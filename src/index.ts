@@ -158,7 +158,10 @@ export const createCss = <T extends IConfig>(
       }
 
       const atom: IAtom = {
-        id: cssPropParts.concat(argsList).join(""),
+        id: cssPropParts
+          .concat(pseudo)
+          .concat(screen || "")
+          .join(""),
         cssPropParts,
         value,
         pseudo,
