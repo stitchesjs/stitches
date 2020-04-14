@@ -1,12 +1,20 @@
-import { ICssPropToToken, IScreens, ISheet } from "./types";
+import {
+  AllCssProps,
+  ICssPropToToken,
+  IScreens,
+  ISheet,
+  IConfig,
+} from "./types";
 
 export const cssPropToToken: ICssPropToToken = {
   color: "colors",
   backgroundColor: "colors",
+  margin: "space",
   marginTop: "space",
   marginLeft: "space",
   marginRight: "space",
   marginBottom: "space",
+  padding: "space",
   paddingTop: "space",
   paddingLeft: "space",
   paddingRight: "space",
@@ -15,6 +23,7 @@ export const cssPropToToken: ICssPropToToken = {
   gridColumnGap: "space",
   gridRowGap: "space",
   fontSize: "fontSizes",
+  borderColor: "colors",
   borderTopColor: "colors",
   borderLeftColor: "colors",
   borderRightColor: "colors",
@@ -29,14 +38,17 @@ export const cssPropToToken: ICssPropToToken = {
   maxWidth: "sizes",
   minHeight: "sizes",
   maxHeight: "sizes",
+  borderWidth: "borderWidths",
   borderTopWidth: "borderWidths",
   borderLeftWidth: "borderWidths",
   borderRightWidth: "borderWidths",
   borderBottomWidth: "borderWidths",
+  borderStyle: "borderStyles",
   borderTopStyle: "borderStyles",
   borderLeftStyle: "borderStyles",
   borderRightStyle: "borderStyles",
   borderBottomStyle: "borderStyles",
+  borderRadius: "radii",
   borderTopLeftRadius: "radii",
   borderTopRightRadius: "radii",
   borderBottomRightRadius: "radii",
@@ -82,4 +94,68 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
 
       return aggr;
     }, {});
+};
+
+export const addDefaultUtils = (config: IConfig) => {
+  config.utils = config.utils || {};
+  config.utils.margin = (css) => (
+    value: AllCssProps["margin"],
+    pseudo?: string
+  ) =>
+    css.compose(
+      css.marginLeft(value, pseudo),
+      css.marginTop(value, pseudo),
+      css.marginRight(value, pseudo),
+      css.marginBottom(value, pseudo)
+    );
+  config.utils.padding = (css) => (
+    value: AllCssProps["padding"],
+    pseudo?: string
+  ) =>
+    css.compose(
+      css.paddingLeft(value, pseudo),
+      css.paddingTop(value, pseudo),
+      css.paddingRight(value, pseudo),
+      css.paddingBottom(value, pseudo)
+    );
+  config.utils.borderRadius = (css) => (
+    value: AllCssProps["borderRadius"],
+    pseudo?: string
+  ) =>
+    css.compose(
+      css.borderTopLeftRadius(value, pseudo),
+      css.borderTopRightRadius(value, pseudo),
+      css.borderBottomLeftRadius(value, pseudo),
+      css.borderBottomRightRadius(value, pseudo)
+    );
+  config.utils.borderColor = (css) => (
+    value: AllCssProps["borderColor"],
+    pseudo?: string
+  ) =>
+    css.compose(
+      css.borderTopColor(value, pseudo),
+      css.borderRightColor(value, pseudo),
+      css.borderBottomColor(value, pseudo),
+      css.borderLeftColor(value, pseudo)
+    );
+  config.utils.borderStyle = (css) => (
+    value: AllCssProps["borderStyle"],
+    pseudo?: string
+  ) =>
+    css.compose(
+      css.borderTopStyle(value, pseudo),
+      css.borderRightStyle(value, pseudo),
+      css.borderBottomStyle(value, pseudo),
+      css.borderLeftStyle(value, pseudo)
+    );
+  config.utils.borderWidth = (css) => (
+    value: AllCssProps["borderWidth"],
+    pseudo?: string
+  ) =>
+    css.compose(
+      css.borderTopWidth(value, pseudo),
+      css.borderRightWidth(value, pseudo),
+      css.borderBottomWidth(value, pseudo),
+      css.borderLeftWidth(value, pseudo)
+    );
 };

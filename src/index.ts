@@ -5,10 +5,10 @@ import {
   ICssPropToToken,
   ISheet,
   TCss,
-  TTokensDefinition,
+  ITokensDefinition,
   IScreens,
 } from "./types";
-import { createSheets, cssPropToToken } from "./utils";
+import { createSheets, cssPropToToken, addDefaultUtils } from "./utils";
 
 const noop = () => {};
 const cssClassname = (
@@ -86,7 +86,7 @@ export const createConfig = <T extends IConfig>(config: T) => {
   return config;
 };
 
-export const createTokens = <T extends TTokensDefinition>(tokens: T) => {
+export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
 
@@ -109,6 +109,8 @@ export const createCss = <T extends IConfig>(
       toString,
     };
   };
+
+  addDefaultUtils(config);
 
   return new Proxy(noop, {
     get(_, prop, proxy) {

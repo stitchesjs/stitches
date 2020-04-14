@@ -1,237 +1,14 @@
-import { StandardLonghandProperties } from "csstype";
+import {
+  StandardLonghandProperties,
+  StandardShorthandProperties,
+} from "csstype";
 
-export type TProps =
-  | "animationDelay"
-  | "animationDirection"
-  | "animationDuration"
-  | "animationFillMode"
-  | "animationIterationCount"
-  | "animationName"
-  | "animationPlayState"
-  | "animationTimingFunction"
-  | "backgroundAttachment"
-  | "backgroundBlendMode"
-  | "backgroundClip"
-  | "backgroundColor"
-  | "backgroundImage"
-  | "backgroundOrigin"
-  | "backgroundPosition"
-  | "backgroundRepeat"
-  | "backgroundSize"
-  | "borderBottomColor"
-  | "borderBottomLeftRadius"
-  | "borderBottomRightRadius"
-  | "borderBottomStyle"
-  | "borderBottomWidth"
-  | "borderCollapse"
-  | "borderImageOutset"
-  | "borderImageRepeat"
-  | "borderImageSlice"
-  | "borderImageSource"
-  | "borderImageWidth"
-  | "borderLeftColor"
-  | "borderLeftStyle"
-  | "borderLeftWidth"
-  | "borderRightColor"
-  | "borderRightStyle"
-  | "borderRightWidth"
-  | "borderTopColor"
-  | "borderTopLeftRadius"
-  | "borderTopRightRadius"
-  | "borderTopStyle"
-  | "borderTopWidth"
-  | "bottom"
-  | "boxShadow"
-  | "boxSizing"
-  | "breakAfter"
-  | "breakBefore"
-  | "breakInside"
-  | "captionSide"
-  | "clear"
-  | "clip"
-  | "color"
-  | "content"
-  | "cursor"
-  | "direction"
-  | "display"
-  | "emptyCells"
-  | "float"
-  | "fontFamily"
-  | "fontKerning"
-  | "fontOpticalSizing"
-  | "fontSize"
-  | "fontStretch"
-  | "fontStyle"
-  | "fontVariant"
-  | "fontVariantLigatures"
-  | "fontVariantCaps"
-  | "fontVariantNumeric"
-  | "fontVariantEastAsian"
-  | "fontWeight"
-  | "height"
-  | "imageRendering"
-  | "isolation"
-  | "justifyItems"
-  | "justifySelf"
-  | "left"
-  | "letterSpacing"
-  | "lineHeight"
-  | "listStyleImage"
-  | "listStylePosition"
-  | "listStyleType"
-  | "marginBottom"
-  | "marginLeft"
-  | "marginRight"
-  | "marginTop"
-  | "maxHeight"
-  | "maxWidth"
-  | "minHeight"
-  | "minWidth"
-  | "mixBlendMode"
-  | "objectFit"
-  | "objectPosition"
-  | "offsetDistance"
-  | "offsetPath"
-  | "offsetRotate"
-  | "opacity"
-  | "orphans"
-  | "outlineColor"
-  | "outlineOffset"
-  | "outlineStyle"
-  | "outlineWidth"
-  | "overflowAnchor"
-  | "overflowWrap"
-  | "overflowX"
-  | "overflowY"
-  | "paddingBottom"
-  | "paddingLeft"
-  | "paddingRight"
-  | "paddingTop"
-  | "pointerEvents"
-  | "position"
-  | "resize"
-  | "right"
-  | "scrollBehavior"
-  | "speak"
-  | "tableLayout"
-  | "tabSize"
-  | "textAlign"
-  | "textAlignLast"
-  | "textDecoration"
-  | "textDecorationLine"
-  | "textDecorationStyle"
-  | "textDecorationColor"
-  | "textDecorationSkipInk"
-  | "textUnderlinePosition"
-  | "textIndent"
-  | "textRendering"
-  | "textShadow"
-  | "textSizeAdjust"
-  | "textOverflow"
-  | "textTransform"
-  | "top"
-  | "touchAction"
-  | "transitionDelay"
-  | "transitionDuration"
-  | "transitionProperty"
-  | "transitionTimingFunction"
-  | "unicodeBidi"
-  | "verticalAlign"
-  | "visibility"
-  | "whiteSpace"
-  | "widows"
-  | "width"
-  | "willChange"
-  | "wordBreak"
-  | "wordSpacing"
-  | "zIndex"
-  | "zoom"
-  | "backfaceVisibility"
-  | "columnCount"
-  | "columnGap"
-  | "columnRuleColor"
-  | "columnRuleStyle"
-  | "columnRuleWidth"
-  | "columnSpan"
-  | "columnWidth"
-  | "backdropFilter"
-  | "alignContent"
-  | "alignItems"
-  | "alignSelf"
-  | "flexBasis"
-  | "flexGrow"
-  | "flexShrink"
-  | "flexDirection"
-  | "flexWrap"
-  | "justifyContent"
-  | "gridAutoColumns"
-  | "gridAutoFlow"
-  | "gridAutoRows"
-  | "gridColumnEnd"
-  | "gridColumnStart"
-  | "gridTemplateAreas"
-  | "gridTemplateColumns"
-  | "gridTemplateRows"
-  | "gridRowEnd"
-  | "gridRowStart"
-  | "rowGap"
-  | "hyphens"
-  | "order"
-  | "perspective"
-  | "perspectiveOrigin"
-  | "shapeOutside"
-  | "shapeImageThreshold"
-  | "shapeMargin"
-  | "transform"
-  | "transformOrigin"
-  | "transformStyle"
-  | "userSelect"
-  | "bufferedRendering"
-  | "clipPath"
-  | "clipRule"
-  | "mask"
-  | "filter"
-  | "floodColor"
-  | "floodOpacity"
-  | "lightingColor"
-  | "stopColor"
-  | "stopOpacity"
-  | "colorInterpolation"
-  | "colorInterpolationFilters"
-  | "colorRendering"
-  | "fill"
-  | "fillOpacity"
-  | "fillRule"
-  | "markerEnd"
-  | "markerMid"
-  | "markerStart"
-  | "maskType"
-  | "shapeRendering"
-  | "stroke"
-  | "strokeDasharray"
-  | "strokeDashoffset"
-  | "strokeLinecap"
-  | "strokeLinejoin"
-  | "strokeMiterlimit"
-  | "strokeOpacity"
-  | "strokeWidth"
-  | "alignmentBaseline"
-  | "baselineShift"
-  | "dominantBaseline"
-  | "textAnchor"
-  | "writingMode"
-  | "vectorEffect"
-  | "paintOrder"
-  | "d"
-  | "cx"
-  | "cy"
-  | "x"
-  | "y"
-  | "r"
-  | "rx"
-  | "ry"
-  | "caretColor"
-  | "lineBreak";
+export type AllCssProps = Required<
+  Omit<
+    StandardLonghandProperties & StandardShorthandProperties,
+    "border" | "background" | "transition"
+  >
+>;
 
 export interface IScreens {
   [key: string]: (css: string) => string;
@@ -255,10 +32,12 @@ export interface IComposedAtom {
 export interface ICssPropToToken {
   color: "colors";
   backgroundColor: "colors";
+  margin: "space";
   marginTop: "space";
   marginLeft: "space";
   marginRight: "space";
   marginBottom: "space";
+  padding: "space";
   paddingTop: "space";
   paddingLeft: "space";
   paddingRight: "space";
@@ -267,6 +46,7 @@ export interface ICssPropToToken {
   gridColumnGap: "space";
   gridRowGap: "space";
   fontSize: "fontSizes";
+  borderColor: "colors";
   borderTopColor: "colors";
   borderLeftColor: "colors";
   borderRightColor: "colors";
@@ -281,14 +61,17 @@ export interface ICssPropToToken {
   maxWidth: "sizes";
   minHeight: "sizes";
   maxHeight: "sizes";
+  borderWidth: "borderWidths";
   borderTopWidth: "borderWidths";
   borderLeftWidth: "borderWidths";
   borderRightWidth: "borderWidths";
   borderBottomWidth: "borderWidths";
+  borderStyle: "borderStyles";
   borderTopStyle: "borderStyles";
   borderLeftStyle: "borderStyles";
   borderRightStyle: "borderStyles";
   borderBottomStyle: "borderStyles";
+  borderRadius: "radii";
   borderTopLeftRadius: "radii";
   borderTopRightRadius: "radii";
   borderBottomRightRadius: "radii";
@@ -304,7 +87,7 @@ export interface ITokenDefinition {
   [key: number]: string;
 }
 
-export type TTokensDefinition = {
+export interface ITokensDefinition {
   colors?: ITokenDefinition;
   space?: ITokenDefinition;
   fontSizes?: ITokenDefinition;
@@ -319,30 +102,30 @@ export type TTokensDefinition = {
   shadows?: ITokenDefinition;
   zIndices?: ITokenDefinition;
   transitions?: ITokenDefinition;
-};
+}
 
 export interface IConfig {
   screens?: IScreens;
-  tokens?: TTokensDefinition;
+  tokens?: ITokensDefinition;
   utils?: {
     [name: string]: (css: TCss<any>) => (...args: any[]) => string;
   };
 }
 
 export type TCss<T extends IConfig> = {
-  [K in TProps]: (
+  [K in keyof AllCssProps]: (
     value: K extends keyof ICssPropToToken
       ? T["tokens"] extends object
         ? T["tokens"][ICssPropToToken[K]] extends object
           ? keyof T["tokens"][ICssPropToToken[K]]
-          : K extends keyof StandardLonghandProperties
-          ? StandardLonghandProperties[K]
+          : K extends keyof AllCssProps
+          ? AllCssProps[K]
           : string
-        : K extends keyof StandardLonghandProperties
-        ? StandardLonghandProperties[K]
+        : K extends keyof AllCssProps
+        ? AllCssProps[K]
         : string
-      : K extends keyof StandardLonghandProperties
-      ? StandardLonghandProperties[K]
+      : K extends keyof AllCssProps
+      ? AllCssProps[K]
       : string,
     pseudo?: string
   ) => string;
@@ -356,19 +139,19 @@ export type TCss<T extends IConfig> = {
   } &
   {
     [S in keyof T["screens"]]: {
-      [K in TProps]: (
+      [K in keyof AllCssProps]: (
         value: K extends keyof ICssPropToToken
           ? T["tokens"] extends object
             ? T["tokens"][ICssPropToToken[K]] extends object
               ? keyof T["tokens"][ICssPropToToken[K]]
-              : K extends keyof StandardLonghandProperties
-              ? StandardLonghandProperties[K]
+              : K extends keyof AllCssProps
+              ? AllCssProps[K]
               : string
-            : K extends keyof StandardLonghandProperties
-            ? StandardLonghandProperties[K]
+            : K extends keyof AllCssProps
+            ? AllCssProps[K]
             : string
-          : K extends keyof StandardLonghandProperties
-          ? StandardLonghandProperties[K]
+          : K extends keyof AllCssProps
+          ? AllCssProps[K]
           : string,
         pseudo?: string
       ) => string;
