@@ -177,3 +177,5 @@ export const createCss = <T extends IConfig>(
     },
   }) as any;
 };
+
+export const css = createCss({});
