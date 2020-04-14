@@ -126,9 +126,8 @@ export const createCss = <T extends IConfig>(
 
       if (config.screens && prop in config.screens) {
         screen = String(prop);
-      } else if (config.utils && cssProp in config.utils) {
+      } else if (config.utils && prop in config.utils) {
         const util = config.utils[String(prop)](proxy);
-
         return (...args: any[]) => {
           isCallingUtil = true;
           const result = util(...args);

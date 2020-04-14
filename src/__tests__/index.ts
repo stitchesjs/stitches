@@ -139,4 +139,18 @@ describe("createCss", () => {
       "@media (min-width: 700px) { .tablet_color_red{color:red;} }"
     );
   });
+  test("should allow utils", () => {
+    const css = createCss(
+      {
+        utils: {
+          marginX: (css) => (value: string) =>
+            css.compose(css.marginLeft(value), css.marginRight(value)),
+        },
+      },
+      null
+    );
+    expect(css.marginX("1rem").toString()).toBe(
+      "margin-right_1rem margin-left_1rem"
+    );
+  });
 });
