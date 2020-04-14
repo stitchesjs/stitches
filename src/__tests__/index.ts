@@ -105,6 +105,17 @@ describe("createCss", () => {
         .toString()
     ).toBe("background-color_green color_red");
   });
+  test("should handle specificity with different but same pseudo", () => {
+    const css = createCss({}, null);
+    expect(
+      css
+        .compose(
+          css.color("red", ":hover:disabled"),
+          css.color("red", ":disabled:hover")
+        )
+        .toString()
+    ).toBe("color_red_disabled_hover");
+  });
   test("should inject sheet", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss({}, (fakeEnv as unknown) as Window);
