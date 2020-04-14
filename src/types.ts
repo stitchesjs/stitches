@@ -360,7 +360,7 @@ export type TCss<T extends IConfig> = {
         value: K extends keyof ICssPropToToken
           ? T["tokens"] extends object
             ? T["tokens"][ICssPropToToken[K]] extends object
-              ? keyof T["tokens"][ICssPropToToken[K]] | string
+              ? keyof T["tokens"][ICssPropToToken[K]]
               : K extends keyof StandardLonghandProperties
               ? StandardLonghandProperties[K]
               : string

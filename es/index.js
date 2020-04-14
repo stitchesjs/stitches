@@ -89,7 +89,7 @@ export var createCss = function (config, env) {
             if (config.screens && prop in config.screens) {
                 screen = String(prop);
             }
-            else if (config.utils && cssProp in config.utils) {
+            else if (config.utils && prop in config.utils) {
                 var util_1 = config.utils[String(prop)](proxy);
                 return function () {
                     var args = [];
