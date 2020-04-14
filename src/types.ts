@@ -243,6 +243,7 @@ export interface IAtom {
   value: string;
   pseudo: string | undefined;
   screen: string;
+  tokenValue: string | undefined;
   toString: () => string;
 }
 
@@ -250,22 +251,6 @@ export interface IComposedAtom {
   atoms: IAtom[];
   toString: () => string;
 }
-
-export type TTokens =
-  | "colors"
-  | "space"
-  | "fontSizes"
-  | "fonts"
-  | "fontWeights"
-  | "lineHeights"
-  | "letterSpacings"
-  | "sizes"
-  | "borderWidths"
-  | "borderStyles"
-  | "radii"
-  | "shadows"
-  | "zIndices"
-  | "transitions";
 
 export interface ICssPropToToken {
   color: "colors";
@@ -319,7 +304,22 @@ export interface ITokenDefinition {
   [key: number]: string;
 }
 
-export type TTokensDefinition = { [K in TTokens]?: ITokenDefinition };
+export type TTokensDefinition = {
+  colors?: ITokenDefinition;
+  space?: ITokenDefinition;
+  fontSizes?: ITokenDefinition;
+  fonts?: ITokenDefinition;
+  fontWeights?: ITokenDefinition;
+  lineHeights?: ITokenDefinition;
+  letterSpacings?: ITokenDefinition;
+  sizes?: ITokenDefinition;
+  borderWidths?: ITokenDefinition;
+  borderStyles?: ITokenDefinition;
+  radii?: ITokenDefinition;
+  shadows?: ITokenDefinition;
+  zIndices?: ITokenDefinition;
+  transitions?: ITokenDefinition;
+};
 
 export interface IConfig {
   screens?: IScreens;
@@ -360,7 +360,7 @@ export type TCss<T extends IConfig> = {
         value: K extends keyof ICssPropToToken
           ? T["tokens"] extends object
             ? T["tokens"][ICssPropToToken[K]] extends object
-              ? keyof T["tokens"][ICssPropToToken[K]]
+              ? keyof T["tokens"][ICssPropToToken[K]] | string
               : K extends keyof StandardLonghandProperties
               ? StandardLonghandProperties[K]
               : string

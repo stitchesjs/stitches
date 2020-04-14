@@ -6,8 +6,9 @@ import {
   ISheet,
   TCss,
   TTokensDefinition,
+  IScreens,
 } from "./types";
-import { cssPropToToken, createSheets } from "./utils";
+import { createSheets, cssPropToToken } from "./utils";
 
 const noop = () => {};
 const cssClassname = (
@@ -31,7 +32,10 @@ const toCssProp = (cssPropParts: string[]) => {
   return cssPropParts.join("-");
 };
 
-const createToString = (sheets: { [screen: string]: ISheet }) =>
+const createToString = (
+  sheets: { [screen: string]: ISheet },
+  screens: IScreens = {}
+) =>
   function toString(this: IComposedAtom | IAtom) {
     // This was a composition
     if ("atoms" in this) {
@@ -45,7 +49,7 @@ const createToString = (sheets: { [screen: string]: ISheet }) =>
       this.screen
     );
     const cssProp = toCssProp(this.cssPropParts);
-    const value = this.value;
+    const value = this.tokenValue || this.value;
     let cssRule = ".";
 
     if (typeof className === "string") {
@@ -54,7 +58,9 @@ const createToString = (sheets: { [screen: string]: ISheet }) =>
       cssRule += `${className.className}${className.pseudo}{${cssProp}:${value};}`;
     }
 
-    sheets[this.screen].insertRule(cssRule);
+    sheets[this.screen].insertRule(
+      this.screen ? screens[this.screen](cssRule) : cssRule
+    );
 
     return typeof className === "string" ? className : className.className;
   };
@@ -94,7 +100,7 @@ export const createCss = <T extends IConfig>(
   // the screen set for that util
   let isCallingUtil = false;
   const sheets = createSheets(env, config.screens);
-  const toString = createToString(sheets);
+  const toString = createToString(sheets, config.screens);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -137,31 +143,33 @@ export const createCss = <T extends IConfig>(
       return proxy;
     },
     apply(_, __, argsList) {
-      if (!isCallingUtil) {
-        screen = undefined;
-      }
-
       const cssPropParts = cssProp
         .split(/(?=[A-Z])/)
         .map((g) => g.toLowerCase());
-      let value = argsList[0];
-
+      const value = argsList[0];
+      const pseudo = argsList[1];
       const token =
         config.tokens &&
         config.tokens[cssPropToToken[cssProp as keyof ICssPropToToken]];
+      let tokenValue: string | undefined;
 
       if (token) {
-        value = token[value];
+        tokenValue = token[value];
       }
 
       const atom: IAtom = {
         id: cssPropParts.concat(argsList).join(""),
         cssPropParts,
-        value: argsList[0],
-        pseudo: argsList[1],
+        value,
+        pseudo,
         screen: screen || "",
+        tokenValue,
         toString,
       };
+
+      if (!isCallingUtil) {
+        screen = undefined;
+      }
 
       return atom;
     },
