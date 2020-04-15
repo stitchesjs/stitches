@@ -12,15 +12,10 @@ import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
 
 // tslint:disable-next-line: no-empty
 const noop = () => {};
-const cssClassname = (
-  cssProp: string,
-  value: string | number,
-  pseudo?: string,
-  screen?: string
-) => {
-  const className = `${screen ? `${screen}_` : ""}${cssProp}_${String(value)}${
-    pseudo ? pseudo.replace(/:/g, "_") : ""
-  }`;
+const cssClassname = (seq: number, cssPropParts: string[], pseudo?: string) => {
+  const className = `${cssPropParts.map((part) => part[0]).join("")}_${String(
+    seq
+  )}`;
 
   if (pseudo) {
     return { className, pseudo };
@@ -36,19 +31,15 @@ const toCssProp = (cssPropParts: string[]) => {
 const createToString = (
   sheets: { [screen: string]: ISheet },
   screens: IScreens = {}
-) =>
-  function toString(this: IComposedAtom | IAtom) {
+) => {
+  let seq = 0;
+  return function toString(this: IComposedAtom | IAtom) {
     // This was a composition
     if ("atoms" in this) {
       return this.atoms.map((atom) => atom.toString()).join(" ");
     }
     // plain atom
-    const className = cssClassname(
-      toCssProp(this.cssPropParts),
-      this.value,
-      this.pseudo,
-      this.screen
-    );
+    const className = cssClassname(seq++, this.cssPropParts, this.pseudo);
     const cssProp = toCssProp(this.cssPropParts);
     const value = this.tokenValue || this.value;
     let cssRule = ".";
@@ -65,6 +56,7 @@ const createToString = (
 
     return typeof className === "string" ? className : className.className;
   };
+};
 
 const composeIntoMap = (
   map: Map<string, IAtom>,

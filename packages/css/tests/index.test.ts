@@ -41,14 +41,14 @@ describe("createCss", () => {
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("red");
-    expect(atom.toString()).toBe("color_red");
-    expect(css.getStyles().trim()).toBe(".color_red{color:red;}");
+    expect(atom.toString()).toBe("c_0");
+    expect(css.getStyles().trim()).toBe(".c_0{color:red;}");
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
     expect(
       css.compose(css.color("red"), css.backgroundColor("blue")).toString()
-    ).toBe("background-color_blue color_red");
+    ).toBe("bc_0 c_1");
   });
   test("should create tokens", () => {
     const tokens = createTokens({
@@ -64,8 +64,8 @@ describe("createCss", () => {
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("RED");
     expect(atom.tokenValue).toBe("tomato");
-    expect(atom.toString()).toBe("color_RED");
-    expect(css.getStyles().trim()).toBe(".color_RED{color:tomato;}");
+    expect(atom.toString()).toBe("c_0");
+    expect(css.getStyles().trim()).toBe(".c_0{color:tomato;}");
   });
   test("should create screens", () => {
     const config = createConfig({
@@ -79,9 +79,9 @@ describe("createCss", () => {
     expect(atom.cssPropParts).toEqual(["color"]);
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("tablet");
-    expect(atom.toString()).toBe("tablet_color_red");
+    expect(atom.toString()).toBe("c_0");
     expect(css.getStyles().trim()).toBe(
-      "@media (min-width: 700px) { .tablet_color_red{color:red;} }"
+      "@media (min-width: 700px) { .c_0{color:red;} }"
     );
   });
   test("should handle pseudos", () => {
@@ -91,8 +91,8 @@ describe("createCss", () => {
     expect(atom.cssPropParts).toEqual(["color"]);
     expect(atom.pseudo).toBe(":hover");
     expect(atom.screen).toBe("");
-    expect(atom.toString()).toBe("color_red_hover");
-    expect(css.getStyles().trim()).toBe(".color_red_hover:hover{color:red;}");
+    expect(atom.toString()).toBe("c_0");
+    expect(css.getStyles().trim()).toBe(".c_0:hover{color:red;}");
   });
   test("should handle specificity", () => {
     const css = createCss({}, null);
@@ -104,7 +104,7 @@ describe("createCss", () => {
           css.backgroundColor("green")
         )
         .toString()
-    ).toBe("background-color_green color_red");
+    ).toBe("bc_0 c_1");
   });
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
@@ -115,16 +115,14 @@ describe("createCss", () => {
           css.color("red", ":disabled:hover")
         )
         .toString()
-    ).toBe("color_red_disabled_hover");
+    ).toBe("c_0");
   });
   test("should inject sheet", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss({}, (fakeEnv as unknown) as Window);
     String(css.color("red"));
     expect(fakeEnv.document.styleSheets.length).toBe(1);
-    expect(fakeEnv.document.styleSheets[0].content).toBe(
-      ".color_red{color:red;}"
-    );
+    expect(fakeEnv.document.styleSheets[0].content).toBe(".c_0{color:red;}");
   });
   test("should inject screen sheets", () => {
     const fakeEnv = createFakeEnv();
@@ -137,7 +135,7 @@ describe("createCss", () => {
     String(css.tablet.color("red"));
     expect(fakeEnv.document.styleSheets.length).toBe(2);
     expect(fakeEnv.document.styleSheets[1].content).toBe(
-      "@media (min-width: 700px) { .tablet_color_red{color:red;} }"
+      "@media (min-width: 700px) { .c_0{color:red;} }"
     );
   });
   test("should allow utils", () => {
@@ -153,8 +151,6 @@ describe("createCss", () => {
       },
       null
     );
-    expect(css.marginX("1rem").toString()).toBe(
-      "margin-right_1rem margin-left_1rem"
-    );
+    expect(css.marginX("1rem").toString()).toBe("mr_0 ml_1");
   });
 });

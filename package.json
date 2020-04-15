@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "release": "lerna publish",
+    "build": "lerna run build",
     "postinstall": "lerna bootstrap",
     "test:css": "lerna --scope @atomica/css run test:watch",
     "test": "lerna run test"
