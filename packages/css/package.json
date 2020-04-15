@@ -9,6 +9,9 @@
   "module": "es/index.js",
   "browser": "dist/bundle.js",
   "types": "dist/bundle.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "npm run build:lib & npm run build:umd",
     "build:lib": "tsc -p tsconfig.build.json --outDir lib --module commonjs",
@@ -42,5 +45,6 @@
     "@types/node": "^13.11.1",
     "csstype": "^2.6.10",
     "tslib": "^1.11.1"
-  }
+  },
+  "gitHead": "437fbc53260b526806e39c57622bea2e38ded82c"
 }
