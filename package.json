@@ -1,52 +1,16 @@
 {
-  "name": "atomica",
-  "version": "0.1.0",
-  "description": "The tiny configurable CSS-IN-JS library",
-  "author": "Christian Alfoni <christianalfoni@gmail.com>",
-  "license": "MIT",
-  "repository": "git+https://github.com/christianalfoni/atomica.git",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "browser": "dist/bundle.js",
-  "types": "dist/bundle.d.ts",
+  "name": "root",
+  "private": true,
   "scripts": {
-    "build": "npm run build:lib & npm run build:umd",
-    "build:lib": "tsc --outDir lib --module commonjs",
-    "build:es": "tsc --outDir es --module es2015",
-    "build:umd": "npm run build:es && rollup --config && dts-bundle --name dist/bundle --main es --outputAsModuleFolder",
-    "clean": "rimraf dist es lib coverage",
-    "typecheck": "tsc --noEmit",
-    "lint": "tslint --project tsconfig.json --format stylish",
-    "format": "prettier '**/*.{md,js,jsx,json,ts,tsx}' --write",
-    "test": "jest --env=jsdom --coverage",
-    "test:watch": "jest --env=jsdom --watch --updateSnapshot",
-    "prepublishOnly": "npm run build",
-    "prebuild": "npm run clean",
-    "postbuild": "rimraf {lib,es}/**/__tests__ {lib,es}/**/*.{spec,test}.{js,d.ts,js.map}",
-    "posttest": "npm run typecheck && npm run lint",
-    "preversion": "npm test",
-    "postversion": "git push && git push --tags"
-  },
-  "keywords": [
-    "typescript",
-    "css-in-js",
-    "css",
-    "library"
-  ],
-  "files": [
-    "lib",
-    "es",
-    "dist"
-  ],
-  "dependencies": {
-    "@types/node": "^13.11.1",
-    "csstype": "^2.6.10",
-    "tslib": "^1.11.1"
+    "postinstall": "lerna bootstrap",
+    "test:css": "lerna --scope @atomica/css run test:watch",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "dts-bundle": "^0.7.3",
     "jest": "^25.3.0",
+    "lerna": "^3.20.2",
     "pascal-case": "^3.1.1",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
@@ -63,5 +27,8 @@
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
     "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@atomica/css": "file:packages/css"
   }
 }

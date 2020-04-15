@@ -1,5 +1,5 @@
-import { createCss, createTokens, createConfig } from "..";
-import { IAtom } from "../types";
+import { createConfig, createCss, createTokens } from "../src";
+import { IAtom } from "../src/types";
 
 function createFakeEnv(
   styleSheets: { content: string; insertRule: (rule: string) => void }[] = []
@@ -7,6 +7,7 @@ function createFakeEnv(
   return {
     document: {
       styleSheets,
+      // tslint:disable-next-line: no-empty
       createElement() {},
       // Only used to grab head
       querySelector() {
@@ -143,8 +144,11 @@ describe("createCss", () => {
     const css = createCss(
       {
         utils: {
-          marginX: (css) => (value: string) =>
-            css.compose(css.marginLeft(value), css.marginRight(value)),
+          marginX: (utilCss) => (value: string) =>
+            utilCss.compose(
+              utilCss.marginLeft(value),
+              utilCss.marginRight(value)
+            ),
         },
       },
       null

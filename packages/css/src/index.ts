@@ -3,13 +3,14 @@ import {
   IComposedAtom,
   IConfig,
   ICssPropToToken,
-  ISheet,
-  TCss,
-  ITokensDefinition,
   IScreens,
+  ISheet,
+  ITokensDefinition,
+  TCss,
 } from "./types";
-import { createSheets, cssPropToToken, addDefaultUtils } from "./utils";
+import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
 
+// tslint:disable-next-line: no-empty
 const noop = () => {};
 const cssClassname = (
   cssProp: string,

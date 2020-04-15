@@ -1,18 +1,10 @@
 {
+  "extends": "./tsconfig.build.json",
+
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "rootDir": "src",
-    "outDir": ".code",
-    "lib": ["dom", "es2017"],
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "declaration": true,
-    "pretty": true,
-    "sourceMap": true,
-    "inlineSources": true,
-    "resolveJsonModule": true,
-    "strict": true
-  },
-  "exclude": ["node_modules", "dist", "es", "lib"]
+    "baseUrl": "./packages",
+    "paths": {
+      "@atomica/css": ["css/src"]
+    }
+  }
 }

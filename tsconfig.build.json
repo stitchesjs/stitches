@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": ".code",
+    "lib": ["dom", "es2017"],
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "declaration": true,
+    "pretty": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "resolveJsonModule": true,
+    "strict": true
+  },
+  "exclude": ["node_modules", "dist", "es", "lib"]
+}

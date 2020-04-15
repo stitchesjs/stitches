@@ -1,9 +1,9 @@
 import {
   AllCssProps,
+  IConfig,
   ICssPropToToken,
   IScreens,
   ISheet,
-  IConfig,
 } from "./types";
 
 export const cssPropToToken: ICssPropToToken = {
