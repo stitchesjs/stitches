@@ -1,4 +1,4 @@
-# @atomica/css
+# @stitches/css
 
 ## Why
 
@@ -12,10 +12,10 @@
 
 ## Get started
 
-`npm install @atomica/css`
+`npm install @stitches/css`
 
 ```ts
-import { css } from "@atomica/css";
+import { css } from "@stitches/css";
 
 const button = css.compose(
   css.color("gray"),
@@ -32,7 +32,7 @@ const alertButton = css.compose(button, css.borderColor("red"));
 Instead of consuming `css` directly from the package, you can create your own configured instance:
 
 ```ts
-import { createCss } from "@atomica/css";
+import { createCss } from "@stitches/css";
 
 export const css = createCss({
   // Maps tokens to properties. Follows the system-ui theme specification: https://system-ui.com/theme
