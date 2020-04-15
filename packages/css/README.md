@@ -75,3 +75,61 @@ css.color("RED"); // Creates "tomato"
 css.tablet.color("blue"); // Color is "blue" when media query is active
 css.marginX(0); // Creates "1rem", as it composes margin, using "space" from tokens
 ```
+
+## Server side rendering
+
+The `createCss` factory automatically detects if you are in a browser environment. That means when you this factory on the server it will rather collect the styling, which you can retrieve with:
+
+```ts
+import { createCss } from "@stitches/css";
+
+const css = createCss({});
+renderSomething(css);
+const styles = css.getStyles(); // The styles to be passed with the resulting HTML
+```
+
+## Usage with React
+
+```tsx
+// css.tsx
+import * as React from "react";
+import { createConfig, TCss } from "@stitches/css";
+
+export const config = createConfig({});
+
+const context = React.createContext<TCss<typeof config>>(null as any);
+
+export const useCss = () => React.useContext(context);
+
+export const CssProvider: React.FC<{ css: TCss<typeof config> }> = ({
+  css,
+  children,
+}) => <context.Provider value={css}>{children}</context.Provider>;
+```
+
+```tsx
+// index.tsx
+import * as React from "react";
+import { render } from "react-dom";
+import { createCss } from "@stitches/css";
+import { config, CssProvider } from "app/css";
+import { App } from "./App";
+
+render(
+  <CssProvider css={createCss(config)}>
+    <App />
+  </CssProvider>,
+  document.querySelector("#app")
+);
+```
+
+```tsx
+// App.tsx
+import * as React from "react";
+import { useCss } from "app/css";
+
+export const App: React.FC = () => {
+  const css = useCss();
+  return <h1 className={css.color("red")}>Hello World</h1>;
+};
+```
