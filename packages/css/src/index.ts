@@ -10,6 +10,8 @@ import {
 } from "./types";
 import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
 
+export * from "./types";
+
 // tslint:disable-next-line: no-empty
 const noop = () => {};
 const cssClassname = (seq: number, cssPropParts: string[], pseudo?: string) => {
