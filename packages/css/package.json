@@ -1,10 +1,10 @@
 {
-  "name": "@atomica/css",
-  "version": "1.0.1",
+  "name": "@stitches/css",
+  "version": "1.0.0",
   "description": "The tiny configurable CSS-IN-JS library",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
-  "repository": "git+https://github.com/christianalfoni/atomica.git",
+  "repository": "git+https://github.com/christianalfoni/stitches.git",
   "main": "lib/index.js",
   "module": "es/index.js",
   "browser": "dist/bundle.js",
@@ -46,5 +46,5 @@
     "csstype": "^2.6.10",
     "tslib": "^1.11.1"
   },
-  "gitHead": "437fbc53260b526806e39c57622bea2e38ded82c"
+  "gitHead": "01e369aa687777e751cb32633010a881071cb6e5"
 }
