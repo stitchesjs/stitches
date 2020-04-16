@@ -36,6 +36,8 @@ Instead of consuming `css` directly from the package, you can create your own co
 import { createCss } from "@stitches/css";
 
 export const css = createCss({
+  // Optinally add a prefix to all classnames to avoid crashing behaviour
+  prefix: "my-lib",
   // Maps tokens to properties. Follows the system-ui theme specification: https://system-ui.com/theme
   tokens: {
     colors: {
