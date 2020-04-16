@@ -180,6 +180,7 @@ export const createCss = <T extends IConfig>(
       const atom: IAtom = {
         id: cssPropParts
           .concat(prefix)
+          .concat(value)
           .concat(pseudo ? pseudo.split(":").sort().join(":") : "")
           .concat(screen || "")
           .join(""),
