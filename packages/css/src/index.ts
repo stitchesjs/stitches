@@ -201,4 +201,7 @@ export const createCss = <T extends IConfig>(
   }) as any;
 };
 
-export const css = createCss({});
+// default instance
+export const css = createCss({
+  prefix: "di",
+});
