@@ -1,4 +1,4 @@
-import { createConfig, createCss, createTokens } from "../src";
+import { createConfig, createCss, createTokens, prefixes } from "../src";
 import { IAtom } from "../src/types";
 
 function createFakeEnv(
@@ -31,6 +31,10 @@ function createFakeEnv(
     },
   };
 }
+
+beforeEach(() => {
+  prefixes.length = 0;
+});
 
 describe("createCss", () => {
   test("should create simple atoms", () => {
@@ -79,9 +83,9 @@ describe("createCss", () => {
     expect(atom.cssPropParts).toEqual(["color"]);
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("tablet");
-    expect(atom.toString()).toBe("c_0");
+    expect(atom.toString()).toBe("tablet_c_0");
     expect(css.getStyles().trim()).toBe(
-      "@media (min-width: 700px) { .c_0{color:red;} }"
+      "@media (min-width: 700px) { .tablet_c_0{color:red;} }"
     );
   });
   test("should handle pseudos", () => {
@@ -141,7 +145,7 @@ describe("createCss", () => {
     String(css.tablet.color("red"));
     expect(fakeEnv.document.styleSheets.length).toBe(2);
     expect(fakeEnv.document.styleSheets[1].content).toBe(
-      "@media (min-width: 700px) { .c_0{color:red;} }"
+      "@media (min-width: 700px) { .tablet_c_0{color:red;} }"
     );
   });
   test("should allow utils", () => {
@@ -165,5 +169,26 @@ describe("createCss", () => {
       // @ts-ignore
       String(css.compose(undefined, null, false, "", css.color("red")))
     ).toBe("c_0");
+  });
+  test("should allow prefixes", () => {
+    const css = createCss(
+      {
+        prefix: "foo",
+      },
+      null
+    );
+    expect(
+      // @ts-ignore
+      String(css.color("red"))
+    ).toBe("foo_c_0");
+  });
+  test("should throw when using same prefix twice", () => {
+    createCss(
+      {
+        prefix: "foo",
+      },
+      null
+    );
+    expect(() => createCss({ prefix: "foo" }, null)).toThrow();
   });
 });

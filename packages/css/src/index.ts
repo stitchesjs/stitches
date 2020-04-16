@@ -14,13 +14,14 @@ export * from "./types";
 
 // tslint:disable-next-line: no-empty
 const noop = () => {};
-const cssClassname = (seq: number, cssPropParts: string[], pseudo?: string) => {
-  const className = `${cssPropParts.map((part) => part[0]).join("")}_${String(
-    seq
-  )}`;
+export const prefixes: string[] = [];
+const cssClassname = (seq: number, atom: IAtom) => {
+  const className = `${atom.prefix ? `${atom.prefix}_` : ""}${
+    atom.screen ? `${atom.screen}_` : ""
+  }${atom.cssPropParts.map((part) => part[0]).join("")}_${String(seq)}`;
 
-  if (pseudo) {
-    return { className, pseudo };
+  if (atom.pseudo) {
+    return { className, pseudo: atom.pseudo };
   }
 
   return className;
@@ -47,7 +48,7 @@ const createToString = (
     }
 
     // plain atom
-    const className = cssClassname(seq++, this.cssPropParts, this.pseudo);
+    const className = cssClassname(seq++, this);
     const cssProp = toCssProp(this.cssPropParts);
     const value = this.tokenValue || this.value;
 
@@ -103,6 +104,14 @@ export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
 ): TCss<T> => {
+  const prefix = config.prefix || "";
+
+  if (prefixes.includes(prefix)) {
+    throw new Error(`@stitches/css - The prefix "${prefix}" is already in use`);
+  }
+
+  prefixes.push(prefix);
+
   let cssProp: string;
   let screen: string | undefined;
   // We need to know when we call utils to avoid clearing
@@ -170,6 +179,7 @@ export const createCss = <T extends IConfig>(
 
       const atom: IAtom = {
         id: cssPropParts
+          .concat(prefix)
           .concat(pseudo ? pseudo.split(":").sort().join(":") : "")
           .concat(screen || "")
           .join(""),
@@ -179,6 +189,7 @@ export const createCss = <T extends IConfig>(
         screen: screen || "",
         tokenValue,
         toString,
+        prefix,
       };
 
       if (!isCallingUtil) {

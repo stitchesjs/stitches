@@ -16,6 +16,7 @@ export interface IScreens {
 
 export interface IAtom {
   id: string;
+  prefix: string;
   cssPropParts: string[];
   value: string;
   pseudo: string | undefined;
@@ -105,6 +106,7 @@ export interface ITokensDefinition {
 }
 
 export interface IConfig {
+  prefix?: string;
   screens?: IScreens;
   tokens?: ITokensDefinition;
   utils?: {
