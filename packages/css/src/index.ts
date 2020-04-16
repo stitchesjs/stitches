@@ -31,6 +31,7 @@ const toCssProp = (cssPropParts: string[]) => {
 };
 
 const createToString = (
+  insertedClassnames: Map<string, string>,
   sheets: { [screen: string]: ISheet },
   screens: IScreens = {}
 ) => {
@@ -40,10 +41,16 @@ const createToString = (
     if ("atoms" in this) {
       return this.atoms.map((atom) => atom.toString()).join(" ");
     }
+
+    if (insertedClassnames.has(this.id)) {
+      return insertedClassnames.get(this.id)!;
+    }
+
     // plain atom
     const className = cssClassname(seq++, this.cssPropParts, this.pseudo);
     const cssProp = toCssProp(this.cssPropParts);
     const value = this.tokenValue || this.value;
+
     let cssRule = ".";
 
     if (typeof className === "string") {
@@ -56,7 +63,12 @@ const createToString = (
       this.screen ? screens[this.screen](cssRule) : cssRule
     );
 
-    return typeof className === "string" ? className : className.className;
+    const result =
+      typeof className === "string" ? className : className.className;
+
+    insertedClassnames.set(this.id, result);
+
+    return result;
   };
 };
 
@@ -97,7 +109,8 @@ export const createCss = <T extends IConfig>(
   // the screen set for that util
   let isCallingUtil = false;
   const sheets = createSheets(env, config.screens);
-  const toString = createToString(sheets, config.screens);
+  const insertedClassnames = new Map<string, string>();
+  const toString = createToString(insertedClassnames, sheets, config.screens);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);

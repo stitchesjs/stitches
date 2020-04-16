@@ -106,6 +106,12 @@ describe("createCss", () => {
         .toString()
     ).toBe("bc_0 c_1");
   });
+  test("should insert rule only once", () => {
+    const css = createCss({}, null);
+    expect(css.color("red").toString()).toBe("c_0");
+    expect(css.color("red").toString()).toBe("c_0");
+    expect(css.getStyles().trim()).toBe(".c_0{color:red;}");
+  });
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
     expect(
