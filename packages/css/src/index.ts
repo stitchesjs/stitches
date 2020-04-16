@@ -43,8 +43,8 @@ const createToString = (
       return this.atoms.map((atom) => atom.toString()).join(" ");
     }
 
-    if (insertedClassnames.has(this.id)) {
-      return insertedClassnames.get(this.id)!;
+    if (insertedClassnames.has(this.uid)) {
+      return insertedClassnames.get(this.uid)!;
     }
 
     // plain atom
@@ -67,7 +67,7 @@ const createToString = (
     const result =
       typeof className === "string" ? className : className.className;
 
-    insertedClassnames.set(this.id, result);
+    insertedClassnames.set(this.uid, result);
 
     return result;
   };
@@ -177,13 +177,14 @@ export const createCss = <T extends IConfig>(
         tokenValue = token[value];
       }
 
+      const id = cssPropParts
+        .concat(pseudo ? pseudo.split(":").sort().join(":") : "")
+        .concat(screen || "")
+        .join("");
+
       const atom: IAtom = {
-        id: cssPropParts
-          .concat(prefix)
-          .concat(value)
-          .concat(pseudo ? pseudo.split(":").sort().join(":") : "")
-          .concat(screen || "")
-          .join(""),
+        id,
+        uid: id + value,
         cssPropParts,
         value,
         pseudo,

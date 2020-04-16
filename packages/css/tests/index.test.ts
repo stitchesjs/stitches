@@ -41,6 +41,7 @@ describe("createCss", () => {
     const css = createCss({}, null);
     const atom = (css.color("red") as unknown) as IAtom;
     expect(atom.id).toBe("color");
+    expect(atom.uid).toBe("colorred");
     expect(atom.cssPropParts).toEqual(["color"]);
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
@@ -63,6 +64,7 @@ describe("createCss", () => {
     const css = createCss({ tokens }, null);
     const atom = (css.color("RED") as unknown) as IAtom;
     expect(atom.id).toBe("color");
+    expect(atom.uid).toBe("colorRED");
     expect(atom.cssPropParts).toEqual(["color"]);
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
@@ -80,6 +82,7 @@ describe("createCss", () => {
     const css = createCss(config, null);
     const atom = (css.tablet.color("red") as unknown) as IAtom;
     expect(atom.id).toBe("colortablet");
+    expect(atom.uid).toBe("colortabletred");
     expect(atom.cssPropParts).toEqual(["color"]);
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("tablet");
@@ -92,6 +95,7 @@ describe("createCss", () => {
     const css = createCss({}, null);
     const atom = (css.color("red", ":hover") as unknown) as IAtom;
     expect(atom.id).toBe("color:hover");
+    expect(atom.uid).toBe("color:hoverred");
     expect(atom.cssPropParts).toEqual(["color"]);
     expect(atom.pseudo).toBe(":hover");
     expect(atom.screen).toBe("");

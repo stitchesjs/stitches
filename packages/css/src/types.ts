@@ -16,6 +16,7 @@ export interface IScreens {
 
 export interface IAtom {
   id: string;
+  uid: string;
   prefix: string;
   cssPropParts: string[];
   value: string;
