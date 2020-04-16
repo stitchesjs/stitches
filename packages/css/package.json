@@ -1,6 +1,6 @@
 {
   "name": "@stitches/css",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "The tiny configurable CSS-IN-JS library",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
