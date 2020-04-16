@@ -67,9 +67,11 @@ const composeIntoMap = (
   let i = atoms.length - 1;
   for (; i >= 0; i--) {
     const item = atoms[i];
-    if ("atoms" in item) {
+    // atoms can be undefined, null, false or '' using ternary like
+    // expressions with the properties
+    if (item && "atoms" in item) {
       composeIntoMap(map, item.atoms);
-    } else {
+    } else if (item) {
       if (!map.has(item.id)) {
         map.set(item.id, item);
       }

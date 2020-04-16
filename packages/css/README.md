@@ -9,6 +9,7 @@
 - **Screens**: Define a set of media queries as screens to easily express CSS active within a screen
 - **Utils**: Create your own CSS properties
 - **Typed**: Fully typed API, even though you are not using Typescript
+- **Specificity solved**: No more specificity issues as an atomic mindset opens up a more efficient and straight forward way to solve it
 
 ## Get started
 

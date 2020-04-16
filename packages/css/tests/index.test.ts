@@ -153,4 +153,11 @@ describe("createCss", () => {
     );
     expect(css.marginX("1rem").toString()).toBe("mr_0 ml_1");
   });
+  test("should ignore undefined atoms", () => {
+    const css = createCss({}, null);
+    expect(
+      // @ts-ignore
+      String(css.compose(undefined, null, false, "", css.color("red")))
+    ).toBe("c_0");
+  });
 });
