@@ -1,11 +1,27 @@
-# Monorepo
+# @stitches
 
-## Resources
+## css
 
-https://medium.com/@NiGhTTraX/how-to-set-up-a-typescript-monorepo-with-lerna-c6acda7d4559
+The core CSS API to be used with any solution.
 
-## Testing
+[@stitches/css](https://github.com/christianalfoni/stitches/tree/master/packages/css)
+
+## styled
+
+A React specific component abstraction.
+
+[@stitches/styled](https://github.com/christianalfoni/stitches/tree/master/packages/styled)
+
+## monorepo
+
+Details about this monorepo.
+
+### Testing
 
 Run tests with `npm test` from root
 
 Run test from package with `npm run test:watch`
+
+### Resources
+
+https://medium.com/@NiGhTTraX/how-to-set-up-a-typescript-monorepo-with-lerna-c6acda7d4559
