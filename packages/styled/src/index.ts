@@ -44,9 +44,22 @@ export const createStyled = <C extends IConfig>() => {
 
         return aggr;
       }, {});
+      const cbProps = { ...defaults, ...props };
+
       return React.createElement(Box, {
         as,
-        className: cb(css, { ...defaults, ...props }),
+        className: cb(
+          css,
+          Object.keys(cbProps).reduce<any>((aggr, key) => {
+            if (cbProps[key] === undefined && defaults[key]) {
+              aggr[key] = defaults[key];
+            } else {
+              aggr[key] = cbProps[key];
+            }
+
+            return aggr;
+          }, {})
+        ),
         ...propsToPass,
       });
     };
