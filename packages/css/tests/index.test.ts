@@ -33,7 +33,7 @@ function createFakeEnv(
 }
 
 beforeEach(() => {
-  prefixes.length = 0;
+  prefixes.clear();
 });
 
 describe("createCss", () => {

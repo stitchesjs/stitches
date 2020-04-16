@@ -14,7 +14,7 @@ export * from "./types";
 
 // tslint:disable-next-line: no-empty
 const noop = () => {};
-export const prefixes: string[] = [];
+export const prefixes = new Set<string>();
 const cssClassname = (seq: number, atom: IAtom) => {
   const className = `${atom.prefix ? `${atom.prefix}_` : ""}${
     atom.screen ? `${atom.screen}_` : ""
@@ -106,11 +106,11 @@ export const createCss = <T extends IConfig>(
 ): TCss<T> => {
   const prefix = config.prefix || "";
 
-  if (prefixes.includes(prefix)) {
+  if (prefixes.has(prefix)) {
     throw new Error(`@stitches/css - The prefix "${prefix}" is already in use`);
   }
 
-  prefixes.push(prefix);
+  prefixes.add(prefix);
 
   let cssProp: string;
   let screen: string | undefined;
