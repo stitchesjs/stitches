@@ -24,7 +24,14 @@ const toStringCachedAtom = function (this: IAtom) {
 };
 
 const toStringCompose = function (this: IComposedAtom) {
-  return this.atoms.map((atom) => atom.toString()).join(" ");
+  const className = this.atoms.map((atom) => atom.toString()).join(" ");
+
+  // cache the className on this instance
+  // @ts-ignore
+  this._className = className;
+  // @ts-ignore
+  this.toString = toStringCachedAtom;
+  return className;
 };
 
 const createToString = (

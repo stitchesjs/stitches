@@ -26,6 +26,7 @@ export interface IAtom {
 
 export interface IComposedAtom {
   atoms: IAtom[];
+  _className?: string;
   toString: (this: IComposedAtom) => string;
 }
 
