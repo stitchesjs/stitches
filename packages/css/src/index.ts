@@ -14,62 +14,54 @@ export * from "./types";
 
 // tslint:disable-next-line: no-empty
 const noop = () => {};
-export const prefixes = new Set<string>();
-const cssClassname = (seq: number, atom: IAtom) => {
-  const className = `${atom.prefix ? `${atom.prefix}_` : ""}${
-    atom.screen ? `${atom.screen}_` : ""
-  }${atom.cssPropParts.map((part) => part[0]).join("")}_${String(seq)}`;
-
-  if (atom.pseudo) {
-    return { className, pseudo: atom.pseudo };
-  }
-
-  return className;
-};
 
 const toCssProp = (cssPropParts: string[]) => {
   return cssPropParts.join("-");
 };
 
+const toStringCachedAtom = function (this: IAtom) {
+  return this._className!;
+};
+
+const toStringCompose = function (this: IComposedAtom) {
+  return this.atoms.map((atom) => atom.toString()).join(" ");
+};
+
 const createToString = (
-  insertedClassnames: Map<string, string>,
   sheets: { [screen: string]: ISheet },
-  screens: IScreens = {}
+  screens: IScreens = {},
+  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?] // [className, pseudo]
 ) => {
   let seq = 0;
-  return function toString(this: IComposedAtom | IAtom) {
-    // This was a composition
-    if ("atoms" in this) {
-      return this.atoms.map((atom) => atom.toString()).join(" ");
-    }
-
-    if (insertedClassnames.has(this.uid)) {
-      return insertedClassnames.get(this.uid)!;
-    }
-
-    // plain atom
-    const className = cssClassname(seq++, this);
+  return function toString(this: IAtom) {
+    const className = cssClassnameProvider(seq++, this);
     const cssProp = toCssProp(this.cssPropParts);
-    const value = this.tokenValue || this.value;
+    const value = this.value;
 
-    let cssRule = ".";
-
-    if (typeof className === "string") {
-      cssRule += `${className}{${cssProp}:${value};}`;
+    let cssRule = "";
+    if (className.length === 2) {
+      cssRule = `.${className[0]}${className[1]}{${cssProp}:${value};}`;
     } else {
-      cssRule += `${className.className}${className.pseudo}{${cssProp}:${value};}`;
+      cssRule = `.${className[0]}{${cssProp}:${value};}`;
     }
 
     sheets[this.screen].insertRule(
       this.screen ? screens[this.screen](cssRule) : cssRule
     );
 
-    const result =
-      typeof className === "string" ? className : className.className;
+    // We are switching this atom from IAtom simpler representation
+    // 1. delete everything but `id` for specificity check
 
-    insertedClassnames.set(this.uid, result);
+    // @ts-ignore
+    this.cssPropParts = this.value = this.pseudo = this.screen = undefined;
 
-    return result;
+    // 2. put on a _className
+    this._className = className[0];
+
+    // 3. switch from this `toString` to a much simpler one
+    this.toString = toStringCachedAtom;
+
+    return className[0];
   };
 };
 
@@ -92,6 +84,8 @@ const composeIntoMap = (
   }
 };
 
+export const prefixes = new Set<string>();
+
 export const createConfig = <T extends IConfig>(config: T) => {
   return config;
 };
@@ -112,48 +106,73 @@ export const createCss = <T extends IConfig>(
 
   prefixes.add(prefix);
 
-  let cssProp: string;
-  let screen: string | undefined;
-  // We need to know when we call utils to avoid clearing
-  // the screen set for that util
-  let isCallingUtil = false;
+  // pre-compute class prefix
+  const classPrefix = prefix ? `${prefix}_` : "";
+  const cssClassnameProvider = (
+    seq: number,
+    atom: IAtom
+  ): [string, string?] => {
+    const className = `${classPrefix}${
+      atom.screen ? `${atom.screen}_` : ""
+    }${atom.cssPropParts.map((part) => part[0]).join("")}_${seq}`;
+
+    if (atom.pseudo) {
+      return [className, atom.pseudo];
+    }
+
+    return [className];
+  };
+
   const sheets = createSheets(env, config.screens);
-  const insertedClassnames = new Map<string, string>();
-  const toString = createToString(insertedClassnames, sheets, config.screens);
+  const toString = createToString(sheets, config.screens, cssClassnameProvider);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
     return {
       atoms: Array.from(map.values()),
-      toString,
+      toString: toStringCompose,
     };
   };
 
   addDefaultUtils(config);
+
+  // pre-checked config to avoid checking these all the time
+  const screens = config.screens || {};
+  const utils = config.utils || {};
+  const tokens = config.tokens || {};
+
+  // atom cache
+  const atomCache = new Map<string, IAtom>();
+
+  // proxy state values that change based on propertie access
+  let cssProp = "";
+  let screen = "";
+  // We need to know when we call utils to avoid clearing
+  // the screen set for that util
+  let isCallingUtil = false;
 
   return new Proxy(noop, {
     get(_, prop, proxy) {
       if (prop === "compose") {
         return compose;
       }
-
       // SSR
       if (prop === "getStyles") {
         return () =>
-          Object.keys(config.screens || {}).reduce((aggr, key) => {
+          Object.keys(screens).reduce((aggr, key) => {
             return aggr + sheets[key].content;
           }, sheets[""].content);
       }
 
-      if (config.screens && prop in config.screens) {
+      if (prop in screens) {
         screen = String(prop);
-      } else if (config.utils && prop in config.utils) {
-        const util = config.utils[String(prop)](proxy);
+      } else if (prop in utils) {
+        const util = utils[String(prop)](proxy);
         return (...args: any[]) => {
           isCallingUtil = true;
           const result = util(...args);
           isCallingUtil = false;
-          screen = undefined;
+          screen = "";
           return result;
         };
       } else {
@@ -163,39 +182,50 @@ export const createCss = <T extends IConfig>(
       return proxy;
     },
     apply(_, __, argsList) {
+      const value = argsList[0];
+      const pseudo = argsList[1];
+      const token = tokens[cssPropToToken[cssProp as keyof ICssPropToToken]];
+
+      // generate id used for specificity check
+      // two atoms are considered equal in regared to there specificity if the id is equal
+      const id =
+        cssProp.toLowerCase() +
+        (pseudo ? pseudo.split(":").sort().join(":") : "") +
+        screen;
+
+      // make a uid accouting for different values
+      const uid = id + value;
+
+      // If this was created before return the cached atom
+      if (atomCache.has(uid)) {
+        // Reset the screen name if needed
+        if (!isCallingUtil) {
+          screen = "";
+        }
+        return atomCache.get(uid)!;
+      }
+
+      // prepare the cssProp
       const cssPropParts = cssProp
         .split(/(?=[A-Z])/)
         .map((g) => g.toLowerCase());
-      const value = argsList[0];
-      const pseudo = argsList[1];
-      const token =
-        config.tokens &&
-        config.tokens[cssPropToToken[cssProp as keyof ICssPropToToken]];
-      let tokenValue: string | undefined;
 
-      if (token) {
-        tokenValue = token[value];
-      }
-
-      const id = cssPropParts
-        .concat(pseudo ? pseudo.split(":").sort().join(":") : "")
-        .concat(screen || "")
-        .join("");
-
+      // Create a new atom
       const atom: IAtom = {
         id,
-        uid: id + value,
         cssPropParts,
-        value,
+        value: token ? token[value] : value,
         pseudo,
-        screen: screen || "",
-        tokenValue,
+        screen,
         toString,
-        prefix,
       };
 
+      // Cache it
+      atomCache.set(uid, atom);
+
+      // Reset the screen name
       if (!isCallingUtil) {
-        screen = undefined;
+        screen = "";
       }
 
       return atom;

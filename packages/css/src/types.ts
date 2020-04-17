@@ -16,19 +16,17 @@ export interface IScreens {
 
 export interface IAtom {
   id: string;
-  uid: string;
-  prefix: string;
   cssPropParts: string[];
   value: string;
   pseudo: string | undefined;
   screen: string;
-  tokenValue: string | undefined;
-  toString: () => string;
+  _className?: string;
+  toString: (this: IAtom) => string;
 }
 
 export interface IComposedAtom {
   atoms: IAtom[];
-  toString: () => string;
+  toString: (this: IComposedAtom) => string;
 }
 
 export interface ICssPropToToken {
