@@ -26,6 +26,9 @@ const button = css.compose(
 );
 
 const alertButton = css.compose(button, css.borderColor("red"));
+
+const dynamicButton = (disabled = false) =>
+  css.compose(button, disabled && css.opacity(0.5));
 ```
 
 ## Configure
