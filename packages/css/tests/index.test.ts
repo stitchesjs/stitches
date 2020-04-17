@@ -219,12 +219,15 @@ describe("createCss", () => {
     const fakeEnv = createFakeEnv(serverCss.getStyles());
     prefixes.clear();
     const clientCss = createCss({}, fakeEnv as any);
+    // Lets see what is already put in
     expect(fakeEnv.document.styleSheets.length).toBe(1);
     expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(1);
     expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
       "//STITCHES\n\n.c_0 {color: red;}"
     );
+    // Lets add something new
     clientCss.color("blue").toString();
+    // Lets see if it continues on the correct sequence
     expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(2);
     expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
       ".c_1 {color: blue;}"
