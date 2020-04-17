@@ -5,7 +5,7 @@
     "release": "lerna publish",
     "build": "lerna run build",
     "postinstall": "lerna bootstrap",
-    "test:css": "lerna --scope @atomica/css run test:watch",
+    "test:css": "lerna --scope @stitches/css run test",
     "test": "lerna run test"
   },
   "devDependencies": {
@@ -32,6 +32,6 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@atomica/css": "file:packages/css"
+    "@stitches/css": "file:packages/css"
   }
 }
