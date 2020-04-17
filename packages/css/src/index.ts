@@ -30,11 +30,13 @@ const toStringCompose = function (this: IComposedAtom) {
 const createToString = (
   sheets: { [screen: string]: ISheet },
   screens: IScreens = {},
-  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?] // [className, pseudo]
+  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?], // [className, pseudo]
+  startSeq = 0
 ) => {
-  let seq = 0;
+  let seq = startSeq;
   return function toString(this: IAtom) {
     const className = cssClassnameProvider(seq++, this);
+
     const cssProp = toCssProp(this.cssPropParts);
     const value = this.value;
 
@@ -122,9 +124,17 @@ export const createCss = <T extends IConfig>(
 
     return [className];
   };
-
   const sheets = createSheets(env, config.screens);
-  const toString = createToString(sheets, config.screens, cssClassnameProvider);
+  const startSeq = Object.keys(sheets).reduce(
+    (count, key) => count + sheets[key].cssRules.length,
+    0
+  );
+  const toString = createToString(
+    sheets,
+    config.screens,
+    cssClassnameProvider,
+    startSeq
+  );
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -159,9 +169,12 @@ export const createCss = <T extends IConfig>(
       // SSR
       if (prop === "getStyles") {
         return () =>
-          Object.keys(screens).reduce((aggr, key) => {
-            return aggr + sheets[key].content;
-          }, sheets[""].content);
+          Object.keys(screens).reduce(
+            (aggr, key) => {
+              return aggr.concat(`// STITCHES:${key}\n${sheets[key].content}`);
+            },
+            [`// STITCHES\n${sheets[""].content}`]
+          );
       }
 
       if (prop in screens) {

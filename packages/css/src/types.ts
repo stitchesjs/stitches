@@ -159,7 +159,7 @@ export type TCss<T extends IConfig> = {
     };
   } & {
     compose: (...compositions: string[]) => string;
-    getStyles: () => string;
+    getStyles: () => string[];
   };
 
 export interface ISheet {

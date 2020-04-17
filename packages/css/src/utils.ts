@@ -67,14 +67,25 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
       throw new Error("There is no HEAD element on this document");
     }
 
-    let styleCount = head.querySelectorAll("style").length;
+    const styles = Array.from<HTMLStyleElement>(head.querySelectorAll("style"));
+    const existingStyles = styles.filter((style) =>
+      Boolean(style.textContent && style.textContent.startsWith("// STITCHES"))
+    );
+
+    let styleIndex = existingStyles.length
+      ? styles.indexOf(existingStyles[0])
+      : styles.length;
+
     return [""]
       .concat(Object.keys(screens))
-      .reduce<{ [key: string]: ISheet }>((aggr, key) => {
-        const style = env.document.createElement("style");
-        head.appendChild(style);
+      .reduce<{ [key: string]: ISheet }>((aggr, key, index) => {
+        if (!existingStyles[index]) {
+          const style = env.document.createElement("style");
+          head.appendChild(style);
+        }
+
         aggr[key] = (env.document.styleSheets[
-          styleCount++
+          styleIndex++
         ] as unknown) as ISheet;
 
         return aggr;

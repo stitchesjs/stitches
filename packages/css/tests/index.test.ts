@@ -1,30 +1,42 @@
 import { createConfig, createCss, createTokens, prefixes } from "../src";
 import { IAtom } from "../src/types";
 
-function createFakeEnv(
-  styleSheets: { content: string; insertRule: (rule: string) => void }[] = []
-) {
+function createStyleSheet(textContent: string): CSSStyleSheet {
+  const style = createStyleTag(textContent);
+  document.querySelector("head")?.appendChild(style);
+
+  return document.styleSheets[document.styleSheets.length - 1] as any;
+}
+
+function createStyleTag(textContent: string): HTMLStyleElement {
+  const style = document.createElement("style");
+  style.textContent = textContent;
+  return style;
+}
+
+function createFakeEnv(styleTags: string[] = []) {
+  const styleSheets = styleTags.map(createStyleSheet);
+
   return {
     document: {
       styleSheets,
-      // tslint:disable-next-line: no-empty
-      createElement() {},
+      // Creates a style tag
+      createElement() {
+        return {
+          textContent: "",
+        };
+      },
       // Only used to grab head
       querySelector() {
         return {
           // Used to append the style, where
           // we add the stylesheet
           appendChild() {
-            styleSheets.push({
-              content: "",
-              insertRule(rule: string) {
-                this.content += rule;
-              },
-            });
+            styleSheets.push(createStyleSheet(""));
           },
           // Only used to count styles
           querySelectorAll() {
-            return styleSheets;
+            return styleTags.map(createStyleTag);
           },
         };
       },
@@ -46,7 +58,8 @@ describe("createCss", () => {
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("red");
     expect(atom.toString()).toBe("c_0");
-    expect(css.getStyles().trim()).toBe(".c_0{color:red;}");
+    expect(css.getStyles().length).toBe(1);
+    expect(css.getStyles()[0].trim()).toBe("// STITCHES\n\n.c_0{color:red;}");
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
@@ -68,7 +81,10 @@ describe("createCss", () => {
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("tomato");
     expect(atom.toString()).toBe("c_0");
-    expect(css.getStyles().trim()).toBe(".c_0{color:tomato;}");
+    expect(css.getStyles().length).toBe(1);
+    expect(css.getStyles()[0].trim()).toBe(
+      "// STITCHES\n\n.c_0{color:tomato;}"
+    );
   });
   test("should create screens", () => {
     const config = createConfig({
@@ -83,8 +99,9 @@ describe("createCss", () => {
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("tablet");
     expect(atom.toString()).toBe("tablet_c_0");
-    expect(css.getStyles().trim()).toBe(
-      "@media (min-width: 700px) { .tablet_c_0{color:red;} }"
+    expect(css.getStyles().length).toBe(2);
+    expect(css.getStyles()[1].trim()).toBe(
+      "// STITCHES:tablet\n\n@media (min-width: 700px) { .tablet_c_0{color:red;} }"
     );
   });
   test("should handle pseudos", () => {
@@ -95,7 +112,10 @@ describe("createCss", () => {
     expect(atom.pseudo).toBe(":hover");
     expect(atom.screen).toBe("");
     expect(atom.toString()).toBe("c_0");
-    expect(css.getStyles().trim()).toBe(".c_0:hover{color:red;}");
+    expect(css.getStyles().length).toBe(1);
+    expect(css.getStyles()[0].trim()).toBe(
+      "// STITCHES\n\n.c_0:hover{color:red;}"
+    );
   });
   test("should handle specificity", () => {
     const css = createCss({}, null);
@@ -113,7 +133,8 @@ describe("createCss", () => {
     const css = createCss({}, null);
     expect(css.color("red").toString()).toBe("c_0");
     expect(css.color("red").toString()).toBe("c_0");
-    expect(css.getStyles().trim()).toBe(".c_0{color:red;}");
+    expect(css.getStyles().length).toBe(1);
+    expect(css.getStyles()[0].trim()).toBe("// STITCHES\n\n.c_0{color:red;}");
   });
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
@@ -131,7 +152,9 @@ describe("createCss", () => {
     const css = createCss({}, (fakeEnv as unknown) as Window);
     String(css.color("red"));
     expect(fakeEnv.document.styleSheets.length).toBe(1);
-    expect(fakeEnv.document.styleSheets[0].content).toBe(".c_0{color:red;}");
+    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+      ".c_0 {color: red;}"
+    );
   });
   test("should inject screen sheets", () => {
     const fakeEnv = createFakeEnv();
@@ -143,8 +166,8 @@ describe("createCss", () => {
     const css = createCss(config, (fakeEnv as unknown) as Window);
     String(css.tablet.color("red"));
     expect(fakeEnv.document.styleSheets.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[1].content).toBe(
-      "@media (min-width: 700px) { .tablet_c_0{color:red;} }"
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
+      "@media (min-width: 700px) {.tablet_c_0 {color: red;}}"
     );
   });
   test("should allow utils", () => {
@@ -189,5 +212,22 @@ describe("createCss", () => {
       null
     );
     expect(() => createCss({ prefix: "foo" }, null)).toThrow();
+  });
+  test("should not inject existing styles", () => {
+    const serverCss = createCss({}, null);
+    serverCss.color("red").toString();
+    const fakeEnv = createFakeEnv(serverCss.getStyles());
+    prefixes.clear();
+    const clientCss = createCss({}, fakeEnv as any);
+    expect(fakeEnv.document.styleSheets.length).toBe(1);
+    expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(1);
+    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+      "//STITCHES\n\n.c_0 {color: red;}"
+    );
+    clientCss.color("blue").toString();
+    expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(2);
+    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+      ".c_1 {color: blue;}"
+    );
   });
 });
