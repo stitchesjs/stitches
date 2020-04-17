@@ -32,6 +32,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@stitches/css": "file:packages/css"
+    "@stitches/css": "file:packages/css",
+    "@stitches/styled": "file:packages/styled",
+    "@stitches/tailwind": "file:packages/tailwind"
   }
 }

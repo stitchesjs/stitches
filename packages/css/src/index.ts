@@ -148,7 +148,8 @@ export const createCss = <T extends IConfig>(
   let cssProp = "";
   let screen = "";
   // We need to know when we call utils to avoid clearing
-  // the screen set for that util
+  // the screen set for that util, also avoid util calling util
+  // when overriding properties
   let isCallingUtil = false;
 
   return new Proxy(noop, {
@@ -166,7 +167,7 @@ export const createCss = <T extends IConfig>(
 
       if (prop in screens) {
         screen = String(prop);
-      } else if (prop in utils) {
+      } else if (!isCallingUtil && prop in utils) {
         const util = utils[String(prop)](proxy);
         return (...args: any[]) => {
           isCallingUtil = true;
