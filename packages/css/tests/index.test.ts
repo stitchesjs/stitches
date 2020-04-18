@@ -169,6 +169,18 @@ describe("createCss", () => {
       String(css.compose(undefined, null, false, "", css.color("red")))
     ).toBe("c_0");
   });
+
+  test("should allow empty compose call", () => {
+    const css = createCss({}, null);
+    expect(css.compose()).toBe("");
+  });
+
+  test("should allow conditional compositions", () => {
+    const css = createCss({}, null);
+    expect(String(css.compose(false && css.color("red")))).toBe("");
+    expect(String(css.compose(true && css.color("red")))).toBe("c_0");
+  });
+
   test("should allow prefixes", () => {
     const css = createCss(
       {
