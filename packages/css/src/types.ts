@@ -114,51 +114,29 @@ export type TCss<
   T extends IConfig,
   Props extends {
     [key: string]: string | number;
+  },
+  CP = {
+    [K in keyof Props]: Props[K] extends TUtility<any, any>
+      ? ReturnType<Props[K]>
+      : (
+          value: K extends keyof ICssPropToToken
+            ? T["tokens"] extends object
+              ? T["tokens"][ICssPropToToken[K]] extends object
+                ? keyof T["tokens"][ICssPropToToken[K]]
+                : Props[K]
+              : Props[K]
+            : Props[K],
+          pseudo?: string
+        ) => string;
   }
-> = {
-  [K in keyof Props]: Props[K] extends TUtility<any, any>
-    ? ReturnType<Props[K]>
-    : (
-        value: K extends keyof ICssPropToToken
-          ? T["tokens"] extends object
-            ? T["tokens"][ICssPropToToken[K]] extends object
-              ? keyof T["tokens"][ICssPropToToken[K]]
-              : K extends keyof Props
-              ? Props[K]
-              : string
-            : K extends keyof Props
-            ? Props[K]
-            : string
-          : K extends keyof Props
-          ? Props[K]
-          : string,
-        pseudo?: string
-      ) => string;
-} &
+> = CP &
   {
     [U in keyof T["utils"]]: T["utils"][U] extends TUtility<infer P, any>
       ? (...args: P) => string
       : never;
   } &
   {
-    [S in keyof T["screens"]]: {
-      [K in keyof AllCssProps]: (
-        value: K extends keyof ICssPropToToken
-          ? T["tokens"] extends object
-            ? T["tokens"][ICssPropToToken[K]] extends object
-              ? keyof T["tokens"][ICssPropToToken[K]]
-              : K extends keyof AllCssProps
-              ? AllCssProps[K]
-              : string
-            : K extends keyof AllCssProps
-            ? AllCssProps[K]
-            : string
-          : K extends keyof AllCssProps
-          ? AllCssProps[K]
-          : string,
-        pseudo?: string
-      ) => string;
-    };
+    [S in keyof T["screens"]]: CP;
   } & {
     compose: (...compositions: string[]) => string;
     getStyles: () => string;
