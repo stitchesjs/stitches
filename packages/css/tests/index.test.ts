@@ -186,13 +186,4 @@ describe("createCss", () => {
       String(css.color("red"))
     ).toBe("foo_c_0");
   });
-  test("should throw when using same prefix twice", () => {
-    createCss(
-      {
-        prefix: "foo",
-      },
-      null
-    );
-    expect(() => createCss({ prefix: "foo" }, null)).toThrow();
-  });
 });
