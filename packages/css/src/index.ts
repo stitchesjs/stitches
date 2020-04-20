@@ -133,10 +133,14 @@ export const createCss = <T extends IConfig>(
     return [className];
   };
   const sheets = createSheets(env, config.screens);
-  const startSeq = Object.keys(sheets).reduce(
-    (count, key) => count + sheets[key].cssRules.length,
-    0
-  );
+  const startSeq = Object.keys(sheets).reduce((count, key) => {
+    // Can fail with cross origin (like Codesandbox)
+    try {
+      return count + sheets[key].cssRules.length;
+    } catch {
+      return count;
+    }
+  }, 0);
   const toString = createToString(
     sheets,
     config.screens,
