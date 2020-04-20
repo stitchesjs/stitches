@@ -8,7 +8,6 @@ import {
   ISheet,
   ITokensDefinition,
   TCss,
-  TUtility,
 } from "./types";
 import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
 
@@ -17,6 +16,10 @@ export * from "./css-types";
 
 // tslint:disable-next-line: no-empty
 const noop = () => {};
+
+const hotReloadingCache: {
+  [key: string]: any;
+} = {};
 
 const toCssProp = (cssPropParts: string[]) => {
   return cssPropParts.join("-");
@@ -87,8 +90,6 @@ const composeIntoMap = (
   }
 };
 
-export const prefixes = new Set<string>();
-
 export const createConfig = <T extends IConfig>(config: T) => {
   return config;
 };
@@ -103,11 +104,9 @@ export const createCss = <T extends IConfig>(
 ): TCss<T, T extends { utilityFirst: true } ? {} : AllCssProps> => {
   const prefix = config.prefix || "";
 
-  if (prefixes.has(prefix)) {
-    throw new Error(`@stitches/css - The prefix "${prefix}" is already in use`);
+  if (hotReloadingCache[prefix]) {
+    return hotReloadingCache[prefix];
   }
-
-  prefixes.add(prefix);
 
   // pre-compute class prefix
   const classPrefix = prefix ? `${prefix}_` : "";
@@ -155,7 +154,7 @@ export const createCss = <T extends IConfig>(
   // when overriding properties
   let isCallingUtil = false;
 
-  return new Proxy(noop, {
+  const css = new Proxy(noop, {
     get(_, prop, proxy) {
       if (prop === "compose") {
         return compose;
@@ -239,6 +238,10 @@ export const createCss = <T extends IConfig>(
       return atom;
     },
   }) as any;
+
+  hotReloadingCache[prefix] = css;
+
+  return css;
 };
 
 // default instance
