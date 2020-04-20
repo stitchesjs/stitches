@@ -17,9 +17,7 @@ export * from "./css-types";
 // tslint:disable-next-line: no-empty
 const noop = () => {};
 
-const hotReloadingCache: {
-  [key: string]: any;
-} = {};
+export const hotReloadingCache = new Map<string, any>();
 
 const toCssProp = (cssPropParts: string[]) => {
   return cssPropParts.join("-");
@@ -104,8 +102,8 @@ export const createCss = <T extends IConfig>(
 ): TCss<T, T extends { utilityFirst: true } ? {} : AllCssProps> => {
   const prefix = config.prefix || "";
 
-  if (hotReloadingCache[prefix]) {
-    return hotReloadingCache[prefix];
+  if (hotReloadingCache.has(prefix)) {
+    return hotReloadingCache.get(prefix);
   }
 
   // pre-compute class prefix
@@ -239,7 +237,7 @@ export const createCss = <T extends IConfig>(
     },
   }) as any;
 
-  hotReloadingCache[prefix] = css;
+  hotReloadingCache.set(prefix, css);
 
   return css;
 };
