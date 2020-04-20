@@ -273,16 +273,13 @@ export type TTailwindUtility<V = never> = TUtility<
 
 const createUtilityValues = <
   T extends {
-    [key: string]: (
-      css: TCss<ITailwindConfig, AllCssProps>,
-      pseudo: string
-    ) => string;
+    [key: string]: (css: TCss<ITailwindConfig>, pseudo: string) => string;
   }
 >(
   values: T
 ) => values;
 
-const createUtility = <C = TCss<ITailwindConfig, AllCssProps>>(
+const createUtility = <C = TCss<ITailwindConfig>>(
   cb:
     | ((css: C, value: any, pseudo?: string) => string)
     | {

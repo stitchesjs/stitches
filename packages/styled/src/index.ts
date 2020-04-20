@@ -1,9 +1,4 @@
-import type {
-  StandardLonghandProperties,
-  StandardShorthandProperties,
-} from "csstype";
-// tslint:disable-next-line
-import { AllCssProps, IConfig, TCss } from "@stitches/css";
+import { IConfig, TCss, TUtilityFirstCss } from "@stitches/css";
 import * as React from "react";
 import { Box, PolymorphicComponent } from "react-polymorphic-box";
 
@@ -13,25 +8,25 @@ export type IStyled<
 > = (<P extends object = {}>(
   defaults: P,
   cb: (
-    css: TCss<C, C extends { utilityFirst: true } ? {} : AllCssProps>,
+    css: C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TCss<C>,
     props: P
   ) => string
 ) => PolymorphicComponent<P, E>) &
   ((
     cb: (
-      css: TCss<C, C extends { utilityFirst: true } ? {} : AllCssProps>
+      css: C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TCss<C>
     ) => string
   ) => PolymorphicComponent<{}, E>);
 
 export const createStyled = <C extends IConfig>() => {
   let currentAs: string;
 
-  const context = React.createContext<
-    TCss<C, C extends { utilityFirst: true } ? {} : AllCssProps>
-  >(null as any);
+  const context = React.createContext<TCss<C> | TUtilityFirstCss<C>>(
+    null as any
+  );
   const useCssInstance = () => React.useContext(context);
   const ProviderInstance: React.FC<{
-    css: TCss<C, C extends { utilityFirst: true } ? {} : AllCssProps>;
+    css: C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TCss<C>;
   }> = ({ css, children }) =>
     React.createElement(
       context.Provider,
