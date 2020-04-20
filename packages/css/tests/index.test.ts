@@ -225,7 +225,7 @@ describe("createCss", () => {
     const serverCss = createCss({}, null);
     serverCss.color("red").toString();
     const fakeEnv = createFakeEnv(serverCss.getStyles());
-    prefixes.clear();
+    hotReloadingCache.clear();
     const clientCss = createCss({}, fakeEnv as any);
     // Lets see what is already put in
     expect(fakeEnv.document.styleSheets.length).toBe(1);
