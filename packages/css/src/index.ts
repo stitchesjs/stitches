@@ -159,7 +159,7 @@ export const createCss = <T extends IConfig>(
   // when overriding properties
   let isCallingUtil = false;
 
-  const css = new Proxy(noop, {
+  const cssInstance = new Proxy(noop, {
     get(_, prop, proxy) {
       if (prop === "compose") {
         return compose;
@@ -244,9 +244,9 @@ export const createCss = <T extends IConfig>(
     },
   }) as any;
 
-  hotReloadingCache.set(prefix, css);
+  hotReloadingCache.set(prefix, cssInstance);
 
-  return css;
+  return cssInstance;
 };
 
 // default instance
