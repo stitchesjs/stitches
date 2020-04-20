@@ -1,3 +1,4 @@
+import { AllCssProps } from "./css-types";
 import {
   IAtom,
   IComposedAtom,
@@ -7,13 +8,17 @@ import {
   ISheet,
   ITokensDefinition,
   TCss,
+  TUtilityFirstCss,
 } from "./types";
 import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
 
 export * from "./types";
+export * from "./css-types";
 
 // tslint:disable-next-line: no-empty
 const noop = () => {};
+
+export const hotReloadingCache = new Map<string, any>();
 
 const toCssProp = (cssPropParts: string[]) => {
   return cssPropParts.join("-");
@@ -24,7 +29,14 @@ const toStringCachedAtom = function (this: IAtom) {
 };
 
 const toStringCompose = function (this: IComposedAtom) {
-  return this.atoms.map((atom) => atom.toString()).join(" ");
+  const className = this.atoms.map((atom) => atom.toString()).join(" ");
+
+  // cache the className on this instance
+  // @ts-ignore
+  this._className = className;
+  // @ts-ignore
+  this.toString = toStringCachedAtom;
+  return className;
 };
 
 const createToString = (
@@ -86,8 +98,6 @@ const composeIntoMap = (
   }
 };
 
-export const prefixes = new Set<string>();
-
 export const createConfig = <T extends IConfig>(config: T) => {
   return config;
 };
@@ -99,14 +109,12 @@ export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
 export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
-): TCss<T> => {
+): T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TCss<T> => {
   const prefix = config.prefix || "";
 
-  if (prefixes.has(prefix)) {
-    throw new Error(`@stitches/css - The prefix "${prefix}" is already in use`);
+  if (env && hotReloadingCache.has(prefix)) {
+    return hotReloadingCache.get(prefix);
   }
-
-  prefixes.add(prefix);
 
   // pre-compute class prefix
   const classPrefix = prefix ? `${prefix}_` : "";
@@ -158,10 +166,14 @@ export const createCss = <T extends IConfig>(
   let cssProp = "";
   let screen = "";
   // We need to know when we call utils to avoid clearing
-  // the screen set for that util
+  // the screen set for that util, also avoid util calling util
+  // when overriding properties
   let isCallingUtil = false;
+  // We need to know when we override as it does not require a util to
+  // be called
+  let isOverriding = false;
 
-  return new Proxy(noop, {
+  const cssInstance = new Proxy(noop, {
     get(_, prop, proxy) {
       if (prop === "compose") {
         return compose;
@@ -177,10 +189,15 @@ export const createCss = <T extends IConfig>(
           );
       }
 
+      if (prop === "override" && config.utilityFirst) {
+        isOverriding = true;
+        return proxy;
+      }
+
       if (prop in screens) {
         screen = String(prop);
-      } else if (prop in utils) {
-        const util = utils[String(prop)](proxy);
+      } else if (!isCallingUtil && prop in utils) {
+        const util = utils[String(prop)](proxy, config);
         return (...args: any[]) => {
           isCallingUtil = true;
           const result = util(...args);
@@ -188,6 +205,10 @@ export const createCss = <T extends IConfig>(
           screen = "";
           return result;
         };
+      } else if (config.utilityFirst && !isCallingUtil && !isOverriding) {
+        throw new Error(
+          `@stitches/css - The property "${String(prop)}" is not available`
+        );
       } else {
         cssProp = String(prop);
       }
@@ -241,9 +262,17 @@ export const createCss = <T extends IConfig>(
         screen = "";
       }
 
+      isOverriding = false;
+
       return atom;
     },
   }) as any;
+
+  if (env) {
+    hotReloadingCache.set(prefix, cssInstance);
+  }
+
+  return cssInstance;
 };
 
 // default instance

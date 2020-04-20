@@ -1,14 +1,4 @@
-import {
-  StandardLonghandProperties,
-  StandardShorthandProperties,
-} from "csstype";
-
-export type AllCssProps = Required<
-  Omit<
-    StandardLonghandProperties & StandardShorthandProperties,
-    "border" | "background" | "transition"
-  >
->;
+import { AllCssProps } from "./css-types";
 
 export interface IScreens {
   [key: string]: (css: string) => string;
@@ -26,8 +16,14 @@ export interface IAtom {
 
 export interface IComposedAtom {
   atoms: IAtom[];
+  _className?: string;
   toString: (this: IComposedAtom) => string;
 }
+
+export type TUtility<A extends any[], C extends IConfig> = (
+  css: TCss<Omit<C, "utils">>,
+  config: C
+) => (...args: A) => string;
 
 export interface ICssPropToToken {
   color: "colors";
@@ -106,12 +102,55 @@ export interface ITokensDefinition {
 
 export interface IConfig {
   prefix?: string;
+  utilityFirst?: boolean;
   screens?: IScreens;
   tokens?: ITokensDefinition;
   utils?: {
-    [name: string]: (css: TCss<any>) => (...args: any[]) => string;
+    [name: string]: TUtility<any, any>;
   };
 }
+
+export type TUtilityFirstCss<T extends IConfig> = {
+  override: {
+    [K in keyof AllCssProps]: (
+      value: K extends keyof ICssPropToToken
+        ? T["tokens"] extends object
+          ? T["tokens"][ICssPropToToken[K]] extends object
+            ? keyof T["tokens"][ICssPropToToken[K]]
+            : AllCssProps[K]
+          : AllCssProps[K]
+        : AllCssProps[K],
+      pseudo?: string
+    ) => string;
+  };
+} & {
+  [S in keyof T["screens"]]: {
+    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]>
+      : never;
+  } & {
+    override: {
+      [K in keyof AllCssProps]: (
+        value: K extends keyof ICssPropToToken
+          ? T["tokens"] extends object
+            ? T["tokens"][ICssPropToToken[K]] extends object
+              ? keyof T["tokens"][ICssPropToToken[K]]
+              : AllCssProps[K]
+            : AllCssProps[K]
+          : AllCssProps[K],
+        pseudo?: string
+      ) => string;
+    };
+  };
+} &
+  {
+    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]>
+      : never;
+  } & {
+    compose: (...compositions: string[]) => string;
+    getStyles: () => string;
+  };
 
 export type TCss<T extends IConfig> = {
   [K in keyof AllCssProps]: (
@@ -119,44 +158,35 @@ export type TCss<T extends IConfig> = {
       ? T["tokens"] extends object
         ? T["tokens"][ICssPropToToken[K]] extends object
           ? keyof T["tokens"][ICssPropToToken[K]]
-          : K extends keyof AllCssProps
-          ? AllCssProps[K]
-          : string
-        : K extends keyof AllCssProps
-        ? AllCssProps[K]
-        : string
-      : K extends keyof AllCssProps
-      ? AllCssProps[K]
-      : string,
+          : AllCssProps[K]
+        : AllCssProps[K]
+      : AllCssProps[K],
     pseudo?: string
   ) => string;
 } &
   {
-    [U in keyof T["utils"]]: T["utils"][U] extends (
-      css: TCss<any>
-    ) => (...args: infer P) => string
-      ? (...args: P) => string
+    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]>
       : never;
   } &
   {
     [S in keyof T["screens"]]: {
-      [K in keyof AllCssProps]: (
-        value: K extends keyof ICssPropToToken
-          ? T["tokens"] extends object
-            ? T["tokens"][ICssPropToToken[K]] extends object
-              ? keyof T["tokens"][ICssPropToToken[K]]
-              : K extends keyof AllCssProps
-              ? AllCssProps[K]
-              : string
-            : K extends keyof AllCssProps
-            ? AllCssProps[K]
-            : string
-          : K extends keyof AllCssProps
-          ? AllCssProps[K]
-          : string,
-        pseudo?: string
-      ) => string;
-    };
+      [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
+        ? ReturnType<T["utils"][U]>
+        : never;
+    } &
+      {
+        [K in keyof AllCssProps]: (
+          value: K extends keyof ICssPropToToken
+            ? T["tokens"] extends object
+              ? T["tokens"][ICssPropToToken[K]] extends object
+                ? keyof T["tokens"][ICssPropToToken[K]]
+                : AllCssProps[K]
+              : AllCssProps[K]
+            : AllCssProps[K],
+          pseudo?: string
+        ) => string;
+      };
   } & {
     compose: (...compositions: string[]) => string;
     getStyles: () => string[];

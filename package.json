@@ -2,9 +2,9 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "release": "lerna publish",
+    "release": "npm run build && lerna publish",
     "build": "lerna run build",
-    "postinstall": "lerna bootstrap",
+    "postinstall": "lerna bootstrap && lerna link",
     "test:css": "lerna --scope @stitches/css run test",
     "test": "lerna run test"
   },
@@ -14,16 +14,8 @@
     "dts-bundle": "^0.7.3",
     "jest": "^25.3.0",
     "lerna": "^3.20.2",
-    "pascal-case": "^3.1.1",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
-    "rollup": "^2.6.1",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-sourcemaps": "^0.5.0",
-    "rollup-plugin-terser": "^5.3.0",
     "semver": "^7.3.0",
     "ts-jest": "~25.3.1",
     "tslint": "^6.1.1",
@@ -32,6 +24,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@stitches/css": "file:packages/css"
+    "@stitches/css": "file:packages/css",
+    "@stitches/styled": "file:packages/styled",
+    "@stitches/tailwind": "file:packages/tailwind"
   }
 }

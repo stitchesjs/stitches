@@ -1,4 +1,9 @@
-import { createConfig, createCss, createTokens, prefixes } from "../src";
+import {
+  createConfig,
+  createCss,
+  createTokens,
+  hotReloadingCache,
+} from "../src";
 import { IAtom } from "../src/types";
 
 function createStyleSheet(textContent: string): CSSStyleSheet {
@@ -45,7 +50,7 @@ function createFakeEnv(styleTags: string[] = []) {
 }
 
 beforeEach(() => {
-  prefixes.clear();
+  hotReloadingCache.clear();
 });
 
 describe("createCss", () => {
@@ -204,14 +209,17 @@ describe("createCss", () => {
       String(css.color("red"))
     ).toBe("foo_c_0");
   });
-  test("should throw when using same prefix twice", () => {
-    createCss(
+  test("should expose override with utility first", () => {
+    const css = createCss(
       {
-        prefix: "foo",
+        utilityFirst: true,
       },
       null
     );
-    expect(() => createCss({ prefix: "foo" }, null)).toThrow();
+    expect(
+      // @ts-ignore
+      String(css.override.color("red"))
+    ).toBe("c_0");
   });
   test("should not inject existing styles", () => {
     const serverCss = createCss({}, null);
