@@ -218,6 +218,12 @@ export const createConfig = <T extends ITailwindConfig>(
 } => ({ ...config, utilityFirst: true } as any);
 
 export const tailwind = createConfig({
+  screens: {
+    sm: (cssRule) => `@media (min-width: ${theme.screens.sm}) { ${cssRule}}`,
+    md: (cssRule) => `@media (min-width: ${theme.screens.md}) { ${cssRule}}`,
+    lg: (cssRule) => `@media (min-width: ${theme.screens.lg}) { ${cssRule}}`,
+    xl: (cssRule) => `@media (min-width: ${theme.screens.xl}) { ${cssRule}}`,
+  },
   theme,
   utilityFirst: true,
   utils,
