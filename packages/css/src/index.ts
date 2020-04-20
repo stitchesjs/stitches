@@ -109,7 +109,7 @@ export const createCss = <T extends IConfig>(
 ): TCss<T, T extends { utilityFirst: true } ? {} : AllCssProps> => {
   const prefix = config.prefix || "";
 
-  if (hotReloadingCache.has(prefix)) {
+  if (env && hotReloadingCache.has(prefix)) {
     return hotReloadingCache.get(prefix);
   }
 
@@ -244,7 +244,9 @@ export const createCss = <T extends IConfig>(
     },
   }) as any;
 
-  hotReloadingCache.set(prefix, cssInstance);
+  if (env) {
+    hotReloadingCache.set(prefix, cssInstance);
+  }
 
   return cssInstance;
 };
