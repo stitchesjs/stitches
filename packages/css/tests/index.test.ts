@@ -186,4 +186,16 @@ describe("createCss", () => {
       String(css.color("red"))
     ).toBe("foo_c_0");
   });
+  test("should expose override with utility first", () => {
+    const css = createCss(
+      {
+        utilityFirst: true,
+      },
+      null
+    );
+    expect(
+      // @ts-ignore
+      String(css.override.color("red"))
+    ).toBe("c_0");
+  });
 });

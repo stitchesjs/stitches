@@ -8,6 +8,7 @@ import {
   ISheet,
   ITokensDefinition,
   TCss,
+  TUtilityFirstCss,
 } from "./types";
 import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
 
@@ -106,7 +107,7 @@ export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
 export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
-): TCss<T, T extends { utilityFirst: true } ? {} : AllCssProps> => {
+): T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TCss<T> => {
   const prefix = config.prefix || "";
 
   if (env && hotReloadingCache.has(prefix)) {
@@ -158,6 +159,9 @@ export const createCss = <T extends IConfig>(
   // the screen set for that util, also avoid util calling util
   // when overriding properties
   let isCallingUtil = false;
+  // We need to know when we override as it does not require a util to
+  // be called
+  let isOverriding = false;
 
   const cssInstance = new Proxy(noop, {
     get(_, prop, proxy) {
@@ -172,6 +176,11 @@ export const createCss = <T extends IConfig>(
           }, sheets[""].content);
       }
 
+      if (prop === "override" && config.utilityFirst) {
+        isOverriding = true;
+        return proxy;
+      }
+
       if (prop in screens) {
         screen = String(prop);
       } else if (!isCallingUtil && prop in utils) {
@@ -183,7 +192,7 @@ export const createCss = <T extends IConfig>(
           screen = "";
           return result;
         };
-      } else if (config.utilityFirst && !isCallingUtil) {
+      } else if (config.utilityFirst && !isCallingUtil && !isOverriding) {
         throw new Error(
           `@stitches/css - The property "${String(prop)}" is not available`
         );
@@ -239,6 +248,8 @@ export const createCss = <T extends IConfig>(
       if (!isCallingUtil) {
         screen = "";
       }
+
+      isOverriding = false;
 
       return atom;
     },

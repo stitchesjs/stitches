@@ -21,6 +21,7 @@ export const createConfig = <T extends ITailwindConfig>(
   config: T
 ): {
   theme: T["theme"];
+  screens: T["screens"];
   utilityFirst: true;
   utils: T["utils"] & {
     container: TMergedUtilityPayload<
