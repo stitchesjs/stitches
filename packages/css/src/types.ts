@@ -114,29 +114,41 @@ export type TCss<
   T extends IConfig,
   Props extends {
     [key: string]: string | number;
-  },
-  CP = {
-    [K in keyof Props]: Props[K] extends TUtility<any, any>
-      ? ReturnType<Props[K]>
-      : (
-          value: K extends keyof ICssPropToToken
-            ? T["tokens"] extends object
-              ? T["tokens"][ICssPropToToken[K]] extends object
-                ? keyof T["tokens"][ICssPropToToken[K]]
-                : Props[K]
-              : Props[K]
-            : Props[K],
-          pseudo?: string
-        ) => string;
   }
-> = CP &
+> = {
+  [K in keyof Props]: Props[K] extends TUtility<any, any>
+    ? ReturnType<Props[K]>
+    : (
+        value: K extends keyof ICssPropToToken
+          ? T["tokens"] extends object
+            ? T["tokens"][ICssPropToToken[K]] extends object
+              ? keyof T["tokens"][ICssPropToToken[K]]
+              : Props[K]
+            : Props[K]
+          : Props[K],
+        pseudo?: string
+      ) => string;
+} &
   {
-    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<infer P, any>
-      ? (...args: P) => string
+    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]>
       : never;
   } &
   {
-    [S in keyof T["screens"]]: CP;
+    [S in keyof T["screens"]]: {
+      [K in keyof Props]: Props[K] extends TUtility<any, any>
+        ? ReturnType<Props[K]>
+        : (
+            value: K extends keyof ICssPropToToken
+              ? T["tokens"] extends object
+                ? T["tokens"][ICssPropToToken[K]] extends object
+                  ? keyof T["tokens"][ICssPropToToken[K]]
+                  : Props[K]
+                : Props[K]
+              : Props[K],
+            pseudo?: string
+          ) => string;
+    };
   } & {
     compose: (...compositions: string[]) => string;
     getStyles: () => string;
