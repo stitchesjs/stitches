@@ -7,16 +7,13 @@
   "repository": "git+https://github.com/christianalfoni/stitches.git",
   "main": "lib/index.js",
   "module": "es/index.js",
-  "browser": "dist/bundle.js",
-  "types": "dist/bundle.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "npm run build:lib & npm run build:umd",
+    "build": "npm run build:lib & npm run build:es",
     "build:lib": "tsc -p tsconfig.build.json --outDir lib --module commonjs",
     "build:es": "tsc -p tsconfig.build.json --outDir es --module es2015",
-    "build:umd": "npm run build:es && rollup --config && dts-bundle --name dist/bundle --main es --outputAsModuleFolder",
     "clean": "rimraf dist es lib coverage",
     "typecheck": "tsc --noEmit",
     "lint": "tslint --project tsconfig.json --format stylish",

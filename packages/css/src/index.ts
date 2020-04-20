@@ -1,3 +1,4 @@
+import { AllCssProps } from "./css-types";
 import {
   IAtom,
   IComposedAtom,
@@ -7,10 +8,12 @@ import {
   ISheet,
   ITokensDefinition,
   TCss,
+  TUtility,
 } from "./types";
 import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
 
 export * from "./types";
+export * from "./css-types";
 
 // tslint:disable-next-line: no-empty
 const noop = () => {};
@@ -97,7 +100,7 @@ export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
 export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
-): TCss<T> => {
+): TCss<T, T extends { utilityFirst: true } ? {} : AllCssProps> => {
   const prefix = config.prefix || "";
 
   if (prefixes.has(prefix)) {
@@ -168,7 +171,7 @@ export const createCss = <T extends IConfig>(
       if (prop in screens) {
         screen = String(prop);
       } else if (!isCallingUtil && prop in utils) {
-        const util = utils[String(prop)](proxy);
+        const util = utils[String(prop)](proxy, config);
         return (...args: any[]) => {
           isCallingUtil = true;
           const result = util(...args);
@@ -176,6 +179,10 @@ export const createCss = <T extends IConfig>(
           screen = "";
           return result;
         };
+      } else if (config.utilityFirst && !isCallingUtil) {
+        throw new Error(
+          `@stitches/css - The property "${String(prop)}" is not available`
+        );
       } else {
         cssProp = String(prop);
       }

@@ -1,14 +1,4 @@
-import {
-  StandardLonghandProperties,
-  StandardShorthandProperties,
-} from "csstype";
-
-export type AllCssProps = Required<
-  Omit<
-    StandardLonghandProperties & StandardShorthandProperties,
-    "border" | "background" | "transition"
-  >
->;
+import { AllCssProps } from "./css-types";
 
 export interface IScreens {
   [key: string]: (css: string) => string;
@@ -28,6 +18,11 @@ export interface IComposedAtom {
   atoms: IAtom[];
   toString: (this: IComposedAtom) => string;
 }
+
+export type TUtility<A extends any[], C extends IConfig> = (
+  css: TCss<Omit<C, "utils">, AllCssProps>,
+  config: C
+) => (...args: A) => string;
 
 export interface ICssPropToToken {
   color: "colors";
@@ -106,35 +101,41 @@ export interface ITokensDefinition {
 
 export interface IConfig {
   prefix?: string;
+  utilityFirst?: boolean;
   screens?: IScreens;
   tokens?: ITokensDefinition;
   utils?: {
-    [name: string]: (css: TCss<any>) => (...args: any[]) => string;
+    [name: string]: TUtility<any, any>;
   };
 }
 
-export type TCss<T extends IConfig> = {
-  [K in keyof AllCssProps]: (
-    value: K extends keyof ICssPropToToken
-      ? T["tokens"] extends object
-        ? T["tokens"][ICssPropToToken[K]] extends object
-          ? keyof T["tokens"][ICssPropToToken[K]]
-          : K extends keyof AllCssProps
-          ? AllCssProps[K]
-          : string
-        : K extends keyof AllCssProps
-        ? AllCssProps[K]
-        : string
-      : K extends keyof AllCssProps
-      ? AllCssProps[K]
-      : string,
-    pseudo?: string
-  ) => string;
+export type TCss<
+  T extends IConfig,
+  Props extends {
+    [key: string]: string | number;
+  }
+> = {
+  [K in keyof Props]: Props[K] extends TUtility<any, any>
+    ? ReturnType<Props[K]>
+    : (
+        value: K extends keyof ICssPropToToken
+          ? T["tokens"] extends object
+            ? T["tokens"][ICssPropToToken[K]] extends object
+              ? keyof T["tokens"][ICssPropToToken[K]]
+              : K extends keyof Props
+              ? Props[K]
+              : string
+            : K extends keyof Props
+            ? Props[K]
+            : string
+          : K extends keyof Props
+          ? Props[K]
+          : string,
+        pseudo?: string
+      ) => string;
 } &
   {
-    [U in keyof T["utils"]]: T["utils"][U] extends (
-      css: TCss<any>
-    ) => (...args: infer P) => string
+    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<infer P, any>
       ? (...args: P) => string
       : never;
   } &

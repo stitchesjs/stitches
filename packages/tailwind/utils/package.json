@@ -1,0 +1,8 @@
+{
+  "name": "@stitches/tailwind/utils",
+  "private": true,
+  "main": "../lib/utils",
+  "module": "../es/utils",
+  "jsnext:main": "../es/utils",
+  "typings": "../lib/utils/index.d.ts"
+}
