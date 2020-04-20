@@ -1,4 +1,9 @@
-import { createConfig, createCss, createTokens, prefixes } from "../src";
+import {
+  createConfig,
+  createCss,
+  createTokens,
+  hotReloadingCache,
+} from "../src";
 import { IAtom } from "../src/types";
 
 function createFakeEnv(
@@ -33,7 +38,7 @@ function createFakeEnv(
 }
 
 beforeEach(() => {
-  prefixes.clear();
+  hotReloadingCache.clear();
 });
 
 describe("createCss", () => {

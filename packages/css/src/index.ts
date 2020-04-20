@@ -1,3 +1,4 @@
+import { AllCssProps } from "./css-types";
 import {
   IAtom,
   IComposedAtom,
@@ -11,9 +12,12 @@ import {
 import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
 
 export * from "./types";
+export * from "./css-types";
 
 // tslint:disable-next-line: no-empty
 const noop = () => {};
+
+export const hotReloadingCache = new Map<string, any>();
 
 const toCssProp = (cssPropParts: string[]) => {
   return cssPropParts.join("-");
@@ -91,8 +95,6 @@ const composeIntoMap = (
   }
 };
 
-export const prefixes = new Set<string>();
-
 export const createConfig = <T extends IConfig>(config: T) => {
   return config;
 };
@@ -104,14 +106,12 @@ export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
 export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
-): TCss<T> => {
+): TCss<T, T extends { utilityFirst: true } ? {} : AllCssProps> => {
   const prefix = config.prefix || "";
 
-  if (prefixes.has(prefix)) {
-    throw new Error(`@stitches/css - The prefix "${prefix}" is already in use`);
+  if (hotReloadingCache.has(prefix)) {
+    return hotReloadingCache.get(prefix);
   }
-
-  prefixes.add(prefix);
 
   // pre-compute class prefix
   const classPrefix = prefix ? `${prefix}_` : "";
@@ -155,10 +155,11 @@ export const createCss = <T extends IConfig>(
   let cssProp = "";
   let screen = "";
   // We need to know when we call utils to avoid clearing
-  // the screen set for that util
+  // the screen set for that util, also avoid util calling util
+  // when overriding properties
   let isCallingUtil = false;
 
-  return new Proxy(noop, {
+  const css = new Proxy(noop, {
     get(_, prop, proxy) {
       if (prop === "compose") {
         return compose;
@@ -173,8 +174,8 @@ export const createCss = <T extends IConfig>(
 
       if (prop in screens) {
         screen = String(prop);
-      } else if (prop in utils) {
-        const util = utils[String(prop)](proxy);
+      } else if (!isCallingUtil && prop in utils) {
+        const util = utils[String(prop)](proxy, config);
         return (...args: any[]) => {
           isCallingUtil = true;
           const result = util(...args);
@@ -182,6 +183,10 @@ export const createCss = <T extends IConfig>(
           screen = "";
           return result;
         };
+      } else if (config.utilityFirst && !isCallingUtil) {
+        throw new Error(
+          `@stitches/css - The property "${String(prop)}" is not available`
+        );
       } else {
         cssProp = String(prop);
       }
@@ -238,6 +243,10 @@ export const createCss = <T extends IConfig>(
       return atom;
     },
   }) as any;
+
+  hotReloadingCache.set(prefix, css);
+
+  return css;
 };
 
 // default instance

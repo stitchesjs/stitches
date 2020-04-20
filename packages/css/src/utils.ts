@@ -1,10 +1,5 @@
-import {
-  AllCssProps,
-  IConfig,
-  ICssPropToToken,
-  IScreens,
-  ISheet,
-} from "./types";
+import { AllCssProps } from "./css-types";
+import { IConfig, ICssPropToToken, IScreens, ISheet } from "./types";
 
 export const cssPropToToken: ICssPropToToken = {
   color: "colors",
@@ -98,6 +93,14 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
 
 export const addDefaultUtils = (config: IConfig) => {
   config.utils = config.utils || {};
+  config.utils.overflow = (css) => (
+    value: AllCssProps["overflow"],
+    pseudo?: string
+  ) =>
+    css.compose(
+      css.overflowX(value as any, pseudo),
+      css.overflowY(value as any, pseudo)
+    );
   config.utils.margin = (css) => (
     value: AllCssProps["margin"],
     pseudo?: string

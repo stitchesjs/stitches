@@ -5,7 +5,8 @@
     "baseUrl": "./packages",
     "paths": {
       "@stitches/css": ["css/src"],
-      "@stitches/styled": ["styled/src"]
+      "@stitches/styled": ["styled/src"],
+      "@stitches/tailwind": ["tailwind/src"]
     }
   }
 }
