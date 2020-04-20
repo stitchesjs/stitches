@@ -1,3 +1,8 @@
+import type {
+  StandardLonghandProperties,
+  StandardShorthandProperties,
+} from "csstype";
+// tslint:disable-next-line: ordered-imports
 import { AllCssProps, IConfig, TCss, TUtility } from "@stitches/css";
 
 export interface IThemeValue {
