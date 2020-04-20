@@ -2,11 +2,13 @@ import type {
   StandardLonghandProperties,
   StandardShorthandProperties,
 } from "csstype";
+// tslint:disable-next-line: ordered-imports
 import { createCss } from "@stitches/css";
 
-import * as utils from "./utils";
 import * as theme from "./theme";
-import { ITailwindConfig, TTailwindUtility, IThemeValue } from "./utils";
+import * as utils from "./utils";
+// tslint:disable-next-line: no-duplicate-imports
+import { ITailwindConfig, IThemeValue, TTailwindUtility } from "./utils";
 
 type TMergedUtilityPayload<
   U extends TTailwindUtility,

@@ -2,7 +2,8 @@ import type {
   StandardLonghandProperties,
   StandardShorthandProperties,
 } from "csstype";
-import { IConfig, TCss, AllCssProps, TUtility } from "@stitches/css";
+// tslint:disable-next-line
+import { AllCssProps, IConfig, TCss } from "@stitches/css";
 import * as React from "react";
 import { Box, PolymorphicComponent } from "react-polymorphic-box";
 

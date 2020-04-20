@@ -1,4 +1,4 @@
-import { TCss, AllCssProps, IConfig, TUtility } from "@stitches/css";
+import { AllCssProps, IConfig, TCss, TUtility } from "@stitches/css";
 
 export interface IThemeValue {
   [key: string]: string;
