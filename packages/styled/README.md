@@ -1,4 +1,4 @@
-# @stitches/styled
+# :thread: @stitches/styled
 
 Use stitches to create styled components in React.
 

@@ -1,4 +1,4 @@
-# @stitches
+# :thread: @stitches
 
 ## css
 
@@ -11,6 +11,12 @@ The core CSS API to be used with any solution.
 A React specific component abstraction.
 
 [@stitches/styled](https://github.com/christianalfoni/stitches/tree/master/packages/styled)
+
+## tailwind
+
+The Tailwind UI with stitches.
+
+[@stitches/styled](https://github.com/christianalfoni/stitches/tree/master/packages/tailwind)
 
 ## monorepo
 

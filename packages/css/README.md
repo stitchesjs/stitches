@@ -1,4 +1,4 @@
-# @stitches/css
+# :thread: @stitches/css
 
 ## Why
 
