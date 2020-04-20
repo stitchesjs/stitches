@@ -1,6 +1,6 @@
 {
   "name": "@stitches/tailwind",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "The tiny configurable CSS-IN-JS library",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
@@ -42,7 +42,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/css": "^1.2.0",
+    "@stitches/css": "^1.2.1",
     "@types/node": "^13.11.1",
     "react-polymorphic-box": "^1.1.0",
     "tslib": "^1.11.1"
