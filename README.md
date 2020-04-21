@@ -16,7 +16,7 @@ A React specific component abstraction.
 
 The Tailwind UI with stitches.
 
-[@stitches/styled](https://github.com/christianalfoni/stitches/tree/master/packages/tailwind)
+[@stitches/tailwind](https://github.com/christianalfoni/stitches/tree/master/packages/tailwind)
 
 ## monorepo
 
