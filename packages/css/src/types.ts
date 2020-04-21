@@ -149,7 +149,7 @@ export type TUtilityFirstCss<T extends IConfig> = {
       : never;
   } & {
     compose: (...compositions: string[]) => string;
-    getStyles: () => string;
+    getStyles: () => string[];
   };
 
 export type TCss<T extends IConfig> = {
