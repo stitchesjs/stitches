@@ -1,6 +1,6 @@
 {
   "name": "@stitches/styled",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "The tiny configurable CSS-IN-JS library",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
@@ -41,7 +41,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/css": "^1.4.2",
+    "@stitches/css": "^1.4.3",
     "@types/node": "^13.11.1",
     "react-polymorphic-box": "^1.1.0",
     "tslib": "^1.11.1"
