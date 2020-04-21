@@ -71,7 +71,7 @@ export const css = createCss({
   utils: {
     marginX: (utilCss) => (value, pseudo) =>
       utilCss.compose(
-        utilsCss.marginLeft(value, pseudo),
+        utilCss.marginLeft(value, pseudo),
         utilCss.marginRight(value, pseudo)
       ),
   },
