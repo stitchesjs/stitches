@@ -47,7 +47,7 @@ export const createStyled = <C extends IConfig>() => {
       const cb = args.length === 1 ? args[0] : args[1];
       const defaults = args.length === 1 ? {} : args[0];
       const propsToPass = Object.keys(props).reduce<any>((aggr, key) => {
-        if (key in defaults) {
+        if (key in defaults || key === "className") {
           return aggr;
         }
 
@@ -59,18 +59,19 @@ export const createStyled = <C extends IConfig>() => {
 
       return React.createElement(Box, {
         as,
-        className: cb(
-          css,
-          Object.keys(cbProps).reduce<any>((aggr, key) => {
-            if (cbProps[key] === undefined && defaults[key]) {
-              aggr[key] = defaults[key];
-            } else {
-              aggr[key] = cbProps[key];
-            }
+        className:
+          cb(
+            css,
+            Object.keys(cbProps).reduce<any>((aggr, key) => {
+              if (cbProps[key] === undefined && defaults[key]) {
+                aggr[key] = defaults[key];
+              } else {
+                aggr[key] = cbProps[key];
+              }
 
-            return aggr;
-          }, {})
-        ),
+              return aggr;
+            }, {})
+          ) + (props.className ? ` ${props.className}` : ""),
         ...propsToPass,
       });
     };
