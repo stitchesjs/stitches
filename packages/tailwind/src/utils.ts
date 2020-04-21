@@ -313,14 +313,17 @@ const createUtility = <C = TCss<ITailwindConfig>>(
       return emptyValue(css, pseudo);
     }
 
-    return throwError(value);
+    return showWarning(value);
   };
 };
 
-const throwError = (value: string) => {
-  throw new Error(
+const showWarning = (value: string) => {
+  // tslint:disable-next-line: no-console
+  console.warn(
     `@stitches/tailwind - The value "${value}" is not a valid value`
   );
+
+  return "";
 };
 
 export const container: ITailwindConfig["utils"]["container"] = (
@@ -674,7 +677,7 @@ export const grid: ITailwindConfig["utils"]["grid"] = (css, config) => (
       "flow-col": "column",
       "flow-row-dense": "row dense",
       "flow-col-dense": "column dense",
-    }[value] || throwError(value),
+    }[value] || showWarning(value),
     pseudo
   );
 };
@@ -696,7 +699,7 @@ export const col: ITailwindConfig["utils"]["col"] = (css, config) => (
     return css.columnGap(config.theme.gap[value], pseudo);
   }
 
-  return throwError(value);
+  return showWarning(value);
 };
 
 export const row: ITailwindConfig["utils"]["row"] = (css, config) => (
@@ -716,7 +719,7 @@ export const row: ITailwindConfig["utils"]["row"] = (css, config) => (
     return css.rowGap(config.theme.gap[value], pseudo);
   }
 
-  return throwError(value);
+  return showWarning(value);
 };
 
 export const gap: ITailwindConfig["utils"]["gap"] = createUtility(
@@ -900,7 +903,7 @@ export const font: ITailwindConfig["utils"]["font"] = (css, config) => (
     return css.fontWeight(Number(config.theme.fontWeight[value]), pseudo);
   }
 
-  return throwError(value);
+  return showWarning(value);
 };
 
 export const text: ITailwindConfig["utils"]["text"] = (css, config) => (
@@ -921,7 +924,7 @@ export const text: ITailwindConfig["utils"]["text"] = (css, config) => (
       right: "right",
       center: "center",
       justify: "justify",
-    } as any)[value] || throwError(value),
+    } as any)[value] || showWarning(value),
     pseudo
   );
 };
@@ -980,7 +983,7 @@ export const list: ITailwindConfig["utils"]["list"] = (css, config) => (
     ({
       inside: "inside",
       outside: "outside",
-    } as any)[value] || throwError(value),
+    } as any)[value] || showWarning(value),
     pseudo
   );
 };
@@ -1104,7 +1107,7 @@ export const bg = ((): ITailwindConfig["utils"]["bg"] => {
       ? css.backgroundColor(config.theme.backgroundColor[value], pseudo)
       : values[value]
       ? (values as any)[value](css, pseudo)
-      : throwError(value);
+      : showWarning(value);
 })();
 
 export const border = ((): ITailwindConfig["utils"]["border"] => {
@@ -1131,7 +1134,7 @@ export const border = ((): ITailwindConfig["utils"]["border"] => {
           config.theme.borderWidth && config.theme.borderWidth.default,
           pseudo
         )
-      : throwError(value);
+      : showWarning(value);
   };
 })();
 
@@ -1150,7 +1153,7 @@ export const borderT: ITailwindConfig["utils"]["borderT"] = (css, config) => (
         config.theme.borderWidth && config.theme.borderWidth.default,
         pseudo
       )
-    : throwError(value);
+    : showWarning(value);
 };
 
 export const borderR: ITailwindConfig["utils"]["borderR"] = (css, config) => (
@@ -1166,7 +1169,7 @@ export const borderR: ITailwindConfig["utils"]["borderR"] = (css, config) => (
 
   return config.theme.borderWidth && config.theme.borderWidth.default
     ? css.borderRightWidth(config.theme.borderWidth.default, pseudo)
-    : throwError(value);
+    : showWarning(value);
 };
 
 export const borderB: ITailwindConfig["utils"]["borderB"] = (css, config) => (
@@ -1182,7 +1185,7 @@ export const borderB: ITailwindConfig["utils"]["borderB"] = (css, config) => (
 
   return config.theme.borderWidth && config.theme.borderWidth.default
     ? css.borderBottomWidth(config.theme.borderWidth.default, pseudo)
-    : throwError(value);
+    : showWarning(value);
 };
 
 export const borderL: ITailwindConfig["utils"]["borderB"] = (css, config) => (
@@ -1198,7 +1201,7 @@ export const borderL: ITailwindConfig["utils"]["borderB"] = (css, config) => (
 
   return config.theme.borderWidth && config.theme.borderWidth.default
     ? css.borderLeftWidth(config.theme.borderWidth.default, pseudo)
-    : throwError(value);
+    : showWarning(value);
 };
 
 export const rounded: ITailwindConfig["utils"]["rounded"] = createUtility(
@@ -1405,7 +1408,7 @@ export const origin: ITailwindConfig["utils"]["origin"] = createUtility(
 export const appearance: ITailwindConfig["utils"]["appearance"] = (css) => (
   value: any,
   pseudo
-) => css.appearance(value === "none" ? value : throwError(value), pseudo);
+) => css.appearance(value === "none" ? value : showWarning(value), pseudo);
 
 export const cursor: ITailwindConfig["utils"]["cursor"] = createUtility(
   (css, value, pseudo) => css.cursor(value, pseudo),
@@ -1417,7 +1420,7 @@ export const cursor: ITailwindConfig["utils"]["cursor"] = createUtility(
 export const outline: ITailwindConfig["utils"]["outline"] = (css) => (
   value: any,
   pseudo
-) => css.appearance(value === "none" ? value : throwError(value), pseudo);
+) => css.appearance(value === "none" ? value : showWarning(value), pseudo);
 
 export const pointerEvents: ITailwindConfig["utils"]["pointerEvents"] = createUtility(
   (css, value, pseudo) => css.pointerEvents(value, pseudo),
@@ -1471,7 +1474,7 @@ export const stroke: ITailwindConfig["utils"]["stroke"] = (css, config) => (
     return (css as any).strokeWidth(config.theme.strokeWidth[value], pseudo);
   }
 
-  return throwError(value);
+  return showWarning(value);
 };
 
 export const srOnly: ITailwindConfig["utils"]["srOnly"] = (css) => () =>
