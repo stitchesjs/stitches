@@ -64,7 +64,9 @@ describe("createCss", () => {
     expect(atom.value).toBe("red");
     expect(atom.toString()).toBe("c_0");
     expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe("// STITCHES\n\n.c_0{color:red;}");
+    expect(css.getStyles()[0].trim()).toBe(
+      "/* STITCHES */\n\n.c_0{color:red;}"
+    );
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
@@ -88,7 +90,7 @@ describe("createCss", () => {
     expect(atom.toString()).toBe("c_0");
     expect(css.getStyles().length).toBe(1);
     expect(css.getStyles()[0].trim()).toBe(
-      "// STITCHES\n\n.c_0{color:tomato;}"
+      "/* STITCHES */\n\n.c_0{color:tomato;}"
     );
   });
   test("should create screens", () => {
@@ -106,7 +108,7 @@ describe("createCss", () => {
     expect(atom.toString()).toBe("tablet_c_0");
     expect(css.getStyles().length).toBe(2);
     expect(css.getStyles()[1].trim()).toBe(
-      "// STITCHES:tablet\n\n@media (min-width: 700px) { .tablet_c_0{color:red;} }"
+      "/* STITCHES:tablet */\n\n@media (min-width: 700px) { .tablet_c_0{color:red;} }"
     );
   });
   test("should handle pseudos", () => {
@@ -119,7 +121,7 @@ describe("createCss", () => {
     expect(atom.toString()).toBe("c_0");
     expect(css.getStyles().length).toBe(1);
     expect(css.getStyles()[0].trim()).toBe(
-      "// STITCHES\n\n.c_0:hover{color:red;}"
+      "/* STITCHES */\n\n.c_0:hover{color:red;}"
     );
   });
   test("should handle specificity", () => {
@@ -139,7 +141,9 @@ describe("createCss", () => {
     expect(css.color("red").toString()).toBe("c_0");
     expect(css.color("red").toString()).toBe("c_0");
     expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe("// STITCHES\n\n.c_0{color:red;}");
+    expect(css.getStyles()[0].trim()).toBe(
+      "/* STITCHES */\n\n.c_0{color:red;}"
+    );
   });
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
@@ -231,7 +235,7 @@ describe("createCss", () => {
     expect(fakeEnv.document.styleSheets.length).toBe(1);
     expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(1);
     expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
-      "//STITCHES\n\n.c_0 {color: red;}"
+      ".c_0 {color: red;}"
     );
     // Lets add something new
     clientCss.color("blue").toString();

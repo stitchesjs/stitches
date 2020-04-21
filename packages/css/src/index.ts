@@ -187,9 +187,11 @@ export const createCss = <T extends IConfig>(
         return () =>
           Object.keys(screens).reduce(
             (aggr, key) => {
-              return aggr.concat(`// STITCHES:${key}\n${sheets[key].content}`);
+              return aggr.concat(
+                `/* STITCHES:${key} */\n${sheets[key].content}`
+              );
             },
-            [`// STITCHES\n${sheets[""].content}`]
+            [`/* STITCHES */\n${sheets[""].content}`]
           );
       }
 

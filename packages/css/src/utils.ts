@@ -64,7 +64,7 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
 
     const styles = Array.from<HTMLStyleElement>(head.querySelectorAll("style"));
     const existingStyles = styles.filter((style) =>
-      Boolean(style.textContent && style.textContent.startsWith("// STITCHES"))
+      Boolean(style.textContent && style.textContent.startsWith("/* STITCHES"))
     );
 
     let styleIndex = existingStyles.length
