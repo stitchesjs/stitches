@@ -6,7 +6,7 @@ export interface IScreens {
 
 export interface IAtom {
   id: string;
-  cssPropParts: string[];
+  cssHyphenProp: string;
   value: string;
   pseudo: string | undefined;
   screen: string;
@@ -101,6 +101,7 @@ export interface ITokensDefinition {
 }
 
 export interface IConfig {
+  showFriendlyClassnames?: boolean;
   prefix?: string;
   utilityFirst?: boolean;
   screens?: IScreens;

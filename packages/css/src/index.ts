@@ -9,7 +9,12 @@ import {
   TCss,
   TUtilityFirstCss,
 } from "./types";
-import { addDefaultUtils, createSheets, cssPropToToken } from "./utils";
+import {
+  addDefaultUtils,
+  createSheets,
+  cssPropToToken,
+  getVendorPrefixAndProps,
+} from "./utils";
 
 export * from "./types";
 export * from "./css-types";
@@ -18,10 +23,6 @@ export * from "./css-types";
 const noop = () => {};
 
 export const hotReloadingCache = new Map<string, any>();
-
-const toCssProp = (cssPropParts: string[]) => {
-  return cssPropParts.join("-");
-};
 
 const toStringCachedAtom = function (this: IAtom) {
   return this._className!;
@@ -48,14 +49,13 @@ const createToString = (
   return function toString(this: IAtom) {
     const className = cssClassnameProvider(seq++, this);
 
-    const cssProp = toCssProp(this.cssPropParts);
     const value = this.value;
 
     let cssRule = "";
     if (className.length === 2) {
-      cssRule = `.${className[0]}${className[1]}{${cssProp}:${value};}`;
+      cssRule = `.${className[0]}${className[1]}{${this.cssHyphenProp}:${value};}`;
     } else {
-      cssRule = `.${className[0]}{${cssProp}:${value};}`;
+      cssRule = `.${className[0]}{${this.cssHyphenProp}:${value};}`;
     }
 
     sheets[this.screen].insertRule(
@@ -66,7 +66,7 @@ const createToString = (
     // 1. delete everything but `id` for specificity check
 
     // @ts-ignore
-    this.cssPropParts = this.value = this.pseudo = this.screen = undefined;
+    this.cssHyphenProp = this.value = this.pseudo = this.screen = undefined;
 
     // 2. put on a _className
     this._className = className[0];
@@ -109,21 +109,36 @@ export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
 ): T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TCss<T> => {
+  const showFriendlyClassnames =
+    typeof config.showFriendlyClassnames === "boolean"
+      ? config.showFriendlyClassnames
+      : process.env.NODE_ENV === "development";
   const prefix = config.prefix || "";
+  const { vendorPrefix, vendorProps } = env
+    ? getVendorPrefixAndProps(env)
+    : { vendorPrefix: "-node-", vendorProps: [] };
 
   if (env && hotReloadingCache.has(prefix)) {
     return hotReloadingCache.get(prefix);
   }
 
   // pre-compute class prefix
-  const classPrefix = prefix ? `${prefix}_` : "";
+  const classPrefix = prefix
+    ? showFriendlyClassnames
+      ? `${prefix}_`
+      : prefix
+    : "";
   const cssClassnameProvider = (
     seq: number,
     atom: IAtom
   ): [string, string?] => {
-    const className = `${classPrefix}${
-      atom.screen ? `${atom.screen}_` : ""
-    }${atom.cssPropParts.map((part) => part[0]).join("")}_${seq}`;
+    const name = showFriendlyClassnames
+      ? `${atom.screen ? `${atom.screen}_` : ""}${atom.cssHyphenProp
+          .split("-")
+          .map((part) => part[0])
+          .join("")}`
+      : "";
+    const className = `${classPrefix}${name}_${seq}`;
 
     if (atom.pseudo) {
       return [className, atom.pseudo];
@@ -224,6 +239,7 @@ export const createCss = <T extends IConfig>(
       const value = argsList[0];
       const pseudo = argsList[1];
       const token = tokens[cssPropToToken[cssProp as keyof ICssPropToToken]];
+      const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
 
       // generate id used for specificity check
       // two atoms are considered equal in regared to there specificity if the id is equal
@@ -245,14 +261,21 @@ export const createCss = <T extends IConfig>(
       }
 
       // prepare the cssProp
-      const cssPropParts = cssProp
+      let cssHyphenProp = cssProp
         .split(/(?=[A-Z])/)
-        .map((g) => g.toLowerCase());
+        .map((g) => g.toLowerCase())
+        .join("-");
+
+      if (isVendorPrefixed) {
+        cssHyphenProp = `-${cssHyphenProp}`;
+      } else if (vendorProps.includes(`${vendorPrefix}${cssHyphenProp}`)) {
+        cssHyphenProp = `${vendorPrefix}${cssHyphenProp}`;
+      }
 
       // Create a new atom
       const atom: IAtom = {
         id,
-        cssPropParts,
+        cssHyphenProp,
         value: token ? token[value] : value,
         pseudo,
         screen,

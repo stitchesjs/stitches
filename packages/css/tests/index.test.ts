@@ -19,10 +19,16 @@ function createStyleTag(textContent: string): HTMLStyleElement {
   return style;
 }
 
-function createFakeEnv(styleTags: string[] = []) {
+function createFakeEnv(
+  styleTags: string[] = [],
+  computedStyles: string[] = []
+) {
   const styleSheets = styleTags.map(createStyleSheet);
 
   return {
+    getComputedStyle() {
+      return computedStyles;
+    },
     document: {
       styleSheets,
       // Creates a style tag
@@ -58,21 +64,19 @@ describe("createCss", () => {
     const css = createCss({}, null);
     const atom = (css.color("red") as unknown) as IAtom;
     expect(atom.id).toBe("color");
-    expect(atom.cssPropParts).toEqual(["color"]);
+    expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("red");
-    expect(atom.toString()).toBe("c_0");
+    expect(atom.toString()).toBe("_0");
     expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe(
-      "/* STITCHES */\n\n.c_0{color:red;}"
-    );
+    expect(css.getStyles()[0].trim()).toBe("/* STITCHES */\n\n._0{color:red;}");
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
     expect(
       css.compose(css.color("red"), css.backgroundColor("blue")).toString()
-    ).toBe("bc_0 c_1");
+    ).toBe("_0 _1");
   });
   test("should create tokens", () => {
     const tokens = createTokens({
@@ -83,14 +87,14 @@ describe("createCss", () => {
     const css = createCss({ tokens }, null);
     const atom = (css.color("RED") as unknown) as IAtom;
     expect(atom.id).toBe("color");
-    expect(atom.cssPropParts).toEqual(["color"]);
+    expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("tomato");
-    expect(atom.toString()).toBe("c_0");
+    expect(atom.toString()).toBe("_0");
     expect(css.getStyles().length).toBe(1);
     expect(css.getStyles()[0].trim()).toBe(
-      "/* STITCHES */\n\n.c_0{color:tomato;}"
+      "/* STITCHES */\n\n._0{color:tomato;}"
     );
   });
   test("should create screens", () => {
@@ -102,26 +106,26 @@ describe("createCss", () => {
     const css = createCss(config, null);
     const atom = (css.tablet.color("red") as unknown) as IAtom;
     expect(atom.id).toBe("colortablet");
-    expect(atom.cssPropParts).toEqual(["color"]);
+    expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("tablet");
-    expect(atom.toString()).toBe("tablet_c_0");
+    expect(atom.toString()).toBe("_0");
     expect(css.getStyles().length).toBe(2);
     expect(css.getStyles()[1].trim()).toBe(
-      "/* STITCHES:tablet */\n\n@media (min-width: 700px) { .tablet_c_0{color:red;} }"
+      "/* STITCHES:tablet */\n\n@media (min-width: 700px) { ._0{color:red;} }"
     );
   });
   test("should handle pseudos", () => {
     const css = createCss({}, null);
     const atom = (css.color("red", ":hover") as unknown) as IAtom;
     expect(atom.id).toBe("color:hover");
-    expect(atom.cssPropParts).toEqual(["color"]);
+    expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(":hover");
     expect(atom.screen).toBe("");
-    expect(atom.toString()).toBe("c_0");
+    expect(atom.toString()).toBe("_0");
     expect(css.getStyles().length).toBe(1);
     expect(css.getStyles()[0].trim()).toBe(
-      "/* STITCHES */\n\n.c_0:hover{color:red;}"
+      "/* STITCHES */\n\n._0:hover{color:red;}"
     );
   });
   test("should handle specificity", () => {
@@ -134,16 +138,14 @@ describe("createCss", () => {
           css.backgroundColor("green")
         )
         .toString()
-    ).toBe("bc_0 c_1");
+    ).toBe("_0 _1");
   });
   test("should insert rule only once", () => {
     const css = createCss({}, null);
-    expect(css.color("red").toString()).toBe("c_0");
-    expect(css.color("red").toString()).toBe("c_0");
+    expect(css.color("red").toString()).toBe("_0");
+    expect(css.color("red").toString()).toBe("_0");
     expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe(
-      "/* STITCHES */\n\n.c_0{color:red;}"
-    );
+    expect(css.getStyles()[0].trim()).toBe("/* STITCHES */\n\n._0{color:red;}");
   });
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
@@ -154,7 +156,7 @@ describe("createCss", () => {
           css.color("red", ":disabled:hover")
         )
         .toString()
-    ).toBe("c_0");
+    ).toBe("_0");
   });
   test("should inject sheet", () => {
     const fakeEnv = createFakeEnv();
@@ -162,7 +164,7 @@ describe("createCss", () => {
     String(css.color("red"));
     expect(fakeEnv.document.styleSheets.length).toBe(1);
     expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
-      ".c_0 {color: red;}"
+      "._0 {color: red;}"
     );
   });
   test("should inject screen sheets", () => {
@@ -176,7 +178,7 @@ describe("createCss", () => {
     String(css.tablet.color("red"));
     expect(fakeEnv.document.styleSheets.length).toBe(2);
     expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "@media (min-width: 700px) {.tablet_c_0 {color: red;}}"
+      "@media (min-width: 700px) {._0 {color: red;}}"
     );
   });
   test("should allow utils", () => {
@@ -192,14 +194,14 @@ describe("createCss", () => {
       },
       null
     );
-    expect(css.marginX("1rem").toString()).toBe("mr_0 ml_1");
+    expect(css.marginX("1rem").toString()).toBe("_0 _1");
   });
   test("should ignore undefined atoms", () => {
     const css = createCss({}, null);
     expect(
       // @ts-ignore
       String(css.compose(undefined, null, false, "", css.color("red")))
-    ).toBe("c_0");
+    ).toBe("_0");
   });
   test("should allow prefixes", () => {
     const css = createCss(
@@ -211,7 +213,7 @@ describe("createCss", () => {
     expect(
       // @ts-ignore
       String(css.color("red"))
-    ).toBe("foo_c_0");
+    ).toBe("foo_0");
   });
   test("should expose override with utility first", () => {
     const css = createCss(
@@ -223,7 +225,7 @@ describe("createCss", () => {
     expect(
       // @ts-ignore
       String(css.override.color("red"))
-    ).toBe("c_0");
+    ).toBe("_0");
   });
   test("should not inject existing styles", () => {
     const serverCss = createCss({}, null);
@@ -235,14 +237,49 @@ describe("createCss", () => {
     expect(fakeEnv.document.styleSheets.length).toBe(1);
     expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(1);
     expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
-      ".c_0 {color: red;}"
+      "._0 {color: red;}"
     );
     // Lets add something new
     clientCss.color("blue").toString();
     // Lets see if it continues on the correct sequence
     expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(2);
     expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
-      ".c_1 {color: blue;}"
+      "._1 {color: blue;}"
+    );
+  });
+  test("should be able to show friendly classnames", () => {
+    const css = createCss(
+      {
+        showFriendlyClassnames: true,
+      },
+      null
+    );
+    css.color("red").toString();
+    css.backgroundColor("red").toString();
+    expect(css.getStyles()).toEqual([
+      `/* STITCHES */\n\n.c_0{color:red;}\n.bc_1{background-color:red;}`,
+    ]);
+  });
+  test("should inject vendor prefix where explicitly stating so", () => {
+    const css = createCss(
+      {
+        showFriendlyClassnames: true,
+      },
+      null
+    );
+    // @ts-ignore
+    css.WebkitColor("red").toString();
+    expect(css.getStyles()).toEqual([
+      `/* STITCHES */\n\n.wc_0{-webkit-color:red;}`,
+    ]);
+  });
+  test("should inject vendor prefix environment defines it", () => {
+    const fakeEnv = createFakeEnv([], ["-webkit-color"]);
+    const css = createCss({}, (fakeEnv as unknown) as Window);
+    // @ts-ignore
+    css.color("red").toString();
+    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+      "._0 {-webkit-color: red;}"
     );
   });
 });

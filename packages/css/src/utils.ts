@@ -173,3 +173,15 @@ export const addDefaultUtils = (config: IConfig) => {
       css.borderLeftWidth(value, pseudo)
     );
 };
+
+export const getVendorPrefixAndProps = (env: any) => {
+  const styles = env.getComputedStyle(env.document.documentElement);
+  const vendorProps = Array.from(styles).filter(
+    (prop) => (prop as string)[0] === "-"
+  );
+  // @ts-ignore
+  const vendorPrefix = (vendorProps.join("").match(/-(moz|webkit|ms)-/) ||
+    (styles.OLink === "" && ["", "o"]))[1];
+
+  return { vendorPrefix: `-${vendorPrefix}-`, vendorProps };
+};
