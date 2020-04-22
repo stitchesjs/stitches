@@ -10,7 +10,7 @@ Tailwinds atomic mindset moved to a CSS-IN-JS library:
 
 - No build step, just start using it
 - No specificity issues
-- Reduced payload, about 10kb vs 45kb
+- Small payload, about 10kb
 - Use any pseudo selectors with any utility
 - Automatically creates the critical CSS when used with SSR
 - Can reduce payload even more with treeshaking utils and theme values
