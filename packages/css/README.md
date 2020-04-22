@@ -109,7 +109,7 @@ export const css = createCss({
   },
   // Create your own custom CSS properties
   utils: {
-    marginX: (utilCss) => (value, pseudo) =>
+    marginX: (utilCss) => (value: number | string, pseudo?: string) =>
       utilCss.compose(
         utilsCss.marginLeft(value, pseudo),
         utilCss.marginRight(value, pseudo)
