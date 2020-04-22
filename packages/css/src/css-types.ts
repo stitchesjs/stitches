@@ -3387,32 +3387,32 @@ export interface StandardLonghandProperties<TLength = string | 0> {
    */
   scrollMarginTop: ScrollMarginTopProperty<TLength>;
   /**
- * The scroll-padding property is a shorthand property which sets all of the scroll-padding longhands, assigning values much like the padding property does for the padding-\* longhands.  
-  
-The scroll-padding properties define offsets for the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user. This allows the author to exclude regions of the scrollport that are obscured by other content (such as fixed-positioned toolbars or sidebars) or simply to put more breathing room between a targetted element and the edges of the scrollport.
- * 
- * **Initial value**: `auto`
- * 
- * | Chrome | Firefox | Safari | Edge | IE  |
- * | :----: | :-----: | :----: | :--: | :-: |
- * | **69** | **68**  | **11** |  No  | No  |
- * 
- * @see https://developer.mozilla.org/docs/Web/CSS/scroll-padding
- */
+   * The scroll-padding property is a shorthand property which sets all of the scroll-padding longhands, assigning values much like the padding property does for the padding-\* longhands.
+   *
+   * The scroll-padding properties define offsets for the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user. This allows the author to exclude regions of the scrollport that are obscured by other content (such as fixed-positioned toolbars or sidebars) or simply to put more breathing room between a targetted element and the edges of the scrollport.
+   *
+   * **Initial value**: `auto`
+   *
+   * | Chrome | Firefox | Safari | Edge | IE  |
+   * | :----: | :-----: | :----: | :--: | :-: |
+   * | **69** | **68**  | **11** |  No  | No  |
+   *
+   * @see https://developer.mozilla.org/docs/Web/CSS/scroll-padding
+   */
   scrollPadding: ScrollPaddingProperty<TLength>;
   /**
- * The `scroll-padding-block` property is a shorthand property which sets the scroll-padding longhands for the block dimension.  
-  
-The scroll-padding properties define offsets for the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user. This allows the author to exclude regions of the scrollport that are obscured by other content (such as fixed-positioned toolbars or sidebars) or simply to put more breathing room between a targetted element and the edges of the scrollport.
- * 
- * **Initial value**: `auto`
- * 
- * | Chrome | Firefox | Safari | Edge | IE  |
- * | :----: | :-----: | :----: | :--: | :-: |
- * | **69** | **68**  |   No   |  No  | No  |
- * 
- * @see https://developer.mozilla.org/docs/Web/CSS/scroll-padding-block
- */
+   * The `scroll-padding-block` property is a shorthand property which sets the scroll-padding longhands for the block dimension.
+   *
+   * The scroll-padding properties define offsets for the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user. This allows the author to exclude regions of the scrollport that are obscured by other content (such as fixed-positioned toolbars or sidebars) or simply to put more breathing room between a targetted element and the edges of the scrollport.
+   *
+   * **Initial value**: `auto`
+   *
+   * | Chrome | Firefox | Safari | Edge | IE  |
+   * | :----: | :-----: | :----: | :--: | :-: |
+   * | **69** | **68**  |   No   |  No  | No  |
+   *
+   * @see https://developer.mozilla.org/docs/Web/CSS/scroll-padding-block
+   */
   scrollPaddingBlock: ScrollPaddingBlockProperty<TLength>;
   /**
    * The `scroll-padding-block-end` property defines offsets for the end edge in the block dimension of the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user. This allows the author to exclude regions of the scrollport that are obscured by other content (such as fixed-positioned toolbars or sidebars) or simply to put more breathing room between a targetted element and the edges of the scrollport.
@@ -3451,18 +3451,18 @@ The scroll-padding properties define offsets for the optimal viewing region of
    */
   scrollPaddingBottom: ScrollPaddingBottomProperty<TLength>;
   /**
- * The `scroll-padding-inline` property is a shorthand property which sets the scroll-padding longhands for the inline dimension.  
-  
-The scroll-padding properties define offsets for the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user. This allows the author to exclude regions of the scrollport that are obscured by other content (such as fixed-positioned toolbars or sidebars) or simply to put more breathing room between a targetted element and the edges of the scrollport.
- * 
- * **Initial value**: `auto`
- * 
- * | Chrome | Firefox | Safari | Edge | IE  |
- * | :----: | :-----: | :----: | :--: | :-: |
- * | **69** | **68**  |   No   |  No  | No  |
- * 
- * @see https://developer.mozilla.org/docs/Web/CSS/scroll-padding-inline
- */
+   * The `scroll-padding-inline` property is a shorthand property which sets the scroll-padding longhands for the inline dimension.
+   *
+   * The scroll-padding properties define offsets for the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user. This allows the author to exclude regions of the scrollport that are obscured by other content (such as fixed-positioned toolbars or sidebars) or simply to put more breathing room between a targetted element and the edges of the scrollport.
+   *
+   * **Initial value**: `auto`
+   *
+   * | Chrome | Firefox | Safari | Edge | IE  |
+   * | :----: | :-----: | :----: | :--: | :-: |
+   * | **69** | **68**  |   No   |  No  | No  |
+   *
+   * @see https://developer.mozilla.org/docs/Web/CSS/scroll-padding-inline
+   */
   scrollPaddingInline: ScrollPaddingInlineProperty<TLength>;
   /**
    * The `scroll-padding-inline-end` property defines offsets for the end edge in the inline dimension of the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user. This allows the author to exclude regions of the scrollport that are obscured by other content (such as fixed-positioned toolbars or sidebars) or simply to put more breathing room between a targetted element and the edges of the scrollport.
