@@ -1,4 +1,4 @@
-import { AllCssProps } from "./css-types";
+import { StandardProperties } from "./css-types";
 import { IConfig, ICssPropToToken, IScreens, ISheet } from "./types";
 
 export const cssPropToToken: ICssPropToToken = {
@@ -105,7 +105,7 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
 export const addDefaultUtils = (config: IConfig) => {
   config.utils = config.utils || {};
   config.utils.overflow = (css) => (
-    value: AllCssProps["overflow"],
+    value: StandardProperties["overflow"],
     pseudo?: string
   ) =>
     css.compose(
@@ -113,7 +113,7 @@ export const addDefaultUtils = (config: IConfig) => {
       css.overflowY(value as any, pseudo)
     );
   config.utils.margin = (css) => (
-    value: AllCssProps["margin"],
+    value: StandardProperties["margin"],
     pseudo?: string
   ) =>
     css.compose(
@@ -123,7 +123,7 @@ export const addDefaultUtils = (config: IConfig) => {
       css.marginBottom(value, pseudo)
     );
   config.utils.padding = (css) => (
-    value: AllCssProps["padding"],
+    value: StandardProperties["padding"],
     pseudo?: string
   ) =>
     css.compose(
@@ -133,7 +133,7 @@ export const addDefaultUtils = (config: IConfig) => {
       css.paddingBottom(value, pseudo)
     );
   config.utils.borderRadius = (css) => (
-    value: AllCssProps["borderRadius"],
+    value: StandardProperties["borderRadius"],
     pseudo?: string
   ) =>
     css.compose(
@@ -143,7 +143,7 @@ export const addDefaultUtils = (config: IConfig) => {
       css.borderBottomRightRadius(value, pseudo)
     );
   config.utils.borderColor = (css) => (
-    value: AllCssProps["borderColor"],
+    value: StandardProperties["borderColor"],
     pseudo?: string
   ) =>
     css.compose(
@@ -153,7 +153,7 @@ export const addDefaultUtils = (config: IConfig) => {
       css.borderLeftColor(value, pseudo)
     );
   config.utils.borderStyle = (css) => (
-    value: AllCssProps["borderStyle"],
+    value: StandardProperties["borderStyle"],
     pseudo?: string
   ) =>
     css.compose(
@@ -163,7 +163,7 @@ export const addDefaultUtils = (config: IConfig) => {
       css.borderLeftStyle(value, pseudo)
     );
   config.utils.borderWidth = (css) => (
-    value: AllCssProps["borderWidth"],
+    value: StandardProperties["borderWidth"],
     pseudo?: string
   ) =>
     css.compose(

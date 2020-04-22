@@ -1,4 +1,4 @@
-import { AllCssProps, IConfig, TCss, TUtility } from "@stitches/css";
+import { IConfig, TCss, TUtility } from "@stitches/css";
 
 export interface IThemeValue {
   [key: string]: string;
@@ -352,7 +352,7 @@ export const box: ITailwindConfig["utils"]["box"] = createUtility(
 );
 
 export const hidden: ITailwindConfig["utils"]["hidden"] = (css) => () =>
-  css.display("hidden");
+  css.visibility("hidden");
 
 export const block: ITailwindConfig["utils"]["block"] = (css) => () =>
   css.display("block");
@@ -672,12 +672,12 @@ export const grid: ITailwindConfig["utils"]["grid"] = (css, config) => (
   }
 
   return css.gridAutoFlow(
-    {
+    ({
       "flow-row": "row",
       "flow-col": "column",
       "flow-row-dense": "row dense",
       "flow-col-dense": "column dense",
-    }[value] || showWarning(value),
+    }[value] as any) || showWarning(value),
     pseudo
   );
 };
@@ -687,13 +687,16 @@ export const col: ITailwindConfig["utils"]["col"] = (css, config) => (
   pseudo
 ) => {
   if (config.theme.gridColumn && config.theme.gridColumn[value]) {
-    return css.gridColumn(config.theme.gridColumn[value], pseudo);
+    return css.gridColumn(config.theme.gridColumn[value] as any, pseudo);
   }
   if (config.theme.gridColumnStart && config.theme.gridColumnStart[value]) {
-    return css.gridColumnStart(config.theme.gridColumnStart[value], pseudo);
+    return css.gridColumnStart(
+      config.theme.gridColumnStart[value] as any,
+      pseudo
+    );
   }
   if (config.theme.gridColumnEnd && config.theme.gridColumnEnd[value]) {
-    return css.gridColumnEnd(config.theme.gridColumnEnd[value], pseudo);
+    return css.gridColumnEnd(config.theme.gridColumnEnd[value] as any, pseudo);
   }
   if (config.theme.gap && config.theme.gap[value]) {
     return css.columnGap(config.theme.gap[value], pseudo);
@@ -707,13 +710,13 @@ export const row: ITailwindConfig["utils"]["row"] = (css, config) => (
   pseudo
 ) => {
   if (config.theme.gridRow && config.theme.gridRow[value]) {
-    return css.gridRow(config.theme.gridRow[value], pseudo);
+    return css.gridRow(config.theme.gridRow[value] as any, pseudo);
   }
   if (config.theme.gridRowStart && config.theme.gridRowStart[value]) {
-    return css.gridRowStart(config.theme.gridRowStart[value], pseudo);
+    return css.gridRowStart(config.theme.gridRowStart[value] as any, pseudo);
   }
   if (config.theme.gridRowEnd && config.theme.gridRowEnd[value]) {
-    return css.gridRowEnd(config.theme.gridRowEnd[value], pseudo);
+    return css.gridRowEnd(config.theme.gridRowEnd[value] as any, pseudo);
   }
   if (config.theme.gap && config.theme.gap[value]) {
     return css.rowGap(config.theme.gap[value], pseudo);
@@ -897,7 +900,7 @@ export const font: ITailwindConfig["utils"]["font"] = (css, config) => (
   pseudo
 ) => {
   if (config.theme.fontFamily && config.theme.fontFamily[value]) {
-    return css.fontFamily(config.theme.fontFamily[value], pseudo);
+    return css.fontFamily(config.theme.fontFamily[value] as any, pseudo);
   }
   if (config.theme.fontWeight && config.theme.fontWeight[value]) {
     return css.fontWeight(Number(config.theme.fontWeight[value]), pseudo);
@@ -911,7 +914,7 @@ export const text: ITailwindConfig["utils"]["text"] = (css, config) => (
   pseudo
 ) => {
   if (config.theme.textColor && config.theme.textColor[value]) {
-    return css.color(config.theme.textColor[value], pseudo);
+    return css.color(config.theme.textColor[value] as any, pseudo);
   }
 
   if (config.theme.fontSize && config.theme.fontSize[value]) {
@@ -976,7 +979,7 @@ export const list: ITailwindConfig["utils"]["list"] = (css, config) => (
   pseudo
 ) => {
   if (config.theme.listStyleType && config.theme.listStyleType[value]) {
-    return css.listStyleType(config.theme.listStyleType[value], pseudo);
+    return css.listStyleType(config.theme.listStyleType[value] as any, pseudo);
   }
 
   return css.listStylePosition(

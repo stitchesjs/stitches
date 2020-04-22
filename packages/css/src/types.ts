@@ -1,4 +1,4 @@
-import { AllCssProps } from "./css-types";
+import { StandardProperties } from "./css-types";
 
 export interface IScreens {
   [key: string]: (css: string) => string;
@@ -112,14 +112,14 @@ export interface IConfig {
 
 export type TUtilityFirstCss<T extends IConfig> = {
   override: {
-    [K in keyof AllCssProps]: (
+    [K in keyof StandardProperties]: (
       value: K extends keyof ICssPropToToken
         ? T["tokens"] extends object
           ? T["tokens"][ICssPropToToken[K]] extends object
             ? keyof T["tokens"][ICssPropToToken[K]]
-            : AllCssProps[K]
-          : AllCssProps[K]
-        : AllCssProps[K],
+            : StandardProperties[K]
+          : StandardProperties[K]
+        : StandardProperties[K],
       pseudo?: string
     ) => string;
   };
@@ -130,14 +130,14 @@ export type TUtilityFirstCss<T extends IConfig> = {
       : never;
   } & {
     override: {
-      [K in keyof AllCssProps]: (
+      [K in keyof StandardProperties]: (
         value: K extends keyof ICssPropToToken
           ? T["tokens"] extends object
             ? T["tokens"][ICssPropToToken[K]] extends object
               ? keyof T["tokens"][ICssPropToToken[K]]
-              : AllCssProps[K]
-            : AllCssProps[K]
-          : AllCssProps[K],
+              : StandardProperties[K]
+            : StandardProperties[K]
+          : StandardProperties[K],
         pseudo?: string
       ) => string;
     };
@@ -153,14 +153,14 @@ export type TUtilityFirstCss<T extends IConfig> = {
   };
 
 export type TCss<T extends IConfig> = {
-  [K in keyof AllCssProps]: (
+  [K in keyof StandardProperties]: (
     value: K extends keyof ICssPropToToken
       ? T["tokens"] extends object
         ? T["tokens"][ICssPropToToken[K]] extends object
           ? keyof T["tokens"][ICssPropToToken[K]]
-          : AllCssProps[K]
-        : AllCssProps[K]
-      : AllCssProps[K],
+          : StandardProperties[K]
+        : StandardProperties[K]
+      : StandardProperties[K],
     pseudo?: string
   ) => string;
 } &
@@ -176,14 +176,14 @@ export type TCss<T extends IConfig> = {
         : never;
     } &
       {
-        [K in keyof AllCssProps]: (
+        [K in keyof StandardProperties]: (
           value: K extends keyof ICssPropToToken
             ? T["tokens"] extends object
               ? T["tokens"][ICssPropToToken[K]] extends object
                 ? keyof T["tokens"][ICssPropToToken[K]]
-                : AllCssProps[K]
-              : AllCssProps[K]
-            : AllCssProps[K],
+                : StandardProperties[K]
+              : StandardProperties[K]
+            : StandardProperties[K],
           pseudo?: string
         ) => string;
       };

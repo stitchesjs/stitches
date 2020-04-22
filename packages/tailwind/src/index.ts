@@ -1,7 +1,3 @@
-import type {
-  StandardLonghandProperties,
-  StandardShorthandProperties,
-} from "csstype";
 // tslint:disable-next-line: ordered-imports
 import { createCss } from "@stitches/css";
 

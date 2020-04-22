@@ -1,4 +1,3 @@
-import { AllCssProps } from "./css-types";
 import {
   IAtom,
   IComposedAtom,
