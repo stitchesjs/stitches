@@ -31,6 +31,46 @@ const dynamicButton = (disabled = false) =>
   css.compose(button, disabled && css.opacity(0.5));
 ```
 
+## Selectors
+
+The second argument to the properties is a selector. An example of that would be:
+
+```ts
+css.color("black", ":hover");
+```
+
+But this selector can be anything you want, think of it as:
+
+```css
+.someClass:hover {
+  color: black;
+}
+```
+
+So you can say:
+
+```ts
+css.color("black", "[target='_blank']");
+```
+
+```css
+.someClass[target="_blank"] {
+  color: black;
+}
+```
+
+Or use it to control child elements:
+
+```ts
+css.color("black", ":hover .some-child");
+```
+
+```css
+.someClass:hover .some-child {
+  color: black;
+}
+```
+
 ## Configure
 
 Instead of consuming `css` directly from the package, you can create your own configured instance:
@@ -92,50 +132,4 @@ import { createCss } from "@stitches/css";
 const css = createCss({});
 renderSomething(css);
 const styles = css.getStyles(); // The styles to be passed with the resulting HTML
-```
-
-## Usage with React
-
-```tsx
-// css.tsx
-import * as React from "react";
-import { createConfig, TCss } from "@stitches/css";
-
-export const config = createConfig({});
-
-const context = React.createContext<TCss<typeof config>>(null as any);
-
-export const useCss = () => React.useContext(context);
-
-export const CssProvider: React.FC<{ css: TCss<typeof config> }> = ({
-  css,
-  children,
-}) => <context.Provider value={css}>{children}</context.Provider>;
-```
-
-```tsx
-// index.tsx
-import * as React from "react";
-import { render } from "react-dom";
-import { createCss } from "@stitches/css";
-import { config, CssProvider } from "app/css";
-import { App } from "./App";
-
-render(
-  <CssProvider css={createCss(config)}>
-    <App />
-  </CssProvider>,
-  document.querySelector("#app")
-);
-```
-
-```tsx
-// App.tsx
-import * as React from "react";
-import { useCss } from "app/css";
-
-export const App: React.FC = () => {
-  const css = useCss();
-  return <h1 className={css.color("red")}>Hello World</h1>;
-};
 ```
