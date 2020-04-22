@@ -39,7 +39,6 @@
   ],
   "dependencies": {
     "@types/node": "^13.11.1",
-    "csstype": "^2.6.10",
     "tslib": "^1.11.1"
   },
   "gitHead": "01e369aa687777e751cb32633010a881071cb6e5"
