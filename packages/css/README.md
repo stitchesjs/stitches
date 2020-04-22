@@ -111,7 +111,7 @@ export const css = createCss({
   utils: {
     marginX: (utilCss) => (value: number | string, pseudo?: string) =>
       utilCss.compose(
-        utilsCss.marginLeft(value, pseudo),
+        utilCss.marginLeft(value, pseudo),
         utilCss.marginRight(value, pseudo)
       ),
   },
