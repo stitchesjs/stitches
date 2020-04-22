@@ -56,3 +56,5 @@ const config = createConfig({
   utils: utils,
 });
 ```
+
+To understand the properties of the theme and how you can build one yourself, take a look at the [default theme](https://github.com/christianalfoni/stitches/blob/master/packages/tailwind/src/theme.ts)
