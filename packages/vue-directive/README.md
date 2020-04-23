@@ -1,4 +1,6 @@
-# :thread: @stitches/vue-directive
+<p align="center">
+  <img width="300" src="/vue.png">
+</p>
 
 Use stitches with Vue
 
