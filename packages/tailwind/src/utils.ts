@@ -2,6 +2,7 @@ import { IConfig, TCss, TUtility } from "@stitches/css";
 
 export interface IThemeValue {
   [key: string]: string;
+  [key: number]: string;
 }
 
 export interface ITheme {

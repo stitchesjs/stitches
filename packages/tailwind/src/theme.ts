@@ -1,4 +1,31 @@
-const negativeSpacing = {
+// For Typescript to keep the string version, also not breaking negative values
+
+import { IThemeValue } from "./utils";
+
+/*
+  There is a bug in Typescript: https://github.com/microsoft/TypeScript/issues/38133
+  This causes a corrupt declaration file. Until it is fixed we have to manually do some typing
+*/
+const negativeSpacing: {
+  "-px": "-1px";
+  "-1": "-0.25rem";
+  "-2": "-0.5rem";
+  "-3": "-0.75rem";
+  "-4": "-1rem";
+  "-5": "-1.25rem";
+  "-6": "-1.5rem";
+  "-8": "-2rem";
+  "-10": "-2.5rem";
+  "-12": "-3rem";
+  "-16": "-4rem";
+  "-20": "-5rem";
+  "-24": "-6rem";
+  "-32": "-8rem";
+  "-40": "-10rem";
+  "-48": "-12rem";
+  "-56": "-14rem";
+  "-64": "-16rem";
+} = {
   "-px": "-1px",
   "-1": "-0.25rem",
   "-2": "-0.5rem",
@@ -124,24 +151,24 @@ export const colors = {
 
 export const spacing = {
   px: "1px",
-  "0": "0",
-  "1": "0.25rem",
-  "2": "0.5rem",
-  "3": "0.75rem",
-  "4": "1rem",
-  "5": "1.25rem",
-  "6": "1.5rem",
-  "8": "2rem",
-  "10": "2.5rem",
-  "12": "3rem",
-  "16": "4rem",
-  "20": "5rem",
-  "24": "6rem",
-  "32": "8rem",
-  "40": "10rem",
-  "48": "12rem",
-  "56": "14rem",
-  "64": "16rem",
+  0: "0",
+  1: "0.25rem",
+  2: "0.5rem",
+  3: "0.75rem",
+  4: "1rem",
+  5: "1.25rem",
+  6: "1.5rem",
+  8: "2rem",
+  10: "2.5rem",
+  12: "3rem",
+  16: "4rem",
+  20: "5rem",
+  24: "6rem",
+  32: "8rem",
+  40: "10rem",
+  48: "12rem",
+  56: "14rem",
+  64: "16rem",
 };
 
 export const backgroundColor = colors;
@@ -317,7 +344,11 @@ export const listStyleType = {
   disc: "disc",
   decimal: "decimal",
 };
-export const margin = {
+
+export const margin: {
+  auto: "auto";
+} & typeof spacing &
+  typeof negativeSpacing = {
   auto: "auto",
   ...spacing,
   ...negativeSpacing,
@@ -584,7 +615,15 @@ export const scale = {
   "125": "1.25",
   "150": "1.5",
 };
-export const rotate = {
+export const rotate: {
+  "-180": "-180deg";
+  "-90": "-90deg";
+  "-45": "-45deg";
+  0: "0";
+  45: "45deg";
+  90: "90deg";
+  180: "180deg";
+} = {
   "-180": "-180deg",
   "-90": "-90deg",
   "-45": "-45deg",
@@ -594,7 +633,13 @@ export const rotate = {
   "180": "180deg",
 };
 
-export const translate = {
+export const translate: {
+  "-full": "-100%";
+  "-1/2": "-50%";
+  "1/2": "50%";
+  full: "100%";
+} & typeof spacing &
+  typeof negativeSpacing = {
   ...spacing,
   ...negativeSpacing,
   "-full": "-100%",
@@ -602,7 +647,15 @@ export const translate = {
   "1/2": "50%",
   full: "100%",
 };
-export const skew = {
+export const skew: {
+  "-12": "-12deg";
+  "-6": "-6deg";
+  "-3": "-3deg";
+  0: "0";
+  3: "3deg";
+  6: "6deg";
+  12: "12deg";
+} = {
   "-12": "-12deg",
   "-6": "-6deg",
   "-3": "-3deg",

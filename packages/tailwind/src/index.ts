@@ -8,9 +8,9 @@ import { ITailwindConfig, IThemeValue, TTailwindUtility } from "./utils";
 
 type TMergedUtilityPayload<
   U extends TTailwindUtility,
-  T extends IThemeValue | undefined
+  T extends object | undefined
 > = U extends TTailwindUtility<infer P>
-  ? TTailwindUtility<keyof T extends never ? P : P | keyof T>
+  ? TTailwindUtility<T extends undefined ? P : P | keyof T>
   : never;
 
 export const createConfig = <T extends ITailwindConfig>(
