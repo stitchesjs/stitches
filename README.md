@@ -1,4 +1,6 @@
-# :thread: @stitches
+<p align="center">
+  <img width="300" src="/stitches.png">
+</p>
 
 ## css
 
