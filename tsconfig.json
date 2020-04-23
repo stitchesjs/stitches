@@ -6,7 +6,8 @@
     "paths": {
       "@stitches/css": ["css/src"],
       "@stitches/styled": ["styled/src"],
-      "@stitches/tailwind": ["tailwind/src"]
+      "@stitches/tailwind": ["tailwind/src"],
+      "@stitches/vue-directive": ["vue-directive/src"]
     }
   }
 }
