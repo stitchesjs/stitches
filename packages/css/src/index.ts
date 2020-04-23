@@ -10,10 +10,10 @@ import {
   TUtilityFirstCss,
 } from "./types";
 import {
-  specificityProps,
   createSheets,
   cssPropToToken,
   getVendorPrefixAndProps,
+  specificityProps,
 } from "./utils";
 
 export * from "./types";
