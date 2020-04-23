@@ -35,7 +35,9 @@
   ],
   "files": [
     "lib",
-    "es"
+    "es",
+    "utils",
+    "theme"
   ],
   "peerDependencies": {
     "react": "^16.13.1"
