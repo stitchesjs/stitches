@@ -133,3 +133,33 @@ const css = createCss({});
 renderSomething(css);
 const styles = css.getStyles(); // The styles to be passed with the resulting HTML
 ```
+
+Note that server produced CSS does not contain vendor prefixes, as there is no browser environment to look at. If you have a server rendered application you can either manually add the vendor prefixes you need:
+
+```ts
+css.compose(
+  css.WebkitFontSmoothing("antialiased"),
+  css.MozOsxFontSmoothing("grayscale")
+);
+```
+
+Or you can use a [postcss](https://www.npmjs.com/package/postcss) to do the conversion:
+
+```ts
+import { createCss } from "@stitches/css";
+import postcss from "postcss";
+import autoprefixer from "autoprefixer";
+
+const css = createCss({});
+renderSomething(css);
+
+Promise.all(
+  css.getStyles.map((style) =>
+    postcss([autoprefixer({ browsers: ["> 1%", "last 2 versions"] })]).process(
+      style
+    )
+  )
+).then((styles) => {
+  // styles with vendor prefixes
+});
+```
