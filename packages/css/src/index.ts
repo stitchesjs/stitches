@@ -10,7 +10,7 @@ import {
   TUtilityFirstCss,
 } from "./types";
 import {
-  addDefaultUtils,
+  specificityProps,
   createSheets,
   cssPropToToken,
   getVendorPrefixAndProps,
@@ -170,8 +170,6 @@ export const createCss = <T extends IConfig>(
     };
   };
 
-  addDefaultUtils(config);
-
   // pre-checked config to avoid checking these all the time
   const screens = config.screens || {};
   const utils = config.utils || {};
@@ -229,6 +227,8 @@ export const createCss = <T extends IConfig>(
         throw new Error(
           `@stitches/css - The property "${String(prop)}" is not available`
         );
+      } else if (specificityProps[String(prop)]) {
+        return specificityProps[String(prop)](cssInstance);
       } else {
         cssProp = String(prop);
       }

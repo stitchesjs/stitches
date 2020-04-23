@@ -294,4 +294,8 @@ describe("createCss", () => {
       "._0 {-webkit-color: red;}"
     );
   });
+  test("should use specificity props", () => {
+    const css = createCss({}, null);
+    expect(String(css.margin("1px"))).toBe("_0 _1 _2 _3");
+  });
 });

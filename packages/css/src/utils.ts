@@ -1,5 +1,5 @@
 import { StandardProperties } from "./css-types";
-import { IConfig, ICssPropToToken, IScreens, ISheet } from "./types";
+import { IConfig, ICssPropToToken, IScreens, ISheet, TCss } from "./types";
 
 export const cssPropToToken: ICssPropToToken = {
   color: "colors",
@@ -102,76 +102,56 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
     }, {});
 };
 
-export const addDefaultUtils = (config: IConfig) => {
-  config.utils = config.utils || {};
-  config.utils.overflow = (css) => (
-    value: StandardProperties["overflow"],
-    pseudo?: string
-  ) =>
+export const specificityProps: {
+  [key: string]: (css: TCss<any>) => (value: any, pseudo?: string) => string;
+} = {
+  overflow: (css) => (value, pseudo) =>
     css.compose(
       css.overflowX(value as any, pseudo),
       css.overflowY(value as any, pseudo)
-    );
-  config.utils.margin = (css) => (
-    value: StandardProperties["margin"],
-    pseudo?: string
-  ) =>
+    ),
+  margin: (css) => (value, pseudo) =>
     css.compose(
       css.marginLeft(value, pseudo),
       css.marginTop(value, pseudo),
       css.marginRight(value, pseudo),
       css.marginBottom(value, pseudo)
-    );
-  config.utils.padding = (css) => (
-    value: StandardProperties["padding"],
-    pseudo?: string
-  ) =>
+    ),
+  padding: (css) => (value, pseudo) =>
     css.compose(
       css.paddingLeft(value, pseudo),
       css.paddingTop(value, pseudo),
       css.paddingRight(value, pseudo),
       css.paddingBottom(value, pseudo)
-    );
-  config.utils.borderRadius = (css) => (
-    value: StandardProperties["borderRadius"],
-    pseudo?: string
-  ) =>
+    ),
+  borderRadius: (css) => (value, pseudo) =>
     css.compose(
       css.borderTopLeftRadius(value, pseudo),
       css.borderTopRightRadius(value, pseudo),
       css.borderBottomLeftRadius(value, pseudo),
       css.borderBottomRightRadius(value, pseudo)
-    );
-  config.utils.borderColor = (css) => (
-    value: StandardProperties["borderColor"],
-    pseudo?: string
-  ) =>
+    ),
+  borderColor: (css) => (value, pseudo) =>
     css.compose(
       css.borderTopColor(value, pseudo),
       css.borderRightColor(value, pseudo),
       css.borderBottomColor(value, pseudo),
       css.borderLeftColor(value, pseudo)
-    );
-  config.utils.borderStyle = (css) => (
-    value: StandardProperties["borderStyle"],
-    pseudo?: string
-  ) =>
+    ),
+  borderStyle: (css) => (value, pseudo) =>
     css.compose(
       css.borderTopStyle(value, pseudo),
       css.borderRightStyle(value, pseudo),
       css.borderBottomStyle(value, pseudo),
       css.borderLeftStyle(value, pseudo)
-    );
-  config.utils.borderWidth = (css) => (
-    value: StandardProperties["borderWidth"],
-    pseudo?: string
-  ) =>
+    ),
+  borderWidth: (css) => (value, pseudo) =>
     css.compose(
       css.borderTopWidth(value, pseudo),
       css.borderRightWidth(value, pseudo),
       css.borderBottomWidth(value, pseudo),
       css.borderLeftWidth(value, pseudo)
-    );
+    ),
 };
 
 export const getVendorPrefixAndProps = (env: any) => {
