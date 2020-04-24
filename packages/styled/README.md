@@ -1,4 +1,6 @@
-# :thread: @stitches/styled
+<p align="center">
+  <img width="300" src="../../react.png">
+</p>
 
 Use stitches to create styled components in React.
 

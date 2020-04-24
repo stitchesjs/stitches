@@ -1,4 +1,6 @@
-# :thread: @stitches/tailwind
+<p align="center">
+  <img width="300" src="../../tailwind.png">
+</p>
 
 Use stitches to build Tailwind apps
 
