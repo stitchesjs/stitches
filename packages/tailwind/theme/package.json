@@ -4,5 +4,5 @@
   "main": "../lib/theme",
   "module": "../es/theme",
   "jsnext:main": "../es/theme",
-  "typings": "../lib/theme/index.d.ts"
+  "typings": "../lib/theme.d.ts"
 }
