@@ -1,49 +1,26 @@
-// For Typescript to keep the string version, also not breaking negative values
-
-import { IThemeValue } from "./utils";
-
 /*
   There is a bug in Typescript: https://github.com/microsoft/TypeScript/issues/38133
   This causes a corrupt declaration file. Until it is fixed we have to manually do some typing
 */
-const negativeSpacing: {
-  "-px": "-1px";
-  "-1": "-0.25rem";
-  "-2": "-0.5rem";
-  "-3": "-0.75rem";
-  "-4": "-1rem";
-  "-5": "-1.25rem";
-  "-6": "-1.5rem";
-  "-8": "-2rem";
-  "-10": "-2.5rem";
-  "-12": "-3rem";
-  "-16": "-4rem";
-  "-20": "-5rem";
-  "-24": "-6rem";
-  "-32": "-8rem";
-  "-40": "-10rem";
-  "-48": "-12rem";
-  "-56": "-14rem";
-  "-64": "-16rem";
-} = {
+const negativeSpacing = {
   "-px": "-1px",
-  "-1": "-0.25rem",
-  "-2": "-0.5rem",
-  "-3": "-0.75rem",
-  "-4": "-1rem",
-  "-5": "-1.25rem",
-  "-6": "-1.5rem",
-  "-8": "-2rem",
-  "-10": "-2.5rem",
-  "-12": "-3rem",
-  "-16": "-4rem",
-  "-20": "-5rem",
-  "-24": "-6rem",
-  "-32": "-8rem",
-  "-40": "-10rem",
-  "-48": "-12rem",
-  "-56": "-14rem",
-  "-64": "-16rem",
+  [-1]: "-0.25rem",
+  [-2]: "-0.5rem",
+  [-3]: "-0.75rem",
+  [-4]: "-1rem",
+  [-5]: "-1.25rem",
+  [-6]: "-1.5rem",
+  [-8]: "-2rem",
+  [-10]: "-2.5rem",
+  [-12]: "-3rem",
+  [-16]: "-4rem",
+  [-20]: "-5rem",
+  [-24]: "-6rem",
+  [-32]: "-8rem",
+  [-40]: "-10rem",
+  [-48]: "-12rem",
+  [-56]: "-14rem",
+  [-64]: "-16rem",
 };
 
 export const screens = {
@@ -52,6 +29,7 @@ export const screens = {
   lg: "1024px",
   xl: "1280px",
 };
+
 export const colors = {
   transparent: "transparent",
   current: "currentColor",
@@ -184,6 +162,7 @@ export const backgroundPosition = {
   "right-top": "right top",
   top: "top",
 };
+
 export const backgroundSize = {
   auto: "auto",
   cover: "cover",
@@ -203,13 +182,15 @@ export const borderRadius = {
   lg: "0.5rem",
   full: "9999px",
 };
+
 export const borderWidth = {
   default: "1px",
-  "0": "0",
-  "2": "2px",
-  "4": "4px",
-  "8": "8px",
+  0: "0",
+  2: "2px",
+  4: "4px",
+  8: "8px",
 };
+
 export const boxShadow = {
   xs: "0 0 0 1px rgba(0, 0, 0, 0.05)",
   sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
@@ -223,7 +204,18 @@ export const boxShadow = {
   outline: "0 0 0 3px rgba(66, 153, 225, 0.5)",
   none: "none",
 };
-export const container = {};
+
+export const container = {
+  center: false,
+  padding: {
+    default: "0",
+    sm: "0",
+    md: "0",
+    lg: "0",
+    xl: "0",
+  },
+};
+
 export const cursor = {
   auto: "auto",
   default: "default",
@@ -233,6 +225,7 @@ export const cursor = {
   move: "move",
   "not-allowed": "not-allowed",
 };
+
 export const divideColor = borderColor;
 
 export const divideWidth = borderWidth;
@@ -240,20 +233,24 @@ export const divideWidth = borderWidth;
 export const fill = {
   current: "currentColor",
 };
+
 export const flex = {
-  "1": "1 1 0%",
-  auto: "1 1 auto",
-  initial: "0 1 auto",
-  none: "none",
+  initial: "0, 1, auto",
+  auto: "1, 1, auto",
+  none: "0, 0, auto",
+  1: "1, 1, 0%",
 };
+
 export const flexGrow = {
-  "0": "0",
+  0: "0",
   default: "1",
 };
+
 export const flexShrink = {
-  "0": "0",
+  0: "0",
   default: "1",
 };
+
 export const fontFamily = {
   sans: [
     "system-ui",
@@ -282,6 +279,7 @@ export const fontFamily = {
     "monospace",
   ].join(","),
 };
+
 export const fontSize = {
   xs: "0.75rem",
   sm: "0.875rem",
@@ -294,6 +292,7 @@ export const fontSize = {
   "5xl": "3rem",
   "6xl": "4rem",
 };
+
 export const fontWeight = {
   hairline: "100",
   thin: "200",
@@ -305,16 +304,19 @@ export const fontWeight = {
   extrabold: "800",
   black: "900",
 };
+
 export const height = {
   auto: "auto",
   ...spacing,
   full: "100%",
   screen: "100vh",
 };
+
 export const inset = {
-  "0": "0",
+  0: "0",
   auto: "auto",
 };
+
 export const letterSpacing = {
   tighter: "-0.05em",
   tight: "-0.025em",
@@ -323,6 +325,7 @@ export const letterSpacing = {
   wider: "0.05em",
   widest: "0.1em",
 };
+
 export const lineHeight = {
   none: "1",
   tight: "1.25",
@@ -330,29 +333,28 @@ export const lineHeight = {
   normal: "1.5",
   relaxed: "1.625",
   loose: "2",
-  "3": ".75rem",
-  "4": "1rem",
-  "5": "1.25rem",
-  "6": "1.5rem",
-  "7": "1.75rem",
-  "8": "2rem",
-  "9": "2.25rem",
-  "10": "2.5rem",
+  3: ".75rem",
+  4: "1rem",
+  5: "1.25rem",
+  6: "1.5rem",
+  7: "1.75rem",
+  8: "2rem",
+  9: "2.25rem",
+  10: "2.5rem",
 };
+
 export const listStyleType = {
   none: "none",
   disc: "disc",
   decimal: "decimal",
 };
 
-export const margin: {
-  auto: "auto";
-} & typeof spacing &
-  typeof negativeSpacing = {
+export const margin = {
   auto: "auto",
   ...spacing,
   ...negativeSpacing,
 };
+
 export const maxHeight = {
   full: "100%",
   screen: "100vh",
@@ -371,18 +373,23 @@ export const maxWidth = {
   "5xl": "64rem",
   "6xl": "72rem",
   full: "100%",
-  ...screens,
+  "screen-sm": screens.sm,
+  "screen-md": screens.md,
+  "screen-lg": screens.lg,
+  "screen-xl": screens.xl,
 };
 
 export const minHeight = {
-  "0": "0",
+  0: "0",
   full: "100%",
   screen: "100vh",
 };
+
 export const minWidth = {
-  "0": "0",
+  0: "0",
   full: "100%",
 };
+
 export const objectPosition = {
   bottom: "bottom",
   center: "center",
@@ -394,42 +401,51 @@ export const objectPosition = {
   "right-top": "right top",
   top: "top",
 };
+
 export const opacity = {
-  "0": "0",
-  "25": "0.25",
-  "50": "0.5",
-  "75": "0.75",
-  "100": "1",
+  0: "0",
+  25: "0.25",
+  50: "0.5",
+  75: "0.75",
+  100: "1",
 };
+
 export const order = {
   first: "-9999",
   last: "9999",
   none: "0",
-  "1": "1",
-  "2": "2",
-  "3": "3",
-  "4": "4",
-  "5": "5",
-  "6": "6",
-  "7": "7",
-  "8": "8",
-  "9": "9",
-  "10": "10",
-  "11": "11",
-  "12": "12",
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
+  8: "8",
+  9: "9",
+  10: "10",
+  11: "11",
+  12: "12",
 };
+
 export const padding = spacing;
+
 export const placeholderColor = colors;
+
 export const space = spacing;
+
 export const stroke = {
   current: "currentColor",
 };
+
 export const strokeWidth = {
-  "0": "0",
-  "1": "1",
-  "2": "2",
+  0: "0",
+  1: "1",
+  2: "2",
 };
+
 export const textColor = colors;
+
 export const width = {
   auto: "auto",
   ...spacing,
@@ -462,51 +478,55 @@ export const width = {
   full: "100%",
   screen: "100vw",
 };
+
 export const zIndex = {
   auto: "auto",
-  "0": "0",
-  "10": "10",
-  "20": "20",
-  "30": "30",
-  "40": "40",
-  "50": "50",
+  0: "0",
+  10: "10",
+  20: "20",
+  30: "30",
+  40: "40",
+  50: "50",
 };
+
 export const gap = {
-  "gap-px": "1px",
-  "gap-0": "0",
-  "gap-1": "0.25rem",
-  "gap-2": "0.5rem",
-  "gap-3": "0.75rem",
-  "gap-4": "1rem",
-  "gap-5": "1.25rem",
-  "gap-6": "1.5rem",
-  "gap-8": "2rem",
-  "gap-10": "2.5rem",
-  "gap-12": "3rem",
-  "gap-16": "4rem",
-  "gap-20": "5rem",
-  "gap-24": "6rem",
-  "gap-32": "8rem",
-  "gap-40": "10rem",
-  "gap-48": "12rem",
-  "gap-56": "14rem",
-  "gap-64": "16rem",
+  px: "1px",
+  0: "0",
+  1: "0.25rem",
+  2: "0.5rem",
+  3: "0.75rem",
+  4: "1rem",
+  5: "1.25rem",
+  6: "1.5rem",
+  8: "2rem",
+  10: "2.5rem",
+  12: "3rem",
+  16: "4rem",
+  20: "5rem",
+  24: "6rem",
+  32: "8rem",
+  40: "10rem",
+  48: "12rem",
+  56: "14rem",
+  64: "16rem",
 };
+
 export const gridTemplateColumns = {
-  "cols-none": "none",
-  "cols-1": "repeat(1, minmax(0, 1fr))",
-  "cols-2": "repeat(2, minmax(0, 1fr))",
-  "cols-3": "repeat(3, minmax(0, 1fr))",
-  "cols-4": "repeat(4, minmax(0, 1fr))",
-  "cols-5": "repeat(5, minmax(0, 1fr))",
-  "cols-6": "repeat(6, minmax(0, 1fr))",
-  "cols-7": "repeat(7, minmax(0, 1fr))",
-  "cols-8": "repeat(8, minmax(0, 1fr))",
-  "cols-9": "repeat(9, minmax(0, 1fr))",
-  "cols-10": "repeat(10, minmax(0, 1fr))",
-  "cols-11": "repeat(11, minmax(0, 1fr))",
-  "cols-12": "repeat(12, minmax(0, 1fr))",
+  none: "none",
+  1: "repeat(1, minmax(0, 1fr))",
+  2: "repeat(2, minmax(0, 1fr))",
+  3: "repeat(3, minmax(0, 1fr))",
+  4: "repeat(4, minmax(0, 1fr))",
+  5: "repeat(5, minmax(0, 1fr))",
+  6: "repeat(6, minmax(0, 1fr))",
+  7: "repeat(7, minmax(0, 1fr))",
+  8: "repeat(8, minmax(0, 1fr))",
+  9: "repeat(9, minmax(0, 1fr))",
+  10: "repeat(10, minmax(0, 1fr))",
+  11: "repeat(11, minmax(0, 1fr))",
+  12: "repeat(12, minmax(0, 1fr))",
 };
+
 export const gridColumn = {
   auto: "auto",
   "span-1": "span 1 / span 1",
@@ -522,47 +542,51 @@ export const gridColumn = {
   "span-11": "span 11 / span 11",
   "span-12": "span 12 / span 12",
 };
+
 export const gridColumnStart = {
-  "start-auto": "auto",
-  "start-1": "1",
-  "start-2": "2",
-  "start-3": "3",
-  "start-4": "4",
-  "start-5": "5",
-  "start-6": "6",
-  "start-7": "7",
-  "start-8": "8",
-  "start-9": "9",
-  "start-10": "10",
-  "start-11": "11",
-  "start-12": "12",
-  "start-13": "13",
+  auto: "auto",
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
+  8: "8",
+  9: "9",
+  10: "10",
+  11: "11",
+  12: "12",
+  13: "13",
 };
+
 export const gridColumnEnd = {
-  "end-auto": "auto",
-  "end-1": "1",
-  "end-2": "2",
-  "end-3": "3",
-  "end-4": "4",
-  "end-5": "5",
-  "end-6": "6",
-  "end-7": "7",
-  "end-8": "8",
-  "end-9": "9",
-  "end-10": "10",
-  "end-11": "11",
-  "end-12": "12",
-  "end-13": "13",
+  auto: "auto",
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
+  8: "8",
+  9: "9",
+  10: "10",
+  11: "11",
+  12: "12",
+  13: "13",
 };
+
 export const gridTemplateRows = {
-  "rows-none": "none",
-  "rows-1": "repeat(1, minmax(0, 1fr))",
-  "rows-2": "repeat(2, minmax(0, 1fr))",
-  "rows-3": "repeat(3, minmax(0, 1fr))",
-  "rows-4": "repeat(4, minmax(0, 1fr))",
-  "rows-5": "repeat(5, minmax(0, 1fr))",
-  "rows-6": "repeat(6, minmax(0, 1fr))",
+  none: "none",
+  1: "repeat(1, minmax(0, 1fr))",
+  2: "repeat(2, minmax(0, 1fr))",
+  3: "repeat(3, minmax(0, 1fr))",
+  4: "repeat(4, minmax(0, 1fr))",
+  5: "repeat(5, minmax(0, 1fr))",
+  6: "repeat(6, minmax(0, 1fr))",
 };
+
 export const gridRow = {
   auto: "auto",
   "span-1": "span 1 / span 1",
@@ -572,26 +596,29 @@ export const gridRow = {
   "span-5": "span 5 / span 5",
   "span-6": "span 6 / span 6",
 };
+
 export const gridRowStart = {
   auto: "auto",
-  "1": "1",
-  "2": "2",
-  "3": "3",
-  "4": "4",
-  "5": "5",
-  "6": "6",
-  "7": "7",
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
 };
+
 export const gridRowEnd = {
   auto: "auto",
-  "1": "1",
-  "2": "2",
-  "3": "3",
-  "4": "4",
-  "5": "5",
-  "6": "6",
-  "7": "7",
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
 };
+
 export const transformOrigin = {
   center: "center",
   top: "top",
@@ -603,43 +630,31 @@ export const transformOrigin = {
   left: "left",
   "top-left": "top left",
 };
+
 export const scale = {
-  "0": "0",
-  "50": ".5",
-  "75": ".75",
-  "90": ".9",
-  "95": ".95",
-  "100": "1",
-  "105": "1.05",
-  "110": "1.1",
-  "125": "1.25",
-  "150": "1.5",
-};
-export const rotate: {
-  "-180": "-180deg";
-  "-90": "-90deg";
-  "-45": "-45deg";
-  0: "0";
-  45: "45deg";
-  90: "90deg";
-  180: "180deg";
-} = {
-  "-180": "-180deg",
-  "-90": "-90deg",
-  "-45": "-45deg",
-  "0": "0",
-  "45": "45deg",
-  "90": "90deg",
-  "180": "180deg",
+  0: "0",
+  50: ".5",
+  75: ".75",
+  90: ".9",
+  95: ".95",
+  100: "1",
+  105: "1.05",
+  110: "1.1",
+  125: "1.25",
+  150: "1.5",
 };
 
-export const translate: {
-  "-full": "-100%";
-  "-1/2": "-50%";
-  "1/2": "50%";
-  full: "100%";
-} & typeof spacing &
-  typeof negativeSpacing = {
+export const rotate = {
+  [-180]: "-180deg",
+  [-90]: "-90deg",
+  [-45]: "-45deg",
+  0: "0",
+  45: "45deg",
+  90: "90deg",
+  180: "180deg",
+};
+
+export const translate = {
   ...spacing,
   ...negativeSpacing,
   "-full": "-100%",
@@ -647,23 +662,17 @@ export const translate: {
   "1/2": "50%",
   full: "100%",
 };
-export const skew: {
-  "-12": "-12deg";
-  "-6": "-6deg";
-  "-3": "-3deg";
-  0: "0";
-  3: "3deg";
-  6: "6deg";
-  12: "12deg";
-} = {
-  "-12": "-12deg",
-  "-6": "-6deg",
-  "-3": "-3deg",
-  "0": "0",
-  "3": "3deg",
-  "6": "6deg",
-  "12": "12deg",
+
+export const skew = {
+  [-12]: "-12deg",
+  [-6]: "-6deg",
+  [-3]: "-3deg",
+  0: "0",
+  3: "3deg",
+  6: "6deg",
+  12: "12deg",
 };
+
 export const transitionProperty = {
   none: "none",
   all: "all",
@@ -674,29 +683,32 @@ export const transitionProperty = {
   shadow: "box-shadow",
   transform: "transform",
 };
+
 export const transitionTimingFunction = {
   linear: "linear",
   in: "cubic-bezier(0.4, 0, 1, 1)",
   out: "cubic-bezier(0, 0, 0.2, 1)",
   "in-out": "cubic-bezier(0.4, 0, 0.2, 1)",
 };
+
 export const transitionDuration = {
-  "75": "75ms",
-  "100": "100ms",
-  "150": "150ms",
-  "200": "200ms",
-  "300": "300ms",
-  "500": "500ms",
-  "700": "700ms",
-  "1000": "1000ms",
+  75: "75ms",
+  100: "100ms",
+  150: "150ms",
+  200: "200ms",
+  300: "300ms",
+  500: "500ms",
+  700: "700ms",
+  1000: "1000ms",
 };
+
 export const transitionDelay = {
-  "75": "75ms",
-  "100": "100ms",
-  "150": "150ms",
-  "200": "200ms",
-  "300": "300ms",
-  "500": "500ms",
-  "700": "700ms",
-  "1000": "1000ms",
+  75: "75ms",
+  100: "100ms",
+  150: "150ms",
+  200: "200ms",
+  300: "300ms",
+  500: "500ms",
+  700: "700ms",
+  1000: "1000ms",
 };

@@ -189,7 +189,9 @@ export type TCss<T extends IConfig> = {
         ) => string;
       };
   } & {
-    compose: (...compositions: string[]) => string;
+    compose: (
+      ...compositions: Array<string | null | undefined | false>
+    ) => string;
     getStyles: () => string[];
   };
 
