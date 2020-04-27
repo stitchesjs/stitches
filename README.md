@@ -20,6 +20,12 @@ The Tailwind UI with stitches.
 
 [@stitches/tailwind](https://github.com/christianalfoni/stitches/tree/master/packages/tailwind)
 
+## vue-directive
+
+A vue directive to consume stitches.
+
+[@stitches/vue-directive](https://github.com/christianalfoni/stitches/tree/master/packages/vue-directive)
+
 ## monorepo
 
 Details about this monorepo.
