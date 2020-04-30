@@ -307,9 +307,4 @@ export const createCss = <T extends IConfig>(
 // default instance
 export const css = createCss({
   prefix: "di",
-  tokens: {
-    colors: {
-      RED: "tomato",
-    },
-  },
 });
