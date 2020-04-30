@@ -1,3 +1,9 @@
+# 2.0.3
+
+## @stitches/css
+
+- Fixed using value overriding a token
+
 # 2.0.2
 
 ## @stitches/css
