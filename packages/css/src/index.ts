@@ -277,7 +277,7 @@ export const createCss = <T extends IConfig>(
       const atom: IAtom = {
         id,
         cssHyphenProp,
-        value: token ? token[value] : value,
+        value: token && token[value] ? token[value] : value,
         pseudo,
         screen,
         toString,
