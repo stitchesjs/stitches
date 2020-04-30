@@ -117,7 +117,7 @@ export type TUtilityFirstCss<T extends IConfig> = {
       value: K extends keyof ICssPropToToken
         ? T["tokens"] extends object
           ? T["tokens"][ICssPropToToken[K]] extends object
-            ? keyof T["tokens"][ICssPropToToken[K]]
+            ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
             : StandardProperties[K]
           : StandardProperties[K]
         : StandardProperties[K],
@@ -135,7 +135,7 @@ export type TUtilityFirstCss<T extends IConfig> = {
         value: K extends keyof ICssPropToToken
           ? T["tokens"] extends object
             ? T["tokens"][ICssPropToToken[K]] extends object
-              ? keyof T["tokens"][ICssPropToToken[K]]
+              ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
               : StandardProperties[K]
             : StandardProperties[K]
           : StandardProperties[K],
@@ -158,7 +158,7 @@ export type TCss<T extends IConfig> = {
     value: K extends keyof ICssPropToToken
       ? T["tokens"] extends object
         ? T["tokens"][ICssPropToToken[K]] extends object
-          ? keyof T["tokens"][ICssPropToToken[K]]
+          ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
           : StandardProperties[K]
         : StandardProperties[K]
       : StandardProperties[K],
@@ -181,7 +181,7 @@ export type TCss<T extends IConfig> = {
           value: K extends keyof ICssPropToToken
             ? T["tokens"] extends object
               ? T["tokens"][ICssPropToToken[K]] extends object
-                ? keyof T["tokens"][ICssPropToToken[K]]
+                ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
                 : StandardProperties[K]
               : StandardProperties[K]
             : StandardProperties[K],
