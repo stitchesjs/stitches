@@ -20,7 +20,6 @@
     "format": "prettier '**/*.{md,js,jsx,json,ts,tsx}' --write",
     "test": "jest --env=jsdom --coverage",
     "test:watch": "node ../../node_modules/jest/bin/jest.js --env=jsdom --watch --updateSnapshot",
-    "prepublishOnly": "npm run build",
     "prebuild": "npm run clean",
     "postbuild": "rimraf {lib,es}/**/__tests__ {lib,es}/**/*.{spec,test}.{js,d.ts,js.map}",
     "posttest": "npm run typecheck && npm run lint",
