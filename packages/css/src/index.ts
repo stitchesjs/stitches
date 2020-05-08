@@ -43,10 +43,9 @@ const toStringCompose = function (this: IComposedAtom) {
 const createToString = (
   sheets: { [screen: string]: ISheet },
   screens: IScreens = {},
-  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?], // [className, pseudo]
-  startSeq = 0
+  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?] // [className, pseudo]
 ) => {
-  let seq = startSeq;
+  let seq = 0;
   return function toString(this: IAtom) {
     const className = cssClassnameProvider(seq++, this);
 
@@ -148,20 +147,7 @@ export const createCss = <T extends IConfig>(
     return [className];
   };
   const sheets = createSheets(env, config.screens);
-  const startSeq = Object.keys(sheets).reduce((count, key) => {
-    // Can fail with cross origin (like Codesandbox)
-    try {
-      return count + sheets[key].cssRules.length;
-    } catch {
-      return count;
-    }
-  }, 0);
-  const toString = createToString(
-    sheets,
-    config.screens,
-    cssClassnameProvider,
-    startSeq
-  );
+  const toString = createToString(sheets, config.screens, cssClassnameProvider);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
