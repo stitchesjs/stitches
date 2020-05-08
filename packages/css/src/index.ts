@@ -43,24 +43,27 @@ const toStringCompose = function (this: IComposedAtom) {
 const createToString = (
   sheets: { [screen: string]: ISheet },
   screens: IScreens = {},
-  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?] // [className, pseudo]
+  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?], // [className, pseudo]
+  startSeq = 0
 ) => {
   let seq = 0;
   return function toString(this: IAtom) {
+    const shouldInject = seq >= startSeq;
     const className = cssClassnameProvider(seq++, this);
-
     const value = this.value;
 
-    let cssRule = "";
-    if (className.length === 2) {
-      cssRule = `.${className[0]}${className[1]}{${this.cssHyphenProp}:${value};}`;
-    } else {
-      cssRule = `.${className[0]}{${this.cssHyphenProp}:${value};}`;
-    }
+    if (shouldInject) {
+      let cssRule = "";
+      if (className.length === 2) {
+        cssRule = `.${className[0]}${className[1]}{${this.cssHyphenProp}:${value};}`;
+      } else {
+        cssRule = `.${className[0]}{${this.cssHyphenProp}:${value};}`;
+      }
 
-    sheets[this.screen].insertRule(
-      this.screen ? screens[this.screen](cssRule) : cssRule
-    );
+      sheets[this.screen].insertRule(
+        this.screen ? screens[this.screen](cssRule) : cssRule
+      );
+    }
 
     // We are switching this atom from IAtom simpler representation
     // 1. delete everything but `id` for specificity check
@@ -147,7 +150,20 @@ export const createCss = <T extends IConfig>(
     return [className];
   };
   const sheets = createSheets(env, config.screens);
-  const toString = createToString(sheets, config.screens, cssClassnameProvider);
+  const startSeq = Object.keys(sheets).reduce((count, key) => {
+    // Can fail with cross origin (like Codesandbox)
+    try {
+      return count + sheets[key].cssRules.length;
+    } catch {
+      return count;
+    }
+  }, 0);
+  const toString = createToString(
+    sheets,
+    config.screens,
+    cssClassnameProvider,
+    startSeq
+  );
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);

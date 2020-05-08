@@ -251,7 +251,9 @@ describe("createCss", () => {
     expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
       "._0 {color: red;}"
     );
-    // Lets add something new
+    // On the client it will rerun the logic (React hydrate etc.)
+    clientCss.color("red").toString();
+    // Then we add something new
     clientCss.color("blue").toString();
     // Lets see if it continues on the correct sequence
     expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(2);
