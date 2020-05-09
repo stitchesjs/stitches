@@ -41,7 +41,7 @@ You can configure the Tailwind instance to have a custom theme, utils and even a
 
 ```ts
 // css.ts
-import { createCss } from "@stitches/styled";
+import { createCss } from "@stitches/css";
 import { createConfig } from "@stitches/tailwind";
 // Treeshake by including only specific utils
 // import { text, flex } from "@stitches/tailwind/utils"
