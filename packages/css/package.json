@@ -1,6 +1,6 @@
 {
   "name": "@stitches/css",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "The atom CSS-IN-JS  library",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
