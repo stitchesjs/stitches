@@ -153,7 +153,11 @@ export type TUtilityFirstCss<T extends IConfig> = {
     getStyles: () => string[];
   };
 
-export type TCss<T extends IConfig> = {
+export type TCss<T extends IConfig> = T extends { utilityFirst: true }
+  ? TUtilityFirstCss<T>
+  : TDefaultCss<T>;
+
+export type TDefaultCss<T extends IConfig> = {
   [K in keyof StandardProperties]: (
     value: K extends keyof ICssPropToToken
       ? T["tokens"] extends object

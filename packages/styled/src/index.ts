@@ -1,5 +1,4 @@
-// Lerna wrong publish, wtf, is happening?
-import { IConfig, TCss, TUtilityFirstCss } from "@stitches/css";
+import { IConfig, TCss } from "@stitches/css";
 import * as React from "react";
 import { Box, PolymorphicComponent } from "react-polymorphic-box";
 
@@ -8,26 +7,17 @@ export type IStyled<
   E extends keyof JSX.IntrinsicElements
 > = (<P extends object = {}>(
   defaults: P,
-  cb: (
-    css: C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TCss<C>,
-    props: P
-  ) => string
+  cb: (css: TCss<C>, props: P) => string
 ) => PolymorphicComponent<P, E>) &
-  ((
-    cb: (
-      css: C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TCss<C>
-    ) => string
-  ) => PolymorphicComponent<{}, E>);
+  ((cb: (css: TCss<C>) => string) => PolymorphicComponent<{}, E>);
 
 export const createStyled = <C extends IConfig>() => {
   let currentAs: string;
 
-  const context = React.createContext<TCss<C> | TUtilityFirstCss<C>>(
-    null as any
-  );
+  const context = React.createContext<TCss<C>>(null as any);
   const useCssInstance = () => React.useContext(context);
   const ProviderInstance: React.FC<{
-    css: C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TCss<C>;
+    css: TCss<C>;
   }> = ({ css, children }) =>
     React.createElement(
       context.Provider,

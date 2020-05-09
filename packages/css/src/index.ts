@@ -111,7 +111,7 @@ export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
 export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
-): T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TCss<T> => {
+): TCss<T> => {
   const showFriendlyClassnames =
     typeof config.showFriendlyClassnames === "boolean"
       ? config.showFriendlyClassnames
