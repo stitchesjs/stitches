@@ -26,6 +26,14 @@ A vue directive to consume stitches.
 
 [@stitches/vue-directive](https://github.com/christianalfoni/stitches/tree/master/packages/vue-directive)
 
+## Roadmap
+
+- Stabilize codebase (fix any bugs)
+- Reduce size (Already tiny, but we have some things we can do)
+- Improve performance (Already superfast, but we have some things we can do)
+- Create a website
+- Encourage community to build extensions in the form of tokens, utilities and other configs (like Tailwind)
+
 ## monorepo
 
 Details about this monorepo.

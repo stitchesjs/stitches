@@ -1,3 +1,11 @@
+# 2.0.4 - 2.0.6
+
+## @stitches/css
+
+- Fixed issue with server side rendering, showing different render outputs error
+- Now `TCss` type can be used for both tailwind and normal
+- Fixed issues with Lerna deploy
+
 # 2.0.3
 
 ## @stitches/css
