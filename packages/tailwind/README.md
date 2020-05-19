@@ -468,7 +468,7 @@ export const letterSpacing = {
 };
 ```
 
-### letterSpacing
+### lineHeight
 
 ```ts
 export const lineHeight = {
