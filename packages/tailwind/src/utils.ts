@@ -730,6 +730,10 @@ export const flex: ITailwindConfig["utils"]["flex"] = createUtility(
   {
     theme: "flex",
     emptyValue: (css, pseudo) => css.display("flex", pseudo),
+    values: {
+      col: "column",
+      "col-reverse": "column-reverse",
+    },
   }
 );
 
