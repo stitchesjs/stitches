@@ -122,7 +122,9 @@ export const createCss = <T extends IConfig>(
     : { vendorPrefix: "-node-", vendorProps: [] };
 
   if (env && hotReloadingCache.has(prefix)) {
-    return hotReloadingCache.get(prefix);
+    const instance = hotReloadingCache.get(prefix);
+    instance.hotUpdateConfig(config);
+    return instance;
   }
 
   // pre-compute class prefix
@@ -194,6 +196,11 @@ export const createCss = <T extends IConfig>(
 
   const cssInstance = new Proxy(noop, {
     get(_, prop, proxy) {
+      if (prop === "hotUpdateConfig") {
+        return (newConfig: any) => {
+          Object.assign(config, newConfig);
+        };
+      }
       if (prop === "compose") {
         return compose;
       }
