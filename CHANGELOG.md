@@ -1,3 +1,9 @@
+# 2.1.0
+
+- Now tailwind is prefixed with "ts" by default
+- Fixed "col" and "col-reverse" on tailwind
+- Now the config is hot reloaded
+
 # 2.0.4 - 2.0.6
 
 ## @stitches/css

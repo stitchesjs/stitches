@@ -176,9 +176,9 @@ export const createCss = <T extends IConfig>(
   };
 
   // pre-checked config to avoid checking these all the time
-  const screens = config.screens || {};
-  const utils = config.utils || {};
-  const tokens = config.tokens || {};
+  let screens = config.screens || {};
+  let utils = config.utils || {};
+  let tokens = config.tokens || {};
 
   // atom cache
   const atomCache = new Map<string, IAtom>();
@@ -199,6 +199,10 @@ export const createCss = <T extends IConfig>(
       if (prop === "hotUpdateConfig") {
         return (newConfig: any) => {
           Object.assign(config, newConfig);
+          atomCache.clear();
+          screens = config.screens || {};
+          utils = config.utils || {};
+          tokens = config.tokens || {};
         };
       }
       if (prop === "compose") {
