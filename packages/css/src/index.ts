@@ -99,7 +99,13 @@ const composeIntoMap = (
   }
 };
 
-export const createConfig = <T extends IConfig>(config: T) => {
+export const createConfig = <T extends IConfig>(
+  config: T & {
+    themes?: {
+      [name: string]: T["tokens"];
+    };
+  }
+): T => {
   return config;
 };
 
@@ -188,6 +194,46 @@ export const createCss = <T extends IConfig>(
     return [className];
   };
   const sheets = createSheets(env, config.screens);
+
+  if (config.themes) {
+    const defaultValues: { [varKey: string]: string } = {};
+    // tslint:disable-next-line
+    for (const theme in config.themes) {
+      const themeValues: { [varKey: string]: string } = {};
+      // tslint:disable-next-line
+      for (const tokenType in config.themes[theme]) {
+        // @ts-ignore
+        // tslint:disable-next-line
+        for (const token in config.themes[theme][tokenType]) {
+          const cssvar = `--${tokenType}-${token}`;
+
+          if (!(cssvar in defaultValues)) {
+            // @ts-ignore
+            defaultValues[cssvar] = config.tokens[tokenType][token];
+          }
+          // @ts-ignore
+          config.tokens[tokenType][token] = `var(${cssvar})`;
+          // @ts-ignore
+          themeValues[cssvar] = config.themes[theme][tokenType][token];
+        }
+      }
+
+      sheets[""].insertRule(
+        `.${classPrefix ? `${classPrefix}-` : ""}theme-${theme}{${Object.keys(
+          themeValues
+        ).reduce((aggr, varKey) => {
+          return `${aggr}${varKey}:${themeValues[varKey]};`;
+        }, "")}}`
+      );
+    }
+
+    sheets[""].insertRule(
+      `:root{${Object.keys(defaultValues).reduce((aggr, varKey) => {
+        return `${aggr}${varKey}:${defaultValues[varKey]};`;
+      }, "")}}`
+    );
+  }
+
   const startSeq = Object.keys(sheets).reduce((count, key) => {
     // Can fail with cross origin (like Codesandbox)
     try {
@@ -240,6 +286,10 @@ export const createCss = <T extends IConfig>(
           utils = config.utils || {};
           tokens = config.tokens || {};
         };
+      }
+      if (prop === "theme") {
+        return (name: string) =>
+          `${classPrefix ? `${classPrefix}-` : ""}theme-${name}`;
       }
       if (prop === "compose") {
         return compose;

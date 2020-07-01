@@ -109,6 +109,9 @@ export interface IConfig {
   utils?: {
     [name: string]: TUtility<any, any>;
   };
+  themes?: {
+    [theme: string]: ITokensDefinition;
+  };
 }
 
 export type TUtilityFirstCss<T extends IConfig> = {
@@ -151,6 +154,7 @@ export type TUtilityFirstCss<T extends IConfig> = {
   } & {
     compose: (...compositions: string[]) => string;
     getStyles: () => string[];
+    theme: (theme: keyof T["themes"]) => string;
   };
 
 export type TDeclarativeCss<T extends IConfig> = T extends {
@@ -267,6 +271,7 @@ export type TDefaultCss<T extends IConfig> = {
   } & {
     compose: (...compositions: (string | null | undefined | false)[]) => string;
     getStyles: () => string[];
+    theme: (theme: keyof T["themes"]) => string;
   };
 
 export interface ISheet {

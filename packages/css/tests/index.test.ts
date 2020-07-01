@@ -350,4 +350,30 @@ describe("createCss", () => {
       "/* STITCHES:mobile */\n\n@media(min-width:700px){._0:hover{color:red;}}"
     );
   });
+  test("should insert themes", () => {
+    const css = createCss(
+      {
+        tokens: {
+          colors: {
+            primary: "tomato",
+          },
+        },
+        themes: {
+          dark: {
+            colors: {
+              primary: "blue",
+            },
+          },
+        },
+      },
+      null
+    );
+    // @ts-ignore
+    css({ color: "primary" }).toString();
+    expect(css.theme("dark")).toBe("theme-dark");
+    expect(css.getStyles().length).toBe(1);
+    expect(css.getStyles()[0].trim()).toBe(
+      "/* STITCHES */\n\n.theme-dark{--colors-primary:blue;}\n:root{--colors-primary:tomato;}\n._0{color:var(--colors-primary);}"
+    );
+  });
 });
