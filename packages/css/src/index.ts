@@ -1,4 +1,3 @@
-// force deploy, wtf lerna?
 import {
   IAtom,
   IComposedAtom,
@@ -8,7 +7,7 @@ import {
   ISheet,
   ITokensDefinition,
   TCss,
-  TUtilityFirstCss,
+  TDeclarativeCss,
 } from "./types";
 import {
   createSheets,
@@ -108,10 +107,45 @@ export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
 
+export const createDeclarativeCss = <T extends IConfig>(
+  config: T
+): TDeclarativeCss<T> => {
+  return function (this: any, definition: any) {
+    const composer = this;
+    const args: any[] = [];
+    for (const key in definition) {
+      if (config.screens && key in config.screens) {
+        for (const screenKey in definition[key]) {
+          if (!screenKey[0].match(/[a-z]/)) {
+            for (const selectorKey in definition[key][screenKey]) {
+              args.push(
+                composer[key][selectorKey](
+                  definition[key][screenKey][selectorKey],
+                  screenKey
+                )
+              );
+            }
+          } else {
+            args.push(composer[key][screenKey](definition[key][screenKey]));
+          }
+        }
+      } else if (!key[0].match(/[a-z]/)) {
+        for (const selectorKey in definition[key]) {
+          args.push(composer[selectorKey](definition[key][selectorKey], key));
+        }
+      } else {
+        args.push(composer[key](definition[key]));
+      }
+    }
+
+    return css.compose(...args);
+  } as any;
+};
+
 export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
-): TCss<T> => {
+): TCss<T> & TDeclarativeCss<T> => {
   const showFriendlyClassnames =
     typeof config.showFriendlyClassnames === "boolean"
       ? config.showFriendlyClassnames
@@ -193,8 +227,8 @@ export const createCss = <T extends IConfig>(
   // We need to know when we override as it does not require a util to
   // be called
   let isOverriding = false;
-
-  const cssInstance = new Proxy(noop, {
+  const declarativeCss = createDeclarativeCss(config);
+  const cssInstance = new Proxy(declarativeCss, {
     get(_, prop, proxy) {
       if (prop === "hotUpdateConfig") {
         return (newConfig: any) => {
@@ -250,6 +284,9 @@ export const createCss = <T extends IConfig>(
       return proxy;
     },
     apply(_, __, argsList) {
+      if (!cssProp) {
+        return _.call(cssInstance, argsList[0]);
+      }
       const value = argsList[0];
       const pseudo = argsList[1];
       const token = tokens[cssPropToToken[cssProp as keyof ICssPropToToken]];
@@ -305,6 +342,7 @@ export const createCss = <T extends IConfig>(
       }
 
       isOverriding = false;
+      cssProp = "";
 
       return atom;
     },

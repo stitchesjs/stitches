@@ -153,6 +153,78 @@ export type TUtilityFirstCss<T extends IConfig> = {
     getStyles: () => string[];
   };
 
+export type TDeclarativeCss<T extends IConfig> = T extends {
+  utilityFirst: true;
+}
+  ? TUtilityFirstCss<T>
+  : TDefaultDeclarativeCss<T>;
+
+export type TDefaultDeclarativeCss<T extends IConfig> = (
+  styles:
+    | ({
+        [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
+          ? T["tokens"] extends object
+            ? T["tokens"][ICssPropToToken[K]] extends object
+              ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
+              : StandardProperties[K]
+            : StandardProperties[K]
+          : StandardProperties[K];
+      } &
+        {
+          [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
+            ? ReturnType<T["utils"][U]> extends (...args: infer A) => string
+              ? A[0]
+              : never
+            : never;
+        } &
+        {
+          [S in keyof T["screens"]]?:
+            | ({
+                [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<
+                  any,
+                  any
+                >
+                  ? ReturnType<T["utils"][U]> extends (
+                      ...args: infer A
+                    ) => string
+                    ? A[0]
+                    : never
+                  : never;
+              } &
+                {
+                  [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
+                    ? T["tokens"] extends object
+                      ? T["tokens"][ICssPropToToken[K]] extends object
+                        ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
+                        : StandardProperties[K]
+                      : StandardProperties[K]
+                    : StandardProperties[K];
+                })
+            | {
+                [selector: string]: {
+                  [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
+                    ? T["tokens"] extends object
+                      ? T["tokens"][ICssPropToToken[K]] extends object
+                        ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
+                        : StandardProperties[K]
+                      : StandardProperties[K]
+                    : StandardProperties[K];
+                };
+              };
+        })
+    | {
+        [selector: string]: {
+          [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
+            ? T["tokens"] extends object
+              ? T["tokens"][ICssPropToToken[K]] extends object
+                ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
+                : StandardProperties[K]
+              : StandardProperties[K]
+            : StandardProperties[K];
+        };
+      }
+) => string;
+
 export type TCss<T extends IConfig> = T extends { utilityFirst: true }
   ? TUtilityFirstCss<T>
   : TDefaultCss<T>;

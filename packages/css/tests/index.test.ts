@@ -300,4 +300,54 @@ describe("createCss", () => {
     const css = createCss({}, null);
     expect(String(css.margin("1px"))).toBe("_0 _1 _2 _3");
   });
+  test("should have declarative api", () => {
+    const css = createCss({}, null);
+    expect(
+      css({
+        color: "red",
+        backgroundColor: "blue",
+      }).toString()
+    ).toBe("_0 _1");
+  });
+  test("should handle declarative pseudo selector", () => {
+    const fakeEnv = createFakeEnv([], []);
+    const css = createCss({}, (fakeEnv as unknown) as Window);
+    // @ts-ignore
+    css({ ":hover": { color: "red" } }).toString();
+    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+      "._0:hover {color: red;}"
+    );
+  });
+  test("should handle screen selector", () => {
+    const css = createCss(
+      {
+        screens: {
+          mobile: (css) => `@media(min-width:700px){${css}}`,
+        },
+      },
+      null
+    );
+    // @ts-ignore
+    css({ mobile: { color: "red" } }).toString();
+    expect(css.getStyles().length).toBe(2);
+    expect(css.getStyles()[1].trim()).toBe(
+      "/* STITCHES:mobile */\n\n@media(min-width:700px){._0{color:red;}}"
+    );
+  });
+  test("should handle pseudo in screen selector", () => {
+    const css = createCss(
+      {
+        screens: {
+          mobile: (css) => `@media(min-width:700px){${css}}`,
+        },
+      },
+      null
+    );
+    // @ts-ignore
+    css({ mobile: { ":hover": { color: "red" } } }).toString();
+    expect(css.getStyles().length).toBe(2);
+    expect(css.getStyles()[1].trim()).toBe(
+      "/* STITCHES:mobile */\n\n@media(min-width:700px){._0:hover{color:red;}}"
+    );
+  });
 });
