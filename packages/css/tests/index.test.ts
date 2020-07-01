@@ -322,7 +322,7 @@ describe("createCss", () => {
     const css = createCss(
       {
         screens: {
-          mobile: (css) => `@media(min-width:700px){${css}}`,
+          mobile: (className) => `@media(min-width:700px){${className}}`,
         },
       },
       null
@@ -338,7 +338,7 @@ describe("createCss", () => {
     const css = createCss(
       {
         screens: {
-          mobile: (css) => `@media(min-width:700px){${css}}`,
+          mobile: (className) => `@media(min-width:700px){${className}}`,
         },
       },
       null

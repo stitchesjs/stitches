@@ -117,6 +117,7 @@ export const createDeclarativeCss = <T extends IConfig>(
       if (config.screens && key in config.screens) {
         for (const screenKey in definition[key]) {
           if (!screenKey[0].match(/[a-z]/)) {
+            // tslint:disable-next-line
             for (const selectorKey in definition[key][screenKey]) {
               args.push(
                 composer[key][selectorKey](
@@ -130,6 +131,7 @@ export const createDeclarativeCss = <T extends IConfig>(
           }
         }
       } else if (!key[0].match(/[a-z]/)) {
+        // tslint:disable-next-line
         for (const selectorKey in definition[key]) {
           args.push(composer[selectorKey](definition[key][selectorKey], key));
         }
