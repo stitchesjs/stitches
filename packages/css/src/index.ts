@@ -165,8 +165,7 @@ export const createCss = <T extends IConfig>(
 
   if (env && hotReloadingCache.has(prefix)) {
     const instance = hotReloadingCache.get(prefix);
-    instance.hotUpdateConfig(config);
-    return instance;
+    instance.dispose();
   }
 
   // pre-compute class prefix
@@ -193,7 +192,29 @@ export const createCss = <T extends IConfig>(
 
     return [className];
   };
-  const sheets = createSheets(env, config.screens);
+  const { tags, sheets } = createSheets(env, config.screens);
+  const startSeq = Object.keys(sheets).reduce((count, key) => {
+    // Can fail with cross origin (like Codesandbox)
+    try {
+      return count + sheets[key].cssRules.length;
+    } catch {
+      return count;
+    }
+  }, 0);
+  const toString = createToString(
+    sheets,
+    config.screens,
+    cssClassnameProvider,
+    startSeq
+  );
+  const compose = (...atoms: IAtom[]): IComposedAtom => {
+    const map = new Map<string, IAtom>();
+    composeIntoMap(map, atoms);
+    return {
+      atoms: Array.from(map.values()),
+      toString: toStringCompose,
+    };
+  };
 
   if (config.themes) {
     const defaultValues: { [varKey: string]: string } = {};
@@ -234,33 +255,10 @@ export const createCss = <T extends IConfig>(
     );
   }
 
-  const startSeq = Object.keys(sheets).reduce((count, key) => {
-    // Can fail with cross origin (like Codesandbox)
-    try {
-      return count + sheets[key].cssRules.length;
-    } catch {
-      return count;
-    }
-  }, 0);
-  const toString = createToString(
-    sheets,
-    config.screens,
-    cssClassnameProvider,
-    startSeq
-  );
-  const compose = (...atoms: IAtom[]): IComposedAtom => {
-    const map = new Map<string, IAtom>();
-    composeIntoMap(map, atoms);
-    return {
-      atoms: Array.from(map.values()),
-      toString: toStringCompose,
-    };
-  };
-
   // pre-checked config to avoid checking these all the time
-  let screens = config.screens || {};
-  let utils = config.utils || {};
-  let tokens = config.tokens || {};
+  const screens = config.screens || {};
+  const utils = config.utils || {};
+  const tokens = config.tokens || {};
 
   // atom cache
   const atomCache = new Map<string, IAtom>();
@@ -278,13 +276,12 @@ export const createCss = <T extends IConfig>(
   const declarativeCss = createDeclarativeCss(config);
   const cssInstance = new Proxy(declarativeCss, {
     get(_, prop, proxy) {
-      if (prop === "hotUpdateConfig") {
-        return (newConfig: any) => {
-          Object.assign(config, newConfig);
+      if (prop === "dispose") {
+        return () => {
           atomCache.clear();
-          screens = config.screens || {};
-          utils = config.utils || {};
-          tokens = config.tokens || {};
+          tags.forEach((tag) => {
+            tag.parentNode?.removeChild(tag);
+          });
         };
       }
       if (prop === "theme") {

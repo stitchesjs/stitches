@@ -55,6 +55,7 @@ export const cssPropToToken: ICssPropToToken = {
 };
 
 export const createSheets = (env: any, screens: IScreens = {}) => {
+  const tags: HTMLStyleElement[] = [];
   if (env && env.document) {
     const head = env.document.querySelector("head");
 
@@ -71,35 +72,42 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
       ? styles.indexOf(existingStyles[0])
       : styles.length;
 
-    return [""]
-      .concat(Object.keys(screens))
-      .reduce<{ [key: string]: ISheet }>((aggr, key, index) => {
-        if (!existingStyles[index]) {
-          const style = env.document.createElement("style");
-          head.appendChild(style);
-        }
+    return {
+      tags,
+      sheets: [""]
+        .concat(Object.keys(screens))
+        .reduce<{ [key: string]: ISheet }>((aggr, key, index) => {
+          if (!existingStyles[index]) {
+            const style = env.document.createElement("style");
+            tags.push(style);
+            head.appendChild(style);
+          }
 
-        aggr[key] = (env.document.styleSheets[
-          styleIndex++
-        ] as unknown) as ISheet;
+          aggr[key] = (env.document.styleSheets[
+            styleIndex++
+          ] as unknown) as ISheet;
 
-        return aggr;
-      }, {});
+          return aggr;
+        }, {}),
+    };
   }
 
-  return [""]
-    .concat(Object.keys(screens))
-    .reduce<{ [key: string]: ISheet }>((aggr, key) => {
-      aggr[key] = {
-        content: "",
-        cssRules: [],
-        insertRule(content) {
-          aggr[key].content += `\n${content}`;
-        },
-      };
+  return {
+    tags,
+    sheets: [""]
+      .concat(Object.keys(screens))
+      .reduce<{ [key: string]: ISheet }>((aggr, key) => {
+        aggr[key] = {
+          content: "",
+          cssRules: [],
+          insertRule(content) {
+            aggr[key].content += `\n${content}`;
+          },
+        };
 
-      return aggr;
-    }, {});
+        return aggr;
+      }, {}),
+  };
 };
 
 export const specificityProps: {
