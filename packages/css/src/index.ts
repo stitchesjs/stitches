@@ -1,11 +1,11 @@
 import {
   IAtom,
-  IThemeAtom,
   IComposedAtom,
   IConfig,
   ICssPropToToken,
   IScreens,
   ISheet,
+  IThemeAtom,
   ITokensDefinition,
   TCss,
   TDeclarativeCss,
