@@ -45,7 +45,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
   const polymorphicCss = (cssFunctionOrObject: any) => {
     return typeof cssFunctionOrObject === "function"
       ? cssFunctionOrObject(css)
-      : css(cssFunctionOrObject);
+      : (css as any)(cssFunctionOrObject);
   };
 
   let currentAs: string;
