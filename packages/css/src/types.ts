@@ -14,6 +14,10 @@ export interface IAtom {
   toString: (this: IAtom) => string;
 }
 
+export interface IThemeAtom {
+  toString: (this: IThemeAtom) => string;
+}
+
 export interface IComposedAtom {
   atoms: IAtom[];
   _className?: string;
@@ -109,13 +113,11 @@ export interface IConfig {
   utils?: {
     [name: string]: TUtility<any, any>;
   };
-  themes?: {
-    [theme: string]: ITokensDefinition;
-  };
 }
 
-export type TUtilityFirstCss<T extends IConfig> = {
-  override: {
+export type TUtilityFirstCss<
+  T extends IConfig,
+  D = {
     [K in keyof StandardProperties]: (
       value: K extends keyof ICssPropToToken
         ? T["tokens"] extends object
@@ -126,25 +128,16 @@ export type TUtilityFirstCss<T extends IConfig> = {
         : StandardProperties[K],
       pseudo?: string
     ) => string;
-  };
+  }
+> = {
+  override: D;
 } & {
   [S in keyof T["screens"]]: {
     [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
       ? ReturnType<T["utils"][U]>
       : never;
   } & {
-    override: {
-      [K in keyof StandardProperties]: (
-        value: K extends keyof ICssPropToToken
-          ? T["tokens"] extends object
-            ? T["tokens"][ICssPropToToken[K]] extends object
-              ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-              : StandardProperties[K]
-            : StandardProperties[K]
-          : StandardProperties[K],
-        pseudo?: string
-      ) => string;
-    };
+    override: D;
   };
 } &
   {
@@ -153,8 +146,8 @@ export type TUtilityFirstCss<T extends IConfig> = {
       : never;
   } & {
     compose: (...compositions: string[]) => string;
-    getStyles: () => string[];
-    theme: (theme: keyof T["themes"]) => string;
+    getStyles: (callback: () => any) => { styles: string[]; result: any };
+    theme: (theme: T["tokens"]) => string;
   };
 
 export type TDeclarativeCss<T extends IConfig> = T extends {
@@ -163,17 +156,20 @@ export type TDeclarativeCss<T extends IConfig> = T extends {
   ? TUtilityFirstCss<T>
   : TDefaultDeclarativeCss<T>;
 
-export type TDefaultDeclarativeCss<T extends IConfig> = (
+export type TDefaultDeclarativeCss<
+  T extends IConfig,
+  D = {
+    [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
+      ? T["tokens"] extends object
+        ? T["tokens"][ICssPropToToken[K]] extends object
+          ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
+          : StandardProperties[K]
+        : StandardProperties[K]
+      : StandardProperties[K];
+  }
+> = (
   styles:
-    | ({
-        [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
-          ? T["tokens"] extends object
-            ? T["tokens"][ICssPropToToken[K]] extends object
-              ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-              : StandardProperties[K]
-            : StandardProperties[K]
-          : StandardProperties[K];
-      } &
+    | (D &
         {
           [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
             ? ReturnType<T["utils"][U]> extends (...args: infer A) => string
@@ -195,37 +191,13 @@ export type TDefaultDeclarativeCss<T extends IConfig> = (
                     : never
                   : never;
               } &
-                {
-                  [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
-                    ? T["tokens"] extends object
-                      ? T["tokens"][ICssPropToToken[K]] extends object
-                        ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-                        : StandardProperties[K]
-                      : StandardProperties[K]
-                    : StandardProperties[K];
-                })
+                D)
             | {
-                [selector: string]: {
-                  [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
-                    ? T["tokens"] extends object
-                      ? T["tokens"][ICssPropToToken[K]] extends object
-                        ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-                        : StandardProperties[K]
-                      : StandardProperties[K]
-                    : StandardProperties[K];
-                };
+                [selector: string]: D;
               };
         })
     | {
-        [selector: string]: {
-          [K in keyof StandardProperties]?: K extends keyof ICssPropToToken
-            ? T["tokens"] extends object
-              ? T["tokens"][ICssPropToToken[K]] extends object
-                ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-                : StandardProperties[K]
-              : StandardProperties[K]
-            : StandardProperties[K];
-        };
+        [selector: string]: D;
       }
 ) => string;
 
@@ -233,18 +205,22 @@ export type TCss<T extends IConfig> = T extends { utilityFirst: true }
   ? TUtilityFirstCss<T>
   : TDefaultCss<T>;
 
-export type TDefaultCss<T extends IConfig> = {
-  [K in keyof StandardProperties]: (
-    value: K extends keyof ICssPropToToken
-      ? T["tokens"] extends object
-        ? T["tokens"][ICssPropToToken[K]] extends object
-          ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
+export type TDefaultCss<
+  T extends IConfig,
+  D = {
+    [K in keyof StandardProperties]: (
+      value: K extends keyof ICssPropToToken
+        ? T["tokens"] extends object
+          ? T["tokens"][ICssPropToToken[K]] extends object
+            ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
+            : StandardProperties[K]
           : StandardProperties[K]
-        : StandardProperties[K]
-      : StandardProperties[K],
-    pseudo?: string
-  ) => string;
-} &
+        : StandardProperties[K],
+      pseudo?: string
+    ) => string;
+  }
+> = TDefaultDeclarativeCss<T> &
+  D &
   {
     [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
       ? ReturnType<T["utils"][U]>
@@ -256,22 +232,11 @@ export type TDefaultCss<T extends IConfig> = {
         ? ReturnType<T["utils"][U]>
         : never;
     } &
-      {
-        [K in keyof StandardProperties]: (
-          value: K extends keyof ICssPropToToken
-            ? T["tokens"] extends object
-              ? T["tokens"][ICssPropToToken[K]] extends object
-                ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-                : StandardProperties[K]
-              : StandardProperties[K]
-            : StandardProperties[K],
-          pseudo?: string
-        ) => string;
-      };
+      D;
   } & {
     compose: (...compositions: (string | null | undefined | false)[]) => string;
-    getStyles: () => string[];
-    theme: (theme: keyof T["themes"]) => string;
+    getStyles: (callback: () => any) => { styles: string[]; result: any };
+    theme: (theme: T["tokens"]) => string;
   };
 
 export interface ISheet {

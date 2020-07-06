@@ -1,5 +1,6 @@
 import {
   IAtom,
+  IThemeAtom,
   IComposedAtom,
   IConfig,
   ICssPropToToken,
@@ -99,21 +100,11 @@ const composeIntoMap = (
   }
 };
 
-export const createConfig = <T extends IConfig>(
-  config: T & {
-    themes?: {
-      [name: string]: T["tokens"];
-    };
-  }
-): T => {
-  return config;
-};
-
 export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
 
-export const createDeclarativeCss = <T extends IConfig>(
+const createDeclarativeCss = <T extends IConfig>(
   config: T
 ): TDeclarativeCss<T> => {
   return function (this: any, definition: any) {
@@ -146,14 +137,14 @@ export const createDeclarativeCss = <T extends IConfig>(
       }
     }
 
-    return css.compose(...args);
+    return composer.compose(...args);
   } as any;
 };
 
 export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
-): TCss<T> & TDeclarativeCss<T> => {
+): TCss<T> => {
   const showFriendlyClassnames =
     typeof config.showFriendlyClassnames === "boolean"
       ? config.showFriendlyClassnames
@@ -192,16 +183,19 @@ export const createCss = <T extends IConfig>(
 
     return [className];
   };
+
   const { tags, sheets } = createSheets(env, config.screens);
-  const startSeq = Object.keys(sheets).reduce((count, key) => {
-    // Can fail with cross origin (like Codesandbox)
-    try {
-      return count + sheets[key].cssRules.length;
-    } catch {
-      return count;
-    }
-  }, 0);
-  const toString = createToString(
+  const startSeq = Object.keys(sheets)
+    .filter((key) => key !== "__variables__")
+    .reduce((count, key) => {
+      // Can fail with cross origin (like Codesandbox)
+      try {
+        return count + sheets[key].cssRules.length;
+      } catch {
+        return count;
+      }
+    }, 0);
+  let toString = createToString(
     sheets,
     config.screens,
     cssClassnameProvider,
@@ -216,52 +210,36 @@ export const createCss = <T extends IConfig>(
     };
   };
 
-  if (config.themes) {
-    const defaultValues: { [varKey: string]: string } = {};
-    // tslint:disable-next-line
-    for (const theme in config.themes) {
-      const themeValues: { [varKey: string]: string } = {};
-      // tslint:disable-next-line
-      for (const tokenType in config.themes[theme]) {
-        // @ts-ignore
-        // tslint:disable-next-line
-        for (const token in config.themes[theme][tokenType]) {
-          const cssvar = `--${tokenType}-${token}`;
-
-          if (!(cssvar in defaultValues)) {
-            // @ts-ignore
-            defaultValues[cssvar] = config.tokens[tokenType][token];
-          }
-          // @ts-ignore
-          config.tokens[tokenType][token] = `var(${cssvar})`;
-          // @ts-ignore
-          themeValues[cssvar] = config.themes[theme][tokenType][token];
-        }
-      }
-
-      sheets[""].insertRule(
-        `.${classPrefix ? `${classPrefix}-` : ""}theme-${theme}{${Object.keys(
-          themeValues
-        ).reduce((aggr, varKey) => {
-          return `${aggr}${varKey}:${themeValues[varKey]};`;
-        }, "")}}`
-      );
-    }
-
-    sheets[""].insertRule(
-      `:root{${Object.keys(defaultValues).reduce((aggr, varKey) => {
-        return `${aggr}${varKey}:${defaultValues[varKey]};`;
-      }, "")}}`
-    );
-  }
-
   // pre-checked config to avoid checking these all the time
   const screens = config.screens || {};
   const utils = config.utils || {};
   const tokens = config.tokens || {};
 
+  const defaultValues: { [varKey: string]: string } = {};
+
+  // tslint:disable-next-line
+  for (const tokenType in tokens) {
+    // @ts-ignore
+    // tslint:disable-next-line
+    for (const token in tokens[tokenType]) {
+      const cssvar = `--${tokenType}-${token}`;
+
+      // @ts-ignore
+      defaultValues[cssvar] = tokens[tokenType][token];
+      // @ts-ignore
+      tokens[tokenType][token] = `var(${cssvar})`;
+    }
+  }
+
+  sheets.__variables__.insertRule(
+    `:root{${Object.keys(defaultValues).reduce((aggr, varKey) => {
+      return `${aggr}${varKey}:${defaultValues[varKey]};`;
+    }, "")}}`
+  );
+
   // atom cache
   const atomCache = new Map<string, IAtom>();
+  const themeCache = new Map<ITokensDefinition, IThemeAtom>();
 
   // proxy state values that change based on propertie access
   let cssProp = "";
@@ -285,23 +263,81 @@ export const createCss = <T extends IConfig>(
         };
       }
       if (prop === "theme") {
-        return (name: string) =>
-          `${classPrefix ? `${classPrefix}-` : ""}theme-${name}`;
+        return (definition: any): IThemeAtom => {
+          // We could here also check if theme has been added from server,
+          // though thinking it does not matter... just a simple rule
+          const name = String(themeCache.size);
+
+          if (themeCache.has(definition)) {
+            return themeCache.get(definition)!;
+          }
+
+          const themeAtom = {
+            toString() {
+              const themeClassName = `${
+                classPrefix ? `${classPrefix}-` : ""
+              }theme-${name}`;
+
+              sheets.__variables__.insertRule(
+                `.${themeClassName}{${Object.keys(definition).reduce(
+                  (aggr, tokenType) => {
+                    return `${aggr}${Object.keys(definition[tokenType]).reduce(
+                      (subAggr, tokenKey) => {
+                        return `${subAggr}--${tokenType}-${tokenKey}:${definition[tokenType][tokenKey]};`;
+                      },
+                      aggr
+                    )}`;
+                  },
+                  ""
+                )}}`
+              );
+
+              this.toString = () => themeClassName;
+
+              return themeClassName;
+            },
+          };
+
+          themeCache.set(definition, themeAtom);
+
+          return themeAtom;
+        };
       }
       if (prop === "compose") {
         return compose;
       }
       // SSR
       if (prop === "getStyles") {
-        return () =>
-          Object.keys(screens).reduce(
-            (aggr, key) => {
-              return aggr.concat(
-                `/* STITCHES:${key} */\n${sheets[key].content}`
-              );
-            },
-            [`/* STITCHES */\n${sheets[""].content}`]
+        return (cb: any) => {
+          atomCache.clear();
+          themeCache.clear();
+          // tslint:disable-next-line
+          for (let sheet in sheets) {
+            sheets[sheet].content = "";
+          }
+          toString = createToString(
+            sheets,
+            config.screens,
+            cssClassnameProvider,
+            0
           );
+          const result = cb();
+
+          return {
+            result,
+            styles: Object.keys(screens).reduce(
+              (aggr, key) => {
+                return aggr.concat(
+                  `/* STITCHES:${key} */\n${sheets[key].content}`
+                );
+              },
+              [
+                `/* STITCHES:__variables__ */\n${sheets.__variables__.content}`,
+                `/* STITCHES */\n${sheets[""].content}`,
+              ]
+            ),
+          };
+        };
       }
 
       if (prop === "override" && config.utilityFirst) {
@@ -357,6 +393,7 @@ export const createCss = <T extends IConfig>(
         if (!isCallingUtil) {
           screen = "";
         }
+        cssProp = "";
         return atomCache.get(uid)!;
       }
 
@@ -403,8 +440,3 @@ export const createCss = <T extends IConfig>(
 
   return cssInstance;
 };
-
-// default instance
-export const css = createCss({
-  prefix: "di",
-});

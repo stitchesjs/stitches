@@ -2,7 +2,6 @@
   <img width="300" src="../../stitches.png">
 </p>
 
-
 ## Why
 
 - **Atomic mindset**: Each CSS property is a an atomic part of your complete CSS
@@ -13,10 +12,44 @@
 - **Utils**: Create your own CSS properties
 - **Typed**: Fully typed API, even though you are not using Typescript
 - **Specificity solved**: No more specificity issues as an atomic mindset opens up a more efficient and straight forward way to solve it
+- **Token based theming**: Tokens are CSS variables. Create themes overriding the tokens and expose themes to any parts of your app
 
 ## Get started
 
 `npm install @stitches/css`
+
+```ts
+import { css } from "@stitches/css";
+
+const button = css({
+  color: "gray",
+  ":hover": {
+    color: "black",
+  },
+  borderColor: "black",
+  padding: "1rem",
+});
+
+const alertButton = css.compose(
+  button,
+  css({
+    borderColor: "red",
+  })
+);
+
+const dynamicButton = (disabled = false) =>
+  css.compose(
+    button,
+    disabled &&
+      css({
+        opacity: 0.5,
+      })
+  );
+```
+
+## Functional syntax
+
+The functional style arguably gives a better typing and autocomplete experience in the editor. It is also lower level, removing a tiny bit of overhead that all CSS-IN-JS libraries have traversing objects.
 
 ```ts
 import { css } from "@stitches/css";
@@ -34,55 +67,13 @@ const dynamicButton = (disabled = false) =>
   css.compose(button, disabled && css.opacity(0.5));
 ```
 
-## Selectors
-
-The second argument to the properties is a selector. An example of that would be:
-
-```ts
-css.color("black", ":hover");
-```
-
-But this selector can be anything you want, think of it as:
-
-```css
-.someClass:hover {
-  color: black;
-}
-```
-
-So you can say:
-
-```ts
-css.color("black", "[target='_blank']");
-```
-
-```css
-.someClass[target="_blank"] {
-  color: black;
-}
-```
-
-Or use it to control child elements:
-
-```ts
-css.color("black", ":hover .some-child");
-```
-
-```css
-.someClass:hover .some-child {
-  color: black;
-}
-```
-
-## Configure
-
-Instead of consuming `css` directly from the package, you can create your own configured instance:
+## Configure an instance
 
 ```ts
 import { createCss } from "@stitches/css";
 
 export const css = createCss({
-  // Optinally add a prefix to all classnames to avoid crashing behaviour
+  // Optinally add a prefix to all classnames to avoid crashes
   prefix: "my-lib",
   // Maps tokens to properties. Follows the system-ui theme specification: https://system-ui.com/theme
   tokens: {
@@ -110,7 +101,8 @@ export const css = createCss({
   screens: {
     tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
   },
-  // Create your own custom CSS properties
+  // Create your own custom CSS properties. Here the functional syntax
+  // shines to handle pseudo selectors
   utils: {
     marginX: (utilCss) => (value: number | string, pseudo?: string) =>
       utilCss.compose(
@@ -120,10 +112,38 @@ export const css = createCss({
   },
 });
 
-css.color("RED"); // Creates "tomato"
-css.tablet.color("blue"); // Color is "blue" when media query is active
-css.marginX(0); // Creates "1rem", as it composes margin, using "space" from tokens
+css({
+  color: "RED", // Creates "tomato"
+  tablet: {
+    color: "blue", // Color is "blue" when media query is active
+  },
+  marginX: 0, // Creates "1rem", as it composes margin, using "space" from tokens
+});
 ```
+
+## Themes
+
+You can create theme instances which overrides tokens:
+
+```ts
+import { createCss } from "@stitches/css";
+
+export const css = createCss({
+  tokens: {
+    colors: {
+      primary: "tomato",
+    },
+  },
+});
+
+export const funnyTheme = css.theme({
+  colors: {
+    primary: "pink",
+  },
+});
+```
+
+This theme represents a classname which can be added at any point in your DOM tree. You can add multiple themes, which overrides each other by the nested level you apply them.
 
 ## Server side rendering
 
@@ -133,17 +153,16 @@ The `createCss` factory automatically detects if you are in a browser environmen
 import { createCss } from "@stitches/css";
 
 const css = createCss({});
-renderSomething(css);
-const styles = css.getStyles(); // The styles to be passed with the resulting HTML
+const { result, styles } = css.getStyles(() => renderSomething(css));
 ```
 
 Note that server produced CSS does not contain vendor prefixes, as there is no browser environment to look at. If you have a server rendered application you can either manually add the vendor prefixes you need:
 
 ```ts
-css.compose(
-  css.WebkitFontSmoothing("antialiased"),
-  css.MozOsxFontSmoothing("grayscale")
-);
+css({
+  WebkitFontSmoothing: "antialiased",
+  MozOsxFontSmoothing: "grayscale",
+});
 ```
 
 Or you can use a [postcss](https://www.npmjs.com/package/postcss) to do the conversion:
@@ -154,10 +173,10 @@ import postcss from "postcss";
 import autoprefixer from "autoprefixer";
 
 const css = createCss({});
-renderSomething(css);
+const { result, styles } = css.getStyles(() => renderSomething(css));
 
 Promise.all(
-  css.getStyles.map((style) =>
+  styles.map((style) =>
     postcss([autoprefixer({ browsers: ["> 1%", "last 2 versions"] })]).process(
       style
     )

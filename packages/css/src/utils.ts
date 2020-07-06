@@ -74,7 +74,7 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
 
     return {
       tags,
-      sheets: [""]
+      sheets: ["__variables__", ""]
         .concat(Object.keys(screens))
         .reduce<{ [key: string]: ISheet }>((aggr, key, index) => {
           if (!existingStyles[index]) {
@@ -94,7 +94,7 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
 
   return {
     tags,
-    sheets: [""]
+    sheets: ["__variables__", ""]
       .concat(Object.keys(screens))
       .reduce<{ [key: string]: ISheet }>((aggr, key) => {
         aggr[key] = {

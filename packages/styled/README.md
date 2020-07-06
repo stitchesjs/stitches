@@ -11,44 +11,23 @@ Read more about stitches at [@stitches/css](https://github.com/christianalfoni/s
 `npm install @stitches/styled`
 
 ```tsx
-// index.tsx
-import * as React from "react";
-import { render } from "react-dom";
-import { css } from "@stitches/css";
-import { Provider } from "@stitches/styled";
-import { App } from "./components/App";
+// css.ts
+import { createCss } from "@stitches/css";
+import { createStyled } from "@stitches/styled";
 
-render(
-  <Provider css={css}>
-    <App />
-  </Provider>,
-  document.querySelector("#app")
-);
+export const css = createCss({});
+export const styled = createStyled(css);
 ```
 
 ```tsx
 // App.tsx
 import * as React from "react";
-import { styled } from "@stitches/styled";
+import { styled } from "./css";
 
-// Create a styled element
-const Header = styled.h1((css) =>
-  css.compose(css.color("red"), css.margin("2rem"))
-);
-
-// Create a styled element with default properties.
-// The defaults is used for typing and also ensures they are
-// not passed down to the underlying element
-const Avatar = styled.div(
-  {
-    imageUrl: "",
-  },
-  (css, { imageUrl }) =>
-    css.compose(
-      css.borderRadius("50%"),
-      css.backgroundImage(`url(${imageUrl})`)
-    )
-);
+const Header = styled.h1({
+  color: "red",
+  margin: "2rem",
+});
 
 export const App: React.FC = () => {
   return (
@@ -58,83 +37,87 @@ export const App: React.FC = () => {
         of the component
       */}
       <Header as="h2">Hello World!</Header>
-      {/*
-        This is typed
-      */}
-      <Avatar imageUrl="https://..." />
     </div>
   );
 };
 ```
 
-## Configure
+**Note!** The styled API, like the core, also supports functional syntax to reduce a bit of overhead. Wherever the documentation shows object syntax you can use `css => css.compose(...)` instead.
 
-When you configure `css`, you also want to configure `styled` to ensure proper typing:
+## Variants
 
-```ts
-// css.ts
-import { createStyled } from "@stitches/styled";
-import { createConfig } from "@stitches/css";
+Instead of providing props to the styled elements, you rather have variants. This fixes two important issues with styled APIs:
 
-const config = createConfig({
-  tokens: {},
-  screens: {},
-  utils: {},
+1. No invalid props are passed down to the underlying DOM node
+2. The css definition has no dynamic behaviour, meaning there is only a single evaluation. This creates a big performance improvement
+
+```tsx
+import { styled } from "./css";
+
+export const Button = styled.button(
+  {
+    borderRadius: 1,
+  },
+  {
+    variant: {
+      primary: {
+        backgroundColor: "red",
+      },
+      muted: {
+        backgroundColor: "gray",
+        opacity: 0.5,
+      },
+    },
+    size: {
+      small: {
+        fontSize: 2,
+      },
+      big: {
+        fontSize: 4,
+      },
+    },
+  }
+);
+```
+
+The dynamic behaviour is defined where you consume the styled component:
+
+```tsx
+<Button variant="primary" size="small"></Button>
+
+<Button variant={isDisabled ? 'muted' : 'primary'} size="small" disabled={isDisabled}></Button>
+```
+
+## Override
+
+All styled components takes a `styled` property. This property allow you to override styles.
+
+```tsx
+const override = styled({
+  ":hover": {
+    color: "blue",
+  },
 });
-const { Provider, useCss, styled } = createStyled<typeof config>();
 
-export { config, Provider, useCss, styled };
-```
-
-```tsx
-// index.tsx
-import * as React from "react";
-import { render } from "react-dom";
-import { createCss } from "@stitches/css";
-import { Provider, config } from "./css";
-import { App } from "./components/App";
-
-render(
-  <Provider css={createCss(config)}>
-    <App />
-  </Provider>,
-  document.querySelector("#app")
-);
-```
-
-```tsx
-// App.tsx
-import * as React from "react";
-import { styled, useCss } from "../css";
-
-const Header = styled.h1((css) =>
-  css.compose(css.color("red"), css.margin("2rem"))
-);
-
-export const App: React.FC = () => {
-  // You can also do inline css
-  const css = useCss();
+export const MyComponent = () => {
   return (
-    <div className={css.color("red")}>
-      <Header as="h2">Hello World!</Header>
+    <div>
+      <Button variant="primary" styled={override}></Button>
     </div>
   );
 };
 ```
+
+**Note!**. All overrides should be defined outside of components. Stitches will actually throw an error if you try to dynamically pass in overrides. This also improves performance.
 
 ## Server side rendering
 
 ```tsx
 import { renderToString } from "react-dom/server";
-import { createCss } from "@stitches/css";
-import { Provider, config } from "../css";
+import { css } from "../css";
 import { App } from "../App";
 
-const css = createCss({});
-const html = renderToString(
-  <Provider css={css}>
-    <App />
-  </Provider>
-);
-const styles = css.getStyles(); // The styles to be passed with the resulting HTML
+const { styles, result } = css.getStyles(() => renderToString(<App />));
 ```
+
+**styles** is an array of style contents. Each item in the array should result in a style tag passed to the browser. **result** is just the result of the callback, in this example the string returned from **renderToString**.

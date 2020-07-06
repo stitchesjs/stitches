@@ -1,9 +1,4 @@
-import {
-  createConfig,
-  createCss,
-  createTokens,
-  hotReloadingCache,
-} from "../src";
+import { createCss, createTokens, hotReloadingCache } from "../src";
 import { IAtom } from "../src/types";
 
 function createStyleSheet(textContent: string): CSSStyleSheet {
@@ -68,9 +63,14 @@ describe("createCss", () => {
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("red");
-    expect(atom.toString()).toBe("_0");
-    expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe("/* STITCHES */\n\n._0{color:red;}");
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_0");
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._0{color:red;}");
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
@@ -90,28 +90,38 @@ describe("createCss", () => {
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
-    expect(atom.value).toBe("tomato");
-    expect(atom.toString()).toBe("_0");
-    expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe(
-      "/* STITCHES */\n\n._0{color:tomato;}"
+    expect(atom.value).toBe("var(--colors-RED)");
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_0");
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n._0{color:var(--colors-RED);}"
     );
   });
   test("should create screens", () => {
-    const config = createConfig({
-      screens: {
-        tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
+    const css = createCss(
+      {
+        screens: {
+          tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
+        },
       },
-    });
-    const css = createCss(config, null);
+      null
+    );
     const atom = (css.tablet.color("red") as unknown) as IAtom;
     expect(atom.id).toBe("colortablet");
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("tablet");
-    expect(atom.toString()).toBe("_0");
-    expect(css.getStyles().length).toBe(2);
-    expect(css.getStyles()[1].trim()).toBe(
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_0");
+      return "";
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toBe(
       "/* STITCHES:tablet */\n\n@media (min-width: 700px) { ._0{color:red;} }"
     );
   });
@@ -122,11 +132,13 @@ describe("createCss", () => {
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(":hover");
     expect(atom.screen).toBe("");
-    expect(atom.toString()).toBe("_0");
-    expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe(
-      "/* STITCHES */\n\n._0:hover{color:red;}"
-    );
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_0");
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._0:hover{color:red;}");
   });
   test("should handle specificity", () => {
     const css = createCss({}, null);
@@ -142,10 +154,14 @@ describe("createCss", () => {
   });
   test("should insert rule only once", () => {
     const css = createCss({}, null);
-    expect(css.color("red").toString()).toBe("_0");
-    expect(css.color("red").toString()).toBe("_0");
-    expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe("/* STITCHES */\n\n._0{color:red;}");
+    const { styles } = css.getStyles(() => {
+      expect(css.color("red").toString()).toBe("_0");
+      expect(css.color("red").toString()).toBe("_0");
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._0{color:red;}");
   });
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
@@ -162,22 +178,24 @@ describe("createCss", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss({}, (fakeEnv as unknown) as Window);
     String(css.color("red"));
-    expect(fakeEnv.document.styleSheets.length).toBe(1);
-    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+    expect(fakeEnv.document.styleSheets.length).toBe(2);
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
       "._0 {color: red;}"
     );
   });
   test("should inject screen sheets", () => {
     const fakeEnv = createFakeEnv();
-    const config = createConfig({
-      screens: {
-        tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
+    const css = createCss(
+      {
+        screens: {
+          tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
+        },
       },
-    });
-    const css = createCss(config, (fakeEnv as unknown) as Window);
+      (fakeEnv as unknown) as Window
+    );
     String(css.tablet.color("red"));
-    expect(fakeEnv.document.styleSheets.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
+    expect(fakeEnv.document.styleSheets.length).toBe(3);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toBe(
       "@media (min-width: 700px) {._0 {color: red;}}"
     );
   });
@@ -241,14 +259,18 @@ describe("createCss", () => {
   });
   test("should not inject existing styles", () => {
     const serverCss = createCss({}, null);
-    serverCss.color("red").toString();
-    const fakeEnv = createFakeEnv(serverCss.getStyles());
+    const { styles } = serverCss.getStyles(() => {
+      serverCss.color("red").toString();
+      return "";
+    });
+
+    const fakeEnv = createFakeEnv(styles);
     hotReloadingCache.clear();
     const clientCss = createCss({}, fakeEnv as any);
     // Lets see what is already put in
-    expect(fakeEnv.document.styleSheets.length).toBe(1);
-    expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(1);
-    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+    expect(fakeEnv.document.styleSheets.length).toBe(2);
+    expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(1);
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
       "._0 {color: red;}"
     );
     // On the client it will rerun the logic (React hydrate etc.)
@@ -256,8 +278,8 @@ describe("createCss", () => {
     // Then we add something new
     clientCss.color("blue").toString();
     // Lets see if it continues on the correct sequence
-    expect(fakeEnv.document.styleSheets[0].cssRules.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+    expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(2);
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
       "._1 {color: blue;}"
     );
   });
@@ -268,9 +290,14 @@ describe("createCss", () => {
       },
       null
     );
-    css.color("red").toString();
-    css.backgroundColor("red").toString();
-    expect(css.getStyles()).toEqual([
+    const { styles } = css.getStyles(() => {
+      css.color("red").toString();
+      css.backgroundColor("red").toString();
+      return "";
+    });
+
+    expect(styles).toEqual([
+      `/* STITCHES:__variables__ */\n\n:root{}`,
       `/* STITCHES */\n\n.c_0{color:red;}\n.bc_1{background-color:red;}`,
     ]);
   });
@@ -281,9 +308,14 @@ describe("createCss", () => {
       },
       null
     );
-    // @ts-ignore
-    css.WebkitColor("red").toString();
-    expect(css.getStyles()).toEqual([
+    const { styles } = css.getStyles(() => {
+      // @ts-ignore
+      css.WebkitColor("red").toString();
+      return "";
+    });
+
+    expect(styles).toEqual([
+      `/* STITCHES:__variables__ */\n\n:root{}`,
       `/* STITCHES */\n\n.wc_0{-webkit-color:red;}`,
     ]);
   });
@@ -292,7 +324,7 @@ describe("createCss", () => {
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css.color("red").toString();
-    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
       "._0 {-webkit-color: red;}"
     );
   });
@@ -314,7 +346,7 @@ describe("createCss", () => {
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css({ ":hover": { color: "red" } }).toString();
-    expect(fakeEnv.document.styleSheets[0].cssRules[0].cssText).toBe(
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
       "._0:hover {color: red;}"
     );
   });
@@ -327,10 +359,14 @@ describe("createCss", () => {
       },
       null
     );
+    const { styles } = css.getStyles(() => {
+      css({ mobile: { color: "red" } }).toString();
+      return "";
+    });
     // @ts-ignore
-    css({ mobile: { color: "red" } }).toString();
-    expect(css.getStyles().length).toBe(2);
-    expect(css.getStyles()[1].trim()).toBe(
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toBe(
       "/* STITCHES:mobile */\n\n@media(min-width:700px){._0{color:red;}}"
     );
   });
@@ -343,10 +379,14 @@ describe("createCss", () => {
       },
       null
     );
-    // @ts-ignore
-    css({ mobile: { ":hover": { color: "red" } } }).toString();
-    expect(css.getStyles().length).toBe(2);
-    expect(css.getStyles()[1].trim()).toBe(
+    const { styles } = css.getStyles(() => {
+      // @ts-ignore
+      css({ mobile: { ":hover": { color: "red" } } }).toString();
+      return "";
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toBe(
       "/* STITCHES:mobile */\n\n@media(min-width:700px){._0:hover{color:red;}}"
     );
   });
@@ -358,22 +398,28 @@ describe("createCss", () => {
             primary: "tomato",
           },
         },
-        themes: {
-          dark: {
-            colors: {
-              primary: "blue",
-            },
-          },
-        },
       },
       null
     );
-    // @ts-ignore
-    css({ color: "primary" }).toString();
-    expect(css.theme("dark")).toBe("theme-dark");
-    expect(css.getStyles().length).toBe(1);
-    expect(css.getStyles()[0].trim()).toBe(
-      "/* STITCHES */\n\n.theme-dark{--colors-primary:blue;}\n:root{--colors-primary:tomato;}\n._0{color:var(--colors-primary);}"
-    );
+    const { styles } = css.getStyles(() => {
+      // @ts-ignore
+      css({ color: "primary" }).toString();
+      expect(
+        css
+          .theme({
+            colors: {
+              primary: "blue",
+            },
+          })
+          .toString()
+      ).toBe("theme-0");
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles).toEqual([
+      "/* STITCHES:__variables__ */\n\n:root{--colors-primary:tomato;}\n.theme-0{--colors-primary:blue;}",
+      "/* STITCHES */\n\n._0{color:var(--colors-primary);}",
+    ]);
   });
 });

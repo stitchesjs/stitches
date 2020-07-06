@@ -1,92 +1,126 @@
-import { IConfig, TCss } from "@stitches/css";
+import {
+  IConfig,
+  TCss,
+  TDeclarativeCss,
+  TDefaultDeclarativeCss,
+  createCss,
+} from "@stitches/css";
 import * as React from "react";
 import { Box, PolymorphicComponent } from "react-polymorphic-box";
 
-export type IStyled<
-  C extends IConfig,
-  E extends keyof JSX.IntrinsicElements
-> = (<P extends object = {}>(
-  defaults: P,
-  cb: (css: TCss<C>, props: P) => string
-) => PolymorphicComponent<P, E>) &
-  ((cb: (css: TCss<C>) => string) => PolymorphicComponent<{}, E>);
+export type CSS<C> = TCss<C> & TDeclarativeCss<C>;
 
-export const createStyled = <C extends IConfig>() => {
+export type CssCallback<C> = (css: CSS<C>) => string;
+export type CssObject<C> = TDefaultDeclarativeCss<C> extends (
+  styled: infer S
+) => string
+  ? S
+  : never;
+
+export type IBaseStyled<C extends IConfig> = (css: CssObject<C>) => string;
+
+export type IStyled<C extends IConfig> = {
+  [E in keyof JSX.IntrinsicElements]: <
+    V extends {
+      [propKey: string]: {
+        [variantName: string]: CssCallback<C> | CssObject<C>;
+      };
+    }
+  >(
+    cb: CssCallback<C> | CssObject<C>,
+    variants?: V
+  ) => PolymorphicComponent<
+    { [P in keyof V]?: keyof V[P] } & {
+      styled?: string;
+    },
+    E
+  >;
+};
+
+export const createStyled = <T extends IConfig>(css: TCss<T>) => {
+  if (!css) {
+    throw new Error("@stitches/styled - you need to pass in your css here");
+  }
+
+  const polymorphicCss = (cssFunctionOrObject: any) => {
+    return typeof cssFunctionOrObject === "function"
+      ? cssFunctionOrObject(css)
+      : css(cssFunctionOrObject);
+  };
+
   let currentAs: string;
 
-  const context = React.createContext<TCss<C>>(null as any);
-  const useCssInstance = () => React.useContext(context);
-  const ProviderInstance: React.FC<{
-    css: TCss<C>;
-  }> = ({ css, children }) =>
-    React.createElement(
-      context.Provider,
-      {
-        value: css,
-      },
-      children
-    );
-  const styledInstance = (...args: any[]) => {
+  const styledInstance = (
+    baseStyling: any,
+    variants: { [variant: string]: { [name: string]: any } } = {}
+  ) => {
     const as = currentAs;
-    return (props: any) => {
-      const css = useCssInstance();
-      if (!css) {
-        throw new Error(
-          "@stitches/styled - You do not seem to have added the Provider, please read the documentation for more help"
+
+    const baseStyles: any = polymorphicCss(baseStyling);
+    const evaluatedVariants: any = {};
+    // tslint:disable-next-line
+    for (const variantName in variants) {
+      evaluatedVariants[variantName] = {};
+      // tslint:disable-next-line
+      for (const variant in variants[variantName]) {
+        evaluatedVariants[variantName][variant] = polymorphicCss(
+          variants[variantName][variant]
         );
       }
-      const cb = args.length === 1 ? args[0] : args[1];
-      const defaults = args.length === 1 ? {} : args[0];
-      const propsToPass = Object.keys(props).reduce<any>((aggr, key) => {
-        if (key in defaults || key === "className") {
-          return aggr;
+    }
+
+    return (props: any) => {
+      const memoComposition = React.useMemo(() => {
+        const base = [baseStyles];
+        if (props.styled) {
+          base.push(polymorphicCss(props.styled));
         }
+        return {
+          identity: props.styled,
+          base,
+        }; // eslint-disable-next-line
+      }, []); // We want this to only eval once
 
-        aggr[key] = props[key];
+      // Check the memoCompsition's identity to warn the user
+      // remove in production
+      if (process.env.NODE_ENV === "development") {
+        if (memoComposition.identity !== props.styled) {
+          throw new Error(
+            "@stitches/styled : The styled prop should not be dynamic. Define it outside your component"
+          );
+        }
+      }
+      // Make a copy of the baseComposition
+      // e.g. combination of baseStyles + props.styled if present
+      const compositions = memoComposition.base.slice();
 
-        return aggr;
-      }, {});
-      const cbProps = { ...defaults, ...props };
+      for (const propName in props) {
+        if (propName in variants && props[propName] in variants[propName]) {
+          compositions.push(evaluatedVariants[propName][props[propName]]);
+        }
+      }
+
+      const className = css.compose(...compositions);
 
       return React.createElement(Box, {
+        ...props,
         as,
-        className:
-          cb(
-            css,
-            Object.keys(cbProps).reduce<any>((aggr, key) => {
-              if (cbProps[key] === undefined && defaults[key]) {
-                aggr[key] = defaults[key];
-              } else {
-                aggr[key] = cbProps[key];
-              }
-
-              return aggr;
-            }, {})
-          ) + (props.className ? ` ${props.className}` : ""),
-        ...propsToPass,
+        className: props.className
+          ? `${props.className} ${className}`
+          : className,
       });
     };
   };
 
-  const styledProxy = new Proxy(
-    {},
-    {
-      get(_, prop) {
-        currentAs = String(prop);
-        return styledInstance;
-      },
-    }
-  ) as {
-    [E in keyof JSX.IntrinsicElements]: IStyled<C, E>;
-  };
+  const styledProxy = (new Proxy(() => {}, {
+    get(_, prop) {
+      currentAs = String(prop);
+      return styledInstance;
+    },
+    apply(_, __, args) {
+      return args[0];
+    },
+  }) as unknown) as IBaseStyled<T> & IStyled<T>;
 
-  return {
-    Provider: ProviderInstance,
-    useCss: useCssInstance,
-    styled: styledProxy,
-  };
+  return styledProxy;
 };
-
-const { Provider, useCss, styled } = createStyled<{}>();
-
-export { Provider, useCss, styled };
