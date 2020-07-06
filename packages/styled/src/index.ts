@@ -112,6 +112,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
     };
   };
 
+  // tslint:disable-next-line
   const styledProxy = (new Proxy(() => {}, {
     get(_, prop) {
       currentAs = String(prop);
