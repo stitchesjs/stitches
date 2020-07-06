@@ -231,11 +231,14 @@ export const createCss = <T extends IConfig>(
     }
   }
 
-  sheets.__variables__.insertRule(
-    `:root{${Object.keys(defaultValues).reduce((aggr, varKey) => {
+  const baseTokens = `:root{${Object.keys(defaultValues).reduce(
+    (aggr, varKey) => {
       return `${aggr}${varKey}:${defaultValues[varKey]};`;
-    }, "")}}`
-  );
+    },
+    ""
+  )}}`;
+
+  sheets.__variables__.insertRule(baseTokens);
 
   // atom cache
   const atomCache = new Map<string, IAtom>();
@@ -315,6 +318,7 @@ export const createCss = <T extends IConfig>(
           for (let sheet in sheets) {
             sheets[sheet].content = "";
           }
+          sheets.__variables__.insertRule(baseTokens);
           toString = createToString(
             sheets,
             config.screens,
