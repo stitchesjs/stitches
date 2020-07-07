@@ -148,9 +148,11 @@ export type TUtilityFirstCss<
     compose: (...compositions: string[]) => string;
     getStyles: (callback: () => any) => { styles: string[]; result: any };
     theme: (
-      theme: {
-        [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
-      }
+      theme: Partial<
+        {
+          [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
+        }
+      >
     ) => string;
   };
 
@@ -283,9 +285,11 @@ export type TDefaultCss<
     compose: (...compositions: (string | null | undefined | false)[]) => string;
     getStyles: (callback: () => any) => { styles: string[]; result: any };
     theme: (
-      theme: {
-        [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
-      }
+      theme: Partial<
+        {
+          [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
+        }
+      >
     ) => string;
   };
 
