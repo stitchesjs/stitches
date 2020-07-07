@@ -3,7 +3,6 @@ import {
   TCss,
   TDeclarativeCss,
   TDefaultDeclarativeCss,
-  createCss,
 } from "@stitches/css";
 import * as React from "react";
 import { Box, PolymorphicComponent } from "react-polymorphic-box";
@@ -57,16 +56,15 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
     const as = currentAs;
 
     const baseStyles: any = polymorphicCss(baseStyling);
-    const evaluatedVariants: any = {};
+    const evaluatedVariantMap: Map<string, Map<string, string>> = new Map();
     // tslint:disable-next-line
     for (const variantName in variants) {
-      evaluatedVariants[variantName] = {};
+      const variantMap: Map<string, string> = new Map();
       // tslint:disable-next-line
       for (const variant in variants[variantName]) {
-        evaluatedVariants[variantName][variant] = polymorphicCss(
-          variants[variantName][variant]
-        );
+        variantMap.set(variant, polymorphicCss(variants[variantName][variant]));
       }
+      evaluatedVariantMap.set(variantName, variantMap);
     }
 
     return (props: any) => {
@@ -96,7 +94,10 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
 
       for (const propName in props) {
         if (propName in variants && props[propName] in variants[propName]) {
-          compositions.push(evaluatedVariants[propName][props[propName]]);
+          const name = evaluatedVariantMap.get(propName)?.get(props[propName]);
+          if (name) {
+            compositions.push(name);
+          }
         }
       }
 

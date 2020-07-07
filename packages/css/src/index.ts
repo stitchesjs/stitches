@@ -215,8 +215,7 @@ export const createCss = <T extends IConfig>(
   const utils = config.utils || {};
   const tokens = config.tokens || {};
 
-  const defaultValues: { [varKey: string]: string } = {};
-
+  let baseTokens = ":root{";
   // tslint:disable-next-line
   for (const tokenType in tokens) {
     // @ts-ignore
@@ -225,18 +224,13 @@ export const createCss = <T extends IConfig>(
       const cssvar = `--${tokenType}-${token}`;
 
       // @ts-ignore
-      defaultValues[cssvar] = tokens[tokenType][token];
+      baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
+
       // @ts-ignore
       tokens[tokenType][token] = `var(${cssvar})`;
     }
   }
-
-  const baseTokens = `:root{${Object.keys(defaultValues).reduce(
-    (aggr, varKey) => {
-      return `${aggr}${varKey}:${defaultValues[varKey]};`;
-    },
-    ""
-  )}}`;
+  baseTokens += "}";
 
   sheets.__variables__.insertRule(baseTokens);
 
