@@ -29,9 +29,10 @@ export type IStyled<C extends IConfig> = {
     cb: CssCallback<C> | CssObject<C>,
     variants?: V
   ) => PolymorphicComponent<
-    { [P in keyof V]?: keyof V[P] } & {
-      styled?: string;
-    },
+    | { [P in keyof V]?: keyof V[P] }
+    | ({
+        styled?: string;
+      } & {}),
     E
   >;
 };

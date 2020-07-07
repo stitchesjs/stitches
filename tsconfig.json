@@ -3,6 +3,7 @@
 
   "compilerOptions": {
     "baseUrl": "./packages",
+    "jsx": "react",
     "paths": {
       "@stitches/css": ["css/src"],
       "@stitches/styled": ["styled/src"],

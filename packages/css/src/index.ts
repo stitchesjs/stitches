@@ -20,9 +20,6 @@ import {
 export * from "./types";
 export * from "./css-types";
 
-// tslint:disable-next-line: no-empty
-const noop = () => {};
-
 export const hotReloadingCache = new Map<string, any>();
 
 const toStringCachedAtom = function (this: IAtom) {
@@ -111,7 +108,23 @@ const createDeclarativeCss = <T extends IConfig>(
     const composer = this;
     const args: any[] = [];
     for (const key in definition) {
-      if (config.screens && key in config.screens) {
+      if (config.utilityFirst && key === "override") {
+        for (const overrideKey in definition[key]) {
+          if (!overrideKey[0].match(/[a-z]/)) {
+            // tslint:disable-next-line
+            for (const selectorKey in definition[key][overrideKey]) {
+              args.push(
+                composer[key][selectorKey](
+                  definition[key][overrideKey][selectorKey],
+                  overrideKey
+                )
+              );
+            }
+          } else {
+            args.push(composer[key][overrideKey](definition[key][overrideKey]));
+          }
+        }
+      } else if (config.screens && key in config.screens) {
         for (const screenKey in definition[key]) {
           if (!screenKey[0].match(/[a-z]/)) {
             // tslint:disable-next-line
