@@ -305,25 +305,27 @@ export const createCss = <T extends IConfig>(
   const screens = config.screens || {};
   const utils = config.utils || {};
   const tokens = config.tokens || {};
-
-  let baseTokens = ":root{";
-  // tslint:disable-next-line
-  for (const tokenType in tokens) {
-    // @ts-ignore
+  let baseTokens = "";
+  if (!preInjectedRules.has(":root")) {
+    baseTokens = ":root{";
     // tslint:disable-next-line
-    for (const token in tokens[tokenType]) {
-      const cssvar = `--${tokenType}-${token}`;
-
+    for (const tokenType in tokens) {
       // @ts-ignore
-      baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
+      // tslint:disable-next-line
+      for (const token in tokens[tokenType]) {
+        const cssvar = `--${tokenType}-${token}`;
 
-      // @ts-ignore
-      tokens[tokenType][token] = `var(${cssvar})`;
+        // @ts-ignore
+        baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
+
+        // @ts-ignore
+        tokens[tokenType][token] = `var(${cssvar})`;
+      }
     }
-  }
-  baseTokens += "}";
+    baseTokens += "}";
 
-  sheets.__variables__.insertRule(baseTokens);
+    sheets.__variables__.insertRule(baseTokens);
+  }
 
   // atom cache
   const atomCache = new Map<string, IAtom>();
@@ -379,7 +381,9 @@ export const createCss = <T extends IConfig>(
           for (let sheet in sheets) {
             sheets[sheet].content = "";
           }
-          sheets.__variables__.insertRule(baseTokens);
+          if (baseTokens) {
+            sheets.__variables__.insertRule(baseTokens);
+          }
 
           // We have to reset our toStrings so that they will now inject again,
           // and still cache is it is being reused
