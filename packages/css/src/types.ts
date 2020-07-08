@@ -15,6 +15,8 @@ export interface IAtom {
 }
 
 export interface IThemeAtom {
+  name: string;
+  definition: ITokensDefinition;
   toString: (this: IThemeAtom) => string;
 }
 

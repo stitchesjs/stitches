@@ -78,6 +78,68 @@ const createToString = (
   };
 };
 
+const createServerToString = (
+  sheets: { [screen: string]: ISheet },
+  screens: IScreens = {},
+  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?] // [className, pseudo]
+) => {
+  let seq = 0;
+  return function toString(this: IAtom) {
+    const className = cssClassnameProvider(seq++, this);
+    const value = this.value;
+
+    let cssRule = "";
+    if (className.length === 2) {
+      cssRule = `.${className[0]}${className[1]}{${this.cssHyphenProp}:${value};}`;
+    } else {
+      cssRule = `.${className[0]}{${this.cssHyphenProp}:${value};}`;
+    }
+
+    sheets[this.screen].insertRule(
+      this.screen ? screens[this.screen](cssRule) : cssRule
+    );
+
+    // We do not clean out the atom here, cause it will be reused
+    // to inject multiple times for each request
+
+    // 1. put on a _className
+    this._className = className[0];
+
+    // 2. switch from this `toString` to a much simpler one
+    this.toString = toStringCachedAtom;
+
+    return className[0];
+  };
+};
+
+const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
+  function toString(this: IThemeAtom) {
+    const themeClassName = `${classPrefix ? `${classPrefix}-` : ""}theme-${
+      this.name
+    }`;
+
+    // @ts-ignore
+    variablesSheet.insertRule(
+      `.${themeClassName}{${Object.keys(this.definition).reduce(
+        (aggr, tokenType) => {
+          // @ts-ignore
+          return `${aggr}${Object.keys(this.definition[tokenType]).reduce(
+            (subAggr, tokenKey) => {
+              // @ts-ignore
+              return `${subAggr}--${tokenType}-${tokenKey}:${this.definition[tokenType][tokenKey]};`;
+            },
+            aggr
+          )}`;
+        },
+        ""
+      )}}`
+    );
+
+    this.toString = () => themeClassName;
+
+    return themeClassName;
+  };
+
 const composeIntoMap = (
   map: Map<string, IAtom>,
   atoms: (IAtom | IComposedAtom)[]
@@ -208,12 +270,11 @@ export const createCss = <T extends IConfig>(
         return count;
       }
     }, 0);
-  let toString = createToString(
-    sheets,
-    config.screens,
-    cssClassnameProvider,
-    startSeq
-  );
+  let toString = env
+    ? createToString(sheets, config.screens, cssClassnameProvider, startSeq)
+    : createServerToString(sheets, config.screens, cssClassnameProvider);
+
+  let themeToString = createThemeToString(classPrefix, sheets.__variables__);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -274,38 +335,16 @@ export const createCss = <T extends IConfig>(
       }
       if (prop === "theme") {
         return (definition: any): IThemeAtom => {
-          // We could here also check if theme has been added from server,
-          // though thinking it does not matter... just a simple rule
-          const name = String(themeCache.size);
-
           if (themeCache.has(definition)) {
             return themeCache.get(definition)!;
           }
 
           const themeAtom = {
-            toString() {
-              const themeClassName = `${
-                classPrefix ? `${classPrefix}-` : ""
-              }theme-${name}`;
-
-              sheets.__variables__.insertRule(
-                `.${themeClassName}{${Object.keys(definition).reduce(
-                  (aggr, tokenType) => {
-                    return `${aggr}${Object.keys(definition[tokenType]).reduce(
-                      (subAggr, tokenKey) => {
-                        return `${subAggr}--${tokenType}-${tokenKey}:${definition[tokenType][tokenKey]};`;
-                      },
-                      aggr
-                    )}`;
-                  },
-                  ""
-                )}}`
-              );
-
-              this.toString = () => themeClassName;
-
-              return themeClassName;
-            },
+            // We could here also check if theme has been added from server,
+            // though thinking it does not matter... just a simple rule
+            name: String(themeCache.size),
+            definition,
+            toString: themeToString,
           };
 
           themeCache.set(definition, themeAtom);
@@ -319,19 +358,35 @@ export const createCss = <T extends IConfig>(
       // SSR
       if (prop === "getStyles") {
         return (cb: any) => {
-          atomCache.clear();
-          themeCache.clear();
           // tslint:disable-next-line
           for (let sheet in sheets) {
             sheets[sheet].content = "";
           }
           sheets.__variables__.insertRule(baseTokens);
-          toString = createToString(
+
+          // We have to reset our toStrings so that they will now inject again,
+          // and still cache is it is being reused
+          toString = createServerToString(
             sheets,
             config.screens,
-            cssClassnameProvider,
-            0
+            cssClassnameProvider
           );
+
+          // We have to reset our themeToStrings so that they will now inject again,
+          // and still cache is it is being reused
+          themeToString = createThemeToString(
+            classPrefix,
+            sheets.__variables__
+          );
+
+          atomCache.forEach((atom) => {
+            atom.toString = toString;
+          });
+
+          themeCache.forEach((atom) => {
+            atom.toString = themeToString;
+          });
+
           const result = cb();
 
           return {
