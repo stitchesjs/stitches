@@ -147,7 +147,7 @@ This theme represents a classname which can be added at any point in your DOM tr
 
 ## Server side rendering
 
-The `createCss` factory automatically detects if you are in a browser environment. That means when you this factory on the server it will rather collect the styling, which you can retrieve with:
+The `createCss` factory automatically detects if you are in a browser or server environment. That means when you this factory on the server it will **hash** the classnames (for rehydration abilities) and allow you to collect the styling to include in the responded html:
 
 ```ts
 import { createCss } from "@stitches/css";
