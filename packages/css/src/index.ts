@@ -14,6 +14,7 @@ import {
   createSheets,
   cssPropToToken,
   getVendorPrefixAndProps,
+  hashString,
   specificityProps,
 } from "./utils";
 
@@ -40,13 +41,17 @@ const toStringCompose = function (this: IComposedAtom) {
 const createToString = (
   sheets: { [screen: string]: ISheet },
   screens: IScreens = {},
-  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?], // [className, pseudo]
-  startSeq = 0
+  cssClassnameProvider: (atom: IAtom, seq: number | null) => [string, string?], // [className, pseudo]
+  preInjectedRules: Set<string>
 ) => {
   let seq = 0;
   return function toString(this: IAtom) {
-    const shouldInject = seq >= startSeq;
-    const className = cssClassnameProvider(seq++, this);
+    const className = cssClassnameProvider(
+      this,
+      preInjectedRules.size ? null : seq++
+    );
+    const shouldInject =
+      !preInjectedRules.size || !preInjectedRules.has(`.${className[0]}`);
     const value = this.value;
 
     if (shouldInject) {
@@ -81,11 +86,10 @@ const createToString = (
 const createServerToString = (
   sheets: { [screen: string]: ISheet },
   screens: IScreens = {},
-  cssClassnameProvider: (seq: number, atom: IAtom) => [string, string?] // [className, pseudo]
+  cssClassnameProvider: (atom: IAtom, seq: number | null) => [string, string?] // [className, pseudo]
 ) => {
-  let seq = 0;
   return function toString(this: IAtom) {
-    const className = cssClassnameProvider(seq++, this);
+    const className = cssClassnameProvider(this, null);
     const value = this.value;
 
     let cssRule = "";
@@ -241,16 +245,26 @@ export const createCss = <T extends IConfig>(
       : prefix
     : "";
   const cssClassnameProvider = (
-    seq: number,
-    atom: IAtom
+    atom: IAtom,
+    seq: number | null
   ): [string, string?] => {
+    const hash =
+      seq === null
+        ? hashString(
+            `${atom.screen || ""}${atom.cssHyphenProp.replace(
+              /-(moz|webkit|ms)-/,
+              ""
+            )}${atom.pseudo || ""}${atom.value}`
+          )
+        : seq;
     const name = showFriendlyClassnames
       ? `${atom.screen ? `${atom.screen}_` : ""}${atom.cssHyphenProp
+          .replace(/-(moz|webkit|ms)-/, "")
           .split("-")
           .map((part) => part[0])
-          .join("")}`
-      : "";
-    const className = `${classPrefix}${name}_${seq}`;
+          .join("")}_${hash}`
+      : `_${hash}`;
+    const className = `${classPrefix}${name}`;
 
     if (atom.pseudo) {
       return [className, atom.pseudo];
@@ -260,18 +274,21 @@ export const createCss = <T extends IConfig>(
   };
 
   const { tags, sheets } = createSheets(env, config.screens);
-  const startSeq = Object.keys(sheets)
-    .filter((key) => key !== "__variables__")
-    .reduce((count, key) => {
-      // Can fail with cross origin (like Codesandbox)
-      try {
-        return count + sheets[key].cssRules.length;
-      } catch {
-        return count;
-      }
-    }, 0);
+  const preInjectedRules = new Set<string>();
+  // tslint:disable-next-line
+  for (const sheet in sheets) {
+    for (let x = 0; x < sheets[sheet].cssRules.length; x++) {
+      preInjectedRules.add(sheets[sheet].cssRules[x].selectorText);
+    }
+  }
+
   let toString = env
-    ? createToString(sheets, config.screens, cssClassnameProvider, startSeq)
+    ? createToString(
+        sheets,
+        config.screens,
+        cssClassnameProvider,
+        preInjectedRules
+      )
     : createServerToString(sheets, config.screens, cssClassnameProvider);
 
   let themeToString = createThemeToString(classPrefix, sheets.__variables__);
