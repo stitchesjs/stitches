@@ -352,6 +352,9 @@ export const createCss = <T extends IConfig>(
           });
         };
       }
+      if (prop === "_config") {
+        return config;
+      }
       if (prop === "theme") {
         return (definition: any): IThemeAtom => {
           if (themeCache.has(definition)) {
@@ -433,6 +436,13 @@ export const createCss = <T extends IConfig>(
       }
 
       if (prop in screens) {
+        if (screen) {
+          throw new Error(
+            `@stitches/css - You can not add the screen "${String(
+              prop
+            )}" inside the screen ${screen}`
+          );
+        }
         screen = String(prop);
       } else if (!isCallingUtil && prop in utils) {
         const util = utils[String(prop)](proxy, config);

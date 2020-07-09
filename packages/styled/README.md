@@ -88,12 +88,24 @@ The dynamic behaviour is defined where you consume the styled component:
 <Button variant={isDisabled ? 'muted' : 'primary'} size="small" disabled={isDisabled}></Button>
 ```
 
-## Override
-
-All styled components takes a `styled` property. This property allow you to override styles.
+Variants can also be triggered by screen:
 
 ```tsx
-const override = styled({
+<Button
+  variant={{
+    mobile: "primary",
+    tablet: "secondary",
+  }}
+  size="small"
+></Button>
+```
+
+## Override
+
+All styled components takes a `styled` property. This property allow you to override styles. You use the **css** factory to create overriding styles.
+
+```tsx
+const override = css({
   ":hover": {
     color: "blue",
   },
@@ -109,6 +121,32 @@ export const MyComponent = () => {
 ```
 
 **Note!**. All overrides should be defined outside of components. Stitches will actually throw an error if you try to dynamically pass in overrides. This also improves performance.
+
+## Composition
+
+The **styled** api can be called directly as well:
+
+```tsx
+const Header = styled("h1", {
+  color: "red",
+  margin: "2rem",
+});
+```
+
+This gives the same result as earlier. But you can rather pass an existing component:
+
+```tsx
+const Header = styled.h1({
+  color: "red",
+  margin: "2rem",
+});
+
+const UltimateHeader = styled(Header, {
+  fontSize: "100px",
+});
+```
+
+Any variants defined by what you compose is typed and made available to the composed styled component.
 
 ## Server side rendering
 
