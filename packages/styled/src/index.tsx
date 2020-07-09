@@ -1,16 +1,12 @@
 import {
   IConfig,
+  IScreens,
   TCss,
   TDeclarativeCss,
   TDefaultDeclarativeCss,
 } from "@stitches/css";
 import * as React from "react";
-import { Box, PolymorphicComponentProps } from "react-polymorphic-box";
-
-type PolymorphicComponent<
-  P,
-  D extends React.ElementType = "div"
-> = React.ComponentType<PolymorphicComponentProps<D, P>>;
+import { Box, PolymorphicComponent } from "react-polymorphic-box";
 
 export type CSS<C> = TCss<C> & TDeclarativeCss<C>;
 
@@ -35,15 +31,17 @@ export type IBaseStyled<C extends IConfig> = <
 ) => PolymorphicComponent<
   | (E extends React.ComponentType<infer CP> ? CP : {})
   | {
-      [P in keyof V]?:
-        | keyof V[P]
-        | {
-            [S in keyof C["screens"]]?: keyof V[P];
-          };
+      [P in keyof V]?: C["screens"] extends IScreens
+        ?
+            | keyof V[P]
+            | {
+                [S in keyof C["screens"]]?: keyof V[P];
+              }
+        : keyof V[P];
     }
-  | ({
+  | {
       styled?: string;
-    } & {}),
+    },
   E
 >;
 
@@ -59,15 +57,17 @@ export type IStyled<C extends IConfig> = {
     variants?: V
   ) => PolymorphicComponent<
     | {
-        [P in keyof V]?:
-          | keyof V[P]
-          | {
-              [S in keyof C["screens"]]?: keyof V[P];
-            };
+        [P in keyof V]?: C["screens"] extends IScreens
+          ?
+              | keyof V[P]
+              | {
+                  [S in keyof C["screens"]]?: keyof V[P];
+                }
+          : keyof V[P];
       }
-    | ({
+    | {
         styled?: string;
-      } & {}),
+      },
     E
   >;
 };
