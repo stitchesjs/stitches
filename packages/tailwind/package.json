@@ -1,6 +1,6 @@
 {
   "name": "@stitches/tailwind",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "The atom CSS-IN-JS  library",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
@@ -42,7 +42,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/css": "^3.0.3",
+    "@stitches/css": "^4.0.0",
     "@types/node": "^13.11.1",
     "react-polymorphic-box": "^1.1.0",
     "tslib": "^1.11.1"
