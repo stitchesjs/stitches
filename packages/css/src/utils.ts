@@ -1,5 +1,4 @@
-import { StandardProperties } from "./css-types";
-import { IConfig, ICssPropToToken, IScreens, ISheet, TCss } from "./types";
+import { ICssPropToToken, IScreens, ISheet, TCss } from "./types";
 
 export const cssPropToToken: ICssPropToToken = {
   color: "colors",
