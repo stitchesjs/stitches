@@ -1,11 +1,13 @@
 import { createCss, createTokens, hotReloadingCache } from "../src";
 import { IAtom } from "../src/types";
 
-function createStyleSheet(textContent: string): CSSStyleSheet {
-  const style = createStyleTag(textContent);
-  document.querySelector("head")?.appendChild(style);
+function createStyleSheet(styleTag: HTMLStyleElement): CSSStyleSheet {
+  document.querySelector("head")?.appendChild(styleTag);
 
-  return document.styleSheets[document.styleSheets.length - 1] as any;
+  const sheet = document.styleSheets[document.styleSheets.length - 1];
+  // @ts-ignore
+  sheet.ownerNode = styleTag;
+  return sheet as any;
 }
 
 function createStyleTag(textContent: string): HTMLStyleElement {
@@ -15,9 +17,10 @@ function createStyleTag(textContent: string): HTMLStyleElement {
 }
 
 function createFakeEnv(
-  styleTags: string[] = [],
+  styleTagContents: string[] = [],
   computedStyles: string[] = []
 ) {
+  const styleTags = styleTagContents.map(createStyleTag);
   const styleSheets = styleTags.map(createStyleSheet);
 
   return {
@@ -28,21 +31,19 @@ function createFakeEnv(
       styleSheets,
       // Creates a style tag
       createElement() {
-        return {
-          textContent: "",
-        };
+        return createStyleTag("");
       },
       // Only used to grab head
       querySelector() {
         return {
           // Used to append the style, where
           // we add the stylesheet
-          appendChild() {
-            styleSheets.push(createStyleSheet(""));
+          appendChild(styleTag: HTMLStyleElement) {
+            styleSheets.push(createStyleSheet(styleTag));
           },
           // Only used to count styles
           querySelectorAll() {
-            return styleTags.map(createStyleTag);
+            return styleTags;
           },
         };
       },

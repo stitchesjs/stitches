@@ -68,24 +68,24 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
       Boolean(style.textContent && style.textContent.startsWith("/* STITCHES"))
     );
 
-    let styleIndex = existingStyles.length
-      ? styles.indexOf(existingStyles[0])
-      : styles.length;
-
     return {
       tags,
       sheets: ["__variables__", ""]
         .concat(Object.keys(screens))
         .reduce<{ [key: string]: ISheet }>((aggr, key, index) => {
-          if (!existingStyles[index]) {
-            const style = env.document.createElement("style");
+          let style = existingStyles[index];
+          if (!style) {
+            style = env.document.createElement("style");
             tags.push(style);
             head.appendChild(style);
           }
 
-          aggr[key] = (env.document.styleSheets[
-            styleIndex++
-          ] as unknown) as ISheet;
+          for (let x = 0; x < document.styleSheets.length; x++) {
+            if (document.styleSheets[x].ownerNode === style) {
+              aggr[key] = document.styleSheets[x] as any;
+              break;
+            }
+          }
 
           return aggr;
         }, {}),
