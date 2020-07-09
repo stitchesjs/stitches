@@ -305,25 +305,25 @@ export const createCss = <T extends IConfig>(
   const screens = config.screens || {};
   const utils = config.utils || {};
   const tokens = config.tokens || {};
-  let baseTokens = "";
-  if (!preInjectedRules.has(":root")) {
-    baseTokens = ":root{";
+
+  let baseTokens = ":root{";
+  // tslint:disable-next-line
+  for (const tokenType in tokens) {
+    // @ts-ignore
     // tslint:disable-next-line
-    for (const tokenType in tokens) {
+    for (const token in tokens[tokenType]) {
+      const cssvar = `--${tokenType}-${token}`;
+
       // @ts-ignore
-      // tslint:disable-next-line
-      for (const token in tokens[tokenType]) {
-        const cssvar = `--${tokenType}-${token}`;
+      baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
 
-        // @ts-ignore
-        baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
-
-        // @ts-ignore
-        tokens[tokenType][token] = `var(${cssvar})`;
-      }
+      // @ts-ignore
+      tokens[tokenType][token] = `var(${cssvar})`;
     }
-    baseTokens += "}";
+  }
+  baseTokens += "}";
 
+  if (!preInjectedRules.has(":root")) {
     sheets.__variables__.insertRule(baseTokens);
   }
 
