@@ -83,7 +83,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
     if (screen) {
       return typeof cssFunctionOrObject === "function"
         ? cssFunctionOrObject((css as any)[screen])
-        : (css as any)[screen](cssFunctionOrObject);
+        : css({ [screen]: cssFunctionOrObject });
     }
     return typeof cssFunctionOrObject === "function"
       ? cssFunctionOrObject(css)
