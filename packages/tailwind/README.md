@@ -25,24 +25,13 @@ Load your page with the normalized CSS of Tailwind: https://cdnjs.cloudflare.com
 
 `npm install @stitches/css @stitches/tailwind`
 
-```ts
-// index.ts
-import { createCss } from "@stitches/css";
-import { tailwind } from "@stitches/tailwind";
-
-const css = createCss(tailwind);
-
-css.compose(css.m(12), css.text("blue-500"));
-```
-
 ## Configure
 
 You can configure the Tailwind instance to have a custom theme, utils and even add new utils:
 
 ```ts
 // css.ts
-import { createCss } from "@stitches/css";
-import { createConfig } from "@stitches/tailwind";
+import { createTailwindCss } from "@stitches/tailwind";
 // Treeshake by including only specific utils
 // import { text, flex } from "@stitches/tailwind/utils"
 import * as utils from "@stitches/tailwind/utils";
@@ -50,7 +39,7 @@ import * as utils from "@stitches/tailwind/utils";
 // import { colors, spacing } from "@stitches/tailwind/theme"
 import * as theme from "@stitches/tailwind/theme";
 
-const config = createConfig({
+export const css = createTailwindCss({
   screens: {
     tablet: (cssRule) => `@media (min-width: 768px) { ${cssRule} }`,
     laptop: (cssRule) => `@media (min-width: 1024px) { ${cssRule} }`,
@@ -66,6 +55,8 @@ const config = createConfig({
 ```
 
 ## Theme
+
+**Note!** Stitches Tailwind has its own theming concept that conforms to how Tailwind does theming.
 
 To create your own theme copy the [default theme](https://github.com/christianalfoni/stitches/blob/master/packages/tailwind/src/theme.ts) and make your changes.
 
