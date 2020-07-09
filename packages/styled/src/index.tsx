@@ -38,6 +38,8 @@ export type IStyled<C extends IConfig> = {
   >;
 };
 
+let hasWarnedInlineStyle = false;
+
 export const createStyled = <T extends IConfig>(css: TCss<T>) => {
   if (!css) {
     throw new Error("@stitches/styled - you need to pass in your css here");
@@ -84,10 +86,15 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
       // Check the memoCompsition's identity to warn the user
       // remove in production
       if (process.env.NODE_ENV === "development") {
-        if (memoComposition.identity !== props.styled) {
-          throw new Error(
-            "@stitches/styled : The styled prop should not be dynamic. Define it outside your component"
+        if (
+          memoComposition.identity !== props.styled &&
+          !hasWarnedInlineStyle
+        ) {
+          // tslint:disable-next-line
+          console.warn(
+            "@stitches/styled : The styled prop should ideally not be dynamic. Define it outside your component using the css composer"
           );
+          hasWarnedInlineStyle = true;
         }
       }
       // Make a copy of the baseComposition
