@@ -3,6 +3,7 @@ import {
   TCss,
   TDeclarativeCss,
   TDefaultDeclarativeCss,
+  createCss,
 } from "@stitches/css";
 import * as React from "react";
 import { Box, PolymorphicComponent } from "react-polymorphic-box";
@@ -93,20 +94,24 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
       // e.g. combination of baseStyles + props.styled if present
       const compositions = memoComposition.base.slice();
 
+      const propsWithoutVariants: any = {};
+
       for (const propName in props) {
         if (propName in variants && props[propName] in variants[propName]) {
           const name = evaluatedVariantMap.get(propName)?.get(props[propName]);
           if (name) {
             compositions.push(name);
           }
+        } else {
+          propsWithoutVariants[propName] = props[propName];
         }
       }
 
       const className = css.compose(...compositions);
 
       return React.createElement(Box, {
-        ...props,
         as,
+        ...propsWithoutVariants,
         className: props.className
           ? `${props.className} ${className}`
           : className,
