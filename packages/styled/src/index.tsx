@@ -4,6 +4,7 @@ import {
   TCss,
   TDeclarativeCss,
   TDefaultDeclarativeCss,
+  createCss,
 } from "@stitches/css";
 import * as React from "react";
 
@@ -11,9 +12,7 @@ type PropsOf<
   E extends keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>
 > = JSX.LibraryManagedAttributes<E, React.ComponentPropsWithRef<E>>;
 
-interface BoxOwnProps<
-  E extends React.ElementType | PolymorphicComponent<any> = React.ElementType
-> {
+interface BoxOwnProps<E extends React.ElementType = React.ElementType> {
   as?: E;
 }
 
@@ -21,10 +20,10 @@ type BoxProps<E extends React.ElementType> = BoxOwnProps<E> &
   Omit<PropsOf<E>, "as">;
 
 type PolymorphicComponentProps<
-  E extends React.ElementType | PolymorphicComponent<any>,
+  E extends React.ElementType,
   P
 > = E extends PolymorphicComponent<infer PP, infer PE>
-  ? PP & P & BoxProps<PE>
+  ? (P | PP) & BoxOwnProps<E> & Omit<PropsOf<PE>, "as">
   : P & BoxProps<E>;
 
 export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
@@ -76,18 +75,21 @@ export type IBaseStyled<C extends IConfig> = <
   variants?: V
 ) => PolymorphicComponent<
   | (E extends React.ComponentType<infer CP> ? CP : {})
-  | {
-      [P in keyof V]?: C["screens"] extends IScreens
-        ?
-            | keyof V[P]
-            | {
-                [S in keyof C["screens"]]?: keyof V[P];
-              }
-        : keyof V[P];
-    }
-  | {
-      styled?: string;
-    },
+  | (V extends void
+      ? {
+          styled?: string;
+        }
+      : {
+          [P in keyof V]?: C["screens"] extends IScreens
+            ?
+                | keyof V[P]
+                | {
+                    [S in keyof C["screens"]]?: keyof V[P];
+                  }
+            : keyof V[P];
+        } & {
+          styled?: string;
+        }),
   E
 >;
 
@@ -102,18 +104,21 @@ export type IStyled<C extends IConfig> = {
     cb: CssCallback<C> | CssObject<C>,
     variants?: V
   ) => PolymorphicComponent<
-    | {
-        [P in keyof V]?: C["screens"] extends IScreens
-          ?
-              | keyof V[P]
-              | {
-                  [S in keyof C["screens"]]?: keyof V[P];
-                }
-          : keyof V[P];
-      }
-    | {
-        styled?: string;
-      },
+    V extends void
+      ? {
+          styled?: string;
+        }
+      : {
+          [P in keyof V]?: C["screens"] extends IScreens
+            ?
+                | keyof V[P]
+                | {
+                    [S in keyof C["screens"]]?: keyof V[P];
+                  }
+            : keyof V[P];
+        } & {
+          styled?: string;
+        },
     E
   >;
 };
