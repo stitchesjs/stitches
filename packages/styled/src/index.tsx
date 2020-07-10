@@ -4,9 +4,18 @@ import {
   TCss,
   TDeclarativeCss,
   TDefaultDeclarativeCss,
+  createCss,
 } from "@stitches/css";
 import * as React from "react";
-import { Box, PolymorphicComponent } from "react-polymorphic-box";
+import { Box, PolymorphicComponentProps } from "react-polymorphic-box";
+
+export declare type PolymorphicComponent<
+  P,
+  D extends React.ElementType = "div"
+> = (<E extends React.ElementType = D>(
+  props: PolymorphicComponentProps<E, P>
+) => JSX.Element) &
+  React.ComponentType;
 
 export type CSS<C> = TCss<C> & TDeclarativeCss<C>;
 
