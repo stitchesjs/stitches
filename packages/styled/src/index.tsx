@@ -17,19 +17,15 @@ interface BoxOwnProps<
   as?: E;
 }
 
-type BoxProps<
-  E extends React.ElementType | PolymorphicComponent<any>
-> = BoxOwnProps<E> &
-  Omit<
-    // @ts-ignore
-    PropsOf<E extends PolymorphicComponent<any, infer L> ? L : E>,
-    keyof BoxOwnProps
-  >;
+type BoxProps<E extends React.ElementType> = BoxOwnProps<E> &
+  Omit<PropsOf<E>, "as">;
 
 type PolymorphicComponentProps<
   E extends React.ElementType | PolymorphicComponent<any>,
   P
-> = (E extends PolymorphicComponent<infer PP> ? PP & P : P) & BoxProps<E>;
+> = E extends PolymorphicComponent<infer PP, infer PE>
+  ? PP & P & BoxProps<PE>
+  : P & BoxProps<E>;
 
 export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
   E extends React.ElementType = D
