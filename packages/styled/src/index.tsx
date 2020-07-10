@@ -4,18 +4,59 @@ import {
   TCss,
   TDeclarativeCss,
   TDefaultDeclarativeCss,
-  createCss,
 } from "@stitches/css";
 import * as React from "react";
-import { Box, PolymorphicComponentProps } from "react-polymorphic-box";
 
-export declare type PolymorphicComponent<
-  P,
-  D extends React.ElementType = "div"
-> = (<E extends React.ElementType = D>(
+type PropsOf<
+  E extends keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>
+> = JSX.LibraryManagedAttributes<E, React.ComponentPropsWithRef<E>>;
+
+interface BoxOwnProps<
+  E extends React.ElementType | PolymorphicComponent<any> = React.ElementType
+> {
+  as?: E;
+}
+
+type BoxProps<
+  E extends React.ElementType | PolymorphicComponent<any>
+> = BoxOwnProps<E> &
+  Omit<
+    // @ts-ignore
+    PropsOf<E extends PolymorphicComponent<any, infer L> ? L : E>,
+    keyof BoxOwnProps
+  >;
+
+type PolymorphicComponentProps<
+  E extends React.ElementType | PolymorphicComponent<any>,
+  P
+> = (E extends PolymorphicComponent<infer PP> ? PP & P : P) & BoxProps<E>;
+
+export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
+  E extends React.ElementType = D
+>(
   props: PolymorphicComponentProps<E, P>
-) => JSX.Element) &
-  React.ComponentType;
+) => JSX.Element) & {
+  propTypes?: React.WeakValidationMap<P>;
+  contextTypes?: React.ValidationMap<any>;
+  defaultProps?: Partial<P>;
+  displayName?: string;
+};
+
+const defaultElement = "div";
+
+export const Box = React.forwardRef(
+  (props: BoxOwnProps, ref: React.Ref<Element>) => {
+    const Element = props.as || defaultElement;
+
+    return React.createElement(Element, {
+      ref,
+      ...props,
+      as: undefined,
+    });
+  }
+) as <E extends React.ElementType = typeof defaultElement>(
+  props: BoxProps<E>
+) => JSX.Element;
 
 export type CSS<C> = TCss<C> & TDeclarativeCss<C>;
 
@@ -153,7 +194,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
       }
       // Make a copy of the baseComposition
       // e.g. combination of baseStyles + props.styled if present
-      const compositions = [baseStyles];
+      const compositions = [baseStyles].concat(props.__compositions__ || []);
 
       const propsWithoutVariants: any = {};
 
@@ -169,23 +210,31 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
               compositions.push(screens?.get(props[propName][screen])![screen]);
             }
           }
-        } else {
+        } else if (propName !== "__compositions__") {
           propsWithoutVariants[propName] = props[propName];
         }
       }
 
-      if (props.styled) {
-        compositions.push(props.styled);
+      if (Component === Box && (!props.as || props.as === "string")) {
+        if (props.styled) {
+          compositions.push(props.styled);
+        }
+
+        const className = css.compose(...compositions);
+
+        return React.createElement(Component, {
+          ...propsWithoutVariants,
+          as: props.as || as,
+          className: props.className
+            ? `${props.className} ${className}`
+            : className,
+        });
       }
 
-      const className = css.compose(...compositions);
-
       return React.createElement(Component, {
-        ...(as ? { as } : {}),
         ...propsWithoutVariants,
-        className: props.className
-          ? `${props.className} ${className}`
-          : className,
+        as: props.as || as,
+        __compositions__: compositions,
       });
     };
   };
