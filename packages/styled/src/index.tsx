@@ -127,6 +127,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
         ? `${props.className} ${className}`
         : className,
       as: undefined,
+      __compositions__: undefined,
     });
   }) as <E extends React.ElementType = typeof defaultElement>(
     props: BoxProps<E>
@@ -212,7 +213,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
               compositions.push(screens?.get(props[propName][screen])![screen]);
             }
           }
-        } else if (propName !== "__compositions__") {
+        } else {
           propsWithoutVariants[propName] = props[propName];
         }
       }
