@@ -37,22 +37,6 @@ export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
   displayName?: string;
 };
 
-const defaultElement = "div";
-
-export const Box = React.forwardRef(
-  (props: BoxOwnProps, ref: React.Ref<Element>) => {
-    const Element = props.as || defaultElement;
-
-    return React.createElement(Element, {
-      ref,
-      ...props,
-      as: undefined,
-    });
-  }
-) as <E extends React.ElementType = typeof defaultElement>(
-  props: BoxProps<E>
-) => JSX.Element;
-
 export type CSS<C> = TCss<C> & TDeclarativeCss<C>;
 
 export type CssCallback<C> = (css: CSS<C>) => string;
@@ -71,7 +55,7 @@ export type IBaseStyled<C extends IConfig> = <
   } | void = void
 >(
   element: E,
-  css: CssObject<C> | CssCallback<C>,
+  css?: CssObject<C> | CssCallback<C>,
   variants?: V
 ) => PolymorphicComponent<
   | (E extends React.ComponentType<infer CP> ? CP : {})
@@ -130,6 +114,24 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
     throw new Error("@stitches/styled - you need to pass in your css here");
   }
 
+  const defaultElement = "div";
+  const Box = React.forwardRef((props: any, ref: React.Ref<Element>) => {
+    const Element = props.as || defaultElement;
+
+    const className = css.compose(...props.__compositions__);
+
+    return React.createElement(Element, {
+      ref,
+      ...props,
+      className: props.className
+        ? `${props.className} ${className}`
+        : className,
+      as: undefined,
+    });
+  }) as <E extends React.ElementType = typeof defaultElement>(
+    props: BoxProps<E>
+  ) => JSX.Element;
+
   const polymorphicCss = (cssFunctionOrObject: any, screen?: string) => {
     if (screen) {
       return typeof cssFunctionOrObject === "function"
@@ -146,7 +148,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
   const configScreens = (css as any)._config.screens;
 
   const styledInstance = (
-    baseStyling: any,
+    baseStyling: any = (css: any) => css.compose(),
     variants: { [variant: string]: { [name: string]: any } } = {},
     Component: React.ComponentType<any> = Box
   ) => {
@@ -193,8 +195,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
           hasWarnedInlineStyle = true;
         }
       }
-      // Make a copy of the baseComposition
-      // e.g. combination of baseStyles + props.styled if present
+
       const compositions = [baseStyles].concat(props.__compositions__ || []);
 
       const propsWithoutVariants: any = {};
@@ -216,20 +217,8 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
         }
       }
 
-      if (Component === Box && (!props.as || props.as === "string")) {
-        if (props.styled) {
-          compositions.push(props.styled);
-        }
-
-        const className = css.compose(...compositions);
-
-        return React.createElement(Component, {
-          ...propsWithoutVariants,
-          as: props.as || as,
-          className: props.className
-            ? `${props.className} ${className}`
-            : className,
-        });
+      if (props.styled) {
+        compositions.push(props.styled);
       }
 
       return React.createElement(Component, {
@@ -243,6 +232,9 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
   // tslint:disable-next-line
   const styledProxy = (new Proxy(() => {}, {
     get(_, prop) {
+      if (prop === "Box") {
+        return Box;
+      }
       currentAs = String(prop);
       return styledInstance;
     },
@@ -254,7 +246,10 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
       currentAs = undefined;
       return styledInstance(styling, variants, Element);
     },
-  }) as unknown) as IBaseStyled<T> & IStyled<T>;
+  }) as unknown) as IBaseStyled<T> &
+    IStyled<T> & {
+      Box: typeof Box;
+    };
 
   return styledProxy;
 };
