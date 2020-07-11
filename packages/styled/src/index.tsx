@@ -19,8 +19,12 @@ interface BoxOwnProps<E extends React.ElementType = React.ElementType> {
 type BoxProps<E extends React.ElementType> = BoxOwnProps<E> &
   Omit<PropsOf<E>, "as">;
 
-type PolymorphicComponentProps<E extends React.ElementType, P> = P &
-  BoxProps<E>;
+type PolymorphicComponentProps<
+  E extends React.ElementType,
+  P
+> = E extends PolymorphicComponent<infer PP, infer PE>
+  ? P & PP & BoxOwnProps<E> & Omit<PropsOf<PE>, "as">
+  : P & BoxProps<E>;
 
 export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
   E extends React.ElementType = D
@@ -254,9 +258,3 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
 
   return styledProxy;
 };
-
-const styled = createStyled(createCss({}));
-
-const Div = styled.div({});
-
-const Comp = () => <Div as="button" disabled />;
