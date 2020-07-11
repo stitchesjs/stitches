@@ -148,7 +148,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
   const configScreens = (css as any)._config.screens;
 
   const styledInstance = (
-    baseStyling: any = (css: any) => css.compose(),
+    baseStyling: any = (cssComposer: any) => cssComposer.compose(),
     variants: { [variant: string]: { [name: string]: any } } = {},
     Component: React.ComponentType<any> = Box
   ) => {
