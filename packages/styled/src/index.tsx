@@ -4,7 +4,6 @@ import {
   TCss,
   TDeclarativeCss,
   TDefaultDeclarativeCss,
-  createCss,
 } from "@stitches/css";
 import * as React from "react";
 
@@ -19,17 +18,8 @@ interface BoxOwnProps<E extends React.ElementType = React.ElementType> {
 type BoxProps<E extends React.ElementType> = BoxOwnProps<E> &
   Omit<PropsOf<E>, "as">;
 
-type PolymorphicComponentProps<
-  E extends React.ElementType,
-  P
-> = E extends React.ComponentType<infer PP>
-  ? (P | PP) &
-      BoxOwnProps<E> &
-      Omit<
-        PropsOf<E extends PolymorphicComponent<any, infer PE> ? PE : E>,
-        "as"
-      >
-  : P & BoxProps<E>;
+type PolymorphicComponentProps<E extends React.ElementType, P> = P &
+  BoxProps<E>;
 
 export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
   E extends React.ElementType = D
