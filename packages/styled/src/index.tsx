@@ -4,6 +4,7 @@ import {
   TCss,
   TDeclarativeCss,
   TDefaultDeclarativeCss,
+  createCss,
 } from "@stitches/css";
 import * as React from "react";
 
@@ -63,7 +64,7 @@ export type IBaseStyled<C extends IConfig> = <
     [propKey: string]: {
       [variantName: string]: CssCallback<C> | CssObject<C>;
     };
-  }
+  } | void = void
 >(
   element: E,
   css: CssObject<C> | CssCallback<C>,
@@ -94,7 +95,7 @@ export type IStyled<C extends IConfig> = {
       [propKey: string]: {
         [variantName: string]: CssCallback<C> | CssObject<C>;
       };
-    }
+    } | void = void
   >(
     cb: CssCallback<C> | CssObject<C>,
     variants?: V
@@ -253,3 +254,9 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
 
   return styledProxy;
 };
+
+const styled = createStyled(createCss({}));
+
+const Div = styled.div({});
+
+const Comp = () => <Div as="button" disabled />;
