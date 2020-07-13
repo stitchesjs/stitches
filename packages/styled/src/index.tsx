@@ -52,7 +52,7 @@ export type IBaseStyled<C extends IConfig> = <
     [propKey: string]: {
       [variantName: string]: CssCallback<C> | CssObject<C>;
     };
-  } | void = void
+  } | void
 >(
   element: E,
   css?: CssObject<C> | CssCallback<C>,
@@ -83,7 +83,7 @@ export type IStyled<C extends IConfig> = {
       [propKey: string]: {
         [variantName: string]: CssCallback<C> | CssObject<C>;
       };
-    } | void = void
+    } | void
   >(
     cb: CssCallback<C> | CssObject<C>,
     variants?: V
