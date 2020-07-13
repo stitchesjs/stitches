@@ -33,8 +33,8 @@ export const App: React.FC = () => {
   return (
     <div>
       {/*
-        You can change the underlying element, which also // changes the typing
-        of the component
+        You can change the underlying element, which also
+        changes the typing of the component
       */}
       <Header as="h2">Hello World!</Header>
     </div>
@@ -120,7 +120,7 @@ export const MyComponent = () => {
 };
 ```
 
-**Note!**. All overrides should be defined outside of components. Stitches will actually throw an error if you try to dynamically pass in overrides. This also improves performance.
+**Note!**. All overrides should be defined outside of components. Stitches will actually warn you in development when you try to dynamically pass in overrides. This improves performance.
 
 ## Composition
 
@@ -147,6 +147,24 @@ const UltimateHeader = styled(Header, {
 ```
 
 Any variants defined by what you compose is typed and made available to the composed styled component.
+
+You can also compose dynamically by doing:
+
+```tsx
+<Header as={SomeOtherStyledComponent} />
+```
+
+You can also create logical components by using the low level `styled.Box` component:
+
+```tsx
+const Alert = styled(({ isOpen, ...props }) => {
+  const [open, setOpen] = React.useState(isOpen);
+
+  return open ? <styled.Box {...props} /> : null;
+});
+```
+
+Now this component can be used as a normal styled component, you could even have given it a base styling and/or variants.
 
 ## Server side rendering
 
