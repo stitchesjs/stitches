@@ -16,7 +16,7 @@ type PolymorphicComponentProps<
   E extends React.ElementType,
   P
 > = E extends PolymorphicComponent<infer PP, infer PE>
-  ? P & PP & BoxOwnProps<E> & Omit<PropsOf<PE>, "as">
+  ? P & BoxOwnProps<E> & Omit<PropsOf<PE>, "as">
   : P & BoxProps<E>;
 
 export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
