@@ -130,23 +130,20 @@ export type TUtilityFirstCss<
         : Properties[K],
       pseudo?: string
     ) => string;
+  },
+  UT = {
+    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]>
+      : never;
   }
 > = TUtilityFirstDeclarativeCss<T> & {
   override: D;
 } & {
-    [S in keyof T["screens"]]: {
-      [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
-        ? ReturnType<T["utils"][U]>
-        : never;
-    } & {
+    [S in keyof T["screens"]]: UT & {
       override: D;
     };
   } &
-  {
-    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
-      ? ReturnType<T["utils"][U]>
-      : never;
-  } & {
+  UT & {
     compose: (...compositions: string[]) => string;
     getStyles: (callback: () => any) => { styles: string[]; result: any };
     theme: (
@@ -168,36 +165,34 @@ export type TUtilityFirstDeclarativeCss<
           : Properties[K]
         : Properties[K]
       : Properties[K];
+  },
+  UT = {
+    [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]> extends (...args: infer A) => string
+        ? A[0]
+        : never
+      : never;
   }
 > = (
-  styles: {
-    override?:
-      | D
-      | {
-          [selector: string]: D;
+  styles:
+    | ({
+        override?: D;
+      } & {
+        [S in keyof T["screens"]]: UT & {
+          override?: D;
         };
-  } & {
-    [S in keyof T["screens"]]: {
-      [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
-        ? ReturnType<T["utils"][U]> extends (...args: infer A) => string
-          ? A[0]
-          : never
-        : never;
-    } & {
-      override?:
-        | D
-        | {
-            [selector: string]: D;
+      } &
+        UT)
+    | {
+        [selector: string]: {
+          override?: D;
+        } & UT &
+          {
+            [S in keyof T["screens"]]: UT & {
+              override?: D;
+            };
           };
-    };
-  } &
-    {
-      [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
-        ? ReturnType<T["utils"][U]> extends (...args: infer A) => string
-          ? A[0]
-          : never
-        : never;
-    }
+      }
 ) => string;
 
 export type TDeclarativeCss<T extends IConfig> = T extends {

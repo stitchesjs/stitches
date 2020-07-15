@@ -1,11 +1,4 @@
-import {
-  IConfig,
-  IScreens,
-  TCss,
-  TDeclarativeCss,
-  TDefaultDeclarativeCss,
-  createCss,
-} from "@stitches/css";
+import { IConfig, IScreens, TCss, TDeclarativeCss } from "@stitches/css";
 import * as React from "react";
 
 type PropsOf<
@@ -39,59 +32,47 @@ export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
 
 export type CSS<C> = TCss<C> & TDeclarativeCss<C>;
 
-export type CssCallback<C> = (css: CSS<C>) => string;
-export type CssObject<C> = TDefaultDeclarativeCss<C> extends (
+export type CssCallback<C extends IConfig> = (css: TCss<C>) => string;
+export type CssObject<C extends IConfig> = TDeclarativeCss<C> extends (
   styled: infer S
 ) => string
   ? S
   : never;
 
-export type IBaseStyled<C extends IConfig> = <
-  E extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
-  V extends {
-    [propKey: string]: {
-      [variantName: string]: CssCallback<C> | CssObject<C>;
-    };
-  } | void
->(
-  element: E,
-  css?: CssObject<C> | CssCallback<C>,
-  variants?: V
-) => PolymorphicComponent<
-  | (E extends React.ComponentType<infer CP> ? CP : {})
-  | (V extends void
-      ? {
+export interface IBaseStyled<C extends IConfig> {
+  <E extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
+    element: E,
+    css?: CssObject<C> | CssCallback<C>
+  ): PolymorphicComponent<
+    E extends React.ComponentType<infer PP>
+      ? PP & {
           styled?: string;
         }
       : {
-          [P in keyof V]?: C["screens"] extends IScreens
-            ?
-                | keyof V[P]
-                | {
-                    [S in keyof C["screens"]]?: keyof V[P];
-                  }
-            : keyof V[P];
-        } & {
           styled?: string;
-        }),
-  E
->;
-
-export type IStyled<C extends IConfig> = {
-  [E in keyof JSX.IntrinsicElements]: <
+        },
+    E
+  >;
+  <
+    E extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
     V extends {
       [propKey: string]: {
         [variantName: string]: CssCallback<C> | CssObject<C>;
       };
     } | void
   >(
-    cb: CssCallback<C> | CssObject<C>,
-    variants?: V
-  ) => PolymorphicComponent<
+    element: E,
+    css: CssObject<C> | CssCallback<C>,
+    variants: V
+  ): PolymorphicComponent<
     V extends void
-      ? {
-          styled?: string;
-        }
+      ? E extends React.ComponentType<infer PP>
+        ? PP & {
+            styled?: string;
+          }
+        : {
+            styled?: string;
+          }
       : {
           [P in keyof V]?: C["screens"] extends IScreens
             ?
@@ -100,11 +81,55 @@ export type IStyled<C extends IConfig> = {
                     [S in keyof C["screens"]]?: keyof V[P];
                   }
             : keyof V[P];
-        } & {
-          styled?: string;
-        },
+        } &
+          (E extends React.ComponentType<infer PP>
+            ? PP & {
+                styled?: string;
+              }
+            : {
+                styled?: string;
+              }),
     E
   >;
+}
+
+interface IStyledConstructor<
+  C extends IConfig,
+  E extends keyof JSX.IntrinsicElements
+> {
+  (cb: CssCallback<C> | CssObject<C>): PolymorphicComponent<
+    {
+      styled?: string;
+    },
+    E
+  >;
+  <
+    V extends {
+      [propKey: string]: {
+        [variantName: string]: CssCallback<C> | CssObject<C>;
+      };
+    }
+  >(
+    cb: CssCallback<C> | CssObject<C>,
+    variants: V
+  ): PolymorphicComponent<
+    {
+      [P in keyof V]?: C["screens"] extends IScreens
+        ?
+            | keyof V[P]
+            | {
+                [S in keyof C["screens"]]?: keyof V[P];
+              }
+        : keyof V[P];
+    } & {
+      styled?: string;
+    },
+    E
+  >;
+}
+
+export type IStyled<C extends IConfig> = {
+  [E in keyof JSX.IntrinsicElements]: IStyledConstructor<C, E>;
 };
 
 let hasWarnedInlineStyle = false;

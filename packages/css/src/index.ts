@@ -173,46 +173,92 @@ const createDeclarativeCss = <T extends IConfig>(
   return function (this: any, definition: any) {
     const composer = this;
     const args: any[] = [];
-    for (const key in definition) {
-      if (config.utilityFirst && key === "override") {
-        for (const overrideKey in definition[key]) {
-          if (!overrideKey[0].match(/[a-z]/)) {
-            // tslint:disable-next-line
-            for (const selectorKey in definition[key][overrideKey]) {
+
+    if (config.utilityFirst) {
+      for (const key in definition) {
+        if (key === "override") {
+          // tslint:disable-next-line
+          for (const overrideKey in definition[key]) {
+            args.push(
+              composer.override[overrideKey](definition[key][overrideKey])
+            );
+          }
+        } else if (!key[0].match(/[a-z]/)) {
+          for (const selectorKey in definition[key]) {
+            if (selectorKey === "override") {
+              // tslint:disable-next-line
+              for (const overrideKey in definition[key][selectorKey]) {
+                args.push(
+                  composer.override[overrideKey](
+                    definition[key][selectorKey][overrideKey],
+                    key
+                  )
+                );
+              }
+            } else {
               args.push(
-                composer[key][selectorKey](
-                  definition[key][overrideKey][selectorKey],
-                  overrideKey
-                )
+                composer[selectorKey](definition[key][selectorKey], key)
               );
             }
-          } else {
-            args.push(composer[key][overrideKey](definition[key][overrideKey]));
           }
-        }
-      } else if (config.screens && key in config.screens) {
-        for (const screenKey in definition[key]) {
-          if (!screenKey[0].match(/[a-z]/)) {
-            // tslint:disable-next-line
-            for (const selectorKey in definition[key][screenKey]) {
-              args.push(
-                composer[key][selectorKey](
-                  definition[key][screenKey][selectorKey],
-                  screenKey
-                )
-              );
+        } else if (config.screens && key in config.screens) {
+          for (const screenKey in definition[key]) {
+            if (!screenKey[0].match(/[a-z]/)) {
+              // tslint:disable-next-line
+              for (const selectorKey in definition[key][screenKey]) {
+                if (selectorKey === "override") {
+                  // tslint:disable-next-line
+                  for (const overrideKey in definition[key]) {
+                    args.push(
+                      composer[key].override[overrideKey](
+                        definition[key][screenKey][selectorKey][overrideKey],
+                        screenKey
+                      )
+                    );
+                  }
+                } else {
+                  args.push(
+                    composer[key][selectorKey](
+                      definition[key][screenKey][selectorKey],
+                      screenKey
+                    )
+                  );
+                }
+              }
+            } else {
+              args.push(composer[key][screenKey](definition[key][screenKey]));
             }
-          } else {
-            args.push(composer[key][screenKey](definition[key][screenKey]));
           }
+        } else {
+          args.push(composer[key](definition[key]));
         }
-      } else if (!key[0].match(/[a-z]/)) {
-        // tslint:disable-next-line
-        for (const selectorKey in definition[key]) {
-          args.push(composer[selectorKey](definition[key][selectorKey], key));
+      }
+    } else {
+      for (const key in definition) {
+        if (config.screens && key in config.screens) {
+          for (const screenKey in definition[key]) {
+            if (!screenKey[0].match(/[a-z]/)) {
+              // tslint:disable-next-line
+              for (const selectorKey in definition[key][screenKey]) {
+                args.push(
+                  composer[key][selectorKey](
+                    definition[key][screenKey][selectorKey],
+                    screenKey
+                  )
+                );
+              }
+            } else {
+              args.push(composer[key][screenKey](definition[key][screenKey]));
+            }
+          }
+        } else if (!key[0].match(/[a-z]/)) {
+          // tslint:disable-next-line
+          for (const selectorKey in definition[key]) {
+            args.push(composer[selectorKey](definition[key][selectorKey], key));
+          }
+        } else {
+          args.push(composer[key](definition[key]));
         }
-      } else {
-        args.push(composer[key](definition[key]));
       }
     }
 
