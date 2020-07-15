@@ -139,7 +139,7 @@ export type TUtilityFirstCss<
 > = TUtilityFirstDeclarativeCss<T> & {
   override: D;
 } & {
-    [S in keyof T["screens"]]: UT & {
+    [S in keyof T["screens"]]?: UT & {
       override: D;
     };
   } &
@@ -178,7 +178,7 @@ export type TUtilityFirstDeclarativeCss<
     | ({
         override?: D;
       } & {
-        [S in keyof T["screens"]]: UT & {
+        [S in keyof T["screens"]]?: UT & {
           override?: D;
         };
       } &
@@ -188,7 +188,7 @@ export type TUtilityFirstDeclarativeCss<
           override?: D;
         } & UT &
           {
-            [S in keyof T["screens"]]: UT & {
+            [S in keyof T["screens"]]?: UT & {
               override?: D;
             };
           };
