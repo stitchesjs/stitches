@@ -390,6 +390,11 @@ export const createCss = <T extends IConfig>(
   const declarativeCss = createDeclarativeCss(config);
   const cssInstance = new Proxy(declarativeCss, {
     get(_, prop, proxy) {
+      // Next.js 9.4 seems to intercept value passed on
+      // className attribute, checking for stuff
+      if (prop === "isReactComponent" || prop === "prototype") {
+        return proxy;
+      }
       if (prop === "dispose") {
         return () => {
           atomCache.clear();
