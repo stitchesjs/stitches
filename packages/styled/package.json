@@ -1,6 +1,6 @@
 {
   "name": "@stitches/styled",
-  "version": "5.2.4",
+  "version": "5.2.5",
   "description": "The atom CSS-IN-JS  library",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/css": "^5.2.4",
+    "@stitches/css": "^5.2.5",
     "@types/node": "^13.11.1",
     "tslib": "^1.11.1"
   },
