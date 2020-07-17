@@ -1,4 +1,10 @@
-import { IConfig, IScreens, TCss, TDeclarativeCss } from "@stitches/css";
+import {
+  IConfig,
+  IScreens,
+  TCss,
+  TDefaultCss,
+  TUtilityFirstCss,
+} from "@stitches/css";
 import * as React from "react";
 
 type PropsOf<
@@ -30,19 +36,13 @@ export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
   displayName?: string;
 };
 
-export type CSS<C> = TCss<C> & TDeclarativeCss<C>;
-
-export type CssCallback<C extends IConfig> = (css: TCss<C>) => string;
-export type CssObject<C extends IConfig> = TDeclarativeCss<C> extends (
-  styled: infer S
-) => string
-  ? S
-  : never;
-
-export interface IBaseStyled<C extends IConfig> {
+export interface IBaseStyled<
+  C extends IConfig,
+  CSS = C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TDefaultCss<C>
+> {
   <E extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
     element: E,
-    css?: CssObject<C> | CssCallback<C>
+    css?: CSS
   ): PolymorphicComponent<
     E extends React.ComponentType<infer PP>
       ? PP & {
@@ -57,12 +57,12 @@ export interface IBaseStyled<C extends IConfig> {
     E extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
     V extends {
       [propKey: string]: {
-        [variantName: string]: CssCallback<C> | CssObject<C>;
+        [variantName: string]: CSS;
       };
     } | void
   >(
     element: E,
-    css: CssObject<C> | CssCallback<C>,
+    css: CSS,
     variants: V
   ): PolymorphicComponent<
     V extends void
@@ -95,9 +95,10 @@ export interface IBaseStyled<C extends IConfig> {
 
 interface IStyledConstructor<
   C extends IConfig,
-  E extends keyof JSX.IntrinsicElements
+  E extends keyof JSX.IntrinsicElements,
+  CSS = C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TDefaultCss<C>
 > {
-  (cb: CssCallback<C> | CssObject<C>): PolymorphicComponent<
+  (cb: CSS): PolymorphicComponent<
     {
       styled?: string;
     },
@@ -106,11 +107,11 @@ interface IStyledConstructor<
   <
     V extends {
       [propKey: string]: {
-        [variantName: string]: CssCallback<C> | CssObject<C>;
+        [variantName: string]: CSS;
       };
     }
   >(
-    cb: CssCallback<C> | CssObject<C>,
+    cb: CSS,
     variants: V
   ): PolymorphicComponent<
     {
@@ -158,17 +159,6 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
     props: BoxProps<E>
   ) => JSX.Element;
 
-  const polymorphicCss = (cssFunctionOrObject: any, screen?: string) => {
-    if (screen) {
-      return typeof cssFunctionOrObject === "function"
-        ? cssFunctionOrObject((css as any)[screen])
-        : css({ [screen]: cssFunctionOrObject });
-    }
-    return typeof cssFunctionOrObject === "function"
-      ? cssFunctionOrObject(css)
-      : (css as any)(cssFunctionOrObject);
-  };
-
   let currentAs: string | undefined;
 
   const configScreens = (css as any)._config.screens;
@@ -180,7 +170,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
   ) => {
     const as = currentAs;
 
-    const baseStyles: any = polymorphicCss(baseStyling);
+    const baseStyles: any = css(baseStyling);
     const evaluatedVariantMap: Map<
       string,
       Map<string, { [key: string]: string }>
@@ -191,15 +181,12 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
       // tslint:disable-next-line
       for (const variant in variants[variantName]) {
         const screens: { [key: string]: string } = {
-          "": polymorphicCss(variants[variantName][variant]),
+          "": css(variants[variantName][variant]),
         };
         if (configScreens) {
           // tslint:disable-next-line
           for (const screen in configScreens) {
-            screens[screen] = polymorphicCss(
-              variants[variantName][variant],
-              screen
-            );
+            screens[screen] = css({ [screen]: variants[variantName][variant] });
           }
         }
         variantMap.set(variant, screens);

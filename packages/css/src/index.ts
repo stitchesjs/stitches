@@ -8,7 +8,6 @@ import {
   IThemeAtom,
   ITokensDefinition,
   TCss,
-  TDeclarativeCss,
 } from "./types";
 import {
   createSheets,
@@ -167,105 +166,6 @@ export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
 
-const createDeclarativeCss = <T extends IConfig>(
-  config: T
-): TDeclarativeCss<T> => {
-  return function (this: any, definition: any) {
-    const composer = this;
-    const args: any[] = [];
-
-    if (config.utilityFirst) {
-      for (const key in definition) {
-        if (key === "override") {
-          // tslint:disable-next-line
-          for (const overrideKey in definition[key]) {
-            args.push(
-              composer.override[overrideKey](definition[key][overrideKey])
-            );
-          }
-        } else if (!key[0].match(/[a-z]/)) {
-          for (const selectorKey in definition[key]) {
-            if (selectorKey === "override") {
-              // tslint:disable-next-line
-              for (const overrideKey in definition[key][selectorKey]) {
-                args.push(
-                  composer.override[overrideKey](
-                    definition[key][selectorKey][overrideKey],
-                    key
-                  )
-                );
-              }
-            } else {
-              args.push(
-                composer[selectorKey](definition[key][selectorKey], key)
-              );
-            }
-          }
-        } else if (config.screens && key in config.screens) {
-          for (const screenKey in definition[key]) {
-            if (!screenKey[0].match(/[a-z]/)) {
-              // tslint:disable-next-line
-              for (const selectorKey in definition[key][screenKey]) {
-                if (selectorKey === "override") {
-                  // tslint:disable-next-line
-                  for (const overrideKey in definition[key]) {
-                    args.push(
-                      composer[key].override[overrideKey](
-                        definition[key][screenKey][selectorKey][overrideKey],
-                        screenKey
-                      )
-                    );
-                  }
-                } else {
-                  args.push(
-                    composer[key][selectorKey](
-                      definition[key][screenKey][selectorKey],
-                      screenKey
-                    )
-                  );
-                }
-              }
-            } else {
-              args.push(composer[key][screenKey](definition[key][screenKey]));
-            }
-          }
-        } else {
-          args.push(composer[key](definition[key]));
-        }
-      }
-    } else {
-      for (const key in definition) {
-        if (config.screens && key in config.screens) {
-          for (const screenKey in definition[key]) {
-            if (!screenKey[0].match(/[a-z]/)) {
-              // tslint:disable-next-line
-              for (const selectorKey in definition[key][screenKey]) {
-                args.push(
-                  composer[key][selectorKey](
-                    definition[key][screenKey][selectorKey],
-                    screenKey
-                  )
-                );
-              }
-            } else {
-              args.push(composer[key][screenKey](definition[key][screenKey]));
-            }
-          }
-        } else if (!key[0].match(/[a-z]/)) {
-          // tslint:disable-next-line
-          for (const selectorKey in definition[key]) {
-            args.push(composer[selectorKey](definition[key][selectorKey], key));
-          }
-        } else {
-          args.push(composer[key](definition[key]));
-        }
-      }
-    }
-
-    return composer.compose(...args);
-  } as any;
-};
-
 export const createCss = <T extends IConfig>(
   config: T,
   env: Window | null = typeof window === "undefined" ? null : window
@@ -346,6 +246,144 @@ export const createCss = <T extends IConfig>(
       toString: toStringCompose,
     };
   };
+  const createAtom = (
+    cssProp: string,
+    value: any,
+    screen = "",
+    pseudo?: string
+  ) => {
+    const token = tokens[cssPropToToken[cssProp as keyof ICssPropToToken]];
+    const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
+
+    // generate id used for specificity check
+    // two atoms are considered equal in regared to there specificity if the id is equal
+    const id =
+      cssProp.toLowerCase() +
+      (pseudo ? pseudo.split(":").sort().join(":") : "") +
+      screen;
+
+    // make a uid accouting for different values
+    const uid = id + value;
+
+    // If this was created before return the cached atom
+    if (atomCache.has(uid)) {
+      return atomCache.get(uid)!;
+    }
+
+    // prepare the cssProp
+    let cssHyphenProp = cssProp
+      .split(/(?=[A-Z])/)
+      .map((g) => g.toLowerCase())
+      .join("-");
+
+    if (isVendorPrefixed) {
+      cssHyphenProp = `-${cssHyphenProp}`;
+    } else if (vendorProps.includes(`${vendorPrefix}${cssHyphenProp}`)) {
+      cssHyphenProp = `${vendorPrefix}${cssHyphenProp}`;
+    }
+
+    // Create a new atom
+    const atom: IAtom = {
+      id,
+      cssHyphenProp,
+      value: token && token[value] ? token[value] : value,
+      pseudo,
+      screen,
+      toString,
+    };
+
+    // Cache it
+    atomCache.set(uid, atom);
+
+    return atom;
+  };
+  const createCssAtoms = (
+    props: {
+      [key: string]: any;
+    },
+    cb: (atom: IAtom) => void,
+    screen = "",
+    pseudo: string[] = []
+  ) => {
+    // tslint:disable-next-line
+    for (const prop in props) {
+      if (config.screens && prop in config.screens) {
+        if (screen) {
+          throw new Error(
+            `@stitches/css - You are nesting the screen "${prop}" into "${screen}", that makes no sense? :-)`
+          );
+        }
+        createCssAtoms(props[prop], cb, prop, pseudo);
+      } else if (!prop[0].match(/[a-zA-Z]/)) {
+        createCssAtoms(props[prop], cb, screen, pseudo.concat(prop));
+      } else if (prop in utils) {
+        createCssAtoms(
+          utils[prop](config)(props[prop]) as any,
+          cb,
+          screen,
+          pseudo
+        );
+      } else if (prop in specificityProps) {
+        createCssAtoms(
+          specificityProps[prop](config)(props[prop]) as any,
+          cb,
+          screen,
+          pseudo
+        );
+      } else {
+        cb(
+          createAtom(
+            prop,
+            props[prop],
+            screen,
+            pseudo.length ? pseudo.join("") : undefined
+          )
+        );
+      }
+    }
+  };
+  const createUtilsAtoms = (
+    props: {
+      [key: string]: any;
+    },
+    cb: (atom: IAtom) => void,
+    screen = "",
+    pseudo: string[] = [],
+    canOverride = true
+  ) => {
+    // tslint:disable-next-line
+    for (const prop in props) {
+      if (prop === "override") {
+        if (!canOverride) {
+          throw new Error(
+            "@stitches/css - You can not override at this level, only at the top level definition"
+          );
+        }
+        createCssAtoms(props[prop], cb, screen, pseudo);
+      } else if (config.screens && prop in config.screens) {
+        if (screen) {
+          throw new Error(
+            `@stitches/css - You are nesting the screen "${prop}" into "${screen}", that makes no sense? :-)`
+          );
+        }
+        createUtilsAtoms(props[prop], cb, prop, pseudo, false);
+      } else if (!prop[0].match(/[a-zA-Z]/)) {
+        createUtilsAtoms(props[prop], cb, screen, pseudo.concat(prop), false);
+      } else if (prop in utils) {
+        createUtilsAtoms(
+          utils[prop](config)(props[prop]) as any,
+          cb,
+          screen,
+          pseudo,
+          false
+        );
+      } else {
+        throw new Error(
+          `@stitches/css - The prop "${prop}" is not a valid utility`
+        );
+      }
+    }
+  };
 
   // pre-checked config to avoid checking these all the time
   const screens = config.screens || {};
@@ -377,210 +415,120 @@ export const createCss = <T extends IConfig>(
   const atomCache = new Map<string, IAtom>();
   const themeCache = new Map<ITokensDefinition, IThemeAtom>();
 
-  // proxy state values that change based on propertie access
-  let cssProp = "";
-  let screen = "";
-  // We need to know when we call utils to avoid clearing
-  // the screen set for that util, also avoid util calling util
-  // when overriding properties
-  let isCallingUtil = false;
-  // We need to know when we override as it does not require a util to
-  // be called
-  let isOverriding = false;
-  const declarativeCss = createDeclarativeCss(config);
-  const cssInstance = new Proxy(declarativeCss, {
-    get(_, prop, proxy) {
-      // Next.js 9.4 seems to intercept value passed on
-      // className attribute, checking for stuff
-      if (prop === "isReactComponent" || prop === "prototype") {
-        return proxy;
-      }
-      if (prop === "dispose") {
-        return () => {
-          atomCache.clear();
-          tags.forEach((tag) => {
-            tag.parentNode?.removeChild(tag);
-          });
-        };
-      }
-      if (prop === "_config") {
-        return config;
-      }
-      if (prop === "theme") {
-        return (definition: any): IThemeAtom => {
-          if (themeCache.has(definition)) {
-            return themeCache.get(definition)!;
-          }
+  const cssInstance = new Proxy(
+    (definition: any) => {
+      const args: any[] = [];
+      let index = 0;
 
-          const themeAtom = {
-            // We could here also check if theme has been added from server,
-            // though thinking it does not matter... just a simple rule
-            name: String(themeCache.size),
-            definition,
-            toString: themeToString,
-          };
-
-          themeCache.set(definition, themeAtom);
-
-          return themeAtom;
-        };
-      }
-      if (prop === "compose") {
-        return compose;
-      }
-      // SSR
-      if (prop === "getStyles") {
-        return (cb: any) => {
-          // tslint:disable-next-line
-          for (let sheet in sheets) {
-            sheets[sheet].content = "";
-          }
-          if (baseTokens) {
-            sheets.__variables__.insertRule(baseTokens);
-          }
-
-          // We have to reset our toStrings so that they will now inject again,
-          // and still cache is it is being reused
-          toString = createServerToString(
-            sheets,
-            config.screens,
-            cssClassnameProvider
-          );
-
-          // We have to reset our themeToStrings so that they will now inject again,
-          // and still cache is it is being reused
-          themeToString = createThemeToString(
-            classPrefix,
-            sheets.__variables__
-          );
-
-          atomCache.forEach((atom) => {
-            atom.toString = toString;
-          });
-
-          themeCache.forEach((atom) => {
-            atom.toString = themeToString;
-          });
-
-          const result = cb();
-
-          return {
-            result,
-            styles: Object.keys(screens).reduce(
-              (aggr, key) => {
-                return aggr.concat(
-                  `/* STITCHES:${key} */\n${sheets[key].content}`
-                );
-              },
-              [
-                `/* STITCHES:__variables__ */\n${sheets.__variables__.content}`,
-                `/* STITCHES */\n${sheets[""].content}`,
-              ]
-            ),
-          };
-        };
-      }
-
-      if (prop === "override" && config.utilityFirst) {
-        isOverriding = true;
-        return proxy;
-      }
-
-      if (prop in screens) {
-        if (screen) {
-          throw new Error(
-            `@stitches/css - You can not add the screen "${String(
-              prop
-            )}" inside the screen ${screen}`
-          );
-        }
-        screen = String(prop);
-      } else if (!isCallingUtil && prop in utils) {
-        const util = utils[String(prop)](proxy, config);
-        return (...args: any[]) => {
-          isCallingUtil = true;
-          const result = util(...args);
-          isCallingUtil = false;
-          screen = "";
-          return result;
-        };
-      } else if (config.utilityFirst && !isCallingUtil && !isOverriding) {
-        throw new Error(
-          `@stitches/css - The property "${String(prop)}" is not available`
-        );
-      } else if (specificityProps[String(prop)]) {
-        return specificityProps[String(prop)](cssInstance);
+      if (config.utilityFirst) {
+        createUtilsAtoms(definition, (atom) => {
+          args[index++] = atom;
+        });
       } else {
-        cssProp = String(prop);
+        createCssAtoms(definition, (atom) => {
+          args[index++] = atom;
+        });
       }
 
-      return proxy;
+      return compose(...args);
     },
-    apply(_, __, argsList) {
-      if (!cssProp) {
-        return _.call(cssInstance, argsList[0]);
-      }
-      const value = argsList[0];
-      const pseudo = argsList[1];
-      const token = tokens[cssPropToToken[cssProp as keyof ICssPropToToken]];
-      const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
-
-      // generate id used for specificity check
-      // two atoms are considered equal in regared to there specificity if the id is equal
-      const id =
-        cssProp.toLowerCase() +
-        (pseudo ? pseudo.split(":").sort().join(":") : "") +
-        screen;
-
-      // make a uid accouting for different values
-      const uid = id + value;
-
-      // If this was created before return the cached atom
-      if (atomCache.has(uid)) {
-        // Reset the screen name if needed
-        if (!isCallingUtil) {
-          screen = "";
+    {
+      get(_, prop, proxy) {
+        // Next.js 9.4 seems to intercept value passed on
+        // className attribute, checking for stuff
+        if (prop === "isReactComponent" || prop === "prototype") {
+          return proxy;
         }
-        cssProp = "";
-        return atomCache.get(uid)!;
-      }
+        if (prop === "dispose") {
+          return () => {
+            atomCache.clear();
+            tags.forEach((tag) => {
+              tag.parentNode?.removeChild(tag);
+            });
+          };
+        }
+        if (prop === "_config") {
+          return config;
+        }
+        if (prop === "compose") {
+          return compose;
+        }
+        if (prop === "theme") {
+          return (definition: any): IThemeAtom => {
+            if (themeCache.has(definition)) {
+              return themeCache.get(definition)!;
+            }
 
-      // prepare the cssProp
-      let cssHyphenProp = cssProp
-        .split(/(?=[A-Z])/)
-        .map((g) => g.toLowerCase())
-        .join("-");
+            const themeAtom = {
+              // We could here also check if theme has been added from server,
+              // though thinking it does not matter... just a simple rule
+              name: String(themeCache.size),
+              definition,
+              toString: themeToString,
+            };
 
-      if (isVendorPrefixed) {
-        cssHyphenProp = `-${cssHyphenProp}`;
-      } else if (vendorProps.includes(`${vendorPrefix}${cssHyphenProp}`)) {
-        cssHyphenProp = `${vendorPrefix}${cssHyphenProp}`;
-      }
+            themeCache.set(definition, themeAtom);
 
-      // Create a new atom
-      const atom: IAtom = {
-        id,
-        cssHyphenProp,
-        value: token && token[value] ? token[value] : value,
-        pseudo,
-        screen,
-        toString,
-      };
+            return themeAtom;
+          };
+        }
+        // SSR
+        if (prop === "getStyles") {
+          return (cb: any) => {
+            // tslint:disable-next-line
+            for (let sheet in sheets) {
+              sheets[sheet].content = "";
+            }
+            if (baseTokens) {
+              sheets.__variables__.insertRule(baseTokens);
+            }
 
-      // Cache it
-      atomCache.set(uid, atom);
+            // We have to reset our toStrings so that they will now inject again,
+            // and still cache is it is being reused
+            toString = createServerToString(
+              sheets,
+              config.screens,
+              cssClassnameProvider
+            );
 
-      // Reset the screen name
-      if (!isCallingUtil) {
-        screen = "";
-      }
+            // We have to reset our themeToStrings so that they will now inject again,
+            // and still cache is it is being reused
+            themeToString = createThemeToString(
+              classPrefix,
+              sheets.__variables__
+            );
 
-      isOverriding = false;
-      cssProp = "";
+            atomCache.forEach((atom) => {
+              atom.toString = toString;
+            });
 
-      return atom;
-    },
-  }) as any;
+            themeCache.forEach((atom) => {
+              atom.toString = themeToString;
+            });
+
+            const result = cb();
+
+            return {
+              result,
+              styles: Object.keys(screens).reduce(
+                (aggr, key) => {
+                  return aggr.concat(
+                    `/* STITCHES:${key} */\n${sheets[key].content}`
+                  );
+                },
+                [
+                  `/* STITCHES:__variables__ */\n${sheets.__variables__.content}`,
+                  `/* STITCHES */\n${sheets[""].content}`,
+                ]
+              ),
+            };
+          };
+        }
+
+        return proxy;
+      },
+    }
+  ) as any;
 
   if (env) {
     hotReloadingCache.set(prefix, cssInstance);

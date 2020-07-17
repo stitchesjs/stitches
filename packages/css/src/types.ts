@@ -26,10 +26,33 @@ export interface IComposedAtom {
   toString: (this: IComposedAtom) => string;
 }
 
-export type TUtility<A extends any[], C extends IConfig> = (
-  css: TCss<Omit<C, "utils">>,
-  config: C
-) => (...args: A) => string;
+export type TRecursiveCss<
+  T extends IConfig,
+  D = {
+    [K in keyof Properties]?: K extends keyof ICssPropToToken
+      ? T["tokens"] extends object
+        ? T["tokens"][ICssPropToToken[K]] extends object
+          ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
+          : Properties[K]
+        : Properties[K]
+      : Properties[K];
+  }
+> = D | { [pseudo: string]: TRecursiveCss<T, D> };
+
+export type TRecursiveUtils<
+  T extends IConfig,
+  UT = {
+    [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]> extends (...args: infer A) => {}
+        ? A[0]
+        : never
+      : never;
+  }
+> = UT | { [pseudo: string]: TRecursiveUtils<T, UT> };
+
+export type TUtility<A extends any[], T extends IConfig> = (
+  config: T
+) => (...args: A) => TRecursiveCss<T>;
 
 export interface ICssPropToToken {
   color: "colors";
@@ -117,178 +140,41 @@ export interface IConfig {
   };
 }
 
-export type TUtilityFirstCss<
-  T extends IConfig,
-  D = {
-    [K in keyof Properties]: (
-      value: K extends keyof ICssPropToToken
-        ? T["tokens"] extends object
-          ? T["tokens"][ICssPropToToken[K]] extends object
-            ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-            : Properties[K]
-          : Properties[K]
-        : Properties[K],
-      pseudo?: string
-    ) => string;
-  },
-  UT = {
-    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
-      ? ReturnType<T["utils"][U]>
-      : never;
-  }
-> = TUtilityFirstDeclarativeCss<T> & {
-  override: D;
-} & {
-    [S in keyof T["screens"]]?: UT & {
-      override: D;
+export type TUtilityFirstCss<T extends IConfig> = {
+  override?: TRecursiveCss<T> &
+    {
+      [S in keyof T["screens"]]?: TRecursiveCss<T>;
     };
-  } &
-  UT & {
-    compose: (...compositions: string[]) => string;
-    getStyles: (callback: () => any) => { styles: string[]; result: any };
-    theme: (
-      theme: Partial<
-        {
-          [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
-        }
-      >
-    ) => string;
+} & {
+  [S in keyof T["screens"]]?: TRecursiveUtils<T>;
+} &
+  TRecursiveUtils<T>;
+
+export type TDefaultCss<T extends IConfig> = TRecursiveCss<T> &
+  TRecursiveUtils<T> &
+  {
+    [S in keyof T["screens"]]?: TRecursiveCss<T> & TRecursiveUtils<T>;
   };
 
-export type TUtilityFirstDeclarativeCss<
+export interface TCssConstructor<
   T extends IConfig,
-  D = {
-    [K in keyof Properties]?: K extends keyof ICssPropToToken
-      ? T["tokens"] extends object
-        ? T["tokens"][ICssPropToToken[K]] extends object
-          ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-          : Properties[K]
-        : Properties[K]
-      : Properties[K];
-  },
-  UT = {
-    [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
-      ? ReturnType<T["utils"][U]> extends (...args: infer A) => string
-        ? A[0]
-        : never
-      : never;
-  }
-> = (
-  styles:
-    | ({
-        override?: D;
-      } & {
-        [S in keyof T["screens"]]?: UT & {
-          override?: D;
-        };
-      } &
-        UT)
-    | {
-        [selector: string]: {
-          override?: D;
-        } & UT &
-          {
-            [S in keyof T["screens"]]?: UT & {
-              override?: D;
-            };
-          };
+  S extends TDefaultCss<T> | TUtilityFirstCss<T>
+> {
+  (styles: S): string;
+  compose: (...compositions: string[]) => string;
+  getStyles: (callback: () => any) => { styles: string[]; result: any };
+  theme: (
+    theme: Partial<
+      {
+        [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
       }
-) => string;
-
-export type TDeclarativeCss<T extends IConfig> = T extends {
-  utilityFirst: true;
+    >
+  ) => string;
 }
-  ? TUtilityFirstDeclarativeCss<T>
-  : TDefaultDeclarativeCss<T>;
-
-export type TDefaultDeclarativeCss<
-  T extends IConfig,
-  D = {
-    [K in keyof Properties]?: K extends keyof ICssPropToToken
-      ? T["tokens"] extends object
-        ? T["tokens"][ICssPropToToken[K]] extends object
-          ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-          : Properties[K]
-        : Properties[K]
-      : Properties[K];
-  }
-> = (
-  styles:
-    | (D &
-        {
-          [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
-            ? ReturnType<T["utils"][U]> extends (...args: infer A) => string
-              ? A[0]
-              : never
-            : never;
-        } &
-        {
-          [S in keyof T["screens"]]?:
-            | ({
-                [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<
-                  any,
-                  any
-                >
-                  ? ReturnType<T["utils"][U]> extends (
-                      ...args: infer A
-                    ) => string
-                    ? A[0]
-                    : never
-                  : never;
-              } &
-                D)
-            | {
-                [selector: string]: D;
-              };
-        })
-    | {
-        [selector: string]: D;
-      }
-) => string;
 
 export type TCss<T extends IConfig> = T extends { utilityFirst: true }
-  ? TUtilityFirstCss<T>
-  : TDefaultCss<T>;
-
-export type TDefaultCss<
-  T extends IConfig,
-  D = {
-    [K in keyof Properties]: (
-      value: K extends keyof ICssPropToToken
-        ? T["tokens"] extends object
-          ? T["tokens"][ICssPropToToken[K]] extends object
-            ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-            : Properties[K]
-          : Properties[K]
-        : Properties[K],
-      pseudo?: string
-    ) => string;
-  }
-> = TDefaultDeclarativeCss<T> &
-  D &
-  {
-    [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
-      ? ReturnType<T["utils"][U]>
-      : never;
-  } &
-  {
-    [S in keyof T["screens"]]: {
-      [U in keyof T["utils"]]: T["utils"][U] extends TUtility<any, any>
-        ? ReturnType<T["utils"][U]>
-        : never;
-    } &
-      D;
-  } & {
-    compose: (...compositions: (string | null | undefined | false)[]) => string;
-    getStyles: (callback: () => any) => { styles: string[]; result: any };
-    theme: (
-      theme: Partial<
-        {
-          [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
-        }
-      >
-    ) => string;
-  };
+  ? TCssConstructor<T, TUtilityFirstCss<T>>
+  : TCssConstructor<T, TDefaultCss<T>>;
 
 export interface ISheet {
   cssRules: any[];

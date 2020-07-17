@@ -1,4 +1,4 @@
-import { IConfig, TCss, TUtility } from "@stitches/css";
+import { IConfig, TCss, TUtility, TDefaultCss } from "@stitches/css";
 
 export interface IThemeValue {
   [key: string]: string;
@@ -278,20 +278,10 @@ export type TTailwindUtility<V = never> = TUtility<
   ITailwindConfig
 >;
 
-const createUtilityValues = <
-  T extends {
-    [key: string]: (css: TCss<ITailwindConfig>, pseudo: string) => string;
-  }
->(
-  values: T
-) => values;
-
-const createUtility = <C = TCss<ITailwindConfig>>(
+const createUtility = (
   cb:
-    | ((css: C, value: any, pseudo?: string) => string)
-    | {
-        [key: string]: (css: C, pseudo?: string) => string;
-      },
+    | ((value: any) => { [key: string]: any })
+    | ReturnType<ReturnType<TTailwindUtility<any>>>,
   {
     theme,
     values = {},
@@ -301,27 +291,26 @@ const createUtility = <C = TCss<ITailwindConfig>>(
     values?: {
       [key: string]: string;
     };
-    emptyValue?: (css: C, pseudo?: string) => string;
+    emptyValue?: ReturnType<ReturnType<TTailwindUtility<any>>>;
   } = {}
-) => {
-  return (css: C, config: ITailwindConfig) => (value: any, pseudo?: string) => {
+): TTailwindUtility<any> => {
+  return ((config: ITailwindConfig) => (value: any) => {
     const evaluatedTheme = theme ? (config.theme as any)[theme] : {};
     const evaluatedValue =
       evaluatedTheme[value] ||
       evaluatedTheme.default ||
       (typeof values[value] === "function"
-        ? (values as any)[value](css, pseudo)
+        ? (values as any)[value]()
         : values[value]);
     if (evaluatedValue) {
-      return typeof cb === "function"
-        ? cb(css, evaluatedValue, pseudo)
-        : cb[evaluatedValue](css, pseudo);
+      // @ts-ignore
+      return typeof cb === "function" ? cb(evaluatedValue) : cb[evaluatedValue];
     } else if (emptyValue) {
-      return emptyValue(css, pseudo);
+      return emptyValue;
     }
 
     return showWarning(value);
-  };
+  }) as any;
 };
 
 const showWarning = (value: string) => {
@@ -330,16 +319,15 @@ const showWarning = (value: string) => {
     `@stitches/tailwind - The value "${value}" is not a valid value`
   );
 
-  return "";
+  return {};
 };
 
-export const absolute: ITailwindConfig["utils"]["absolute"] = (css) => (
-  _,
-  pseudo
-) => css.position("absolute", pseudo);
+export const absolute: ITailwindConfig["utils"]["absolute"] = () => () => ({
+  position: "absolute",
+});
 
 export const align: ITailwindConfig["utils"]["align"] = createUtility(
-  (css, value, pseudo) => css.verticalAlign(value, pseudo),
+  (value) => ({ verticalAlign: value }),
   {
     values: {
       baseline: "baseline",
@@ -352,147 +340,135 @@ export const align: ITailwindConfig["utils"]["align"] = createUtility(
   }
 );
 
-export const antialiased: ITailwindConfig["utils"]["antialiased"] = (
-  css,
-  pseudo
-) => () =>
-  css.compose(
-    (css as any).WebkitFontSmoothing("antialiased", pseudo),
-    (css as any).MozOsxFontSmoothing("grayscale", pseudo)
-  );
+export const antialiased: ITailwindConfig["utils"]["antialiased"] = () => () => ({
+  // @ts-ignore
+  WebkitFontSmoothing: "antialiased",
+  // @ts-ignore
+  MozOsxFontSmoothing: "grayscale",
+});
 
-export const appearance: ITailwindConfig["utils"]["appearance"] = (css) => (
-  value: any,
-  pseudo
-) => css.appearance(value === "none" ? value : showWarning(value), pseudo);
+export const appearance: ITailwindConfig["utils"]["appearance"] = () => (
+  value: any
+) => ({ appearance: value === "none" ? value : showWarning(value) });
 
 export const bg = ((): ITailwindConfig["utils"]["bg"] => {
-  const values = createUtilityValues({
-    fixed: (css, pseudo) => css.backgroundAttachment("fixed", pseudo),
-    local: (css, pseudo) => css.backgroundAttachment("local", pseudo),
-    scroll: (css, pseudo) => css.backgroundAttachment("scroll", pseudo),
-    repeat: (css, pseudo) => css.backgroundRepeat("repeat", pseudo),
-    "no-repeat": (css, pseudo) => css.backgroundRepeat("no-repeat", pseudo),
-    "repeat-x": (css, pseudo) => css.backgroundRepeat("repeat-x", pseudo),
-    "repeat-y": (css, pseudo) => css.backgroundRepeat("repeat-y", pseudo),
-    "repeat-round": (css, pseudo) => css.backgroundRepeat("round", pseudo),
-    "repeat-space": (css, pseudo) => css.backgroundRepeat("space", pseudo),
-  });
-  return (css, config) => (value, pseudo) => {
+  const values = {
+    fixed: { backgroundAttachment: "fixed" },
+    local: { backgroundAttachment: "local" },
+    scroll: { backgroundAttachment: "scroll" },
+    repeat: { backgroundRepeat: "repeat" },
+    "no-repeat": { backgroundRepeat: "no-repeat" },
+    "repeat-x": { backgroundRepeat: "repeat-x" },
+    "repeat-y": { backgroundRepeat: "repeat-y" },
+    "repeat-round": { backgroundRepeat: "round" },
+    "repeat-space": { backgroundRepeat: "space" },
+  };
+  return (config) => (value) => {
     if (config.theme.backgroundColor && config.theme.backgroundColor[value]) {
-      return css.backgroundColor(config.theme.backgroundColor[value], pseudo);
+      return { backgroundColor: config.theme.backgroundColor[value] };
     }
     if (
       config.theme.backgroundPosition &&
       config.theme.backgroundPosition[value]
     ) {
-      return css.backgroundPosition(
-        config.theme.backgroundPosition[value],
-        pseudo
-      );
+      return { backgroundPosition: config.theme.backgroundPosition[value] };
     }
     if (config.theme.backgroundSize && config.theme.backgroundSize[value]) {
-      return css.backgroundSize(config.theme.backgroundSize[value], pseudo);
+      return { backgroundSize: config.theme.backgroundSize[value] };
     }
 
-    return values[value]
-      ? (values as any)[value](css, pseudo)
-      : showWarning(value);
+    return values[value] || showWarning(value);
   };
 })();
 
-export const block: ITailwindConfig["utils"]["block"] = (css) => () =>
-  css.display("block");
+export const block: ITailwindConfig["utils"]["block"] = () => () => ({
+  display: "block",
+});
 
 export const border = ((): ITailwindConfig["utils"]["border"] => {
-  const values = createUtilityValues({
-    solid: (css, pseudo) => css.borderStyle("solid", pseudo),
-    dashed: (css, pseudo) => css.borderStyle("dashed", pseudo),
-    dotted: (css, pseudo) => css.borderStyle("dotted", pseudo),
-    double: (css, pseudo) => css.borderStyle("double", pseudo),
-    none: (css, pseudo) => css.borderStyle("none", pseudo),
-    collapse: (css, pseudo) => css.borderCollapse("collapse", pseudo),
-    separate: (css, pseudo) => css.borderCollapse("separate", pseudo),
-  });
-  return (css, config) => (value, pseudo) => {
+  const values = {
+    solid: { borderStyle: "solid" },
+    dashed: { borderStyle: "dashed" },
+    dotted: { borderStyle: "dotted" },
+    double: { borderStyle: "double" },
+    none: { borderStyle: "none" },
+    collapse: { borderCollapse: "collapse" },
+    separate: { borderCollapse: "separate" },
+  };
+  // @ts-ignore
+  return (config) => (value) => {
     if (config.theme.borderColor && config.theme.borderColor[value]) {
-      return css.borderColor(config.theme.borderColor[value], pseudo);
+      return { borderColor: config.theme.borderColor[value] };
     }
     if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-      return css.borderWidth(config.theme.borderWidth[value], pseudo);
+      return { borderWidth: config.theme.borderWidth[value] };
     }
 
-    return values[value]
-      ? (values[value] as any)(css, pseudo)
-      : showWarning(value);
+    return values[value] || showWarning(value);
   };
 })();
 
-export const borderB: ITailwindConfig["utils"]["borderB"] = (css, config) => (
-  value: any,
-  pseudo
+export const borderB: ITailwindConfig["utils"]["borderB"] = (config) => (
+  value: any
 ) => {
   if (config.theme.borderColor && config.theme.borderColor[value]) {
-    return css.borderBottomColor(config.theme.borderColor[value], pseudo);
+    return { borderBottomColor: config.theme.borderColor[value] };
   }
   if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-    return css.borderBottomWidth(config.theme.borderWidth[value], pseudo);
+    return { borderBottomWidth: config.theme.borderWidth[value] };
   }
 
   return showWarning(value);
 };
 
-export const borderL: ITailwindConfig["utils"]["borderB"] = (css, config) => (
-  value: any,
-  pseudo
+export const borderL: ITailwindConfig["utils"]["borderB"] = (config) => (
+  value: any
 ) => {
   if (config.theme.borderColor && config.theme.borderColor[value]) {
-    return css.borderLeftColor(config.theme.borderColor[value], pseudo);
+    return { borderLeftColor: config.theme.borderColor[value] };
   }
   if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-    return css.borderLeftWidth(config.theme.borderWidth[value], pseudo);
+    return { borderLeftWidth: config.theme.borderWidth[value] };
   }
 
   return showWarning(value);
 };
 
-export const borderR: ITailwindConfig["utils"]["borderR"] = (css, config) => (
-  value: any,
-  pseudo
+export const borderR: ITailwindConfig["utils"]["borderR"] = (config) => (
+  value: any
 ) => {
   if (config.theme.borderColor && config.theme.borderColor[value]) {
-    return css.borderRightColor(config.theme.borderColor[value], pseudo);
+    return { borderRightColor: config.theme.borderColor[value] };
   }
   if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-    return css.borderRightWidth(config.theme.borderWidth[value], pseudo);
+    return { borderRightWidth: config.theme.borderWidth[value] };
   }
 
   return showWarning(value);
 };
 
-export const borderT: ITailwindConfig["utils"]["borderT"] = (css, config) => (
-  value,
-  pseudo
+export const borderT: ITailwindConfig["utils"]["borderT"] = (config) => (
+  value
 ) => {
   if (config.theme.borderColor && config.theme.borderColor[value]) {
-    return css.borderTopColor(config.theme.borderColor[value], pseudo);
+    return { borderTopColor: config.theme.borderColor[value] };
   }
   if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-    return css.borderTopWidth(config.theme.borderWidth[value], pseudo);
+    return { borderTopWidth: config.theme.borderWidth[value] };
   }
 
   return showWarning(value);
 };
 
 export const bottom: ITailwindConfig["utils"]["bottom"] = createUtility(
-  (css, value, pseudo) => css.bottom(value, pseudo),
+  (value) => ({ bottom: value }),
   {
     theme: "inset",
   }
 );
 
 export const box: ITailwindConfig["utils"]["box"] = createUtility(
-  (css, value, pseudo) => css.boxSizing(value, pseudo),
+  (value) => ({ boxSizing: value }),
   {
     values: {
       border: "border-box",
@@ -502,22 +478,17 @@ export const box: ITailwindConfig["utils"]["box"] = createUtility(
 );
 
 export const breakText: ITailwindConfig["utils"]["breakText"] = createUtility({
-  normal: (css, pseudo) =>
-    css.compose(
-      css.wordBreak("normal", pseudo),
-      css.overflowWrap("normal", pseudo)
-    ),
-  words: (css, pseudo) => css.overflowWrap("break-word", pseudo),
-  all: (css, pseudo) => css.wordBreak("break-all", pseudo),
+  normal: { wordBreak: "normal", overflowWrap: "normal" },
+  words: { overflowWrap: "break-word" },
+  all: { wordBreak: "break-all" },
 });
 
-export const capitalize: ITailwindConfig["utils"]["capitalize"] = (css) => (
-  _,
-  pseudo
-) => css.textTransform("capitalize", pseudo);
+export const capitalize: ITailwindConfig["utils"]["capitalize"] = () => () => ({
+  textTransform: "capitalize",
+});
 
 export const clear: ITailwindConfig["utils"]["clear"] = createUtility(
-  (css, value, pseudo) => css.clear(value, pseudo),
+  (value) => ({ clear: value }),
   {
     values: {
       left: "left",
@@ -528,36 +499,37 @@ export const clear: ITailwindConfig["utils"]["clear"] = createUtility(
   }
 );
 
-export const clearfix: ITailwindConfig["utils"]["clearfix"] = (css) => () =>
-  css.compose(
-    css.content("", "::after"),
-    css.display("table", "::after"),
-    css.clear("both", "::after")
-  );
+export const clearfix: ITailwindConfig["utils"]["clearfix"] = () => () => ({
+  "::after": {
+    content: "",
+    display: "table",
+    clear: "both",
+  },
+});
 
 export const col: ITailwindConfig["utils"]["col"] = createUtility(
-  (css, value, pseudo) => css.gridColumn(value, pseudo),
+  (value) => ({ gridColumn: value }),
   {
     theme: "gridColumn",
   }
 );
 
 export const colEnd: ITailwindConfig["utils"]["colEnd"] = createUtility(
-  (css, value, pseudo) => css.gridColumnEnd(value, pseudo),
+  (value) => ({ gridColumnEnd: value }),
   {
     theme: "gridColumnEnd",
   }
 );
 
 export const colGap: ITailwindConfig["utils"]["colGap"] = createUtility(
-  (css, value, pseudo) => css.columnGap(value, pseudo),
+  (value) => ({ columnGap: value }),
   {
     theme: "gap",
   }
 );
 
 export const colStart: ITailwindConfig["utils"]["colStart"] = createUtility(
-  (css, value, pseudo) => css.gridColumnStart(value, pseudo),
+  (value) => ({ gridColumnStart: value }),
   {
     theme: "gridColumnStart",
   }
@@ -565,41 +537,42 @@ export const colStart: ITailwindConfig["utils"]["colStart"] = createUtility(
 
 export const container = ((): ITailwindConfig["utils"]["container"] => {
   let cachedContainer: any;
-  return (css, config) => () => {
+  return (config) => () => {
     if (cachedContainer) {
       return cachedContainer;
     }
 
-    const properties: any[] = [css.width("100%")];
+    const properties: any = { width: "100%" };
 
     if (config.theme.container && config.theme.container.center) {
-      properties.push(css.marginLeft("auto"));
-      properties.push(css.marginRight("auto"));
+      properties.marginLeft = "auto";
+      properties.marginRight = "auto";
     }
 
     if (config.theme.container && config.theme.container.padding) {
       const padding = config.theme.container.padding;
       Object.keys(padding).forEach((key) => {
         if (key === "default") {
-          properties.push(css.padding(padding[key]));
+          properties.padding = padding[key];
+        } else {
+          properties[key] = { padding: padding[key] };
         }
-
-        (css as any)[key].padding(padding[key]);
       });
     }
 
     Object.keys(config.theme.screens || {}).forEach((screen) => {
-      properties.push(
-        (css as any)[screen].maxWidth(config.theme.screens![screen])
-      );
+      if (!properties[screen]) {
+        properties[screen] = {};
+      }
+      properties[screen].maxWidth = config.theme.screens![screen];
     });
 
-    return (cachedContainer = css.compose(...properties));
+    return (cachedContainer = properties);
   };
 })();
 
 export const content: ITailwindConfig["utils"]["content"] = createUtility(
-  (css, value, pseudo) => css.alignContent(value, pseudo),
+  (value) => ({ alignContent: value }),
   {
     values: {
       start: "flex-start",
@@ -612,124 +585,141 @@ export const content: ITailwindConfig["utils"]["content"] = createUtility(
 );
 
 export const cursor: ITailwindConfig["utils"]["cursor"] = createUtility(
-  (css, value, pseudo) => css.cursor(value, pseudo),
+  (value) => ({ cursor: value }),
   {
     theme: "cursor",
   }
 );
 
 export const delay: ITailwindConfig["utils"]["delay"] = createUtility(
-  (css, value, pseudo) => css.transitionDelay(value, pseudo),
+  (value) => ({ transitionDelay: value }),
   {
     theme: "transitionDelay",
   }
 );
 
 export const divideBottom: ITailwindConfig["utils"]["divideBottom"] = (
-  css,
   config
-) => (value, pseudo = "") => {
-  const composedPseudo = `${pseudo} > * + *`;
+) => (value) => {
+  const pseudo = ` > * + *`;
 
   if (config.theme.divideWidth && config.theme.divideWidth[value]) {
-    return css.borderBottomWidth(
-      config.theme.divideWidth[value],
-      composedPseudo
-    );
+    return {
+      [pseudo]: {
+        borderBottomWidth: config.theme.divideWidth[value],
+      },
+    };
   }
   if (config.theme.divideColor && config.theme.divideColor[value]) {
-    return css.borderBottomColor(
-      config.theme.divideColor[value],
-      composedPseudo
-    );
+    return {
+      [pseudo]: {
+        borderBottomColor: config.theme.divideColor[value],
+      },
+    };
   }
 
   return showWarning(value);
 };
 
-export const divideLeft: ITailwindConfig["utils"]["divideLeft"] = (
-  css,
-  config
-) => (value, pseudo = "") => {
-  const composedPseudo = `${pseudo} > * + *`;
+export const divideLeft: ITailwindConfig["utils"]["divideLeft"] = (config) => (
+  value
+) => {
+  const pseudo = ` > * + *`;
 
   if (config.theme.divideWidth && config.theme.divideWidth[value]) {
-    return css.borderLeftWidth(config.theme.divideWidth[value], composedPseudo);
+    return {
+      [pseudo]: {
+        borderLeftWidth: config.theme.divideWidth[value],
+      },
+    };
   }
   if (config.theme.divideColor && config.theme.divideColor[value]) {
-    return css.borderLeftColor(config.theme.divideColor[value], composedPseudo);
+    return {
+      [pseudo]: {
+        borderLeftColor: config.theme.divideColor[value],
+      },
+    };
   }
 
   return showWarning(value);
 };
 
 export const divideRight: ITailwindConfig["utils"]["divideRight"] = (
-  css,
   config
-) => (value, pseudo = "") => {
-  const composedPseudo = `${pseudo} > * + *`;
+) => (value) => {
+  const pseudo = ` > * + *`;
 
   if (config.theme.divideWidth && config.theme.divideWidth[value]) {
-    return css.borderRightWidth(
-      config.theme.divideWidth[value],
-      composedPseudo
-    );
+    return {
+      [pseudo]: {
+        borderRightWidth: config.theme.divideWidth[value],
+      },
+    };
   }
   if (config.theme.divideColor && config.theme.divideColor[value]) {
-    return css.borderRightColor(
-      config.theme.divideColor[value],
-      composedPseudo
-    );
+    return {
+      [pseudo]: {
+        borderRightColor: config.theme.divideColor[value],
+      },
+    };
   }
 
   return showWarning(value);
 };
 
-export const divideTop: ITailwindConfig["utils"]["divideTop"] = (
-  css,
-  config
-) => (value, pseudo = "") => {
-  const composedPseudo = `${pseudo} > * + *`;
+export const divideTop: ITailwindConfig["utils"]["divideTop"] = (config) => (
+  value
+) => {
+  const pseudo = ` > * + *`;
 
   if (config.theme.divideWidth && config.theme.divideWidth[value]) {
-    return css.borderTopWidth(config.theme.divideWidth[value], composedPseudo);
+    return {
+      [pseudo]: {
+        borderTopWidth: config.theme.divideWidth[value],
+      },
+    };
   }
   if (config.theme.divideColor && config.theme.divideColor[value]) {
-    return css.borderTopColor(config.theme.divideColor[value], composedPseudo);
+    return {
+      [pseudo]: {
+        borderTopColor: config.theme.divideColor[value],
+      },
+    };
   }
 
   return showWarning(value);
 };
 
 export const duration: ITailwindConfig["utils"]["duration"] = createUtility(
-  (css, value, pseudo) => css.transitionDuration(value, pseudo),
+  (value) => ({ transitionDuration: value }),
   {
     theme: "transitionDuration",
   }
 );
 
 export const ease: ITailwindConfig["utils"]["ease"] = createUtility(
-  (css, value, pseudo) => css.transitionTimingFunction(value, pseudo),
+  (value) => ({ transitionTimingFunction: value }),
   {
     theme: "transitionTimingFunction",
   }
 );
 
 export const fill: ITailwindConfig["utils"]["fill"] = createUtility(
-  (css, value, pseudo) => (css as any).fill(value, pseudo),
+  (value) => ({ fill: value }),
   {
     theme: "fill",
   }
 );
 
-export const fixed: ITailwindConfig["utils"]["fixed"] = (css) => (_, pseudo) =>
-  css.position("fixed", pseudo);
+export const fixed: ITailwindConfig["utils"]["fixed"] = () => () => ({
+  position: "fixed",
+});
 
 export const flex: ITailwindConfig["utils"]["flex"] = createUtility(
-  (css, value, pseudo) => css.flexDirection(value, pseudo),
+  (value) => ({ flexDirection: value }),
   {
     theme: "flex",
-    emptyValue: (css, pseudo) => css.display("flex", pseudo),
+    emptyValue: { display: "flex" },
     values: {
       col: "column",
       "col-reverse": "column-reverse",
@@ -738,7 +728,7 @@ export const flex: ITailwindConfig["utils"]["flex"] = createUtility(
 );
 
 export const float: ITailwindConfig["utils"]["float"] = createUtility(
-  (css, value, pseudo) => css.float(value, pseudo),
+  (value) => ({ float: value }),
   {
     values: {
       left: "left",
@@ -748,43 +738,43 @@ export const float: ITailwindConfig["utils"]["float"] = createUtility(
   }
 );
 
-export const flowRoot: ITailwindConfig["utils"]["flowRoot"] = (css) => () =>
-  css.display("flow-root");
+export const flowRoot: ITailwindConfig["utils"]["flowRoot"] = () => () => ({
+  display: "flow-root",
+});
 
-export const font: ITailwindConfig["utils"]["font"] = (css, config) => (
-  value: any,
-  pseudo
+export const font: ITailwindConfig["utils"]["font"] = (config) => (
+  value: any
 ) => {
   if (config.theme.fontFamily && config.theme.fontFamily[value]) {
-    return css.fontFamily(config.theme.fontFamily[value] as any, pseudo);
+    return { fontFamily: config.theme.fontFamily[value] as any };
   }
   if (config.theme.fontWeight && config.theme.fontWeight[value]) {
-    return css.fontWeight(Number(config.theme.fontWeight[value]), pseudo);
+    return { fontWeight: Number(config.theme.fontWeight[value]) };
   }
 
   return showWarning(value);
 };
 
 export const gap: ITailwindConfig["utils"]["gap"] = createUtility(
-  (css, value, pseudo) => css.gap(value, pseudo),
+  (value) => ({ gap: value }),
   {
     theme: "gap",
   }
 );
 
-export const grid: ITailwindConfig["utils"]["grid"] = createUtility(
-  (css, _, pseudo) => css.display("grid", pseudo)
-);
+export const grid: ITailwindConfig["utils"]["grid"] = createUtility(() => ({
+  display: "grid",
+}));
 
 export const gridCols: ITailwindConfig["utils"]["gridCols"] = createUtility(
-  (css, value, pseudo) => css.gridTemplateColumns(value, pseudo),
+  (value) => ({ gridTemplateColumns: value }),
   {
     theme: "gridTemplateColumns",
   }
 );
 
 export const gridFlow: ITailwindConfig["utils"]["gridFlow"] = createUtility(
-  (css, value, pseudo) => css.gridAutoFlow(value, pseudo),
+  (value) => ({ gridAutoFlow: value }),
   {
     values: {
       row: "row",
@@ -796,88 +786,88 @@ export const gridFlow: ITailwindConfig["utils"]["gridFlow"] = createUtility(
 );
 
 export const gridRows: ITailwindConfig["utils"]["gridRows"] = createUtility(
-  (css, value, pseudo) => css.gridTemplateRows(value, pseudo),
+  (value) => ({ gridTemplateRows: value }),
   {
     theme: "gridTemplateRows",
   }
 );
 
 export const grow: ITailwindConfig["utils"]["grow"] = createUtility(
-  (css, value, pseudo) => css.flexGrow(value, pseudo),
+  (value) => ({ flexGrow: value }),
   {
     theme: "flexGrow",
   }
 );
 
 export const h: ITailwindConfig["utils"]["h"] = createUtility(
-  (css, value, pseudo) => css.height(value, pseudo),
+  (value) => ({ height: value }),
   {
     theme: "height",
   }
 );
 
-export const hidden: ITailwindConfig["utils"]["hidden"] = (css) => (
-  _,
-  pseudo
-) => css.display("none", pseudo);
+export const hidden: ITailwindConfig["utils"]["hidden"] = () => () => ({
+  display: "none",
+});
 
-export const inline: ITailwindConfig["utils"]["inline"] = (css) => (
-  _,
-  pseudo
-) => css.display("inline", pseudo);
+export const inline: ITailwindConfig["utils"]["inline"] = () => () => ({
+  display: "inline",
+});
 
-export const inlineBlock: ITailwindConfig["utils"]["inlineBlock"] = (css) => (
-  _,
-  pseudo
-) => css.display("inline-block", pseudo);
+export const inlineBlock: ITailwindConfig["utils"]["inlineBlock"] = () => () => ({
+  display: "inline-block",
+});
 
-export const inlineFlex: ITailwindConfig["utils"]["inlineFlex"] = (css) => () =>
-  css.display("inline-flex");
+export const inlineFlex: ITailwindConfig["utils"]["inlineFlex"] = () => () => ({
+  display: "inline-flex",
+});
 
-export const inlineGrid: ITailwindConfig["utils"]["inlineGrid"] = (css) => () =>
-  css.display("inline-grid");
+export const inlineGrid: ITailwindConfig["utils"]["inlineGrid"] = () => () => ({
+  display: "inline-grid",
+});
 
 export const inset: ITailwindConfig["utils"]["inset"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.top(value, pseudo),
-      css.right(value, pseudo),
-      css.bottom(value, pseudo),
-      css.left(value, pseudo)
-    ),
+  (value) => ({
+    top: value,
+    right: value,
+    bottom: value,
+    left: value,
+  }),
   {
     theme: "inset",
   }
 );
 
 export const insetX: ITailwindConfig["utils"]["insetX"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(css.right(value, pseudo), css.left(value, pseudo)),
+  (value) => ({
+    right: value,
+    left: value,
+  }),
   {
     theme: "inset",
   }
 );
 
 export const insetY: ITailwindConfig["utils"]["insetY"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(css.top(value, pseudo), css.bottom(value, pseudo)),
+  (value) => ({
+    top: value,
+    bottom: value,
+  }),
   {
     theme: "inset",
   }
 );
 
-export const invisible: ITailwindConfig["utils"]["invisible"] = (css) => (
-  _,
-  pseudo
-) => css.visibility("hidden", pseudo);
+export const invisible: ITailwindConfig["utils"]["invisible"] = () => () => ({
+  visibility: "hidden",
+});
 
-export const italic: ITailwindConfig["utils"]["italic"] = (css) => (
-  _,
-  pseudo
-) => css.fontStyle("italic", pseudo);
+export const italic: ITailwindConfig["utils"]["italic"] = (css) => () => ({
+  fontStyle: "italic",
+});
 
 export const items: ITailwindConfig["utils"]["items"] = createUtility(
-  (css, value, pseudo) => css.alignItems(value, pseudo),
+  (value) => ({ alignItems: value }),
   {
     values: {
       stretch: "stretch",
@@ -890,7 +880,7 @@ export const items: ITailwindConfig["utils"]["items"] = createUtility(
 );
 
 export const justify: ITailwindConfig["utils"]["justify"] = createUtility(
-  (css, value, pseudo) => css.justifyContent(value, pseudo),
+  (value) => ({ justifyContent: value }),
   {
     values: {
       start: "flex-start",
@@ -903,173 +893,167 @@ export const justify: ITailwindConfig["utils"]["justify"] = createUtility(
 );
 
 export const leading: ITailwindConfig["utils"]["leading"] = createUtility(
-  (css, value, pseudo) => css.lineHeight(value, pseudo),
+  (value) => ({ lineHeight: value }),
   {
     theme: "lineHeight",
   }
 );
 
 export const left: ITailwindConfig["utils"]["left"] = createUtility(
-  (css, value, pseudo) => css.left(value, pseudo),
+  (value) => ({ left: value }),
   {
     theme: "inset",
   }
 );
 
-export const lineThrough: ITailwindConfig["utils"]["lineThrough"] = (css) => (
-  _,
-  pseudo
-) => css.textDecoration("line-through", pseudo);
+export const lineThrough: ITailwindConfig["utils"]["lineThrough"] = () => () => ({
+  textDecoration: "line-through",
+});
 
-export const list: ITailwindConfig["utils"]["list"] = (css, config) => (
-  value,
-  pseudo
-) => {
+export const list: ITailwindConfig["utils"]["list"] = (config) => (value) => {
   if (config.theme.listStyleType && config.theme.listStyleType[value]) {
-    return css.listStyleType(config.theme.listStyleType[value] as any, pseudo);
+    return { listStyleType: config.theme.listStyleType[value] as any };
   }
 
-  return css.listStylePosition(
-    ({
-      inside: "inside",
-      outside: "outside",
-    } as any)[value] || showWarning(value),
-    pseudo
-  );
+  return {
+    listStylePosition:
+      ({
+        inside: "inside",
+        outside: "outside",
+      } as any)[value] || showWarning(value),
+  };
 };
 
-export const lowercase: ITailwindConfig["utils"]["lowercase"] = (css) => (
-  _,
-  pseudo
-) => css.textTransform("lowercase", pseudo);
+export const lowercase: ITailwindConfig["utils"]["lowercase"] = () => () => ({
+  textTransform: "lowercase",
+});
 
 export const m: ITailwindConfig["utils"]["m"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.marginTop(value, pseudo),
-      css.marginRight(value, pseudo),
-      css.marginBottom(value, pseudo),
-      css.marginLeft(value, pseudo)
-    ),
+  (value) => ({
+    marginTop: value,
+    marginRight: value,
+    marginBottom: value,
+    marginLeft: value,
+  }),
   {
     theme: "margin",
   }
 );
 
 export const maxH: ITailwindConfig["utils"]["maxH"] = createUtility(
-  (css, value, pseudo) => css.maxHeight(value, pseudo),
+  (value) => ({ maxHeight: value }),
   {
     theme: "maxHeight",
   }
 );
 
 export const maxW: ITailwindConfig["utils"]["maxW"] = createUtility(
-  (css, value, pseudo) => css.maxWidth(value, pseudo),
+  (value) => ({ maxWidth: value }),
   {
     theme: "maxWidth",
   }
 );
 
 export const mb: ITailwindConfig["utils"]["mb"] = createUtility(
-  (css, value, pseudo) => css.marginBottom(value, pseudo),
+  (value) => ({ marginBottom: value }),
   {
     theme: "margin",
   }
 );
 
 export const minH: ITailwindConfig["utils"]["minH"] = createUtility(
-  (css, value, pseudo) => css.minHeight(value, pseudo),
+  (value) => ({ minHeight: value }),
   {
     theme: "minHeight",
   }
 );
 
 export const minW: ITailwindConfig["utils"]["minW"] = createUtility(
-  (css, value, pseudo) => css.minWidth(value, pseudo),
+  (value) => ({ minWidth: value }),
   {
     theme: "minWidth",
   }
 );
 
 export const ml: ITailwindConfig["utils"]["ml"] = createUtility(
-  (css, value, pseudo) => css.marginLeft(value, pseudo),
+  (value) => ({ marginLeft: value }),
   {
     theme: "margin",
   }
 );
 
 export const mr: ITailwindConfig["utils"]["mr"] = createUtility(
-  (css, value, pseudo) => css.marginRight(value, pseudo),
+  (value) => ({ marginRight: value }),
   {
     theme: "margin",
   }
 );
 
 export const mt: ITailwindConfig["utils"]["mt"] = createUtility(
-  (css, value, pseudo) => css.marginTop(value, pseudo),
+  (value) => ({ marginTop: value }),
   {
     theme: "margin",
   }
 );
 
 export const mx: ITailwindConfig["utils"]["mx"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(css.marginLeft(value, pseudo), css.marginRight(value, pseudo)),
+  (value) => ({
+    marginLeft: value,
+    marginRight: value,
+  }),
   {
     theme: "margin",
   }
 );
 
 export const my: ITailwindConfig["utils"]["my"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(css.marginTop(value, pseudo), css.marginBottom(value, pseudo)),
+  (value) => ({
+    marginTop: value,
+    marginBottom: value,
+  }),
   {
     theme: "margin",
   }
 );
 
-export const normalCase: ITailwindConfig["utils"]["normalCase"] = (css) => (
-  _,
-  pseudo
-) => css.textTransform("none", pseudo);
+export const normalCase: ITailwindConfig["utils"]["normalCase"] = () => () => ({
+  textTransform: "none",
+});
 
-export const notItalic: ITailwindConfig["utils"]["notItalic"] = (css) => (
-  _,
-  pseudo
-) => css.fontStyle("normal", pseudo);
+export const notItalic: ITailwindConfig["utils"]["notItalic"] = () => () => ({
+  fontStyle: "normal",
+});
 
-export const notSrOnly: ITailwindConfig["utils"]["notSrOnly"] = (css) => () =>
-  css.compose(
-    css.position("static"),
-    css.width("auto"),
-    css.height("auto"),
-    css.padding(0),
-    css.margin(0),
-    css.overflow("visible"),
-    (css as any).clip("auto"),
-    css.whiteSpace("normal")
-  );
+export const notSrOnly: ITailwindConfig["utils"]["notSrOnly"] = () => () => ({
+  position: "static",
+  width: "auto",
+  height: "auto",
+  padding: 0,
+  margin: 0,
+  overflow: "visible",
+  clip: "auto",
+  whiteSpace: "normal",
+});
 
-export const noUnderline: ITailwindConfig["utils"]["noUnderline"] = (css) => (
-  _,
-  pseudo
-) => css.textDecoration("none", pseudo);
+export const noUnderline: ITailwindConfig["utils"]["noUnderline"] = () => () => ({
+  textDecoration: "none",
+});
 
 export const table: ITailwindConfig["utils"]["table"] = createUtility(
   {
-    caption: (css, pseudo) => css.display("table-caption", pseudo),
-    cell: (css, pseudo) => css.display("table-cell", pseudo),
-    column: (css, pseudo) => css.display("table-column", pseudo),
-    "footer-group": (css, pseudo) => css.display("table-footer-group", pseudo),
-    "header-group": (css, pseudo) => css.display("table-header-group", pseudo),
-    "column-group": (css, pseudo) => css.display("table-column-group", pseudo),
-    "row-group": (css, pseudo) => css.display("table-row-group", pseudo),
-    row: (css, pseudo) => css.display("table-row", pseudo),
-    auto: (css, pseudo) => css.tableLayout("auto", pseudo),
-    fixed: (css, pseudo) => css.tableLayout("fixed", pseudo),
+    caption: { display: "table-caption" },
+    cell: { display: "table-cell" },
+    column: { display: "table-column" },
+    "footer-group": { display: "table-footer-group" },
+    "header-group": { display: "table-header-group" },
+    "column-group": { display: "table-column-group" },
+    "row-group": { display: "table-row-group" },
+    row: { display: "table-row" },
+    auto: { tableLayout: "auto" },
+    fixed: { tableLayout: "fixed" },
   },
   {
-    emptyValue: (css, pseudo) => css.display("table", pseudo),
+    emptyValue: { display: "table" },
   }
 );
 
@@ -1081,42 +1065,41 @@ export const object = ((): ITailwindConfig["utils"]["object"] => {
     none: "none",
     "scale-down": "scale-down",
   };
-  return (css, config) => (value, pseudo) => {
+  return (config) => (value) => {
     if (config.theme.objectPosition && config.theme.objectPosition[value]) {
-      return css.objectPosition(config.theme.objectPosition[value], pseudo);
+      return { objectPosition: config.theme.objectPosition[value] };
     }
 
     return values[value]
-      ? css.objectFit((values as any)[value])
+      ? { objectFit: (values as any)[value] }
       : showWarning(value);
   };
 })();
 
 export const opacity: ITailwindConfig["utils"]["opacity"] = createUtility(
-  (css, value, pseudo) => css.opacity(value, pseudo),
+  (value) => ({ opacity: value }),
   {
     theme: "opacity",
   }
 );
 
 export const order: ITailwindConfig["utils"]["order"] = createUtility(
-  (css, value, pseudo) => css.order(value, pseudo),
+  (value) => ({ order: value }),
   {
     theme: "order",
   }
 );
 
 export const origin: ITailwindConfig["utils"]["origin"] = createUtility(
-  (css, value, pseudo) => css.transformOrigin(value, pseudo),
+  (value) => ({ transformOrigin: value }),
   {
     theme: "transformOrigin",
   }
 );
 
-export const outline: ITailwindConfig["utils"]["outline"] = (css) => (
-  value: any,
-  pseudo
-) => css.outline(value === "none" ? value : showWarning(value), pseudo);
+export const outline: ITailwindConfig["utils"]["outline"] = () => (
+  value: any
+) => ({ outline: value === "none" ? value : showWarning(value) });
 
 const overflowValues = {
   hidden: "hidden",
@@ -1126,56 +1109,55 @@ const overflowValues = {
 } as any;
 
 export const overflow: ITailwindConfig["utils"]["overflow"] = createUtility(
-  (css, value, pseudo) => css.overflow(value, pseudo),
+  (value) => ({ overflow: value }),
   { values: overflowValues }
 );
 
 export const overflowX: ITailwindConfig["utils"]["overflowX"] = createUtility(
-  (css, value, pseudo) => css.overflowX(value, pseudo),
+  (value) => ({ overflowX: value }),
   { values: overflowValues }
 );
 
 export const overflowY: ITailwindConfig["utils"]["overflowY"] = createUtility(
-  (css, value, pseudo) => css.overflowY(value, pseudo),
+  (value) => ({ overflowY: value }),
   { values: overflowValues }
 );
 
 export const p: ITailwindConfig["utils"]["p"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.paddingTop(value, pseudo),
-      css.paddingRight(value, pseudo),
-      css.paddingBottom(value, pseudo),
-      css.paddingLeft(value, pseudo)
-    ),
+  (value) => ({
+    paddingTop: value,
+    paddingRight: value,
+    paddingBottom: value,
+    paddingLeft: value,
+  }),
   {
     theme: "padding",
   }
 );
 
 export const pb: ITailwindConfig["utils"]["pb"] = createUtility(
-  (css, value, pseudo) => css.paddingBottom(value, pseudo),
+  (value) => ({ paddingBottom: value }),
   {
     theme: "padding",
   }
 );
 
 export const pl: ITailwindConfig["utils"]["pl"] = createUtility(
-  (css, value, pseudo) => css.paddingLeft(value, pseudo),
+  (value) => ({ paddingLeft: value }),
   {
     theme: "padding",
   }
 );
 
 export const placeholder: ITailwindConfig["utils"]["placeholder"] = createUtility(
-  (css, value, pseudo) => css.color(value, `${pseudo}::placeholder`),
+  (value) => ({ "::placeholder": { color: value } }),
   {
     theme: "placeholderColor",
   }
 );
 
 export const pointerEvents: ITailwindConfig["utils"]["pointerEvents"] = createUtility(
-  (css, value, pseudo) => css.pointerEvents(value, pseudo),
+  (value) => ({ pointerEvents: value }),
   {
     values: {
       none: "none",
@@ -1185,14 +1167,14 @@ export const pointerEvents: ITailwindConfig["utils"]["pointerEvents"] = createUt
 );
 
 export const pr: ITailwindConfig["utils"]["pr"] = createUtility(
-  (css, value, pseudo) => css.paddingRight(value, pseudo),
+  (value) => ({ paddingRight: value }),
   {
     theme: "padding",
   }
 );
 
 export const pt: ITailwindConfig["utils"]["pt"] = createUtility(
-  (css, value, pseudo) => css.paddingTop(value, pseudo),
+  (value) => ({ paddingTop: value }),
 
   {
     theme: "padding",
@@ -1200,29 +1182,27 @@ export const pt: ITailwindConfig["utils"]["pt"] = createUtility(
 );
 
 export const px: ITailwindConfig["utils"]["px"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.paddingLeft(value, pseudo),
-      css.paddingRight(value, pseudo)
-    ),
+  (value) => ({
+    paddingLeft: value,
+    paddingRight: value,
+  }),
   {
     theme: "padding",
   }
 );
 
 export const py: ITailwindConfig["utils"]["py"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.paddingTop(value, pseudo),
-      css.paddingBottom(value, pseudo)
-    ),
+  (value) => ({
+    paddingTop: value,
+    paddingBottom: value,
+  }),
   {
     theme: "padding",
   }
 );
 
 export const resize: ITailwindConfig["utils"]["resize"] = createUtility(
-  (css, value, pseudo) => css.resize(value, pseudo),
+  (value) => ({ resize: value }),
   {
     values: {
       none: "none",
@@ -1232,170 +1212,163 @@ export const resize: ITailwindConfig["utils"]["resize"] = createUtility(
   }
 );
 
-export const relative: ITailwindConfig["utils"]["relative"] = (css) => (
-  _,
-  pseudo
-) => css.position("relative", pseudo);
+export const relative: ITailwindConfig["utils"]["relative"] = () => () => ({
+  position: "relative",
+});
 
 export const right: ITailwindConfig["utils"]["right"] = createUtility(
-  (css, value, pseudo) => css.right(value, pseudo),
+  (value) => ({ right: value }),
   {
     theme: "inset",
   }
 );
 
 export const rotate: ITailwindConfig["utils"]["rotate"] = createUtility(
-  (css, value, pseudo) => (css as any)["--transform-rotate"](value, pseudo),
+  (value) => ({ ["--transform-rotate"]: value }),
   {
     theme: "rotate",
   }
 );
 
 export const rounded: ITailwindConfig["utils"]["rounded"] = createUtility(
-  (css, value, pseudo) => css.borderRadius(value, pseudo),
+  (value) => ({ borderRadius: value }),
   {
     theme: "borderRadius",
   }
 );
 
 export const roundedB: ITailwindConfig["utils"]["roundedB"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.borderBottomRightRadius(value, pseudo),
-      css.borderBottomLeftRadius(value, pseudo)
-    ),
+  (value) => ({
+    borderBottomRightRadius: value,
+    borderBottomLeftRadius: value,
+  }),
   {
     theme: "borderRadius",
   }
 );
 
 export const roundedBL: ITailwindConfig["utils"]["roundedBL"] = createUtility(
-  (css, value, pseudo) => css.borderBottomLeftRadius(value, pseudo),
+  (value) => ({ borderBottomLeftRadius: value }),
   {
     theme: "borderRadius",
   }
 );
 
 export const roundedBR: ITailwindConfig["utils"]["roundedBR"] = createUtility(
-  (css, value, pseudo) => css.borderBottomRightRadius(value, pseudo),
+  (value) => ({ borderBottomRightRadius: value }),
   {
     theme: "borderRadius",
   }
 );
 
 export const roundedL: ITailwindConfig["utils"]["roundedL"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.borderTopLeftRadius(value, pseudo),
-      css.borderBottomLeftRadius(value, pseudo)
-    ),
+  (value) => ({
+    borderTopLeftRadius: value,
+    borderBottomLeftRadius: value,
+  }),
   {
     theme: "borderRadius",
   }
 );
 
 export const roundedR: ITailwindConfig["utils"]["roundedR"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.borderBottomRightRadius(value, pseudo),
-      css.borderTopRightRadius(value, pseudo)
-    ),
+  (value) => ({
+    borderBottomRightRadius: value,
+    borderTopRightRadius: value,
+  }),
   {
     theme: "borderRadius",
   }
 );
 
 export const roundedT: ITailwindConfig["utils"]["roundedT"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      css.borderTopLeftRadius(value, pseudo),
-      css.borderTopRightRadius(value, pseudo)
-    ),
+  (value) => ({
+    borderTopLeftRadius: value,
+    borderTopRightRadius: value,
+  }),
   {
     theme: "borderRadius",
   }
 );
 
 export const roundedTL: ITailwindConfig["utils"]["roundedTL"] = createUtility(
-  (css, value, pseudo) => css.borderTopLeftRadius(value, pseudo),
+  (value) => ({ borderTopLeftRadius: value }),
   {
     theme: "borderRadius",
   }
 );
 
 export const roundedTR: ITailwindConfig["utils"]["roundedTR"] = createUtility(
-  (css, value, pseudo) => css.borderTopRightRadius(value, pseudo),
+  (value) => ({ borderTopRightRadius: value }),
   {
     theme: "borderRadius",
   }
 );
 
 export const row: ITailwindConfig["utils"]["row"] = createUtility(
-  (css, value, pseudo) => css.gridRow(value, pseudo),
+  (value) => ({ gridRow: value }),
   {
     theme: "gridRow",
   }
 );
 
 export const rowEnd: ITailwindConfig["utils"]["rowEnd"] = createUtility(
-  (css, value, pseudo) => css.gridRowEnd(value, pseudo),
+  (value) => ({ gridRowEnd: value }),
   {
     theme: "gridRowEnd",
   }
 );
 
 export const rowGap: ITailwindConfig["utils"]["rowGap"] = createUtility(
-  (css, value, pseudo) => css.rowGap(value, pseudo),
+  (value) => ({ rowGap: value }),
   {
     theme: "gap",
   }
 );
 
 export const rowStart: ITailwindConfig["utils"]["rowStart"] = createUtility(
-  (css, value, pseudo) => css.gridRowStart(value, pseudo),
+  (value) => ({ gridRowStart: value }),
   {
     theme: "gridRowStart",
   }
 );
 
 export const scale: ITailwindConfig["utils"]["scale"] = createUtility(
-  (css, value, pseudo) =>
-    css.compose(
-      (css as any)["--transform-scale-x"](value, pseudo),
-      (css as any)["--transform-scale-y"](value, pseudo)
-    ),
+  (value) => ({
+    ["--transform-scale-x"]: value,
+    ["--transform-scale-y"]: value,
+  }),
   {
     theme: "scale",
   }
 );
 
 export const scaleX: ITailwindConfig["utils"]["scaleX"] = createUtility(
-  (css, value, pseudo) => (css as any)["--transform-scale-x"](value, pseudo),
+  (value) => ({ ["--transform-scale-x"]: value }),
   {
     theme: "scale",
   }
 );
 
 export const scaleY: ITailwindConfig["utils"]["scaleY"] = createUtility(
-  (css, value, pseudo) => (css as any)["--transform-scale-y"](value, pseudo),
+  (value) => ({ ["--transform-scale-y"]: value }),
   {
     theme: "scale",
   }
 );
 
 export const scrolling: ITailwindConfig["utils"]["scrolling"] = createUtility(
-  (css, value, pseudo) =>
-    (css as any).WebkitOverflowScrolling(
+  (value) => ({
+    WebkitOverflowScrolling:
       ({
         touch: "touch",
         auto: "auto",
       } as any)[value] || showWarning(value),
-      pseudo
-    )
+  })
 );
 
 export const select: ITailwindConfig["utils"]["select"] = createUtility(
-  (css, value, pseudo) => css.userSelect(value, pseudo),
+  (value) => ({ userSelect: value }),
   {
     values: {
       none: "none",
@@ -1407,7 +1380,7 @@ export const select: ITailwindConfig["utils"]["select"] = createUtility(
 );
 
 export const self: ITailwindConfig["utils"]["self"] = createUtility(
-  (css, value, pseudo) => css.alignSelf(value, pseudo),
+  (value) => ({ alignSelf: value }),
   {
     values: {
       start: "flex-start",
@@ -1420,106 +1393,101 @@ export const self: ITailwindConfig["utils"]["self"] = createUtility(
 );
 
 export const shadow: ITailwindConfig["utils"]["shadow"] = createUtility(
-  (css, value, pseudo) => css.boxShadow(value, pseudo),
+  (value) => ({ boxShadow: value }),
   {
     theme: "boxShadow",
   }
 );
 
 export const shrink: ITailwindConfig["utils"]["shrink"] = createUtility(
-  (css, value, pseudo) => css.flexShrink(value, pseudo),
+  (value) => ({ flexShrink: value }),
   {
     theme: "flexShrink",
   }
 );
 
 export const skewX: ITailwindConfig["utils"]["skewX"] = createUtility(
-  (css, value, pseudo) => (css as any)["--transform-skew-x"](value, pseudo),
+  (value) => ({ ["--transform-skew-x"]: value }),
   {
     theme: "skew",
   }
 );
 
 export const skewY: ITailwindConfig["utils"]["skewY"] = createUtility(
-  (css, value, pseudo) => (css as any)["--transform-skew-y"](value, pseudo),
+  (value) => ({ ["--transform-skew-y"]: value }),
   {
     theme: "skew",
   }
 );
 
 export const spaceBottom: ITailwindConfig["utils"]["spaceBottom"] = createUtility(
-  (css, value, pseudo = "") => css.marginBottom(value, `${pseudo} > * + *`),
+  (value) => ({ " > * + *": { marginBottom: value } }),
   {
     theme: "margin",
   }
 );
 
 export const spaceLeft: ITailwindConfig["utils"]["spaceLeft"] = createUtility(
-  (css, value, pseudo = "") => css.marginLeft(value, `${pseudo} > * + *`),
+  (value) => ({ " > * + *": { marginLeft: value } }),
   {
     theme: "margin",
   }
 );
 
 export const spaceRight: ITailwindConfig["utils"]["spaceRight"] = createUtility(
-  (css, value, pseudo = "") => css.marginRight(value, `${pseudo} > * + *`),
+  (value) => ({ " > * + *": { marginRight: value } }),
   {
     theme: "margin",
   }
 );
 
 export const spaceTop: ITailwindConfig["utils"]["spaceTop"] = createUtility(
-  (css, value, pseudo = "") => css.marginTop(value, `${pseudo} > * + *`),
+  (value) => ({ " > * + *": { marginTop: value } }),
   {
     theme: "margin",
   }
 );
 
-export const srOnly: ITailwindConfig["utils"]["srOnly"] = (css) => () =>
-  css.compose(
-    css.position("absolute"),
-    css.width("1px"),
-    css.height("1px"),
-    css.padding(0),
-    css.margin("-1px"),
-    css.overflow("hidden"),
-    (css as any).clip("rect(0, 0, 0 ,0)"),
-    css.whiteSpace("nowrap"),
-    css.borderWidth(0)
-  );
+export const srOnly: ITailwindConfig["utils"]["srOnly"] = () => () => ({
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: 0,
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0 ,0)",
+  whiteSpace: "nowrap",
+  borderWidth: 0,
+});
 
-export const staticPosition: ITailwindConfig["utils"]["staticPosition"] = (
-  css
-) => (_, pseudo) => css.position("static", pseudo);
+export const staticPosition: ITailwindConfig["utils"]["staticPosition"] = () => () => ({
+  position: "static",
+});
 
-export const sticky: ITailwindConfig["utils"]["sticky"] = (css) => (
-  _,
-  pseudo
-) => css.position("sticky", pseudo);
+export const sticky: ITailwindConfig["utils"]["sticky"] = () => () => ({
+  position: "sticky",
+});
 
-export const stroke: ITailwindConfig["utils"]["stroke"] = (css, config) => (
-  value: any,
-  pseudo
+export const stroke: ITailwindConfig["utils"]["stroke"] = (config) => (
+  value: any
 ) => {
   if (config.theme.stroke && config.theme.stroke[value]) {
-    return (css as any).stroke(config.theme.stroke[value], pseudo);
+    return { stroke: config.theme.stroke[value] };
   }
 
   if (config.theme.strokeWidth && config.theme.strokeWidth[value]) {
-    return (css as any).strokeWidth(config.theme.strokeWidth[value], pseudo);
+    return { strokeWidth: config.theme.strokeWidth[value] };
   }
 
   return showWarning(value);
 };
 
-export const subpixelAntialiased: ITailwindConfig["utils"]["subpixelAntialiased"] = (
-  css,
-  pseudo
-) => () =>
-  css.compose(
-    (css as any).WebkitFontSmoothing("auto", pseudo),
-    (css as any).MozOsxFontSmoothing("auto", pseudo)
-  );
+export const subpixelAntialiased: ITailwindConfig["utils"]["subpixelAntialiased"] = () => () => ({
+  // @ts-ignore
+  WebkitFontSmoothing: "auto",
+  // @ts-ignore
+  MozOsxFontSmoothing: "auto",
+});
 
 export const text = ((): ITailwindConfig["utils"]["text"] => {
   const values = {
@@ -1528,108 +1496,93 @@ export const text = ((): ITailwindConfig["utils"]["text"] => {
     center: "center",
     justify: "justify",
   };
-  return (css, config) => (value: any, pseudo) => {
+  return (config) => (value: any) => {
     if (config.theme.textColor && config.theme.textColor[value]) {
-      return css.color(config.theme.textColor[value] as any, pseudo);
+      return { color: config.theme.textColor[value] as any };
     }
 
     if (config.theme.fontSize && config.theme.fontSize[value]) {
-      return css.fontSize(config.theme.fontSize[value], pseudo);
+      return { fontSize: config.theme.fontSize[value] };
     }
 
-    return css.textAlign((values as any)[value] || showWarning(value), pseudo);
+    return { textAlign: (values as any)[value] || showWarning(value) };
   };
 })();
 
 export const top: ITailwindConfig["utils"]["top"] = createUtility(
-  (css, value, pseudo) => css.top(value, pseudo),
+  (value) => ({ top: value }),
   {
     theme: "inset",
   }
 );
 
 export const tracking: ITailwindConfig["utils"]["tracking"] = createUtility(
-  (css, value, pseudo) => css.letterSpacing(value, pseudo),
+  (value) => ({ letterSpacing: value }),
   {
     theme: "letterSpacing",
   }
 );
 
-export const transform: ITailwindConfig["utils"]["transform"] = (css) => (
-  _,
-  pseudo
-) =>
-  css.compose(
-    (css as any)["--transform-translate-x"](0),
-    (css as any)["--transform-translate-y"](0),
-    (css as any)["--transform-rotate"](0),
-    (css as any)["--transform-skew-x"](0),
-    (css as any)["--transform-skew-y"](0),
-    (css as any)["--transform-scale-x"](1),
-    (css as any)["--transform-scale-y"](1),
-    css.transform(
-      "translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y))",
-      pseudo
-    )
-  );
+export const transform: ITailwindConfig["utils"]["transform"] = () => () => ({
+  ["--transform-translate-x"]: 0,
+  ["--transform-translate-y"]: 0,
+  ["--transform-rotate"]: 0,
+  ["--transform-skew-x"]: 0,
+  ["--transform-skew-y"]: 0,
+  ["--transform-scale-x"]: 1,
+  ["--transform-scale-y"]: 1,
+  transform:
+    "translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y))",
+});
 
 export const transition: ITailwindConfig["utils"]["transition"] = createUtility(
-  (css, value, pseudo) => css.transitionProperty(value, pseudo),
+  (value) => ({ transitionProperty: value }),
   {
     theme: "transitionProperty",
   }
 );
 
 export const translateX: ITailwindConfig["utils"]["translateX"] = createUtility(
-  (css, value, pseudo) =>
-    (css as any)["--transform-translate-x"](value, pseudo),
+  (value) => ({ ["--transform-translate-x"]: value }),
   {
     theme: "translate",
   }
 );
 
 export const translateY: ITailwindConfig["utils"]["translateY"] = createUtility(
-  (css, value, pseudo) =>
-    (css as any)["--transform-translate-y"](value, pseudo),
+  (value) => ({ ["--transform-translate-y"]: value }),
   {
     theme: "translate",
   }
 );
 
-export const truncate: ITailwindConfig["utils"]["truncate"] = (css) => (
-  _,
-  pseudo
-) =>
-  css.compose(
-    css.overflow("hidden", pseudo),
-    css.textOverflow("ellipsis", pseudo),
-    css.whiteSpace("nowrap", pseudo)
-  );
+export const truncate: ITailwindConfig["utils"]["truncate"] = () => () => ({
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+});
 
-export const underline: ITailwindConfig["utils"]["underline"] = (css) => (
-  _,
-  pseudo
-) => css.textDecoration("underline", pseudo);
+export const underline: ITailwindConfig["utils"]["underline"] = () => () => ({
+  textDecoration: "underline",
+});
 
-export const uppercase: ITailwindConfig["utils"]["uppercase"] = (css) => (
-  _,
-  pseudo
-) => css.textTransform("uppercase", pseudo);
+export const uppercase: ITailwindConfig["utils"]["uppercase"] = () => () => ({
+  textTransform: "uppercase",
+});
 
-export const visible: ITailwindConfig["utils"]["visible"] = (css) => (
-  _,
-  pseudo
-) => css.visibility("visible", pseudo);
+export const visible: ITailwindConfig["utils"]["visible"] = () => () => ({
+  visibility: "visible",
+});
 
 export const w: ITailwindConfig["utils"]["w"] = createUtility(
-  (css, value, pseudo) => css.width(value, pseudo),
+  (value) => ({ width: value }),
   {
     theme: "width",
   }
 );
 
 export const whitespace: ITailwindConfig["utils"]["whitespace"] = createUtility(
-  (css, value, pseudo) => css.whiteSpace(value, pseudo),
+  (value) => ({ whiteSpace: value }),
   {
     values: {
       normal: "normal",
@@ -1642,18 +1595,18 @@ export const whitespace: ITailwindConfig["utils"]["whitespace"] = createUtility(
 );
 
 export const wrap: ITailwindConfig["utils"]["wrap"] = createUtility(
-  (css, value, pseudo) => css.flexWrap(value, pseudo),
+  (value) => ({ flexWrap: value }),
   {
     values: {
       none: "none",
       reverse: "wrap-reverse",
     },
-    emptyValue: (css, pseudo) => css.flexWrap("wrap", pseudo),
+    emptyValue: { flexWrap: "wrap" },
   }
 );
 
 export const z: ITailwindConfig["utils"]["z"] = createUtility(
-  (css, value, pseudo) => css.zIndex(value, pseudo),
+  (value) => ({ zIndex: value }),
   {
     theme: "zIndex",
   }

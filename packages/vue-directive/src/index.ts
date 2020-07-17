@@ -25,12 +25,22 @@ export const createDirective = <T extends TCss<any>>(css: T) => {
       .compose(
         ...props.map((propParts) => {
           const pseudos = propParts.shift()!.split(":");
-          const cssProp = pseudos.pop();
-          const method = screen ? css[screen][cssProp!] : css[cssProp!];
-          return method(
-            propParts.join("-"),
-            pseudos.map((pseudo) => `:${pseudo}`).join("")
-          );
+          const cssProp = pseudos.pop()!;
+          const cssValue = propParts.join("-");
+          const pseudo = pseudos.map((pseudoPart) => `:${pseudoPart}`).join("");
+
+          if (screen && pseudo) {
+            return css({ [screen]: { [pseudo]: { [cssProp]: cssValue } } });
+          }
+          if (screen) {
+            return css({ [screen]: { [cssProp]: cssValue } });
+          }
+          if (pseudo) {
+            return css({ [pseudo]: { [cssProp]: cssValue } });
+          }
+
+          // @ts-ignore
+          return css({ [cssProp]: cssValue });
         })
       )
       .toString();

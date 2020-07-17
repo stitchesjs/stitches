@@ -58,12 +58,15 @@ beforeEach(() => {
 describe("createCss", () => {
   test("should create simple atoms", () => {
     const css = createCss({}, null);
-    const atom = (css.color("red") as unknown) as IAtom;
+    const atoms = css({ color: "red" }) as any;
+    const atom = atoms.atoms[0];
+
     expect(atom.id).toBe("color");
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("red");
+
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_1725676875");
 
@@ -75,9 +78,9 @@ describe("createCss", () => {
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
-    expect(
-      css.compose(css.color("red"), css.backgroundColor("blue")).toString()
-    ).toBe("_763805413 _1725676875");
+    expect(css({ color: "red", backgroundColor: "blue" }).toString()).toBe(
+      "_763805413 _1725676875"
+    );
   });
   test("should create tokens", () => {
     const tokens = createTokens({
@@ -86,12 +89,14 @@ describe("createCss", () => {
       },
     });
     const css = createCss({ tokens }, null);
-    const atom = (css.color("RED") as unknown) as IAtom;
+    const atom = (css({ color: "RED" }) as any).atoms[0];
+
     expect(atom.id).toBe("color");
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(undefined);
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("var(--colors-RED)");
+
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_3389639116");
       return "";
@@ -111,7 +116,7 @@ describe("createCss", () => {
       },
       null
     );
-    const atom = (css.tablet.color("red") as unknown) as IAtom;
+    const atom = (css({ tablet: { color: "red" } }) as any).atoms[0];
     expect(atom.id).toBe("colortablet");
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(undefined);
@@ -128,7 +133,8 @@ describe("createCss", () => {
   });
   test("should handle pseudos", () => {
     const css = createCss({}, null);
-    const atom = (css.color("red", ":hover") as unknown) as IAtom;
+    const atom = (css({ ":hover": { color: "red" } }) as any).atoms[0];
+
     expect(atom.id).toBe("color:hover");
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(":hover");
@@ -148,9 +154,13 @@ describe("createCss", () => {
     expect(
       css
         .compose(
-          css.color("red"),
-          css.backgroundColor("blue"),
-          css.backgroundColor("green")
+          css({
+            color: "red",
+            backgroundColor: "blue",
+          }),
+          css({
+            backgroundColor: "green",
+          })
         )
         .toString()
     ).toBe("_736532192 _1725676875");
@@ -158,8 +168,8 @@ describe("createCss", () => {
   test("should insert rule only once", () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
-      expect(css.color("red").toString()).toBe("_1725676875");
-      expect(css.color("red").toString()).toBe("_1725676875");
+      expect(css({ color: "red" }).toString()).toBe("_1725676875");
+      expect(css({ color: "red" }).toString()).toBe("_1725676875");
       return "";
     });
 
@@ -171,8 +181,8 @@ describe("createCss", () => {
     expect(
       css
         .compose(
-          css.color("red", ":hover:disabled"),
-          css.color("red", ":disabled:hover")
+          css({ ":hover:disabled": { color: "red" } }),
+          css({ ":disabled:hover": { color: "red" } })
         )
         .toString()
     ).toBe("_3266759165");
@@ -180,7 +190,7 @@ describe("createCss", () => {
   test("should use simple sequence for classname when browser", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss({}, (fakeEnv as unknown) as Window);
-    String(css.color("red"));
+    String(css({ color: "red" }));
     expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
       "._0 {color: red;}"
     );
@@ -188,7 +198,7 @@ describe("createCss", () => {
   test("should inject sheet", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss({}, (fakeEnv as unknown) as Window);
-    String(css.color("red"));
+    String(css({ color: "red" }));
     expect(fakeEnv.document.styleSheets.length).toBe(2);
     expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
       "._0 {color: red;}"
@@ -204,7 +214,7 @@ describe("createCss", () => {
       },
       (fakeEnv as unknown) as Window
     );
-    String(css.tablet.color("red"));
+    String(css({ tablet: { color: "red" } }));
     expect(fakeEnv.document.styleSheets.length).toBe(3);
     expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toBe(
       "@media (min-width: 700px) {._0 {color: red;}}"
@@ -214,36 +224,37 @@ describe("createCss", () => {
     const css = createCss(
       {
         utils: {
-          marginX: (utilCss) => (value: string) =>
-            utilCss.compose(
-              utilCss.marginLeft(value),
-              utilCss.marginRight(value)
-            ),
+          marginX: () => (value: string) => ({
+            marginLeft: value,
+            marginRight: value,
+          }),
         },
       },
       null
     );
-    expect(css.marginX("1rem").toString()).toBe("_4081121629 _97196166");
+    expect(css({ marginX: "1rem" }).toString()).toBe("_4081121629 _97196166");
   });
   test("should ignore undefined atoms", () => {
     const css = createCss({}, null);
+
     expect(
       // @ts-ignore
-      String(css.compose(undefined, null, false, "", css.color("red")))
+      String(css.compose(undefined, null, false, "", css({ color: "red" })))
     ).toBe("_1725676875");
   });
-
   test("should allow empty compose call", () => {
     const css = createCss({}, null);
     expect(String(css.compose())).toBe("");
   });
-
   test("should allow conditional compositions", () => {
     const css = createCss({}, null);
-    expect(String(css.compose((false as any) && css.color("red")))).toBe("");
-    expect(String(css.compose(true && css.color("red")))).toBe("_1725676875");
+    expect(String(css.compose((false as any) && css({ color: "red" })))).toBe(
+      ""
+    );
+    expect(String(css.compose(true && css({ color: "red" })))).toBe(
+      "_1725676875"
+    );
   });
-
   test("should allow prefixes", () => {
     const css = createCss(
       {
@@ -251,27 +262,24 @@ describe("createCss", () => {
       },
       null
     );
-    expect(
-      // @ts-ignore
-      String(css.color("red"))
-    ).toBe("foo_1725676875");
+    expect(String(css({ color: "red" }))).toBe("foo_1725676875");
   });
   test("should expose override with utility first", () => {
     const css = createCss(
       {
         utilityFirst: true,
+        screens: {
+          mobile: () => "",
+        },
       },
       null
     );
-    expect(
-      // @ts-ignore
-      String(css.override.color("red"))
-    ).toBe("_1725676875");
+    expect(String(css({ override: { color: "red" } }))).toBe("_1725676875");
   });
   test("should not inject existing styles", () => {
     const serverCss = createCss({}, null);
     const { styles } = serverCss.getStyles(() => {
-      serverCss.color("red").toString();
+      serverCss({ color: "red" }).toString();
       return "";
     });
 
@@ -285,9 +293,9 @@ describe("createCss", () => {
       "._1725676875 {color: red;}"
     );
     // On the client it will rerun the logic (React hydrate etc.)
-    clientCss.color("red").toString();
+    clientCss({ color: "red" }).toString();
     // Then we add something new
-    clientCss.color("blue").toString();
+    clientCss({ color: "blue" }).toString();
     // Lets see if it continues on the correct sequence
     expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(2);
     expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
@@ -302,8 +310,8 @@ describe("createCss", () => {
       null
     );
     const { styles } = css.getStyles(() => {
-      css.color("red").toString();
-      css.backgroundColor("red").toString();
+      css({ color: "red" }).toString();
+      css({ backgroundColor: "red" }).toString();
       return "";
     });
 
@@ -321,7 +329,7 @@ describe("createCss", () => {
     );
     const { styles } = css.getStyles(() => {
       // @ts-ignore
-      css.WebkitColor("red").toString();
+      css({ WebkitColor: "red" }).toString();
       return "";
     });
 
@@ -330,18 +338,9 @@ describe("createCss", () => {
       `/* STITCHES */\n\n.c_1725676875{-webkit-color:red;}`,
     ]);
   });
-  test("should inject vendor prefix environment defines it", () => {
-    const fakeEnv = createFakeEnv([], ["-webkit-color"]);
-    const css = createCss({}, (fakeEnv as unknown) as Window);
-    // @ts-ignore
-    css.color("red").toString();
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._0 {-webkit-color: red;}"
-    );
-  });
   test("should use specificity props", () => {
     const css = createCss({}, null);
-    expect(String(css.margin("1px"))).toBe(
+    expect(String(css({ margin: "1px" }))).toBe(
       "_2683736640 _968032303 _4032728388 _4031826548"
     );
   });
@@ -434,5 +433,20 @@ describe("createCss", () => {
       "/* STITCHES:__variables__ */\n\n:root{--colors-primary:tomato;}\n.theme-0{--colors-primary:blue;}",
       "/* STITCHES */\n\n._221333491{color:var(--colors-primary);}",
     ]);
+  });
+  test("should allow nested pseudo", () => {
+    const css = createCss({}, null);
+    const atom = css({ ":hover": { ":disabled": { color: "red" } } }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_3266759165");
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n._3266759165:hover:disabled{color:red;}"
+    );
   });
 });
