@@ -30,41 +30,17 @@ const button = css({
   padding: "1rem",
 });
 
-const alertButton = css.compose(
-  button,
-  css({
-    borderColor: "red",
-  })
-);
+const alertButton = css(button, {
+  borderColor: "red",
+});
 
 const dynamicButton = (disabled = false) =>
-  css.compose(
+  css(
     button,
-    disabled &&
-      css({
-        opacity: 0.5,
-      })
+    disabled && {
+      opacity: 0.5,
+    }
   );
-```
-
-## Functional syntax
-
-The functional style arguably gives a better typing and autocomplete experience in the editor. It is also lower level, removing a tiny bit of overhead that all CSS-IN-JS libraries have traversing objects.
-
-```ts
-import { css } from "@stitches/css";
-
-const button = css.compose(
-  css.color("gray"),
-  css.color("black", ":hover"),
-  css.borderColor("black"),
-  css.padding("1rem")
-);
-
-const alertButton = css.compose(button, css.borderColor("red"));
-
-const dynamicButton = (disabled = false) =>
-  css.compose(button, disabled && css.opacity(0.5));
 ```
 
 ## Configure an instance

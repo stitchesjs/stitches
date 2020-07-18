@@ -144,16 +144,10 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
   const Box = React.forwardRef((props: any, ref: React.Ref<Element>) => {
     const Element = props.as || defaultElement;
 
-    const className = css.compose(...props.__compositions__);
-
     return React.createElement(Element, {
       ref,
       ...props,
-      className: props.className
-        ? `${props.className} ${className}`
-        : className,
       as: undefined,
-      __compositions__: undefined,
     });
   }) as <E extends React.ElementType = typeof defaultElement>(
     props: BoxProps<E>
@@ -209,7 +203,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
         }
       }
 
-      const compositions = [baseStyles].concat(props.__compositions__ || []);
+      const compositions = [baseStyles];
 
       const propsWithoutVariants: any = {};
 
@@ -237,7 +231,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
       return React.createElement(Component, {
         ...propsWithoutVariants,
         as: props.as || as,
-        __compositions__: compositions,
+        className: css(props.className, ...compositions),
       });
     };
   };

@@ -160,8 +160,7 @@ export interface TCssConstructor<
   T extends IConfig,
   S extends TDefaultCss<T> | TUtilityFirstCss<T>
 > {
-  (styles: S): string;
-  compose: (...compositions: string[]) => string;
+  (...styles: (S | string | boolean | null | undefined)[]): string;
   getStyles: (callback: () => any) => { styles: string[]; result: any };
   theme: (
     theme: Partial<

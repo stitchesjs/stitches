@@ -415,120 +415,101 @@ export const createCss = <T extends IConfig>(
   const atomCache = new Map<string, IAtom>();
   const themeCache = new Map<ITokensDefinition, IThemeAtom>();
 
-  const cssInstance = new Proxy(
-    (definition: any) => {
-      const args: any[] = [];
-      let index = 0;
+  const cssInstance = ((...definitions: any[]) => {
+    const args: any[] = [];
+    let index = 0;
 
-      if (config.utilityFirst) {
-        createUtilsAtoms(definition, (atom) => {
+    for (let x = 0; x < definitions.length; x++) {
+      if (!definitions[x]) {
+        continue;
+      }
+      if (
+        "atoms" in definitions[x] &&
+        definitions[x].hasOwnProperty("toString")
+      ) {
+        args[index++] = definitions[x];
+      } else if (config.utilityFirst) {
+        createUtilsAtoms(definitions[x], (atom) => {
           args[index++] = atom;
         });
       } else {
-        createCssAtoms(definition, (atom) => {
+        createCssAtoms(definitions[x], (atom) => {
           args[index++] = atom;
         });
       }
-
-      return compose(...args);
-    },
-    {
-      get(_, prop, proxy) {
-        // Next.js 9.4 seems to intercept value passed on
-        // className attribute, checking for stuff
-        if (prop === "isReactComponent" || prop === "prototype") {
-          return proxy;
-        }
-        if (prop === "dispose") {
-          return () => {
-            atomCache.clear();
-            tags.forEach((tag) => {
-              tag.parentNode?.removeChild(tag);
-            });
-          };
-        }
-        if (prop === "_config") {
-          return config;
-        }
-        if (prop === "compose") {
-          return compose;
-        }
-        if (prop === "theme") {
-          return (definition: any): IThemeAtom => {
-            if (themeCache.has(definition)) {
-              return themeCache.get(definition)!;
-            }
-
-            const themeAtom = {
-              // We could here also check if theme has been added from server,
-              // though thinking it does not matter... just a simple rule
-              name: String(themeCache.size),
-              definition,
-              toString: themeToString,
-            };
-
-            themeCache.set(definition, themeAtom);
-
-            return themeAtom;
-          };
-        }
-        // SSR
-        if (prop === "getStyles") {
-          return (cb: any) => {
-            // tslint:disable-next-line
-            for (let sheet in sheets) {
-              sheets[sheet].content = "";
-            }
-            if (baseTokens) {
-              sheets.__variables__.insertRule(baseTokens);
-            }
-
-            // We have to reset our toStrings so that they will now inject again,
-            // and still cache is it is being reused
-            toString = createServerToString(
-              sheets,
-              config.screens,
-              cssClassnameProvider
-            );
-
-            // We have to reset our themeToStrings so that they will now inject again,
-            // and still cache is it is being reused
-            themeToString = createThemeToString(
-              classPrefix,
-              sheets.__variables__
-            );
-
-            atomCache.forEach((atom) => {
-              atom.toString = toString;
-            });
-
-            themeCache.forEach((atom) => {
-              atom.toString = themeToString;
-            });
-
-            const result = cb();
-
-            return {
-              result,
-              styles: Object.keys(screens).reduce(
-                (aggr, key) => {
-                  return aggr.concat(
-                    `/* STITCHES:${key} */\n${sheets[key].content}`
-                  );
-                },
-                [
-                  `/* STITCHES:__variables__ */\n${sheets.__variables__.content}`,
-                  `/* STITCHES */\n${sheets[""].content}`,
-                ]
-              ),
-            };
-          };
-        }
-
-        return proxy;
-      },
     }
-  ) as any;
+
+    return compose(...args);
+  }) as any;
+
+  cssInstance.dispose = () => {
+    atomCache.clear();
+    tags.forEach((tag) => {
+      tag.parentNode?.removeChild(tag);
+    });
+  };
+  cssInstance._config = () => config;
+  cssInstance.theme = (definition: any): IThemeAtom => {
+    if (themeCache.has(definition)) {
+      return themeCache.get(definition)!;
+    }
+
+    const themeAtom = {
+      // We could here also check if theme has been added from server,
+      // though thinking it does not matter... just a simple rule
+      name: String(themeCache.size),
+      definition,
+      toString: themeToString,
+    };
+
+    themeCache.set(definition, themeAtom);
+
+    return themeAtom;
+  };
+  cssInstance.getStyles = (cb: any) => {
+    // tslint:disable-next-line
+    for (let sheet in sheets) {
+      sheets[sheet].content = "";
+    }
+    if (baseTokens) {
+      sheets.__variables__.insertRule(baseTokens);
+    }
+
+    // We have to reset our toStrings so that they will now inject again,
+    // and still cache is it is being reused
+    toString = createServerToString(
+      sheets,
+      config.screens,
+      cssClassnameProvider
+    );
+
+    // We have to reset our themeToStrings so that they will now inject again,
+    // and still cache is it is being reused
+    themeToString = createThemeToString(classPrefix, sheets.__variables__);
+
+    atomCache.forEach((atom) => {
+      atom.toString = toString;
+    });
+
+    themeCache.forEach((atom) => {
+      atom.toString = themeToString;
+    });
+
+    const result = cb();
+
+    return {
+      result,
+      styles: Object.keys(screens).reduce(
+        (aggr, key) => {
+          return aggr.concat(`/* STITCHES:${key} */\n${sheets[key].content}`);
+        },
+        [
+          `/* STITCHES:__variables__ */\n${sheets.__variables__.content}`,
+          `/* STITCHES */\n${sheets[""].content}`,
+        ]
+      ),
+    };
+  };
 
   if (env) {
     hotReloadingCache.set(prefix, cssInstance);

@@ -21,29 +21,26 @@ export const createDirective = <T extends TCss<any>>(css: T) => {
 
     const props = classnames.map((className) => className.split("-"));
 
-    return css
-      .compose(
-        ...props.map((propParts) => {
-          const pseudos = propParts.shift()!.split(":");
-          const cssProp = pseudos.pop()!;
-          const cssValue = propParts.join("-");
-          const pseudo = pseudos.map((pseudoPart) => `:${pseudoPart}`).join("");
+    return css(
+      ...props.map<any>((propParts) => {
+        const pseudos = propParts.shift()!.split(":");
+        const cssProp = pseudos.pop()!;
+        const cssValue = propParts.join("-");
+        const pseudo = pseudos.map((pseudoPart) => `:${pseudoPart}`).join("");
 
-          if (screen && pseudo) {
-            return css({ [screen]: { [pseudo]: { [cssProp]: cssValue } } });
-          }
-          if (screen) {
-            return css({ [screen]: { [cssProp]: cssValue } });
-          }
-          if (pseudo) {
-            return css({ [pseudo]: { [cssProp]: cssValue } });
-          }
+        if (screen && pseudo) {
+          return { [screen]: { [pseudo]: { [cssProp]: cssValue } } };
+        }
+        if (screen) {
+          return { [screen]: { [cssProp]: cssValue } };
+        }
+        if (pseudo) {
+          return { [pseudo]: { [cssProp]: cssValue } };
+        }
 
-          // @ts-ignore
-          return css({ [cssProp]: cssValue });
-        })
-      )
-      .toString();
+        return { [cssProp]: cssValue };
+      })
+    ).toString();
   }
   function bind(el: HTMLElement, binding: Binding) {
     if (!binding.oldValue || binding.oldValue !== binding.value) {

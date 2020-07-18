@@ -152,17 +152,15 @@ describe("createCss", () => {
   test("should handle specificity", () => {
     const css = createCss({}, null);
     expect(
-      css
-        .compose(
-          css({
-            color: "red",
-            backgroundColor: "blue",
-          }),
-          css({
-            backgroundColor: "green",
-          })
-        )
-        .toString()
+      css(
+        {
+          color: "red",
+          backgroundColor: "blue",
+        },
+        {
+          backgroundColor: "green",
+        }
+      ).toString()
     ).toBe("_736532192 _1725676875");
   });
   test("should insert rule only once", () => {
@@ -179,12 +177,10 @@ describe("createCss", () => {
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
     expect(
-      css
-        .compose(
-          css({ ":hover:disabled": { color: "red" } }),
-          css({ ":disabled:hover": { color: "red" } })
-        )
-        .toString()
+      css(
+        { ":hover:disabled": { color: "red" } },
+        { ":disabled:hover": { color: "red" } }
+      ).toString()
     ).toBe("_3266759165");
   });
   test("should use simple sequence for classname when browser", () => {
@@ -239,21 +235,17 @@ describe("createCss", () => {
 
     expect(
       // @ts-ignore
-      String(css.compose(undefined, null, false, "", css({ color: "red" })))
+      String(css(undefined, null, false, "", { color: "red" }))
     ).toBe("_1725676875");
   });
   test("should allow empty compose call", () => {
     const css = createCss({}, null);
-    expect(String(css.compose())).toBe("");
+    expect(String(css())).toBe("");
   });
   test("should allow conditional compositions", () => {
     const css = createCss({}, null);
-    expect(String(css.compose((false as any) && css({ color: "red" })))).toBe(
-      ""
-    );
-    expect(String(css.compose(true && css({ color: "red" })))).toBe(
-      "_1725676875"
-    );
+    expect(String(css((false as any) && { color: "red" }))).toBe("");
+    expect(String(css(true && { color: "red" }))).toBe("_1725676875");
   });
   test("should allow prefixes", () => {
     const css = createCss(

@@ -42,8 +42,6 @@ export const App: React.FC = () => {
 };
 ```
 
-**Note!** The styled API, like the core, also supports functional syntax to reduce a bit of overhead. Wherever the documentation shows object syntax you can use `css => css.compose(...)` instead.
-
 ## Variants
 
 Instead of providing props to the styled elements, you rather have variants. This fixes two important issues with styled APIs:
@@ -157,11 +155,13 @@ You can also compose dynamically by doing:
 You can also create logical components by using the low level `styled.Box` component:
 
 ```tsx
-const Alert = styled(({ isOpen, ...props }) => {
-  const [open, setOpen] = React.useState(isOpen);
+const Alert: PolymorphicComponent<{ isOpen: boolean }, "div"> = styled(
+  ({ isOpen, as, ...props }) => {
+    const [open, setOpen] = React.useState(isOpen);
 
-  return open ? <styled.Box {...props} /> : null;
-});
+    return open ? <styled.Box {...props} as={as || "div"} /> : null;
+  }
+);
 ```
 
 Now this component can be used as a normal styled component, you could even have given it a base styling and/or variants.
