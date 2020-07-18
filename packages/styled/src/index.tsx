@@ -4,6 +4,7 @@ import {
   TCss,
   TDefaultCss,
   TUtilityFirstCss,
+  createCss,
 } from "@stitches/css";
 import * as React from "react";
 
@@ -135,11 +136,18 @@ export type IStyled<C extends IConfig> = {
 
 let hasWarnedInlineStyle = false;
 
-export const createStyled = <T extends IConfig>(css: TCss<T>) => {
-  if (!css) {
-    throw new Error("@stitches/styled - you need to pass in your css here");
-  }
-
+export const createStyled = <T extends IConfig>(
+  config: T
+): {
+  css: TCss<T>;
+  styled: IBaseStyled<T> &
+    IStyled<T> & {
+      Box: <E extends React.ElementType = typeof defaultElement>(
+        props: BoxProps<E>
+      ) => JSX.Element;
+    };
+} => {
+  const css = createCss(config);
   const defaultElement = "div";
   const Box = React.forwardRef((props: any, ref: React.Ref<Element>) => {
     const Element = props.as || defaultElement;
@@ -149,9 +157,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
       ...props,
       as: undefined,
     });
-  }) as <E extends React.ElementType = typeof defaultElement>(
-    props: BoxProps<E>
-  ) => JSX.Element;
+  });
 
   let currentAs: string | undefined;
 
@@ -237,7 +243,7 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
   };
 
   // tslint:disable-next-line
-  const styledProxy = (new Proxy(() => {}, {
+  const styledProxy = new Proxy(() => {}, {
     get(_, prop) {
       if (prop === "Box") {
         return Box;
@@ -253,10 +259,10 @@ export const createStyled = <T extends IConfig>(css: TCss<T>) => {
       currentAs = undefined;
       return styledInstance(styling, variants, Element);
     },
-  }) as unknown) as IBaseStyled<T> &
-    IStyled<T> & {
-      Box: typeof Box;
-    };
+  });
 
-  return styledProxy;
+  return {
+    styled: styledProxy as any,
+    css,
+  };
 };

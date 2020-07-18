@@ -12,11 +12,13 @@ Read more about stitches at [@stitches/css](https://github.com/christianalfoni/s
 
 ```tsx
 // css.ts
-import { createCss } from "@stitches/css";
 import { createStyled } from "@stitches/styled";
 
-export const css = createCss({});
-export const styled = createStyled(css);
+export const { styled, css } = createStyled({
+  // CSS config
+});
+
+export { styled, css };
 ```
 
 ```tsx
