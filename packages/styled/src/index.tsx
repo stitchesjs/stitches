@@ -52,7 +52,7 @@ export interface IBaseStyled<
       : {
           styled?: string;
         },
-    E
+    E extends PolymorphicComponent<any, infer PE> ? PE : E
   >;
   <
     E extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
