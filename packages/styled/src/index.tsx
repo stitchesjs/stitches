@@ -142,8 +142,8 @@ export const createStyled = <T extends IConfig>(
   css: TCss<T>;
   styled: IBaseStyled<T> &
     IStyled<T> & {
-      Box: <E extends React.ElementType = typeof defaultElement>(
-        props: BoxProps<E>
+      Box: <E extends React.ElementType>(
+        props: PropsOf<E> & { as?: E }
       ) => JSX.Element;
     };
 } => {
