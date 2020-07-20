@@ -49,8 +49,8 @@ export interface IBaseStyled<
   >(
     element: E,
     css?: CSS
-  ): E extends PolymorphicComponent<any, any>
-    ? E
+  ): E extends PolymorphicComponent<infer EP, infer EE>
+    ? PolymorphicComponent<EP & { styled?: string }, EE>
     : PolymorphicComponent<
         E extends React.ComponentType<infer PP>
           ? PP & {
@@ -78,7 +78,9 @@ export interface IBaseStyled<
   ): E extends PolymorphicComponent<infer EP, infer EE>
     ? PolymorphicComponent<
         V extends void
-          ? EP
+          ? EP & {
+              styled?: string;
+            }
           : EP &
               {
                 [P in keyof V]?: C["screens"] extends IScreens
@@ -88,6 +90,8 @@ export interface IBaseStyled<
                           [S in keyof C["screens"]]?: keyof V[P];
                         }
                   : keyof V[P];
+              } & {
+                styled?: string;
               },
         EE
       >
