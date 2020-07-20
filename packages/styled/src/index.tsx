@@ -30,7 +30,7 @@ export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
   E extends React.ElementType = D
 >(
   props: PolymorphicComponentProps<E, P>
-) => JSX.Element) & {
+) => JSX.Element | null) & {
   propTypes?: React.WeakValidationMap<P>;
   contextTypes?: React.ValidationMap<any>;
   defaultProps?: Partial<P>;
