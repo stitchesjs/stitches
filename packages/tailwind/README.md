@@ -31,7 +31,8 @@ You can configure the Tailwind instance to have a custom theme, utils and even a
 
 ```ts
 // css.ts
-import { createTailwindCss } from "@stitches/tailwind";
+import { createCss } from "@stitches/css";
+import { createTailwindConfig } from "@stitches/tailwind";
 // Treeshake by including only specific utils
 // import { text, flex } from "@stitches/tailwind/utils"
 import * as utils from "@stitches/tailwind/utils";
@@ -39,7 +40,7 @@ import * as utils from "@stitches/tailwind/utils";
 // import { colors, spacing } from "@stitches/tailwind/theme"
 import * as theme from "@stitches/tailwind/theme";
 
-export const css = createTailwindCss({
+const config = createTailwindConfig({
   screens: {
     tablet: (cssRule) => `@media (min-width: 768px) { ${cssRule} }`,
     laptop: (cssRule) => `@media (min-width: 1024px) { ${cssRule} }`,
@@ -52,6 +53,8 @@ export const css = createTailwindCss({
   },
   utils: utils,
 });
+
+export const css = createCss(config);
 ```
 
 ## Theme
