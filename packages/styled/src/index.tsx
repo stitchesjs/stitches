@@ -41,21 +41,31 @@ export interface IBaseStyled<
   C extends IConfig,
   CSS = C extends { utilityFirst: true } ? TUtilityFirstCss<C> : TDefaultCss<C>
 > {
-  <E extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
+  <
+    E extends
+      | keyof JSX.IntrinsicElements
+      | React.ComponentType<any>
+      | PolymorphicComponent<any, any>
+  >(
     element: E,
     css?: CSS
-  ): PolymorphicComponent<
-    E extends React.ComponentType<infer PP>
-      ? PP & {
-          styled?: string;
-        }
-      : {
-          styled?: string;
-        },
-    E extends PolymorphicComponent<any, infer PE> ? PE : E
-  >;
+  ): E extends PolymorphicComponent<any, any>
+    ? E
+    : PolymorphicComponent<
+        E extends React.ComponentType<infer PP>
+          ? PP & {
+              styled?: string;
+            }
+          : {
+              styled?: string;
+            },
+        E
+      >;
   <
-    E extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+    E extends
+      | keyof JSX.IntrinsicElements
+      | React.ComponentType<any>
+      | PolymorphicComponent<any, any>,
     V extends {
       [propKey: string]: {
         [variantName: string]: CSS;
@@ -65,33 +75,49 @@ export interface IBaseStyled<
     element: E,
     css: CSS,
     variants: V
-  ): PolymorphicComponent<
-    V extends void
-      ? E extends React.ComponentType<infer PP>
-        ? PP & {
-            styled?: string;
-          }
-        : {
-            styled?: string;
-          }
-      : {
-          [P in keyof V]?: C["screens"] extends IScreens
-            ?
-                | keyof V[P]
-                | {
-                    [S in keyof C["screens"]]?: keyof V[P];
-                  }
-            : keyof V[P];
-        } &
-          (E extends React.ComponentType<infer PP>
+  ): E extends PolymorphicComponent<infer EP, infer EE>
+    ? PolymorphicComponent<
+        V extends void
+          ? EP
+          : EP &
+              {
+                [P in keyof V]?: C["screens"] extends IScreens
+                  ?
+                      | keyof V[P]
+                      | {
+                          [S in keyof C["screens"]]?: keyof V[P];
+                        }
+                  : keyof V[P];
+              },
+        EE
+      >
+    : PolymorphicComponent<
+        V extends void
+          ? E extends React.ComponentType<infer PP>
             ? PP & {
                 styled?: string;
               }
             : {
                 styled?: string;
-              }),
-    E
-  >;
+              }
+          : {
+              [P in keyof V]?: C["screens"] extends IScreens
+                ?
+                    | keyof V[P]
+                    | {
+                        [S in keyof C["screens"]]?: keyof V[P];
+                      }
+                : keyof V[P];
+            } &
+              (E extends React.ComponentType<infer PP>
+                ? PP & {
+                    styled?: string;
+                  }
+                : {
+                    styled?: string;
+                  }),
+        E
+      >;
 }
 
 interface IStyledConstructor<
