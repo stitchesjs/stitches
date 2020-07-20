@@ -70,11 +70,17 @@ export interface IBaseStyled<
       [propKey: string]: {
         [variantName: string]: CSS;
       };
-    } | void
+    }
   >(
     element: E,
     css: CSS,
-    variants: V
+    variants:
+      | V
+      | {
+          [propKey: string]: {
+            [variantName: string]: CSS;
+          };
+        }
   ): E extends PolymorphicComponent<infer EP, infer EE>
     ? PolymorphicComponent<
         V extends void
