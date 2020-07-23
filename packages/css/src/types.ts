@@ -160,21 +160,27 @@ export interface IConfig {
   };
 }
 
-export type TUtilityFirstCss<T extends IConfig> = {
-  override?: TRecursiveCss<T> &
-    {
-      [S in keyof T["screens"]]?: TRecursiveCss<T>;
-    };
-} & {
-  [S in keyof T["screens"]]?: TRecursiveUtils<T>;
-} &
-  TRecursiveUtils<T>;
+export type TUtilityFirstCss<T extends IConfig> = T["screens"] extends unknown
+  ? {
+      override?: TRecursiveCss<T>;
+    } & TRecursiveUtils<T>
+  : {
+      override?: TRecursiveCss<T> &
+        {
+          [S in keyof T["screens"]]?: TRecursiveCss<T>;
+        };
+    } & {
+      [S in keyof T["screens"]]?: TRecursiveUtils<T>;
+    } &
+      TRecursiveUtils<T>;
 
-export type TDefaultCss<T extends IConfig> = TRecursiveCss<T> &
-  TRecursiveUtils<T> &
-  {
-    [S in keyof T["screens"]]?: TRecursiveCss<T> & TRecursiveUtils<T>;
-  };
+export type TDefaultCss<T extends IConfig> = T["screens"] extends unknown
+  ? TRecursiveCss<T> & TRecursiveUtils<T>
+  : TRecursiveCss<T> &
+      TRecursiveUtils<T> &
+      {
+        [S in keyof T["screens"]]?: TRecursiveCss<T> & TRecursiveUtils<T>;
+      };
 
 export interface TCssConstructor<
   T extends IConfig,

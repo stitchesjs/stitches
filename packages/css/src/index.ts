@@ -370,12 +370,11 @@ export const createCss = <T extends IConfig>(
       } else if (!prop[0].match(/[a-zA-Z]/)) {
         createUtilsAtoms(props[prop], cb, screen, pseudo.concat(prop), false);
       } else if (prop in utils) {
-        createUtilsAtoms(
+        createCssAtoms(
           utils[prop](config)(props[prop]) as any,
           cb,
           screen,
-          pseudo,
-          false
+          pseudo
         );
       } else {
         throw new Error(
