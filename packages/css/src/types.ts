@@ -37,18 +37,38 @@ export type TRecursiveCss<
         : Properties[K]
       : Properties[K];
   }
-> = D | { [pseudo: string]: TRecursiveCss<T, D> };
+> = (
+  | D
+  | {
+      [pseudo: string]: (
+        | D
+        | { [pseudo: string]: (D | { [pseudo: string]: D }) & D }
+      ) &
+        D;
+    }
+) &
+  D;
 
 export type TRecursiveUtils<
   T extends IConfig,
   UT = {
     [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
-      ? ReturnType<T["utils"][U]> extends (...args: infer A) => {}
-        ? A[0]
+      ? ReturnType<T["utils"][U]> extends (arg: infer A) => {}
+        ? A
         : never
       : never;
   }
-> = UT | { [pseudo: string]: TRecursiveUtils<T, UT> };
+> = (
+  | UT
+  | {
+      [pseudo: string]: (
+        | UT
+        | { [pseudo: string]: (UT | { [pseudo: string]: UT }) & UT }
+      ) &
+        UT;
+    }
+) &
+  UT;
 
 export type TUtility<A extends any[], T extends IConfig> = (
   config: T

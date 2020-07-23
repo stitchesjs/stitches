@@ -80,11 +80,10 @@ export const css = createCss({
   // Create your own custom CSS properties. Here the functional syntax
   // shines to handle pseudo selectors
   utils: {
-    marginX: (utilCss) => (value: number | string, pseudo?: string) =>
-      utilCss.compose(
-        utilCss.marginLeft(value, pseudo),
-        utilCss.marginRight(value, pseudo)
-      ),
+    marginX: (config) => (value: number | string) => ({
+      marginLeft: value,
+      marginRight: value,
+    }),
   },
 });
 
@@ -94,6 +93,41 @@ css({
     color: "blue", // Color is "blue" when media query is active
   },
   marginX: 0, // Creates "1rem", as it composes margin, using "space" from tokens
+});
+```
+
+## Utility first
+
+Stitches also allows you to put your utils at the front. That means you can create your very own CSS abstraction, where the underlying CSS properties are secondary.
+
+```ts
+import { createCss } from "@stitches/css";
+
+export const css = createCss({
+  utilityFirst: true,
+  utils: {
+    text: (config) => (value: { color?: string; size?: number }) => ({
+      ...(color ? { color } : {}),
+      ...(size ? { fontSize: size + "rem" } : {}),
+    }),
+  },
+});
+
+css({
+  text: {
+    color: "red",
+    size: 2,
+  },
+  ":hover": {
+    text: {
+      color: "blue",
+    },
+  },
+  // Override is a property that allows you to override
+  // with specific low level CSS properties
+  override: {
+    padding: "2rem",
+  },
 });
 ```
 
