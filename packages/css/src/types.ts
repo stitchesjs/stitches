@@ -70,9 +70,9 @@ export type TRecursiveUtils<
 ) &
   UT;
 
-export type TUtility<A extends any[], T extends IConfig> = (
+export type TUtility<A extends any, T extends IConfig> = (
   config: T
-) => (...args: A) => TRecursiveCss<T>;
+) => (arg: A) => TRecursiveCss<T>;
 
 export interface ICssPropToToken {
   color: "colors";

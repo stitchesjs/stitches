@@ -74,11 +74,11 @@ export interface ITheme {
 export interface ITailwindConfig extends IConfig {
   theme: ITheme;
   utils: {
-    absolute: TTailwindUtility<void>;
+    absolute: TTailwindUtility<true>;
     align: TTailwindUtility<
       "baseline" | "top" | "middle" | "bottom" | "text-top" | "text-bottom"
     >;
-    antialiased: TTailwindUtility<void>;
+    antialiased: TTailwindUtility<true>;
     appearance: TTailwindUtility<"none">;
     bg: TTailwindUtility<
       | "fixed"
@@ -91,7 +91,7 @@ export interface ITailwindConfig extends IConfig {
       | "repeat-round"
       | "repeat-space"
     >;
-    block: TTailwindUtility<void>;
+    block: TTailwindUtility<true>;
     border: TTailwindUtility<
       | "collapse"
       | "separate"
@@ -108,9 +108,9 @@ export interface ITailwindConfig extends IConfig {
     bottom: TTailwindUtility;
     box: TTailwindUtility<"border" | "content">;
     breakText: TTailwindUtility<"normal" | "words" | "all">;
-    capitalize: TTailwindUtility<void>;
+    capitalize: TTailwindUtility<true>;
     clear: TTailwindUtility<"right" | "left" | "both" | "none">;
-    clearfix: TTailwindUtility<void>;
+    clearfix: TTailwindUtility<true>;
     col: TTailwindUtility;
     colEnd: TTailwindUtility;
     colGap: TTailwindUtility;
@@ -128,9 +128,9 @@ export interface ITailwindConfig extends IConfig {
     duration: TTailwindUtility;
     ease: TTailwindUtility;
     fill: TTailwindUtility;
-    fixed: TTailwindUtility<void>;
+    fixed: TTailwindUtility<true>;
     flex: TTailwindUtility<
-      | void
+      | true
       | "row"
       | "row-reverse"
       | "col"
@@ -140,10 +140,10 @@ export interface ITailwindConfig extends IConfig {
       | "wrap-reverse"
     >;
     float: TTailwindUtility<"right" | "left" | "none">;
-    flowRoot: TTailwindUtility<void>;
+    flowRoot: TTailwindUtility<true>;
     font: TTailwindUtility;
     gap: TTailwindUtility;
-    grid: TTailwindUtility<void>;
+    grid: TTailwindUtility<true>;
     gridCols: TTailwindUtility;
     gridFlow: TTailwindUtility<"row" | "col" | "row-dense" | "col-dense">;
     gridRows: TTailwindUtility;
@@ -151,14 +151,13 @@ export interface ITailwindConfig extends IConfig {
     h: TTailwindUtility;
     hidden: TTailwindUtility<void>;
     inline: TTailwindUtility<void>;
-    inlineBlock: TTailwindUtility<void>;
-    inlineGrid: TTailwindUtility<void>;
-    inlineFlex: TTailwindUtility<void>;
+    inlineBlock: TTailwindUtility<true>;
+    inlineGrid: TTailwindUtility<true>;
+    inlineFlex: TTailwindUtility<true>;
     inset: TTailwindUtility;
     insetX: TTailwindUtility;
     insetY: TTailwindUtility;
-    invisible: TTailwindUtility<void>;
-    italic: TTailwindUtility<void>;
+    italic: TTailwindUtility<boolean>;
     items: TTailwindUtility<
       "stretch" | "start" | "center" | "end" | "baseline"
     >;
@@ -167,9 +166,9 @@ export interface ITailwindConfig extends IConfig {
     >;
     leading: TTailwindUtility;
     left: TTailwindUtility;
-    lineThrough: TTailwindUtility<void>;
+    lineThrough: TTailwindUtility<true>;
     list: TTailwindUtility<"inside" | "outside">;
-    lowercase: TTailwindUtility<void>;
+    lowercase: TTailwindUtility<true>;
     m: TTailwindUtility;
     maxH: TTailwindUtility;
     maxW: TTailwindUtility;
@@ -181,12 +180,9 @@ export interface ITailwindConfig extends IConfig {
     mt: TTailwindUtility;
     mx: TTailwindUtility;
     my: TTailwindUtility;
-    normalCase: TTailwindUtility<void>;
-    notItalic: TTailwindUtility<void>;
-    notSrOnly: TTailwindUtility<void>;
-    noUnderline: TTailwindUtility<void>;
+    normalCase: TTailwindUtility<true>;
     table: TTailwindUtility<
-      | void
+      | true
       | "caption"
       | "cell"
       | "col"
@@ -217,8 +213,8 @@ export interface ITailwindConfig extends IConfig {
     pt: TTailwindUtility;
     px: TTailwindUtility;
     py: TTailwindUtility;
-    resize: TTailwindUtility<void | "none" | "y" | "x">;
-    relative: TTailwindUtility<void>;
+    resize: TTailwindUtility<true | "none" | "y" | "x">;
+    relative: TTailwindUtility<true>;
     right: TTailwindUtility;
     rotate: TTailwindUtility;
     rounded: TTailwindUtility;
@@ -248,33 +244,33 @@ export interface ITailwindConfig extends IConfig {
     spaceLeft: TTailwindUtility;
     spaceRight: TTailwindUtility;
     spaceTop: TTailwindUtility;
-    srOnly: TTailwindUtility<void>;
-    staticPosition: TTailwindUtility<void>;
-    sticky: TTailwindUtility<void>;
+    srOnly: TTailwindUtility<boolean>;
+    staticPosition: TTailwindUtility<true>;
+    sticky: TTailwindUtility<true>;
     stroke: TTailwindUtility;
-    subpixelAntialiased: TTailwindUtility<void>;
+    subpixelAntialiased: TTailwindUtility<true>;
     text: TTailwindUtility<"left" | "center" | "right" | "justify">;
     top: TTailwindUtility;
     tracking: TTailwindUtility;
-    transform: TTailwindUtility<void>;
+    transform: TTailwindUtility<true>;
     transition: TTailwindUtility;
     translateX: TTailwindUtility;
     translateY: TTailwindUtility;
-    truncate: TTailwindUtility<void>;
-    underline: TTailwindUtility<void>;
-    uppercase: TTailwindUtility<void>;
-    visible: TTailwindUtility<void>;
+    truncate: TTailwindUtility<true>;
+    underline: TTailwindUtility<boolean>;
+    uppercase: TTailwindUtility<true>;
+    visible: TTailwindUtility<boolean>;
     w: TTailwindUtility;
     whitespace: TTailwindUtility<
       "normal" | "no-wrap" | "pre" | "pre-line" | "pre-wrap"
     >;
-    wrap: TTailwindUtility<void | "none" | "reverse">;
+    wrap: TTailwindUtility<true | "none" | "reverse">;
     z: TTailwindUtility;
   };
 }
 
-export type TTailwindUtility<V = never> = TUtility<
-  [V, string?],
+export type TTailwindUtility<V extends any = undefined> = TUtility<
+  V | V[],
   ITailwindConfig
 >;
 
@@ -294,22 +290,31 @@ const createUtility = (
     emptyValue?: ReturnType<ReturnType<TTailwindUtility<any>>>;
   } = {}
 ): TTailwindUtility<any> => {
-  return ((config: ITailwindConfig) => (value: any) => {
-    const evaluatedTheme = theme ? (config.theme as any)[theme] : {};
-    const evaluatedValue =
-      evaluatedTheme[value] ||
-      evaluatedTheme.default ||
-      (typeof values[value] === "function"
-        ? (values as any)[value]()
-        : values[value]);
-    if (evaluatedValue) {
-      // @ts-ignore
-      return typeof cb === "function" ? cb(evaluatedValue) : cb[evaluatedValue];
-    } else if (emptyValue) {
-      return emptyValue;
-    }
+  return ((config: ITailwindConfig) => (arg: any) => {
+    const args = Array.isArray(arg) ? arg : [arg];
 
-    return showWarning(value);
+    return args.reduce((aggr, value) => {
+      const evaluatedTheme = theme ? (config.theme as any)[theme] : {};
+      const evaluatedValue =
+        evaluatedTheme[value] ||
+        evaluatedTheme.default ||
+        (typeof values[value] === "function"
+          ? (values as any)[value]()
+          : values[value]);
+      if (evaluatedValue) {
+        // @ts-ignore
+        return {
+          ...aggr,
+          ...(typeof cb === "function"
+            ? cb(evaluatedValue)
+            : (cb as any)[evaluatedValue]),
+        };
+      } else if (emptyValue) {
+        return { ...aggr, ...emptyValue };
+      }
+
+      return { ...aggr, ...showWarning(value) };
+    }, {});
   }) as any;
 };
 
@@ -363,21 +368,31 @@ export const bg = ((): ITailwindConfig["utils"]["bg"] => {
     "repeat-round": { backgroundRepeat: "round" },
     "repeat-space": { backgroundRepeat: "space" },
   };
-  return (config) => (value) => {
-    if (config.theme.backgroundColor && config.theme.backgroundColor[value]) {
-      return { backgroundColor: config.theme.backgroundColor[value] };
-    }
-    if (
-      config.theme.backgroundPosition &&
-      config.theme.backgroundPosition[value]
-    ) {
-      return { backgroundPosition: config.theme.backgroundPosition[value] };
-    }
-    if (config.theme.backgroundSize && config.theme.backgroundSize[value]) {
-      return { backgroundSize: config.theme.backgroundSize[value] };
-    }
+  return (config) => (arg) => {
+    const args = Array.isArray(arg) ? arg : [arg];
 
-    return values[value] || showWarning(value);
+    return args.reduce((aggr, value) => {
+      if (config.theme.backgroundColor && config.theme.backgroundColor[value]) {
+        return {
+          ...aggr,
+          backgroundColor: config.theme.backgroundColor[value],
+        };
+      }
+      if (
+        config.theme.backgroundPosition &&
+        config.theme.backgroundPosition[value]
+      ) {
+        return {
+          ...aggr,
+          backgroundPosition: config.theme.backgroundPosition[value],
+        };
+      }
+      if (config.theme.backgroundSize && config.theme.backgroundSize[value]) {
+        return { ...aggr, backgroundSize: config.theme.backgroundSize[value] };
+      }
+
+      return { ...aggr, ...(values[value] || showWarning(value)) };
+    }, {});
   };
 })();
 
@@ -396,15 +411,19 @@ export const border = ((): ITailwindConfig["utils"]["border"] => {
     separate: { borderCollapse: "separate" },
   };
   // @ts-ignore
-  return (config) => (value) => {
-    if (config.theme.borderColor && config.theme.borderColor[value]) {
-      return { borderColor: config.theme.borderColor[value] };
-    }
-    if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-      return { borderWidth: config.theme.borderWidth[value] };
-    }
+  return (config) => (arg) => {
+    const args = Array.isArray(arg) ? arg : [arg];
 
-    return values[value] || showWarning(value);
+    return args.reduce((aggr, value) => {
+      if (config.theme.borderColor && config.theme.borderColor[value]) {
+        return { ...aggr, borderColor: config.theme.borderColor[value] };
+      }
+      if (config.theme.borderWidth && config.theme.borderWidth[value]) {
+        return { ...aggr, borderWidth: config.theme.borderWidth[value] };
+      }
+
+      return { ...aggr, ...(values[value] || showWarning(value)) };
+    }, {});
   };
 })();
 
@@ -448,7 +467,7 @@ export const borderR: ITailwindConfig["utils"]["borderR"] = (config) => (
 };
 
 export const borderT: ITailwindConfig["utils"]["borderT"] = (config) => (
-  value
+  value: any
 ) => {
   if (config.theme.borderColor && config.theme.borderColor[value]) {
     return { borderTopColor: config.theme.borderColor[value] };
@@ -480,7 +499,7 @@ export const box: ITailwindConfig["utils"]["box"] = createUtility(
 export const breakText: ITailwindConfig["utils"]["breakText"] = createUtility({
   normal: { wordBreak: "normal", overflowWrap: "normal" },
   words: { overflowWrap: "break-word" },
-  all: { wordBreak: "break-all" },
+  all: { wordBreak: "break-all" } as any,
 });
 
 export const capitalize: ITailwindConfig["utils"]["capitalize"] = () => () => ({
@@ -600,7 +619,7 @@ export const delay: ITailwindConfig["utils"]["delay"] = createUtility(
 
 export const divideBottom: ITailwindConfig["utils"]["divideBottom"] = (
   config
-) => (value) => {
+) => (value: any) => {
   const pseudo = ` > * + *`;
 
   if (config.theme.divideWidth && config.theme.divideWidth[value]) {
@@ -622,7 +641,7 @@ export const divideBottom: ITailwindConfig["utils"]["divideBottom"] = (
 };
 
 export const divideLeft: ITailwindConfig["utils"]["divideLeft"] = (config) => (
-  value
+  value: any
 ) => {
   const pseudo = ` > * + *`;
 
@@ -646,7 +665,7 @@ export const divideLeft: ITailwindConfig["utils"]["divideLeft"] = (config) => (
 
 export const divideRight: ITailwindConfig["utils"]["divideRight"] = (
   config
-) => (value) => {
+) => (value: any) => {
   const pseudo = ` > * + *`;
 
   if (config.theme.divideWidth && config.theme.divideWidth[value]) {
@@ -668,7 +687,7 @@ export const divideRight: ITailwindConfig["utils"]["divideRight"] = (
 };
 
 export const divideTop: ITailwindConfig["utils"]["divideTop"] = (config) => (
-  value
+  value: any
 ) => {
   const pseudo = ` > * + *`;
 
@@ -858,12 +877,8 @@ export const insetY: ITailwindConfig["utils"]["insetY"] = createUtility(
   }
 );
 
-export const invisible: ITailwindConfig["utils"]["invisible"] = () => () => ({
-  visibility: "hidden",
-});
-
-export const italic: ITailwindConfig["utils"]["italic"] = (css) => () => ({
-  fontStyle: "italic",
+export const italic: ITailwindConfig["utils"]["italic"] = () => (isItalic) => ({
+  fontStyle: isItalic ? "italic" : "normal",
 });
 
 export const items: ITailwindConfig["utils"]["items"] = createUtility(
@@ -910,18 +925,28 @@ export const lineThrough: ITailwindConfig["utils"]["lineThrough"] = () => () => 
   textDecoration: "line-through",
 });
 
-export const list: ITailwindConfig["utils"]["list"] = (config) => (value) => {
-  if (config.theme.listStyleType && config.theme.listStyleType[value]) {
-    return { listStyleType: config.theme.listStyleType[value] as any };
-  }
+export const list: ITailwindConfig["utils"]["list"] = (config) => (
+  arg: any
+) => {
+  const args = Array.isArray(arg) ? arg : [arg];
 
-  return {
-    listStylePosition:
-      ({
-        inside: "inside",
-        outside: "outside",
-      } as any)[value] || showWarning(value),
-  };
+  return args.reduce((aggr, value) => {
+    if (config.theme.listStyleType && config.theme.listStyleType[value]) {
+      return {
+        ...aggr,
+        listStyleType: config.theme.listStyleType[value] as any,
+      };
+    }
+
+    return {
+      ...aggr,
+      listStylePosition:
+        ({
+          inside: "inside",
+          outside: "outside",
+        } as any)[value] || showWarning(value),
+    };
+  }, {});
 };
 
 export const lowercase: ITailwindConfig["utils"]["lowercase"] = () => () => ({
@@ -1020,25 +1045,6 @@ export const normalCase: ITailwindConfig["utils"]["normalCase"] = () => () => ({
   textTransform: "none",
 });
 
-export const notItalic: ITailwindConfig["utils"]["notItalic"] = () => () => ({
-  fontStyle: "normal",
-});
-
-export const notSrOnly: ITailwindConfig["utils"]["notSrOnly"] = () => () => ({
-  position: "static",
-  width: "auto",
-  height: "auto",
-  padding: 0,
-  margin: 0,
-  overflow: "visible",
-  clip: "auto",
-  whiteSpace: "normal",
-});
-
-export const noUnderline: ITailwindConfig["utils"]["noUnderline"] = () => () => ({
-  textDecoration: "none",
-});
-
 export const table: ITailwindConfig["utils"]["table"] = createUtility(
   {
     caption: { display: "table-caption" },
@@ -1065,14 +1071,21 @@ export const object = ((): ITailwindConfig["utils"]["object"] => {
     none: "none",
     "scale-down": "scale-down",
   };
-  return (config) => (value) => {
-    if (config.theme.objectPosition && config.theme.objectPosition[value]) {
-      return { objectPosition: config.theme.objectPosition[value] };
-    }
+  return (config) => (arg) => {
+    const args = Array.isArray(arg) ? arg : [arg];
 
-    return values[value]
-      ? { objectFit: (values as any)[value] }
-      : showWarning(value);
+    return args.reduce((aggr, value) => {
+      if (config.theme.objectPosition && config.theme.objectPosition[value]) {
+        return { ...aggr, objectPosition: config.theme.objectPosition[value] };
+      }
+
+      return {
+        ...aggr,
+        ...(values[value]
+          ? { objectFit: (values as any)[value] }
+          : showWarning(value)),
+      };
+    }, {});
   };
 })();
 
@@ -1448,17 +1461,29 @@ export const spaceTop: ITailwindConfig["utils"]["spaceTop"] = createUtility(
   }
 );
 
-export const srOnly: ITailwindConfig["utils"]["srOnly"] = () => () => ({
-  position: "absolute",
-  width: "1px",
-  height: "1px",
-  padding: 0,
-  margin: "-1px",
-  overflow: "hidden",
-  clip: "rect(0, 0, 0 ,0)",
-  whiteSpace: "nowrap",
-  borderWidth: 0,
-});
+export const srOnly: ITailwindConfig["utils"]["srOnly"] = () => (isSrOnly) =>
+  isSrOnly
+    ? {
+        position: "absolute",
+        width: "1px",
+        height: "1px",
+        padding: 0,
+        margin: "-1px",
+        overflow: "hidden",
+        clip: "rect(0, 0, 0 ,0)",
+        whiteSpace: "nowrap",
+        borderWidth: 0,
+      }
+    : {
+        position: "static",
+        width: "auto",
+        height: "auto",
+        padding: 0,
+        margin: 0,
+        overflow: "visible",
+        clip: "auto",
+        whiteSpace: "normal",
+      };
 
 export const staticPosition: ITailwindConfig["utils"]["staticPosition"] = () => () => ({
   position: "static",
@@ -1562,16 +1587,20 @@ export const truncate: ITailwindConfig["utils"]["truncate"] = () => () => ({
   whiteSpace: "nowrap",
 });
 
-export const underline: ITailwindConfig["utils"]["underline"] = () => () => ({
-  textDecoration: "underline",
+export const underline: ITailwindConfig["utils"]["underline"] = () => (
+  hasUnderline
+) => ({
+  textDecoration: hasUnderline ? "underline" : "none",
 });
 
 export const uppercase: ITailwindConfig["utils"]["uppercase"] = () => () => ({
   textTransform: "uppercase",
 });
 
-export const visible: ITailwindConfig["utils"]["visible"] = () => () => ({
-  visibility: "visible",
+export const visible: ITailwindConfig["utils"]["visible"] = () => (
+  isVisible
+) => ({
+  visibility: isVisible ? "visible" : "hidden",
 });
 
 export const w: ITailwindConfig["utils"]["w"] = createUtility(

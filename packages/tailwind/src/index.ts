@@ -1,18 +1,21 @@
 // tslint:disable-next-line: no-duplicate-imports
 import { ITailwindConfig, TTailwindUtility } from "./utils";
+import { createCss } from "@stitches/css";
+import * as theme from "./theme";
+import * as utils from "./utils";
 
 type TMergedUtilityPayload<
-  U extends TTailwindUtility,
+  U extends TTailwindUtility<any>,
   T extends object | undefined
 > = U extends TTailwindUtility<infer P>
-  ? TTailwindUtility<T extends undefined ? P : P | keyof T>
+  ? TTailwindUtility<T extends void ? P : P | keyof T | (keyof T)[]>
   : never;
 
 export const createTailwindConfig = <T extends ITailwindConfig>(
   config: T
 ): {
   theme: T["theme"];
-  screens: T["screens"];
+  screens: T["screens"] extends unknown ? {} : T["screens"];
   utilityFirst: true;
   utils: T["utils"] & {
     bg: TMergedUtilityPayload<

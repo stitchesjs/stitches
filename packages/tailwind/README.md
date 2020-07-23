@@ -57,6 +57,24 @@ const config = createTailwindConfig({
 export const css = createCss(config);
 ```
 
+## Usage
+
+Since many Tailwind classes does not conform directly to an object style syntax, Stitches Tailwind evaluates like:
+
+```ts
+css({
+  // Where there are no alternative values
+  absolute: true,
+  // Where there are opposite classnames, you can use true and false
+  italic: false,
+  // Where there are multiple values you can use a single value or an array of values
+  text: ["xl", "green-500"],
+  flex: [true, "row"],
+});
+```
+
+**Note!**. Actually all utils allows for the array syntax.
+
 ## Theme
 
 **Note!** Stitches Tailwind has its own theming concept that conforms to how Tailwind does theming.
