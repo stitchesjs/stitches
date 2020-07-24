@@ -303,7 +303,8 @@ export const createCss = <T extends IConfig>(
     },
     cb: (atom: IAtom) => void,
     screen = "",
-    pseudo: string[] = []
+    pseudo: string[] = [],
+    canCallUtils = false
   ) => {
     // tslint:disable-next-line
     for (const prop in props) {
@@ -316,7 +317,7 @@ export const createCss = <T extends IConfig>(
         createCssAtoms(props[prop], cb, prop, pseudo);
       } else if (!prop[0].match(/[a-zA-Z]/)) {
         createCssAtoms(props[prop], cb, screen, pseudo.concat(prop));
-      } else if (prop in utils) {
+      } else if (canCallUtils && prop in utils) {
         createCssAtoms(
           utils[prop](config)(props[prop]) as any,
           cb,
@@ -374,7 +375,8 @@ export const createCss = <T extends IConfig>(
           utils[prop](config)(props[prop]) as any,
           cb,
           screen,
-          pseudo
+          pseudo,
+          false
         );
       } else {
         throw new Error(
