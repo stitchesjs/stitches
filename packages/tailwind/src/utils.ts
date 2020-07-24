@@ -1521,16 +1521,23 @@ export const text = ((): ITailwindConfig["utils"]["text"] => {
     center: "center",
     justify: "justify",
   };
-  return (config) => (value: any) => {
-    if (config.theme.textColor && config.theme.textColor[value]) {
-      return { color: config.theme.textColor[value] as any };
-    }
+  return (config) => (arg: any) => {
+    const args = Array.isArray(arg) ? arg : [arg];
 
-    if (config.theme.fontSize && config.theme.fontSize[value]) {
-      return { fontSize: config.theme.fontSize[value] };
-    }
+    return args.reduce((aggr, value) => {
+      if (config.theme.textColor && config.theme.textColor[value]) {
+        return { ...aggr, color: config.theme.textColor[value] as any };
+      }
 
-    return { textAlign: (values as any)[value] || showWarning(value) };
+      if (config.theme.fontSize && config.theme.fontSize[value]) {
+        return { ...aggr, fontSize: config.theme.fontSize[value] };
+      }
+
+      return {
+        ...aggr,
+        textAlign: (values as any)[value] || showWarning(value),
+      };
+    }, {});
   };
 })();
 
