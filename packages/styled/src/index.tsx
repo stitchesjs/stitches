@@ -92,9 +92,11 @@ export interface IBaseStyled<
                 [P in keyof V]?: C["screens"] extends IScreens
                   ?
                       | keyof V[P]
-                      | {
+                      | ({
                           [S in keyof C["screens"]]?: keyof V[P];
-                        }
+                        } & {
+                          ""?: keyof V[P];
+                        })
                   : keyof V[P];
               } & {
                 styled?: string;
@@ -114,9 +116,11 @@ export interface IBaseStyled<
               [P in keyof V]?: C["screens"] extends IScreens
                 ?
                     | keyof V[P]
-                    | {
+                    | ({
                         [S in keyof C["screens"]]?: keyof V[P];
-                      }
+                      } & {
+                        ""?: keyof V[P];
+                      })
                 : keyof V[P];
             } &
               (E extends React.ComponentType<infer PP>
@@ -158,7 +162,7 @@ interface IStyledConstructor<
             | ({
                 [S in keyof C["screens"]]?: keyof V[P];
               } & {
-                "": keyof V[P];
+                ""?: keyof V[P];
               })
         : keyof V[P];
     } & {
