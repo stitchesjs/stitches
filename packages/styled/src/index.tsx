@@ -23,7 +23,7 @@ type PolymorphicComponentProps<
   E extends React.ElementType,
   P
 > = E extends PolymorphicComponent<infer PP, infer PE>
-  ? P & PP & BoxOwnProps<E> & Omit<PropsOf<PE>, "as">
+  ? P & BoxOwnProps<E> & Omit<PropsOf<PE> & PP, "as">
   : P & BoxProps<E>;
 
 export type PolymorphicComponent<P, D extends React.ElementType = "div"> = (<
@@ -155,9 +155,11 @@ interface IStyledConstructor<
       [P in keyof V]?: C["screens"] extends IScreens
         ?
             | keyof V[P]
-            | {
+            | ({
                 [S in keyof C["screens"]]?: keyof V[P];
-              }
+              } & {
+                "": keyof V[P];
+              })
         : keyof V[P];
     } & {
       styled?: string;
@@ -197,7 +199,7 @@ export const createStyled = <T extends IConfig>(
 
   let currentAs: string | undefined;
 
-  const configScreens = (css as any)._config.screens;
+  const configScreens = (css as any)._config().screens;
 
   const styledInstance = (
     baseStyling: any = (cssComposer: any) => cssComposer.compose(),
