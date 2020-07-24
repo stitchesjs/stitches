@@ -304,7 +304,7 @@ export const createCss = <T extends IConfig>(
     cb: (atom: IAtom) => void,
     screen = "",
     pseudo: string[] = [],
-    canCallUtils = false
+    canCallUtils = true
   ) => {
     // tslint:disable-next-line
     for (const prop in props) {
@@ -322,7 +322,8 @@ export const createCss = <T extends IConfig>(
           utils[prop](config)(props[prop]) as any,
           cb,
           screen,
-          pseudo
+          pseudo,
+          false
         );
       } else if (prop in specificityProps) {
         createCssAtoms(
