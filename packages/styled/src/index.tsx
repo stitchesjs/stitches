@@ -92,12 +92,15 @@ export interface IBaseStyled<
                 [P in keyof V]?: C["screens"] extends IScreens
                   ?
                       | keyof V[P]
+                      | false
+                      | null
+                      | undefined
                       | ({
                           [S in keyof C["screens"]]?: keyof V[P];
                         } & {
                           ""?: keyof V[P];
                         })
-                  : keyof V[P];
+                  : keyof V[P] | false | null | undefined;
               } & {
                 styled?: string;
               },
@@ -115,13 +118,16 @@ export interface IBaseStyled<
           : {
               [P in keyof V]?: C["screens"] extends IScreens
                 ?
+                    | false
+                    | null
+                    | undefined
                     | keyof V[P]
                     | ({
                         [S in keyof C["screens"]]?: keyof V[P];
                       } & {
                         ""?: keyof V[P];
                       })
-                : keyof V[P];
+                : keyof V[P] | false | null | undefined;
             } &
               (E extends React.ComponentType<infer PP>
                 ? PP & {
@@ -158,6 +164,9 @@ interface IStyledConstructor<
     {
       [P in keyof V]?: C["screens"] extends IScreens
         ?
+            | false
+            | null
+            | undefined
             | keyof V[P]
             | ({
                 [S in keyof C["screens"]]?: keyof V[P];
@@ -261,7 +270,7 @@ export const createStyled = <T extends IConfig>(
 
           if (typeof props[propName] === "string") {
             compositions.push(screens?.get(props[propName])![""]);
-          } else {
+          } else if (props[propName]) {
             // tslint:disable-next-line
             for (const screen in props[propName]) {
               compositions.push(screens?.get(props[propName][screen])![screen]);
