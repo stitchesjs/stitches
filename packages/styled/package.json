@@ -40,7 +40,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/css": "^7.1.2",
+    "@stitches/css": "^7.1.0",
     "@types/node": "^13.11.1",
     "tslib": "^1.11.1"
   },
