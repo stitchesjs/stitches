@@ -1,4 +1,4 @@
-import { Properties, LineWidth, LineStyle, Color } from "./css-types";
+import { Color, LineStyle, LineWidth, Properties } from "./css-types";
 
 export interface IScreens {
   [key: string]: (css: string) => string;
