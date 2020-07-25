@@ -153,12 +153,14 @@ const composeIntoMap = (
     const item = atoms[i];
     // atoms can be undefined, null, false or '' using ternary like
     // expressions with the properties
-    if (item && "atoms" in item) {
+    if (item && item[ATOM] && "atoms" in item) {
       composeIntoMap(map, item.atoms);
-    } else if (item) {
-      if (!map.has(item.id)) {
-        map.set(item.id, item);
+    } else if (item && item[ATOM]) {
+      if (!map.has((item as IAtom).id)) {
+        map.set((item as IAtom).id, item as IAtom);
       }
+    } else if (item) {
+      map.set((item as unknown) as string, item as IAtom);
     }
   }
 };
@@ -245,6 +247,7 @@ export const createCss = <T extends IConfig>(
     return {
       atoms: Array.from(map.values()),
       toString: toStringCompose,
+      [ATOM]: true,
     };
   };
   const createAtom = (
@@ -449,7 +452,7 @@ export const createCss = <T extends IConfig>(
       if (!definitions[x]) {
         continue;
       }
-      if (definitions[x][ATOM]) {
+      if (typeof definitions[x] === "string" || definitions[x][ATOM]) {
         args[index++] = definitions[x];
       } else if (config.utilityFirst) {
         createUtilsAtoms(definitions[x], (atom) => {

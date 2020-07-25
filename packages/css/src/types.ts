@@ -28,6 +28,7 @@ export interface IComposedAtom {
   atoms: IAtom[];
   _className?: string;
   toString: (this: IComposedAtom) => string;
+  [ATOM]: true;
 }
 
 export type TRecursiveCss<
