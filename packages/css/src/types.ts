@@ -1,9 +1,9 @@
 import {
   Color,
+  FlexProperty,
   LineStyle,
   LineWidth,
   Properties,
-  FlexProperty,
 } from "./css-types";
 
 export interface IScreens {
