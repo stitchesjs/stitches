@@ -93,6 +93,9 @@ css({
     color: "blue", // Color is "blue" when media query is active
   },
   marginX: 0, // Creates "1rem", as it composes margin, using "space" from tokens
+  border: "1px solid RED", // creates a "tomato" border
+  border: ["1px", "solid", "RED"], // You can also use array syntax to get typing
+  boxShadow: ["1px", "1px", "1px", "RED"], // You can also use array syntax with shadow
 });
 ```
 
