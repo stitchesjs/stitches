@@ -21,6 +21,8 @@ import {
 export * from "./types";
 export * from "./css-types";
 
+// Lerna ISSUE
+
 export const hotReloadingCache = new Map<string, any>();
 
 const toStringCachedAtom = function (this: IAtom) {
