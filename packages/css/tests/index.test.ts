@@ -441,4 +441,71 @@ describe("createCss", () => {
       "/* STITCHES */\n\n._3266759165:hover:disabled{color:red;}"
     );
   });
+  test("should handle border specificity", () => {
+    const css = createCss({}, null);
+    const atom = css({ border: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe(
+        "_3699842268 _4258539560 _3162928263 _2026632940 _1405295864 _397589452 _3971615587 _1515315272 _1917871437 _115517177 _3001088182 _1146082397"
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n._3699842268{border-left-color:red;}\n._4258539560{border-bottom-color:red;}\n._3162928263{border-right-color:red;}\n._2026632940{border-top-color:red;}\n._1405295864{border-left-style:solid;}\n._397589452{border-bottom-style:solid;}\n._3971615587{border-right-style:solid;}\n._1515315272{border-top-style:solid;}\n._1917871437{border-left-width:1px;}\n._115517177{border-bottom-width:1px;}\n._3001088182{border-right-width:1px;}\n._1146082397{border-top-width:1px;}"
+    );
+  });
+  test("should handle border array definition with token", () => {
+    const css = createCss(
+      {
+        tokens: {
+          colors: {
+            primary: "tomato",
+          },
+        },
+      },
+      null
+    );
+    const atom = css({ border: ["1px", "solid", "primary"] }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe(
+        "_37328740 _3671545168 _150089599 _4079361620 _1405295864 _397589452 _3971615587 _1515315272 _1917871437 _115517177 _3001088182 _1146082397"
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n._37328740{border-left-color:var(--colors-primary);}\n._3671545168{border-bottom-color:var(--colors-primary);}\n._150089599{border-right-color:var(--colors-primary);}\n._4079361620{border-top-color:var(--colors-primary);}\n._1405295864{border-left-style:solid;}\n._397589452{border-bottom-style:solid;}\n._3971615587{border-right-style:solid;}\n._1515315272{border-top-style:solid;}\n._1917871437{border-left-width:1px;}\n._115517177{border-bottom-width:1px;}\n._3001088182{border-right-width:1px;}\n._1146082397{border-top-width:1px;}"
+    );
+  });
+  test("should handle box shadow array with token", () => {
+    const css = createCss(
+      {
+        tokens: {
+          colors: {
+            primary: "tomato",
+          },
+        },
+      },
+      null
+    );
+    const atom = css({ boxShadow: ["1px", "1px", "1px", "primary"] }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_3532244265");
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n._3532244265{box-shadow:1px 1px 1px var(--colors-primary);}"
+    );
+  });
 });

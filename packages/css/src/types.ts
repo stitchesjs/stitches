@@ -1,4 +1,4 @@
-import { Properties } from "./css-types";
+import { Properties, LineWidth, LineStyle, Color } from "./css-types";
 
 export interface IScreens {
   [key: string]: (css: string) => string;
@@ -29,12 +29,8 @@ export interface IComposedAtom {
 export type TRecursiveCss<
   T extends IConfig,
   D = {
-    [K in keyof Properties]?: K extends keyof ICssPropToToken
-      ? T["tokens"] extends object
-        ? T["tokens"][ICssPropToToken[K]] extends object
-          ? keyof T["tokens"][ICssPropToToken[K]] | (string & {})
-          : Properties[K]
-        : Properties[K]
+    [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
+      ? ICssPropToToken<T>[K] | Properties[K]
       : Properties[K];
   }
 > = (
@@ -74,58 +70,176 @@ export type TUtility<A extends any, T extends IConfig> = (
   config: T
 ) => (arg: A) => TRecursiveCss<T>;
 
-export interface ICssPropToToken {
-  color: "colors";
-  backgroundColor: "colors";
-  margin: "space";
-  marginTop: "space";
-  marginLeft: "space";
-  marginRight: "space";
-  marginBottom: "space";
-  padding: "space";
-  paddingTop: "space";
-  paddingLeft: "space";
-  paddingRight: "space";
-  paddingBottom: "space";
-  gridGap: "space";
-  gridColumnGap: "space";
-  gridRowGap: "space";
-  fontSize: "fontSizes";
-  borderColor: "colors";
-  borderTopColor: "colors";
-  borderLeftColor: "colors";
-  borderRightColor: "colors";
-  borderBottomColor: "colors";
-  fontFamily: "fonts";
-  fontWeight: "fontWeights";
-  lineHeight: "lineHeights";
-  letterSpacing: "letterSpacings";
-  width: "sizes";
-  height: "sizes";
-  minWidth: "sizes";
-  maxWidth: "sizes";
-  minHeight: "sizes";
-  maxHeight: "sizes";
-  borderWidth: "borderWidths";
-  borderTopWidth: "borderWidths";
-  borderLeftWidth: "borderWidths";
-  borderRightWidth: "borderWidths";
-  borderBottomWidth: "borderWidths";
-  borderStyle: "borderStyles";
-  borderTopStyle: "borderStyles";
-  borderLeftStyle: "borderStyles";
-  borderRightStyle: "borderStyles";
-  borderBottomStyle: "borderStyles";
-  borderRadius: "radii";
-  borderTopLeftRadius: "radii";
-  borderTopRightRadius: "radii";
-  borderBottomRightRadius: "radii";
-  borderBottomLeftRadius: "radii";
-  boxShadow: "shadows";
-  textShadow: "shadows";
-  zIndex: "zIndices";
-  transition: "transitions";
-}
+export type ICssPropToToken<T extends IConfig> = T["tokens"] extends object
+  ? {
+      border: [
+        LineWidth<(string & {}) | 0>,
+        T["tokens"]["borderStyles"] extends object
+          ? keyof T["tokens"]["borderStyles"]
+          : LineStyle,
+        T["tokens"]["colors"] extends object
+          ? keyof T["tokens"]["colors"]
+          : Color
+      ];
+      color: T["tokens"]["colors"] extends object
+        ? keyof T["tokens"]["colors"]
+        : never;
+      backgroundColor: T["tokens"]["colors"] extends object
+        ? keyof T["tokens"]["colors"]
+        : never;
+      margin: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      marginTop: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      marginLeft: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      marginRight: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      marginBottom: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      padding: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      paddingTop: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      paddingLeft: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      paddingRight: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      paddingBottom: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      gridGap: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      gridColumnGap: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      gridRowGap: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
+      fontSize: T["tokens"]["fontSizes"] extends object
+        ? keyof T["tokens"]["fontSizes"]
+        : never;
+      borderColor: T["tokens"]["colors"] extends object
+        ? keyof T["tokens"]["colors"]
+        : never;
+      borderTopColor: T["tokens"]["colors"] extends object
+        ? keyof T["tokens"]["colors"]
+        : never;
+      borderLeftColor: T["tokens"]["colors"] extends object
+        ? keyof T["tokens"]["colors"]
+        : never;
+      borderRightColor: T["tokens"]["colors"] extends object
+        ? keyof T["tokens"]["colors"]
+        : never;
+      borderBottomColor: T["tokens"]["colors"] extends object
+        ? keyof T["tokens"]["colors"]
+        : never;
+      fontFamily: T["tokens"]["fonts"] extends object
+        ? keyof T["tokens"]["fonts"]
+        : never;
+      fontWeight: T["tokens"]["fontWeights"] extends object
+        ? keyof T["tokens"]["fontWeights"]
+        : never;
+      lineHeight: T["tokens"]["lineHeights"] extends object
+        ? keyof T["tokens"]["lineHeights"]
+        : never;
+      letterSpacing: T["tokens"]["letterSpacings"] extends object
+        ? keyof T["tokens"]["letterSpacings"]
+        : never;
+      width: T["tokens"]["sizes"] extends object
+        ? keyof T["tokens"]["sizes"]
+        : never;
+      height: T["tokens"]["sizes"] extends object
+        ? keyof T["tokens"]["sizes"]
+        : never;
+      minWidth: T["tokens"]["sizes"] extends object
+        ? keyof T["tokens"]["sizes"]
+        : never;
+      maxWidth: T["tokens"]["sizes"] extends object
+        ? keyof T["tokens"]["sizes"]
+        : never;
+      minHeight: T["tokens"]["sizes"] extends object
+        ? keyof T["tokens"]["sizes"]
+        : never;
+      maxHeight: T["tokens"]["sizes"] extends object
+        ? keyof T["tokens"]["sizes"]
+        : never;
+      borderWidth: T["tokens"]["borderWidths"] extends object
+        ? keyof T["tokens"]["borderWidths"]
+        : never;
+      borderTopWidth: T["tokens"]["borderWidths"] extends object
+        ? keyof T["tokens"]["borderWidths"]
+        : never;
+      borderLeftWidth: T["tokens"]["borderWidths"] extends object
+        ? keyof T["tokens"]["borderWidths"]
+        : never;
+      borderRightWidth: T["tokens"]["borderWidths"] extends object
+        ? keyof T["tokens"]["borderWidths"]
+        : never;
+      borderBottomWidth: T["tokens"]["borderWidths"] extends object
+        ? keyof T["tokens"]["borderWidths"]
+        : never;
+      borderStyle: T["tokens"]["borderStyles"] extends object
+        ? keyof T["tokens"]["borderStyles"]
+        : never;
+      borderTopStyle: T["tokens"]["borderStyles"] extends object
+        ? keyof T["tokens"]["borderStyles"]
+        : never;
+      borderLeftStyle: T["tokens"]["borderStyles"] extends object
+        ? keyof T["tokens"]["borderStyles"]
+        : never;
+      borderRightStyle: T["tokens"]["borderStyles"] extends object
+        ? keyof T["tokens"]["borderStyles"]
+        : never;
+      borderBottomStyle: T["tokens"]["borderStyles"] extends object
+        ? keyof T["tokens"]["borderStyles"]
+        : never;
+      borderRadius: T["tokens"]["radii"] extends object
+        ? keyof T["tokens"]["radii"]
+        : never;
+      borderTopLeftRadius: T["tokens"]["radii"] extends object
+        ? keyof T["tokens"]["radii"]
+        : never;
+      borderTopRightRadius: T["tokens"]["radii"] extends object
+        ? keyof T["tokens"]["radii"]
+        : never;
+      borderBottomRightRadius: T["tokens"]["radii"] extends object
+        ? keyof T["tokens"]["radii"]
+        : never;
+      borderBottomLeftRadius: T["tokens"]["radii"] extends object
+        ? keyof T["tokens"]["radii"]
+        : never;
+      boxShadow: T["tokens"]["shadows"] extends object
+        ? keyof T["tokens"]["shadows"]
+        : [
+            string | number,
+            string | number,
+            string | number,
+            T["tokens"]["colors"] extends object
+              ? keyof T["tokens"]["colors"]
+              : Color
+          ];
+      textShadow: T["tokens"]["shadows"] extends object
+        ? keyof T["tokens"]["shadows"]
+        : never;
+      zIndex: T["tokens"]["zIndices"] extends object
+        ? keyof T["tokens"]["zIndices"]
+        : never;
+      transition: T["tokens"]["transitions"] extends object
+        ? keyof T["tokens"]["transitions"]
+        : never;
+    }
+  : {};
 
 export interface ITokenDefinition {
   [key: string]: string;

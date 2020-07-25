@@ -252,7 +252,26 @@ export const createCss = <T extends IConfig>(
     screen = "",
     pseudo?: string
   ) => {
-    const token = tokens[cssPropToToken[cssProp as keyof ICssPropToToken]];
+    const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
+    let tokenValue: any;
+    if (token) {
+      if (Array.isArray(token) && Array.isArray(value)) {
+        tokenValue = token.map((tokenName, index) =>
+          token &&
+          (tokens as any)[tokenName] &&
+          (tokens as any)[tokenName][value[index]]
+            ? (tokens as any)[tokenName][value[index]]
+            : value[index]
+        );
+      } else {
+        tokenValue =
+          token && (tokens as any)[token] && (tokens as any)[token][value]
+            ? (tokens as any)[token][value]
+            : value;
+      }
+    } else {
+      tokenValue = value;
+    }
     const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
 
     // generate id used for specificity check
@@ -286,7 +305,7 @@ export const createCss = <T extends IConfig>(
     const atom: IAtom = {
       id,
       cssHyphenProp,
-      value: token && token[value] ? token[value] : value,
+      value: tokenValue,
       pseudo,
       screen,
       toString,
@@ -304,7 +323,8 @@ export const createCss = <T extends IConfig>(
     cb: (atom: IAtom) => void,
     screen = "",
     pseudo: string[] = [],
-    canCallUtils = true
+    canCallUtils = true,
+    canCallSpecificityProps = true
   ) => {
     // tslint:disable-next-line
     for (const prop in props) {
@@ -325,12 +345,14 @@ export const createCss = <T extends IConfig>(
           pseudo,
           false
         );
-      } else if (prop in specificityProps) {
+      } else if (canCallSpecificityProps && prop in specificityProps) {
         createCssAtoms(
           specificityProps[prop](config)(props[prop]) as any,
           cb,
           screen,
-          pseudo
+          pseudo,
+          false,
+          false
         );
       } else {
         cb(

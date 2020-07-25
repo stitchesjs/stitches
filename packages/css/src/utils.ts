@@ -1,6 +1,7 @@
-import { ICssPropToToken, IScreens, ISheet, TCss, TUtility } from "./types";
+import { ICssPropToToken, IScreens, ISheet, TUtility } from "./types";
 
-export const cssPropToToken: ICssPropToToken = {
+export const cssPropToToken: ICssPropToToken<any> = {
+  border: ["", "borderStyles", "colors"],
   color: "colors",
   backgroundColor: "colors",
   margin: "space",
@@ -112,6 +113,34 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
 export const specificityProps: {
   [key: string]: TUtility<any, any>;
 } = {
+  border: () => (value) => {
+    const parts = Array.isArray(value) ? value : value.split(" ");
+    return {
+      borderTopWidth: parts[0],
+      borderRightWidth: parts[0],
+      borderBottomWidth: parts[0],
+      borderLeftWidth: parts[0],
+      borderTopStyle: parts[1],
+      borderRightStyle: parts[1],
+      borderBottomStyle: parts[1],
+      borderLeftStyle: parts[1],
+      borderTopColor: parts[2],
+      borderRightColor: parts[2],
+      borderBottomColor: parts[2],
+      borderLeftColor: parts[2],
+    };
+  },
+  boxShadow: (config) => (value) => ({
+    boxShadow: Array.isArray(value)
+      ? `${value[0]} ${value[1]} ${value[2]} ${
+          config.tokens &&
+          config.tokens.colors &&
+          config.tokens.colors[value[3]]
+            ? config.tokens.colors[value[3]]
+            : value[3]
+        }`
+      : value,
+  }),
   overflow: () => (value) => ({ overflowX: value, overflowY: value }),
   margin: () => (value) => ({
     marginLeft: value,

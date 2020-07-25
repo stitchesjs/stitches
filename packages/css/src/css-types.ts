@@ -1,4 +1,4 @@
-export interface StandardLonghandProperties<TLength = string | 0> {
+export interface StandardLonghandProperties<TLength = (string & {}) | 0> {
   /**
    * The CSS **`align-content`** property sets how the browser distributes space between and around content items along the cross-axis of a flexbox container, and the main-axis of a grid container.
    *
@@ -6447,7 +6447,8 @@ export type BorderProperty<TLength> =
   | LineWidth<TLength>
   | LineStyle
   | Color
-  | (string & {});
+  | (string & {})
+  | [LineWidth<TLength>, LineStyle, Color];
 
 export type BorderBlockProperty<TLength> =
   | Globals
@@ -9125,7 +9126,7 @@ type BlendMode =
 
 type Box = "border-box" | "content-box" | "padding-box";
 
-type Color =
+export type Color =
   | NamedColor
   | DeprecatedSystemColor
   | "currentcolor"
@@ -9289,7 +9290,7 @@ type GeometryBox = Box | "fill-box" | "margin-box" | "stroke-box" | "view-box";
 
 type GridLine = "auto" | (string & {}) | number;
 
-type LineStyle =
+export type LineStyle =
   | "dashed"
   | "dotted"
   | "double"
@@ -9301,7 +9302,7 @@ type LineStyle =
   | "ridge"
   | "solid";
 
-type LineWidth<TLength> = TLength | "medium" | "thick" | "thin";
+export type LineWidth<TLength> = TLength | "medium" | "thick" | "thin";
 
 type MaskLayer<TLength> =
   | Position<TLength>
