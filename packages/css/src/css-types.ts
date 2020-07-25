@@ -4239,7 +4239,7 @@ export interface StandardLonghandProperties<TLength = (string & {}) | 0> {
   zoom: ZoomProperty;
 }
 
-export interface StandardShorthandProperties<TLength = string | 0> {
+export interface StandardShorthandProperties<TLength = (string & {}) | 0> {
   /**
    * The `**all**` CSS shorthand property sets all of an element's properties (other than `unicode-bidi` and `direction`) to their initial or inherited values, or to the values specified in another stylesheet origin.
    *
@@ -4729,11 +4729,11 @@ export interface StandardShorthandProperties<TLength = string | 0> {
   transition: TransitionProperty;
 }
 
-export interface StandardProperties<TLength = string | 0>
+export interface StandardProperties<TLength = (string & {}) | 0>
   extends StandardLonghandProperties<TLength>,
     StandardShorthandProperties<TLength> {}
 
-export interface VendorLonghandProperties<TLength = string | 0> {
+export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
   /**
    * The **`animation-delay`** CSS property sets when an animation starts. The animation can start later, immediately from its beginning, or immediately and partway through the animation.
    *
@@ -6070,7 +6070,7 @@ export interface VendorLonghandProperties<TLength = string | 0> {
   WebkitWritingMode: WritingModeProperty;
 }
 
-export interface VendorShorthandProperties<TLength = string | 0> {
+export interface VendorShorthandProperties<TLength = (string & {}) | 0> {
   /** The **`animation`** shorthand CSS property sets an animated transition between styles. It is a shorthand for `animation-name`, `animation-duration`, `animation-timing-function`, `animation-delay`, `animation-iteration-count`, `animation-direction`, `animation-fill-mode`, and `animation-play-state`. */
   MozAnimation: AnimationProperty;
   /** The **`border-image`** CSS property draws an image in place of an element's `border-style`. */
@@ -6121,11 +6121,11 @@ export interface VendorShorthandProperties<TLength = string | 0> {
   WebkitTransition: TransitionProperty;
 }
 
-export interface VendorProperties<TLength = string | 0>
+export interface VendorProperties<TLength = (string & {}) | 0>
   extends VendorLonghandProperties<TLength>,
     VendorShorthandProperties<TLength> {}
 
-export interface SvgProperties<TLength = string | 0> {
+export interface SvgProperties<TLength = (string & {}) | 0> {
   alignmentBaseline: AlignmentBaselineProperty;
   baselineShift: BaselineShiftProperty<TLength>;
   clip: ClipProperty;
@@ -6188,7 +6188,7 @@ export interface SvgProperties<TLength = string | 0> {
   writingMode: WritingModeProperty;
 }
 
-export interface Properties<TLength = string | 0>
+export interface Properties<TLength = (string & {}) | 0>
   extends StandardProperties<TLength>,
     VendorProperties<TLength>,
     SvgProperties<TLength> {}
@@ -6227,7 +6227,7 @@ export interface FontFaceFallback {
   unicodeRange: string | string[];
 }
 
-export interface Viewport<TLength = string | 0> {
+export interface Viewport<TLength = (string & {}) | 0> {
   msHeight: ViewportHeightProperty<TLength>;
   msMaxHeight: ViewportMaxHeightProperty<TLength>;
   msMaxWidth: ViewportMaxWidthProperty<TLength>;
@@ -6253,7 +6253,7 @@ export interface Viewport<TLength = string | 0> {
   zoom: ViewportZoomProperty;
 }
 
-export interface ViewportFallback<TLength = string | 0> {
+export interface ViewportFallback<TLength = (string & {}) | 0> {
   msHeight: ViewportHeightProperty<TLength> | ViewportHeightProperty<TLength>[];
   msMaxHeight:
     | ViewportMaxHeightProperty<TLength>
@@ -6911,7 +6911,9 @@ export type FlexProperty<TLength> =
   | "min-content"
   | "none"
   | (string & {})
-  | number;
+  | number
+  | [number, number | (string & {})]
+  | [number, number, string & {}];
 
 export type FlexBasisProperty<TLength> =
   | Globals
@@ -7331,7 +7333,22 @@ export type MarginProperty<TLength> =
   | Globals
   | TLength
   | "auto"
-  | (string & {});
+  | (string & {})
+  | [
+      Globals | TLength | "auto" | (string & {}),
+      Globals | TLength | "auto" | (string & {})
+    ]
+  | [
+      Globals | TLength | "auto" | (string & {}),
+      Globals | TLength | "auto" | (string & {}),
+      Globals | TLength | "auto" | (string & {})
+    ]
+  | [
+      Globals | TLength | "auto" | (string & {}),
+      Globals | TLength | "auto" | (string & {}),
+      Globals | TLength | "auto" | (string & {}),
+      Globals | TLength | "auto" | (string & {})
+    ];
 
 export type MarginBlockProperty<TLength> =
   | Globals
@@ -7711,7 +7728,22 @@ export type OverscrollBehaviorXProperty = Globals | "auto" | "contain" | "none";
 
 export type OverscrollBehaviorYProperty = Globals | "auto" | "contain" | "none";
 
-export type PaddingProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingProperty<TLength> =
+  | Globals
+  | TLength
+  | (string & {})
+  | [Globals | TLength | (string & {}), Globals | TLength | (string & {})]
+  | [
+      Globals | TLength | (string & {}),
+      Globals | TLength | (string & {}),
+      Globals | TLength | (string & {})
+    ]
+  | [
+      Globals | TLength | (string & {}),
+      Globals | TLength | (string & {}),
+      Globals | TLength | (string & {}),
+      Globals | TLength | (string & {})
+    ];
 
 export type PaddingBlockProperty<TLength> = Globals | TLength | (string & {});
 

@@ -2,6 +2,7 @@ import { ICssPropToToken, IScreens, ISheet, TUtility } from "./types";
 
 export const cssPropToToken: ICssPropToToken<any> = {
   border: ["", "borderStyles", "colors"],
+  flexBasis: "space",
   color: "colors",
   backgroundColor: "colors",
   margin: "space",
@@ -141,19 +142,102 @@ export const specificityProps: {
         }`
       : value,
   }),
+  flex: () => (value) => {
+    if (Array.isArray(value)) {
+      if (value.length === 2) {
+        return {
+          flexGrow: value[0],
+          ...(isNaN(value[1])
+            ? { flexBasis: value[1] }
+            : { flexShrink: value[1] }),
+        };
+      }
+      if (value.length === 3) {
+        return {
+          flexGrow: value[0],
+          flexShrink: value[1],
+          flexBasis: value[2],
+        };
+      }
+    }
+
+    return isNaN(value)
+      ? {
+          flexBasis: value,
+        }
+      : {
+          flexGrow: value,
+        };
+  },
   overflow: () => (value) => ({ overflowX: value, overflowY: value }),
-  margin: () => (value) => ({
-    marginLeft: value,
-    marginTop: value,
-    marginRight: value,
-    marginBottom: value,
-  }),
-  padding: () => (value) => ({
-    paddingLeft: value,
-    paddingTop: value,
-    paddingRight: value,
-    paddingBottom: value,
-  }),
+  margin: () => (value) => {
+    if (Array.isArray(value)) {
+      if (value.length === 2) {
+        return {
+          marginLeft: value[1],
+          marginTop: value[0],
+          marginRight: value[1],
+          marginBottom: value[0],
+        };
+      }
+      if (value.length === 3) {
+        return {
+          marginLeft: value[1],
+          marginTop: value[0],
+          marginRight: value[1],
+          marginBottom: value[2],
+        };
+      }
+
+      return {
+        marginLeft: value[3],
+        marginTop: value[0],
+        marginRight: value[1],
+        marginBottom: value[2],
+      };
+    }
+
+    return {
+      marginLeft: value,
+      marginTop: value,
+      marginRight: value,
+      marginBottom: value,
+    };
+  },
+  padding: () => (value) => {
+    if (Array.isArray(value)) {
+      if (value.length === 2) {
+        return {
+          paddingLeft: value[1],
+          paddingTop: value[0],
+          paddingRight: value[1],
+          paddingBottom: value[0],
+        };
+      }
+      if (value.length === 3) {
+        return {
+          paddingLeft: value[1],
+          paddingTop: value[0],
+          paddingRight: value[1],
+          paddingBottom: value[2],
+        };
+      }
+
+      return {
+        paddingLeft: value[3],
+        paddingTop: value[0],
+        paddingRight: value[1],
+        paddingBottom: value[2],
+      };
+    }
+
+    return {
+      paddingLeft: value,
+      paddingTop: value,
+      paddingRight: value,
+      paddingBottom: value,
+    };
+  },
   borderRadius: () => (value) => ({
     borderTopLeftRadius: value,
     borderTopRightRadius: value,

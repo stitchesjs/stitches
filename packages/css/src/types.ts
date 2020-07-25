@@ -1,4 +1,10 @@
-import { Color, LineStyle, LineWidth, Properties } from "./css-types";
+import {
+  Color,
+  LineStyle,
+  LineWidth,
+  Properties,
+  FlexProperty,
+} from "./css-types";
 
 export interface IScreens {
   [key: string]: (css: string) => string;
@@ -93,7 +99,20 @@ export type ICssPropToToken<T extends IConfig> = T["tokens"] extends object
         ? keyof T["tokens"]["colors"]
         : never;
       margin: T["tokens"]["space"] extends object
-        ? keyof T["tokens"]["space"]
+        ?
+            | keyof T["tokens"]["space"]
+            | [keyof T["tokens"]["space"], keyof T["tokens"]["space"]]
+            | [
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"]
+              ]
+            | [
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"]
+              ]
         : never;
       marginTop: T["tokens"]["space"] extends object
         ? keyof T["tokens"]["space"]
@@ -108,7 +127,20 @@ export type ICssPropToToken<T extends IConfig> = T["tokens"] extends object
         ? keyof T["tokens"]["space"]
         : never;
       padding: T["tokens"]["space"] extends object
-        ? keyof T["tokens"]["space"]
+        ?
+            | keyof T["tokens"]["space"]
+            | [keyof T["tokens"]["space"], keyof T["tokens"]["space"]]
+            | [
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"]
+              ]
+            | [
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"],
+                keyof T["tokens"]["space"]
+              ]
         : never;
       paddingTop: T["tokens"]["space"] extends object
         ? keyof T["tokens"]["space"]
@@ -161,6 +193,23 @@ export type ICssPropToToken<T extends IConfig> = T["tokens"] extends object
       letterSpacing: T["tokens"]["letterSpacings"] extends object
         ? keyof T["tokens"]["letterSpacings"]
         : never;
+      flex:
+        | (T["tokens"]["space"] extends object
+            ? keyof T["tokens"]["space"]
+            : FlexProperty<(string & {}) | 0>)
+        | [
+            number,
+            T["tokens"]["space"] extends object
+              ? keyof T["tokens"]["space"]
+              : string | number
+          ]
+        | [
+            number,
+            number,
+            T["tokens"]["space"] extends object
+              ? keyof T["tokens"]["space"]
+              : string | number
+          ];
       width: T["tokens"]["sizes"] extends object
         ? keyof T["tokens"]["sizes"]
         : never;
