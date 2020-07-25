@@ -1,6 +1,6 @@
 {
   "name": "@stitches/vue-directive",
-  "version": "7.1.2",
+  "version": "7.1.0",
   "description": "The atom CSS-IN-JS  library",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
