@@ -193,10 +193,13 @@ export type ICssPropToToken<T extends IConfig> = T["tokens"] extends object
       letterSpacing: T["tokens"]["letterSpacings"] extends object
         ? keyof T["tokens"]["letterSpacings"]
         : never;
+      flexBasis: T["tokens"]["space"] extends object
+        ? keyof T["tokens"]["space"]
+        : never;
       flex:
         | (T["tokens"]["space"] extends object
             ? keyof T["tokens"]["space"]
-            : FlexProperty<(string & {}) | 0>)
+            : never)
         | [
             number,
             T["tokens"]["space"] extends object
