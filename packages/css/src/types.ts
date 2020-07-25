@@ -4,6 +4,8 @@ export interface IScreens {
   [key: string]: (css: string) => string;
 }
 
+export const ATOM = Symbol("ATOM");
+
 export interface IAtom {
   id: string;
   cssHyphenProp: string;
@@ -12,12 +14,14 @@ export interface IAtom {
   screen: string;
   _className?: string;
   toString: (this: IAtom) => string;
+  [ATOM]: true;
 }
 
 export interface IThemeAtom {
   name: string;
   definition: ITokensDefinition;
   toString: (this: IThemeAtom) => string;
+  [ATOM]: true;
 }
 
 export interface IComposedAtom {

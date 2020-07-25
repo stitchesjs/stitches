@@ -1,5 +1,4 @@
 import { createCss, createTokens, hotReloadingCache } from "../src";
-import { IAtom } from "../src/types";
 
 function createStyleSheet(styleTag: HTMLStyleElement): CSSStyleSheet {
   document.querySelector("head")?.appendChild(styleTag);
@@ -506,6 +505,37 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
       "/* STITCHES */\n\n._3532244265{box-shadow:1px 1px 1px var(--colors-primary);}"
+    );
+  });
+  test("should be able to compose themes", () => {
+    const css = createCss(
+      {
+        tokens: {
+          colors: {
+            primary: "tomato",
+          },
+        },
+      },
+      null
+    );
+    const darkTheme = css.theme({
+      colors: {
+        primary: "green",
+      },
+    });
+    const atom = css(darkTheme, {
+      color: "primary",
+    }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_221333491 theme-0");
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n._221333491{color:var(--colors-primary);}"
     );
   });
 });

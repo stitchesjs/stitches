@@ -1,4 +1,5 @@
 import {
+  ATOM,
   IAtom,
   IComposedAtom,
   IConfig,
@@ -309,6 +310,7 @@ export const createCss = <T extends IConfig>(
       pseudo,
       screen,
       toString,
+      [ATOM]: true,
     };
 
     // Cache it
@@ -447,10 +449,7 @@ export const createCss = <T extends IConfig>(
       if (!definitions[x]) {
         continue;
       }
-      if (
-        "atoms" in definitions[x] &&
-        definitions[x].hasOwnProperty("toString")
-      ) {
+      if (definitions[x][ATOM]) {
         args[index++] = definitions[x];
       } else if (config.utilityFirst) {
         createUtilsAtoms(definitions[x], (atom) => {
@@ -484,6 +483,7 @@ export const createCss = <T extends IConfig>(
       name: String(themeCache.size),
       definition,
       toString: themeToString,
+      [ATOM]: true as true,
     };
 
     themeCache.set(definition, themeAtom);
