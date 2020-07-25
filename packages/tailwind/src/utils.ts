@@ -428,55 +428,71 @@ export const border = ((): ITailwindConfig["utils"]["border"] => {
 })();
 
 export const borderB: ITailwindConfig["utils"]["borderB"] = (config) => (
-  value: any
+  arg: any
 ) => {
-  if (config.theme.borderColor && config.theme.borderColor[value]) {
-    return { borderBottomColor: config.theme.borderColor[value] };
-  }
-  if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-    return { borderBottomWidth: config.theme.borderWidth[value] };
-  }
+  const args = Array.isArray(arg) ? arg : [arg];
 
-  return showWarning(value);
+  return args.reduce((aggr, value) => {
+    if (config.theme.borderColor && config.theme.borderColor[value]) {
+      return { ...aggr, borderBottomColor: config.theme.borderColor[value] };
+    }
+    if (config.theme.borderWidth && config.theme.borderWidth[value]) {
+      return { ...aggr, borderBottomWidth: config.theme.borderWidth[value] };
+    }
+
+    return { ...aggr, ...showWarning(value) };
+  }, {});
 };
 
 export const borderL: ITailwindConfig["utils"]["borderB"] = (config) => (
-  value: any
+  arg: any
 ) => {
-  if (config.theme.borderColor && config.theme.borderColor[value]) {
-    return { borderLeftColor: config.theme.borderColor[value] };
-  }
-  if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-    return { borderLeftWidth: config.theme.borderWidth[value] };
-  }
+  const args = Array.isArray(arg) ? arg : [arg];
 
-  return showWarning(value);
+  return args.reduce((aggr, value) => {
+    if (config.theme.borderColor && config.theme.borderColor[value]) {
+      return { ...aggr, borderLeftColor: config.theme.borderColor[value] };
+    }
+    if (config.theme.borderWidth && config.theme.borderWidth[value]) {
+      return { ...aggr, borderLeftWidth: config.theme.borderWidth[value] };
+    }
+
+    return { ...aggr, ...showWarning(value) };
+  }, {});
 };
 
 export const borderR: ITailwindConfig["utils"]["borderR"] = (config) => (
-  value: any
+  arg: any
 ) => {
-  if (config.theme.borderColor && config.theme.borderColor[value]) {
-    return { borderRightColor: config.theme.borderColor[value] };
-  }
-  if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-    return { borderRightWidth: config.theme.borderWidth[value] };
-  }
+  const args = Array.isArray(arg) ? arg : [arg];
 
-  return showWarning(value);
+  return args.reduce((aggr, value) => {
+    if (config.theme.borderColor && config.theme.borderColor[value]) {
+      return { ...aggr, borderRightColor: config.theme.borderColor[value] };
+    }
+    if (config.theme.borderWidth && config.theme.borderWidth[value]) {
+      return { ...aggr, borderRightWidth: config.theme.borderWidth[value] };
+    }
+
+    return { ...aggr, ...showWarning(value) };
+  }, {});
 };
 
 export const borderT: ITailwindConfig["utils"]["borderT"] = (config) => (
-  value: any
+  arg: any
 ) => {
-  if (config.theme.borderColor && config.theme.borderColor[value]) {
-    return { borderTopColor: config.theme.borderColor[value] };
-  }
-  if (config.theme.borderWidth && config.theme.borderWidth[value]) {
-    return { borderTopWidth: config.theme.borderWidth[value] };
-  }
+  const args = Array.isArray(arg) ? arg : [arg];
 
-  return showWarning(value);
+  return args.reduce((aggr, value) => {
+    if (config.theme.borderColor && config.theme.borderColor[value]) {
+      return { ...aggr, borderTopColor: config.theme.borderColor[value] };
+    }
+    if (config.theme.borderWidth && config.theme.borderWidth[value]) {
+      return { ...aggr, borderTopWidth: config.theme.borderWidth[value] };
+    }
+
+    return { ...aggr, ...showWarning(value) };
+  }, {});
 };
 
 export const bottom: ITailwindConfig["utils"]["bottom"] = createUtility(
