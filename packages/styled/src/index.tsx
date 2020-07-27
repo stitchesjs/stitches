@@ -288,7 +288,7 @@ export const createStyled = <T extends IConfig>(
       return React.createElement(Component, {
         ...propsWithoutVariants,
         as: props.as || as,
-        className: css(props.className, ...compositions),
+        className: css(...compositions, props.className),
       });
     };
   };
