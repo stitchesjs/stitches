@@ -115,7 +115,11 @@ export const specificityProps: {
   [key: string]: TUtility<any, any>;
 } = {
   border: () => (value) => {
-    const parts = Array.isArray(value) ? value : value.split(" ");
+    const parts = Array.isArray(value)
+      ? value
+      : typeof value === "string"
+      ? value.split(" ")
+      : value;
     return {
       borderTopWidth: parts[0],
       borderRightWidth: parts[0],
