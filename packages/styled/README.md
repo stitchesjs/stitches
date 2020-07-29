@@ -102,7 +102,7 @@ Variants can also be triggered by screen:
 
 ## Override
 
-All styled components takes a `styled` property. This property allow you to override styles. You use the **css** factory to create overriding styles.
+All styled components takes a `css` property. This property allow you to override styles. You should ideally use the **css** factory to create overriding style outside the component or using a memo hook, but you can inline if you really want to. Inlining forces Stitches to evaluate the styling on every render, but this is a tiny overhead not really noticeable in practice.
 
 ```tsx
 const override = css({
@@ -114,13 +114,16 @@ const override = css({
 export const MyComponent = () => {
   return (
     <div>
-      <Button variant="primary" styled={override}></Button>
+      <Button variant="primary" css={override}></Button>
+      <Button variant="primary" css={{
+        ':hover': {
+          color: 'blue'
+        }
+      }}>
     </div>
   );
 };
 ```
-
-**Note!**. All overrides should be defined outside of components. Stitches will actually warn you in development when you try to dynamically pass in overrides. This improves performance.
 
 ## Composition
 

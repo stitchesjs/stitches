@@ -14,6 +14,8 @@
 - **Specificity solved**: No more specificity issues as an atomic mindset opens up a more efficient and straight forward way to solve it
 - **Token based theming**: Tokens are CSS variables. Create themes overriding the tokens and expose themes to any parts of your app
 
+[A simple benchmark VS styled-components](https://codesandbox.io/s/benchmark-stitches-vs-styled-components-xi7qh?file=/src/App.js)
+
 ## Get started
 
 `npm install @stitches/css`

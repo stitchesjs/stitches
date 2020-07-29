@@ -139,6 +139,7 @@ export const createTailwindConfig = <T extends ITailwindConfig>(
     pr: TMergedUtilityPayload<T["utils"]["pr"], T["theme"]["padding"]>;
     px: TMergedUtilityPayload<T["utils"]["px"], T["theme"]["padding"]>;
     py: TMergedUtilityPayload<T["utils"]["py"], T["theme"]["padding"]>;
+    pt: TMergedUtilityPayload<T["utils"]["py"], T["theme"]["padding"]>;
     right: TMergedUtilityPayload<T["utils"]["right"], T["theme"]["inset"]>;
     rotate: TMergedUtilityPayload<T["utils"]["rotate"], T["theme"]["rotate"]>;
     rounded: TMergedUtilityPayload<

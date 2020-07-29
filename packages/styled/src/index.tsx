@@ -50,14 +50,14 @@ export interface IBaseStyled<
     element: E,
     css?: CSS
   ): E extends PolymorphicComponent<infer EP, infer EE>
-    ? PolymorphicComponent<EP & { styled?: string }, EE>
+    ? PolymorphicComponent<EP & { css?: CSS | (string & {}) }, EE>
     : PolymorphicComponent<
         E extends React.ComponentType<infer PP>
           ? PP & {
-              styled?: string;
+              css?: CSS | (string & {});
             }
           : {
-              styled?: string;
+              css?: CSS | (string & {});
             },
         E
       >;
@@ -85,7 +85,7 @@ export interface IBaseStyled<
     ? PolymorphicComponent<
         V extends void
           ? EP & {
-              styled?: string;
+              css?: CSS | (string & {});
             }
           : EP &
               {
@@ -102,7 +102,7 @@ export interface IBaseStyled<
                         })
                   : keyof V[P] | false | null | undefined;
               } & {
-                styled?: string;
+                css?: CSS | (string & {});
               },
         EE
       >
@@ -110,10 +110,10 @@ export interface IBaseStyled<
         V extends void
           ? E extends React.ComponentType<infer PP>
             ? PP & {
-                styled?: string;
+                css?: CSS | (string & {});
               }
             : {
-                styled?: string;
+                css?: CSS | (string & {});
               }
           : {
               [P in keyof V]?: C["screens"] extends IScreens
@@ -131,10 +131,10 @@ export interface IBaseStyled<
             } &
               (E extends React.ComponentType<infer PP>
                 ? PP & {
-                    styled?: string;
+                    css?: CSS | (string & {});
                   }
                 : {
-                    styled?: string;
+                    css?: CSS | (string & {});
                   }),
         E
       >;
@@ -147,7 +147,7 @@ interface IStyledConstructor<
 > {
   (cb: CSS): PolymorphicComponent<
     {
-      styled?: string;
+      css?: CSS | (string & {});
     },
     E
   >;
@@ -175,7 +175,7 @@ interface IStyledConstructor<
               })
         : keyof V[P];
     } & {
-      styled?: string;
+      css?: CSS | (string & {});
     },
     E
   >;
@@ -246,15 +246,15 @@ export const createStyled = <T extends IConfig>(
     }
 
     return (props: any) => {
-      const memoStyled = React.useMemo(() => props.styled, []); // We want this to only eval once
+      const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
 
       // Check the memoCompsition's identity to warn the user
       // remove in production
       if (process.env.NODE_ENV === "development") {
-        if (memoStyled !== props.styled && !hasWarnedInlineStyle) {
+        if (memoStyled !== props.css && !hasWarnedInlineStyle) {
           // tslint:disable-next-line
           console.warn(
-            "@stitches/styled : The styled prop should ideally not be dynamic. Define it outside your component using the css composer"
+            "@stitches/styled : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook"
           );
           hasWarnedInlineStyle = true;
         }
@@ -281,8 +281,8 @@ export const createStyled = <T extends IConfig>(
         }
       }
 
-      if (props.styled) {
-        compositions.push(props.styled);
+      if (props.css) {
+        compositions.push(props.css);
       }
 
       return React.createElement(Component, {
