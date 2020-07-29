@@ -114,26 +114,36 @@ export const createSheets = (env: any, screens: IScreens = {}) => {
 export const specificityProps: {
   [key: string]: TUtility<any, any>;
 } = {
+  // Even though native CSS allows values in any order,
+  // we require the order to be "size style color"
   border: () => (value) => {
     const parts = Array.isArray(value)
       ? value
       : typeof value === "string"
       ? value.split(" ")
-      : value;
-    return {
+      : [value];
+    const css = {
       borderTopWidth: parts[0],
       borderRightWidth: parts[0],
       borderBottomWidth: parts[0],
       borderLeftWidth: parts[0],
-      borderTopStyle: parts[1],
-      borderRightStyle: parts[1],
-      borderBottomStyle: parts[1],
-      borderLeftStyle: parts[1],
-      borderTopColor: parts[2],
-      borderRightColor: parts[2],
-      borderBottomColor: parts[2],
-      borderLeftColor: parts[2],
-    };
+    } as any;
+
+    if (parts.length > 1) {
+      css.borderTopStyle = parts[1];
+      css.borderRightStyle = parts[1];
+      css.borderBottomStyle = parts[1];
+      css.borderLeftStyle = parts[1];
+    }
+
+    if (parts.length > 2) {
+      css.borderTopColor = parts[2];
+      css.borderRightColor = parts[2];
+      css.borderBottomColor = parts[2];
+      css.borderLeftColor = parts[2];
+    }
+
+    return css;
   },
   boxShadow: (config) => (value) => ({
     boxShadow: Array.isArray(value)
