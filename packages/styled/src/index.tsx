@@ -173,7 +173,7 @@ interface IStyledConstructor<
               } & {
                 ""?: keyof V[P];
               })
-        : keyof V[P];
+        : keyof V[P] | false | null | undefined;
     } & {
       css?: CSS | (string & {});
     },
