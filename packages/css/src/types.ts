@@ -345,13 +345,13 @@ export type TUtilityFirstCss<T extends IConfig> = T["screens"] extends unknown
     } &
       TRecursiveUtils<T>;
 
-export type TDefaultCss<T extends IConfig> = T["screens"] extends unknown
-  ? TRecursiveCss<T> & TRecursiveUtils<T>
-  : TRecursiveCss<T> &
+export type TDefaultCss<T extends IConfig> = T["screens"] extends object
+  ? TRecursiveCss<T> &
       TRecursiveUtils<T> &
       {
         [S in keyof T["screens"]]?: TRecursiveCss<T> & TRecursiveUtils<T>;
-      };
+      }
+  : TRecursiveCss<T> & TRecursiveUtils<T>;
 
 export interface TCssConstructor<
   T extends IConfig,
