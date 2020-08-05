@@ -347,7 +347,7 @@ export const createCss = <T extends IConfig>(
           );
         }
         createCssAtoms(props[prop], cb, prop, pseudo);
-      } else if (!prop[0].match(/[a-zA-Z]/)) {
+      } else if (typeof props[prop] === 'object') {
         createCssAtoms(props[prop], cb, screen, pseudo.concat(prop));
       } else if (canCallUtils && prop in utils) {
         createCssAtoms(
