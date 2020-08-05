@@ -23,6 +23,13 @@ export * from "./css-types";
 
 export const hotReloadingCache = new Map<string, any>();
 
+/**
+ * A reducer function that resolves nesting for a given array of pseudo (nested selectors)
+ */
+const pseudosReducer = (aggr: string, currentPseudo: string) =>
+  aggr +
+  (currentPseudo[0] === "&" ? currentPseudo.substring(1) : ` ${currentPseudo}`);
+
 const toStringCachedAtom = function (this: IAtom) {
   return this._className!;
 };
@@ -365,7 +372,7 @@ export const createCss = <T extends IConfig>(
             prop,
             props[prop],
             screen,
-            pseudo.length ? pseudo.join("") : undefined
+            pseudo.length ? pseudo.reduce(pseudosReducer, "") : undefined
           )
         );
       }
