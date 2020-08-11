@@ -23,6 +23,56 @@ export * from "./types";
 export * from "./css-types";
 
 export const hotReloadingCache = new Map<string, any>();
+
+const MAIN_SHEET_ID = "";
+
+const resolveValueIntoTokens = (
+  cssProp: string,
+  value: any,
+  tokens: any
+) => {
+  const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
+  let tokenValue: any;
+  if (token) {
+    if (Array.isArray(token) && Array.isArray(value)) {
+      tokenValue = token.map((tokenName, index) =>
+        token &&
+        (tokens as any)[tokenName] &&
+        (tokens as any)[tokenName][value[index]]
+          ? (tokens as any)[tokenName][value[index]]
+          : value[index]
+      );
+    } else {
+      tokenValue =
+        token && (tokens as any)[token] && (tokens as any)[token][value]
+          ? (tokens as any)[token][value]
+          : value;
+    }
+  } else {
+    tokenValue = value;
+  }
+  return tokenValue;
+};
+
+/**
+ * Flatten an css object structure while resolving tokens, specificity props and utils
+ */
+const resolveTokensAndSpecificityAndUtils = (
+  obj,
+  utils,
+  tokens,
+  resolvedObj = {}
+) => {
+  for (let key in obj) {
+    if (key in specificityProps) {
+      continue;
+    }
+    if (key in utils) {
+    }
+  }
+  return resolvedObj;
+};
+
 const hyphenCssProp = (cssProp: string) =>
   cssProp
     .split(/(?=[A-Z])/)
@@ -258,8 +308,7 @@ export const createCss = <T extends IConfig>(
     : createServerToString(sheets, config.screens, cssClassnameProvider);
 
   let themeToString = createThemeToString(classPrefix, sheets.__variables__);
-  console.log({sheets})
-  let keyframesToString = createKeyframesToString(sheets[''])
+  let keyframesToString = createKeyframesToString(sheets[MAIN_SHEET_ID]);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -272,29 +321,10 @@ export const createCss = <T extends IConfig>(
   const createAtom = (
     cssProp: string,
     value: any,
-    screen = "",
+    screen = MAIN_SHEET_ID,
     pseudo?: string
   ) => {
-    const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
-    let tokenValue: any;
-    if (token) {
-      if (Array.isArray(token) && Array.isArray(value)) {
-        tokenValue = token.map((tokenName, index) =>
-          token &&
-          (tokens as any)[tokenName] &&
-          (tokens as any)[tokenName][value[index]]
-            ? (tokens as any)[tokenName][value[index]]
-            : value[index]
-        );
-      } else {
-        tokenValue =
-          token && (tokens as any)[token] && (tokens as any)[token][value]
-            ? (tokens as any)[token][value]
-            : value;
-      }
-    } else {
-      tokenValue = value;
-    }
+    let tokenValue: any = resolveValueIntoTokens(cssProp, value, tokens);
     const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
 
     // generate id used for specificity check
@@ -342,7 +372,7 @@ export const createCss = <T extends IConfig>(
       [key: string]: any;
     },
     cb: (atom: IAtom) => void,
-    screen = "",
+    screen = MAIN_SHEET_ID,
     pseudo: string[] = [],
     canCallUtils = true,
     canCallSpecificityProps = true
@@ -392,7 +422,7 @@ export const createCss = <T extends IConfig>(
       [key: string]: any;
     },
     cb: (atom: IAtom) => void,
-    screen = "",
+    screen = MAIN_SHEET_ID,
     pseudo: string[] = [],
     canOverride = true
   ) => {
@@ -524,11 +554,11 @@ export const createCss = <T extends IConfig>(
     }
 
     const hash = hashString(cssRule);
-    
+
     // Check if an atom exist with the same hash and return it if so
-    const cachedAtom = keyFramesCache.get(hash)
-    if(cachedAtom){
-      return cachedAtom
+    const cachedAtom = keyFramesCache.get(hash);
+    if (cachedAtom) {
+      return cachedAtom;
     }
 
     // wrap it with the generated keyframes name
@@ -566,7 +596,7 @@ export const createCss = <T extends IConfig>(
 
     // We have to reset our keyframesToString so that they will now inject again,
     // and still cache is it is being reused
-    keyframesToString = createKeyframesToString(sheets[''])
+    keyframesToString = createKeyframesToString(sheets[MAIN_SHEET_ID]);
 
     // We have to reset our themeToStrings so that they will now inject again,
     // and still cache is it is being reused
@@ -576,9 +606,9 @@ export const createCss = <T extends IConfig>(
       atom.toString = toString;
     });
 
-    keyFramesCache.forEach(atom => {
-      atom.toString = keyframesToString
-    })
+    keyFramesCache.forEach((atom) => {
+      atom.toString = keyframesToString;
+    });
 
     themeCache.forEach((atom) => {
       atom.toString = themeToString;
