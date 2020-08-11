@@ -37,6 +37,13 @@ export interface IComposedAtom {
   [ATOM]: true;
 }
 
+export interface IKeyframesAtom {
+  id: string;
+  _cssRuleString?: string;
+  toString: (this: IKeyframesAtom) => string;
+  [ATOM]: true;
+}
+
 export type TRecursiveCss<
   T extends IConfig,
   D = {
@@ -55,6 +62,26 @@ export type TRecursiveCss<
     }
 ) &
   D;
+
+export type TFlatCSS<
+  T extends IConfig,
+  D = {
+    [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
+      ? ICssPropToToken<T>[K] | Properties[K]
+      : Properties[K];
+  }
+> = D;
+
+export type TFlatUtils<
+  T extends IConfig,
+  UT = {
+    [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]> extends (arg: infer A) => {}
+        ? A
+        : never
+      : never;
+  }
+> = UT;
 
 export type TRecursiveUtils<
   T extends IConfig,
@@ -359,6 +386,7 @@ export interface TCssConstructor<
 > {
   (...styles: (S | string | boolean | null | undefined)[]): string;
   getStyles: (callback: () => any) => { styles: string[]; result: any };
+  keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
   theme: (
     theme: Partial<
       {
