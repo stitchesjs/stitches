@@ -8,6 +8,7 @@ import {
   ISheet,
   IThemeAtom,
   ITokensDefinition,
+  IKeyframesAtom,
   TCss,
 } from "./types";
 import {
@@ -22,6 +23,11 @@ export * from "./types";
 export * from "./css-types";
 
 export const hotReloadingCache = new Map<string, any>();
+const hyphenCssProp = (cssProp: string) =>
+  cssProp
+    .split(/(?=[A-Z])/)
+    .map((g) => g.toLowerCase())
+    .join("-");
 
 const toStringCachedAtom = function (this: IAtom) {
   return this._className!;
@@ -144,6 +150,17 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
     return themeClassName;
   };
 
+const createKeyframesToString = (variablesSheet: ISheet) =>
+  function toString(this: IKeyframesAtom) {
+    if (this._cssRuleString) {
+      variablesSheet.insertRule(this._cssRuleString);
+    }
+
+    this.toString = () => this.id;
+
+    return this.id;
+  };
+
 const composeIntoMap = (
   map: Map<string, IAtom>,
   atoms: (IAtom | IComposedAtom)[]
@@ -241,6 +258,8 @@ export const createCss = <T extends IConfig>(
     : createServerToString(sheets, config.screens, cssClassnameProvider);
 
   let themeToString = createThemeToString(classPrefix, sheets.__variables__);
+  console.log({sheets})
+  let keyframesToString = createKeyframesToString(sheets[''])
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -294,10 +313,7 @@ export const createCss = <T extends IConfig>(
     }
 
     // prepare the cssProp
-    let cssHyphenProp = cssProp
-      .split(/(?=[A-Z])/)
-      .map((g) => g.toLowerCase())
-      .join("-");
+    let cssHyphenProp = hyphenCssProp(cssProp);
 
     if (isVendorPrefixed) {
       cssHyphenProp = `-${cssHyphenProp}`;
@@ -447,6 +463,7 @@ export const createCss = <T extends IConfig>(
   const cssInstance = ((...definitions: any[]) => {
     const args: any[] = [];
     let index = 0;
+    console.log({ definitions });
 
     for (let x = 0; x < definitions.length; x++) {
       if (!definitions[x]) {
@@ -492,6 +509,34 @@ export const createCss = <T extends IConfig>(
     themeCache.set(definition, themeAtom);
 
     return themeAtom;
+  };
+
+  cssInstance.keyframes = (definition: any): IKeyframesAtom => {
+    let cssRule = "";
+    for (const time in definition) {
+      cssRule += `${time} {`;
+      for (const cssProp in definition[time]) {
+        const cssHyphenProp = hyphenCssProp(cssProp);
+        cssRule += `${cssHyphenProp}: ${definition[time][cssProp]};`;
+      }
+      cssRule += "}\n";
+    }
+
+    const hash = hashString(cssRule);
+
+    // wrap it with the generated keyframes name
+    cssRule = `@keyframes ${hash} {${cssRule}}`;
+
+    const keyframesAtom = {
+      // We could here also check if theme has been added from server,
+      // though thinking it does not matter... just a simple rule
+      id: String(hash),
+      _cssRuleString: cssRule,
+      toString: keyframesToString,
+      [ATOM]: true as true,
+    };
+
+    return keyframesAtom;
   };
   cssInstance.getStyles = (cb: any) => {
     // tslint:disable-next-line
