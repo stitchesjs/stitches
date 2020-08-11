@@ -26,11 +26,7 @@ export const hotReloadingCache = new Map<string, any>();
 
 const MAIN_SHEET_ID = "";
 
-const resolveValueIntoTokens = (
-  cssProp: string,
-  value: any,
-  tokens: any
-) => {
+const resolveValueIntoTokens = (cssProp: string, value: any, tokens: any) => {
   const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
   let tokenValue: any;
   if (token) {
@@ -58,9 +54,9 @@ const resolveValueIntoTokens = (
  * Flatten an css object structure while resolving tokens, specificity props and utils
  */
 const resolveTokensAndSpecificityAndUtils = (
-  obj,
-  utils,
-  tokens,
+  obj: any,
+  utils: any,
+  tokens: any,
   resolvedObj = {}
 ) => {
   for (let key in obj) {
@@ -73,11 +69,24 @@ const resolveTokensAndSpecificityAndUtils = (
   return resolvedObj;
 };
 
-const hyphenCssProp = (cssProp: string) =>
-  cssProp
+const hyphenAndVendorPrefixCssProp = (
+  cssProp: string,
+  vendorProps: any[],
+  vendorPrefix: string
+) => {
+  const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
+  let cssHyphenProp = cssProp
     .split(/(?=[A-Z])/)
     .map((g) => g.toLowerCase())
     .join("-");
+
+  if (isVendorPrefixed) {
+    cssHyphenProp = `-${cssHyphenProp}`;
+  } else if (vendorProps.includes(`${vendorPrefix}${cssHyphenProp}`)) {
+    cssHyphenProp = `${vendorPrefix}${cssHyphenProp}`;
+  }
+  return cssHyphenProp
+};
 
 const toStringCachedAtom = function (this: IAtom) {
   return this._className!;
@@ -325,7 +334,6 @@ export const createCss = <T extends IConfig>(
     pseudo?: string
   ) => {
     let tokenValue: any = resolveValueIntoTokens(cssProp, value, tokens);
-    const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
 
     // generate id used for specificity check
     // two atoms are considered equal in regared to there specificity if the id is equal
@@ -343,13 +351,7 @@ export const createCss = <T extends IConfig>(
     }
 
     // prepare the cssProp
-    let cssHyphenProp = hyphenCssProp(cssProp);
-
-    if (isVendorPrefixed) {
-      cssHyphenProp = `-${cssHyphenProp}`;
-    } else if (vendorProps.includes(`${vendorPrefix}${cssHyphenProp}`)) {
-      cssHyphenProp = `${vendorPrefix}${cssHyphenProp}`;
-    }
+    let cssHyphenProp = hyphenAndVendorPrefixCssProp(cssProp, vendorProps, vendorPrefix);
 
     // Create a new atom
     const atom: IAtom = {
@@ -385,9 +387,12 @@ export const createCss = <T extends IConfig>(
             `@stitches/css - You are nesting the screen "${prop}" into "${screen}", that makes no sense? :-)`
           );
         }
+        // screen
         createCssAtoms(props[prop], cb, prop, pseudo);
       } else if (!prop[0].match(/[a-zA-Z]/)) {
+        // nested rules
         createCssAtoms(props[prop], cb, screen, pseudo.concat(prop));
+        //utils
       } else if (canCallUtils && prop in utils) {
         createCssAtoms(
           utils[prop](config)(props[prop]) as any,
@@ -397,6 +402,7 @@ export const createCss = <T extends IConfig>(
           false
         );
       } else if (canCallSpecificityProps && prop in specificityProps) {
+        // specificity props
         createCssAtoms(
           specificityProps[prop](config)(props[prop]) as any,
           cb,
@@ -406,6 +412,8 @@ export const createCss = <T extends IConfig>(
           false
         );
       } else {
+        // default case:
+        // an actual css prop
         cb(
           createAtom(
             prop,
@@ -547,7 +555,7 @@ export const createCss = <T extends IConfig>(
     for (const time in definition) {
       cssRule += `${time} {`;
       for (const cssProp in definition[time]) {
-        const cssHyphenProp = hyphenCssProp(cssProp);
+        const cssHyphenProp = hyphenAndVendorPrefixCssProp(cssProp, vendorProps, vendorPrefix);
         cssRule += `${cssHyphenProp}: ${definition[time][cssProp]};`;
       }
       cssRule += "}\n";
