@@ -458,6 +458,7 @@ export const createCss = <T extends IConfig>(
 
   // atom cache
   const atomCache = new Map<string, IAtom>();
+  const keyFramesCache = new Map<string, IKeyframesAtom>();
   const themeCache = new Map<ITokensDefinition, IThemeAtom>();
 
   const cssInstance = ((...definitions: any[]) => {
@@ -523,6 +524,12 @@ export const createCss = <T extends IConfig>(
     }
 
     const hash = hashString(cssRule);
+    
+    // Check if an atom exist with the same hash and return it if so
+    const cachedAtom = keyFramesCache.get(hash)
+    if(cachedAtom){
+      return cachedAtom
+    }
 
     // wrap it with the generated keyframes name
     cssRule = `@keyframes ${hash} {${cssRule}}`;
@@ -535,6 +542,8 @@ export const createCss = <T extends IConfig>(
       toString: keyframesToString,
       [ATOM]: true as true,
     };
+
+    keyFramesCache.set(hash, keyframesAtom);
 
     return keyframesAtom;
   };
@@ -555,6 +564,10 @@ export const createCss = <T extends IConfig>(
       cssClassnameProvider
     );
 
+    // We have to reset our keyframesToString so that they will now inject again,
+    // and still cache is it is being reused
+    keyframesToString = createKeyframesToString(sheets[''])
+
     // We have to reset our themeToStrings so that they will now inject again,
     // and still cache is it is being reused
     themeToString = createThemeToString(classPrefix, sheets.__variables__);
@@ -562,6 +575,10 @@ export const createCss = <T extends IConfig>(
     atomCache.forEach((atom) => {
       atom.toString = toString;
     });
+
+    keyFramesCache.forEach(atom => {
+      atom.toString = keyframesToString
+    })
 
     themeCache.forEach((atom) => {
       atom.toString = themeToString;
