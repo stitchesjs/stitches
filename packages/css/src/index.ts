@@ -304,10 +304,10 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
     return themeClassName;
   };
 
-const createKeyframesToString = (variablesSheet: ISheet) =>
+const createKeyframesToString = (sheet: ISheet) =>
   function toString(this: IKeyframesAtom) {
     if (this._cssRuleString) {
-      variablesSheet.insertRule(this._cssRuleString);
+      sheet.insertRule(this._cssRuleString);
     }
 
     this.toString = () => this.id;
