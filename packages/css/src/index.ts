@@ -109,8 +109,7 @@ const resolveStyleObj = (
     }
     // shorthand css props or css props that has baked in handling:
     // see specificityProps in ./utils
-    if (key in specificityProps) {
-      // Merge resolved specificity props:
+    if (isSpecificityProp) {
       const resolvedSpecificityProps = specificityProps[key](config)(val);
       // Call the value middleware on all values:
       callCallbackOnObjectValues(
@@ -471,6 +470,7 @@ export const createCss = <T extends IConfig>(
   };
 
   // pre-checked config to avoid checking these all the time
+  // TODO: handle defaults better
   const screens = (config.screens = config.screens || {});
   const utils = (config.utils = config.utils || {});
   const tokens = (config.tokens = config.tokens || {});
@@ -554,7 +554,6 @@ export const createCss = <T extends IConfig>(
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
     let cssRule = "";
     let currentTimeProp = "";
-    console.log({ definition });
     resolveStyleObj(definition, config, (key, value, [timeProp]) => {
       if (timeProp !== currentTimeProp) {
         if (cssRule) {
@@ -567,7 +566,7 @@ export const createCss = <T extends IConfig>(
         key,
         vendorProps,
         vendorPrefix
-      )}: ${value};`;
+      )}: ${resolveTokens(key, value, tokens)};`;
     });
 
     const hash = hashString(cssRule);
