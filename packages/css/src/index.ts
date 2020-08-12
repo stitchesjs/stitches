@@ -24,7 +24,7 @@ export * from "./css-types";
 
 export const hotReloadingCache = new Map<string, any>();
 
-const MAIN_SHEET_ID = "";
+const MAIN_SCREEN_ID = "";
 
 const resolveTokens = (cssProp: string, value: any, tokens: any) => {
   const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
@@ -69,35 +69,13 @@ const resolveStyleObj = (
   ) => void,
   currentNestingPath: string[] = []
 ) => {
-  const currentNestingLength = currentNestingPath.length;
   // key: css prop or override or a selector
   // value is: cssValue, a util, specificity prop, or
   for (const key in obj) {
     const val = obj[key];
-    /** Nested styles: */
-    if (typeof val === "object") {
-      // Atom value:
-      if(val[ATOM]){
-        valueMiddleware(key, val, currentNestingPath);
-        continue
-      }
-      // Override is only allowed at the top level when utility first flag is enabled
-      const isOverride = config.utilityFirst && key === "override";
-      if (isOverride && currentNestingLength) {
-        throw new Error(
-          "@stitches/css - You can not override at this level, only at the top level definition"
-        );
-      }
-      // handle the value object
-      resolveStyleObj(val, config, valueMiddleware, [
-        ...currentNestingPath,
-        key,
-      ]);
-      continue;
-    }
+
     /** Utils: */
     if (key in config.utils) {
-      console.log(obj, key, val, config)
       // Resolve the util from the util function:
       const resolvedUtils = config.utils[key](config)(val);
       // we handle specificityProps after we handle utils in case utils result in specificityProps
@@ -114,12 +92,20 @@ const resolveStyleObj = (
       );
       continue;
     }
-    // In utilityFirst mode, we want to disallow normal css prop usage outside the override prop
-    // so if the execution reaches here then the key is likely a css prop or something invalid :
-    if (config.utilityFirst) {
-      throw new Error(
-        `@stitches/css - The prop "${key}" is not a valid utility`
-      );
+    const isSpecificityProp = key in specificityProps;
+    /** Nested styles: */
+    if (typeof val === "object" && !isSpecificityProp) {
+      // Atom value:
+      if (val[ATOM]) {
+        valueMiddleware(key, val, currentNestingPath);
+        continue;
+      }
+      // handle the value object
+      resolveStyleObj(val, config, valueMiddleware, [
+        ...currentNestingPath,
+        key,
+      ]);
+      continue;
     }
     // shorthand css props or css props that has baked in handling:
     // see specificityProps in ./utils
@@ -139,6 +125,45 @@ const resolveStyleObj = (
     valueMiddleware(key, val, currentNestingPath);
   }
 };
+
+const resolveScreenAndSelector = (nestingPath: string[], config: any) =>
+  nestingPath.reduce(
+    (acc, screenOrSelector, i) => {
+      // utilityFirst selector specific resolution:
+      const isOverride = config.utilityFirst && screenOrSelector === "override";
+      if (isOverride) {
+        // any level above 0
+        if (i) {
+          throw new Error(
+            `@stitches/css - You can not override at this level [${nestingPath
+              .slice(0, i - 1)
+              .join(
+                ", "
+              )}, -> ${screenOrSelector}], only at the top level definition`
+          );
+        }
+        return acc;
+      }
+      // Screens handling:
+      if (screenOrSelector in config.screens) {
+        if (acc.screen !== MAIN_SCREEN_ID) {
+          throw new Error(
+            `@stitches/css - You are nesting the screen "${screenOrSelector}" into "${acc.screen}", that makes no sense? :-)`
+          );
+        }
+        acc.screen = screenOrSelector;
+        return acc;
+      }
+      // Normal css nesting selector:
+      acc.nestingPath +=
+        screenOrSelector[0] === "&"
+          ? screenOrSelector.substring(1)
+          : ` ${screenOrSelector}`;
+
+      return acc;
+    },
+    { screen: MAIN_SCREEN_ID, nestingPath: "" }
+  );
 
 const hyphenAndVendorPrefixCssProp = (
   cssProp: string,
@@ -388,7 +413,7 @@ export const createCss = <T extends IConfig>(
     : createServerToString(sheets, config.screens, cssClassnameProvider);
 
   let themeToString = createThemeToString(classPrefix, sheets.__variables__);
-  let keyframesToString = createKeyframesToString(sheets[MAIN_SHEET_ID]);
+  let keyframesToString = createKeyframesToString(sheets[MAIN_SCREEN_ID]);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -401,7 +426,7 @@ export const createCss = <T extends IConfig>(
   const createAtom = (
     cssProp: string,
     value: any,
-    screen = MAIN_SHEET_ID,
+    screen = MAIN_SCREEN_ID,
     pseudo?: string
   ) => {
     let tokenValue: any = resolveTokens(cssProp, value, tokens);
@@ -446,9 +471,9 @@ export const createCss = <T extends IConfig>(
   };
 
   // pre-checked config to avoid checking these all the time
-  const screens = config.screens = config.screens || {};
-  const utils = config.utils = config.utils || {};
-  const tokens = config.tokens = config.tokens || {};
+  const screens = (config.screens = config.screens || {});
+  const utils = (config.utils = config.utils || {});
+  const tokens = (config.tokens = config.tokens || {});
 
   let baseTokens = ":root{";
   // tslint:disable-next-line
@@ -488,7 +513,11 @@ export const createCss = <T extends IConfig>(
         args[index++] = definitions[x];
       } else {
         resolveStyleObj(definitions[x], config, (prop, value, path) => {
-          args[index++] = createAtom(prop, value, MAIN_SHEET_ID, path.join(""));
+          const { nestingPath, screen } = resolveScreenAndSelector(
+            path,
+            config
+          );
+          args[index++] = createAtom(prop, value, screen, nestingPath);
         });
       }
     }
@@ -525,7 +554,7 @@ export const createCss = <T extends IConfig>(
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
     let cssRule = "";
     let currentTimeProp = "";
-    console.log({definition})
+    console.log({ definition });
     resolveStyleObj(definition, config, (key, value, [timeProp]) => {
       if (timeProp !== currentTimeProp) {
         if (cssRule) {
@@ -574,7 +603,7 @@ export const createCss = <T extends IConfig>(
       config.screens,
       cssClassnameProvider
     );
-    keyframesToString = createKeyframesToString(sheets[MAIN_SHEET_ID]);
+    keyframesToString = createKeyframesToString(sheets[MAIN_SCREEN_ID]);
     themeToString = createThemeToString(classPrefix, sheets.__variables__);
 
     atomCache.forEach((atom) => {
