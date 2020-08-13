@@ -61,7 +61,7 @@ const callCallbackOnObjectValues = <T>(
 
 const resolveStyleObj = (
   obj: any,
-  config: any,
+  config: IConfig<true>,
   valueMiddleware: (
     prop: string,
     value: string,
@@ -73,6 +73,22 @@ const resolveStyleObj = (
   // value is: cssValue, a util, specificity prop, or
   for (const key in obj) {
     const val = obj[key];
+    const isSpecificityProp = key in specificityProps;
+    const isUtilProp = key in config.utils;
+    /** Nested styles: */
+    if (typeof val === "object" && !isSpecificityProp && !isUtilProp) {
+      // Atom value:
+      if (val[ATOM]) {
+        valueMiddleware(key, val, currentNestingPath);
+        continue;
+      }
+      // handle the value object
+      resolveStyleObj(val, config, valueMiddleware, [
+        ...currentNestingPath,
+        key,
+      ]);
+      continue;
+    }
 
     /** Utils: */
     if (key in config.utils) {
@@ -92,21 +108,7 @@ const resolveStyleObj = (
       );
       continue;
     }
-    const isSpecificityProp = key in specificityProps;
-    /** Nested styles: */
-    if (typeof val === "object" && !isSpecificityProp) {
-      // Atom value:
-      if (val[ATOM]) {
-        valueMiddleware(key, val, currentNestingPath);
-        continue;
-      }
-      // handle the value object
-      resolveStyleObj(val, config, valueMiddleware, [
-        ...currentNestingPath,
-        key,
-      ]);
-      continue;
-    }
+
     // shorthand css props or css props that has baked in handling:
     // see specificityProps in ./utils
     if (isSpecificityProp) {
@@ -339,11 +341,14 @@ const composeIntoMap = (
 export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
-
 export const createCss = <T extends IConfig>(
-  config: T,
+  _config: T,
   env: Window | null = typeof window === "undefined" ? null : window
 ): TCss<T> => {
+  // pre-checked config to avoid checking these all the time
+  const config: IConfig<true> = Object.assign({tokens: {}, utils: {}, screens:{}},_config)
+  const { tokens, screens } = config;
+
   const showFriendlyClassnames =
     typeof config.showFriendlyClassnames === "boolean"
       ? config.showFriendlyClassnames
@@ -468,12 +473,6 @@ export const createCss = <T extends IConfig>(
 
     return atom;
   };
-
-  // pre-checked config to avoid checking these all the time
-  // TODO: handle defaults better
-  const screens = (config.screens = config.screens || {});
-  const utils = (config.utils = config.utils || {});
-  const tokens = (config.tokens = config.tokens || {});
 
   let baseTokens = ":root{";
   // tslint:disable-next-line

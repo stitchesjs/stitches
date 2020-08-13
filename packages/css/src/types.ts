@@ -347,15 +347,15 @@ export interface ITokensDefinition {
   transitions?: ITokenDefinition;
 }
 
-export interface IConfig<T extends boolean = false > {
+export interface IConfig<STRICT_MODE extends boolean = false > {
   showFriendlyClassnames?: boolean;
   prefix?: string;
   utilityFirst?: boolean;
-  screens: IScreens| (T extends true ? never : undefined ) ;
-  tokens:  ITokensDefinition | (T extends true ? never : undefined ) ;
+  screens: IScreens| (STRICT_MODE extends true ? never : undefined ) ;
+  tokens:  ITokensDefinition | (STRICT_MODE extends true ? never : undefined ) ;
   utils: {
     [name: string]: TUtility<any, any>;
-  }| (T extends true ? never : undefined ) ;
+  }| (STRICT_MODE extends true ? never : undefined ) ;
 }
 
 export type TUtilityFirstCss<T extends IConfig> = T["screens"] extends unknown
