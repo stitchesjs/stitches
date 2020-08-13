@@ -26,6 +26,9 @@ export const hotReloadingCache = new Map<string, any>();
 
 const MAIN_SCREEN_ID = "";
 
+/**
+ * Resolves a token to its css value in the context of the passed css prop:
+ */
 const resolveTokens = (cssProp: string, value: any, tokens: any) => {
   const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
   let tokenValue: any;
@@ -49,6 +52,10 @@ const resolveTokens = (cssProp: string, value: any, tokens: any) => {
   }
   return tokenValue;
 };
+
+/**
+ * iterates over an object's key and value pairs and calls the callback with the key, value, and passed extraData as args
+ */
 const callCallbackOnObjectValues = <T>(
   obj: any,
   callback: (key: string, value: string, extraData: T) => void,
@@ -59,7 +66,18 @@ const callCallbackOnObjectValues = <T>(
   }
 };
 
-const resolveStyleObj = (
+/**
+ * iterates over a style object keys and values,
+ * resolving them to their final form then calls the value callback with the prop, value
+ * and the current value nesting path in the style object:
+ * - handles utilities
+ * - handles specificity props
+ * - handles nesting
+ * - TODO: also handle the things below once we handle envs differently (to avoid passing a lot of props around):
+ * - handles tokens
+ * - handles vendor prefixing
+ */
+const processStyleObject = (
   obj: any,
   config: IConfig<true>,
   valueMiddleware: (
@@ -73,8 +91,8 @@ const resolveStyleObj = (
   // value is: cssValue, a util, specificity prop, or
   for (const key in obj) {
     const val = obj[key];
-    const isSpecificityProp = key in specificityProps;
     const isUtilProp = key in config.utils;
+    const isSpecificityProp = !isUtilProp && key in specificityProps;
     /** Nested styles: */
     if (typeof val === "object" && !isSpecificityProp && !isUtilProp) {
       // Atom value:
@@ -83,7 +101,7 @@ const resolveStyleObj = (
         continue;
       }
       // handle the value object
-      resolveStyleObj(val, config, valueMiddleware, [
+      processStyleObject(val, config, valueMiddleware, [
         ...currentNestingPath,
         key,
       ]);
@@ -91,7 +109,7 @@ const resolveStyleObj = (
     }
 
     /** Utils: */
-    if (key in config.utils) {
+    if (isUtilProp) {
       // Resolve the util from the util function:
       const resolvedUtils = config.utils[key](config)(val);
       // we handle specificityProps after we handle utils in case utils result in specificityProps
@@ -109,6 +127,7 @@ const resolveStyleObj = (
       continue;
     }
 
+    /** Specificity Props: */
     // shorthand css props or css props that has baked in handling:
     // see specificityProps in ./utils
     if (isSpecificityProp) {
@@ -127,7 +146,13 @@ const resolveStyleObj = (
   }
 };
 
-const resolveScreenAndSelector = (nestingPath: string[], config: any) =>
+/**
+ * Resolves a css prop nesting path to a css selector and the screen the css prop is meant to be injected to
+ */
+const resolveScreenAndSelector = (
+  nestingPath: string[],
+  config: IConfig<true>
+) =>
   nestingPath.reduce(
     (acc, screenOrSelector, i) => {
       // utilityFirst selector specific resolution:
@@ -156,8 +181,11 @@ const resolveScreenAndSelector = (nestingPath: string[], config: any) =>
         return acc;
       }
       // Normal css nesting selector:
+      const firstChar = screenOrSelector[0]
       acc.nestingPath +=
-        screenOrSelector[0] === "&"
+        firstChar === ":"
+          ? screenOrSelector
+          : firstChar === "&"
           ? screenOrSelector.substring(1)
           : ` ${screenOrSelector}`;
 
@@ -166,6 +194,10 @@ const resolveScreenAndSelector = (nestingPath: string[], config: any) =>
     { screen: MAIN_SCREEN_ID, nestingPath: "" }
   );
 
+/**
+ * converts an object style css prop to its normal css style object prop and handles prefixing:
+ * borderColor => border-color
+ */
 const hyphenAndVendorPrefixCssProp = (
   cssProp: string,
   vendorProps: any[],
@@ -346,7 +378,10 @@ export const createCss = <T extends IConfig>(
   env: Window | null = typeof window === "undefined" ? null : window
 ): TCss<T> => {
   // pre-checked config to avoid checking these all the time
-  const config: IConfig<true> = Object.assign({tokens: {}, utils: {}, screens:{}},_config)
+  const config: IConfig<true> = Object.assign(
+    { tokens: {}, utils: {}, screens: {} },
+    _config
+  );
   const { tokens, screens } = config;
 
   const showFriendlyClassnames =
@@ -511,7 +546,7 @@ export const createCss = <T extends IConfig>(
       if (typeof definitions[x] === "string" || definitions[x][ATOM]) {
         args[index++] = definitions[x];
       } else {
-        resolveStyleObj(definitions[x], config, (prop, value, path) => {
+        processStyleObject(definitions[x], config, (prop, value, path) => {
           const { nestingPath, screen } = resolveScreenAndSelector(
             path,
             config
@@ -553,7 +588,7 @@ export const createCss = <T extends IConfig>(
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
     let cssRule = "";
     let currentTimeProp = "";
-    resolveStyleObj(definition, config, (key, value, [timeProp]) => {
+    processStyleObject(definition, config, (key, value, [timeProp]) => {
       if (timeProp !== currentTimeProp) {
         if (cssRule) {
           cssRule += `}`;
