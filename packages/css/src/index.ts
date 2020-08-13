@@ -2,12 +2,13 @@ import {
   ATOM,
   IAtom,
   IComposedAtom,
-  IConfig,
+  TConfig,
   ICssPropToToken,
   IScreens,
   ISheet,
   IThemeAtom,
   ITokensDefinition,
+  IKeyframesAtom,
   TCss,
 } from "./types";
 import {
@@ -22,6 +23,199 @@ export * from "./types";
 export * from "./css-types";
 
 export const hotReloadingCache = new Map<string, any>();
+
+const MAIN_SCREEN_ID = "";
+
+/**
+ * Resolves a token to its css value in the context of the passed css prop:
+ */
+const resolveTokens = (cssProp: string, value: any, tokens: any) => {
+  const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
+  let tokenValue: any;
+  if (token) {
+    if (Array.isArray(token) && Array.isArray(value)) {
+      tokenValue = token.map((tokenName, index) =>
+        token &&
+        (tokens as any)[tokenName] &&
+        (tokens as any)[tokenName][value[index]]
+          ? (tokens as any)[tokenName][value[index]]
+          : value[index]
+      );
+    } else {
+      tokenValue =
+        token && (tokens as any)[token] && (tokens as any)[token][value]
+          ? (tokens as any)[token][value]
+          : value;
+    }
+  } else {
+    tokenValue = value;
+  }
+  return tokenValue;
+};
+
+/**
+ * iterates over an object's key and value pairs and calls the callback with the key, value, and passed extraData as args
+ */
+const callCallbackOnObjectValues = <T>(
+  obj: any,
+  callback: (key: string, value: string, extraData: T) => void,
+  extraData: T
+) => {
+  for (const key in obj) {
+    callback(key, obj[key], extraData);
+  }
+};
+
+/**
+ * iterates over a style object keys and values,
+ * resolving them to their final form then calls the value callback with the prop, value
+ * and the current value nesting path in the style object:
+ * - handles utilities
+ * - handles specificity props
+ * - handles nesting
+ * - TODO: also handle the things below once we handle envs differently (to avoid passing a lot of props around):
+ * - handles tokens
+ * - handles vendor prefixing
+ */
+const processStyleObject = (
+  obj: any,
+  config: TConfig<true>,
+  valueMiddleware: (
+    prop: string,
+    value: string,
+    currentNestingPath: string[]
+  ) => void,
+  currentNestingPath: string[] = []
+) => {
+  // key: css prop or override or a selector
+  // value is: cssValue, a util, specificity prop, or
+  for (const key in obj) {
+    const val = obj[key];
+    const isUtilProp = key in config.utils;
+    const isSpecificityProp = !isUtilProp && key in specificityProps;
+    /** Nested styles: */
+    if (typeof val === "object" && !isSpecificityProp && !isUtilProp) {
+      // Atom value:
+      if (val[ATOM]) {
+        valueMiddleware(key, val, currentNestingPath);
+        continue;
+      }
+      // handle the value object
+      processStyleObject(val, config, valueMiddleware, [
+        ...currentNestingPath,
+        key,
+      ]);
+      continue;
+    }
+
+    /** Utils: */
+    if (isUtilProp) {
+      // Resolve the util from the util function:
+      const resolvedUtils = config.utils[key](config)(val);
+      // we handle specificityProps after we handle utils in case utils result in specificityProps
+      for (const key in resolvedUtils) {
+        if (key in specificityProps) {
+          Object.assign(resolvedUtils, specificityProps[key](config)(val));
+        }
+      }
+      // call the value middleware on all values:
+      callCallbackOnObjectValues(
+        resolvedUtils,
+        valueMiddleware,
+        currentNestingPath
+      );
+      continue;
+    }
+
+    /** Specificity Props: */
+    // shorthand css props or css props that has baked in handling:
+    // see specificityProps in ./utils
+    if (isSpecificityProp) {
+      const resolvedSpecificityProps = specificityProps[key](config)(val);
+      // Call the value middleware on all values:
+      callCallbackOnObjectValues(
+        resolvedSpecificityProps,
+        valueMiddleware,
+        currentNestingPath
+      );
+      continue;
+    }
+    // Normal css prop
+    // Call the value middleware on it:
+    valueMiddleware(key, val, currentNestingPath);
+  }
+};
+
+/**
+ * Resolves a css prop nesting path to a css selector and the screen the css prop is meant to be injected to
+ */
+const resolveScreenAndSelector = (
+  nestingPath: string[],
+  config: TConfig<true>
+) =>
+  nestingPath.reduce(
+    (acc, screenOrSelector, i) => {
+      // utilityFirst selector specific resolution:
+      const isOverride = config.utilityFirst && screenOrSelector === "override";
+      if (isOverride) {
+        // any level above 0
+        if (i) {
+          throw new Error(
+            `@stitches/css - You can not override at this level [${nestingPath
+              .slice(0, i - 1)
+              .join(
+                ", "
+              )}, -> ${screenOrSelector}], only at the top level definition`
+          );
+        }
+        return acc;
+      }
+      // Screens handling:
+      if (screenOrSelector in config.screens) {
+        if (acc.screen !== MAIN_SCREEN_ID) {
+          throw new Error(
+            `@stitches/css - You are nesting the screen "${screenOrSelector}" into "${acc.screen}", that makes no sense? :-)`
+          );
+        }
+        acc.screen = screenOrSelector;
+        return acc;
+      }
+      // Normal css nesting selector:
+      const firstChar = screenOrSelector[0]
+      acc.nestingPath +=
+        firstChar === ":"
+          ? screenOrSelector
+          : firstChar === "&"
+          ? screenOrSelector.substring(1)
+          : ` ${screenOrSelector}`;
+
+      return acc;
+    },
+    { screen: MAIN_SCREEN_ID, nestingPath: "" }
+  );
+
+/**
+ * converts an object style css prop to its normal css style object prop and handles prefixing:
+ * borderColor => border-color
+ */
+const hyphenAndVendorPrefixCssProp = (
+  cssProp: string,
+  vendorProps: any[],
+  vendorPrefix: string
+) => {
+  const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
+  let cssHyphenProp = cssProp
+    .split(/(?=[A-Z])/)
+    .map((g) => g.toLowerCase())
+    .join("-");
+
+  if (isVendorPrefixed) {
+    cssHyphenProp = `-${cssHyphenProp}`;
+  } else if (vendorProps.includes(`${vendorPrefix}${cssHyphenProp}`)) {
+    cssHyphenProp = `${vendorPrefix}${cssHyphenProp}`;
+  }
+  return cssHyphenProp;
+};
 
 const toStringCachedAtom = function (this: IAtom) {
   return this._className!;
@@ -144,6 +338,17 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
     return themeClassName;
   };
 
+const createKeyframesToString = (sheet: ISheet) =>
+  function toString(this: IKeyframesAtom) {
+    if (this._cssRuleString) {
+      sheet.insertRule(this._cssRuleString);
+    }
+
+    this.toString = () => this.id;
+
+    return this.id;
+  };
+
 const composeIntoMap = (
   map: Map<string, IAtom>,
   atoms: (IAtom | IComposedAtom)[]
@@ -168,11 +373,17 @@ const composeIntoMap = (
 export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
-
-export const createCss = <T extends IConfig>(
-  config: T,
+export const createCss = <T extends TConfig>(
+  _config: T,
   env: Window | null = typeof window === "undefined" ? null : window
 ): TCss<T> => {
+  // pre-checked config to avoid checking these all the time
+  const config: TConfig<true> = Object.assign(
+    { tokens: {}, utils: {}, screens: {} },
+    _config
+  );
+  const { tokens, screens } = config;
+
   const showFriendlyClassnames =
     typeof config.showFriendlyClassnames === "boolean"
       ? config.showFriendlyClassnames
@@ -241,6 +452,7 @@ export const createCss = <T extends IConfig>(
     : createServerToString(sheets, config.screens, cssClassnameProvider);
 
   let themeToString = createThemeToString(classPrefix, sheets.__variables__);
+  let keyframesToString = createKeyframesToString(sheets[MAIN_SCREEN_ID]);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -253,30 +465,10 @@ export const createCss = <T extends IConfig>(
   const createAtom = (
     cssProp: string,
     value: any,
-    screen = "",
+    screen = MAIN_SCREEN_ID,
     pseudo?: string
   ) => {
-    const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
-    let tokenValue: any;
-    if (token) {
-      if (Array.isArray(token) && Array.isArray(value)) {
-        tokenValue = token.map((tokenName, index) =>
-          token &&
-          (tokens as any)[tokenName] &&
-          (tokens as any)[tokenName][value[index]]
-            ? (tokens as any)[tokenName][value[index]]
-            : value[index]
-        );
-      } else {
-        tokenValue =
-          token && (tokens as any)[token] && (tokens as any)[token][value]
-            ? (tokens as any)[token][value]
-            : value;
-      }
-    } else {
-      tokenValue = value;
-    }
-    const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
+    let tokenValue: any = resolveTokens(cssProp, value, tokens);
 
     // generate id used for specificity check
     // two atoms are considered equal in regared to there specificity if the id is equal
@@ -294,16 +486,11 @@ export const createCss = <T extends IConfig>(
     }
 
     // prepare the cssProp
-    let cssHyphenProp = cssProp
-      .split(/(?=[A-Z])/)
-      .map((g) => g.toLowerCase())
-      .join("-");
-
-    if (isVendorPrefixed) {
-      cssHyphenProp = `-${cssHyphenProp}`;
-    } else if (vendorProps.includes(`${vendorPrefix}${cssHyphenProp}`)) {
-      cssHyphenProp = `${vendorPrefix}${cssHyphenProp}`;
-    }
+    let cssHyphenProp = hyphenAndVendorPrefixCssProp(
+      cssProp,
+      vendorProps,
+      vendorPrefix
+    );
 
     // Create a new atom
     const atom: IAtom = {
@@ -321,103 +508,6 @@ export const createCss = <T extends IConfig>(
 
     return atom;
   };
-  const createCssAtoms = (
-    props: {
-      [key: string]: any;
-    },
-    cb: (atom: IAtom) => void,
-    screen = "",
-    pseudo: string[] = [],
-    canCallUtils = true,
-    canCallSpecificityProps = true
-  ) => {
-    // tslint:disable-next-line
-    for (const prop in props) {
-      if (config.screens && prop in config.screens) {
-        if (screen) {
-          throw new Error(
-            `@stitches/css - You are nesting the screen "${prop}" into "${screen}", that makes no sense? :-)`
-          );
-        }
-        createCssAtoms(props[prop], cb, prop, pseudo);
-      } else if (!prop[0].match(/[a-zA-Z]/)) {
-        createCssAtoms(props[prop], cb, screen, pseudo.concat(prop));
-      } else if (canCallUtils && prop in utils) {
-        createCssAtoms(
-          utils[prop](config)(props[prop]) as any,
-          cb,
-          screen,
-          pseudo,
-          false
-        );
-      } else if (canCallSpecificityProps && prop in specificityProps) {
-        createCssAtoms(
-          specificityProps[prop](config)(props[prop]) as any,
-          cb,
-          screen,
-          pseudo,
-          false,
-          false
-        );
-      } else {
-        cb(
-          createAtom(
-            prop,
-            props[prop],
-            screen,
-            pseudo.length ? pseudo.join("") : undefined
-          )
-        );
-      }
-    }
-  };
-  const createUtilsAtoms = (
-    props: {
-      [key: string]: any;
-    },
-    cb: (atom: IAtom) => void,
-    screen = "",
-    pseudo: string[] = [],
-    canOverride = true
-  ) => {
-    // tslint:disable-next-line
-    for (const prop in props) {
-      if (prop === "override") {
-        if (!canOverride) {
-          throw new Error(
-            "@stitches/css - You can not override at this level, only at the top level definition"
-          );
-        }
-        createCssAtoms(props[prop], cb, screen, pseudo);
-      } else if (config.screens && prop in config.screens) {
-        if (screen) {
-          throw new Error(
-            `@stitches/css - You are nesting the screen "${prop}" into "${screen}", that makes no sense? :-)`
-          );
-        }
-        createUtilsAtoms(props[prop], cb, prop, pseudo, false);
-      } else if (!prop[0].match(/[a-zA-Z]/)) {
-        createUtilsAtoms(props[prop], cb, screen, pseudo.concat(prop), false);
-      } else if (prop in utils) {
-        createCssAtoms(
-          utils[prop](config)(props[prop]) as any,
-          cb,
-          screen,
-          pseudo,
-          false
-        );
-      } else {
-        throw new Error(
-          `@stitches/css - The prop "${prop}" is not a valid utility`
-        );
-      }
-    }
-  };
-
-  // pre-checked config to avoid checking these all the time
-  const screens = config.screens || {};
-  const utils = config.utils || {};
-  const tokens = config.tokens || {};
 
   let baseTokens = ":root{";
   // tslint:disable-next-line
@@ -442,6 +532,7 @@ export const createCss = <T extends IConfig>(
 
   // atom cache
   const atomCache = new Map<string, IAtom>();
+  const keyFramesCache = new Map<string, IKeyframesAtom>();
   const themeCache = new Map<ITokensDefinition, IThemeAtom>();
 
   const cssInstance = ((...definitions: any[]) => {
@@ -454,13 +545,13 @@ export const createCss = <T extends IConfig>(
       }
       if (typeof definitions[x] === "string" || definitions[x][ATOM]) {
         args[index++] = definitions[x];
-      } else if (config.utilityFirst) {
-        createUtilsAtoms(definitions[x], (atom) => {
-          args[index++] = atom;
-        });
       } else {
-        createCssAtoms(definitions[x], (atom) => {
-          args[index++] = atom;
+        processStyleObject(definitions[x], config, (prop, value, path) => {
+          const { nestingPath, screen } = resolveScreenAndSelector(
+            path,
+            config
+          );
+          args[index++] = createAtom(prop, value, screen, nestingPath);
         });
       }
     }
@@ -493,6 +584,42 @@ export const createCss = <T extends IConfig>(
 
     return themeAtom;
   };
+
+  cssInstance.keyframes = (definition: any): IKeyframesAtom => {
+    let cssRule = "";
+    let currentTimeProp = "";
+    processStyleObject(definition, config, (key, value, [timeProp]) => {
+      if (timeProp !== currentTimeProp) {
+        if (cssRule) {
+          cssRule += `}`;
+        }
+        currentTimeProp = timeProp;
+        cssRule += `${timeProp} {`;
+      }
+      cssRule += `${hyphenAndVendorPrefixCssProp(
+        key,
+        vendorProps,
+        vendorPrefix
+      )}: ${resolveTokens(key, value, tokens)};`;
+    });
+
+    const hash = hashString(cssRule);
+    // Check if an atom exist with the same hash and return it if so
+    const cachedAtom = keyFramesCache.get(hash);
+    if (cachedAtom) {
+      return cachedAtom;
+    }
+    // wrap it with the generated keyframes name
+    cssRule = `@keyframes ${hash} {${cssRule}}`;
+    const keyframesAtom = {
+      id: String(hash),
+      _cssRuleString: cssRule,
+      toString: keyframesToString,
+      [ATOM]: true as true,
+    };
+    keyFramesCache.set(hash, keyframesAtom);
+    return keyframesAtom;
+  };
   cssInstance.getStyles = (cb: any) => {
     // tslint:disable-next-line
     for (let sheet in sheets) {
@@ -509,13 +636,15 @@ export const createCss = <T extends IConfig>(
       config.screens,
       cssClassnameProvider
     );
-
-    // We have to reset our themeToStrings so that they will now inject again,
-    // and still cache is it is being reused
+    keyframesToString = createKeyframesToString(sheets[MAIN_SCREEN_ID]);
     themeToString = createThemeToString(classPrefix, sheets.__variables__);
 
     atomCache.forEach((atom) => {
       atom.toString = toString;
+    });
+
+    keyFramesCache.forEach((atom) => {
+      atom.toString = keyframesToString;
     });
 
     themeCache.forEach((atom) => {
