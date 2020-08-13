@@ -2,7 +2,7 @@ import {
   ATOM,
   IAtom,
   IComposedAtom,
-  IConfig,
+  TConfig,
   ICssPropToToken,
   IScreens,
   ISheet,
@@ -79,7 +79,7 @@ const callCallbackOnObjectValues = <T>(
  */
 const processStyleObject = (
   obj: any,
-  config: IConfig<true>,
+  config: TConfig<true>,
   valueMiddleware: (
     prop: string,
     value: string,
@@ -151,7 +151,7 @@ const processStyleObject = (
  */
 const resolveScreenAndSelector = (
   nestingPath: string[],
-  config: IConfig<true>
+  config: TConfig<true>
 ) =>
   nestingPath.reduce(
     (acc, screenOrSelector, i) => {
@@ -373,12 +373,12 @@ const composeIntoMap = (
 export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
-export const createCss = <T extends IConfig>(
+export const createCss = <T extends TConfig>(
   _config: T,
   env: Window | null = typeof window === "undefined" ? null : window
 ): TCss<T> => {
   // pre-checked config to avoid checking these all the time
-  const config: IConfig<true> = Object.assign(
+  const config: TConfig<true> = Object.assign(
     { tokens: {}, utils: {}, screens: {} },
     _config
   );
