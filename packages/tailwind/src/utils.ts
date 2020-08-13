@@ -444,7 +444,7 @@ export const borderB: ITailwindConfig["utils"]["borderB"] = (config) => (
   }, {});
 };
 
-export const borderL: ITailwindConfig["utils"]["borderB"] = (config) => (
+export const borderL: ITailwindConfig["utils"]["borderL"] = (config) => (
   arg: any
 ) => {
   const args = Array.isArray(arg) ? arg : [arg];
