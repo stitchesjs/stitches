@@ -1,4 +1,3 @@
-
 import { createCss, createTokens, hotReloadingCache } from "../src";
 
 function createStyleSheet(styleTag: HTMLStyleElement): CSSStyleSheet {
@@ -537,6 +536,92 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
       "/* STITCHES */\n\n._Eogfp{color:var(--colors-primary);}"
+    );
+  });
+
+  test("should generate keyframe atoms", () => {
+    const css = createCss({}, null);
+    const keyFrame = css.keyframes({
+      "0%": { background: "red" },
+      "100%": { background: "green" },
+    }) as any;
+
+    expect(keyFrame._cssRuleString).toBe(
+      "@keyframes kNUAiX {0% {background: red;}100% {background: green;}"
+    );
+
+    expect(keyFrame.toString()).toBe("kNUAiX");
+  });
+
+  test("should support utils inside keyframes", () => {
+    const css = createCss(
+      {
+        utils: {
+          mx: (config) => (value) => ({
+            marginLeft: value,
+            marginRight: value,
+          }),
+        },
+      },
+      null
+    );
+    const keyFrame = css.keyframes({
+      "0%": { mx: "1px" },
+      "100%": { mx: "10px" },
+    }) as any;
+
+    expect(keyFrame._cssRuleString).toBe(
+      "@keyframes bFeLcH {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}"
+    );
+
+    expect(keyFrame.toString()).toBe("bFeLcH");
+  });
+
+  test("should support specificity props inside keyframes", () => {
+    const css = createCss({}, null);
+    const keyFrame = css.keyframes({
+      "0%": { padding: "1px" },
+      "100%": { padding: "10px" },
+    }) as any;
+
+    expect(keyFrame._cssRuleString).toBe(
+      "@keyframes hAOsXf {0% {padding-left: 1px;padding-top: 1px;padding-right: 1px;padding-bottom: 1px;}100% {padding-left: 10px;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;}"
+    );
+
+    expect(keyFrame.toString()).toBe("hAOsXf");
+  });
+  test("should allow keyframes atom to be used as a direct object value", () => {
+    const css = createCss({}, null);
+    const keyFrame = css.keyframes({
+      "0%": { background: "red" },
+      "100%": { background: "green" },
+    }) as any;
+    let atom: any;
+    const { styles } = css.getStyles(() => {
+      expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
+      expect(atom.toString()).toBe("_hVCFgX");
+      return "";
+    });
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
+    );
+  });
+
+    test("should inject styles for animations into sheet", () => {
+    const css = createCss({}, null);
+    const keyFrame = css.keyframes({
+      "0%": { background: "red" },
+      "100%": { background: "green" },
+    }) as any;
+    let atom = css({ animationName: keyFrame }) as any;
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_hVCFgX");
+      return "";
+    });
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
     );
   });
 });
