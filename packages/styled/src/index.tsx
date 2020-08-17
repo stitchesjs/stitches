@@ -454,7 +454,7 @@ export const createStyled = <
 
       const compositions = [baseStyles];
 
-      const propsWithoutVariants: any = {};
+      const propsWithoutVariantsAndCssProp: any = {};
 
       for (const propName in props) {
         if (propName in variants) {
@@ -469,16 +469,17 @@ export const createStyled = <
             }
           }
         } else {
-          propsWithoutVariants[propName] = props[propName];
+          propsWithoutVariantsAndCssProp[propName] = props[propName];
         }
       }
 
-      if (props.css) {
-        compositions.push(props.css);
+      if (propsWithoutVariantsAndCssProp.css) {
+        compositions.push(propsWithoutVariantsAndCssProp.css);
+        propsWithoutVariantsAndCssProp.css = undefined
       }
 
       return React.createElement(Component, {
-        ...propsWithoutVariants,
+        ...propsWithoutVariantsAndCssProp,
         as: props.as || as,
         className: css(...compositions, props.className),
       });
