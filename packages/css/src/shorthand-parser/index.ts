@@ -243,7 +243,7 @@ export const borderRight = createPropertyParser((tokens, css, value) => {
   }
 });
 
-export const borderBottom = createPropertyParser((tokens, css, value) => {
+export const borderLeft = createPropertyParser((tokens, css, value) => {
   if (
     value.match(
       /none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset/
@@ -257,15 +257,15 @@ export const borderBottom = createPropertyParser((tokens, css, value) => {
   }
 });
 
-export const borderLeft = createPropertyParser((tokens, css, value) => {
+export const borderBottom = createPropertyParser((tokens, css, value) => {
   if (
     value.match(
       /none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset/
     )
   ) {
-    css.borderBottomColor = value;
+    css.borderBottomStyle = value;
   } else if (value.match(unitMatch) || tokens.borderWidths[value]) {
-    css.borderBottomColor = tokens.borderWidths[value] || value;
+    css.borderBottomWidth = tokens.borderWidths[value] || value;
   } else {
     css.borderBottomColor = tokens.colors[value] || value;
   }
