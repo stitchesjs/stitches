@@ -332,7 +332,7 @@ describe("createCss", () => {
   test("should use specificity props", () => {
     const css = createCss({}, null);
     expect(String(css({ margin: "1px" }))).toBe(
-      "_hdcIia _cCuGfR _kFCHHa _kFwmfW"
+      "_kFwmfW _hdcIia _cCuGfR _kFCHHa"
     );
   });
   test("should have declarative api", () => {
@@ -457,7 +457,7 @@ describe("createCss", () => {
       "/* STITCHES */\n\n._jMbiSS{border-left-color:red;}\n._lkwFJC{border-bottom-color:red;}\n._iqEHZB{border-right-color:red;}\n._frjswu{border-top-color:red;}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
     );
   });
-  test("should handle border array definition with token", () => {
+  test("should handle border shorthand with tokens", () => {
     const css = createCss(
       {
         tokens: {
@@ -468,7 +468,7 @@ describe("createCss", () => {
       },
       null
     );
-    const atom = css({ border: ["1px", "solid", "primary"] }) as any;
+    const atom = css({ border: "1px solid primary" }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe(
@@ -483,7 +483,7 @@ describe("createCss", () => {
       "/* STITCHES */\n\n._ffzau{border-left-color:var(--colors-primary);}\n._jIhVXS{border-bottom-color:var(--colors-primary);}\n._uBwAx{border-right-color:var(--colors-primary);}\n._kLWpHW{border-top-color:var(--colors-primary);}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
     );
   });
-  test("should handle box shadow array with token", () => {
+  test("should handle box shadow with tokens", () => {
     const css = createCss(
       {
         tokens: {
@@ -494,17 +494,17 @@ describe("createCss", () => {
       },
       null
     );
-    const atom = css({ boxShadow: ["1px", "1px", "1px", "primary"] }) as any;
+    const atom = css({ boxShadow: "1px 1px 1px primary" }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_jpflsr");
+      expect(atom.toString()).toBe("_diaoUX");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._jpflsr{box-shadow:1px 1px 1px var(--colors-primary);}"
+      "/* STITCHES */\n\n._diaoUX{box-shadow: 1px 1px 1px var(--colors-primary);}"
     );
   });
   test("should be able to compose themes", () => {
@@ -584,11 +584,11 @@ describe("createCss", () => {
       "100%": { padding: "10px" },
     }) as any;
 
-    expect(keyFrame._cssRuleString).toBe(
-      "@keyframes hAOsXf {0% {padding-left: 1px;padding-top: 1px;padding-right: 1px;padding-bottom: 1px;}100% {padding-left: 10px;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;}"
+    expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
+      `"@keyframes bivLJn {0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;}100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}"`
     );
 
-    expect(keyFrame.toString()).toBe("hAOsXf");
+    expect(keyFrame.toString()).toBe("bivLJn");
   });
   test("should allow keyframes atom to be used as a direct object value", () => {
     const css = createCss({}, null);
@@ -608,7 +608,7 @@ describe("createCss", () => {
     );
   });
 
-    test("should inject styles for animations into sheet", () => {
+  test("should inject styles for animations into sheet", () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
       "0%": { background: "red" },

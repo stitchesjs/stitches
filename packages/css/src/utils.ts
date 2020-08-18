@@ -73,6 +73,18 @@ export const cssPropToToken: ICssPropToToken<any> = {
   transition: "transitions",
 };
 
+export const tokenTypes = [
+  "sizes",
+  "colors",
+  "space",
+  "fontSize",
+  "lineHeights",
+  "fontWeights",
+  "fonts",
+  "borderWidths",
+  "radii",
+] as const;
+
 export const createSheets = (env: any, screens: IScreens = {}) => {
   const tags: HTMLStyleElement[] = [];
   if (env && env.document) {
@@ -164,7 +176,7 @@ export const specificityProps: {
   overflow: (tokens, value) => ({ overflowX: value, overflowY: value }),
   margin,
   padding,
-  borderRadius ,
+  borderRadius,
   borderColor,
   borderStyle,
   borderWidth,
