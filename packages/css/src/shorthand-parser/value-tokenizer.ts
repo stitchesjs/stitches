@@ -16,9 +16,12 @@ let currentDepth = 0;
 let tokenGroups: string[][] = [[]];
 
 export const tokenizeValue = (str: string) => {
-  let strLength = str.length;
   resetCurrentToken();
   tokenGroups = [[]];
+  if(!str){
+    return tokenGroups
+  }
+  let strLength = str.length;
   for (let i = 0; i < strLength; i++) {
     let char = str[i];
     switch (char) {
