@@ -624,4 +624,287 @@ describe("createCss", () => {
       "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
     );
   });
+
+  test("should handle margin shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ margin: "1px 5px" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_jeUhKW _hdcIia _ihMdjN _kFCHHa"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._jeUhKW{margin-left:5px;}
+      ._hdcIia{margin-bottom:1px;}
+      ._ihMdjN{margin-right:5px;}
+      ._kFCHHa{margin-top:1px;}"
+    `);
+  });
+
+  test("should handle padding shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ padding: "1px 5px" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_gyarRZ _kQnasN _gerKhy _cRIZvx"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._gyarRZ{padding-left:5px;}
+      ._kQnasN{padding-bottom:1px;}
+      ._gerKhy{padding-right:5px;}
+      ._cRIZvx{padding-top:1px;}"
+    `);
+  });
+
+  test("should handle border-top shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderTop: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_frjswu _dZmTIq _daMVcf"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._frjswu{border-top-color:red;}
+      ._dZmTIq{border-top-style:solid;}
+      ._daMVcf{border-top-width:1px;}"
+    `);
+  });
+
+  test("should handle border-right shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderRight: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_iqEHZB _kxkaMR _hUxHUo"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._iqEHZB{border-right-color:red;}
+      ._kxkaMR{border-right-style:solid;}
+      ._hUxHUo{border-right-width:1px;}"
+    `);
+  });
+
+  test("should handle border-bottom shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderBottom: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_lkwFJC _bctHBa _pPCSj"`);
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._lkwFJC{border-bottom-color:red;}
+      ._bctHBa{border-bottom-style:solid;}
+      ._pPCSj{border-bottom-width:1px;}"
+    `);
+  });
+
+  test("should handle border-left shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderLeft: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_jMbiSS _dKkway _fcpRZb"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._jMbiSS{border-left-color:red;}
+      ._dKkway{border-left-style:solid;}
+      ._fcpRZb{border-left-width:1px;}"
+    `);
+  });
+
+  test("should handle border-radius shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderRadius: "5px" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_kirJLA _gnzyQc _bjAoar _iVJtjr"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._kirJLA{border-bottom-right-radius:5px;}
+      ._gnzyQc{border-top-right-radius:5px;}
+      ._bjAoar{border-top-left-radius:5px;}
+      ._iVJtjr{border-bottom-left-radius:5px;}"
+    `);
+  });
+
+  test("should handle border-color shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderColor: "red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_jMbiSS _lkwFJC _iqEHZB _frjswu"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._jMbiSS{border-left-color:red;}
+      ._lkwFJC{border-bottom-color:red;}
+      ._iqEHZB{border-right-color:red;}
+      ._frjswu{border-top-color:red;}"
+    `);
+  });
+
+  test("should handle border-style shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderStyle: "solid" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_dKkway _bctHBa _kxkaMR _dZmTIq"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._dKkway{border-left-style:solid;}
+      ._bctHBa{border-bottom-style:solid;}
+      ._kxkaMR{border-right-style:solid;}
+      ._dZmTIq{border-top-style:solid;}"
+    `);
+  });
+
+  test("should handle border-width shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderWidth: "2px" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_exEWxc _dVrsOA _foDwTX _hlWFhc"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._exEWxc{border-left-width:2px;}
+      ._dVrsOA{border-bottom-width:2px;}
+      ._foDwTX{border-right-width:2px;}
+      ._hlWFhc{border-top-width:2px;}"
+    `);
+  });
+
+  test("should handle background shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ background: "red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cODewW"`);
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._cODewW{background-color:red;}"
+    `);
+  });
+
+  test("should handle transition shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ transition: "margin-right 2s ease-in-out" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_cYJUVx _dkQnca _fMYPIB"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._cYJUVx{transition-timing-function:ease-in-out;}
+      ._dkQnca{transition-duration:2s;}
+      ._fMYPIB{transition-property:margin-right;}"
+    `);
+  });
+
+  test("should handle font shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ font: '1.2em "Fira Sans", sans-serif' }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_kSPChp _bZKhEt"`);
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._kSPChp{font-family:\\"Fira Sans\\",sans-serif;}
+      ._bZKhEt{font-size:1.2em;}"
+    `);
+  });
 });
