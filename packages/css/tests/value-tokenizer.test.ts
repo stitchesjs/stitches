@@ -1,4 +1,4 @@
-import { tokenizeValue } from "../src/value-tokenizer";
+import { tokenizeValue } from "../src/shorthand-parser/value-tokenizer";
 
 describe("Parse css values into token groups", () => {
   test("Parse space separated values", () => {

@@ -10,7 +10,7 @@ import {
   borderWidth,
   borderStyle,
   boxShadow,
-} from "../src/css-property-parser";
+} from "../src/shorthand-parser";
 
 const tokens = {
   sizes: { 1: "1px" },
