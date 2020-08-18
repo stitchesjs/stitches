@@ -180,6 +180,14 @@ export const specificityProps: {
   borderColor,
   borderStyle,
   borderWidth,
+  background,
+  animation,
+  transition,
+  font,
+  borderBottom,
+  borderLeft,
+  borderTop,
+  borderRight
 };
 
 export const getVendorPrefixAndProps = (env: any) => {
