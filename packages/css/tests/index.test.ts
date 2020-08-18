@@ -547,10 +547,10 @@ describe("createCss", () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toBe(
-      "@keyframes kNUAiX {0% {background: red;}100% {background: green;}"
+      "@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
     );
 
-    expect(keyFrame.toString()).toBe("kNUAiX");
+    expect(keyFrame.toString()).toBe("dmyJCr");
   });
 
   test("should support utils inside keyframes", () => {
@@ -599,12 +599,12 @@ describe("createCss", () => {
     let atom: any;
     const { styles } = css.getStyles(() => {
       expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
-      expect(atom.toString()).toBe("_hVCFgX");
+      expect(atom.toString()).toBe("_idHIjE");
       return "";
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
+      "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
     );
   });
 
@@ -616,12 +616,12 @@ describe("createCss", () => {
     }) as any;
     let atom = css({ animationName: keyFrame }) as any;
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_hVCFgX");
+      expect(atom.toString()).toBe("_idHIjE");
       return "";
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
+      "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
     );
   });
 });
