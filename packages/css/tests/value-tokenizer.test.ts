@@ -1,6 +1,9 @@
 import { tokenizeValue } from "../src/shorthand-parser/value-tokenizer";
 
 describe("Parse css values into token groups", () => {
+  test("Will bail out early if giving a falsy value", () => {
+    expect(tokenizeValue(undefined as any)).toEqual([[]]);
+  });
   test("Parse space separated values", () => {
     expect(tokenizeValue("solid red")).toEqual([["solid", "red"]]);
   });
