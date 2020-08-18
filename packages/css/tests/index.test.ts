@@ -62,23 +62,23 @@ describe("createCss", () => {
 
     expect(atom.id).toBe("color");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.pseudo).toBe(undefined);
+    expect(atom.pseudo).toBe("");
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("red");
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_1725676875");
+      expect(atom.toString()).toBe("_eCaYfN");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._1725676875{color:red;}");
+    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._eCaYfN{color:red;}");
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
     expect(css({ color: "red", backgroundColor: "blue" }).toString()).toBe(
-      "_763805413 _1725676875"
+      "_cayivH _eCaYfN"
     );
   });
   test("should create tokens", () => {
@@ -92,18 +92,18 @@ describe("createCss", () => {
 
     expect(atom.id).toBe("color");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.pseudo).toBe(undefined);
+    expect(atom.pseudo).toBe("");
     expect(atom.screen).toBe("");
     expect(atom.value).toBe("var(--colors-RED)");
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_3389639116");
+      expect(atom.toString()).toBe("_iVFaNG");
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._3389639116{color:var(--colors-RED);}"
+      "/* STITCHES */\n\n._iVFaNG{color:var(--colors-RED);}"
     );
   });
   test("should create screens", () => {
@@ -118,34 +118,34 @@ describe("createCss", () => {
     const atom = (css({ tablet: { color: "red" } }) as any).atoms[0];
     expect(atom.id).toBe("colortablet");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.pseudo).toBe(undefined);
+    expect(atom.pseudo).toBe("");
     expect(atom.screen).toBe("tablet");
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_2796359201");
+      expect(atom.toString()).toBe("_hsxGAz");
       return "";
     });
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toBe(
-      "/* STITCHES:tablet */\n\n@media (min-width: 700px) { ._2796359201{color:red;} }"
+      "/* STITCHES:tablet */\n\n@media (min-width: 700px) { ._hsxGAz{color:red;} }"
     );
   });
   test("should handle pseudos", () => {
     const css = createCss({}, null);
-    const atom = (css({ ":hover": { color: "red" } }) as any).atoms[0];
+    const atom = (css({ "&:hover": { color: "red" } }) as any).atoms[0];
 
     expect(atom.id).toBe("color:hover");
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.pseudo).toBe(":hover");
     expect(atom.screen).toBe("");
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_627048087");
+      expect(atom.toString()).toBe("_bHNCzd");
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._627048087:hover{color:red;}"
+      "/* STITCHES */\n\n._bHNCzd:hover{color:red;}"
     );
   });
   test("should handle specificity", () => {
@@ -160,27 +160,27 @@ describe("createCss", () => {
           backgroundColor: "green",
         }
       ).toString()
-    ).toBe("_736532192 _1725676875");
+    ).toBe("_bWMkiG _eCaYfN");
   });
   test("should insert rule only once", () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
-      expect(css({ color: "red" }).toString()).toBe("_1725676875");
-      expect(css({ color: "red" }).toString()).toBe("_1725676875");
+      expect(css({ color: "red" }).toString()).toBe("_eCaYfN");
+      expect(css({ color: "red" }).toString()).toBe("_eCaYfN");
       return "";
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._1725676875{color:red;}");
+    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._eCaYfN{color:red;}");
   });
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
     expect(
       css(
-        { ":hover:disabled": { color: "red" } },
-        { ":disabled:hover": { color: "red" } }
+        { "&:hover:disabled": { color: "red" } },
+        { "&:disabled:hover": { color: "red" } }
       ).toString()
-    ).toBe("_3266759165");
+    ).toBe("_iEPeZH");
   });
   test("should use simple sequence for classname when browser", () => {
     const fakeEnv = createFakeEnv();
@@ -227,7 +227,7 @@ describe("createCss", () => {
       },
       null
     );
-    expect(css({ marginX: "1rem" }).toString()).toBe("_4081121629 _97196166");
+    expect(css({ marginX: "1rem" }).toString()).toBe("_kMiQCn _npnrc");
   });
   test("should ignore undefined atoms", () => {
     const css = createCss({}, null);
@@ -235,7 +235,7 @@ describe("createCss", () => {
     expect(
       // @ts-ignore
       String(css(undefined, null, false, "", { color: "red" }))
-    ).toBe("_1725676875");
+    ).toBe("_eCaYfN");
   });
   test("should allow empty compose call", () => {
     const css = createCss({}, null);
@@ -244,7 +244,7 @@ describe("createCss", () => {
   test("should allow conditional compositions", () => {
     const css = createCss({}, null);
     expect(String(css((false as any) && { color: "red" }))).toBe("");
-    expect(String(css(true && { color: "red" }))).toBe("_1725676875");
+    expect(String(css(true && { color: "red" }))).toBe("_eCaYfN");
   });
   test("should allow prefixes", () => {
     const css = createCss(
@@ -253,7 +253,7 @@ describe("createCss", () => {
       },
       null
     );
-    expect(String(css({ color: "red" }))).toBe("foo_1725676875");
+    expect(String(css({ color: "red" }))).toBe("foo_eCaYfN");
   });
   test("should expose override with utility first", () => {
     const css = createCss(
@@ -265,7 +265,7 @@ describe("createCss", () => {
       },
       null
     );
-    expect(String(css({ override: { color: "red" } }))).toBe("_1725676875");
+    expect(String(css({ override: { color: "red" } }))).toBe("_eCaYfN");
   });
   test("should not inject existing styles", () => {
     const serverCss = createCss({}, null);
@@ -281,7 +281,7 @@ describe("createCss", () => {
     expect(fakeEnv.document.styleSheets.length).toBe(2);
     expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(1);
     expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._1725676875 {color: red;}"
+      "._eCaYfN {color: red;}"
     );
     // On the client it will rerun the logic (React hydrate etc.)
     clientCss({ color: "red" }).toString();
@@ -290,7 +290,7 @@ describe("createCss", () => {
     // Lets see if it continues on the correct sequence
     expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(2);
     expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._1757807590 {color: blue;}"
+      "._eGvyOg {color: blue;}"
     );
   });
   test("should be able to show friendly classnames", () => {
@@ -308,7 +308,7 @@ describe("createCss", () => {
 
     expect(styles).toEqual([
       `/* STITCHES:__variables__ */\n\n:root{}`,
-      `/* STITCHES */\n\n.c_1725676875{color:red;}\n.bc_1056962344{background-color:red;}`,
+      `/* STITCHES */\n\n.c_eCaYfN{color:red;}\n.bc_cODewW{background-color:red;}`,
     ]);
   });
   test("should inject vendor prefix where explicitly stating so", () => {
@@ -326,13 +326,13 @@ describe("createCss", () => {
 
     expect(styles).toEqual([
       `/* STITCHES:__variables__ */\n\n:root{}`,
-      `/* STITCHES */\n\n.c_1725676875{-webkit-color:red;}`,
+      `/* STITCHES */\n\n.c_eCaYfN{-webkit-color:red;}`,
     ]);
   });
   test("should use specificity props", () => {
     const css = createCss({}, null);
     expect(String(css({ margin: "1px" }))).toBe(
-      "_2683736640 _968032303 _4032728388 _4031826548"
+      "_hdcIia _cCuGfR _kFCHHa _kFwmfW"
     );
   });
   test("should have declarative api", () => {
@@ -342,13 +342,13 @@ describe("createCss", () => {
         color: "red",
         backgroundColor: "blue",
       }).toString()
-    ).toBe("_763805413 _1725676875");
+    ).toBe("_cayivH _eCaYfN");
   });
   test("should handle declarative pseudo selector", () => {
     const fakeEnv = createFakeEnv([], []);
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
-    css({ ":hover": { color: "red" } }).toString();
+    css({ "&:hover": { color: "red" } }).toString();
     expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
       "._0:hover {color: red;}"
     );
@@ -370,7 +370,7 @@ describe("createCss", () => {
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toBe(
-      "/* STITCHES:mobile */\n\n@media(min-width:700px){._2196820011{color:red;}}"
+      "/* STITCHES:mobile */\n\n@media(min-width:700px){._fOxLwJ{color:red;}}"
     );
   });
   test("should handle pseudo in screen selector", () => {
@@ -384,13 +384,13 @@ describe("createCss", () => {
     );
     const { styles } = css.getStyles(() => {
       // @ts-ignore
-      css({ mobile: { ":hover": { color: "red" } } }).toString();
+      css({ mobile: { "&:hover": { color: "red" } } }).toString();
       return "";
     });
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toBe(
-      "/* STITCHES:mobile */\n\n@media(min-width:700px){._860048247:hover{color:red;}}"
+      "/* STITCHES:mobile */\n\n@media(min-width:700px){._cnGHjt:hover{color:red;}}"
     );
   });
   test("should insert themes", () => {
@@ -422,22 +422,22 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles).toEqual([
       "/* STITCHES:__variables__ */\n\n:root{--colors-primary:tomato;}\n.theme-0{--colors-primary:blue;}",
-      "/* STITCHES */\n\n._221333491{color:var(--colors-primary);}",
+      "/* STITCHES */\n\n._Eogfp{color:var(--colors-primary);}",
     ]);
   });
   test("should allow nested pseudo", () => {
     const css = createCss({}, null);
-    const atom = css({ ":hover": { ":disabled": { color: "red" } } }) as any;
+    const atom = css({ "&:hover": { "&:disabled": { color: "red" } } }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_3266759165");
+      expect(atom.toString()).toBe("_iEPeZH");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._3266759165:hover:disabled{color:red;}"
+      "/* STITCHES */\n\n._iEPeZH:hover:disabled{color:red;}"
     );
   });
   test("should handle border specificity", () => {
@@ -446,7 +446,7 @@ describe("createCss", () => {
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe(
-        "_3699842268 _4258539560 _3162928263 _2026632940 _1405295864 _397589452 _3971615587 _1515315272 _1917871437 _115517177 _3001088182 _1146082397"
+        "_jMbiSS _lkwFJC _iqEHZB _frjswu _dKkway _bctHBa _kxkaMR _dZmTIq _fcpRZb _pPCSj _hUxHUo _daMVcf"
       );
 
       return "";
@@ -454,7 +454,7 @@ describe("createCss", () => {
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._3699842268{border-left-color:red;}\n._4258539560{border-bottom-color:red;}\n._3162928263{border-right-color:red;}\n._2026632940{border-top-color:red;}\n._1405295864{border-left-style:solid;}\n._397589452{border-bottom-style:solid;}\n._3971615587{border-right-style:solid;}\n._1515315272{border-top-style:solid;}\n._1917871437{border-left-width:1px;}\n._115517177{border-bottom-width:1px;}\n._3001088182{border-right-width:1px;}\n._1146082397{border-top-width:1px;}"
+      "/* STITCHES */\n\n._jMbiSS{border-left-color:red;}\n._lkwFJC{border-bottom-color:red;}\n._iqEHZB{border-right-color:red;}\n._frjswu{border-top-color:red;}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
     );
   });
   test("should handle border array definition with token", () => {
@@ -472,7 +472,7 @@ describe("createCss", () => {
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe(
-        "_37328740 _3671545168 _150089599 _4079361620 _1405295864 _397589452 _3971615587 _1515315272 _1917871437 _115517177 _3001088182 _1146082397"
+        "_ffzau _jIhVXS _uBwAx _kLWpHW _dKkway _bctHBa _kxkaMR _dZmTIq _fcpRZb _pPCSj _hUxHUo _daMVcf"
       );
 
       return "";
@@ -480,7 +480,7 @@ describe("createCss", () => {
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._37328740{border-left-color:var(--colors-primary);}\n._3671545168{border-bottom-color:var(--colors-primary);}\n._150089599{border-right-color:var(--colors-primary);}\n._4079361620{border-top-color:var(--colors-primary);}\n._1405295864{border-left-style:solid;}\n._397589452{border-bottom-style:solid;}\n._3971615587{border-right-style:solid;}\n._1515315272{border-top-style:solid;}\n._1917871437{border-left-width:1px;}\n._115517177{border-bottom-width:1px;}\n._3001088182{border-right-width:1px;}\n._1146082397{border-top-width:1px;}"
+      "/* STITCHES */\n\n._ffzau{border-left-color:var(--colors-primary);}\n._jIhVXS{border-bottom-color:var(--colors-primary);}\n._uBwAx{border-right-color:var(--colors-primary);}\n._kLWpHW{border-top-color:var(--colors-primary);}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
     );
   });
   test("should handle box shadow array with token", () => {
@@ -497,14 +497,14 @@ describe("createCss", () => {
     const atom = css({ boxShadow: ["1px", "1px", "1px", "primary"] }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_3532244265");
+      expect(atom.toString()).toBe("_jpflsr");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._3532244265{box-shadow:1px 1px 1px var(--colors-primary);}"
+      "/* STITCHES */\n\n._jpflsr{box-shadow:1px 1px 1px var(--colors-primary);}"
     );
   });
   test("should be able to compose themes", () => {
@@ -528,14 +528,100 @@ describe("createCss", () => {
     }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_221333491 theme-0");
+      expect(atom.toString()).toBe("_Eogfp theme-0");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._221333491{color:var(--colors-primary);}"
+      "/* STITCHES */\n\n._Eogfp{color:var(--colors-primary);}"
+    );
+  });
+
+  test("should generate keyframe atoms", () => {
+    const css = createCss({}, null);
+    const keyFrame = css.keyframes({
+      "0%": { background: "red" },
+      "100%": { background: "green" },
+    }) as any;
+
+    expect(keyFrame._cssRuleString).toBe(
+      "@keyframes kNUAiX {0% {background: red;}100% {background: green;}"
+    );
+
+    expect(keyFrame.toString()).toBe("kNUAiX");
+  });
+
+  test("should support utils inside keyframes", () => {
+    const css = createCss(
+      {
+        utils: {
+          mx: (config) => (value) => ({
+            marginLeft: value,
+            marginRight: value,
+          }),
+        },
+      },
+      null
+    );
+    const keyFrame = css.keyframes({
+      "0%": { mx: "1px" },
+      "100%": { mx: "10px" },
+    }) as any;
+
+    expect(keyFrame._cssRuleString).toBe(
+      "@keyframes bFeLcH {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}"
+    );
+
+    expect(keyFrame.toString()).toBe("bFeLcH");
+  });
+
+  test("should support specificity props inside keyframes", () => {
+    const css = createCss({}, null);
+    const keyFrame = css.keyframes({
+      "0%": { padding: "1px" },
+      "100%": { padding: "10px" },
+    }) as any;
+
+    expect(keyFrame._cssRuleString).toBe(
+      "@keyframes hAOsXf {0% {padding-left: 1px;padding-top: 1px;padding-right: 1px;padding-bottom: 1px;}100% {padding-left: 10px;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;}"
+    );
+
+    expect(keyFrame.toString()).toBe("hAOsXf");
+  });
+  test("should allow keyframes atom to be used as a direct object value", () => {
+    const css = createCss({}, null);
+    const keyFrame = css.keyframes({
+      "0%": { background: "red" },
+      "100%": { background: "green" },
+    }) as any;
+    let atom: any;
+    const { styles } = css.getStyles(() => {
+      expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
+      expect(atom.toString()).toBe("_hVCFgX");
+      return "";
+    });
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
+    );
+  });
+
+    test("should inject styles for animations into sheet", () => {
+    const css = createCss({}, null);
+    const keyFrame = css.keyframes({
+      "0%": { background: "red" },
+      "100%": { background: "green" },
+    }) as any;
+    let atom = css({ animationName: keyFrame }) as any;
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_hVCFgX");
+      return "";
+    });
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
     );
   });
 });

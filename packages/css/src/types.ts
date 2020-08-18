@@ -5,6 +5,7 @@ import {
   LineWidth,
   Properties,
 } from "./css-types";
+import { StrictMode } from "react";
 
 export interface IScreens {
   [key: string]: (css: string) => string;
@@ -37,8 +38,15 @@ export interface IComposedAtom {
   [ATOM]: true;
 }
 
+export interface IKeyframesAtom {
+  id: string;
+  _cssRuleString?: string;
+  toString: (this: IKeyframesAtom) => string;
+  [ATOM]: true;
+}
+
 export type TRecursiveCss<
-  T extends IConfig,
+  T extends TConfig,
   D = {
     [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
       ? ICssPropToToken<T>[K] | Properties[K]
@@ -56,8 +64,28 @@ export type TRecursiveCss<
 ) &
   D;
 
+export type TFlatCSS<
+  T extends TConfig,
+  D = {
+    [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
+      ? ICssPropToToken<T>[K] | Properties[K]
+      : Properties[K];
+  }
+> = D;
+
+export type TFlatUtils<
+  T extends TConfig,
+  UT = {
+    [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
+      ? ReturnType<T["utils"][U]> extends (arg: infer A) => {}
+        ? A
+        : never
+      : never;
+  }
+> = UT;
+
 export type TRecursiveUtils<
-  T extends IConfig,
+  T extends TConfig,
   UT = {
     [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
       ? ReturnType<T["utils"][U]> extends (arg: infer A) => {}
@@ -77,11 +105,11 @@ export type TRecursiveUtils<
 ) &
   UT;
 
-export type TUtility<A extends any, T extends IConfig> = (
+export type TUtility<A extends any, T extends TConfig> = (
   config: T
 ) => (arg: A) => TRecursiveCss<T>;
 
-export type ICssPropToToken<T extends IConfig> = T["tokens"] extends object
+export type ICssPropToToken<T extends TConfig> = T["tokens"] extends object
   ? {
       border: [
         LineWidth<(string & {}) | 0>,
@@ -319,19 +347,23 @@ export interface ITokensDefinition {
   zIndices?: ITokenDefinition;
   transitions?: ITokenDefinition;
 }
+export interface IUtils {
+  [name: string]: TUtility<any, any>;
+}
 
-export interface IConfig {
+export type TConfig<STRICT_MODE extends boolean = false> = {
   showFriendlyClassnames?: boolean;
   prefix?: string;
   utilityFirst?: boolean;
-  screens?: IScreens;
-  tokens?: ITokensDefinition;
-  utils?: {
-    [name: string]: TUtility<any, any>;
-  };
-}
+} & (STRICT_MODE extends true
+  ? { screens: IScreens; tokens: ITokensDefinition; utils: IUtils }
+  : {
+      screens?: IScreens;
+      tokens?: ITokensDefinition;
+      utils?: IUtils;
+    });
 
-export type TUtilityFirstCss<T extends IConfig> = T["screens"] extends unknown
+export type TUtilityFirstCss<T extends TConfig> = T["screens"] extends unknown
   ? {
       override?: TRecursiveCss<T>;
     } & TRecursiveUtils<T>
@@ -345,7 +377,7 @@ export type TUtilityFirstCss<T extends IConfig> = T["screens"] extends unknown
     } &
       TRecursiveUtils<T>;
 
-export type TDefaultCss<T extends IConfig> = T["screens"] extends object
+export type TDefaultCss<T extends TConfig> = T["screens"] extends object
   ? TRecursiveCss<T> &
       TRecursiveUtils<T> &
       {
@@ -354,11 +386,14 @@ export type TDefaultCss<T extends IConfig> = T["screens"] extends object
   : TRecursiveCss<T> & TRecursiveUtils<T>;
 
 export interface TCssConstructor<
-  T extends IConfig,
+  T extends TConfig,
   S extends TDefaultCss<T> | TUtilityFirstCss<T>
 > {
   (...styles: (S | string | boolean | null | undefined)[]): string;
   getStyles: (callback: () => any) => { styles: string[]; result: any };
+  keyframes: (
+    definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>
+  ) => string;
   theme: (
     theme: Partial<
       {
@@ -368,7 +403,7 @@ export interface TCssConstructor<
   ) => string;
 }
 
-export type TCss<T extends IConfig> = T extends { utilityFirst: true }
+export type TCss<T extends TConfig> = T extends { utilityFirst: true }
   ? TCssConstructor<T, TUtilityFirstCss<T>>
   : TCssConstructor<T, TDefaultCss<T>>;
 
