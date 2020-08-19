@@ -17,8 +17,6 @@ import { createStyled } from "@stitches/styled";
 export const { styled, css } = createStyled({
   // CSS config
 });
-
-export { styled, css };
 ```
 
 ```tsx
