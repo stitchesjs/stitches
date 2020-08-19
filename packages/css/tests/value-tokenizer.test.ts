@@ -46,10 +46,16 @@ describe("Parse css values into token groups", () => {
     ]);
   });
 
+  test("handles slashes", () => {
+    expect(tokenizeValue("small-caps bold 24px/1 sans-serif")).toEqual([
+      ["small-caps", "bold", "24px/1", "sans-serif"],
+    ]);
+    expect(tokenizeValue("2em / 5em")).toEqual([["2em", "/", "5em"]]);
+  });
+
   test("Handles nested css functions in multiple groups", () => {
     expect(
       tokenizeValue("linear-gradient(red, hsla(120,100%,50%,0.3)), red")
     ).toEqual([["linear-gradient(red, hsla(120,100%,50%,0.3))"], ["red"]]);
   });
-
 });
