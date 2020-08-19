@@ -639,4 +639,18 @@ describe("createCss", () => {
       backgroundColor: "red",
     });
   });
+
+  test("should not yield type errors when a token category is missing", () => {
+    const css = createCss({
+      tokens: {
+        radii: {
+          tiny: "3px",
+        },
+      },
+    });
+    css({
+      borderRadius: "tiny",
+      color: "lime", // allowed since no color tokens are defined
+    });
+  });
 });
