@@ -1,6 +1,6 @@
 import {
-  IConfig,
-  IScreens,
+  IBreakpoints,
+  TConfig,
   TCss,
   TDefaultCss,
   TUtilityFirstCss,
@@ -219,7 +219,7 @@ interface PolymorphicComponent<P, T extends string>
   ): React.ReactElement<PolymorphicProps<P, E, T>>;
 }
 
-export interface IBaseStyled<CSS, SCREENS> {
+export interface IBaseStyled<CSS, BREAKPOINTS> {
   <E extends string | React.ComponentType>(
     element: E,
     css?: CSS
@@ -238,14 +238,14 @@ export interface IBaseStyled<CSS, SCREENS> {
       };
     },
     VE = {
-      [P in keyof V]?: SCREENS extends IScreens
+      [P in keyof V]?: BREAKPOINTS extends IBreakpoints
         ?
             | keyof V[P]
             | false
             | null
             | undefined
             | ({
-                [S in keyof SCREENS]?: keyof V[P];
+                [S in keyof BREAKPOINTS]?: keyof V[P];
               } & {
                 ""?: keyof V[P];
               })
@@ -296,7 +296,7 @@ export interface IBaseStyled<CSS, SCREENS> {
 interface IStyledConstructor<
   E extends string | React.ComponentType,
   CSS,
-  SCREENS
+  BREAKPOINTS
 > {
   (cb: CSS): E extends ElKeys
     ? PolymorphicComponent<
@@ -327,14 +327,14 @@ interface IStyledConstructor<
       };
     },
     VE = {
-      [P in keyof V]?: SCREENS extends IScreens
+      [P in keyof V]?: BREAKPOINTS extends IBreakpoints
         ?
             | false
             | null
             | undefined
             | keyof V[P]
             | ({
-                [S in keyof SCREENS]?: keyof V[P];
+                [S in keyof BREAKPOINTS]?: keyof V[P];
               } & {
                 ""?: keyof V[P];
               })
@@ -369,22 +369,22 @@ interface IStyledConstructor<
     : never;
 }
 
-export type IStyled<CSS, SCREENS> = {
-  [E in ElKeys]: IStyledConstructor<E, CSS, SCREENS>;
+export type IStyled<CSS, BREAKPOINTS> = {
+  [E in ElKeys]: IStyledConstructor<E, CSS, BREAKPOINTS>;
 };
 
 let hasWarnedInlineStyle = false;
 
 export const createStyled = <
-  T extends IConfig,
+  T extends TConfig,
   CSS = T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TDefaultCss<T>,
-  SCREENS = T["screens"]
+  BREAKPOINTS = T["breakpoints"]
 >(
   config: T
 ): {
   css: TCss<T>;
-  styled: IBaseStyled<CSS, SCREENS> &
-    IStyled<CSS, SCREENS> & {
+  styled: IBaseStyled<CSS, BREAKPOINTS> &
+    IStyled<CSS, BREAKPOINTS> & {
       Box: <E extends ElKeys>(
         props: JSX.IntrinsicElements[E] & { as?: E }
       ) => JSX.Element;
@@ -404,7 +404,7 @@ export const createStyled = <
 
   let currentAs: string | undefined;
 
-  const configScreens = (css as any)._config().screens;
+  const configBreakpoints = (css as any)._config().breakpoints;
 
   const styledInstance = (
     baseStyling: any = (cssComposer: any) => cssComposer.compose(),
@@ -423,16 +423,18 @@ export const createStyled = <
       const variantMap: Map<string, { [key: string]: string }> = new Map();
       // tslint:disable-next-line
       for (const variant in variants[variantName]) {
-        const screens: { [key: string]: string } = {
+        const breakpoints: { [key: string]: string } = {
           "": css(variants[variantName][variant]),
         };
-        if (configScreens) {
+        if (configBreakpoints) {
           // tslint:disable-next-line
-          for (const screen in configScreens) {
-            screens[screen] = css({ [screen]: variants[variantName][variant] });
+          for (const breakpoint in configBreakpoints) {
+            breakpoints[breakpoint] = css({
+              [breakpoint]: variants[variantName][variant],
+            });
           }
         }
-        variantMap.set(variant, screens);
+        variantMap.set(variant, breakpoints);
       }
       evaluatedVariantMap.set(variantName, variantMap);
     }
@@ -458,14 +460,16 @@ export const createStyled = <
 
       for (const propName in props) {
         if (propName in variants) {
-          const screens = evaluatedVariantMap.get(propName);
+          const breakpoints = evaluatedVariantMap.get(propName);
 
           if (typeof props[propName] === "string") {
-            compositions.push(screens?.get(props[propName])![""]);
+            compositions.push(breakpoints?.get(props[propName])![""]);
           } else if (props[propName]) {
             // tslint:disable-next-line
-            for (const screen in props[propName]) {
-              compositions.push(screens?.get(props[propName][screen])![screen]);
+            for (const breakpoint in props[propName]) {
+              compositions.push(
+                breakpoints?.get(props[propName][breakpoint])![breakpoint]
+              );
             }
           }
         } else {
@@ -475,7 +479,7 @@ export const createStyled = <
 
       if (propsWithoutVariantsAndCssProp.css) {
         compositions.push(propsWithoutVariantsAndCssProp.css);
-        propsWithoutVariantsAndCssProp.css = undefined
+        propsWithoutVariantsAndCssProp.css = undefined;
       }
 
       return React.createElement(Component, {
