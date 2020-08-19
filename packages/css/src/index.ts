@@ -484,7 +484,7 @@ export const createCss = <T extends TConfig>(
     const inlineMediaQueries = selectors?.filter((part) =>
       part.startsWith("@")
     );
-    const selectorString = selectors
+    let selectorString = selectors
       ?.filter((part) => !part.startsWith("@"))
       .join("");
 
@@ -510,6 +510,16 @@ export const createCss = <T extends TConfig>(
       vendorProps,
       vendorPrefix
     );
+
+    // We want certain pseudo selectors to take presedence over other pseudo
+    // selectors, so we increase specificity
+    if (!selectorString?.match("&")) {
+      if (selectorString?.match(/\:focus|\:focus-within|\:hover/)) {
+        selectorString = `&&${selectorString}`;
+      } else if (selectorString?.match(/\:active/)) {
+        selectorString = `&&&${selectorString}`;
+      }
+    }
 
     // Create a new atom
     const atom: IAtom = {

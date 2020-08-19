@@ -136,16 +136,16 @@ describe("createCss", () => {
 
     expect(atom.id).toBe("color:hover");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.selector).toBe(":hover");
+    expect(atom.selector).toBe("&&:hover");
     expect(atom.breakpoint).toBe("");
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_bHNCzd");
+      expect(atom.toString()).toBe("_FdHZR");
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._bHNCzd:hover{color:red;}"
+      "/* STITCHES */\n\n._FdHZR._FdHZR:hover{color:red;}"
     );
   });
   test("should handle specificity", () => {
@@ -354,7 +354,7 @@ describe("createCss", () => {
     // @ts-ignore
     css({ "&:hover": { color: "red" } }).toString();
     expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._0:hover {color: red;}"
+      "._0._0:hover {color: red;}"
     );
   });
   test("should handle screen selector", () => {
@@ -394,7 +394,7 @@ describe("createCss", () => {
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toBe(
-      "/* STITCHES:mobile */\n\n@media(min-width:700px){._cnGHjt:hover{color:red;}}"
+      "/* STITCHES:mobile */\n\n@media(min-width:700px){._coXxUV._coXxUV:hover{color:red;}}"
     );
   });
   test("should insert themes", () => {
@@ -434,14 +434,14 @@ describe("createCss", () => {
     const atom = css({ "&:hover": { "&:disabled": { color: "red" } } }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_iEPeZH");
+      expect(atom.toString()).toBe("_imukGD");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._iEPeZH:hover:disabled{color:red;}"
+      "/* STITCHES */\n\n._imukGD._imukGD:hover:disabled{color:red;}"
     );
   });
   test("should handle border specificity", () => {
