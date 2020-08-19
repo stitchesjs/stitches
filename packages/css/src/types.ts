@@ -49,7 +49,7 @@ export type TRecursiveCss<
   T extends TConfig,
   D = {
     [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
-      ? ICssPropToToken<T>[K] | Properties[K]
+      ? ICssPropToToken<T>[K]
       : Properties[K];
   }
 > = (
@@ -68,7 +68,7 @@ export type TFlatCSS<
   T extends TConfig,
   D = {
     [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
-      ? ICssPropToToken<T>[K] | Properties[K]
+      ? ICssPropToToken<T>[K]
       : Properties[K];
   }
 > = D;

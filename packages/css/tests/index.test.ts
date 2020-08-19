@@ -608,7 +608,7 @@ describe("createCss", () => {
     );
   });
 
-    test("should inject styles for animations into sheet", () => {
+  test("should inject styles for animations into sheet", () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
       "0%": { background: "red" },
@@ -623,5 +623,20 @@ describe("createCss", () => {
     expect(styles[1].trim()).toBe(
       "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
     );
+  });
+
+  test("should yield type errors when tokens are defined", () => {
+    const css = createCss({
+      tokens: {
+        colors: {
+          primary: "red",
+        },
+      },
+    });
+    css({
+      color: "primary",
+      // @ts-expect-error
+      backgroundColor: "red",
+    });
   });
 });
