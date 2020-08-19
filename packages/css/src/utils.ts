@@ -1,4 +1,4 @@
-import { ICssPropToToken, IScreens, ISheet, TUtility } from "./types";
+import { ICssPropToToken, IBreakpoints, ISheet, TUtility } from "./types";
 
 export const cssPropToToken: ICssPropToToken<any> = {
   border: ["", "borderStyles", "colors"],
@@ -55,7 +55,7 @@ export const cssPropToToken: ICssPropToToken<any> = {
   transition: "transitions",
 };
 
-export const createSheets = (env: any, screens: IScreens = {}) => {
+export const createSheets = (env: any, screens: IBreakpoints = {}) => {
   const tags: HTMLStyleElement[] = [];
   if (env && env.document) {
     const head = env.document.querySelector("head");

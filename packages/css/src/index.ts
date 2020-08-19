@@ -4,7 +4,7 @@ import {
   IComposedAtom,
   TConfig,
   ICssPropToToken,
-  IScreens,
+  IBreakpoints,
   ISheet,
   IThemeAtom,
   ITokensDefinition,
@@ -24,7 +24,15 @@ export * from "./css-types";
 
 export const hotReloadingCache = new Map<string, any>();
 
-const MAIN_SCREEN_ID = "";
+const MAIN_BREAKPOINT_ID = "";
+
+const createSelector = (className: string, pseudo?: string) => {
+  return pseudo && pseudo.includes("&")
+    ? pseudo.replace(/&/gi, `.${className}`)
+    : pseudo
+    ? `.${className}${pseudo[0] === ":" ? pseudo : ` ${pseudo}`}`
+    : `.${className}`;
+};
 
 /**
  * Resolves a token to its css value in the context of the passed css prop:
@@ -147,16 +155,17 @@ const processStyleObject = (
 };
 
 /**
- * Resolves a css prop nesting path to a css selector and the screen the css prop is meant to be injected to
+ * Resolves a css prop nesting path to a css selector and the breakpoint the css prop is meant to be injected to
  */
-const resolveScreenAndSelector = (
+const resolvebreakpointAndSelector = (
   nestingPath: string[],
   config: TConfig<true>
 ) =>
   nestingPath.reduce(
-    (acc, screenOrSelector, i) => {
+    (acc, breakpointOrSelector, i) => {
       // utilityFirst selector specific resolution:
-      const isOverride = config.utilityFirst && screenOrSelector === "override";
+      const isOverride =
+        config.utilityFirst && breakpointOrSelector === "override";
       if (isOverride) {
         // any level above 0
         if (i) {
@@ -165,33 +174,31 @@ const resolveScreenAndSelector = (
               .slice(0, i - 1)
               .join(
                 ", "
-              )}, -> ${screenOrSelector}], only at the top level definition`
+              )}, -> ${breakpointOrSelector}], only at the top level definition`
           );
         }
         return acc;
       }
-      // Screens handling:
-      if (screenOrSelector in config.screens) {
-        if (acc.screen !== MAIN_SCREEN_ID) {
+      // breakpoints handling:
+      if (breakpointOrSelector in config.breakpoints) {
+        if (acc.breakpoint !== MAIN_BREAKPOINT_ID) {
           throw new Error(
-            `@stitches/css - You are nesting the screen "${screenOrSelector}" into "${acc.screen}", that makes no sense? :-)`
+            `@stitches/css - You are nesting the breakpoint "${breakpointOrSelector}" into "${acc.breakpoint}", that makes no sense? :-)`
           );
         }
-        acc.screen = screenOrSelector;
+        acc.breakpoint = breakpointOrSelector;
         return acc;
       }
       // Normal css nesting selector:
-      const firstChar = screenOrSelector[0]
-      acc.nestingPath +=
-        firstChar === ":"
-          ? screenOrSelector
-          : firstChar === "&"
-          ? screenOrSelector.substring(1)
-          : ` ${screenOrSelector}`;
+      acc.nestingPath[acc.nestingPath.length] =
+        // If you manually prefix with '&' we remove it for identity consistency
+        breakpointOrSelector[0] === "&"
+          ? breakpointOrSelector.substr(1)
+          : breakpointOrSelector;
 
       return acc;
     },
-    { screen: MAIN_SCREEN_ID, nestingPath: "" }
+    { breakpoint: MAIN_BREAKPOINT_ID, nestingPath: [] as string[] }
   );
 
 /**
@@ -232,10 +239,36 @@ const toStringCompose = function (this: IComposedAtom) {
   return className;
 };
 
+const createCssRule = (
+  breakpoints: IBreakpoints,
+  atom: IAtom,
+  className: string
+) => {
+  let cssRule = "";
+  if (atom.inlineMediaQueries && atom.inlineMediaQueries.length) {
+    let allMediaQueries = "";
+    let endBrackets = "";
+    atom.inlineMediaQueries.forEach((breakpoint) => {
+      allMediaQueries += `${breakpoint}{`;
+      endBrackets += "}";
+    });
+
+    cssRule = `${allMediaQueries}${createSelector(className, atom.selector)}{${
+      atom.cssHyphenProp
+    }:${atom.value};}${endBrackets}`;
+  } else {
+    cssRule = `${createSelector(className, atom.selector)}{${
+      atom.cssHyphenProp
+    }:${atom.value};}`;
+  }
+
+  return atom.breakpoint ? breakpoints[atom.breakpoint](cssRule) : cssRule;
+};
+
 const createToString = (
-  sheets: { [screen: string]: ISheet },
-  screens: IScreens = {},
-  cssClassnameProvider: (atom: IAtom, seq: number | null) => [string, string?], // [className, pseudo]
+  sheets: { [breakpoint: string]: ISheet },
+  breakpoints: IBreakpoints = {},
+  cssClassnameProvider: (atom: IAtom, seq: number | null) => string, // [className, pseudo]
   preInjectedRules: Set<string>
 ) => {
   let seq = 0;
@@ -245,19 +278,11 @@ const createToString = (
       preInjectedRules.size ? null : seq++
     );
     const shouldInject =
-      !preInjectedRules.size || !preInjectedRules.has(`.${className[0]}`);
-    const value = this.value;
+      !preInjectedRules.size || !preInjectedRules.has(`.${className}`);
 
     if (shouldInject) {
-      let cssRule = "";
-      if (className.length === 2) {
-        cssRule = `.${className[0]}${className[1]}{${this.cssHyphenProp}:${value};}`;
-      } else {
-        cssRule = `.${className[0]}{${this.cssHyphenProp}:${value};}`;
-      }
-
-      sheets[this.screen].insertRule(
-        this.screen ? screens[this.screen](cssRule) : cssRule
+      sheets[this.breakpoint].insertRule(
+        createCssRule(breakpoints, this, className)
       );
     }
 
@@ -265,48 +290,40 @@ const createToString = (
     // 1. delete everything but `id` for specificity check
 
     // @ts-ignore
-    this.cssHyphenProp = this.value = this.pseudo = this.screen = undefined;
+    this.cssHyphenProp = this.value = this.pseudo = this.breakpoint = this.inlineMediaQueries = undefined;
 
     // 2. put on a _className
-    this._className = className[0];
+    this._className = className;
 
     // 3. switch from this `toString` to a much simpler one
     this.toString = toStringCachedAtom;
 
-    return className[0];
+    return className;
   };
 };
 
 const createServerToString = (
-  sheets: { [screen: string]: ISheet },
-  screens: IScreens = {},
-  cssClassnameProvider: (atom: IAtom, seq: number | null) => [string, string?] // [className, pseudo]
+  sheets: { [mediaQuery: string]: ISheet },
+  breakpoints: IBreakpoints = {},
+  cssClassnameProvider: (atom: IAtom, seq: number | null) => string
 ) => {
   return function toString(this: IAtom) {
     const className = cssClassnameProvider(this, null);
-    const value = this.value;
 
-    let cssRule = "";
-    if (className.length === 2) {
-      cssRule = `.${className[0]}${className[1]}{${this.cssHyphenProp}:${value};}`;
-    } else {
-      cssRule = `.${className[0]}{${this.cssHyphenProp}:${value};}`;
-    }
-
-    sheets[this.screen].insertRule(
-      this.screen ? screens[this.screen](cssRule) : cssRule
+    sheets[this.breakpoint].insertRule(
+      createCssRule(breakpoints, this, className)
     );
 
     // We do not clean out the atom here, cause it will be reused
     // to inject multiple times for each request
 
     // 1. put on a _className
-    this._className = className[0];
+    this._className = className;
 
     // 2. switch from this `toString` to a much simpler one
     this.toString = toStringCachedAtom;
 
-    return className[0];
+    return className;
   };
 };
 
@@ -379,10 +396,10 @@ export const createCss = <T extends TConfig>(
 ): TCss<T> => {
   // pre-checked config to avoid checking these all the time
   const config: TConfig<true> = Object.assign(
-    { tokens: {}, utils: {}, screens: {} },
+    { tokens: {}, utils: {}, breakpoints: {} },
     _config
   );
-  const { tokens, screens } = config;
+  const { tokens, breakpoints } = config;
 
   const showFriendlyClassnames =
     typeof config.showFriendlyClassnames === "boolean"
@@ -404,36 +421,30 @@ export const createCss = <T extends TConfig>(
       ? `${prefix}_`
       : prefix
     : "";
-  const cssClassnameProvider = (
-    atom: IAtom,
-    seq: number | null
-  ): [string, string?] => {
+  const cssClassnameProvider = (atom: IAtom, seq: number | null): string => {
     const hash =
       seq === null
         ? hashString(
-            `${atom.screen || ""}${atom.cssHyphenProp.replace(
+            `${atom.breakpoint || ""}${atom.cssHyphenProp.replace(
               /-(moz|webkit|ms)-/,
               ""
-            )}${atom.pseudo || ""}${atom.value}`
+            )}${atom.selector || ""}${atom.inlineMediaQueries?.join("") || ""}${
+              atom.value
+            }`
           )
         : seq;
     const name = showFriendlyClassnames
-      ? `${atom.screen ? `${atom.screen}_` : ""}${atom.cssHyphenProp
+      ? `${atom.breakpoint ? `${atom.breakpoint}_` : ""}${atom.cssHyphenProp
           .replace(/-(moz|webkit|ms)-/, "")
           .split("-")
           .map((part) => part[0])
           .join("")}_${hash}`
       : `_${hash}`;
-    const className = `${classPrefix}${name}`;
 
-    if (atom.pseudo) {
-      return [className, atom.pseudo];
-    }
-
-    return [className];
+    return `${classPrefix}${name}`;
   };
 
-  const { tags, sheets } = createSheets(env, config.screens);
+  const { tags, sheets } = createSheets(env, config.breakpoints);
   const preInjectedRules = new Set<string>();
   // tslint:disable-next-line
   for (const sheet in sheets) {
@@ -445,14 +456,14 @@ export const createCss = <T extends TConfig>(
   let toString = env
     ? createToString(
         sheets,
-        config.screens,
+        config.breakpoints,
         cssClassnameProvider,
         preInjectedRules
       )
-    : createServerToString(sheets, config.screens, cssClassnameProvider);
+    : createServerToString(sheets, config.breakpoints, cssClassnameProvider);
 
   let themeToString = createThemeToString(classPrefix, sheets.__variables__);
-  let keyframesToString = createKeyframesToString(sheets[MAIN_SCREEN_ID]);
+  let keyframesToString = createKeyframesToString(sheets[MAIN_BREAKPOINT_ID]);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -465,17 +476,25 @@ export const createCss = <T extends TConfig>(
   const createAtom = (
     cssProp: string,
     value: any,
-    screen = MAIN_SCREEN_ID,
-    pseudo?: string
+    breakpoint = MAIN_BREAKPOINT_ID,
+    selectors?: string[]
   ) => {
-    let tokenValue: any = resolveTokens(cssProp, value, tokens);
+    const tokenValue: any = resolveTokens(cssProp, value, tokens);
+
+    const inlineMediaQueries = selectors?.filter((part) =>
+      part.startsWith("@")
+    );
+    const selectorString = selectors
+      ?.filter((part) => !part.startsWith("@"))
+      .join("");
 
     // generate id used for specificity check
     // two atoms are considered equal in regared to there specificity if the id is equal
     const id =
       cssProp.toLowerCase() +
-      (pseudo ? pseudo.split(":").sort().join(":") : "") +
-      screen;
+      (selectorString || "") +
+      (inlineMediaQueries ? inlineMediaQueries.join("") : "") +
+      breakpoint;
 
     // make a uid accouting for different values
     const uid = id + value;
@@ -486,7 +505,7 @@ export const createCss = <T extends TConfig>(
     }
 
     // prepare the cssProp
-    let cssHyphenProp = hyphenAndVendorPrefixCssProp(
+    const cssHyphenProp = hyphenAndVendorPrefixCssProp(
       cssProp,
       vendorProps,
       vendorPrefix
@@ -497,8 +516,9 @@ export const createCss = <T extends TConfig>(
       id,
       cssHyphenProp,
       value: tokenValue,
-      pseudo,
-      screen,
+      selector: selectorString,
+      inlineMediaQueries,
+      breakpoint,
       toString,
       [ATOM]: true,
     };
@@ -547,11 +567,11 @@ export const createCss = <T extends TConfig>(
         args[index++] = definitions[x];
       } else {
         processStyleObject(definitions[x], config, (prop, value, path) => {
-          const { nestingPath, screen } = resolveScreenAndSelector(
+          const { nestingPath, breakpoint } = resolvebreakpointAndSelector(
             path,
             config
           );
-          args[index++] = createAtom(prop, value, screen, nestingPath);
+          args[index++] = createAtom(prop, value, breakpoint, nestingPath);
         });
       }
     }
@@ -633,10 +653,10 @@ export const createCss = <T extends TConfig>(
     // and still cache is it is being reused
     toString = createServerToString(
       sheets,
-      config.screens,
+      config.breakpoints,
       cssClassnameProvider
     );
-    keyframesToString = createKeyframesToString(sheets[MAIN_SCREEN_ID]);
+    keyframesToString = createKeyframesToString(sheets[MAIN_BREAKPOINT_ID]);
     themeToString = createThemeToString(classPrefix, sheets.__variables__);
 
     atomCache.forEach((atom) => {
@@ -655,7 +675,7 @@ export const createCss = <T extends TConfig>(
 
     return {
       result,
-      styles: Object.keys(screens).reduce(
+      styles: Object.keys(breakpoints).reduce(
         (aggr, key) => {
           return aggr.concat(`/* STITCHES:${key} */\n${sheets[key].content}`);
         },

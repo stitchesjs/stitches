@@ -62,8 +62,8 @@ describe("createCss", () => {
 
     expect(atom.id).toBe("color");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.pseudo).toBe("");
-    expect(atom.screen).toBe("");
+    expect(atom.selector).toBe("");
+    expect(atom.breakpoint).toBe("");
     expect(atom.value).toBe("red");
 
     const { styles } = css.getStyles(() => {
@@ -92,8 +92,8 @@ describe("createCss", () => {
 
     expect(atom.id).toBe("color");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.pseudo).toBe("");
-    expect(atom.screen).toBe("");
+    expect(atom.selector).toBe("");
+    expect(atom.breakpoint).toBe("");
     expect(atom.value).toBe("var(--colors-RED)");
 
     const { styles } = css.getStyles(() => {
@@ -106,10 +106,10 @@ describe("createCss", () => {
       "/* STITCHES */\n\n._iVFaNG{color:var(--colors-RED);}"
     );
   });
-  test("should create screens", () => {
+  test("should create breakpoints", () => {
     const css = createCss(
       {
-        screens: {
+        breakpoints: {
           tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
         },
       },
@@ -118,8 +118,8 @@ describe("createCss", () => {
     const atom = (css({ tablet: { color: "red" } }) as any).atoms[0];
     expect(atom.id).toBe("colortablet");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.pseudo).toBe("");
-    expect(atom.screen).toBe("tablet");
+    expect(atom.selector).toBe("");
+    expect(atom.breakpoint).toBe("tablet");
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_hsxGAz");
       return "";
@@ -136,8 +136,8 @@ describe("createCss", () => {
 
     expect(atom.id).toBe("color:hover");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.pseudo).toBe(":hover");
-    expect(atom.screen).toBe("");
+    expect(atom.selector).toBe(":hover");
+    expect(atom.breakpoint).toBe("");
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_bHNCzd");
       return "";
@@ -173,6 +173,9 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe("/* STITCHES */\n\n._eCaYfN{color:red;}");
   });
+  /*
+    Not sorting pseudos, rather letting these combinations craete new atoms... take more 
+    sorting everything than creating "duplicate" atoms like this
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
     expect(
@@ -182,6 +185,7 @@ describe("createCss", () => {
       ).toString()
     ).toBe("_iEPeZH");
   });
+  */
   test("should use simple sequence for classname when browser", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss({}, (fakeEnv as unknown) as Window);
@@ -203,7 +207,7 @@ describe("createCss", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss(
       {
-        screens: {
+        breakpoints: {
           tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
         },
       },
@@ -259,7 +263,7 @@ describe("createCss", () => {
     const css = createCss(
       {
         utilityFirst: true,
-        screens: {
+        breakpoints: {
           mobile: () => "",
         },
       },
@@ -356,7 +360,7 @@ describe("createCss", () => {
   test("should handle screen selector", () => {
     const css = createCss(
       {
-        screens: {
+        breakpoints: {
           mobile: (className) => `@media(min-width:700px){${className}}`,
         },
       },
@@ -376,7 +380,7 @@ describe("createCss", () => {
   test("should handle pseudo in screen selector", () => {
     const css = createCss(
       {
-        screens: {
+        breakpoints: {
           mobile: (className) => `@media(min-width:700px){${className}}`,
         },
       },
@@ -607,8 +611,7 @@ describe("createCss", () => {
       "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
     );
   });
-
-    test("should inject styles for animations into sheet", () => {
+  test("should inject styles for animations into sheet", () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
       "0%": { background: "red" },
@@ -622,6 +625,56 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
       "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
+    );
+  });
+  test("should allow inline media queries", () => {
+    const css = createCss({}, null);
+    const atom = css({ "@media (hover:hover)": { color: "red" } }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_hCvELq");
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n@media (hover:hover){._hCvELq{color:red;}}"
+    );
+  });
+  test("should allow nested inline media queries", () => {
+    const css = createCss({}, null);
+    const atom = css({
+      "@media (hover:hover)": { "@media screen": { color: "red" } },
+    }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_zbUMK");
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n@media (hover:hover){@media screen{._zbUMK{color:red;}}}"
+    );
+  });
+  test("should allow injection of classname", () => {
+    const css = createCss({}, null);
+    const atom = (css({ "div:hover &": { color: "red" } }) as any).atoms[0];
+
+    expect(atom.id).toBe("colordiv:hover &");
+    expect(atom.cssHyphenProp).toEqual("color");
+    expect(atom.selector).toBe("div:hover &");
+    expect(atom.breakpoint).toBe("");
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_dkzxrg");
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\ndiv:hover ._dkzxrg{color:red;}"
     );
   });
 });
