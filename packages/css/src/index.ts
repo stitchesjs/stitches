@@ -26,11 +26,11 @@ export const hotReloadingCache = new Map<string, any>();
 
 const MAIN_BREAKPOINT_ID = "";
 
-const createSelector = (className: string, pseudo?: string) => {
-  return pseudo && pseudo.includes("&")
-    ? pseudo.replace(/&/gi, `.${className}`)
-    : pseudo
-    ? `.${className}${pseudo[0] === ":" ? pseudo : ` ${pseudo}`}`
+const createSelector = (className: string, selector?: string) => {
+  return selector && selector.includes("&")
+    ? selector.replace(/&/gi, `.${className}`)
+    : selector
+    ? `.${className}${selector[0] === ":" ? selector : ` ${selector}`}`
     : `.${className}`;
 };
 
