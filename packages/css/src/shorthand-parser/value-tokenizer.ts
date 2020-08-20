@@ -18,12 +18,12 @@ let tokenGroups: string[][] = [[]];
 export const tokenizeValue = (str: string) => {
   resetCurrentToken();
   tokenGroups = [[]];
-  if(!str){
-    return tokenGroups
+  if (!str) {
+    return tokenGroups;
   }
-  let strLength = str.length;
+  const strLength = str.length;
   for (let i = 0; i < strLength; i++) {
-    let char = str[i];
+    const char = str[i];
     switch (char) {
       // whitespace
       case " ":
@@ -86,7 +86,7 @@ export const tokenizeValue = (str: string) => {
         currentToken += char;
     }
   }
-  currentToken && addCurrentTokenToGroup();
+  if (currentToken) addCurrentTokenToGroup();
   return tokenGroups;
 };
 /**

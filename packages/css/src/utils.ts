@@ -1,12 +1,6 @@
-import { ICssPropToToken, IBreakpoints, ISheet, TUtility } from "./types";
 import {
-  background,
   animation,
-  transition,
-  font,
-  boxShadow,
-  margin,
-  padding,
+  background,
   border,
   borderBottom,
   borderColor,
@@ -16,7 +10,13 @@ import {
   borderStyle,
   borderTop,
   borderWidth,
+  boxShadow,
+  font,
+  margin,
+  padding,
+  transition,
 } from "./shorthand-parser";
+import { IBreakpoints, ICssPropToToken, ISheet } from "./types";
 
 export const cssPropToToken: ICssPropToToken<any> = {
   border: ["", "borderStyles", "colors"],
@@ -77,7 +77,7 @@ export const tokenTypes = [
   "sizes",
   "colors",
   "space",
-  "fontSize",
+  "fontSizes",
   "lineHeights",
   "fontWeights",
   "fonts",
@@ -146,7 +146,7 @@ export const specificityProps: {
 } = {
   border,
   boxShadow,
-  flex: (tokens, value) => {
+  flex: (tokens: any, value: any) => {
     if (Array.isArray(value)) {
       if (value.length === 2) {
         return {
@@ -173,7 +173,10 @@ export const specificityProps: {
           flexGrow: value,
         };
   },
-  overflow: (tokens, value) => ({ overflowX: value, overflowY: value }),
+  overflow: (tokens: any, value: any) => ({
+    overflowX: value,
+    overflowY: value,
+  }),
   margin,
   padding,
   borderRadius,
@@ -187,7 +190,7 @@ export const specificityProps: {
   borderBottom,
   borderLeft,
   borderTop,
-  borderRight
+  borderRight,
 };
 
 export const getVendorPrefixAndProps = (env: any) => {

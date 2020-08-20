@@ -1,15 +1,15 @@
 import {
-  background,
-  font,
   animation,
-  transition,
-  margin,
-  padding,
+  background,
   border,
   borderColor,
-  borderWidth,
   borderStyle,
+  borderWidth,
   boxShadow,
+  font,
+  margin,
+  padding,
+  transition,
 } from "../src/shorthand-parser";
 
 const tokens = {
@@ -18,7 +18,7 @@ const tokens = {
     gray400: "#e3e3e3",
   },
   space: { 1: "5px", 2: "10px", 3: "15px", 4: "20px" },
-  fontSize: { 1: "18px" },
+  fontSizes: { 1: "18px" },
   lineHeights: { 1: "2" },
   fontWeights: { 1: "500" },
   fonts: { main: "potato-font" },
