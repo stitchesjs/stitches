@@ -62,19 +62,6 @@ const resolveTokens = (cssProp: string, value: any, tokens: any) => {
 };
 
 /**
- * iterates over an object's key and value pairs and calls the callback with the key, value, and passed extraData as args
- */
-const callCallbackOnObjectValues = <T>(
-  obj: any,
-  callback: (key: string, value: string, extraData: T) => void,
-  extraData: T
-) => {
-  for (const key in obj) {
-    callback(key, obj[key], extraData);
-  }
-};
-
-/**
  * iterates over a style object keys and values,
  * resolving them to their final form then calls the value callback with the prop, value
  * and the current value nesting path in the style object:
@@ -93,14 +80,17 @@ const processStyleObject = (
     value: string,
     currentNestingPath: string[]
   ) => void,
-  currentNestingPath: string[] = []
+  currentNestingPath: string[] = [],
+  shouldHandleUtils = true,
+  shouldHandleSpecificityProps = true
 ) => {
   // key: css prop or override or a selector
   // value is: cssValue, a util, specificity prop, or
   for (const key in obj) {
     const val = obj[key];
-    const isUtilProp = key in config.utils;
-    const isSpecificityProp = !isUtilProp && key in specificityProps;
+    const isUtilProp = shouldHandleUtils && key in config.utils;
+    const isSpecificityProp =
+      shouldHandleSpecificityProps && !isUtilProp && key in specificityProps;
     /** Nested styles: */
     if (typeof val === "object" && !isSpecificityProp && !isUtilProp) {
       // Atom value:
@@ -120,17 +110,12 @@ const processStyleObject = (
     if (isUtilProp) {
       // Resolve the util from the util function:
       const resolvedUtils = config.utils[key](config)(val);
-      // we handle specificityProps after we handle utils in case utils result in specificityProps
-      for (const key in resolvedUtils) {
-        if (key in specificityProps) {
-          Object.assign(resolvedUtils, specificityProps[key](config)(val));
-        }
-      }
-      // call the value middleware on all values:
-      callCallbackOnObjectValues(
+      processStyleObject(
         resolvedUtils,
+        config,
         valueMiddleware,
-        currentNestingPath
+        [...currentNestingPath],
+        false
       );
       continue;
     }
@@ -140,11 +125,13 @@ const processStyleObject = (
     // see specificityProps in ./utils
     if (isSpecificityProp) {
       const resolvedSpecificityProps = specificityProps[key](config)(val);
-      // Call the value middleware on all values:
-      callCallbackOnObjectValues(
+      processStyleObject(
         resolvedSpecificityProps,
+        config,
         valueMiddleware,
-        currentNestingPath
+        [...currentNestingPath],
+        false,
+        false,
       );
       continue;
     }

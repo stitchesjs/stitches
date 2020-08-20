@@ -233,6 +233,40 @@ describe("createCss", () => {
     );
     expect(css({ marginX: "1rem" }).toString()).toBe("_kMiQCn _npnrc");
   });
+
+  test("should allow utils that resolve into nested structures", () => {
+    const css = createCss(
+      {
+        utils: {
+          hover: () => (value) => ({
+            ":hover": value,
+            ":focus": value,
+          }),
+        },
+      },
+      null
+    );
+    const atom = css({
+      hover: {
+        color: "green",
+      },
+    });
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_btUdGL _dGJDNJ");
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._btUdGL._btUdGL:focus{color:green;}
+      ._dGJDNJ._dGJDNJ:hover{color:green;}"
+    `);
+  });
+
   test("should ignore undefined atoms", () => {
     const css = createCss({}, null);
 
