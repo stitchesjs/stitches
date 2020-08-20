@@ -73,7 +73,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._eCaYfN{color:red;}");
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._eCaYfN{color:red;}"
+    `);
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
@@ -102,9 +105,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._iVFaNG{color:var(--colors-RED);}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._iVFaNG{color:var(--colors-RED);}"
+    `);
   });
   test("should remove special characters from tokens", () => {
     const tokens = createTokens({
@@ -123,9 +127,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._tLwhG{color:var(--colors-red);}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._tLwhG{color:var(--colors-red);}"
+    `);
   });
   test("should create breakpoints", () => {
     const css = createCss(
@@ -147,9 +152,14 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toBe(
-      "/* STITCHES:tablet */\n\n@media (min-width: 700px) { ._hsxGAz{color:red;} }"
-    );
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:tablet */
+      @media (min-width: 700px) { ._hsxGAz{color:red;} }"
+    `);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:tablet */
+      @media (min-width: 700px) { ._hsxGAz{color:red;} }"
+    `);
   });
   test("should handle pseudos", () => {
     const css = createCss({}, null);
@@ -165,9 +175,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._FdHZR._FdHZR:hover{color:red;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._FdHZR._FdHZR:hover{color:red;}"
+    `);
   });
   test("should handle specificity", () => {
     const css = createCss({}, null);
@@ -192,7 +203,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._eCaYfN{color:red;}");
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._eCaYfN{color:red;}"
+    `);
   });
   /*
     Not sorting pseudos, rather letting these combinations craete new atoms... take more
@@ -282,9 +296,8 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._btUdGL._btUdGL:focus{color:green;}
-      ._dGJDNJ._dGJDNJ:hover{color:green;}"
+      ._dGJDNJ._dGJDNJ:hover{color:green;}
+      ._btUdGL._btUdGL:focus{color:green;}"
     `);
   });
 
@@ -365,10 +378,11 @@ describe("createCss", () => {
       return "";
     });
 
-    expect(styles).toEqual([
-      `/* STITCHES:__variables__ */\n\n:root{}`,
-      `/* STITCHES */\n\n.c_eCaYfN{color:red;}\n.bc_cODewW{background-color:red;}`,
-    ]);
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      .bc_cODewW{background-color:red;}
+      .c_eCaYfN{color:red;}"
+    `);
   });
   test("should inject vendor prefix where explicitly stating so", () => {
     const css = createCss(
@@ -383,10 +397,10 @@ describe("createCss", () => {
       return "";
     });
 
-    expect(styles).toEqual([
-      `/* STITCHES:__variables__ */\n\n:root{}`,
-      `/* STITCHES */\n\n.c_eCaYfN{-webkit-color:red;}`,
-    ]);
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      .c_eCaYfN{-webkit-color:red;}"
+    `);
   });
   test("should use specificity props", () => {
     const css = createCss({}, null);
@@ -428,9 +442,10 @@ describe("createCss", () => {
     // @ts-ignore
 
     expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toBe(
-      "/* STITCHES:mobile */\n\n@media(min-width:700px){._fOxLwJ{color:red;}}"
-    );
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:mobile */
+      @media(min-width:700px){._fOxLwJ{color:red;}}"
+    `);
   });
   test("should handle pseudo in screen selector", () => {
     const css = createCss(
@@ -448,9 +463,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toBe(
-      "/* STITCHES:mobile */\n\n@media(min-width:700px){._coXxUV._coXxUV:hover{color:red;}}"
-    );
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:mobile */
+      @media(min-width:700px){._coXxUV._coXxUV:hover{color:red;}}"
+    `);
   });
   test("should insert themes", () => {
     const css = createCss(
@@ -479,10 +495,15 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles).toEqual([
-      "/* STITCHES:__variables__ */\n\n:root{--colors-primary:tomato;}\n.theme-0{--colors-primary:blue;}",
-      "/* STITCHES */\n\n._Eogfp{color:var(--colors-primary);}",
-    ]);
+    expect(styles[0]).toMatchInlineSnapshot(`
+      "/* STITCHES:__variables__ */
+      .theme-0{--colors-primary:blue;}
+      :root{--colors-primary:tomato;}"
+    `);
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._Eogfp{color:var(--colors-primary);}"
+    `);
   });
   test("should allow nested pseudo", () => {
     const css = createCss({}, null);
@@ -495,9 +516,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._imukGD._imukGD:hover:disabled{color:red;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._imukGD._imukGD:hover:disabled{color:red;}"
+    `);
   });
   test("should handle border specificity", () => {
     const css = createCss({}, null);
@@ -512,9 +534,21 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._jMbiSS{border-left-color:red;}\n._lkwFJC{border-bottom-color:red;}\n._iqEHZB{border-right-color:red;}\n._frjswu{border-top-color:red;}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._daMVcf{border-top-width:1px;}
+      ._hUxHUo{border-right-width:1px;}
+      ._pPCSj{border-bottom-width:1px;}
+      ._fcpRZb{border-left-width:1px;}
+      ._dZmTIq{border-top-style:solid;}
+      ._kxkaMR{border-right-style:solid;}
+      ._bctHBa{border-bottom-style:solid;}
+      ._dKkway{border-left-style:solid;}
+      ._frjswu{border-top-color:red;}
+      ._iqEHZB{border-right-color:red;}
+      ._lkwFJC{border-bottom-color:red;}
+      ._jMbiSS{border-left-color:red;}"
+    `);
   });
   test("should handle border shorthand with tokens", () => {
     const css = createCss(
@@ -538,9 +572,21 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._ffzau{border-left-color:var(--colors-primary);}\n._jIhVXS{border-bottom-color:var(--colors-primary);}\n._uBwAx{border-right-color:var(--colors-primary);}\n._kLWpHW{border-top-color:var(--colors-primary);}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._daMVcf{border-top-width:1px;}
+      ._hUxHUo{border-right-width:1px;}
+      ._pPCSj{border-bottom-width:1px;}
+      ._fcpRZb{border-left-width:1px;}
+      ._dZmTIq{border-top-style:solid;}
+      ._kxkaMR{border-right-style:solid;}
+      ._bctHBa{border-bottom-style:solid;}
+      ._dKkway{border-left-style:solid;}
+      ._kLWpHW{border-top-color:var(--colors-primary);}
+      ._uBwAx{border-right-color:var(--colors-primary);}
+      ._jIhVXS{border-bottom-color:var(--colors-primary);}
+      ._ffzau{border-left-color:var(--colors-primary);}"
+    `);
   });
   test("should handle box shadow with tokens", () => {
     const css = createCss(
@@ -562,9 +608,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._diaoUX{box-shadow: 1px 1px 1px var(--colors-primary);}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._diaoUX{box-shadow: 1px 1px 1px var(--colors-primary);}"
+    `);
   });
   test("should be able to compose themes", () => {
     const css = createCss(
@@ -593,9 +640,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._Eogfp{color:var(--colors-primary);}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._Eogfp{color:var(--colors-primary);}"
+    `);
   });
 
   test("should generate keyframe atoms", () => {
@@ -662,9 +710,11 @@ describe("createCss", () => {
       return "";
     });
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._idHIjE{animation-name:dmyJCr;}
+      @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
+    `);
   });
   test("should inject styles for animations into sheet", () => {
     const css = createCss({}, null);
@@ -678,9 +728,11 @@ describe("createCss", () => {
       return "";
     });
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._idHIjE{animation-name:dmyJCr;}
+      @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
+    `);
   });
   test("should handle margin shorthand", () => {
     const css = createCss({}, null);
@@ -697,11 +749,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._jeUhKW{margin-left:5px;}
-      ._hdcIia{margin-bottom:1px;}
+      ._kFCHHa{margin-top:1px;}
       ._ihMdjN{margin-right:5px;}
-      ._kFCHHa{margin-top:1px;}"
+      ._hdcIia{margin-bottom:1px;}
+      ._jeUhKW{margin-left:5px;}"
     `);
   });
 
@@ -720,11 +771,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._gyarRZ{padding-left:5px;}
-      ._kQnasN{padding-bottom:1px;}
+      ._cRIZvx{padding-top:1px;}
       ._gerKhy{padding-right:5px;}
-      ._cRIZvx{padding-top:1px;}"
+      ._kQnasN{padding-bottom:1px;}
+      ._gyarRZ{padding-left:5px;}"
     `);
   });
 
@@ -740,11 +790,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._frjswu{border-top-color:red;}
+      ._daMVcf{border-top-width:1px;}
       ._dZmTIq{border-top-style:solid;}
-      ._daMVcf{border-top-width:1px;}"
-      `);
+      ._frjswu{border-top-color:red;}"
+    `);
   });
 
   test("should allow nested inline media queries", () => {
@@ -774,10 +823,9 @@ describe("createCss", () => {
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._iqEHZB{border-right-color:red;}
+      ._hUxHUo{border-right-width:1px;}
       ._kxkaMR{border-right-style:solid;}
-      ._hUxHUo{border-right-width:1px;}"
+      ._iqEHZB{border-right-color:red;}"
     `);
   });
   test("should handle border-bottom shorthand", () => {
@@ -789,10 +837,9 @@ describe("createCss", () => {
     });
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._lkwFJC{border-bottom-color:red;}
+      ._pPCSj{border-bottom-width:1px;}
       ._bctHBa{border-bottom-style:solid;}
-      ._pPCSj{border-bottom-width:1px;}"
+      ._lkwFJC{border-bottom-color:red;}"
     `);
   });
   test("should allow inline media queries", () => {
@@ -805,7 +852,6 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-
       @media (hover:hover){._hCvELq{color:red;}}"
     `);
   });
@@ -822,9 +868,10 @@ describe("createCss", () => {
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_dkzxrg");
     });
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\ndiv:hover ._dkzxrg{color:red;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      div:hover ._dkzxrg{color:red;}"
+    `);
   });
 
   test("should handle border-left shorthand", () => {
@@ -840,10 +887,9 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._jMbiSS{border-left-color:red;}
+      ._fcpRZb{border-left-width:1px;}
       ._dKkway{border-left-style:solid;}
-      ._fcpRZb{border-left-width:1px;}"
+      ._jMbiSS{border-left-color:red;}"
     `);
   });
   test("should handle border-radius shorthand", () => {
@@ -860,11 +906,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._kirJLA{border-bottom-right-radius:5px;}
-      ._gnzyQc{border-top-right-radius:5px;}
+      ._iVJtjr{border-bottom-left-radius:5px;}
       ._bjAoar{border-top-left-radius:5px;}
-      ._iVJtjr{border-bottom-left-radius:5px;}"
+      ._gnzyQc{border-top-right-radius:5px;}
+      ._kirJLA{border-bottom-right-radius:5px;}"
     `);
   });
 
@@ -883,11 +928,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._jMbiSS{border-left-color:red;}
-      ._lkwFJC{border-bottom-color:red;}
+      ._frjswu{border-top-color:red;}
       ._iqEHZB{border-right-color:red;}
-      ._frjswu{border-top-color:red;}"
+      ._lkwFJC{border-bottom-color:red;}
+      ._jMbiSS{border-left-color:red;}"
     `);
   });
 
@@ -906,11 +950,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._dKkway{border-left-style:solid;}
-      ._bctHBa{border-bottom-style:solid;}
+      ._dZmTIq{border-top-style:solid;}
       ._kxkaMR{border-right-style:solid;}
-      ._dZmTIq{border-top-style:solid;}"
+      ._bctHBa{border-bottom-style:solid;}
+      ._dKkway{border-left-style:solid;}"
     `);
   });
 
@@ -929,11 +972,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._exEWxc{border-left-width:2px;}
-      ._dVrsOA{border-bottom-width:2px;}
+      ._hlWFhc{border-top-width:2px;}
       ._foDwTX{border-right-width:2px;}
-      ._hlWFhc{border-top-width:2px;}"
+      ._dVrsOA{border-bottom-width:2px;}
+      ._exEWxc{border-left-width:2px;}"
     `);
   });
 
@@ -950,7 +992,6 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
       ._cODewW{background-color:red;}"
     `);
   });
@@ -970,10 +1011,9 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._cYJUVx{transition-timing-function:ease-in-out;}
+      ._fMYPIB{transition-property:margin-right;}
       ._dkQnca{transition-duration:2s;}
-      ._fMYPIB{transition-property:margin-right;}"
+      ._cYJUVx{transition-timing-function:ease-in-out;}"
     `);
   });
 
@@ -990,24 +1030,51 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._kSPChp{font-family:\\"Fira Sans\\",sans-serif;}
-      ._bZKhEt{font-size:1.2em;}"
+      ._bZKhEt{font-size:1.2em;}
+      ._kSPChp{font-family:\\"Fira Sans\\",sans-serif;}"
     `);
   });
 
   test("Should warn about potential specificity issues when an inline responsive atom appears in two different css definitions", () => {
     const css = createCss({}, null);
-    const mediaString = "@media (min-width: 700px)"
+    const mediaString = "@media (min-width: 700px)";
     console.warn = jest.fn();
     const firstDef = css({
       [mediaString]: { color: "red" },
     }).toString();
-  
+
     const secondDef = css({
       [mediaString]: { color: "red" },
     }).toString();
 
-    expect(console.warn).toHaveBeenCalledWith(`The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`)
+    expect(console.warn).toHaveBeenCalledWith(
+      `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
+    );
+  });
+  test("should inject media queries after normal rules", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css({
+        color: "red",
+        "@media (min-width: 700px)": { color: "red" },
+        backgroundColor: "blue",
+      }).toString();
+      css({
+        color: "green",
+        "@media (min-width: 200px)": { color: "red" },
+        backgroundColor: "yello",
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ._jTsVyZ{color:green;}
+      ._dXRydm{background-color:yello;}
+      ._eCaYfN{color:red;}
+      ._cayivH{background-color:blue;}
+      @media (min-width: 700px){._heiuYc{color:red;}}
+      @media (min-width: 200px){._grNRuV{color:red;}}"
+    `);
   });
 });

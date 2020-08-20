@@ -656,7 +656,7 @@ export const createCss = <T extends TConfig>(
   cssInstance.getStyles = (cb: any) => {
     // tslint:disable-next-line
     for (let sheet in sheets) {
-      sheets[sheet].content = "";
+      sheets[sheet].cssRules.length = 0;
     }
     if (baseTokens) {
       sheets.__variables__.insertRule(baseTokens);
@@ -690,11 +690,11 @@ export const createCss = <T extends TConfig>(
       result,
       styles: Object.keys(breakpoints).reduce(
         (aggr, key) => {
-          return aggr.concat(`/* STITCHES:${key} */\n${sheets[key].content}`);
+          return aggr.concat(`/* STITCHES:${key} */\n${sheets[key].cssRules.join("\n")}`);
         },
         [
-          `/* STITCHES:__variables__ */\n${sheets.__variables__.content}`,
-          `/* STITCHES */\n${sheets[""].content}`,
+          `/* STITCHES:__variables__ */\n${sheets.__variables__.cssRules.join("\n")}`,
+          `/* STITCHES */\n${sheets[""].cssRules.join("\n")}`,
         ]
       ),
     };
