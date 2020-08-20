@@ -1,4 +1,22 @@
 import { ICssPropToToken, IBreakpoints, ISheet, TUtility } from "./types";
+import {
+  background,
+  animation,
+  transition,
+  font,
+  boxShadow,
+  margin,
+  padding,
+  border,
+  borderBottom,
+  borderColor,
+  borderLeft,
+  borderRadius,
+  borderRight,
+  borderStyle,
+  borderTop,
+  borderWidth,
+} from "./shorthand-parser";
 
 export const cssPropToToken: ICssPropToToken<any> = {
   border: ["", "borderStyles", "colors"],
@@ -54,6 +72,18 @@ export const cssPropToToken: ICssPropToToken<any> = {
   zIndex: "zIndices",
   transition: "transitions",
 };
+
+export const tokenTypes = [
+  "sizes",
+  "colors",
+  "space",
+  "fontSize",
+  "lineHeights",
+  "fontWeights",
+  "fonts",
+  "borderWidths",
+  "radii",
+] as const;
 
 export const createSheets = (env: any, screens: IBreakpoints = {}) => {
   const tags: HTMLStyleElement[] = [];
@@ -112,51 +142,11 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
 };
 
 export const specificityProps: {
-  [key: string]: TUtility<any, any>;
+  [key: string]: any;
 } = {
-  // Even though native CSS allows values in any order,
-  // we require the order to be "size style color"
-  border: () => (value) => {
-    const parts = Array.isArray(value)
-      ? value
-      : typeof value === "string"
-      ? value.split(" ")
-      : [value];
-    const css = {
-      borderTopWidth: parts[0],
-      borderRightWidth: parts[0],
-      borderBottomWidth: parts[0],
-      borderLeftWidth: parts[0],
-    } as any;
-
-    if (parts.length > 1) {
-      css.borderTopStyle = parts[1];
-      css.borderRightStyle = parts[1];
-      css.borderBottomStyle = parts[1];
-      css.borderLeftStyle = parts[1];
-    }
-
-    if (parts.length > 2) {
-      css.borderTopColor = parts[2];
-      css.borderRightColor = parts[2];
-      css.borderBottomColor = parts[2];
-      css.borderLeftColor = parts[2];
-    }
-
-    return css;
-  },
-  boxShadow: (config) => (value) => ({
-    boxShadow: Array.isArray(value)
-      ? `${value[0]} ${value[1]} ${value[2]} ${
-          config.tokens &&
-          config.tokens.colors &&
-          config.tokens.colors[value[3]]
-            ? config.tokens.colors[value[3]]
-            : value[3]
-        }`
-      : value,
-  }),
-  flex: () => (value) => {
+  border,
+  boxShadow,
+  flex: (tokens, value) => {
     if (Array.isArray(value)) {
       if (value.length === 2) {
         return {
@@ -183,99 +173,21 @@ export const specificityProps: {
           flexGrow: value,
         };
   },
-  overflow: () => (value) => ({ overflowX: value, overflowY: value }),
-  margin: () => (value) => {
-    if (Array.isArray(value)) {
-      if (value.length === 2) {
-        return {
-          marginLeft: value[1],
-          marginTop: value[0],
-          marginRight: value[1],
-          marginBottom: value[0],
-        };
-      }
-      if (value.length === 3) {
-        return {
-          marginLeft: value[1],
-          marginTop: value[0],
-          marginRight: value[1],
-          marginBottom: value[2],
-        };
-      }
-
-      return {
-        marginLeft: value[3],
-        marginTop: value[0],
-        marginRight: value[1],
-        marginBottom: value[2],
-      };
-    }
-
-    return {
-      marginLeft: value,
-      marginTop: value,
-      marginRight: value,
-      marginBottom: value,
-    };
-  },
-  padding: () => (value) => {
-    if (Array.isArray(value)) {
-      if (value.length === 2) {
-        return {
-          paddingLeft: value[1],
-          paddingTop: value[0],
-          paddingRight: value[1],
-          paddingBottom: value[0],
-        };
-      }
-      if (value.length === 3) {
-        return {
-          paddingLeft: value[1],
-          paddingTop: value[0],
-          paddingRight: value[1],
-          paddingBottom: value[2],
-        };
-      }
-
-      return {
-        paddingLeft: value[3],
-        paddingTop: value[0],
-        paddingRight: value[1],
-        paddingBottom: value[2],
-      };
-    }
-
-    return {
-      paddingLeft: value,
-      paddingTop: value,
-      paddingRight: value,
-      paddingBottom: value,
-    };
-  },
-  borderRadius: () => (value) => ({
-    borderTopLeftRadius: value,
-    borderTopRightRadius: value,
-    borderBottomLeftRadius: value,
-    borderBottomRightRadius: value,
-  }),
-  borderColor: () => (value) => ({
-    borderTopColor: value,
-    borderRightColor: value,
-    borderBottomColor: value,
-    borderLeftColor: value,
-  }),
-  borderStyle: () => (value) => ({
-    borderTopStyle: value,
-    borderRightStyle: value,
-    borderBottomStyle: value,
-    borderLeftStyle: value,
-  }),
-  borderWidth: () => (value) => ({
-    borderTopWidth: value,
-    borderRightWidth: value,
-    borderBottomWidth: value,
-    borderLeftWidth: value,
-  }),
+  overflow: (tokens, value) => ({ overflowX: value, overflowY: value }),
+  margin,
+  padding,
+  borderRadius,
+  borderColor,
+  borderStyle,
+  borderWidth,
+  background,
+  animation,
+  transition,
+  font,
+  borderBottom,
+  borderLeft,
+  borderTop,
+  borderRight
 };
 
 export const getVendorPrefixAndProps = (env: any) => {

@@ -370,7 +370,7 @@ describe("createCss", () => {
   test("should use specificity props", () => {
     const css = createCss({}, null);
     expect(String(css({ margin: "1px" }))).toBe(
-      "_hdcIia _cCuGfR _kFCHHa _kFwmfW"
+      "_kFwmfW _hdcIia _cCuGfR _kFCHHa"
     );
   });
   test("should have declarative api", () => {
@@ -495,7 +495,7 @@ describe("createCss", () => {
       "/* STITCHES */\n\n._jMbiSS{border-left-color:red;}\n._lkwFJC{border-bottom-color:red;}\n._iqEHZB{border-right-color:red;}\n._frjswu{border-top-color:red;}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
     );
   });
-  test("should handle border array definition with token", () => {
+  test("should handle border shorthand with tokens", () => {
     const css = createCss(
       {
         tokens: {
@@ -506,7 +506,7 @@ describe("createCss", () => {
       },
       null
     );
-    const atom = css({ border: ["1px", "solid", "primary"] }) as any;
+    const atom = css({ border: "1px solid primary" }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe(
@@ -521,7 +521,7 @@ describe("createCss", () => {
       "/* STITCHES */\n\n._ffzau{border-left-color:var(--colors-primary);}\n._jIhVXS{border-bottom-color:var(--colors-primary);}\n._uBwAx{border-right-color:var(--colors-primary);}\n._kLWpHW{border-top-color:var(--colors-primary);}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
     );
   });
-  test("should handle box shadow array with token", () => {
+  test("should handle box shadow with tokens", () => {
     const css = createCss(
       {
         tokens: {
@@ -532,17 +532,17 @@ describe("createCss", () => {
       },
       null
     );
-    const atom = css({ boxShadow: ["1px", "1px", "1px", "primary"] }) as any;
+    const atom = css({ boxShadow: "1px 1px 1px primary" }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_jpflsr");
+      expect(atom.toString()).toBe("_diaoUX");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._jpflsr{box-shadow:1px 1px 1px var(--colors-primary);}"
+      "/* STITCHES */\n\n._diaoUX{box-shadow: 1px 1px 1px var(--colors-primary);}"
     );
   });
   test("should be able to compose themes", () => {
@@ -585,10 +585,10 @@ describe("createCss", () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toBe(
-      "@keyframes kNUAiX {0% {background: red;}100% {background: green;}"
+      "@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
     );
 
-    expect(keyFrame.toString()).toBe("kNUAiX");
+    expect(keyFrame.toString()).toBe("dmyJCr");
   });
 
   test("should support utils inside keyframes", () => {
@@ -622,11 +622,11 @@ describe("createCss", () => {
       "100%": { padding: "10px" },
     }) as any;
 
-    expect(keyFrame._cssRuleString).toBe(
-      "@keyframes hAOsXf {0% {padding-left: 1px;padding-top: 1px;padding-right: 1px;padding-bottom: 1px;}100% {padding-left: 10px;padding-top: 10px;padding-right: 10px;padding-bottom: 10px;}"
+    expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
+      `"@keyframes bivLJn {0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;}100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}"`
     );
 
-    expect(keyFrame.toString()).toBe("hAOsXf");
+    expect(keyFrame.toString()).toBe("bivLJn");
   });
   test("should allow keyframes atom to be used as a direct object value", () => {
     const css = createCss({}, null);
@@ -637,12 +637,12 @@ describe("createCss", () => {
     let atom: any;
     const { styles } = css.getStyles(() => {
       expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
-      expect(atom.toString()).toBe("_hVCFgX");
+      expect(atom.toString()).toBe("_idHIjE");
       return "";
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
+      "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
     );
   });
   test("should inject styles for animations into sheet", () => {
@@ -653,29 +653,79 @@ describe("createCss", () => {
     }) as any;
     let atom = css({ animationName: keyFrame }) as any;
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_hVCFgX");
+      expect(atom.toString()).toBe("_idHIjE");
       return "";
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@keyframes kNUAiX {0% {background: red;}100% {background: green;}\n._hVCFgX{animation-name:kNUAiX;}"
+      "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
     );
   });
-  test("should allow inline media queries", () => {
+  test("should handle margin shorthand", () => {
     const css = createCss({}, null);
-    const atom = css({ "@media (hover:hover)": { color: "red" } }) as any;
+    const atom = css({ margin: "1px 5px" }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_hCvELq");
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_jeUhKW _hdcIia _ihMdjN _kFCHHa"`
+      );
 
       return "";
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@media (hover:hover){._hCvELq{color:red;}}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._jeUhKW{margin-left:5px;}
+      ._hdcIia{margin-bottom:1px;}
+      ._ihMdjN{margin-right:5px;}
+      ._kFCHHa{margin-top:1px;}"
+    `);
   });
+
+  test("should handle padding shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ padding: "1px 5px" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_gyarRZ _kQnasN _gerKhy _cRIZvx"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._gyarRZ{padding-left:5px;}
+      ._kQnasN{padding-bottom:1px;}
+      ._gerKhy{padding-right:5px;}
+      ._cRIZvx{padding-top:1px;}"
+    `);
+  });
+
+  test("should handle border-top shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderTop: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_frjswu _dZmTIq _daMVcf"`
+      );
+    });
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._frjswu{border-top-color:red;}
+      ._dZmTIq{border-top-style:solid;}
+      ._daMVcf{border-top-width:1px;}"
+      `);
+  });
+
   test("should allow nested inline media queries", () => {
     const css = createCss({}, null);
     const atom = css({
@@ -684,15 +734,61 @@ describe("createCss", () => {
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_zbUMK");
+    });
+  });
+
+  test("should handle border-right shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderRight: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_iqEHZB _kxkaMR _hUxHUo"`
+      );
 
       return "";
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@media (hover:hover){@media screen{._zbUMK{color:red;}}}"
-    );
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._iqEHZB{border-right-color:red;}
+      ._kxkaMR{border-right-style:solid;}
+      ._hUxHUo{border-right-width:1px;}"
+    `);
   });
+  test("should handle border-bottom shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderBottom: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_lkwFJC _bctHBa _pPCSj"`);
+    });
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._lkwFJC{border-bottom-color:red;}
+      ._bctHBa{border-bottom-style:solid;}
+      ._pPCSj{border-bottom-width:1px;}"
+    `);
+  });
+  test("should allow inline media queries", () => {
+    const css = createCss({}, null);
+    const atom = css({ "@media (hover:hover)": { color: "red" } }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_hCvELq");
+    });
+    expect(styles.length).toBe(2);
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      @media (hover:hover){._hCvELq{color:red;}}"
+    `);
+  });
+
   test("should allow injection of classname", () => {
     const css = createCss({}, null);
     const atom = (css({ "div:hover &": { color: "red" } }) as any).atoms[0];
@@ -701,14 +797,181 @@ describe("createCss", () => {
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.selector).toBe("div:hover &");
     expect(atom.breakpoint).toBe("");
+
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_dkzxrg");
+    });
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\ndiv:hover ._dkzxrg{color:red;}"
+    );
+  });
+
+  test("should handle border-left shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderLeft: "1px solid red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_jMbiSS _dKkway _fcpRZb"`
+      );
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._jMbiSS{border-left-color:red;}
+      ._dKkway{border-left-style:solid;}
+      ._fcpRZb{border-left-width:1px;}"
+    `);
+  });
+  test("should handle border-radius shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderRadius: "5px" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_kirJLA _gnzyQc _bjAoar _iVJtjr"`
+      );
       return "";
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\ndiv:hover ._dkzxrg{color:red;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._kirJLA{border-bottom-right-radius:5px;}
+      ._gnzyQc{border-top-right-radius:5px;}
+      ._bjAoar{border-top-left-radius:5px;}
+      ._iVJtjr{border-bottom-left-radius:5px;}"
+    `);
+  });
+
+  test("should handle border-color shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderColor: "red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_jMbiSS _lkwFJC _iqEHZB _frjswu"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._jMbiSS{border-left-color:red;}
+      ._lkwFJC{border-bottom-color:red;}
+      ._iqEHZB{border-right-color:red;}
+      ._frjswu{border-top-color:red;}"
+    `);
+  });
+
+  test("should handle border-style shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderStyle: "solid" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_dKkway _bctHBa _kxkaMR _dZmTIq"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._dKkway{border-left-style:solid;}
+      ._bctHBa{border-bottom-style:solid;}
+      ._kxkaMR{border-right-style:solid;}
+      ._dZmTIq{border-top-style:solid;}"
+    `);
+  });
+
+  test("should handle border-width shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ borderWidth: "2px" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_exEWxc _dVrsOA _foDwTX _hlWFhc"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._exEWxc{border-left-width:2px;}
+      ._dVrsOA{border-bottom-width:2px;}
+      ._foDwTX{border-right-width:2px;}
+      ._hlWFhc{border-top-width:2px;}"
+    `);
+  });
+
+  test("should handle background shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ background: "red" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cODewW"`);
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._cODewW{background-color:red;}"
+    `);
+  });
+
+  test("should handle transition shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ transition: "margin-right 2s ease-in-out" }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_cYJUVx _dkQnca _fMYPIB"`
+      );
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._cYJUVx{transition-timing-function:ease-in-out;}
+      ._dkQnca{transition-duration:2s;}
+      ._fMYPIB{transition-property:margin-right;}"
+    `);
+  });
+
+  test("should handle font shorthand", () => {
+    const css = createCss({}, null);
+    const atom = css({ font: '1.2em "Fira Sans", sans-serif' }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_kSPChp _bZKhEt"`);
+
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+
+      ._kSPChp{font-family:\\"Fira Sans\\",sans-serif;}
+      ._bZKhEt{font-size:1.2em;}"
+    `);
   });
 });

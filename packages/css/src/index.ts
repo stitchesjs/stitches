@@ -17,6 +17,7 @@ import {
   getVendorPrefixAndProps,
   hashString,
   specificityProps,
+  tokenTypes,
 } from "./utils";
 
 export * from "./types";
@@ -124,7 +125,7 @@ const processStyleObject = (
     // shorthand css props or css props that has baked in handling:
     // see specificityProps in ./utils
     if (isSpecificityProp) {
-      const resolvedSpecificityProps = specificityProps[key](config)(val);
+      const resolvedSpecificityProps = specificityProps[key](config.tokens, val);
       processStyleObject(
         resolvedSpecificityProps,
         config,
@@ -385,6 +386,10 @@ export const createCss = <T extends TConfig>(
   const config: TConfig<true> = Object.assign(
     { tokens: {}, utils: {}, breakpoints: {} },
     _config
+  );
+  // prefill with empty token groups
+  tokenTypes.forEach(
+    (tokenType) => (config.tokens[tokenType] = config.tokens[tokenType] || {})
   );
   const { tokens, breakpoints } = config;
 

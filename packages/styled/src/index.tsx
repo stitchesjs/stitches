@@ -439,7 +439,7 @@ export const createStyled = <
       evaluatedVariantMap.set(variantName, variantMap);
     }
 
-    return (props: any) => {
+    return React.forwardRef((props: any, ref: React.Ref<Element>) => {
       const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
 
       // Check the memoCompsition's identity to warn the user
@@ -485,9 +485,10 @@ export const createStyled = <
       return React.createElement(Component, {
         ...propsWithoutVariantsAndCssProp,
         as: props.as || as,
+        ref,
         className: css(...compositions, props.className),
       });
-    };
+    });
   };
 
   // tslint:disable-next-line
