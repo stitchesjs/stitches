@@ -625,7 +625,7 @@ describe("createCss", () => {
     );
   });
 
-  test("should yield type errors when tokens are defined", () => {
+  test("should not yield type errors when raw values are used even though tokens are defined", () => {
     const css = createCss({
       tokens: {
         colors: {
@@ -634,14 +634,29 @@ describe("createCss", () => {
       },
     });
     css({
+      color: "lime",
+    });
+  });
+
+  test("should yield type errors in strict mode when tokens are defined but raw values are used", () => {
+    const css = createCss({
+      strict: true,
+      tokens: {
+        colors: {
+          primary: "red",
+        },
+      },
+    });
+    css({
       color: "primary",
-      // @ts-expect-error
+      // @ts-ignore
       backgroundColor: "red",
     });
   });
 
   test("should not yield type errors when a token category is missing", () => {
     const css = createCss({
+      strict: true,
       tokens: {
         radii: {
           tiny: "3px",

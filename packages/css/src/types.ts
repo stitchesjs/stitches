@@ -93,14 +93,7 @@ export interface IKeyframesAtom {
   [ATOM]: true;
 }
 
-export type TRecursiveCss<
-  T extends TConfig,
-  D = {
-    [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
-      ? ICssPropToToken<T>[K]
-      : Properties[K];
-  }
-> = (
+export type TRecursiveCss<T extends TConfig, D = TFlatCSS<T>> = (
   | D
   | {
       [pseudo: string]: (
@@ -112,14 +105,13 @@ export type TRecursiveCss<
 ) &
   D;
 
-export type TFlatCSS<
-  T extends TConfig,
-  D = {
-    [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
+export type TFlatCSS<T extends TConfig> = {
+  [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
+    ? T extends { strict: true }
       ? ICssPropToToken<T>[K]
-      : Properties[K];
-  }
-> = D;
+      : ICssPropToToken<T>[K] | Properties[K]
+    : Properties[K];
+};
 
 export type TFlatUtils<
   T extends TConfig,
@@ -403,6 +395,7 @@ export type TConfig<STRICT_MODE extends boolean = false> = {
   showFriendlyClassnames?: boolean;
   prefix?: string;
   utilityFirst?: boolean;
+  strict?: boolean;
 } & (STRICT_MODE extends true
   ? { screens: IScreens; tokens: ITokensDefinition; utils: IUtils }
   : {
