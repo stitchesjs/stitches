@@ -1,4 +1,4 @@
-import { ICssPropToToken, IScreens, ISheet, TUtility } from "./types";
+import { ICssPropToToken, IBreakpoints, ISheet, TUtility } from "./types";
 import {
   background,
   animation,
@@ -85,7 +85,7 @@ export const tokenTypes = [
   "radii",
 ] as const;
 
-export const createSheets = (env: any, screens: IScreens = {}) => {
+export const createSheets = (env: any, screens: IBreakpoints = {}) => {
   const tags: HTMLStyleElement[] = [];
   if (env && env.document) {
     const head = env.document.querySelector("head");
