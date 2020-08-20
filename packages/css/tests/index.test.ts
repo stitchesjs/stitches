@@ -106,6 +106,27 @@ describe("createCss", () => {
       "/* STITCHES */\n\n._iVFaNG{color:var(--colors-RED);}"
     );
   });
+  test("should remove special characters from tokens", () => {
+    const tokens = createTokens({
+      colors: {
+        "$!@red@!$": "tomato",
+      },
+    });
+    const css = createCss({ tokens }, null);
+    const atom = (css({ color: "$!@red@!$" }) as any).atoms[0];
+
+    expect(atom.value).toBe("var(--colors-red)");
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toBe("_tLwhG");
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toBe(
+      "/* STITCHES */\n\n._tLwhG{color:var(--colors-red);}"
+    );
+  });
   test("should create breakpoints", () => {
     const css = createCss(
       {
@@ -174,7 +195,7 @@ describe("createCss", () => {
     expect(styles[1].trim()).toBe("/* STITCHES */\n\n._eCaYfN{color:red;}");
   });
   /*
-    Not sorting pseudos, rather letting these combinations craete new atoms... take more 
+    Not sorting pseudos, rather letting these combinations craete new atoms... take more
     sorting everything than creating "duplicate" atoms like this
   test("should handle specificity with different but same pseudo", () => {
     const css = createCss({}, null);
