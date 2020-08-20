@@ -1,4 +1,4 @@
-import { IConfig, TUtility } from "@stitches/css";
+import { TConfig, TUtility } from "@stitches/css";
 
 export interface IThemeValue {
   [key: string]: string;
@@ -71,7 +71,7 @@ export interface ITheme {
   transitionDelay?: IThemeValue;
 }
 
-export interface ITailwindConfig extends IConfig {
+export interface ITailwindConfig extends TConfig {
   theme: ITheme;
   utils: {
     absolute: TTailwindUtility<true>;

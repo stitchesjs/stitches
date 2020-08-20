@@ -672,7 +672,7 @@ describe("createCss", () => {
       "0%": { background: "red" },
       "100%": { background: "green" },
     }) as any;
-    let atom = css({ animationName: keyFrame }) as any;
+    const atom = css({ animationName: keyFrame }) as any;
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_idHIjE");
       return "";
