@@ -995,4 +995,19 @@ describe("createCss", () => {
       ._bZKhEt{font-size:1.2em;}"
     `);
   });
+
+  test("Should warn about potential specificity issues when an inline responsive atom appears in two different css definitions", () => {
+    const css = createCss({}, null);
+    const mediaString = "@media (min-width: 700px)"
+    console.warn = jest.fn();
+    const firstDef = css({
+      [mediaString]: { color: "red" },
+    }).toString();
+  
+    const secondDef = css({
+      [mediaString]: { color: "red" },
+    }).toString();
+
+    expect(console.warn).toHaveBeenCalledWith(`The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`)
+  });
 });

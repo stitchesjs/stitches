@@ -475,7 +475,6 @@ export const createCss = <T extends TConfig>(
     selectors?: string[]
   ) => {
     const tokenValue: any = resolveTokens(cssProp, value, tokens);
-
     const inlineMediaQueries = selectors?.filter((part) =>
       part.startsWith("@")
     );
@@ -485,6 +484,7 @@ export const createCss = <T extends TConfig>(
 
     // generate id used for specificity check
     // two atoms are considered equal in regared to there specificity if the id is equal
+    const inlineMediasAsString = (inlineMediaQueries ? inlineMediaQueries.join("") : "")
     const id =
       cssProp.toLowerCase() +
       (selectorString || "") +
@@ -496,6 +496,10 @@ export const createCss = <T extends TConfig>(
 
     // If this was created before return the cached atom
     if (atomCache.has(uid)) {
+      // check if this has a breakpoint based media query
+      if(inlineMediasAsString.match(/@media.*\((min|max)?.*(width|height).*\)/)){
+        console.warn(`The property "${cssProp}" with media query ${inlineMediasAsString} can cause a specificity issue. You should create a breakpoint`)
+      }
       return atomCache.get(uid)!;
     }
 
@@ -527,6 +531,7 @@ export const createCss = <T extends TConfig>(
       toString,
       [ATOM]: true,
     };
+
 
     // Cache it
     atomCache.set(uid, atom);
