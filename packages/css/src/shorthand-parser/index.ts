@@ -16,6 +16,7 @@ const createPropertyParser = (type: any) => (tokens: any, value: string) => {
   const css = {};
 
   chains.forEach((chain, chainIndex) => {
+    // tslint:disable-next-line
     chain.forEach((value, index) => {
       type(tokens, css, value, index, chain, chainIndex, chains);
     });
