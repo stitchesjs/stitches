@@ -17,6 +17,7 @@ import {
   getVendorPrefixAndProps,
   hashString,
   specificityProps,
+  tokenTypes,
 } from "./utils";
 
 export * from "./types";
@@ -115,7 +116,10 @@ const processStyleObject = (
       // we handle specificityProps after we handle utils in case utils result in specificityProps
       for (const key in resolvedUtils) {
         if (key in specificityProps) {
-          Object.assign(resolvedUtils, specificityProps[key](config)(val));
+          Object.assign(
+            resolvedUtils,
+            specificityProps[key](config.tokens, val)
+          );
         }
       }
       // call the value middleware on all values:
@@ -131,7 +135,10 @@ const processStyleObject = (
     // shorthand css props or css props that has baked in handling:
     // see specificityProps in ./utils
     if (isSpecificityProp) {
-      const resolvedSpecificityProps = specificityProps[key](config)(val);
+      const resolvedSpecificityProps = specificityProps[key](
+        config.tokens,
+        val
+      );
       // Call the value middleware on all values:
       callCallbackOnObjectValues(
         resolvedSpecificityProps,
@@ -181,7 +188,7 @@ const resolveScreenAndSelector = (
         return acc;
       }
       // Normal css nesting selector:
-      const firstChar = screenOrSelector[0]
+      const firstChar = screenOrSelector[0];
       acc.nestingPath +=
         firstChar === ":"
           ? screenOrSelector
@@ -381,6 +388,10 @@ export const createCss = <T extends TConfig>(
   const config: TConfig<true> = Object.assign(
     { tokens: {}, utils: {}, screens: {} },
     _config
+  );
+  // prefill with empty token groups
+  tokenTypes.forEach(
+    (tokenType) => (config.tokens[tokenType] = config.tokens[tokenType] || {})
   );
   const { tokens, screens } = config;
 
