@@ -125,14 +125,17 @@ const processStyleObject = (
     // shorthand css props or css props that has baked in handling:
     // see specificityProps in ./utils
     if (isSpecificityProp) {
-      const resolvedSpecificityProps = specificityProps[key](config.tokens, val);
+      const resolvedSpecificityProps = specificityProps[key](
+        config.tokens,
+        val
+      );
       processStyleObject(
         resolvedSpecificityProps,
         config,
         valueMiddleware,
         [...currentNestingPath],
         false,
-        false,
+        false
       );
       continue;
     }
@@ -537,7 +540,10 @@ export const createCss = <T extends TConfig>(
     // @ts-ignore
     // tslint:disable-next-line
     for (const token in tokens[tokenType]) {
-      const cssvar = `--${tokenType}-${token}`;
+      // format token to remove special characters
+      // https://stackoverflow.com/a/4374890
+      const formattedToken = token.replace(/[^\w\s]/gi, "");
+      const cssvar = `--${tokenType}-${formattedToken}`;
 
       // @ts-ignore
       baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
