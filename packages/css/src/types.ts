@@ -53,9 +53,8 @@ import {
   ZIndexProperty,
   TransitionProperty,
 } from "./css-types";
-import { StrictMode } from "react";
 
-export interface IScreens {
+export interface IBreakpoints {
   [key: string]: (css: string) => string;
 }
 
@@ -65,8 +64,9 @@ export interface IAtom {
   id: string;
   cssHyphenProp: string;
   value: string;
-  pseudo: string | undefined;
-  screen: string;
+  selector: string | undefined;
+  breakpoint: string;
+  inlineMediaQueries: string[] | undefined;
   _className?: string;
   toString: (this: IAtom) => string;
   [ATOM]: true;
@@ -397,32 +397,34 @@ export type TConfig<STRICT_MODE extends boolean = false> = {
   utilityFirst?: boolean;
   strict?: boolean;
 } & (STRICT_MODE extends true
-  ? { screens: IScreens; tokens: ITokensDefinition; utils: IUtils }
+  ? { breakpoints: IBreakpoints; tokens: ITokensDefinition; utils: IUtils }
   : {
-      screens?: IScreens;
+      breakpoints?: IBreakpoints;
       tokens?: ITokensDefinition;
       utils?: IUtils;
     });
 
-export type TUtilityFirstCss<T extends TConfig> = T["screens"] extends unknown
+export type TUtilityFirstCss<
+  T extends TConfig
+> = T["breakpoints"] extends unknown
   ? {
       override?: TRecursiveCss<T>;
     } & TRecursiveUtils<T>
   : {
       override?: TRecursiveCss<T> &
         {
-          [S in keyof T["screens"]]?: TRecursiveCss<T>;
+          [S in keyof T["breakpoints"]]?: TRecursiveCss<T>;
         };
     } & {
-      [S in keyof T["screens"]]?: TRecursiveUtils<T>;
+      [S in keyof T["breakpoints"]]?: TRecursiveUtils<T>;
     } &
       TRecursiveUtils<T>;
 
-export type TDefaultCss<T extends TConfig> = T["screens"] extends object
+export type TDefaultCss<T extends TConfig> = T["breakpoints"] extends object
   ? TRecursiveCss<T> &
       TRecursiveUtils<T> &
       {
-        [S in keyof T["screens"]]?: TRecursiveCss<T> & TRecursiveUtils<T>;
+        [S in keyof T["breakpoints"]]?: TRecursiveCss<T> & TRecursiveUtils<T>;
       }
   : TRecursiveCss<T> & TRecursiveUtils<T>;
 
