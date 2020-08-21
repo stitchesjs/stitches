@@ -602,15 +602,15 @@ describe("createCss", () => {
     const atom = css({ boxShadow: "1px 1px 1px primary" }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_diaoUX");
+      expect(atom.toString()).toBe("_jpflsr");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._diaoUX{box-shadow: 1px 1px 1px var(--colors-primary);}"
+      ._jpflsr{box-shadow:1px 1px 1px var(--colors-primary);}"
     `);
   });
   test("should be able to compose themes", () => {

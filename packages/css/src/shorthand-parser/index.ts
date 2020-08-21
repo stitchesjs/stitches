@@ -202,7 +202,11 @@ export const border = createPropertyParser((tokens, css, value) => {
     css.borderRightStyle = value;
     css.borderBottomStyle = value;
     css.borderLeftStyle = value;
-  } else if (value.match(unitMatch) || tokens.borderWidths[value] || !isNaN(value)) {
+  } else if (
+    value.match(unitMatch) ||
+    tokens.borderWidths[value] ||
+    !isNaN(value)
+  ) {
     css.borderTopWidth = tokens.borderWidths[value] || value;
     css.borderRightWidth = tokens.borderWidths[value] || value;
     css.borderBottomWidth = tokens.borderWidths[value] || value;
@@ -338,12 +342,13 @@ export const borderRadius = createPropertyParser(
 );
 
 export const boxShadow = (tokens, value) => {
-  return tokenizeValue(value)
-    .map((chain) =>
-       chain
-        .map((val) => (tokens.colors[val] ? tokens.colors[val] : val))
-        .join(" ")
-      
-    )
-    .join(", ");
+  return {
+    boxShadow: tokenizeValue(value)
+      .map((chain) =>
+        chain
+          .map((val) => (tokens.colors[val] ? tokens.colors[val] : val))
+          .join(" ")
+      )
+      .join(", "),
+  };
 };
