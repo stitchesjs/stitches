@@ -394,6 +394,42 @@ describe("createCss", () => {
       "_kFwmfW _hdcIia _cCuGfR _kFCHHa"
     );
   });
+  test("should map CSS Properties to Tokens", () => {
+    const css = createCss(
+      {
+        tokens: {
+          space: {
+            "1": "5px",
+            "2": "10px",
+          },
+          colors: {
+            red500: "tomato",
+            blue500: "royalblue",
+          },
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      css({ marginTop: "1" }).toString();
+      css({ gap: "2" }).toString();
+      css({ outlineColor: "red500" }).toString();
+      return "";
+    });
+
+    expect(styles).toMatchInlineSnapshot(`
+      Array [
+        "/* STITCHES:__variables__ */
+
+      :root{--space-1:5px;--space-2:10px;--colors-red500:tomato;--colors-blue500:royalblue;}",
+        "/* STITCHES */
+
+      ._eWquZf{margin-top:var(--space-1);}
+      ._iSavHO{gap:var(--space-2);}
+      ._cAsSHa{outline-color:var(--colors-red500);}",
+      ]
+    `);
+  });
   test("should have declarative api", () => {
     const css = createCss({}, null);
     expect(
