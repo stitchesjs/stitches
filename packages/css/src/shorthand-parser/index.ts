@@ -319,28 +319,31 @@ export const borderStyle = createPropertyParser((tokens, css, value, index) => {
   }
 });
 
-export const borderRadius = createPropertyParser((tokens, css, value, index) => {
-  if (index === 0) {
-    css.borderBottomLeftRadius = tokens.radii[value] || value;
-    css.borderTopLeftRadius = tokens.radii[value] || value;
-    css.borderTopRightRadius = tokens.radii[value] || value;
-    css.borderBottomRightRadius = tokens.radii[value] || value;
-  } else if (index === 1) {
-    css.borderTopRightRadius = tokens.radii[value] || value;
-    css.borderBottomLeftRadius = tokens.radii[value] || value;
-  } else if (index === 2) {
-    css.borderBottomRightRadius = tokens.radii[value] || value;
-  } else if (index === 3) {
-    css.borderBottomLeftRadius = tokens.radii[value] || value;
+export const borderRadius = createPropertyParser(
+  (tokens, css, value, index) => {
+    if (index === 0) {
+      css.borderBottomLeftRadius = tokens.radii[value] || value;
+      css.borderTopLeftRadius = tokens.radii[value] || value;
+      css.borderTopRightRadius = tokens.radii[value] || value;
+      css.borderBottomRightRadius = tokens.radii[value] || value;
+    } else if (index === 1) {
+      css.borderTopRightRadius = tokens.radii[value] || value;
+      css.borderBottomLeftRadius = tokens.radii[value] || value;
+    } else if (index === 2) {
+      css.borderBottomRightRadius = tokens.radii[value] || value;
+    } else if (index === 3) {
+      css.borderBottomLeftRadius = tokens.radii[value] || value;
+    }
   }
-});
+);
 
-
-export const boxShadow = createPropertyParser((tokens, css, value, index, chain) => {
-  if (value.match(/none|inset/)) css.boxShadow = value;
-  else if (index === chain.length - 1) {
-    css.boxShadow += ` ${tokens.colors[value] || value}`;
-  } else {
-    css.boxShadow = `${css.boxShadow || ""} ${tokens.sizes[value] || value}`;
-  }
-});
+export const boxShadow = (tokens, value) => {
+  return tokenizeValue(value)
+    .map((chain) =>
+       chain
+        .map((val) => (tokens.colors[val] ? tokens.colors[val] : val))
+        .join(" ")
+      
+    )
+    .join(", ");
+};
