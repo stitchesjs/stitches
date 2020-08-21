@@ -370,7 +370,7 @@ export const borderRadius = createPropertyParser(
   }
 );
 
-export const boxShadow = (tokens, value) => {
+export const boxShadow = (tokens:any, value: string) => {
   return {
     boxShadow: tokenizeValue(value)
       .map((chain) =>

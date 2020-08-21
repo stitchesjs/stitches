@@ -303,7 +303,7 @@ const createServerToString = (
     const className = cssClassnameProvider(this, null);
 
     sheets[this.breakpoint].insertRule(
-      createCssRule(breakpoints, this, className)
+      createCssRule(breakpoints, this, `/*X*/${className}/*X*/`)
     );
 
     // We do not clean out the atom here, cause it will be reused
@@ -419,17 +419,14 @@ export const createCss = <T extends TConfig>(
       : prefix
     : "";
   const cssClassnameProvider = (atom: IAtom, seq: number | null): string => {
-    const hash =
-      seq === null
-        ? hashString(
-            `${atom.breakpoint || ""}${atom.cssHyphenProp.replace(
-              /-(moz|webkit|ms)-/,
-              ""
-            )}${atom.selector || ""}${atom.inlineMediaQueries?.join("") || ""}${
-              atom.value
-            }`
-          )
-        : seq;
+    const hash = hashString(
+      `${atom.breakpoint || ""}${atom.cssHyphenProp.replace(
+        /-(moz|webkit|ms)-/,
+        ""
+      )}${atom.selector || ""}${atom.inlineMediaQueries?.join("") || ""}${
+        atom.value
+      }`
+    );
     const name = showFriendlyClassnames
       ? `${atom.breakpoint ? `${atom.breakpoint}_` : ""}${atom.cssHyphenProp
           .replace(/-(moz|webkit|ms)-/, "")
@@ -444,10 +441,10 @@ export const createCss = <T extends TConfig>(
   const { tags, sheets } = createSheets(env, config.breakpoints);
   const preInjectedRules = new Set<string>();
   // tslint:disable-next-line
-  for (const sheet in sheets) {
-    for (let x = 0; x < sheets[sheet].cssRules.length; x++) {
-      preInjectedRules.add(sheets[sheet].cssRules[x].selectorText);
-    }
+  for (const tag of tags) {
+    (tag.innerText.match(/\/\*\X\*\/.*?\/\*\X\*\//g) || []).forEach((rule) => {
+      preInjectedRules.add("." + rule.replace(/\/\*X\*\//g, ""));
+    });
   }
 
   let toString = env
@@ -485,8 +482,10 @@ export const createCss = <T extends TConfig>(
       .join("");
 
     // generate id used for specificity check
-    // two atoms are considered equal in regared to there specificity if the id is equal
-    const inlineMediasAsString = (inlineMediaQueries ? inlineMediaQueries.join("") : "")
+    // two atoms are considered equal in regard to there specificity if the id is equal
+    const inlineMediasAsString = inlineMediaQueries
+      ? inlineMediaQueries.join("")
+      : "";
     const id =
       cssProp.toLowerCase() +
       (selectorString || "") +
@@ -499,8 +498,12 @@ export const createCss = <T extends TConfig>(
     // If this was created before return the cached atom
     if (atomCache.has(uid)) {
       // check if this has a breakpoint based media query
-      if(inlineMediasAsString.match(/@media.*\((min|max)?.*(width|height).*\)/)){
-        console.warn(`The property "${cssProp}" with media query ${inlineMediasAsString} can cause a specificity issue. You should create a breakpoint`)
+      if (
+        inlineMediasAsString.match(/@media.*\((min|max)?.*(width|height).*\)/)
+      ) {
+        console.warn(
+          `The property "${cssProp}" with media query ${inlineMediasAsString} can cause a specificity issue. You should create a breakpoint`
+        );
       }
       return atomCache.get(uid)!;
     }
@@ -533,7 +536,6 @@ export const createCss = <T extends TConfig>(
       toString,
       [ATOM]: true,
     };
-
 
     // Cache it
     atomCache.set(uid, atom);
@@ -692,10 +694,14 @@ export const createCss = <T extends TConfig>(
       result,
       styles: Object.keys(breakpoints).reduce(
         (aggr, key) => {
-          return aggr.concat(`/* STITCHES:${key} */\n${sheets[key].cssRules.join("\n")}`);
+          return aggr.concat(
+            `/* STITCHES:${key} */\n${sheets[key].cssRules.join("\n")}`
+          );
         },
         [
-          `/* STITCHES:__variables__ */\n${sheets.__variables__.cssRules.join("\n")}`,
+          `/* STITCHES:__variables__ */\n${sheets.__variables__.cssRules.join(
+            "\n"
+          )}`,
           `/* STITCHES */\n${sheets[""].cssRules.join("\n")}`,
         ]
       ),
