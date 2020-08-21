@@ -417,10 +417,18 @@ describe("createCss", () => {
       return "";
     });
 
-    expect(styles).toEqual([
-      `/* STITCHES:__variables__ */\n\n:root{--space-1:5px;--space-2:10px;--colors-red500:tomato;--colors-blue500:royalblue;}`,
-      `/* STITCHES */\n\n._eWquZf{margin-top:var(--space-1);}\n._iSavHO{gap:var(--space-2);}\n._cAsSHa{outline-color:var(--colors-red500);}`,
-    ]);
+    expect(styles).toMatchInlineSnapshot(`
+      Array [
+        "/* STITCHES:__variables__ */
+
+      :root{--space-1:5px;--space-2:10px;--colors-red500:tomato;--colors-blue500:royalblue;}",
+        "/* STITCHES */
+
+      ._eWquZf{margin-top:var(--space-1);}
+      ._iSavHO{gap:var(--space-2);}
+      ._cAsSHa{outline-color:var(--colors-red500);}",
+      ]
+    `);
   });
   test("should have declarative api", () => {
     const css = createCss({}, null);
