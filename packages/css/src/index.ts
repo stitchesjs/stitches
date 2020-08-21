@@ -1,14 +1,14 @@
 import {
   ATOM,
   IAtom,
-  IComposedAtom,
-  TConfig,
-  ICssPropToToken,
   IBreakpoints,
+  IComposedAtom,
+  ICssPropToToken,
+  IKeyframesAtom,
   ISheet,
   IThemeAtom,
   ITokensDefinition,
-  IKeyframesAtom,
+  TConfig,
   TCss,
 } from "./types";
 import {
@@ -22,6 +22,7 @@ import {
 
 export * from "./types";
 export * from "./css-types";
+export * from "./utils";
 
 export const hotReloadingCache = new Map<string, any>();
 
@@ -87,7 +88,7 @@ const processStyleObject = (
 ) => {
   // key: css prop or override or a selector
   // value is: cssValue, a util, specificity prop, or
-  for (const key in obj) {
+  for (const key of Object.keys(obj)) {
     const val = obj[key];
     const isUtilProp = shouldHandleUtils && key in config.utils;
     const isSpecificityProp =
@@ -386,6 +387,7 @@ export const createCss = <T extends TConfig>(
   env: Window | null = typeof window === "undefined" ? null : window
 ): TCss<T> => {
   // pre-checked config to avoid checking these all the time
+  // tslint:disable-next-line
   const config: TConfig<true> = Object.assign(
     { tokens: {}, utils: {}, breakpoints: {} },
     _config

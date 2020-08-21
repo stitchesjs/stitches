@@ -5,6 +5,7 @@ import {
   TDefaultCss,
   TUtilityFirstCss,
   createCss,
+  hashString,
 } from "@stitches/css";
 import * as React from "react";
 
@@ -439,31 +440,42 @@ export const createStyled = <
       evaluatedVariantMap.set(variantName, variantMap);
     }
 
-    return React.forwardRef((props: any, ref: React.Ref<Element>) => {
-      const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
+    const stitchesComponentId = `scid-${hashString(
+      `${JSON.stringify(baseStyling)}${JSON.stringify(variants)}`
+    )}`;
 
-      // Check the memoCompsition's identity to warn the user
-      // remove in production
-      if (process.env.NODE_ENV === "development") {
-        if (memoStyled !== props.css && !hasWarnedInlineStyle) {
-          // tslint:disable-next-line
-          console.warn(
-            "@stitches/styled : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook"
-          );
-          hasWarnedInlineStyle = true;
+    const StitchesComponent = React.forwardRef(
+      (props: any, ref: React.Ref<Element>) => {
+        const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
+
+        // Check the memoCompsition's identity to warn the user
+        // remove in production
+        if (process.env.NODE_ENV === "development") {
+          if (memoStyled !== props.css && !hasWarnedInlineStyle) {
+            // tslint:disable-next-line
+            console.warn(
+              "@stitches/styled : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook"
+            );
+            hasWarnedInlineStyle = true;
+          }
         }
-      }
 
-      const compositions = [baseStyles];
+        const compositions = [baseStyles];
 
-      const propsWithoutVariantsAndCssProp: any = {};
+        const propsWithoutVariantsAndCssProp: any = {};
 
-      for (const propName in props) {
-        if (propName in variants) {
-          const breakpoints = evaluatedVariantMap.get(propName);
+        for (const propName in props) {
+          if (propName in variants) {
+            const breakpoints = evaluatedVariantMap.get(propName);
 
-          if (typeof props[propName] === "string") {
-            compositions.push(breakpoints?.get(props[propName])![""]);
+          // check if prop value is a string and not an empty string
+          // otherwise assume its a responsive object
+          if (typeof props[propName] === "string" && Boolean(props[propName])) {
+            // if a variant value has been provided, check it exists
+            // this prevents invalid variant values from crashing
+            if (breakpoints?.get(props[propName])) {
+              compositions.push(breakpoints?.get(props[propName])![""]);
+            }
           } else if (props[propName]) {
             // tslint:disable-next-line
             for (const breakpoint in props[propName]) {
@@ -471,24 +483,31 @@ export const createStyled = <
                 breakpoints?.get(props[propName][breakpoint])![breakpoint]
               );
             }
+          } else {
+            propsWithoutVariantsAndCssProp[propName] = props[propName];
           }
-        } else {
-          propsWithoutVariantsAndCssProp[propName] = props[propName];
         }
-      }
 
-      if (propsWithoutVariantsAndCssProp.css) {
-        compositions.push(propsWithoutVariantsAndCssProp.css);
-        propsWithoutVariantsAndCssProp.css = undefined;
-      }
+        if (propsWithoutVariantsAndCssProp.css) {
+          compositions.push(propsWithoutVariantsAndCssProp.css);
+          propsWithoutVariantsAndCssProp.css = undefined;
+        }
 
-      return React.createElement(Component, {
-        ...propsWithoutVariantsAndCssProp,
-        as: props.as || as,
-        ref,
-        className: css(...compositions, props.className),
-      });
-    });
+        return React.createElement(Component, {
+          ...propsWithoutVariantsAndCssProp,
+          as: props.as || as,
+          ref,
+          className: `${stitchesComponentId} ${css(
+            ...compositions,
+            props.className
+          )}`,
+        });
+      }
+    );
+
+    StitchesComponent.toString = () => `.${stitchesComponentId}`;
+
+    return StitchesComponent;
   };
 
   // tslint:disable-next-line
