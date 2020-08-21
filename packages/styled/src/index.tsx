@@ -462,7 +462,9 @@ export const createStyled = <
         if (propName in variants) {
           const breakpoints = evaluatedVariantMap.get(propName);
 
-          if (typeof props[propName] === "string") {
+          // check if prop value is a string and not an empty string
+          // otherwise assume its a responsive object
+          if (typeof props[propName] === "string" && Boolean(props[propName])) {
             compositions.push(breakpoints?.get(props[propName])![""]);
           } else if (props[propName]) {
             // tslint:disable-next-line
