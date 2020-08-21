@@ -606,6 +606,14 @@ describe("Border shorthands", () => {
         "borderTopStyle": "none",
       }
     `);
+    expect(border(tokens, "0")).toMatchInlineSnapshot(`
+      Object {
+        "borderBottomWidth": "0",
+        "borderLeftWidth": "0",
+        "borderRightWidth": "0",
+        "borderTopWidth": "0",
+      }
+    `);
     expect(border(tokens, "solid")).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "solid",
