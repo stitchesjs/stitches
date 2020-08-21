@@ -22,6 +22,7 @@ import {
 
 export * from "./types";
 export * from "./css-types";
+export * from "./utils";
 
 export const hotReloadingCache = new Map<string, any>();
 
