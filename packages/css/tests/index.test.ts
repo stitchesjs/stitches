@@ -274,9 +274,7 @@ describe("createCss", () => {
     });
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_iLTgZz _dGJDNJ"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_iLTgZz _dGJDNJ"`);
 
       return "";
     });
@@ -1097,6 +1095,43 @@ describe("createCss", () => {
       ./*X*/_cayivH/*X*/{background-color:blue;}
       @media (min-width: 700px){./*X*/_heiuYc/*X*/{color:red;}}
       @media (min-width: 200px){./*X*/_grNRuV/*X*/{color:red;}}"
+    `);
+  });
+
+  test("should inject pseudo selectors with increased specificity", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css({
+        ":hover": {
+          color: "red",
+        },
+        ":active": {
+          color: "red",
+        },
+        ":focus": {
+          color: "red",
+        },
+        ":focus-visible": {
+          color: "red",
+        },
+        ":read-only": {
+          color: "red",
+        },
+        ":disabled": {
+          color: "red",
+        },
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_FdHZR/*X*/./*X*/_FdHZR/*X*/:hover{color:red;}
+      ./*X*/_glwpql/*X*/./*X*/_glwpql/*X*/./*X*/_glwpql/*X*/:active{color:red;}
+      ./*X*/_fMqZb/*X*/./*X*/_fMqZb/*X*/./*X*/_fMqZb/*X*/./*X*/_fMqZb/*X*/:focus{color:red;}
+      ./*X*/_iqsQSU/*X*/./*X*/_iqsQSU/*X*/./*X*/_iqsQSU/*X*/./*X*/_iqsQSU/*X*/:focus-visible{color:red;}
+      ./*X*/_gZDqEe/*X*/./*X*/_gZDqEe/*X*/./*X*/_gZDqEe/*X*/./*X*/_gZDqEe/*X*/./*X*/_gZDqEe/*X*/:read-only{color:red;}
+      ./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/:disabled{color:red;}"
     `);
   });
 });
