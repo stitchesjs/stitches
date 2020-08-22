@@ -1102,21 +1102,27 @@ describe("createCss", () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
+        // &&
         ":hover": {
           color: "red",
         },
+        // &&&
         ":active": {
           color: "red",
         },
+        // &&&&
         ":focus": {
           color: "red",
         },
+        // &&&&
         ":focus-visible": {
           color: "red",
         },
+        // &&&&&
         ":read-only": {
           color: "red",
         },
+        // &&&&&&
         ":disabled": {
           color: "red",
         },
