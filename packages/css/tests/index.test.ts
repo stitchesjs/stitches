@@ -78,6 +78,47 @@ describe("createCss", () => {
       ./*X*/_eCaYfN/*X*/{color:red;}"
     `);
   });
+
+  test("should regenerate styles on ssr", () => {
+    const css = createCss({ tokens: { colors: { red100: "red" } } }, null);
+    console.log = jest.fn();
+    const keyframe = css.keyframes({
+      from: { backgroundColor: "red" },
+      to: { backgroundColor: "blue" },
+    });
+    const atoms = css({ color: "red100", animationName: keyframe }) as any;
+    const atom = atoms.atoms[0];
+
+    const { styles } = css.getStyles(() => {
+      atoms.toString();
+    });
+
+    const { styles: secondStyles } = css.getStyles(() => {
+      atoms.toString();
+    });
+    expect(styles).toMatchInlineSnapshot(`
+      Array [
+        "/* STITCHES:__variables__ */
+      :root{--colors-red100:red;}",
+        "/* STITCHES */
+      ./*X*/_dvXeIv/*X*/{color:var(--colors-red100);}
+      ./*X*/_isTdIU/*X*/{animation-name:ftEIjK;}
+      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
+      ]
+    `);
+    expect(secondStyles).toMatchInlineSnapshot(`
+      Array [
+        "/* STITCHES:__variables__ */
+      :root{--colors-red100:red;}",
+        "/* STITCHES */
+      ./*X*/_dvXeIv/*X*/{color:var(--colors-red100);}
+      ./*X*/_isTdIU/*X*/{animation-name:ftEIjK;}
+      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
+      ]
+    `);
+    expect(styles).toEqual(secondStyles);
+  });
+
   test("should compose atoms", () => {
     const css = createCss({}, null);
     expect(

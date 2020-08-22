@@ -222,7 +222,6 @@ const toStringCachedAtom = function (this: IAtom) {
 
 const toStringCompose = function (this: IComposedAtom) {
   const className = this.atoms.map((atom) => atom.toString()).join(" ");
-
   // cache the className on this instance
   // @ts-ignore
   this._className = className;
@@ -260,15 +259,11 @@ const createCssRule = (
 const createToString = (
   sheets: { [breakpoint: string]: ISheet },
   breakpoints: IBreakpoints = {},
-  cssClassnameProvider: (atom: IAtom, seq: number | null) => string, // [className, pseudo]
+  cssClassnameProvider: (atom: IAtom) => string, // [className, pseudo]
   preInjectedRules: Set<string>
 ) => {
-  let seq = 0;
   return function toString(this: IAtom) {
-    const className = cssClassnameProvider(
-      this,
-      preInjectedRules.size ? null : seq++
-    );
+    const className = cssClassnameProvider(this);
     const shouldInject =
       !preInjectedRules.size || !preInjectedRules.has(`.${className}`);
 
@@ -297,10 +292,11 @@ const createToString = (
 const createServerToString = (
   sheets: { [mediaQuery: string]: ISheet },
   breakpoints: IBreakpoints = {},
-  cssClassnameProvider: (atom: IAtom, seq: number | null) => string
+  cssClassnameProvider: (atom: IAtom) => string
 ) => {
+  console.log('server')
   return function toString(this: IAtom) {
-    const className = cssClassnameProvider(this, null);
+    const className = cssClassnameProvider(this);
 
     sheets[this.breakpoint].insertRule(
       createCssRule(breakpoints, this, `/*X*/${className}/*X*/`)
@@ -418,7 +414,7 @@ export const createCss = <T extends TConfig>(
       ? `${prefix}_`
       : prefix
     : "";
-  const cssClassnameProvider = (atom: IAtom, seq: number | null): string => {
+  const cssClassnameProvider = (atom: IAtom): string => {
     const hash = hashString(
       `${atom.breakpoint || ""}${atom.cssHyphenProp.replace(
         /-(moz|webkit|ms)-/,
@@ -574,12 +570,11 @@ export const createCss = <T extends TConfig>(
   if (!preInjectedRules.has(":root")) {
     sheets.__variables__.insertRule(baseTokens);
   }
-
-  // atom cache
+  // Keeping track of all atoms for SSR
+  const compositionsCache = new Set<IComposedAtom>();
   const atomCache = new Map<string, IAtom>();
   const keyFramesCache = new Map<string, IKeyframesAtom>();
   const themeCache = new Map<ITokensDefinition, IThemeAtom>();
-
   const cssInstance = ((...definitions: any[]) => {
     const args: any[] = [];
     let index = 0;
@@ -600,8 +595,12 @@ export const createCss = <T extends TConfig>(
         });
       }
     }
+    // might cause memory leaks when doing css() inside a component
+    // but we need this for now to fix SSR
+    const composition = compose(...args)
+    compositionsCache.add(composition)
 
-    return compose(...args);
+    return composition;
   }) as any;
 
   cssInstance.dispose = () => {
@@ -666,6 +665,10 @@ export const createCss = <T extends TConfig>(
     return keyframesAtom;
   };
   cssInstance.getStyles = (cb: any) => {
+    // Reset the composition to avoid ssr issues
+    compositionsCache.forEach(composition => {
+      composition.toString = toStringCompose
+    })
     // tslint:disable-next-line
     for (let sheet in sheets) {
       sheets[sheet].cssRules.length = 0;
