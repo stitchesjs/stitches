@@ -75,14 +75,14 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._eCaYfN{color:red;}"
+      ./*X*/_eCaYfN/*X*/{color:red;}"
     `);
   });
   test("should compose atoms", () => {
     const css = createCss({}, null);
-    expect(css({ color: "red", backgroundColor: "blue" }).toString()).toBe(
-      "_cayivH _eCaYfN"
-    );
+    expect(
+      css({ color: "red", backgroundColor: "blue" }).toString()
+    ).toMatchInlineSnapshot(`"_cayivH _eCaYfN"`);
   });
   test("should create tokens", () => {
     const tokens = createTokens({
@@ -107,7 +107,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._iVFaNG{color:var(--colors-RED);}"
+      ./*X*/_iVFaNG/*X*/{color:var(--colors-RED);}"
     `);
   });
   test("should remove special characters from tokens", () => {
@@ -129,7 +129,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._tLwhG{color:var(--colors-red);}"
+      ./*X*/_tLwhG/*X*/{color:var(--colors-red);}"
     `);
   });
   test("should create breakpoints", () => {
@@ -154,11 +154,11 @@ describe("createCss", () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:tablet */
-      @media (min-width: 700px) { ._hsxGAz{color:red;} }"
+      @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
     `);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:tablet */
-      @media (min-width: 700px) { ._hsxGAz{color:red;} }"
+      @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
     `);
   });
   test("should handle pseudos", () => {
@@ -177,7 +177,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._FdHZR._FdHZR:hover{color:red;}"
+      ./*X*/_FdHZR/*X*/./*X*/_FdHZR/*X*/:hover{color:red;}"
     `);
   });
   test("should handle specificity", () => {
@@ -205,7 +205,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._eCaYfN{color:red;}"
+      ./*X*/_eCaYfN/*X*/{color:red;}"
     `);
   });
   /*
@@ -221,23 +221,7 @@ describe("createCss", () => {
     ).toBe("_iEPeZH");
   });
   */
-  test("should use simple sequence for classname when browser", () => {
-    const fakeEnv = createFakeEnv();
-    const css = createCss({}, (fakeEnv as unknown) as Window);
-    String(css({ color: "red" }));
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._0 {color: red;}"
-    );
-  });
-  test("should inject sheet", () => {
-    const fakeEnv = createFakeEnv();
-    const css = createCss({}, (fakeEnv as unknown) as Window);
-    String(css({ color: "red" }));
-    expect(fakeEnv.document.styleSheets.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._0 {color: red;}"
-    );
-  });
+
   test("should inject screen sheets", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss(
@@ -250,8 +234,10 @@ describe("createCss", () => {
     );
     String(css({ tablet: { color: "red" } }));
     expect(fakeEnv.document.styleSheets.length).toBe(3);
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toBe(
-      "@media (min-width: 700px) {._0 {color: red;}}"
+    expect(
+      fakeEnv.document.styleSheets[2].cssRules[0].cssText
+    ).toMatchInlineSnapshot(
+      `"@media (min-width: 700px) {._hsxGAz {color: red;}}"`
     );
   });
   test("should allow utils", () => {
@@ -288,7 +274,9 @@ describe("createCss", () => {
     });
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_btUdGL _dGJDNJ");
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_iLTgZz _dGJDNJ"`
+      );
 
       return "";
     });
@@ -296,8 +284,8 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._dGJDNJ._dGJDNJ:hover{color:green;}
-      ._btUdGL._btUdGL:focus{color:green;}"
+      ./*X*/_dGJDNJ/*X*/./*X*/_dGJDNJ/*X*/:hover{color:green;}
+      ./*X*/_iLTgZz/*X*/./*X*/_iLTgZz/*X*/./*X*/_iLTgZz/*X*/./*X*/_iLTgZz/*X*/:focus{color:green;}"
     `);
   });
 
@@ -380,8 +368,8 @@ describe("createCss", () => {
 
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      .bc_cODewW{background-color:red;}
-      .c_eCaYfN{color:red;}"
+      ./*X*/bc_cODewW/*X*/{background-color:red;}
+      ./*X*/c_eCaYfN/*X*/{color:red;}"
     `);
   });
   test("should inject vendor prefix where explicitly stating so", () => {
@@ -399,7 +387,7 @@ describe("createCss", () => {
 
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      .c_eCaYfN{-webkit-color:red;}"
+      ./*X*/c_eCaYfN/*X*/{-webkit-color:red;}"
     `);
   });
   test("should use specificity props", () => {
@@ -434,13 +422,11 @@ describe("createCss", () => {
     expect(styles).toMatchInlineSnapshot(`
       Array [
         "/* STITCHES:__variables__ */
-
       :root{--space-1:5px;--space-2:10px;--colors-red500:tomato;--colors-blue500:royalblue;}",
         "/* STITCHES */
-
-      ._eWquZf{margin-top:var(--space-1);}
-      ._iSavHO{gap:var(--space-2);}
-      ._cAsSHa{outline-color:var(--colors-red500);}",
+      ./*X*/_cAsSHa/*X*/{outline-color:var(--colors-red500);}
+      ./*X*/_iSavHO/*X*/{gap:var(--space-2);}
+      ./*X*/_eWquZf/*X*/{margin-top:var(--space-1);}",
       ]
     `);
   });
@@ -458,9 +444,9 @@ describe("createCss", () => {
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css({ "&:hover": { color: "red" } }).toString();
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._0._0:hover {color: red;}"
-    );
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[0].cssText
+    ).toMatchInlineSnapshot(`"._FdHZR._FdHZR:hover {color: red;}"`);
   });
   test("should handle screen selector", () => {
     const css = createCss(
@@ -480,7 +466,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:mobile */
-      @media(min-width:700px){._fOxLwJ{color:red;}}"
+      @media(min-width:700px){./*X*/_fOxLwJ/*X*/{color:red;}}"
     `);
   });
   test("should handle pseudo in screen selector", () => {
@@ -501,7 +487,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:mobile */
-      @media(min-width:700px){._coXxUV._coXxUV:hover{color:red;}}"
+      @media(min-width:700px){./*X*/_coXxUV/*X*/./*X*/_coXxUV/*X*/:hover{color:red;}}"
     `);
   });
   test("should insert themes", () => {
@@ -538,7 +524,7 @@ describe("createCss", () => {
     `);
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._Eogfp{color:var(--colors-primary);}"
+      ./*X*/_Eogfp/*X*/{color:var(--colors-primary);}"
     `);
   });
   test("should allow nested pseudo", () => {
@@ -554,7 +540,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._imukGD._imukGD:hover:disabled{color:red;}"
+      ./*X*/_imukGD/*X*/./*X*/_imukGD/*X*/:hover:disabled{color:red;}"
     `);
   });
   test("should handle border specificity", () => {
@@ -572,18 +558,18 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._daMVcf{border-top-width:1px;}
-      ._hUxHUo{border-right-width:1px;}
-      ._pPCSj{border-bottom-width:1px;}
-      ._fcpRZb{border-left-width:1px;}
-      ._dZmTIq{border-top-style:solid;}
-      ._kxkaMR{border-right-style:solid;}
-      ._bctHBa{border-bottom-style:solid;}
-      ._dKkway{border-left-style:solid;}
-      ._frjswu{border-top-color:red;}
-      ._iqEHZB{border-right-color:red;}
-      ._lkwFJC{border-bottom-color:red;}
-      ._jMbiSS{border-left-color:red;}"
+      ./*X*/_daMVcf/*X*/{border-top-width:1px;}
+      ./*X*/_hUxHUo/*X*/{border-right-width:1px;}
+      ./*X*/_pPCSj/*X*/{border-bottom-width:1px;}
+      ./*X*/_fcpRZb/*X*/{border-left-width:1px;}
+      ./*X*/_dZmTIq/*X*/{border-top-style:solid;}
+      ./*X*/_kxkaMR/*X*/{border-right-style:solid;}
+      ./*X*/_bctHBa/*X*/{border-bottom-style:solid;}
+      ./*X*/_dKkway/*X*/{border-left-style:solid;}
+      ./*X*/_frjswu/*X*/{border-top-color:red;}
+      ./*X*/_iqEHZB/*X*/{border-right-color:red;}
+      ./*X*/_lkwFJC/*X*/{border-bottom-color:red;}
+      ./*X*/_jMbiSS/*X*/{border-left-color:red;}"
     `);
   });
   test("should handle border shorthand with tokens", () => {
@@ -610,18 +596,18 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._daMVcf{border-top-width:1px;}
-      ._hUxHUo{border-right-width:1px;}
-      ._pPCSj{border-bottom-width:1px;}
-      ._fcpRZb{border-left-width:1px;}
-      ._dZmTIq{border-top-style:solid;}
-      ._kxkaMR{border-right-style:solid;}
-      ._bctHBa{border-bottom-style:solid;}
-      ._dKkway{border-left-style:solid;}
-      ._kLWpHW{border-top-color:var(--colors-primary);}
-      ._uBwAx{border-right-color:var(--colors-primary);}
-      ._jIhVXS{border-bottom-color:var(--colors-primary);}
-      ._ffzau{border-left-color:var(--colors-primary);}"
+      ./*X*/_daMVcf/*X*/{border-top-width:1px;}
+      ./*X*/_hUxHUo/*X*/{border-right-width:1px;}
+      ./*X*/_pPCSj/*X*/{border-bottom-width:1px;}
+      ./*X*/_fcpRZb/*X*/{border-left-width:1px;}
+      ./*X*/_dZmTIq/*X*/{border-top-style:solid;}
+      ./*X*/_kxkaMR/*X*/{border-right-style:solid;}
+      ./*X*/_bctHBa/*X*/{border-bottom-style:solid;}
+      ./*X*/_dKkway/*X*/{border-left-style:solid;}
+      ./*X*/_kLWpHW/*X*/{border-top-color:var(--colors-primary);}
+      ./*X*/_uBwAx/*X*/{border-right-color:var(--colors-primary);}
+      ./*X*/_jIhVXS/*X*/{border-bottom-color:var(--colors-primary);}
+      ./*X*/_ffzau/*X*/{border-left-color:var(--colors-primary);}"
     `);
   });
   test("should handle box shadow with tokens", () => {
@@ -646,7 +632,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._jpflsr{box-shadow:1px 1px 1px var(--colors-primary);}"
+      ./*X*/_jpflsr/*X*/{box-shadow:1px 1px 1px var(--colors-primary);}"
     `);
   });
   test("should be able to compose themes", () => {
@@ -678,7 +664,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._Eogfp{color:var(--colors-primary);}"
+      ./*X*/_Eogfp/*X*/{color:var(--colors-primary);}"
     `);
   });
 
@@ -748,7 +734,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._idHIjE{animation-name:dmyJCr;}
+      ./*X*/_idHIjE/*X*/{animation-name:dmyJCr;}
       @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
     `);
   });
@@ -766,7 +752,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._idHIjE{animation-name:dmyJCr;}
+      ./*X*/_idHIjE/*X*/{animation-name:dmyJCr;}
       @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
     `);
   });
@@ -785,10 +771,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._kFCHHa{margin-top:1px;}
-      ._ihMdjN{margin-right:5px;}
-      ._hdcIia{margin-bottom:1px;}
-      ._jeUhKW{margin-left:5px;}"
+      ./*X*/_kFCHHa/*X*/{margin-top:1px;}
+      ./*X*/_ihMdjN/*X*/{margin-right:5px;}
+      ./*X*/_hdcIia/*X*/{margin-bottom:1px;}
+      ./*X*/_jeUhKW/*X*/{margin-left:5px;}"
     `);
   });
 
@@ -807,10 +793,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._cRIZvx{padding-top:1px;}
-      ._gerKhy{padding-right:5px;}
-      ._kQnasN{padding-bottom:1px;}
-      ._gyarRZ{padding-left:5px;}"
+      ./*X*/_cRIZvx/*X*/{padding-top:1px;}
+      ./*X*/_gerKhy/*X*/{padding-right:5px;}
+      ./*X*/_kQnasN/*X*/{padding-bottom:1px;}
+      ./*X*/_gyarRZ/*X*/{padding-left:5px;}"
     `);
   });
 
@@ -826,9 +812,9 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._daMVcf{border-top-width:1px;}
-      ._dZmTIq{border-top-style:solid;}
-      ._frjswu{border-top-color:red;}"
+      ./*X*/_daMVcf/*X*/{border-top-width:1px;}
+      ./*X*/_dZmTIq/*X*/{border-top-style:solid;}
+      ./*X*/_frjswu/*X*/{border-top-color:red;}"
     `);
   });
 
@@ -859,9 +845,9 @@ describe("createCss", () => {
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._hUxHUo{border-right-width:1px;}
-      ._kxkaMR{border-right-style:solid;}
-      ._iqEHZB{border-right-color:red;}"
+      ./*X*/_hUxHUo/*X*/{border-right-width:1px;}
+      ./*X*/_kxkaMR/*X*/{border-right-style:solid;}
+      ./*X*/_iqEHZB/*X*/{border-right-color:red;}"
     `);
   });
   test("should handle border-bottom shorthand", () => {
@@ -873,9 +859,9 @@ describe("createCss", () => {
     });
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._pPCSj{border-bottom-width:1px;}
-      ._bctHBa{border-bottom-style:solid;}
-      ._lkwFJC{border-bottom-color:red;}"
+      ./*X*/_pPCSj/*X*/{border-bottom-width:1px;}
+      ./*X*/_bctHBa/*X*/{border-bottom-style:solid;}
+      ./*X*/_lkwFJC/*X*/{border-bottom-color:red;}"
     `);
   });
   test("should allow inline media queries", () => {
@@ -888,7 +874,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      @media (hover:hover){._hCvELq{color:red;}}"
+      @media (hover:hover){./*X*/_hCvELq/*X*/{color:red;}}"
     `);
   });
 
@@ -906,7 +892,7 @@ describe("createCss", () => {
     });
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      div:hover ._dkzxrg{color:red;}"
+      div:hover ./*X*/_dkzxrg/*X*/{color:red;}"
     `);
   });
 
@@ -923,9 +909,9 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._fcpRZb{border-left-width:1px;}
-      ._dKkway{border-left-style:solid;}
-      ._jMbiSS{border-left-color:red;}"
+      ./*X*/_fcpRZb/*X*/{border-left-width:1px;}
+      ./*X*/_dKkway/*X*/{border-left-style:solid;}
+      ./*X*/_jMbiSS/*X*/{border-left-color:red;}"
     `);
   });
   test("should handle border-radius shorthand", () => {
@@ -942,10 +928,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._iVJtjr{border-bottom-left-radius:5px;}
-      ._bjAoar{border-top-left-radius:5px;}
-      ._gnzyQc{border-top-right-radius:5px;}
-      ._kirJLA{border-bottom-right-radius:5px;}"
+      ./*X*/_iVJtjr/*X*/{border-bottom-left-radius:5px;}
+      ./*X*/_bjAoar/*X*/{border-top-left-radius:5px;}
+      ./*X*/_gnzyQc/*X*/{border-top-right-radius:5px;}
+      ./*X*/_kirJLA/*X*/{border-bottom-right-radius:5px;}"
     `);
   });
 
@@ -964,10 +950,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._frjswu{border-top-color:red;}
-      ._iqEHZB{border-right-color:red;}
-      ._lkwFJC{border-bottom-color:red;}
-      ._jMbiSS{border-left-color:red;}"
+      ./*X*/_frjswu/*X*/{border-top-color:red;}
+      ./*X*/_iqEHZB/*X*/{border-right-color:red;}
+      ./*X*/_lkwFJC/*X*/{border-bottom-color:red;}
+      ./*X*/_jMbiSS/*X*/{border-left-color:red;}"
     `);
   });
 
@@ -986,10 +972,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._dZmTIq{border-top-style:solid;}
-      ._kxkaMR{border-right-style:solid;}
-      ._bctHBa{border-bottom-style:solid;}
-      ._dKkway{border-left-style:solid;}"
+      ./*X*/_dZmTIq/*X*/{border-top-style:solid;}
+      ./*X*/_kxkaMR/*X*/{border-right-style:solid;}
+      ./*X*/_bctHBa/*X*/{border-bottom-style:solid;}
+      ./*X*/_dKkway/*X*/{border-left-style:solid;}"
     `);
   });
 
@@ -1008,10 +994,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._hlWFhc{border-top-width:2px;}
-      ._foDwTX{border-right-width:2px;}
-      ._dVrsOA{border-bottom-width:2px;}
-      ._exEWxc{border-left-width:2px;}"
+      ./*X*/_hlWFhc/*X*/{border-top-width:2px;}
+      ./*X*/_foDwTX/*X*/{border-right-width:2px;}
+      ./*X*/_dVrsOA/*X*/{border-bottom-width:2px;}
+      ./*X*/_exEWxc/*X*/{border-left-width:2px;}"
     `);
   });
 
@@ -1028,7 +1014,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._cODewW{background-color:red;}"
+      ./*X*/_cODewW/*X*/{background-color:red;}"
     `);
   });
 
@@ -1047,9 +1033,9 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._fMYPIB{transition-property:margin-right;}
-      ._dkQnca{transition-duration:2s;}
-      ._cYJUVx{transition-timing-function:ease-in-out;}"
+      ./*X*/_fMYPIB/*X*/{transition-property:margin-right;}
+      ./*X*/_dkQnca/*X*/{transition-duration:2s;}
+      ./*X*/_cYJUVx/*X*/{transition-timing-function:ease-in-out;}"
     `);
   });
 
@@ -1066,8 +1052,8 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._bZKhEt{font-size:1.2em;}
-      ._kSPChp{font-family:\\"Fira Sans\\",sans-serif;}"
+      ./*X*/_bZKhEt/*X*/{font-size:1.2em;}
+      ./*X*/_kSPChp/*X*/{font-family:\\"Fira Sans\\",sans-serif;}"
     `);
   });
 
@@ -1105,12 +1091,12 @@ describe("createCss", () => {
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ._jTsVyZ{color:green;}
-      ._dXRydm{background-color:yello;}
-      ._eCaYfN{color:red;}
-      ._cayivH{background-color:blue;}
-      @media (min-width: 700px){._heiuYc{color:red;}}
-      @media (min-width: 200px){._grNRuV{color:red;}}"
+      ./*X*/_jTsVyZ/*X*/{color:green;}
+      ./*X*/_dXRydm/*X*/{background-color:yello;}
+      ./*X*/_eCaYfN/*X*/{color:red;}
+      ./*X*/_cayivH/*X*/{background-color:blue;}
+      @media (min-width: 700px){./*X*/_heiuYc/*X*/{color:red;}}
+      @media (min-width: 200px){./*X*/_grNRuV/*X*/{color:red;}}"
     `);
   });
 });

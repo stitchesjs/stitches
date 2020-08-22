@@ -442,9 +442,11 @@ export const createCss = <T extends TConfig>(
   const preInjectedRules = new Set<string>();
   // tslint:disable-next-line
   for (const tag of tags) {
-    (tag.innerText.match(/\/\*\X\*\/.*?\/\*\X\*\//g) || []).forEach((rule) => {
-      preInjectedRules.add("." + rule.replace(/\/\*X\*\//g, ""));
-    });
+    ((tag.textContent || "").match(/\/\*\X\*\/.*?\/\*\X\*\//g) || []).forEach(
+      (rule) => {
+        preInjectedRules.add("." + rule.replace(/\/\*X\*\//g, ""));
+      }
+    );
   }
 
   let toString = env
@@ -518,10 +520,16 @@ export const createCss = <T extends TConfig>(
     // We want certain pseudo selectors to take presedence over other pseudo
     // selectors, so we increase specificity
     if (!selectorString?.match("&")) {
-      if (selectorString?.match(/\:focus|\:focus-within|\:hover/)) {
+      if (selectorString?.match(/\:hover/)) {
         selectorString = `&&${selectorString}`;
       } else if (selectorString?.match(/\:active/)) {
         selectorString = `&&&${selectorString}`;
+      } else if (selectorString?.match(/\:focus|\:focus-visible/)) {
+        selectorString = `&&&&${selectorString}`;
+      } else if (selectorString?.match(/\:read-only/)) {
+        selectorString = `&&&&&${selectorString}`;
+      } else if (selectorString?.match(/\:disabled/)) {
+        selectorString = `&&&&&&${selectorString}`;
       }
     }
 
