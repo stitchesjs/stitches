@@ -73,13 +73,57 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._eCaYfN{color:red;}");
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_eCaYfN/*X*/{color:red;}"
+    `);
   });
+
+  test("should regenerate styles on ssr", () => {
+    const css = createCss({ tokens: { colors: { red100: "red" } } }, null);
+    console.log = jest.fn();
+    const keyframe = css.keyframes({
+      from: { backgroundColor: "red" },
+      to: { backgroundColor: "blue" },
+    });
+    const atoms = css({ color: "red100", animationName: keyframe }) as any;
+    const atom = atoms.atoms[0];
+
+    const { styles } = css.getStyles(() => {
+      atoms.toString();
+    });
+
+    const { styles: secondStyles } = css.getStyles(() => {
+      atoms.toString();
+    });
+    expect(styles).toMatchInlineSnapshot(`
+      Array [
+        "/* STITCHES:__variables__ */
+      :root{--colors-red100:red;}",
+        "/* STITCHES */
+      ./*X*/_dvXeIv/*X*/{color:var(--colors-red100);}
+      ./*X*/_isTdIU/*X*/{animation-name:ftEIjK;}
+      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
+      ]
+    `);
+    expect(secondStyles).toMatchInlineSnapshot(`
+      Array [
+        "/* STITCHES:__variables__ */
+      :root{--colors-red100:red;}",
+        "/* STITCHES */
+      ./*X*/_dvXeIv/*X*/{color:var(--colors-red100);}
+      ./*X*/_isTdIU/*X*/{animation-name:ftEIjK;}
+      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
+      ]
+    `);
+    expect(styles).toEqual(secondStyles);
+  });
+
   test("should compose atoms", () => {
     const css = createCss({}, null);
-    expect(css({ color: "red", backgroundColor: "blue" }).toString()).toBe(
-      "_cayivH _eCaYfN"
-    );
+    expect(
+      css({ color: "red", backgroundColor: "blue" }).toString()
+    ).toMatchInlineSnapshot(`"_cayivH _eCaYfN"`);
   });
   test("should create tokens", () => {
     const tokens = createTokens({
@@ -102,9 +146,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._iVFaNG{color:var(--colors-RED);}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_iVFaNG/*X*/{color:var(--colors-RED);}"
+    `);
   });
   test("should remove special characters from tokens", () => {
     const tokens = createTokens({
@@ -123,9 +168,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._tLwhG{color:var(--colors-red);}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_tLwhG/*X*/{color:var(--colors-red);}"
+    `);
   });
   test("should create breakpoints", () => {
     const css = createCss(
@@ -147,9 +193,14 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toBe(
-      "/* STITCHES:tablet */\n\n@media (min-width: 700px) { ._hsxGAz{color:red;} }"
-    );
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:tablet */
+      @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
+    `);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:tablet */
+      @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
+    `);
   });
   test("should handle pseudos", () => {
     const css = createCss({}, null);
@@ -165,9 +216,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._FdHZR._FdHZR:hover{color:red;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_FdHZR/*X*/./*X*/_FdHZR/*X*/:hover{color:red;}"
+    `);
   });
   test("should handle specificity", () => {
     const css = createCss({}, null);
@@ -192,7 +244,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe("/* STITCHES */\n\n._eCaYfN{color:red;}");
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_eCaYfN/*X*/{color:red;}"
+    `);
   });
   /*
     Not sorting pseudos, rather letting these combinations craete new atoms... take more
@@ -207,23 +262,7 @@ describe("createCss", () => {
     ).toBe("_iEPeZH");
   });
   */
-  test("should use simple sequence for classname when browser", () => {
-    const fakeEnv = createFakeEnv();
-    const css = createCss({}, (fakeEnv as unknown) as Window);
-    String(css({ color: "red" }));
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._0 {color: red;}"
-    );
-  });
-  test("should inject sheet", () => {
-    const fakeEnv = createFakeEnv();
-    const css = createCss({}, (fakeEnv as unknown) as Window);
-    String(css({ color: "red" }));
-    expect(fakeEnv.document.styleSheets.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._0 {color: red;}"
-    );
-  });
+
   test("should inject screen sheets", () => {
     const fakeEnv = createFakeEnv();
     const css = createCss(
@@ -236,8 +275,10 @@ describe("createCss", () => {
     );
     String(css({ tablet: { color: "red" } }));
     expect(fakeEnv.document.styleSheets.length).toBe(3);
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toBe(
-      "@media (min-width: 700px) {._0 {color: red;}}"
+    expect(
+      fakeEnv.document.styleSheets[2].cssRules[0].cssText
+    ).toMatchInlineSnapshot(
+      `"@media (min-width: 700px) {._hsxGAz {color: red;}}"`
     );
   });
   test("should allow utils", () => {
@@ -274,7 +315,7 @@ describe("createCss", () => {
     });
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_btUdGL _dGJDNJ");
+      expect(atom.toString()).toMatchInlineSnapshot(`"_iLTgZz _dGJDNJ"`);
 
       return "";
     });
@@ -282,9 +323,8 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._btUdGL._btUdGL:focus{color:green;}
-      ._dGJDNJ._dGJDNJ:hover{color:green;}"
+      ./*X*/_dGJDNJ/*X*/./*X*/_dGJDNJ/*X*/:hover{color:green;}
+      ./*X*/_iLTgZz/*X*/./*X*/_iLTgZz/*X*/./*X*/_iLTgZz/*X*/./*X*/_iLTgZz/*X*/:focus{color:green;}"
     `);
   });
 
@@ -365,10 +405,11 @@ describe("createCss", () => {
       return "";
     });
 
-    expect(styles).toEqual([
-      `/* STITCHES:__variables__ */\n\n:root{}`,
-      `/* STITCHES */\n\n.c_eCaYfN{color:red;}\n.bc_cODewW{background-color:red;}`,
-    ]);
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/bc_cODewW/*X*/{background-color:red;}
+      ./*X*/c_eCaYfN/*X*/{color:red;}"
+    `);
   });
   test("should inject vendor prefix where explicitly stating so", () => {
     const css = createCss(
@@ -383,10 +424,10 @@ describe("createCss", () => {
       return "";
     });
 
-    expect(styles).toEqual([
-      `/* STITCHES:__variables__ */\n\n:root{}`,
-      `/* STITCHES */\n\n.c_eCaYfN{-webkit-color:red;}`,
-    ]);
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/c_eCaYfN/*X*/{-webkit-color:red;}"
+    `);
   });
   test("should use specificity props", () => {
     const css = createCss({}, null);
@@ -420,13 +461,11 @@ describe("createCss", () => {
     expect(styles).toMatchInlineSnapshot(`
       Array [
         "/* STITCHES:__variables__ */
-
       :root{--space-1:5px;--space-2:10px;--colors-red500:tomato;--colors-blue500:royalblue;}",
         "/* STITCHES */
-
-      ._eWquZf{margin-top:var(--space-1);}
-      ._iSavHO{gap:var(--space-2);}
-      ._cAsSHa{outline-color:var(--colors-red500);}",
+      ./*X*/_cAsSHa/*X*/{outline-color:var(--colors-red500);}
+      ./*X*/_iSavHO/*X*/{gap:var(--space-2);}
+      ./*X*/_eWquZf/*X*/{margin-top:var(--space-1);}",
       ]
     `);
   });
@@ -444,9 +483,9 @@ describe("createCss", () => {
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css({ "&:hover": { color: "red" } }).toString();
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toBe(
-      "._0._0:hover {color: red;}"
-    );
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[0].cssText
+    ).toMatchInlineSnapshot(`"._FdHZR._FdHZR:hover {color: red;}"`);
   });
   test("should handle screen selector", () => {
     const css = createCss(
@@ -464,9 +503,10 @@ describe("createCss", () => {
     // @ts-ignore
 
     expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toBe(
-      "/* STITCHES:mobile */\n\n@media(min-width:700px){._fOxLwJ{color:red;}}"
-    );
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:mobile */
+      @media(min-width:700px){./*X*/_fOxLwJ/*X*/{color:red;}}"
+    `);
   });
   test("should handle pseudo in screen selector", () => {
     const css = createCss(
@@ -484,9 +524,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toBe(
-      "/* STITCHES:mobile */\n\n@media(min-width:700px){._coXxUV._coXxUV:hover{color:red;}}"
-    );
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:mobile */
+      @media(min-width:700px){./*X*/_coXxUV/*X*/./*X*/_coXxUV/*X*/:hover{color:red;}}"
+    `);
   });
   test("should insert themes", () => {
     const css = createCss(
@@ -515,10 +556,15 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles).toEqual([
-      "/* STITCHES:__variables__ */\n\n:root{--colors-primary:tomato;}\n.theme-0{--colors-primary:blue;}",
-      "/* STITCHES */\n\n._Eogfp{color:var(--colors-primary);}",
-    ]);
+    expect(styles[0]).toMatchInlineSnapshot(`
+      "/* STITCHES:__variables__ */
+      .theme-0{--colors-primary:blue;}
+      :root{--colors-primary:tomato;}"
+    `);
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_Eogfp/*X*/{color:var(--colors-primary);}"
+    `);
   });
   test("should allow nested pseudo", () => {
     const css = createCss({}, null);
@@ -531,9 +577,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._imukGD._imukGD:hover:disabled{color:red;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_imukGD/*X*/./*X*/_imukGD/*X*/:hover:disabled{color:red;}"
+    `);
   });
   test("should handle border specificity", () => {
     const css = createCss({}, null);
@@ -548,9 +595,21 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._jMbiSS{border-left-color:red;}\n._lkwFJC{border-bottom-color:red;}\n._iqEHZB{border-right-color:red;}\n._frjswu{border-top-color:red;}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_daMVcf/*X*/{border-top-width:1px;}
+      ./*X*/_hUxHUo/*X*/{border-right-width:1px;}
+      ./*X*/_pPCSj/*X*/{border-bottom-width:1px;}
+      ./*X*/_fcpRZb/*X*/{border-left-width:1px;}
+      ./*X*/_dZmTIq/*X*/{border-top-style:solid;}
+      ./*X*/_kxkaMR/*X*/{border-right-style:solid;}
+      ./*X*/_bctHBa/*X*/{border-bottom-style:solid;}
+      ./*X*/_dKkway/*X*/{border-left-style:solid;}
+      ./*X*/_frjswu/*X*/{border-top-color:red;}
+      ./*X*/_iqEHZB/*X*/{border-right-color:red;}
+      ./*X*/_lkwFJC/*X*/{border-bottom-color:red;}
+      ./*X*/_jMbiSS/*X*/{border-left-color:red;}"
+    `);
   });
   test("should handle border shorthand with tokens", () => {
     const css = createCss(
@@ -574,9 +633,21 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._ffzau{border-left-color:var(--colors-primary);}\n._jIhVXS{border-bottom-color:var(--colors-primary);}\n._uBwAx{border-right-color:var(--colors-primary);}\n._kLWpHW{border-top-color:var(--colors-primary);}\n._dKkway{border-left-style:solid;}\n._bctHBa{border-bottom-style:solid;}\n._kxkaMR{border-right-style:solid;}\n._dZmTIq{border-top-style:solid;}\n._fcpRZb{border-left-width:1px;}\n._pPCSj{border-bottom-width:1px;}\n._hUxHUo{border-right-width:1px;}\n._daMVcf{border-top-width:1px;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_daMVcf/*X*/{border-top-width:1px;}
+      ./*X*/_hUxHUo/*X*/{border-right-width:1px;}
+      ./*X*/_pPCSj/*X*/{border-bottom-width:1px;}
+      ./*X*/_fcpRZb/*X*/{border-left-width:1px;}
+      ./*X*/_dZmTIq/*X*/{border-top-style:solid;}
+      ./*X*/_kxkaMR/*X*/{border-right-style:solid;}
+      ./*X*/_bctHBa/*X*/{border-bottom-style:solid;}
+      ./*X*/_dKkway/*X*/{border-left-style:solid;}
+      ./*X*/_kLWpHW/*X*/{border-top-color:var(--colors-primary);}
+      ./*X*/_uBwAx/*X*/{border-right-color:var(--colors-primary);}
+      ./*X*/_jIhVXS/*X*/{border-bottom-color:var(--colors-primary);}
+      ./*X*/_ffzau/*X*/{border-left-color:var(--colors-primary);}"
+    `);
   });
   test("should handle box shadow with tokens", () => {
     const css = createCss(
@@ -592,15 +663,16 @@ describe("createCss", () => {
     const atom = css({ boxShadow: "1px 1px 1px primary" }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_diaoUX");
+      expect(atom.toString()).toBe("_jpflsr");
 
       return "";
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._diaoUX{box-shadow: 1px 1px 1px var(--colors-primary);}"
-    );
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_jpflsr/*X*/{box-shadow:1px 1px 1px var(--colors-primary);}"
+    `);
   });
   test("should be able to compose themes", () => {
     const css = createCss(
@@ -629,9 +701,10 @@ describe("createCss", () => {
     });
 
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n._Eogfp{color:var(--colors-primary);}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_Eogfp/*X*/{color:var(--colors-primary);}"
+    `);
   });
 
   test("should generate keyframe atoms", () => {
@@ -698,9 +771,11 @@ describe("createCss", () => {
       return "";
     });
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_idHIjE/*X*/{animation-name:dmyJCr;}
+      @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
+    `);
   });
   test("should inject styles for animations into sheet", () => {
     const css = createCss({}, null);
@@ -714,9 +789,11 @@ describe("createCss", () => {
       return "";
     });
     expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\n@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}\n._idHIjE{animation-name:dmyJCr;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_idHIjE/*X*/{animation-name:dmyJCr;}
+      @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
+    `);
   });
   test("should handle margin shorthand", () => {
     const css = createCss({}, null);
@@ -733,11 +810,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._jeUhKW{margin-left:5px;}
-      ._hdcIia{margin-bottom:1px;}
-      ._ihMdjN{margin-right:5px;}
-      ._kFCHHa{margin-top:1px;}"
+      ./*X*/_kFCHHa/*X*/{margin-top:1px;}
+      ./*X*/_ihMdjN/*X*/{margin-right:5px;}
+      ./*X*/_hdcIia/*X*/{margin-bottom:1px;}
+      ./*X*/_jeUhKW/*X*/{margin-left:5px;}"
     `);
   });
 
@@ -756,11 +832,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._gyarRZ{padding-left:5px;}
-      ._kQnasN{padding-bottom:1px;}
-      ._gerKhy{padding-right:5px;}
-      ._cRIZvx{padding-top:1px;}"
+      ./*X*/_cRIZvx/*X*/{padding-top:1px;}
+      ./*X*/_gerKhy/*X*/{padding-right:5px;}
+      ./*X*/_kQnasN/*X*/{padding-bottom:1px;}
+      ./*X*/_gyarRZ/*X*/{padding-left:5px;}"
     `);
   });
 
@@ -776,11 +851,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._frjswu{border-top-color:red;}
-      ._dZmTIq{border-top-style:solid;}
-      ._daMVcf{border-top-width:1px;}"
-      `);
+      ./*X*/_daMVcf/*X*/{border-top-width:1px;}
+      ./*X*/_dZmTIq/*X*/{border-top-style:solid;}
+      ./*X*/_frjswu/*X*/{border-top-color:red;}"
+    `);
   });
 
   test("should allow nested inline media queries", () => {
@@ -810,10 +884,9 @@ describe("createCss", () => {
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._iqEHZB{border-right-color:red;}
-      ._kxkaMR{border-right-style:solid;}
-      ._hUxHUo{border-right-width:1px;}"
+      ./*X*/_hUxHUo/*X*/{border-right-width:1px;}
+      ./*X*/_kxkaMR/*X*/{border-right-style:solid;}
+      ./*X*/_iqEHZB/*X*/{border-right-color:red;}"
     `);
   });
   test("should handle border-bottom shorthand", () => {
@@ -825,10 +898,9 @@ describe("createCss", () => {
     });
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._lkwFJC{border-bottom-color:red;}
-      ._bctHBa{border-bottom-style:solid;}
-      ._pPCSj{border-bottom-width:1px;}"
+      ./*X*/_pPCSj/*X*/{border-bottom-width:1px;}
+      ./*X*/_bctHBa/*X*/{border-bottom-style:solid;}
+      ./*X*/_lkwFJC/*X*/{border-bottom-color:red;}"
     `);
   });
   test("should allow inline media queries", () => {
@@ -841,8 +913,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      @media (hover:hover){._hCvELq{color:red;}}"
+      @media (hover:hover){./*X*/_hCvELq/*X*/{color:red;}}"
     `);
   });
 
@@ -858,9 +929,10 @@ describe("createCss", () => {
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toBe("_dkzxrg");
     });
-    expect(styles[1].trim()).toBe(
-      "/* STITCHES */\n\ndiv:hover ._dkzxrg{color:red;}"
-    );
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      div:hover ./*X*/_dkzxrg/*X*/{color:red;}"
+    `);
   });
 
   test("should handle border-left shorthand", () => {
@@ -876,10 +948,9 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._jMbiSS{border-left-color:red;}
-      ._dKkway{border-left-style:solid;}
-      ._fcpRZb{border-left-width:1px;}"
+      ./*X*/_fcpRZb/*X*/{border-left-width:1px;}
+      ./*X*/_dKkway/*X*/{border-left-style:solid;}
+      ./*X*/_jMbiSS/*X*/{border-left-color:red;}"
     `);
   });
   test("should handle border-radius shorthand", () => {
@@ -896,11 +967,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._kirJLA{border-bottom-right-radius:5px;}
-      ._gnzyQc{border-top-right-radius:5px;}
-      ._bjAoar{border-top-left-radius:5px;}
-      ._iVJtjr{border-bottom-left-radius:5px;}"
+      ./*X*/_iVJtjr/*X*/{border-bottom-left-radius:5px;}
+      ./*X*/_bjAoar/*X*/{border-top-left-radius:5px;}
+      ./*X*/_gnzyQc/*X*/{border-top-right-radius:5px;}
+      ./*X*/_kirJLA/*X*/{border-bottom-right-radius:5px;}"
     `);
   });
 
@@ -919,11 +989,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._jMbiSS{border-left-color:red;}
-      ._lkwFJC{border-bottom-color:red;}
-      ._iqEHZB{border-right-color:red;}
-      ._frjswu{border-top-color:red;}"
+      ./*X*/_frjswu/*X*/{border-top-color:red;}
+      ./*X*/_iqEHZB/*X*/{border-right-color:red;}
+      ./*X*/_lkwFJC/*X*/{border-bottom-color:red;}
+      ./*X*/_jMbiSS/*X*/{border-left-color:red;}"
     `);
   });
 
@@ -942,11 +1011,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._dKkway{border-left-style:solid;}
-      ._bctHBa{border-bottom-style:solid;}
-      ._kxkaMR{border-right-style:solid;}
-      ._dZmTIq{border-top-style:solid;}"
+      ./*X*/_dZmTIq/*X*/{border-top-style:solid;}
+      ./*X*/_kxkaMR/*X*/{border-right-style:solid;}
+      ./*X*/_bctHBa/*X*/{border-bottom-style:solid;}
+      ./*X*/_dKkway/*X*/{border-left-style:solid;}"
     `);
   });
 
@@ -965,11 +1033,10 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._exEWxc{border-left-width:2px;}
-      ._dVrsOA{border-bottom-width:2px;}
-      ._foDwTX{border-right-width:2px;}
-      ._hlWFhc{border-top-width:2px;}"
+      ./*X*/_hlWFhc/*X*/{border-top-width:2px;}
+      ./*X*/_foDwTX/*X*/{border-right-width:2px;}
+      ./*X*/_dVrsOA/*X*/{border-bottom-width:2px;}
+      ./*X*/_exEWxc/*X*/{border-left-width:2px;}"
     `);
   });
 
@@ -986,8 +1053,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._cODewW{background-color:red;}"
+      ./*X*/_cODewW/*X*/{background-color:red;}"
     `);
   });
 
@@ -1006,10 +1072,9 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-
-      ._cYJUVx{transition-timing-function:ease-in-out;}
-      ._dkQnca{transition-duration:2s;}
-      ._fMYPIB{transition-property:margin-right;}"
+      ./*X*/_fMYPIB/*X*/{transition-property:margin-right;}
+      ./*X*/_dkQnca/*X*/{transition-duration:2s;}
+      ./*X*/_cYJUVx/*X*/{transition-timing-function:ease-in-out;}"
     `);
   });
 
@@ -1026,9 +1091,94 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
+      ./*X*/_bZKhEt/*X*/{font-size:1.2em;}
+      ./*X*/_kSPChp/*X*/{font-family:\\"Fira Sans\\",sans-serif;}"
+    `);
+  });
 
-      ._kSPChp{font-family:\\"Fira Sans\\",sans-serif;}
-      ._bZKhEt{font-size:1.2em;}"
+  test("Should warn about potential specificity issues when an inline responsive atom appears in two different css definitions", () => {
+    const css = createCss({}, null);
+    const mediaString = "@media (min-width: 700px)";
+    console.warn = jest.fn();
+    const firstDef = css({
+      [mediaString]: { color: "red" },
+    }).toString();
+
+    const secondDef = css({
+      [mediaString]: { color: "red" },
+    }).toString();
+
+    expect(console.warn).toHaveBeenCalledWith(
+      `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
+    );
+  });
+  test("should inject media queries after normal rules", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css({
+        color: "red",
+        "@media (min-width: 700px)": { color: "red" },
+        backgroundColor: "blue",
+      }).toString();
+      css({
+        color: "green",
+        "@media (min-width: 200px)": { color: "red" },
+        backgroundColor: "yello",
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_jTsVyZ/*X*/{color:green;}
+      ./*X*/_dXRydm/*X*/{background-color:yello;}
+      ./*X*/_eCaYfN/*X*/{color:red;}
+      ./*X*/_cayivH/*X*/{background-color:blue;}
+      @media (min-width: 700px){./*X*/_heiuYc/*X*/{color:red;}}
+      @media (min-width: 200px){./*X*/_grNRuV/*X*/{color:red;}}"
+    `);
+  });
+
+  test("should inject pseudo selectors with increased specificity", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css({
+        // &&
+        ":hover": {
+          color: "red",
+        },
+        // &&&
+        ":active": {
+          color: "red",
+        },
+        // &&&&
+        ":focus": {
+          color: "red",
+        },
+        // &&&&
+        ":focus-visible": {
+          color: "red",
+        },
+        // &&&&&
+        ":read-only": {
+          color: "red",
+        },
+        // &&&&&&
+        ":disabled": {
+          color: "red",
+        },
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_FdHZR/*X*/./*X*/_FdHZR/*X*/:hover{color:red;}
+      ./*X*/_glwpql/*X*/./*X*/_glwpql/*X*/./*X*/_glwpql/*X*/:active{color:red;}
+      ./*X*/_fMqZb/*X*/./*X*/_fMqZb/*X*/./*X*/_fMqZb/*X*/./*X*/_fMqZb/*X*/:focus{color:red;}
+      ./*X*/_iqsQSU/*X*/./*X*/_iqsQSU/*X*/./*X*/_iqsQSU/*X*/./*X*/_iqsQSU/*X*/:focus-visible{color:red;}
+      ./*X*/_gZDqEe/*X*/./*X*/_gZDqEe/*X*/./*X*/_gZDqEe/*X*/./*X*/_gZDqEe/*X*/./*X*/_gZDqEe/*X*/:read-only{color:red;}
+      ./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/:disabled{color:red;}"
     `);
   });
 });

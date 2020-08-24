@@ -122,6 +122,24 @@ export const tokenTypes = [
   "radii",
 ] as const;
 
+const enhanceSheet = (sheet: ISheet): ISheet => {
+  return {
+    content: sheet.content,
+    cssRules: sheet.cssRules,
+    insertRule: (rule) => {
+      try {
+        const newIndex = sheet.insertRule(
+          rule,
+          rule.startsWith("@") ? sheet.cssRules.length : 0
+        );
+        return newIndex;
+      } catch {
+        return -1;
+      }
+    },
+  };
+};
+
 export const createSheets = (env: any, screens: IBreakpoints = {}) => {
   const tags: HTMLStyleElement[] = [];
   if (env && env.document) {
@@ -144,13 +162,12 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
           let style = existingStyles[index];
           if (!style) {
             style = env.document.createElement("style");
-            tags.push(style);
             head.appendChild(style);
           }
-
+          tags.push(style);
           for (let x = 0; x < document.styleSheets.length; x++) {
             if (document.styleSheets[x].ownerNode === style) {
-              aggr[key] = document.styleSheets[x] as any;
+              aggr[key] = enhanceSheet(document.styleSheets[x] as any);
               break;
             }
           }
@@ -165,13 +182,13 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
     sheets: ["__variables__", ""]
       .concat(Object.keys(screens))
       .reduce<{ [key: string]: ISheet }>((aggr, key) => {
-        aggr[key] = {
+        aggr[key] = enhanceSheet({
           content: "",
           cssRules: [],
-          insertRule(content) {
-            aggr[key].content += `\n${content}`;
+          insertRule(content, index = 0) {
+            this.cssRules.splice(index, 0, content);
           },
-        };
+        });
 
         return aggr;
       }, {}),

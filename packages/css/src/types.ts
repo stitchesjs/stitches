@@ -524,5 +524,5 @@ export type TCss<T extends TConfig> = T extends { utilityFirst: true }
 export interface ISheet {
   cssRules: any[];
   content: string;
-  insertRule(rule: string): void;
+  insertRule(rule: string, index?: number): void;
 }
