@@ -439,6 +439,7 @@ export const createCss = <T extends TConfig>(
   for (const tag of tags) {
     ((tag.textContent || "").match(/\/\*\X\*\/.*?\/\*\X\*\//g) || []).forEach(
       (rule) => {
+        // tslint:disable-next-line
         preInjectedRules.add("." + rule.replace(/\/\*X\*\//g, ""));
       }
     );
