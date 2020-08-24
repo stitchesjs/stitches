@@ -1,10 +1,6 @@
-<p align="center">
-  <img width="300" src="/vue.png">
-</p>
-
 Use stitches with Vue
 
-Read more about stitches at [@stitches/css](https://github.com/christianalfoni/stitches/tree/master/packages/css).
+Read more about stitches at [@stitches/css](https://github.com/modulz/stitches/tree/master/packages/css).
 
 ## Get started
 

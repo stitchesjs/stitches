@@ -1,10 +1,6 @@
-<p align="center">
-  <img width="300" src="../../tailwind.png">
-</p>
-
 Use stitches to build Tailwind apps
 
-Read more about stitches at [@stitches/css](https://github.com/christianalfoni/stitches/tree/master/packages/css).
+Read more about stitches at [@stitches/css](https://github.com/modulz/stitches/tree/master/packages/css).
 
 ## Why
 
@@ -79,7 +75,7 @@ css({
 
 **Note!** Stitches Tailwind has its own theming concept that conforms to how Tailwind does theming.
 
-To create your own theme copy the [default theme](https://github.com/christianalfoni/stitches/blob/master/packages/tailwind/src/theme.ts) and make your changes.
+To create your own theme copy the [default theme](https://github.com/modulz/stitches/blob/master/packages/tailwind/src/theme.ts) and make your changes.
 
 Any key defined as **default** will allow you to call its consuming utility without a value, resulting in the default value.
 

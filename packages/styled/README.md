@@ -1,10 +1,6 @@
-<p align="center">
-  <img width="300" src="../../react.png">
-</p>
-
 Use stitches to create styled components in React.
 
-Read more about stitches at [@stitches/css](https://github.com/christianalfoni/stitches/tree/master/packages/css).
+Read more about stitches at [@stitches/css](https://github.com/modulz/stitches/tree/master/packages/css).
 
 ## Get started
 
@@ -104,7 +100,7 @@ All styled components takes a `css` property. This property allow you to overrid
 
 ```tsx
 const override = css({
-  ":hover": {
+  '&:hover': {
     color: "blue",
   },
 });
@@ -114,7 +110,7 @@ export const MyComponent = () => {
     <div>
       <Button variant="primary" css={override}></Button>
       <Button variant="primary" css={{
-        ':hover': {
+        '&:hover': {
           color: 'blue'
         }
       }}>

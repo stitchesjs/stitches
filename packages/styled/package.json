@@ -1,10 +1,14 @@
 {
   "name": "@stitches/styled",
   "version": "9.0.0-alpha.2",
-  "description": "The atom CSS-IN-JS  library",
-  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "description": "The modern CSS-in-JS library",
+  "contributors": [
+    "Christian Alfoni <christianalfoni@gmail.com>",
+    "Pedro Duarte <pedro@modulz.app>",
+    "Abdul Hallak <abdul@modulz.app>"
+  ],
   "license": "MIT",
-  "repository": "git+https://github.com/christianalfoni/stitches.git",
+  "repository": "git+https://github.com/modulz/stitches.git",
   "main": "lib/index.js",
   "module": "es/index.js",
   "publishConfig": {

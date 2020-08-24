@@ -1,7 +1,3 @@
-<p align="center">
-  <img width="300" src="../../stitches.png">
-</p>
-
 ## Why
 
 - **Atomic mindset**: Each CSS property is a an atomic part of your complete CSS
@@ -25,7 +21,7 @@ import { css } from "@stitches/css";
 
 const button = css({
   color: "gray",
-  ":hover": {
+  "&:hover": {
     color: "black",
   },
   borderColor: "black",
@@ -76,7 +72,7 @@ export const css = createCss({
   },
   // Create screens with media queries. Note that the media queriy with the
   // highest specificity should go last
-  screens: {
+  breakpoints: {
     tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
   },
   // Create your own custom CSS properties. Here the functional syntax
