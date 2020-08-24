@@ -486,9 +486,9 @@ export const createStyled = <
                   breakpoints?.get(props[propName][breakpoint])![breakpoint]
                 );
               }
-            } else {
-              propsWithoutVariantsAndCssProp[propName] = props[propName];
             }
+          } else {
+            propsWithoutVariantsAndCssProp[propName] = props[propName];
           }
         }
 
