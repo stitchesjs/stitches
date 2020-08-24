@@ -468,23 +468,27 @@ export const createStyled = <
           if (propName in variants) {
             const breakpoints = evaluatedVariantMap.get(propName);
 
-          // check if prop value is a string and not an empty string
-          // otherwise assume its a responsive object
-          if (typeof props[propName] === "string" && Boolean(props[propName])) {
-            // if a variant value has been provided, check it exists
-            // this prevents invalid variant values from crashing
-            if (breakpoints?.get(props[propName])) {
-              compositions.push(breakpoints?.get(props[propName])![""]);
+            // check if prop value is a string and not an empty string
+            // otherwise assume its a responsive object
+            if (
+              typeof props[propName] === "string" &&
+              Boolean(props[propName])
+            ) {
+              // if a variant value has been provided, check it exists
+              // this prevents invalid variant values from crashing
+              if (breakpoints?.get(props[propName])) {
+                compositions.push(breakpoints?.get(props[propName])![""]);
+              }
+            } else if (props[propName]) {
+              // tslint:disable-next-line
+              for (const breakpoint in props[propName]) {
+                compositions.push(
+                  breakpoints?.get(props[propName][breakpoint])![breakpoint]
+                );
+              }
+            } else {
+              propsWithoutVariantsAndCssProp[propName] = props[propName];
             }
-          } else if (props[propName]) {
-            // tslint:disable-next-line
-            for (const breakpoint in props[propName]) {
-              compositions.push(
-                breakpoints?.get(props[propName][breakpoint])![breakpoint]
-              );
-            }
-          } else {
-            propsWithoutVariantsAndCssProp[propName] = props[propName];
           }
         }
 
