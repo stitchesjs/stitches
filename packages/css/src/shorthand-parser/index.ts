@@ -207,32 +207,34 @@ export const padding = createPropertyParser(
   }
 );
 
-export const border = createPropertyParser((tokens: any, css: any, value: any) => {
-  if (
-    value.match(
-      /none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset/
-    )
-  ) {
-    css.borderTopStyle = value;
-    css.borderRightStyle = value;
-    css.borderBottomStyle = value;
-    css.borderLeftStyle = value;
-  } else if (
-    value.match(unitMatch) ||
-    tokens.borderWidths[value] ||
-    !isNaN(value)
-  ) {
-    css.borderTopWidth = tokens.borderWidths[value] || value;
-    css.borderRightWidth = tokens.borderWidths[value] || value;
-    css.borderBottomWidth = tokens.borderWidths[value] || value;
-    css.borderLeftWidth = tokens.borderWidths[value] || value;
-  } else {
-    css.borderTopColor = tokens.colors[value] || value;
-    css.borderRightColor = tokens.colors[value] || value;
-    css.borderBottomColor = tokens.colors[value] || value;
-    css.borderLeftColor = tokens.colors[value] || value;
+export const border = createPropertyParser(
+  (tokens: any, css: any, value: any) => {
+    if (
+      value.match(
+        /none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset/
+      )
+    ) {
+      css.borderTopStyle = value;
+      css.borderRightStyle = value;
+      css.borderBottomStyle = value;
+      css.borderLeftStyle = value;
+    } else if (
+      value.match(unitMatch) ||
+      tokens.borderWidths[value] ||
+      !isNaN(value)
+    ) {
+      css.borderTopWidth = tokens.borderWidths[value] || value;
+      css.borderRightWidth = tokens.borderWidths[value] || value;
+      css.borderBottomWidth = tokens.borderWidths[value] || value;
+      css.borderLeftWidth = tokens.borderWidths[value] || value;
+    } else {
+      css.borderTopColor = tokens.colors[value] || value;
+      css.borderRightColor = tokens.colors[value] || value;
+      css.borderBottomColor = tokens.colors[value] || value;
+      css.borderLeftColor = tokens.colors[value] || value;
+    }
   }
-});
+);
 
 export const borderTop = createPropertyParser(
   (tokens: any, css: any, value: any) => {
@@ -370,7 +372,7 @@ export const borderRadius = createPropertyParser(
   }
 );
 
-export const boxShadow = (tokens:any, value: string) => {
+export const boxShadow = (tokens: any, value: string) => {
   return {
     boxShadow: tokenizeValue(value)
       .map((chain) =>

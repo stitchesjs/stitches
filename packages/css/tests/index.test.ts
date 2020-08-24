@@ -81,6 +81,7 @@ describe("createCss", () => {
 
   test("should regenerate styles on ssr", () => {
     const css = createCss({ tokens: { colors: { red100: "red" } } }, null);
+    // tslint:disable-next-line
     console.log = jest.fn();
     const keyframe = css.keyframes({
       from: { backgroundColor: "red" },
@@ -1099,6 +1100,7 @@ describe("createCss", () => {
   test("Should warn about potential specificity issues when an inline responsive atom appears in two different css definitions", () => {
     const css = createCss({}, null);
     const mediaString = "@media (min-width: 700px)";
+    // tslint:disable-next-line
     console.warn = jest.fn();
     const firstDef = css({
       [mediaString]: { color: "red" },
@@ -1107,7 +1109,7 @@ describe("createCss", () => {
     const secondDef = css({
       [mediaString]: { color: "red" },
     }).toString();
-
+    // tslint:disable-next-line
     expect(console.warn).toHaveBeenCalledWith(
       `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
     );

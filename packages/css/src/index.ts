@@ -294,7 +294,6 @@ const createServerToString = (
   breakpoints: IBreakpoints = {},
   cssClassnameProvider: (atom: IAtom) => string
 ) => {
-  console.log('server')
   return function toString(this: IAtom) {
     const className = cssClassnameProvider(this);
 
@@ -499,6 +498,7 @@ export const createCss = <T extends TConfig>(
       if (
         inlineMediasAsString.match(/@media.*\((min|max)?.*(width|height).*\)/)
       ) {
+        // tslint:disable-next-line
         console.warn(
           `The property "${cssProp}" with media query ${inlineMediasAsString} can cause a specificity issue. You should create a breakpoint`
         );
@@ -597,8 +597,8 @@ export const createCss = <T extends TConfig>(
     }
     // might cause memory leaks when doing css() inside a component
     // but we need this for now to fix SSR
-    const composition = compose(...args)
-    compositionsCache.add(composition)
+    const composition = compose(...args);
+    compositionsCache.add(composition);
 
     return composition;
   }) as any;
@@ -666,9 +666,9 @@ export const createCss = <T extends TConfig>(
   };
   cssInstance.getStyles = (cb: any) => {
     // Reset the composition to avoid ssr issues
-    compositionsCache.forEach(composition => {
-      composition.toString = toStringCompose
-    })
+    compositionsCache.forEach((composition) => {
+      composition.toString = toStringCompose;
+    });
     // tslint:disable-next-line
     for (let sheet in sheets) {
       sheets[sheet].cssRules.length = 0;
