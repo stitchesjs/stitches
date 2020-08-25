@@ -210,7 +210,7 @@ type PolymorphicProps<
       : never
     : never);
 
-interface PolymorphicComponent<P, T extends string>
+export interface PolymorphicComponent<P, T extends string>
   extends React.ForwardRefExoticComponent<PolymorphicProps<P, T, T>> {
   (
     props: PolymorphicProps<P, T, T> & { as?: never; forwardedAs?: never }
