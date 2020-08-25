@@ -1,11 +1,23 @@
-## css
+<div align="center">
+  <a href="https://stitches-site.modulz-deploys.com">
+    <img width="149" alt="stitches" src="https://user-images.githubusercontent.com/372831/91160749-164abb00-e6ca-11ea-844f-a58658012263.png">
+  </a>
+</div>
 
-The core CSS API to be used with any solution.
+<br />
 
-[@stitches/css](https://github.com/modulz/stitches/tree/master/packages/css)
+**The modern styling library.**
 
-## styled
+Near-zero runtime, server-side rendering, multi-variant support, and best-in-class developer experience.
 
-A React specific component abstraction.
+---
 
-[@stitches/styled](https://github.com/modulz/stitches/tree/master/packages/styled)
+## Documentation
+
+For full documentation, visit [stitches.com](https://stitches-site.modulz-deploys.com).
+
+## License
+
+Licensed under the MIT License, Copyright © 2020-present Modulz.
+
+See [LICENSE](./LICENSE.md) for more information.
