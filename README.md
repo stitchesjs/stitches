@@ -6,9 +6,11 @@
 
 <br />
 
+<div align="center">
 **The modern styling library.**
 
 Near-zero runtime, server-side rendering, multi-variant support, and best-in-class developer experience.
+</div>
 
 ---
 
