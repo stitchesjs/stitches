@@ -45,24 +45,15 @@ export interface IKeyframesAtom {
   [ATOM]: true;
 }
 
-export type TRecursiveCss<
-  T extends TConfig,
-  D = {
-    [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
-      ? ICssPropToToken<T>[K] | Properties[K]
-      : Properties[K];
-  }
-> = (
-  | D
+export type TRecursiveCss<T extends TConfig> =
   | {
-      [pseudo: string]: (
-        | D
-        | { [pseudo: string]: (D | { [pseudo: string]: D }) & D }
-      ) &
-        D;
+      [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
+        ? ICssPropToToken<T>[K] | Properties[K]
+        : Properties[K];
     }
-) &
-  D;
+  | {
+      [selector: string]: TRecursiveCss<T>;
+    };
 
 export type TFlatCSS<
   T extends TConfig,
