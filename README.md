@@ -1,12 +1,8 @@
-<div align="center">
-  <a href="https://stitches-site.modulz-deploys.com">
-    <img width="149" alt="stitches" src="https://user-images.githubusercontent.com/372831/91160749-164abb00-e6ca-11ea-844f-a58658012263.png">
-  </a>
-</div>
+<a href="https://stitches-site.modulz-deploys.com">
+	<img width="149" alt="stitches" src="https://user-images.githubusercontent.com/372831/91160749-164abb00-e6ca-11ea-844f-a58658012263.png">
+</a>
 
-<br />
-
-**The modern styling library.**
+# The modern styling library.
 
 Near-zero runtime, server-side rendering, multi-variant support, and best-in-class developer experience.
 
@@ -15,6 +11,17 @@ Near-zero runtime, server-side rendering, multi-variant support, and best-in-cla
 ## Documentation
 
 For full documentation, visit [stitches.com](https://stitches-site.modulz-deploys.com).
+
+## Contributing
+
+Not quite ready :)
+
+## Authors
+
+- Christian Alfoni ([@christianalfoni](https://twitter.com/christianalfoni)) - Codesandbox, Cerebral
+- Pedro Duarte ([@peduarte](https://twitter.com/peduarte)) - [Modulz](https://modulz.app)
+- Jenna Smith ([@jjenzz](https://twitter.com/jjenzz)) - [Modulz](https://modulz.app)
+- Abdul Hallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [Modulz](https://modulz.app)
 
 ## License
 
