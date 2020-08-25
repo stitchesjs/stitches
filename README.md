@@ -1,8 +1,6 @@
-<div style="margin-left: -20px;">
-  <a href="https://stitches-site.modulz-deploys.com" >
-    <img width="149" alt="stitches" src="https://user-images.githubusercontent.com/372831/91160749-164abb00-e6ca-11ea-844f-a58658012263.png">
-  </a>
-</div>
+<a href="https://stitches-site.modulz-deploys.com" >
+  <img width="149" alt="stitches" src="https://user-images.githubusercontent.com/372831/91163750-59a72880-e6ce-11ea-80b6-131a34da954c.png">
+</a>
 
 # The modern styling library.
 
