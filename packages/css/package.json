@@ -1,6 +1,6 @@
 {
   "name": "@stitches/css",
-  "version": "9.0.0-alpha.1",
+  "version": "9.0.0-alpha.3",
   "description": "The modern CSS-in-JS library",
   "contributors": [
     "Christian Alfoni <christianalfoni@gmail.com>",
