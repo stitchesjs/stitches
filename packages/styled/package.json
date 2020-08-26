@@ -1,6 +1,6 @@
 {
   "name": "@stitches/styled",
-  "version": "9.0.0-alpha.3",
+  "version": "9.0.0-alpha.4",
   "description": "The modern CSS-in-JS library",
   "contributors": [
     "Christian Alfoni <christianalfoni@gmail.com>",
@@ -44,7 +44,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/css": "^9.0.0-alpha.3",
+    "@stitches/css": "^9.0.0-alpha.4",
     "@types/node": "^13.11.1",
     "tslib": "^1.11.1"
   },
