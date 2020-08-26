@@ -45,12 +45,14 @@ export interface IKeyframesAtom {
   [ATOM]: true;
 }
 
+export type TTopCss<T extends TConfig> = {
+  [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
+    ? ICssPropToToken<T>[K] | Properties[K]
+    : Properties[K];
+};
+
 export type TRecursiveCss<T extends TConfig> =
-  | {
-      [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
-        ? ICssPropToToken<T>[K] | Properties[K]
-        : Properties[K];
-    }
+  | TTopCss<T>
   | {
       [selector: string]: TRecursiveCss<T>;
     };
@@ -75,26 +77,19 @@ export type TFlatUtils<
   }
 > = UT;
 
-export type TRecursiveUtils<
-  T extends TConfig,
-  UT = {
-    [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
-      ? ReturnType<T["utils"][U]> extends (arg: infer A) => {}
-        ? A
-        : never
-      : never;
-  }
-> = (
-  | UT
+export type TTopUtils<T extends TConfig> = {
+  [U in keyof T["utils"]]?: T["utils"][U] extends TUtility<any, any>
+    ? ReturnType<T["utils"][U]> extends (arg: infer A) => {}
+      ? A
+      : never
+    : never;
+};
+
+export type TRecursiveUtils<T extends TConfig> =
+  | TTopUtils<T>
   | {
-      [pseudo: string]: (
-        | UT
-        | { [pseudo: string]: (UT | { [pseudo: string]: UT }) & UT }
-      ) &
-        UT;
-    }
-) &
-  UT;
+      [pseudo: string]: TRecursiveUtils<T>;
+    };
 
 export type TUtility<A extends any, T extends TConfig> = (
   config: T
