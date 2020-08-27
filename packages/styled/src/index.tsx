@@ -220,33 +220,35 @@ export interface PolymorphicComponent<P, T extends string>
   ): React.ReactElement<PolymorphicProps<P, E, T>>;
 }
 
-export interface IBaseStyled<CSS, BREAKPOINTS> {
+export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
+
+export interface IBaseStyled<T extends TConfig> {
   <E extends string | React.ComponentType>(
     element: E,
-    css?: CSS
+    css?: TDefaultCss<T>
   ): E extends ElKeys
-    ? PolymorphicComponent<{ css?: CSS | (string & {}) }, E>
+    ? PolymorphicComponent<{ css?: TCssProp<T> }, E>
     : E extends PolymorphicComponent<infer EP, infer EE>
-    ? PolymorphicComponent<EP & { css?: CSS | (string & {}) }, EE>
+    ? PolymorphicComponent<EP & { css?: TCssProp<T> }, EE>
     : E extends React.ComponentType<infer PP>
-    ? PolymorphicComponent<PP & { css?: CSS | (string & {}) }, never>
+    ? PolymorphicComponent<PP & { css?: TCssProp<T> }, never>
     : never;
   <
     E extends ElKeys | React.ComponentType,
     V extends {
       [propKey: string]: {
-        [variantName: string]: CSS;
+        [variantName: string]: TDefaultCss<T>;
       };
     },
     VE = {
-      [P in keyof V]?: BREAKPOINTS extends IBreakpoints
+      [P in keyof V]?: T["breakpoints"] extends IBreakpoints
         ?
             | keyof V[P]
             | false
             | null
             | undefined
             | ({
-                [S in keyof BREAKPOINTS]?: keyof V[P];
+                [S in keyof T["breakpoints"]]?: keyof V[P];
               } & {
                 ""?: keyof V[P];
               })
@@ -254,16 +256,16 @@ export interface IBaseStyled<CSS, BREAKPOINTS> {
     }
   >(
     element: E,
-    css: CSS,
+    css: TDefaultCss<T>,
     variants: V
   ): E extends ElKeys
     ? PolymorphicComponent<
         V extends void
           ? {
-              css?: CSS | (string & {});
+              css?: TCssProp<T>;
             }
           : VE & {
-              css?: CSS | (string & {});
+              css?: TCssProp<T>;
             },
         E
       >
@@ -271,11 +273,11 @@ export interface IBaseStyled<CSS, BREAKPOINTS> {
     ? PolymorphicComponent<
         V extends void
           ? EP & {
-              css?: CSS | (string & {});
+              css?: TCssProp<T>;
             }
           : EP &
               VE & {
-                css?: CSS | (string & {});
+                css?: TCssProp<T>;
               },
         EE
       >
@@ -283,11 +285,11 @@ export interface IBaseStyled<CSS, BREAKPOINTS> {
     ? PolymorphicComponent<
         V extends void
           ? PP & {
-              css?: CSS | (string & {});
+              css?: TCssProp<T>;
             }
           : VE &
               PP & {
-                css?: CSS | (string & {});
+                css?: TCssProp<T>;
               },
         never
       >
@@ -296,27 +298,26 @@ export interface IBaseStyled<CSS, BREAKPOINTS> {
 
 interface IStyledConstructor<
   E extends string | React.ComponentType,
-  CSS,
-  BREAKPOINTS
+  T extends TConfig
 > {
-  (cb: CSS): E extends ElKeys
+  (cb: TDefaultCss<T>): E extends ElKeys
     ? PolymorphicComponent<
         {
-          css?: CSS | (string & {});
+          css?: TCssProp<T>;
         },
         E
       >
     : E extends PolymorphicComponent<infer EP, infer EE>
     ? PolymorphicComponent<
         EP & {
-          css?: CSS | (string & {});
+          css?: TCssProp<T>;
         },
         EE
       >
     : E extends React.ComponentType<infer PP>
     ? PolymorphicComponent<
         PP & {
-          css?: CSS | (string & {});
+          css?: TCssProp<T>;
         },
         never
       >
@@ -324,30 +325,30 @@ interface IStyledConstructor<
   <
     V extends {
       [propKey: string]: {
-        [variantName: string]: CSS;
+        [variantName: string]: TDefaultCss<T>;
       };
     },
     VE = {
-      [P in keyof V]?: BREAKPOINTS extends IBreakpoints
+      [P in keyof V]?: T["breakpoints"] extends IBreakpoints
         ?
             | false
             | null
             | undefined
             | keyof V[P]
             | ({
-                [S in keyof BREAKPOINTS]?: keyof V[P];
+                [S in keyof T["breakpoints"]]?: keyof V[P];
               } & {
                 ""?: keyof V[P];
               })
         : keyof V[P] | false | null | undefined;
     }
   >(
-    cb: CSS,
+    cb: TDefaultCss<T>,
     variants: V
   ): E extends ElKeys
     ? PolymorphicComponent<
         VE & {
-          css?: CSS | (string & {});
+          css?: TCssProp<T>;
         },
         E
       >
@@ -355,7 +356,7 @@ interface IStyledConstructor<
     ? PolymorphicComponent<
         EP &
           VE & {
-            css?: CSS | (string & {});
+            css?: TCssProp<T>;
           },
         EE
       >
@@ -363,29 +364,25 @@ interface IStyledConstructor<
     ? PolymorphicComponent<
         PP &
           VE & {
-            css?: CSS | (string & {});
+            css?: TCssProp<T>;
           },
         never
       >
     : never;
 }
 
-export type IStyled<CSS, BREAKPOINTS> = {
-  [E in ElKeys]: IStyledConstructor<E, CSS, BREAKPOINTS>;
+export type IStyled<T extends TConfig> = {
+  [E in ElKeys]: IStyledConstructor<E, T>;
 };
 
 let hasWarnedInlineStyle = false;
 
-export const createStyled = <
-  T extends TConfig,
-  CSS = T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TDefaultCss<T>,
-  BREAKPOINTS = T["breakpoints"]
->(
+export const createStyled = <T extends TConfig>(
   config: T
 ): {
   css: TCss<T>;
-  styled: IBaseStyled<CSS, BREAKPOINTS> &
-    IStyled<CSS, BREAKPOINTS> & {
+  styled: IBaseStyled<T> &
+    IStyled<T> & {
       Box: <E extends ElKeys>(
         props: JSX.IntrinsicElements[E] & { as?: E }
       ) => JSX.Element;
