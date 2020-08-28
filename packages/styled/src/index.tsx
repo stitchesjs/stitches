@@ -76,7 +76,11 @@ interface IStyledComponent<
   /**
    * Default props typing:
    */
-  defaultProps: VariantASProps<Config, Variants> & { [k: string]: any };
+  defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
+  /**
+   * DisplayName typing:
+   */
+  displayName?: string;
 }
 
 /** Typed css with tokens and breakpoints */
