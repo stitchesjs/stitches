@@ -3,6 +3,8 @@ import * as React from "react";
 
 let hasWarnedInlineStyle = false;
 
+export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
+
 /**
  * Extracts Variants from an object:
  */
@@ -49,7 +51,7 @@ interface IStyledComponent<
   (
     props: React.ComponentPropsWithRef<ComponentOrTag> & {
       as?: never;
-      css?: TDefaultCss<Config> & { [key in BreakPointsKeys<Config>]?: TDefaultCss<Config> };
+      css?: TCssWithBreakpoints<Config>;
       className?: string;
       children?: any;
     } & VariantASProps<Config, Variants>
@@ -84,8 +86,8 @@ interface IStyledComponent<
 }
 
 /** Typed css with tokens and breakpoints */
-type TCssWithBreakpoints<Config extends TConfig> = TDefaultCss<Config> &
-  { [key in BreakPointsKeys<Config>]?: TDefaultCss<Config> };
+type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
+  { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
 
 /** The type for the styles in a styled call */
 type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints<Config> & {
