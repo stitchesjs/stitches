@@ -193,9 +193,13 @@ interface IntrinsicElements {
 
 type ElKeys = keyof IntrinsicElements;
 
+type ReactComponent<P = {}> =
+  | React.ComponentType<P>
+  | React.ForwardRefExoticComponent<P>;
+
 type PolymorphicProps<
   P,
-  E extends string | React.ComponentType,
+  E extends string | React.ComponentType | React.ExoticComponent,
   T extends string
 > = P & {
   as?: E;
@@ -215,7 +219,7 @@ export interface PolymorphicComponent<P, T extends string>
   (
     props: PolymorphicProps<P, T, T> & { as?: never; forwardedAs?: never }
   ): React.ReactElement<PolymorphicProps<P, T, T>>;
-  <E extends string | React.ComponentType = T>(
+  <E extends string | ReactComponent = T>(
     props: PolymorphicProps<P, E, T>
   ): React.ReactElement<PolymorphicProps<P, E, T>>;
 }
@@ -223,15 +227,15 @@ export interface PolymorphicComponent<P, T extends string>
 export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
 
 export interface IBaseStyled<T extends TConfig> {
-  <E extends string | React.ComponentType>(
+  <E extends string | ReactComponent>(
     element: E,
     css?: TDefaultCss<T>
   ): E extends ElKeys
     ? PolymorphicComponent<{ css?: TCssProp<T> }, E>
     : E extends PolymorphicComponent<infer EP, infer EE>
     ? PolymorphicComponent<EP & { css?: TCssProp<T> }, EE>
-    : E extends React.ComponentType<infer PP>
-    ? PolymorphicComponent<PP & { css?: TCssProp<T> }, never>
+    : E extends ReactComponent<infer PP>
+    ? ReactComponent<PP & { css?: TCssProp<T> }>
     : never;
   <
     E extends ElKeys | React.ComponentType,
@@ -296,30 +300,13 @@ export interface IBaseStyled<T extends TConfig> {
     : never;
 }
 
-interface IStyledConstructor<
-  E extends string | React.ComponentType,
-  T extends TConfig
-> {
+interface IStyledConstructor<E extends string, T extends TConfig> {
   (cb: TDefaultCss<T>): E extends ElKeys
     ? PolymorphicComponent<
         {
           css?: TCssProp<T>;
         },
         E
-      >
-    : E extends PolymorphicComponent<infer EP, infer EE>
-    ? PolymorphicComponent<
-        EP & {
-          css?: TCssProp<T>;
-        },
-        EE
-      >
-    : E extends React.ComponentType<infer PP>
-    ? PolymorphicComponent<
-        PP & {
-          css?: TCssProp<T>;
-        },
-        never
       >
     : never;
   <
@@ -360,7 +347,7 @@ interface IStyledConstructor<
           },
         EE
       >
-    : E extends React.ComponentType<infer PP>
+    : E extends ReactComponent<infer PP>
     ? PolymorphicComponent<
         PP &
           VE & {
@@ -407,7 +394,7 @@ export const createStyled = <T extends TConfig>(
   const styledInstance = (
     baseStyling: any = (cssComposer: any) => cssComposer.compose(),
     variants: { [variant: string]: { [name: string]: any } } = {},
-    Component: React.ComponentType<any> = Box
+    Component: ReactComponent<any> = Box
   ) => {
     const as = currentAs;
 
