@@ -331,7 +331,14 @@ interface IStyledConstructor<E extends string, T extends TConfig> {
     }
   >(
     cb: TDefaultCss<T>,
-    variants: V
+    variants: // This is a hack to fix "any" token related properties. It still shows as "any", but
+    // suggestions pops up
+    | {
+          [propKey: string]: {
+            [variantName: string]: TDefaultCss<T>;
+          };
+        }
+      | V
   ): E extends ElKeys
     ? PolymorphicComponent<
         VE & {
