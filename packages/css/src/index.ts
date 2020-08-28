@@ -551,19 +551,26 @@ export const createCss = <T extends TConfig>(
   let baseTokens = ":root{";
   // tslint:disable-next-line
   for (const tokenType in tokens) {
+    const isNumericScale = tokenType.match(/^(sizes|space|letterSpacings|zIndices)$/)
     // @ts-ignore
     // tslint:disable-next-line
     for (const token in tokens[tokenType]) {
       // format token to remove special characters
       // https://stackoverflow.com/a/4374890
-      const formattedToken = token.replace(/[^\w\s]/gi, "");
-      const cssvar = `--${tokenType}-${formattedToken}`;
+      const formattedToken = token.replace(/[^\w\s-]/gi, "");
+      const cssVar = `--${tokenType}-${formattedToken}`;
 
       // @ts-ignore
-      baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
+      baseTokens += `${cssVar}:${tokens[tokenType][token]};`;
 
       // @ts-ignore
-      tokens[tokenType][token] = `var(${cssvar})`;
+      tokens[tokenType][token] = `var(${cssVar})`;
+
+      // Add negative tokens
+      if(isNumericScale){
+      // @ts-ignore
+        tokens[tokenType]['-'+token] = `calc(var(${cssVar}) * -1)`;
+      }
     }
   }
   baseTokens += "}";

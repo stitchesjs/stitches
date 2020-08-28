@@ -8381,7 +8381,7 @@ export type WritingModeProperty =
   | "vertical-lr"
   | "vertical-rl";
 
-export type ZIndexProperty = Globals | "auto" | number;
+export type ZIndexProperty = Globals | "auto" | number | string;
 
 export type ZoomProperty =
   | Globals
