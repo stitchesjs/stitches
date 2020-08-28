@@ -339,22 +339,6 @@ interface IStyledConstructor<E extends string, T extends TConfig> {
         },
         E
       >
-    : E extends PolymorphicComponent<infer EP, infer EE>
-    ? PolymorphicComponent<
-        EP &
-          VE & {
-            css?: TCssProp<T>;
-          },
-        EE
-      >
-    : E extends ReactComponent<infer PP>
-    ? PolymorphicComponent<
-        PP &
-          VE & {
-            css?: TCssProp<T>;
-          },
-        never
-      >
     : never;
 }
 
@@ -452,10 +436,11 @@ export const createStyled = <T extends TConfig>(
           if (propName in variants) {
             const breakpoints = evaluatedVariantMap.get(propName);
 
-            // check if prop value is a string and not an empty string
+            // check if prop value is a string or number, and not an empty string
             // otherwise assume its a responsive object
             if (
-              typeof props[propName] === "string" &&
+              (typeof props[propName] === "string" ||
+                typeof props[propName] === "number") &&
               Boolean(props[propName])
             ) {
               // if a variant value has been provided, check it exists
