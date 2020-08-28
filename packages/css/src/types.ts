@@ -19,6 +19,7 @@ export interface IAtom {
   selector: string | undefined;
   breakpoint: string;
   inlineMediaQueries: string[] | undefined;
+  _isGlobal?: boolean;
   _className?: string;
   toString: (this: IAtom) => string;
   [ATOM]: true;
@@ -493,6 +494,9 @@ export interface TCssConstructor<
   getStyles: (callback: () => any) => { styles: string[]; result: any };
   keyframes: (
     definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>
+  ) => string;
+  global: (
+    definition: Record<string,S>
   ) => string;
   theme: (
     theme: Partial<

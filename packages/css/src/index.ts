@@ -32,8 +32,12 @@ const createSelector = (className: string, selector?: string) => {
   return selector && selector.includes("&")
     ? selector.replace(/&/gi, `.${className}`)
     : selector
-    ? `.${className}${selector[0] === ":" ? selector : ` ${selector}`}`
-    : `.${className}`;
+    ? `${className ? "." + className : ""}${
+        selector[0] === ":" ? selector : ` ${selector}`
+      }`
+    : className
+    ? "." + className
+    : "";
 };
 
 /**
@@ -298,7 +302,11 @@ const createServerToString = (
     const className = cssClassnameProvider(this);
 
     sheets[this.breakpoint].insertRule(
-      createCssRule(breakpoints, this, `/*X*/${className}/*X*/`)
+      createCssRule(
+        breakpoints,
+        this,
+        className ? `/*X*/${className}/*X*/` : ""
+      )
     );
 
     // We do not clean out the atom here, cause it will be reused
@@ -414,6 +422,9 @@ export const createCss = <T extends TConfig>(
       : prefix
     : "";
   const cssClassnameProvider = (atom: IAtom): string => {
+    if (atom._isGlobal) {
+      return "";
+    }
     const hash = hashString(
       `${atom.breakpoint || ""}${atom.cssHyphenProp.replace(
         /-(moz|webkit|ms)-/,
@@ -469,7 +480,8 @@ export const createCss = <T extends TConfig>(
     cssProp: string,
     value: any,
     breakpoint = MAIN_BREAKPOINT_ID,
-    selectors?: string[]
+    selectors: string[] = [],
+    isGlobal?: boolean
   ) => {
     const tokenValue: any = resolveTokens(cssProp, value, tokens);
     const inlineMediaQueries = selectors?.filter((part) =>
@@ -540,6 +552,7 @@ export const createCss = <T extends TConfig>(
       breakpoint,
       toString,
       [ATOM]: true,
+      _isGlobal: isGlobal,
     };
 
     // Cache it
@@ -630,6 +643,26 @@ export const createCss = <T extends TConfig>(
     return themeAtom;
   };
 
+  cssInstance.global = (definitions: any) => {
+    const args: any[] = [];
+    let index = 0;
+
+    processStyleObject(definitions, config, (prop, value, path) => {
+      const { nestingPath, breakpoint } = resolvebreakpointAndSelector(
+        path,
+        config
+      );
+      if (!nestingPath.length) {
+        throw new Error("Global styles need to be nested");
+      }
+      args[index++] = createAtom(prop, value, breakpoint, nestingPath, true);
+    });
+
+    // might cause memory leaks when doing css() inside a component
+    // but we need this for now to fix SSR
+    const composition = compose(...args);
+    return composition;
+  };
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
     let cssRule = "";
     let currentTimeProp = "";
@@ -665,6 +698,7 @@ export const createCss = <T extends TConfig>(
     keyFramesCache.set(hash, keyframesAtom);
     return keyframesAtom;
   };
+
   cssInstance.getStyles = (cb: any) => {
     // Reset the composition to avoid ssr issues
     compositionsCache.forEach((composition) => {
