@@ -1183,4 +1183,20 @@ describe("createCss", () => {
       ./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/./*X*/_fOVguX/*X*/:disabled{color:red;}"
     `);
   });
+
+  test("Should omit undefined css values", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css({
+        backgroundColor: undefined,
+        color: "red",
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_eCaYfN/*X*/{color:red;}"
+    `);
+  });
 });
