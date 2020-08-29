@@ -31,7 +31,7 @@ const MAIN_BREAKPOINT_ID = "";
 const createSelector = (className: string, selector: string) => {
   return selector && selector.includes("&")
     ? selector.replace(/&/gi, `.${className}`)
-    : '.' + className + selector
+    : "." + className + selector;
 };
 
 /**
@@ -564,19 +564,35 @@ export const createCss = <T extends TConfig>(
   let baseTokens = ":root{";
   // tslint:disable-next-line
   for (const tokenType in tokens) {
+    const isNumericScale = tokenType.match(
+      /^(sizes|space|letterSpacings|zIndices)$/
+    );
     // @ts-ignore
     // tslint:disable-next-line
-    for (const token in tokens[tokenType]) {
+    const scaleTokenKeys = Object.keys(tokens[tokenType]);
+    for (let index = 0; index < scaleTokenKeys.length; index++) {
+      const token = scaleTokenKeys[index]
       // format token to remove special characters
       // https://stackoverflow.com/a/4374890
-      const formattedToken = token.replace(/[^\w\s]/gi, "");
-      const cssvar = `--${tokenType}-${formattedToken}`;
+      const formattedToken = token.replace(/[^\w\s-]/gi, "");
+      const cssVar = `--${tokenType}-${formattedToken}`;
 
       // @ts-ignore
-      baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
+      baseTokens += `${cssVar}:${tokens[tokenType][token]};`;
 
       // @ts-ignore
-      tokens[tokenType][token] = `var(${cssvar})`;
+      tokens[tokenType][token] = `var(${cssVar})`;
+
+      // Add negative tokens
+      const negativeTokenKey = "-" + token;
+      // check that it's a numericScale and that the user didn't already set a negative token witht this name
+      // @ts-ignore
+      const isAlreadyANegativeToken = token[0] === '-' ? !!(tokens[tokenType][token.substring(1)]) : false
+      // @ts-ignore
+      if (isNumericScale && !tokens[tokenType][negativeTokenKey] && !isAlreadyANegativeToken) {
+        // @ts-ignore
+        tokens[tokenType][negativeTokenKey] = `calc(var(${cssVar}) * -1)`;
+      }
     }
   }
   baseTokens += "}";
@@ -604,9 +620,15 @@ export const createCss = <T extends TConfig>(
           const {
             nestingPath,
             breakpoint,
-            inlineMediaQueries
+            inlineMediaQueries,
           } = resolveBreakpointAndSelectorAndInlineMedia(path, config);
-          args[index++] = createAtom(prop, value, breakpoint, nestingPath, inlineMediaQueries);
+          args[index++] = createAtom(
+            prop,
+            value,
+            breakpoint,
+            nestingPath,
+            inlineMediaQueries
+          );
         });
       }
     }

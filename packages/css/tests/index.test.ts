@@ -174,6 +174,62 @@ describe("createCss", () => {
       ./*X*/_tLwhG/*X*/{color:var(--colors-red);}"
     `);
   });
+
+  test("Should generate negative tokens for numeric scales", () => {
+    const tokens = createTokens({
+      sizes: {
+        "0": "0px",
+        "1": "1px",
+      },
+      space: {
+        "0": "0px",
+        "1": "1px",
+      },
+      letterSpacings: {
+        "0": "0px",
+        "1": "1px",
+      },
+      zIndices: {
+        "0": "0",
+        "1": "1",
+      },
+    });
+    const css = createCss({ tokens }, null);
+    const atom = css({
+      marginLeft: "-1",
+      letterSpacing: "-1",
+      width: "-1",
+      zIndex: "-1",
+    }) as any;
+
+    const { styles } = css.getStyles(() => {
+      atom.toString();
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_jOOeHx/*X*/{margin-left:calc(var(--space-1) * -1);}
+      ./*X*/_ehLivv/*X*/{letter-spacing:calc(var(--letterSpacings-1) * -1);}
+      ./*X*/_eQOPSx/*X*/{width:calc(var(--sizes-1) * -1);}
+      ./*X*/_euLKsd/*X*/{z-index:calc(var(--zIndices-1) * -1);}"
+    `);
+  });
+
+  test("Should not generate negative tokens when the user already defined a negative one", () => {
+    const tokens = createTokens({
+      sizes: {
+        "-1": "-1px",
+        "1": "1px",
+      },
+    });
+    const css = createCss({ tokens }, null);
+    expect((css as any)._config().tokens.sizes['1']).toBeTruthy();
+    expect((css as any)._config().tokens.sizes['-1']).toBeTruthy();
+    expect((css as any)._config().tokens.sizes['--1']).toBeFalsy();
+  });
+
   test("should create breakpoints", () => {
     const css = createCss(
       {
