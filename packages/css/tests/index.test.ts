@@ -217,6 +217,19 @@ describe("createCss", () => {
     `);
   });
 
+  test("Should not generate negative tokens when the user already defined a negative one", () => {
+    const tokens = createTokens({
+      sizes: {
+        "-1": "-1px",
+        "1": "1px",
+      },
+    });
+    const css = createCss({ tokens }, null);
+    expect((css as any)._config().tokens.sizes['1']).toBeTruthy();
+    expect((css as any)._config().tokens.sizes['-1']).toBeTruthy();
+    expect((css as any)._config().tokens.sizes['--1']).toBeFalsy();
+  });
+
   test("should create breakpoints", () => {
     const css = createCss(
       {
