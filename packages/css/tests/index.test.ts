@@ -488,6 +488,45 @@ describe("createCss", () => {
       fakeEnv.document.styleSheets[1].cssRules[0].cssText
     ).toMatchInlineSnapshot(`"._FdHZR._FdHZR:hover {color: red;}"`);
   });
+
+  test("Should handle ampersand correctly when not targeting pseudo selector", () => {
+    const fakeEnv = createFakeEnv([], []);
+    const css = createCss({}, (fakeEnv as unknown) as Window);
+    // @ts-ignore
+    css({ "&.red": { color: "red" } }).toString();
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[0].cssText
+    ).toMatchInlineSnapshot(`"._dzVkYU.red {color: red;}"`);
+  });
+
+  test("Should handle nesting", () => {
+    const fakeEnv = createFakeEnv([], []);
+    const css = createCss({}, (fakeEnv as unknown) as Window);
+    // @ts-ignore
+    css({
+      ".red": {
+        color: "red",
+        ".potato": {
+          backgroundColor: "red",
+          ":hover": {
+            backgroundColor: "green",
+          },
+        },
+      },
+    }).toString();
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[0].cssText
+    ).toMatchInlineSnapshot(`"._hJxieM .red {color: red;}"`);
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[1].cssText
+    ).toMatchInlineSnapshot(`"._bCrHfw .red .potato {background-color: red;}"`);
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[2].cssText
+    ).toMatchInlineSnapshot(
+      `"._cfgJGo._cfgJGo .red .potato:hover {background-color: green;}"`
+    );
+  });
+
   test("should handle screen selector", () => {
     const css = createCss(
       {
@@ -922,17 +961,17 @@ describe("createCss", () => {
     const css = createCss({}, null);
     const atom = (css({ "div:hover &": { color: "red" } }) as any).atoms[0];
 
-    expect(atom.id).toBe("colordiv:hover &");
+    expect(atom.id).toBe("color div:hover &");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.selector).toBe("div:hover &");
+    expect(atom.selector).toBe(" div:hover &");
     expect(atom.breakpoint).toBe("");
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_dkzxrg");
+      atom.toString();
     });
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      div:hover ./*X*/_dkzxrg/*X*/{color:red;}"
+       div:hover ./*X*/_bdAhzM/*X*/{color:red;}"
     `);
   });
 

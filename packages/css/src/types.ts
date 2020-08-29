@@ -16,9 +16,9 @@ export interface IAtom {
   id: string;
   cssHyphenProp: string;
   value: string;
-  selector: string | undefined;
+  selector: string;
   breakpoint: string;
-  inlineMediaQueries: string[] | undefined;
+  inlineMediaQueries: string[];
   _className?: string;
   toString: (this: IAtom) => string;
   [ATOM]: true;
