@@ -1,370 +1,138 @@
-import {
-  IBreakpoints,
-  TConfig,
-  TCss,
-  TDefaultCss,
-  TUtilityFirstCss,
-  createCss,
-  hashString,
-} from "@stitches/css";
+import { TConfig, TDefaultCss, createCss, hashString, TCss } from "@stitches/css";
 import * as React from "react";
-
-interface IntrinsicElements {
-  // HTML
-  a: React.AnchorHTMLAttributes<HTMLAnchorElement>;
-  abbr: React.HTMLAttributes<HTMLElement>;
-  address: React.HTMLAttributes<HTMLElement>;
-  // area: React.AreaHTMLAttributes<HTMLAreaElement>;
-  article: React.HTMLAttributes<HTMLElement>;
-  aside: React.HTMLAttributes<HTMLElement>;
-  // audio: React.AudioHTMLAttributes<HTMLAudioElement>;
-  // b: React.HTMLAttributes<HTMLElement>;
-  // base: React.BaseHTMLAttributes<HTMLBaseElement>;
-  // bdi: React.HTMLAttributes<HTMLElement>;
-  // bdo: React.HTMLAttributes<HTMLElement>;
-  // big: React.HTMLAttributes<HTMLElement>;
-  blockquote: React.BlockquoteHTMLAttributes<HTMLElement>;
-  body: React.HTMLAttributes<HTMLBodyElement>;
-  br: React.HTMLAttributes<HTMLBRElement>;
-  button: React.ButtonHTMLAttributes<HTMLButtonElement>;
-  canvas: React.CanvasHTMLAttributes<HTMLCanvasElement>;
-  caption: React.HTMLAttributes<HTMLElement>;
-  cite: React.HTMLAttributes<HTMLElement>;
-  code: React.HTMLAttributes<HTMLElement>;
-  col: React.ColHTMLAttributes<HTMLTableColElement>;
-  colgroup: React.ColgroupHTMLAttributes<HTMLTableColElement>;
-  data: React.DataHTMLAttributes<HTMLDataElement>;
-  datalist: React.HTMLAttributes<HTMLDataListElement>;
-  dd: React.HTMLAttributes<HTMLElement>;
-  // del: React.DelHTMLAttributes<HTMLElement>;
-  details: React.DetailsHTMLAttributes<HTMLElement>;
-  dfn: React.HTMLAttributes<HTMLElement>;
-  dialog: React.DialogHTMLAttributes<HTMLDialogElement>;
-  div: React.HTMLAttributes<HTMLDivElement>;
-  dl: React.HTMLAttributes<HTMLDListElement>;
-  dt: React.HTMLAttributes<HTMLElement>;
-  // em: React.HTMLAttributes<HTMLElement>;
-  embed: React.EmbedHTMLAttributes<HTMLEmbedElement>;
-  fieldset: React.FieldsetHTMLAttributes<HTMLFieldSetElement>;
-  figcaption: React.HTMLAttributes<HTMLElement>;
-  figure: React.HTMLAttributes<HTMLElement>;
-  footer: React.HTMLAttributes<HTMLElement>;
-  form: React.FormHTMLAttributes<HTMLFormElement>;
-  h1: React.HTMLAttributes<HTMLHeadingElement>;
-  h2: React.HTMLAttributes<HTMLHeadingElement>;
-  h3: React.HTMLAttributes<HTMLHeadingElement>;
-  h4: React.HTMLAttributes<HTMLHeadingElement>;
-  h5: React.HTMLAttributes<HTMLHeadingElement>;
-  h6: React.HTMLAttributes<HTMLHeadingElement>;
-  head: React.HTMLAttributes<HTMLHeadElement>;
-  header: React.HTMLAttributes<HTMLElement>;
-  hgroup: React.HTMLAttributes<HTMLElement>;
-  hr: React.HTMLAttributes<HTMLHRElement>;
-  // html: React.HtmlHTMLAttributes<HTMLHtmlElement>;
-  i: React.HTMLAttributes<HTMLElement>;
-  iframe: React.IframeHTMLAttributes<HTMLIFrameElement>;
-  img: React.ImgHTMLAttributes<HTMLImageElement>;
-  input: React.InputHTMLAttributes<HTMLInputElement>;
-  ins: React.InsHTMLAttributes<HTMLModElement>;
-  kbd: React.HTMLAttributes<HTMLElement>;
-  // keygen: React.KeygenHTMLAttributes<HTMLElement>;
-  label: React.LabelHTMLAttributes<HTMLLabelElement>;
-  legend: React.HTMLAttributes<HTMLLegendElement>;
-  li: React.LiHTMLAttributes<HTMLLIElement>;
-  link: React.LinkHTMLAttributes<HTMLLinkElement>;
-  // main: React.HTMLAttributes<HTMLElement>;
-  // map: React.MapHTMLAttributes<HTMLMapElement>;
-  // mark: React.HTMLAttributes<HTMLElement>;
-  menu: React.MenuHTMLAttributes<HTMLElement>;
-  menuitem: React.HTMLAttributes<HTMLElement>;
-  meta: React.MetaHTMLAttributes<HTMLMetaElement>;
-  // meter: React.MeterHTMLAttributes<HTMLElement>;
-  nav: React.HTMLAttributes<HTMLElement>;
-  // noindex: React.HTMLAttributes<HTMLElement>;
-  // noscript: React.HTMLAttributes<HTMLElement>;
-  object: React.ObjectHTMLAttributes<HTMLObjectElement>;
-  ol: React.OlHTMLAttributes<HTMLOListElement>;
-  optgroup: React.OptgroupHTMLAttributes<HTMLOptGroupElement>;
-  option: React.OptionHTMLAttributes<HTMLOptionElement>;
-  output: React.OutputHTMLAttributes<HTMLElement>;
-  p: React.HTMLAttributes<HTMLParagraphElement>;
-  // param: React.ParamHTMLAttributes<HTMLParamElement>;
-  picture: React.HTMLAttributes<HTMLElement>;
-  pre: React.HTMLAttributes<HTMLPreElement>;
-  // progress: React.ProgressHTMLAttributes<HTMLProgressElement>;
-  q: React.QuoteHTMLAttributes<HTMLQuoteElement>;
-  rp: React.HTMLAttributes<HTMLElement>;
-  rt: React.HTMLAttributes<HTMLElement>;
-  // ruby: React.HTMLAttributes<HTMLElement>;
-  s: React.HTMLAttributes<HTMLElement>;
-  // samp: React.HTMLAttributes<HTMLElement>;
-  // slot: React.SlotHTMLAttributes<HTMLSlotElement>;
-  // script: React.ScriptHTMLAttributes<HTMLScriptElement>;
-  section: React.HTMLAttributes<HTMLElement>;
-  select: React.SelectHTMLAttributes<HTMLSelectElement>;
-  // small: React.HTMLAttributes<HTMLElement>;
-  // source: React.SourceHTMLAttributes<HTMLSourceElement>;
-  span: React.HTMLAttributes<HTMLSpanElement>;
-  // strong: React.HTMLAttributes<HTMLElement>;
-  // style: React.StyleHTMLAttributes<HTMLStyleElement>;
-  sub: React.HTMLAttributes<HTMLElement>;
-  summary: React.HTMLAttributes<HTMLElement>;
-  // sup: React.HTMLAttributes<HTMLElement>;
-  table: React.TableHTMLAttributes<HTMLTableElement>;
-  // template: React.HTMLAttributes<HTMLTemplateElement>;
-  tbody: React.HTMLAttributes<HTMLTableSectionElement>;
-  td: React.TdHTMLAttributes<HTMLTableDataCellElement>;
-  textarea: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
-  tfoot: React.HTMLAttributes<HTMLTableSectionElement>;
-  th: React.ThHTMLAttributes<HTMLTableHeaderCellElement>;
-  thead: React.HTMLAttributes<HTMLTableSectionElement>;
-  // time: React.TimeHTMLAttributes<HTMLElement>;
-  title: React.HTMLAttributes<HTMLTitleElement>;
-  tr: React.HTMLAttributes<HTMLTableRowElement>;
-  track: React.TrackHTMLAttributes<HTMLTrackElement>;
-  u: React.HTMLAttributes<HTMLElement>;
-  ul: React.HTMLAttributes<HTMLUListElement>;
-  // var: React.HTMLAttributes<HTMLElement>;
-  // video: React.VideoHTMLAttributes<HTMLVideoElement>;
-  // wbr: React.HTMLAttributes<HTMLElement>;
-  // webview: React.WebViewHTMLAttributes<HTMLWebViewElement>;
-
-  // SVG
-  svg: React.SVGProps<SVGSVGElement>;
-
-  // animate: React.SVGProps<SVGElement>; // TODO: It is SVGAnimateElement but is not in TypeScript's lib.dom.d.ts for now.
-  // animateMotion: React.SVGProps<SVGElement>;
-  // animateTransform: React.SVGProps<SVGElement>; // TODO: It is SVGAnimateTransformElement but is not in TypeScript's lib.dom.d.ts for now.
-  circle: React.SVGProps<SVGCircleElement>;
-  clipPath: React.SVGProps<SVGClipPathElement>;
-  // defs: React.SVGProps<SVGDefsElement>;
-  // desc: React.SVGProps<SVGDescElement>;
-  ellipse: React.SVGProps<SVGEllipseElement>;
-  // feBlend: React.SVGProps<SVGFEBlendElement>;
-  // feColorMatrix: React.SVGProps<SVGFEColorMatrixElement>;
-  // feComponentTransfer: React.SVGProps<SVGFEComponentTransferElement>;
-  // feComposite: React.SVGProps<SVGFECompositeElement>;
-  // feConvolveMatrix: React.SVGProps<SVGFEConvolveMatrixElement>;
-  // feDiffuseLighting: React.SVGProps<SVGFEDiffuseLightingElement>;
-  // feDisplacementMap: React.SVGProps<SVGFEDisplacementMapElement>;
-  // feDistantLight: React.SVGProps<SVGFEDistantLightElement>;
-  // feDropShadow: React.SVGProps<SVGFEDropShadowElement>;
-  // feFlood: React.SVGProps<SVGFEFloodElement>;
-  // feFuncA: React.SVGProps<SVGFEFuncAElement>;
-  // feFuncB: React.SVGProps<SVGFEFuncBElement>;
-  // feFuncG: React.SVGProps<SVGFEFuncGElement>;
-  // feFuncR: React.SVGProps<SVGFEFuncRElement>;
-  // feGaussianBlur: React.SVGProps<SVGFEGaussianBlurElement>;
-  // feImage: React.SVGProps<SVGFEImageElement>;
-  // feMerge: React.SVGProps<SVGFEMergeElement>;
-  // feMergeNode: React.SVGProps<SVGFEMergeNodeElement>;
-  // feMorphology: React.SVGProps<SVGFEMorphologyElement>;
-  // feOffset: React.SVGProps<SVGFEOffsetElement>;
-  // fePointLight: React.SVGProps<SVGFEPointLightElement>;
-  // feSpecularLighting: React.SVGProps<SVGFESpecularLightingElement>;
-  // feSpotLight: React.SVGProps<SVGFESpotLightElement>;
-  // feTile: React.SVGProps<SVGFETileElement>;
-  // feTurbulence: React.SVGProps<SVGFETurbulenceElement>;
-  // filter: React.SVGProps<SVGFilterElement>;
-  // foreignObject: React.SVGProps<SVGForeignObjectElement>;
-  g: React.SVGProps<SVGGElement>;
-  image: React.SVGProps<SVGImageElement>;
-  line: React.SVGProps<SVGLineElement>;
-  // linearGradient: React.SVGProps<SVGLinearGradientElement>;
-  // marker: React.SVGProps<SVGMarkerElement>;
-  // mask: React.SVGProps<SVGMaskElement>;
-  // metadata: React.SVGProps<SVGMetadataElement>;
-  mpath: React.SVGProps<SVGElement>;
-  path: React.SVGProps<SVGPathElement>;
-  // pattern: React.SVGProps<SVGPatternElement>;
-  polygon: React.SVGProps<SVGPolygonElement>;
-  polyline: React.SVGProps<SVGPolylineElement>;
-  // radialGradient: React.SVGProps<SVGRadialGradientElement>;
-  rect: React.SVGProps<SVGRectElement>;
-  stop: React.SVGProps<SVGStopElement>;
-  // switch: React.SVGProps<SVGSwitchElement>;
-  // symbol: React.SVGProps<SVGSymbolElement>;
-  text: React.SVGProps<SVGTextElement>;
-  textPath: React.SVGProps<SVGTextPathElement>;
-  tspan: React.SVGProps<SVGTSpanElement>;
-  // use: React.SVGProps<SVGUseElement>;
-  // view: React.SVGProps<SVGViewElement>;
-}
-
-type ElKeys = keyof IntrinsicElements;
-
-type ReactComponent<P = {}> =
-  | React.ComponentType<P>
-  | React.ForwardRefExoticComponent<P>;
-
-type PolymorphicProps<
-  P,
-  E extends string | React.ComponentType | React.ExoticComponent,
-  T extends string
-> = P & {
-  as?: E;
-  forwardedAs?: E;
-} & (E extends ElKeys
-    ? IntrinsicElements[E]
-    : E extends PolymorphicComponent<infer PP, infer PE>
-    ? PP & (PE extends ElKeys ? IntrinsicElements[PE] : never)
-    : E extends T
-    ? E extends ElKeys
-      ? IntrinsicElements[E]
-      : never
-    : never);
-
-export interface PolymorphicComponent<P, T extends string>
-  extends React.ForwardRefExoticComponent<PolymorphicProps<P, T, T>> {
-  (
-    props: PolymorphicProps<P, T, T> & { as?: never; forwardedAs?: never }
-  ): React.ReactElement<PolymorphicProps<P, T, T>>;
-  <E extends string | ReactComponent = T>(
-    props: PolymorphicProps<P, E, T>
-  ): React.ReactElement<PolymorphicProps<P, E, T>>;
-}
-
-export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
-
-export interface IBaseStyled<T extends TConfig> {
-  <E extends string | ReactComponent>(
-    element: E,
-    css?: TDefaultCss<T>
-  ): E extends ElKeys
-    ? PolymorphicComponent<{ css?: TCssProp<T> }, E>
-    : E extends PolymorphicComponent<infer EP, infer EE>
-    ? PolymorphicComponent<EP & { css?: TCssProp<T> }, EE>
-    : E extends ReactComponent<infer PP>
-    ? ReactComponent<PP & { css?: TCssProp<T> }>
-    : never;
-  <
-    E extends ElKeys | React.ComponentType,
-    V extends {
-      [propKey: string]: {
-        [variantName: string]: TDefaultCss<T>;
-      };
-    },
-    VE = {
-      [P in keyof V]?: T["breakpoints"] extends IBreakpoints
-        ?
-            | keyof V[P]
-            | false
-            | null
-            | undefined
-            | ({
-                [S in keyof T["breakpoints"]]?: keyof V[P];
-              } & {
-                ""?: keyof V[P];
-              })
-        : keyof V[P] | false | null | undefined;
-    }
-  >(
-    element: E,
-    css: TDefaultCss<T>,
-    variants: V
-  ): E extends ElKeys
-    ? PolymorphicComponent<
-        V extends void
-          ? {
-              css?: TCssProp<T>;
-            }
-          : VE & {
-              css?: TCssProp<T>;
-            },
-        E
-      >
-    : E extends PolymorphicComponent<infer EP, infer EE>
-    ? PolymorphicComponent<
-        V extends void
-          ? EP & {
-              css?: TCssProp<T>;
-            }
-          : EP &
-              VE & {
-                css?: TCssProp<T>;
-              },
-        EE
-      >
-    : E extends React.ComponentType<infer PP>
-    ? PolymorphicComponent<
-        V extends void
-          ? PP & {
-              css?: TCssProp<T>;
-            }
-          : VE &
-              PP & {
-                css?: TCssProp<T>;
-              },
-        never
-      >
-    : never;
-}
-
-interface IStyledConstructor<E extends string, T extends TConfig> {
-  (cb: TDefaultCss<T>): E extends ElKeys
-    ? PolymorphicComponent<
-        {
-          css?: TCssProp<T>;
-        },
-        E
-      >
-    : never;
-  <
-    V extends {
-      [propKey: string]: {
-        [variantName: string]: TDefaultCss<T>;
-      };
-    },
-    VE = {
-      [P in keyof V]?: T["breakpoints"] extends IBreakpoints
-        ?
-            | false
-            | null
-            | undefined
-            | keyof V[P]
-            | ({
-                [S in keyof T["breakpoints"]]?: keyof V[P];
-              } & {
-                ""?: keyof V[P];
-              })
-        : keyof V[P] | false | null | undefined;
-    }
-  >(
-    cb: TDefaultCss<T>,
-    variants: // This is a hack to fix "any" token related properties. It still shows as "any", but
-    // suggestions pops up
-    | {
-          [propKey: string]: {
-            [variantName: string]: TDefaultCss<T>;
-          };
-        }
-      | V
-  ): E extends ElKeys
-    ? PolymorphicComponent<
-        VE & {
-          css?: TCssProp<T>;
-        },
-        E
-      >
-    : never;
-}
-
-export type IStyled<T extends TConfig> = {
-  [E in ElKeys]: IStyledConstructor<E, T>;
-};
 
 let hasWarnedInlineStyle = false;
 
-export const createStyled = <T extends TConfig>(
-  config: T
-): {
-  css: TCss<T>;
-  styled: IBaseStyled<T> &
-    IStyled<T> & {
-      Box: <E extends ElKeys>(
-        props: JSX.IntrinsicElements[E] & { as?: E }
-      ) => JSX.Element;
+export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
+
+/**
+ * Extracts Variants from an object:
+ */
+export type TExtractVariants<Styles> = Styles extends { variants: infer Variants }
+  ? { [a in keyof Variants]: keyof Variants[a] }
+  : {};
+
+/**
+ * Extracts Breakpoint keys from a config
+ */
+export type BreakPointsKeys<Config extends TConfig> = keyof Config["breakpoints"];
+
+/**
+ * Takes a value and if it's one of the string type representations of a boolean ('true' | 'false')
+ * it adds the actual boolean values to it
+ * */
+export type CastStringToBoolean<Val> = Val extends "true" | "false" ? boolean | "true" | "false" : never;
+/**
+ * Takes a variants object and converts it to the correct type information for usage in props
+ */
+export type VariantASProps<Config extends TConfig, VariantsObj> = {
+  [V in keyof VariantsObj]?:
+    | CastStringToBoolean<VariantsObj[V]>
+    | VariantsObj[V]
+    | {
+        [B in BreakPointsKeys<Config>]?: CastStringToBoolean<VariantsObj[V]> | VariantsObj[V];
+      };
+};
+
+/**
+ * Types for a styled component which contain:
+ * 1. First overload which matches when the as prop isn't passed
+ * 2. Second overload which matches when the as prop *IS* passed
+ * 3. The compoundVariants function typings
+ */
+export interface IStyledComponent<
+  ComponentOrTag extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+  Variants,
+  Config extends TConfig
+> {
+  /**
+   * First overload without the "as" prop
+   */
+  (
+    props: React.ComponentPropsWithRef<ComponentOrTag> & {
+      as?: never;
+      css?: TCssWithBreakpoints<Config>;
+      className?: string;
+      children?: any;
+    } & VariantASProps<Config, Variants>
+  ): any;
+  /**
+   * Second overload * WITH * the "as" prop.
+   */
+  <AS extends keyof JSX.IntrinsicElements | React.ComponentType>(
+    props: {
+      as: AS;
+      css?: TCssWithBreakpoints<Config>;
+      className?: string;
+      children?: any;
+    } & VariantASProps<Config, Variants> &
+      React.ComponentPropsWithRef<AS>
+  ): any;
+  /**
+   * Compound Variant typing:
+   **/
+  compoundVariant: (
+    compoundVariants: VariantASProps<Config, Variants>,
+    possibleValues: TCssWithBreakpoints<Config>
+  ) => IStyledComponent<ComponentOrTag, Variants, Config>;
+  /**
+   * Default props typing:
+   */
+  defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
+  /**
+   * DisplayName typing:
+   */
+  displayName?: string;
+}
+
+/** Typed css with tokens and breakpoints */
+export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
+  { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
+
+/** The type for the styles in a styled call */
+export type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints<Config> & {
+  variants?: {
+    [k: string]: {
+      [s: string]: TCssWithBreakpoints<Config>;
     };
+  };
+};
+/**
+ * Types for styled.button, styled.div, etc..
+ */
+export type TProxyStyledElements<Config extends TConfig> = {
+  [key in keyof JSX.IntrinsicElements]: <BaseAndVariantStyles extends TComponentStylesObject<Config>>(
+    a: BaseAndVariantStyles | TComponentStylesObject<Config>
+  ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
+};
+/**
+ * Styled Components creator Type.
+ * ie: styled.div(styles) | styled('div', {styles})
+ */
+export type TStyled<Config extends TConfig> = {
+  <
+    TagOrComponent extends keyof JSX.IntrinsicElements | React.ComponentType<any> | IStyledComponent<any, any, Config>,
+    BaseAndVariantStyles extends TComponentStylesObject<Config>
+  >(
+    tag: TagOrComponent,
+    baseStyles: BaseAndVariantStyles | TComponentStylesObject<Config>
+  ): TagOrComponent extends IStyledComponent<any, any, Config>
+    ? TagOrComponent
+    : IStyledComponent<TagOrComponent, TExtractVariants<BaseAndVariantStyles>, Config>;
+} & TProxyStyledElements<Config>;
+
+const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
+  const map = new Map();
+  map.set("", [...(existingMap?.get("") || [])]);
+  Object.keys(breakPoints).forEach((breakpoint) => map.set(breakpoint, [...(existingMap?.get(breakpoint) || [])]));
+  return map;
+};
+
+export const createStyled = <Config extends TConfig>(
+  config: Config
+): {
+  css: TCss<Config>;
+  styled: TStyled<Config>;
 } => {
   const css = createCss(config);
   const defaultElement = "div";
@@ -374,119 +142,137 @@ export const createStyled = <T extends TConfig>(
     return React.createElement(Element, {
       ref,
       ...props,
-      as: undefined,
+      as: undefined
     });
   });
 
   let currentAs: string | undefined;
 
-  const configBreakpoints = (css as any)._config().breakpoints;
+  const configBreakpoints = config.breakpoints || {};
 
   const styledInstance = (
-    baseStyling: any = (cssComposer: any) => cssComposer.compose(),
-    variants: { [variant: string]: { [name: string]: any } } = {},
-    Component: ReactComponent<any> = Box
+    baseAndVariantStyles: any = (cssComposer: any) => cssComposer.compose(),
+    Component: React.ComponentType<any> = Box
   ) => {
+    let numberOfCompoundVariants = 0;
     const as = currentAs;
-
-    const baseStyles: any = css(baseStyling);
-    const evaluatedVariantMap: Map<
-      string,
-      Map<string, { [key: string]: string }>
-    > = new Map();
-    // tslint:disable-next-line
-    for (const variantName in variants) {
+    const { variants = {}, ...base } = baseAndVariantStyles;
+    const baseStyles: any = css(base);
+    // compound s vars & constants:
+    // keep track of all compound variants:
+    const compoundVariants: any[] = [];
+    // a map that keeps track of the required number of matching s left for each break point:
+    const requiredMatches = createCompoundVariantsMatcher(configBreakpoints);
+    // keep track of the number of available variants
+    const evaluatedVariantMap: Map<string, Map<string, { [key: string]: string }>> = new Map();
+    // store pre evaluated variants
+    const evaluatedCompoundVariants: Map<any, { [key: string]: string }> = new Map();
+    for (const Name in variants) {
       const variantMap: Map<string, { [key: string]: string }> = new Map();
-      // tslint:disable-next-line
-      for (const variant in variants[variantName]) {
-        const breakpoints: { [key: string]: string } = {
-          "": css(variants[variantName][variant]),
-        };
-        if (configBreakpoints) {
-          // tslint:disable-next-line
-          for (const breakpoint in configBreakpoints) {
-            breakpoints[breakpoint] = css({
-              [breakpoint]: variants[variantName][variant],
-            });
-          }
-        }
-        variantMap.set(variant, breakpoints);
+      for (const ValueName in variants[Name]) {
+        const evaluatedStyles = evaluateStylesForAllBreakpoints(variants[Name][ValueName], configBreakpoints, css);
+        variantMap.set(ValueName, evaluatedStyles);
       }
-      evaluatedVariantMap.set(variantName, variantMap);
+      evaluatedVariantMap.set(Name, variantMap);
     }
 
-    const stitchesComponentId = `scid-${hashString(
-      `${JSON.stringify(baseStyling)}${JSON.stringify(variants)}`
-    )}`;
+    const stitchesComponentId = `scid-${hashString(JSON.stringify(baseAndVariantStyles))}`;
 
-    const StitchesComponent = React.forwardRef(
-      (props: any, ref: React.Ref<Element>) => {
+    const StitchesComponent = React.forwardRef((props: any, ref: React.Ref<Element>) => {
+      // Check the memoCompsition's identity to warn the user
+      // remove in production
+      if (process.env.NODE_ENV === "development") {
+        // we're breaking the rules of hooks on purpose as the env will never change
+        // eslint-disable-next-line
         const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
-
-        // Check the memoCompsition's identity to warn the user
-        // remove in production
-        if (process.env.NODE_ENV === "development") {
-          if (memoStyled !== props.css && !hasWarnedInlineStyle) {
-            // tslint:disable-next-line
-            console.warn(
-              "@stitches/styled : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook"
-            );
-            hasWarnedInlineStyle = true;
-          }
+        if (memoStyled !== props.css && !hasWarnedInlineStyle) {
+          // tslint:disable-next-line
+          console.warn(
+            "@stitches/styled : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook"
+          );
+          hasWarnedInlineStyle = true;
         }
-
-        const compositions = [baseStyles];
-
-        const propsWithoutVariantsAndCssProp: any = {};
-
-        for (const propName in props) {
-          if (propName in variants) {
-            const breakpoints = evaluatedVariantMap.get(propName);
-
-            // check if prop value is a string or number, and not an empty string
-            // otherwise assume its a responsive object
-            if (
-              (typeof props[propName] === "string" ||
-                typeof props[propName] === "number") &&
-              Boolean(props[propName])
-            ) {
-              // if a variant value has been provided, check it exists
-              // this prevents invalid variant values from crashing
-              if (breakpoints?.get(props[propName])) {
-                compositions.push(breakpoints?.get(props[propName])![""]);
-              }
-            } else if (props[propName]) {
-              // tslint:disable-next-line
-              for (const breakpoint in props[propName]) {
-                compositions.push(
-                  breakpoints?.get(props[propName][breakpoint])![breakpoint]
-                );
-              }
-            }
-          } else {
-            propsWithoutVariantsAndCssProp[propName] = props[propName];
-          }
-        }
-
-        if (propsWithoutVariantsAndCssProp.css) {
-          compositions.push(propsWithoutVariantsAndCssProp.css);
-          propsWithoutVariantsAndCssProp.css = undefined;
-        }
-
-        return React.createElement(Component, {
-          ...propsWithoutVariantsAndCssProp,
-          as: props.as || as,
-          ref,
-          className: `${stitchesComponentId} ${css(
-            ...compositions,
-            props.className
-          )}`,
-        });
       }
-    );
+
+      const compositions = [baseStyles];
+
+      const propsWithoutVariantsAndCssProp: any = {};
+      // clone the compound s matcher
+      const compoundRequiredMatches = createCompoundVariantsMatcher(configBreakpoints, requiredMatches);
+      // keep track of the number of unResolved s so that we could bail early:
+      const numberOfUnResolvedCompoundVariants = {
+        current: numberOfCompoundVariants
+      };
+      for (const key in props) {
+        // check if the prop is a variant
+        if (key in variants) {
+          const evaluatedVariant = evaluatedVariantMap.get(key);
+          // normalize the value so that we only have to deal with one structure:
+          const keyVal = props[key] && typeof props[key] !== "object" ? { "": props[key] } : props[key];
+          for (const breakpoint in keyVal) {
+            // check if the variant exist for this breakpoint
+            if (keyVal[breakpoint] && evaluatedVariant && evaluatedVariant.get(String(keyVal[breakpoint]))) {
+              compositions.push(evaluatedVariant.get(String(keyVal[breakpoint]))?.[breakpoint]);
+            }
+            /** Compound variants: */
+            if (numberOfUnResolvedCompoundVariants.current) {
+              compoundVariants.forEach((compoundVariant, i) => {
+                // if this breakpoint  matches a compound
+                // eslint-disable-next-line
+                if (String(keyVal[breakpoint]) === String(compoundVariant[key])) {
+                  compoundRequiredMatches.get(breakpoint)[i]--;
+                }
+                // when the required matches reach 0 for any compound ...
+                // we know we have a matched compoundVariant
+                if (compoundRequiredMatches.get(breakpoint)[i] === 0) {
+                  numberOfUnResolvedCompoundVariants.current--;
+                  compositions.push(evaluatedCompoundVariants.get(compoundVariant)?.[breakpoint]);
+                }
+              });
+            }
+            /** End compound variants */
+          }
+        } else {
+          propsWithoutVariantsAndCssProp[key] = props[key];
+        }
+      }
+
+      if (propsWithoutVariantsAndCssProp.css) {
+        compositions.push(propsWithoutVariantsAndCssProp.css);
+        propsWithoutVariantsAndCssProp.css = undefined;
+      }
+
+      return React.createElement(Component, {
+        ...propsWithoutVariantsAndCssProp,
+        as: props.as || as,
+        ref,
+        className: css(stitchesComponentId, ...compositions, props.className)
+      });
+    });
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
+    (StitchesComponent as any).compoundVariant = (compundVariantsObject: any, compoundVariantStyles: any) => {
+      // Update component level variables:
+      numberOfCompoundVariants++;
+      // Each time we add
+      compoundVariants.push(compundVariantsObject);
+      // required matches is a map with breakpoints
+      // each time we add a compound variant, we also push its length to
+      // all of the breakpoints so:
+      // requiredMatches.get(breakpoint)[i] === Object.keys(compoundVariants[i]).length
+      // at render time we clone the requiredMatches map and whenever a prop matches a compound variant we decrement
+      // the required matches for this compound variant at this breakpoint
+      // when the required matches hit 0 we know it's a mtach
+      requiredMatches.forEach((value, key) => {
+        value.push(Object.keys(compundVariantsObject).length);
+      });
+
+      const evaluatedStyles = evaluateStylesForAllBreakpoints(compoundVariantStyles, configBreakpoints, css);
+
+      evaluatedCompoundVariants.set(compundVariantsObject, evaluatedStyles);
+      return StitchesComponent;
+    };
     return StitchesComponent;
   };
 
@@ -499,18 +285,32 @@ export const createStyled = <T extends TConfig>(
       currentAs = String(prop);
       return styledInstance;
     },
-    apply(_, __, [Element, styling, variants]) {
+    apply(_, __, [Element, styling]) {
       if (typeof Element === "string") {
         currentAs = Element;
-        return styledInstance(styling, variants);
+        return styledInstance(styling);
       }
       currentAs = undefined;
-      return styledInstance(styling, variants, Element);
-    },
+      return styledInstance(styling, Element);
+    }
   });
 
   return {
     styled: styledProxy as any,
-    css,
+    css
   };
 };
+function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: any, css: any) {
+  const breakpoints: { [key: string]: string } = {
+    "": css(styleObject)
+  };
+  if (configBreakpoints) {
+    // tslint:disable-next-line
+    for (const breakpoint in configBreakpoints) {
+      breakpoints[breakpoint] = css({
+        [breakpoint]: styleObject
+      });
+    }
+  }
+  return breakpoints;
+}
