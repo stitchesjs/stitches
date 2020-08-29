@@ -142,7 +142,9 @@ const processStyleObject = (
     }
     // Normal css prop
     // Call the value middleware on it:
-    valueMiddleware(key, val, currentNestingPath);
+    if (val !== undefined) {
+      valueMiddleware(key, val, currentNestingPath);
+    }
   }
 };
 
