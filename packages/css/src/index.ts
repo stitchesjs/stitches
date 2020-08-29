@@ -28,12 +28,10 @@ export const hotReloadingCache = new Map<string, any>();
 
 const MAIN_BREAKPOINT_ID = "";
 
-const createSelector = (className: string, selector?: string) => {
+const createSelector = (className: string, selector: string) => {
   return selector && selector.includes("&")
     ? selector.replace(/&/gi, `.${className}`)
-    : selector
-    ? `.${className}${selector[0] === ":" ? selector : ` ${selector}`}`
-    : `.${className}`;
+    : '.' + className + selector
 };
 
 /**
@@ -142,14 +140,16 @@ const processStyleObject = (
     }
     // Normal css prop
     // Call the value middleware on it:
-    valueMiddleware(key, val, currentNestingPath);
+    if (val !== undefined) {
+      valueMiddleware(key, val, currentNestingPath);
+    }
   }
 };
 
 /**
  * Resolves a css prop nesting path to a css selector and the breakpoint the css prop is meant to be injected to
  */
-const resolvebreakpointAndSelector = (
+const resolveBreakpointAndSelectorAndInlineMedia = (
   nestingPath: string[],
   config: TConfig<true>
 ) =>
@@ -172,7 +172,10 @@ const resolvebreakpointAndSelector = (
         return acc;
       }
       // breakpoints handling:
-      if (breakpointOrSelector in config.breakpoints) {
+      if (
+        breakpointOrSelector in config.breakpoints ||
+        breakpointOrSelector === MAIN_BREAKPOINT_ID
+      ) {
         if (acc.breakpoint !== MAIN_BREAKPOINT_ID) {
           throw new Error(
             `@stitches/css - You are nesting the breakpoint "${breakpointOrSelector}" into "${acc.breakpoint}", that makes no sense? :-)`
@@ -181,16 +184,31 @@ const resolvebreakpointAndSelector = (
         acc.breakpoint = breakpointOrSelector;
         return acc;
       }
-      // Normal css nesting selector:
-      acc.nestingPath[acc.nestingPath.length] =
-        // If you manually prefix with '&' we remove it for identity consistency
-        breakpointOrSelector[0] === "&"
-          ? breakpointOrSelector.substr(1)
-          : breakpointOrSelector;
 
+      if (breakpointOrSelector[0] === "@") {
+        acc.inlineMediaQueries.push(breakpointOrSelector);
+        return acc;
+      }
+      // Normal css nesting selector:
+      acc.nestingPath =
+        acc.nestingPath +
+        // If you manually prefix with '&' we remove it for identity consistency
+        // only for pseudo selectors and nothing else
+        (breakpointOrSelector[0] === "&"
+          ? breakpointOrSelector.substr(1)
+          : // pseudo elements/class
+          // don't prepend with a whitespace
+          breakpointOrSelector[0] === ":"
+          ? breakpointOrSelector
+          : // else just nest with a space
+            " " + breakpointOrSelector);
       return acc;
     },
-    { breakpoint: MAIN_BREAKPOINT_ID, nestingPath: [] as string[] }
+    {
+      breakpoint: MAIN_BREAKPOINT_ID,
+      nestingPath: "",
+      inlineMediaQueries: [] as string[],
+    }
   );
 
 /**
@@ -469,15 +487,10 @@ export const createCss = <T extends TConfig>(
     cssProp: string,
     value: any,
     breakpoint = MAIN_BREAKPOINT_ID,
-    selectors?: string[]
+    selectorString: string,
+    inlineMediaQueries: string[]
   ) => {
     const tokenValue: any = resolveTokens(cssProp, value, tokens);
-    const inlineMediaQueries = selectors?.filter((part) =>
-      part.startsWith("@")
-    );
-    let selectorString = selectors
-      ?.filter((part) => !part.startsWith("@"))
-      .join("");
 
     // generate id used for specificity check
     // two atoms are considered equal in regard to there specificity if the id is equal
@@ -486,7 +499,7 @@ export const createCss = <T extends TConfig>(
       : "";
     const id =
       cssProp.toLowerCase() +
-      (selectorString || "") +
+      selectorString +
       (inlineMediaQueries ? inlineMediaQueries.join("") : "") +
       breakpoint;
 
@@ -595,11 +608,12 @@ export const createCss = <T extends TConfig>(
         args[index++] = definitions[x];
       } else {
         processStyleObject(definitions[x], config, (prop, value, path) => {
-          const { nestingPath, breakpoint } = resolvebreakpointAndSelector(
-            path,
-            config
-          );
-          args[index++] = createAtom(prop, value, breakpoint, nestingPath);
+          const {
+            nestingPath,
+            breakpoint,
+            inlineMediaQueries
+          } = resolveBreakpointAndSelectorAndInlineMedia(path, config);
+          args[index++] = createAtom(prop, value, breakpoint, nestingPath, inlineMediaQueries);
         });
       }
     }

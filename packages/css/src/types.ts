@@ -16,9 +16,9 @@ export interface IAtom {
   id: string;
   cssHyphenProp: string;
   value: string;
-  selector: string | undefined;
+  selector: string;
   breakpoint: string;
-  inlineMediaQueries: string[] | undefined;
+  inlineMediaQueries: string[];
   _className?: string;
   toString: (this: IAtom) => string;
   [ATOM]: true;
@@ -485,27 +485,17 @@ export type TDefaultCss<T extends TConfig> = T["breakpoints"] extends object
       }
   : TRecursiveCss<T> & TRecursiveUtils<T>;
 
-export interface TCssConstructor<
-  T extends TConfig,
-  S extends TDefaultCss<T> | TUtilityFirstCss<T>
-> {
-  (...styles: (S | string | boolean | null | undefined)[]): string;
-  getStyles: (callback: () => any) => { styles: string[]; result: any };
-  keyframes: (
-    definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>
-  ) => string;
-  theme: (
-    theme: Partial<
-      {
+export interface TCss<T extends TConfig> {
+    (...styles: ((T extends {utilityFirst: true} ? TUtilityFirstCss<T> : TDefaultCss<T>) | string | boolean | null | undefined)[]): string;
+    getStyles: (callback: () => any) => {
+        styles: string[];
+        result: any;
+    };
+    keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
+    theme: (theme: Partial<{
         [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
-      }
-    >
-  ) => string;
+    }>) => string;
 }
-
-export type TCss<T extends TConfig> = T extends { utilityFirst: true }
-  ? TCssConstructor<T, TUtilityFirstCss<T>>
-  : TCssConstructor<T, TDefaultCss<T>>;
 
 export interface ISheet {
   cssRules: any[];
