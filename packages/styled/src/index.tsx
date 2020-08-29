@@ -40,7 +40,7 @@ type VariantASProps<Config extends TConfig, VariantsObj> = {
  * 2. Second overload which matches when the as prop *IS* passed
  * 3. The compoundVariants function typings
  */
-interface IStyledComponent<
+export interface IStyledComponent<
   ComponentOrTag extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
   Variants,
   Config extends TConfig
