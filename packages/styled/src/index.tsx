@@ -8,24 +8,24 @@ export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
 /**
  * Extracts Variants from an object:
  */
-type TExtractVariants<Styles> = Styles extends { variants: infer Variants }
+export type TExtractVariants<Styles> = Styles extends { variants: infer Variants }
   ? { [a in keyof Variants]: keyof Variants[a] }
   : {};
 
 /**
  * Extracts Breakpoint keys from a config
  */
-type BreakPointsKeys<Config extends TConfig> = keyof Config["breakpoints"];
+export type BreakPointsKeys<Config extends TConfig> = keyof Config["breakpoints"];
 
 /**
  * Takes a value and if it's one of the string type representations of a boolean ('true' | 'false')
  * it adds the actual boolean values to it
  * */
-type CastStringToBoolean<Val> = Val extends "true" | "false" ? boolean | "true" | "false" : never;
+export type CastStringToBoolean<Val> = Val extends "true" | "false" ? boolean | "true" | "false" : never;
 /**
  * Takes a variants object and converts it to the correct type information for usage in props
  */
-type VariantASProps<Config extends TConfig, VariantsObj> = {
+export type VariantASProps<Config extends TConfig, VariantsObj> = {
   [V in keyof VariantsObj]?:
     | CastStringToBoolean<VariantsObj[V]>
     | VariantsObj[V]
@@ -86,11 +86,11 @@ export interface IStyledComponent<
 }
 
 /** Typed css with tokens and breakpoints */
-type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
+export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
 
 /** The type for the styles in a styled call */
-type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints<Config> & {
+export type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints<Config> & {
   variants?: {
     [k: string]: {
       [s: string]: TCssWithBreakpoints<Config>;
@@ -100,7 +100,7 @@ type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints<Config
 /**
  * Types for styled.button, styled.div, etc..
  */
-type TProxyStyledElements<Config extends TConfig> = {
+export type TProxyStyledElements<Config extends TConfig> = {
   [key in keyof JSX.IntrinsicElements]: <BaseAndVariantStyles extends TComponentStylesObject<Config>>(
     a: BaseAndVariantStyles | TComponentStylesObject<Config>
   ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
@@ -109,7 +109,7 @@ type TProxyStyledElements<Config extends TConfig> = {
  * Styled Components creator Type.
  * ie: styled.div(styles) | styled('div', {styles})
  */
-type TStyled<Config extends TConfig> = {
+export type TStyled<Config extends TConfig> = {
   <
     TagOrComponent extends keyof JSX.IntrinsicElements | React.ComponentType<any> | IStyledComponent<any, any, Config>,
     BaseAndVariantStyles extends TComponentStylesObject<Config>
