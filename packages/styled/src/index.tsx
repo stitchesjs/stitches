@@ -314,5 +314,3 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   }
   return breakpoints;
 }
-
-//
