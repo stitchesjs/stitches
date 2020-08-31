@@ -586,12 +586,12 @@ export const createCss = <T extends TConfig>(
       // Add negative tokens
       const negativeTokenKey = "-" + token;
       // check that it's a numericScale and that the user didn't already set a negative token witht this name
-      // @ts-ignore
       const isAlreadyANegativeToken =
+        // @ts-ignore
         token[0] === "-" ? !!tokens[tokenType][token.substring(1)] : false;
-      // @ts-ignore
       if (
         isNumericScale &&
+        // @ts-ignore
         !tokens[tokenType][negativeTokenKey] &&
         !isAlreadyANegativeToken
       ) {
