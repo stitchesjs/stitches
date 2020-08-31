@@ -1298,42 +1298,36 @@ describe("createCss", () => {
   test("should handle global styles", () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
-      css
-        .global({
-          "@media (min-width: 700px)": {
-            div: {
-              color: "red",
-              backgroundColor: "white",
-              paddingLeft: "10px",
-            },
+      css.global({
+        "@media (min-width: 700px)": {
+          div: {
+            color: "red",
+            backgroundColor: "white",
+            paddingLeft: "10px",
           },
-        })
-        .toString();
+        },
+      });
       return "";
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      @media (min-width: 700px){ div{padding-left:10px;}}
+      @media (min-width: 700px){ div{color:red;}}
       @media (min-width: 700px){ div{background-color:white;}}
-      @media (min-width: 700px){ div{color:red;}}"
+      @media (min-width: 700px){ div{padding-left:10px;}}"
     `);
   });
 
   test("should not re-inject global styles", () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
-      css
-        .global({
-          "@media (min-width: 700px)": { div: { color: "red" } },
-        })
-        .toString();
+      css.global({
+        "@media (min-width: 700px)": { div: { color: "red" } },
+      });
 
-      css
-        .global({
-          "@media (min-width: 700px)": { div: { color: "red" } },
-        })
-        .toString();
+      css.global({
+        "@media (min-width: 700px)": { div: { color: "red" } },
+      });
       return "";
     });
 

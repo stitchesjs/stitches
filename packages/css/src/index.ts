@@ -687,9 +687,6 @@ export const createCss = <T extends TConfig>(
   };
 
   cssInstance.global = (definitions: any) => {
-    const args: any[] = [];
-    let index = 0;
-
     processStyleObject(definitions, config, (prop, value, path) => {
       const {
         nestingPath,
@@ -699,20 +696,15 @@ export const createCss = <T extends TConfig>(
       if (!nestingPath.length) {
         throw new Error("Global styles need to be nested");
       }
-      args[index++] = createAtom(
+      createAtom(
         prop,
         value,
         breakpoint,
         nestingPath,
         inlineMediaQueries,
         true
-      );
+      ).toString();
     });
-
-    // might cause memory leaks when doing css() inside a component
-    // but we need this for now to fix SSR
-    const composition = compose(...args);
-    return composition;
   };
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
     let cssRule = "";
