@@ -18,6 +18,7 @@ export interface IAtom {
   value: string;
   selector: string;
   breakpoint: string;
+  _isGlobal?: boolean;
   inlineMediaQueries: string[];
   _className?: string;
   toString: (this: IAtom) => string;
@@ -505,6 +506,11 @@ export interface TCss<T extends TConfig> {
   };
   keyframes: (
     definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>
+  ) => string;
+  global: (
+    definition: Record<string,(T extends { utilityFirst: true }
+          ? TUtilityFirstCss<T>
+          : TDefaultCss<T>)>
   ) => string;
   theme: (
     theme: Partial<

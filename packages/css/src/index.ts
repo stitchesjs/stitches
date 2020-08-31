@@ -29,10 +29,13 @@ export const hotReloadingCache = new Map<string, any>();
 const MAIN_BREAKPOINT_ID = "";
 
 const createSelector = (className: string, selector: string) => {
-  return selector && selector.includes("&")
-    ? selector.replace(/&/gi, `.${className}`)
-    : // tslint:disable-next-line: prefer-template
-      "." + className + selector;
+  const cssRuleClassName = className ? `.${className}` : "";
+  if (selector && selector.includes("&"))
+    return selector.replace(/&/gi, cssRuleClassName);
+  if (selector) {
+    return `${cssRuleClassName}${selector}`;
+  }
+  return cssRuleClassName;
 };
 
 /**
@@ -195,7 +198,7 @@ const resolveBreakpointAndSelectorAndInlineMedia = (
         acc.nestingPath +
         // If you manually prefix with '&' we remove it for identity consistency
         // only for pseudo selectors and nothing else
-        (breakpointOrSelector[0] === "&"
+        (breakpointOrSelector[0] === "&" && breakpointOrSelector[1] === ':'
           ? breakpointOrSelector.substr(1)
           : // pseudo elements/class
           // don't prepend with a whitespace
@@ -318,7 +321,11 @@ const createServerToString = (
     const className = cssClassnameProvider(this);
 
     sheets[this.breakpoint].insertRule(
-      createCssRule(breakpoints, this, `/*X*/${className}/*X*/`)
+      createCssRule(
+        breakpoints,
+        this,
+        className ? `/*X*/${className}/*X*/` : ""
+      )
     );
 
     // We do not clean out the atom here, cause it will be reused
@@ -434,6 +441,9 @@ export const createCss = <T extends TConfig>(
       : prefix
     : "";
   const cssClassnameProvider = (atom: IAtom): string => {
+    if (atom._isGlobal) {
+      return "";
+    }
     const hash = hashString(
       `${atom.breakpoint || ""}${atom.cssHyphenProp.replace(
         /-(moz|webkit|ms)-/,
@@ -490,7 +500,8 @@ export const createCss = <T extends TConfig>(
     value: any,
     breakpoint = MAIN_BREAKPOINT_ID,
     selectorString: string,
-    inlineMediaQueries: string[]
+    inlineMediaQueries: string[],
+    isGlobal?: boolean
   ) => {
     const tokenValue: any = resolveTokens(cssProp, value, tokens);
 
@@ -555,6 +566,7 @@ export const createCss = <T extends TConfig>(
       breakpoint,
       toString,
       [ATOM]: true,
+      _isGlobal: isGlobal,
     };
 
     // Cache it
@@ -674,6 +686,28 @@ export const createCss = <T extends TConfig>(
     return themeAtom;
   };
 
+  cssInstance.global = (definitions: any) => {
+    processStyleObject(definitions, config, (prop, value, path) => {
+      const {
+        nestingPath,
+        breakpoint,
+        inlineMediaQueries,
+      } = resolveBreakpointAndSelectorAndInlineMedia(path, config);
+      if (!nestingPath.length) {
+        throw new Error("Global styles need to be nested");
+      }
+      // Create a global atom and call toString() on it directly to inject it
+      // as global atoms don't generate class names of their own
+      createAtom(
+        prop,
+        value,
+        breakpoint,
+        nestingPath,
+        inlineMediaQueries,
+        true
+      ).toString();
+    });
+  };
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
     let cssRule = "";
     let currentTimeProp = "";
@@ -709,6 +743,7 @@ export const createCss = <T extends TConfig>(
     keyFramesCache.set(hash, keyframesAtom);
     return keyframesAtom;
   };
+
   cssInstance.getStyles = (cb: any) => {
     // Reset the composition to avoid ssr issues
     compositionsCache.forEach((composition) => {

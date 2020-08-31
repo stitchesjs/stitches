@@ -552,7 +552,7 @@ describe("createCss", () => {
     css({ "&.red": { color: "red" } }).toString();
     expect(
       fakeEnv.document.styleSheets[1].cssRules[0].cssText
-    ).toMatchInlineSnapshot(`"._dzVkYU.red {color: red;}"`);
+    ).toMatchInlineSnapshot(`"._fKmKeG.red {color: red;}"`);
   });
 
   test("Should handle nesting", () => {
@@ -1293,5 +1293,56 @@ describe("createCss", () => {
       "/* STITCHES */
       ./*X*/_eCaYfN/*X*/{color:red;}"
     `);
+  });
+
+  test("should handle global styles", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css.global({
+        "@media (min-width: 700px)": {
+          div: {
+            color: "red",
+            backgroundColor: "white",
+            paddingLeft: "10px",
+          },
+        },
+      });
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      @media (min-width: 700px){ div{color:red;}}
+      @media (min-width: 700px){ div{background-color:white;}}
+      @media (min-width: 700px){ div{padding-left:10px;}}"
+    `);
+  });
+
+  test("should not re-inject global styles", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css.global({
+        "@media (min-width: 700px)": { div: { color: "red" } },
+      });
+
+      css.global({
+        "@media (min-width: 700px)": { div: { color: "red" } },
+      });
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      @media (min-width: 700px){ div{color:red;}}"
+    `);
+  });
+
+  test("should error when styles are passed without a selector", () => {
+    const css = createCss({}, null);
+    expect(() => {
+      css.global({
+        background: "red",
+      });
+    }).toThrow();
   });
 });
