@@ -59,7 +59,6 @@ describe("createCss", () => {
     const css = createCss({}, null);
     const atoms = css({ color: "red" }) as any;
     const atom = atoms.atoms[0];
-    console.log(atom);
     expect(atom.id).toMatchInlineSnapshot(`"colorinitial"`);
     expect(atom.cssHyphenProp).toEqual("color");
     expect(atom.selector).toBe("");
