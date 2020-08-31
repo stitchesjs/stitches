@@ -31,7 +31,8 @@ const MAIN_BREAKPOINT_ID = "";
 const createSelector = (className: string, selector: string) => {
   return selector && selector.includes("&")
     ? selector.replace(/&/gi, `.${className}`)
-    : "." + className + selector;
+    : // tslint:disable-next-line: prefer-template
+      "." + className + selector;
 };
 
 /**
@@ -201,6 +202,7 @@ const resolveBreakpointAndSelectorAndInlineMedia = (
           breakpointOrSelector[0] === ":"
           ? breakpointOrSelector
           : // else just nest with a space
+            // tslint:disable-next-line: prefer-template
             " " + breakpointOrSelector);
       return acc;
     },
@@ -584,6 +586,7 @@ export const createCss = <T extends TConfig>(
       tokens[tokenType][token] = `var(${cssVar})`;
 
       // Add negative tokens
+      // tslint:disable-next-line: prefer-template
       const negativeTokenKey = "-" + token;
       // check that it's a numericScale and that the user didn't already set a negative token witht this name
       const isAlreadyANegativeToken =
