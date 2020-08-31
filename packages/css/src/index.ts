@@ -29,15 +29,13 @@ export const hotReloadingCache = new Map<string, any>();
 const MAIN_BREAKPOINT_ID = "";
 
 const createSelector = (className: string, selector: string) => {
-  return selector && selector.includes("&")
-    ? selector.replace(/&/gi, `.${className}`)
-    : selector
-    ? `${className ? "." + className : ""}${
-        selector[0] === ":" ? selector : ` ${selector}`
-      }`
-    : className
-    ? "." + className
-    : "";
+  const cssRuleClassName = className ? `.${className}` : "";
+  if (selector && selector.includes("&"))
+    return selector.replace(/&/gi, cssRuleClassName);
+  if (selector) {
+    return `${cssRuleClassName}${selector}`;
+  }
+  return cssRuleClassName;
 };
 
 /**
@@ -200,7 +198,7 @@ const resolveBreakpointAndSelectorAndInlineMedia = (
         acc.nestingPath +
         // If you manually prefix with '&' we remove it for identity consistency
         // only for pseudo selectors and nothing else
-        (breakpointOrSelector[0] === "&"
+        (breakpointOrSelector[0] === "&" && breakpointOrSelector[1] === ':'
           ? breakpointOrSelector.substr(1)
           : // pseudo elements/class
           // don't prepend with a whitespace
@@ -693,14 +691,22 @@ export const createCss = <T extends TConfig>(
     let index = 0;
 
     processStyleObject(definitions, config, (prop, value, path) => {
-      const { nestingPath, breakpoint, inlineMediaQueries } = resolveBreakpointAndSelectorAndInlineMedia(
-        path,
-        config
-      );
+      const {
+        nestingPath,
+        breakpoint,
+        inlineMediaQueries,
+      } = resolveBreakpointAndSelectorAndInlineMedia(path, config);
       if (!nestingPath.length) {
         throw new Error("Global styles need to be nested");
       }
-      args[index++] = createAtom(prop, value, breakpoint, nestingPath,inlineMediaQueries, true);
+      args[index++] = createAtom(
+        prop,
+        value,
+        breakpoint,
+        nestingPath,
+        inlineMediaQueries,
+        true
+      );
     });
 
     // might cause memory leaks when doing css() inside a component

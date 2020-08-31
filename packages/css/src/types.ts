@@ -508,7 +508,9 @@ export interface TCss<T extends TConfig> {
     definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>
   ) => string;
   global: (
-    definition: Record<string,S>
+    definition: Record<string,(T extends { utilityFirst: true }
+          ? TUtilityFirstCss<T>
+          : TDefaultCss<T>)>
   ) => string;
   theme: (
     theme: Partial<

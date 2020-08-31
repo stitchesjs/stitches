@@ -552,7 +552,7 @@ describe("createCss", () => {
     css({ "&.red": { color: "red" } }).toString();
     expect(
       fakeEnv.document.styleSheets[1].cssRules[0].cssText
-    ).toMatchInlineSnapshot(`"._dzVkYU.red {color: red;}"`);
+    ).toMatchInlineSnapshot(`"._fKmKeG.red {color: red;}"`);
   });
 
   test("Should handle nesting", () => {
@@ -1342,8 +1342,8 @@ describe("createCss", () => {
       @media (min-width: 700px){ div{color:red;}}"
     `);
   });
-  
-  test("should error when styles are used without nesting", () => {
+
+  test("should error when styles are passed without a selector", () => {
     const css = createCss({}, null);
     expect(() => {
       css.global({
