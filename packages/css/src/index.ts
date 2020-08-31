@@ -696,6 +696,8 @@ export const createCss = <T extends TConfig>(
       if (!nestingPath.length) {
         throw new Error("Global styles need to be nested");
       }
+      // Create a global atom and call toString() on it directly to inject it
+      // as global atoms don't generate class names of their own
       createAtom(
         prop,
         value,
