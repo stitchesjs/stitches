@@ -12,6 +12,7 @@ import {
   TCss,
 } from "./types";
 import {
+  MAIN_BREAKPOINT_ID,
   createSheets,
   cssPropToToken,
   getVendorPrefixAndProps,
@@ -25,10 +26,6 @@ export * from "./css-types";
 export * from "./utils";
 
 export const hotReloadingCache = new Map<string, any>();
-
-export const MAIN_BREAKPOINT_ID = 'initial';
-
-export type TMainBreakPoint = typeof MAIN_BREAKPOINT_ID
 
 const createSelector = (className: string, selector: string) => {
   const cssRuleClassName = className ? `.${className}` : "";
