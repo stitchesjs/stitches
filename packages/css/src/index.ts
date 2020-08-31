@@ -26,7 +26,8 @@ export * from "./utils";
 
 export const hotReloadingCache = new Map<string, any>();
 
-const MAIN_BREAKPOINT_ID = "";
+export const MAIN_BREAKPOINT_ID = 'initial';
+export type TMainBreakPoint = typeof MAIN_BREAKPOINT_ID
 
 const createSelector = (className: string, selector: string) => {
   const cssRuleClassName = className ? `.${className}` : "";
