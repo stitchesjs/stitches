@@ -18,6 +18,8 @@ import {
 } from "./shorthand-parser";
 import { IBreakpoints, ICssPropToToken, ISheet } from "./types";
 
+const MAIN_BREAKPOINT_ID = 'initial';
+
 export const cssPropToToken: ICssPropToToken<any> = {
   gap: "space",
   gridGap: "space",
@@ -156,7 +158,7 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
 
     return {
       tags,
-      sheets: ["__variables__", ""]
+      sheets: ["__variables__", MAIN_BREAKPOINT_ID]
         .concat(Object.keys(screens))
         .reduce<{ [key: string]: ISheet }>((aggr, key, index) => {
           let style = existingStyles[index];
@@ -179,7 +181,7 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
 
   return {
     tags,
-    sheets: ["__variables__", ""]
+    sheets: ["__variables__", MAIN_BREAKPOINT_ID]
       .concat(Object.keys(screens))
       .reduce<{ [key: string]: ISheet }>((aggr, key) => {
         aggr[key] = enhanceSheet({

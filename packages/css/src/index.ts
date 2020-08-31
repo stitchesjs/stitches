@@ -27,6 +27,7 @@ export * from "./utils";
 export const hotReloadingCache = new Map<string, any>();
 
 export const MAIN_BREAKPOINT_ID = 'initial';
+
 export type TMainBreakPoint = typeof MAIN_BREAKPOINT_ID
 
 const createSelector = (className: string, selector: string) => {
@@ -277,7 +278,7 @@ const createCssRule = (
     }:${atom.value};}`;
   }
 
-  return atom.breakpoint ? breakpoints[atom.breakpoint](cssRule) : cssRule;
+  return atom.breakpoint !== MAIN_BREAKPOINT_ID ? breakpoints[atom.breakpoint](cssRule) : cssRule;
 };
 
 const createToString = (
@@ -794,7 +795,7 @@ export const createCss = <T extends TConfig>(
           `/* STITCHES:__variables__ */\n${sheets.__variables__.cssRules.join(
             "\n"
           )}`,
-          `/* STITCHES */\n${sheets[""].cssRules.join("\n")}`,
+          `/* STITCHES */\n${sheets[MAIN_BREAKPOINT_ID].cssRules.join("\n")}`,
         ]
       ),
     };
