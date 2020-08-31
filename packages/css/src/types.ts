@@ -486,15 +486,33 @@ export type TDefaultCss<T extends TConfig> = T["breakpoints"] extends object
   : TRecursiveCss<T> & TRecursiveUtils<T>;
 
 export interface TCss<T extends TConfig> {
-    (...styles: ((T extends {utilityFirst: true} ? TUtilityFirstCss<T> : TDefaultCss<T>) | string | boolean | null | undefined)[]): string;
-    getStyles: (callback: () => any) => {
-        styles: string[];
-        result: any;
-    };
-    keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
-    theme: (theme: Partial<{
+  (
+    ...styles: (
+      | (T extends { utilityFirst: true }
+          ? TUtilityFirstCss<T>
+          : TDefaultCss<T>)
+      | string
+      | boolean
+      | null
+      | undefined
+    )[]
+  ): string;
+  getStyles: (
+    callback: () => any
+  ) => {
+    styles: string[];
+    result: any;
+  };
+  keyframes: (
+    definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>
+  ) => string;
+  theme: (
+    theme: Partial<
+      {
         [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
-    }>) => string;
+      }
+    >
+  ) => string;
 }
 
 export interface ISheet {

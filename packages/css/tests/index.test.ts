@@ -225,9 +225,9 @@ describe("createCss", () => {
       },
     });
     const css = createCss({ tokens }, null);
-    expect((css as any)._config().tokens.sizes['1']).toBeTruthy();
-    expect((css as any)._config().tokens.sizes['-1']).toBeTruthy();
-    expect((css as any)._config().tokens.sizes['--1']).toBeFalsy();
+    expect((css as any)._config().tokens.sizes["1"]).toBeTruthy();
+    expect((css as any)._config().tokens.sizes["-1"]).toBeTruthy();
+    expect((css as any)._config().tokens.sizes["--1"]).toBeFalsy();
   });
 
   test("should create breakpoints", () => {

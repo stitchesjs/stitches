@@ -571,7 +571,7 @@ export const createCss = <T extends TConfig>(
     // tslint:disable-next-line
     const scaleTokenKeys = Object.keys(tokens[tokenType]);
     for (let index = 0; index < scaleTokenKeys.length; index++) {
-      const token = scaleTokenKeys[index]
+      const token = scaleTokenKeys[index];
       // format token to remove special characters
       // https://stackoverflow.com/a/4374890
       const formattedToken = token.replace(/[^\w\s-]/gi, "");
@@ -587,9 +587,14 @@ export const createCss = <T extends TConfig>(
       const negativeTokenKey = "-" + token;
       // check that it's a numericScale and that the user didn't already set a negative token witht this name
       // @ts-ignore
-      const isAlreadyANegativeToken = token[0] === '-' ? !!(tokens[tokenType][token.substring(1)]) : false
+      const isAlreadyANegativeToken =
+        token[0] === "-" ? !!tokens[tokenType][token.substring(1)] : false;
       // @ts-ignore
-      if (isNumericScale && !tokens[tokenType][negativeTokenKey] && !isAlreadyANegativeToken) {
+      if (
+        isNumericScale &&
+        !tokens[tokenType][negativeTokenKey] &&
+        !isAlreadyANegativeToken
+      ) {
         // @ts-ignore
         tokens[tokenType][negativeTokenKey] = `calc(var(${cssVar}) * -1)`;
       }
