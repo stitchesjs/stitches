@@ -26,7 +26,6 @@
   "dependencies": {
     "@stitches/css": "file:packages/css",
     "@stitches/styled": "file:packages/styled",
-    "@stitches/tailwind": "file:packages/tailwind",
-    "@stitches/vue-directive": "file:packages/vue-directive"
+    "@stitches/tailwind": "file:packages/tailwind"
   }
 }

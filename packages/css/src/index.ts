@@ -28,7 +28,7 @@ export const hotReloadingCache = new Map<string, any>();
 
 const MAIN_BREAKPOINT_ID = "";
 
-const createSelector = (className: string, selector?: string) => {
+const createSelector = (className: string, selector: string) => {
   return selector && selector.includes("&")
     ? selector.replace(/&/gi, `.${className}`)
     : selector
@@ -146,14 +146,16 @@ const processStyleObject = (
     }
     // Normal css prop
     // Call the value middleware on it:
-    valueMiddleware(key, val, currentNestingPath);
+    if (val !== undefined) {
+      valueMiddleware(key, val, currentNestingPath);
+    }
   }
 };
 
 /**
  * Resolves a css prop nesting path to a css selector and the breakpoint the css prop is meant to be injected to
  */
-const resolvebreakpointAndSelector = (
+const resolveBreakpointAndSelectorAndInlineMedia = (
   nestingPath: string[],
   config: TConfig<true>
 ) =>
@@ -176,7 +178,10 @@ const resolvebreakpointAndSelector = (
         return acc;
       }
       // breakpoints handling:
-      if (breakpointOrSelector in config.breakpoints) {
+      if (
+        breakpointOrSelector in config.breakpoints ||
+        breakpointOrSelector === MAIN_BREAKPOINT_ID
+      ) {
         if (acc.breakpoint !== MAIN_BREAKPOINT_ID) {
           throw new Error(
             `@stitches/css - You are nesting the breakpoint "${breakpointOrSelector}" into "${acc.breakpoint}", that makes no sense? :-)`
@@ -185,16 +190,32 @@ const resolvebreakpointAndSelector = (
         acc.breakpoint = breakpointOrSelector;
         return acc;
       }
-      // Normal css nesting selector:
-      acc.nestingPath[acc.nestingPath.length] =
-        // If you manually prefix with '&' we remove it for identity consistency
-        breakpointOrSelector[0] === "&"
-          ? breakpointOrSelector.substr(1)
-          : breakpointOrSelector;
 
+      if (breakpointOrSelector[0] === "@") {
+        acc.inlineMediaQueries.push(breakpointOrSelector);
+        return acc;
+      }
+      // Normal css nesting selector:
+      acc.nestingPath =
+        acc.nestingPath +
+        // If you manually prefix with '&' we remove it for identity consistency
+        // only for pseudo selectors and nothing else
+        (breakpointOrSelector[0] === "&"
+          ? breakpointOrSelector.substr(1)
+          : // pseudo elements/class
+          // don't prepend with a whitespace
+          breakpointOrSelector[0] === ":"
+          ? breakpointOrSelector
+          : // else just nest with a space
+            // tslint:disable-next-line: prefer-template
+            " " + breakpointOrSelector);
       return acc;
     },
-    { breakpoint: MAIN_BREAKPOINT_ID, nestingPath: [] as string[] }
+    {
+      breakpoint: MAIN_BREAKPOINT_ID,
+      nestingPath: "",
+      inlineMediaQueries: [] as string[],
+    }
   );
 
 /**
@@ -480,16 +501,11 @@ export const createCss = <T extends TConfig>(
     cssProp: string,
     value: any,
     breakpoint = MAIN_BREAKPOINT_ID,
-    selectors: string[] = [],
+    selectorString: string,
+    inlineMediaQueries: string[],
     isGlobal?: boolean
   ) => {
     const tokenValue: any = resolveTokens(cssProp, value, tokens);
-    const inlineMediaQueries = selectors?.filter((part) =>
-      part.startsWith("@")
-    );
-    let selectorString = selectors
-      ?.filter((part) => !part.startsWith("@"))
-      .join("");
 
     // generate id used for specificity check
     // two atoms are considered equal in regard to there specificity if the id is equal
@@ -498,7 +514,7 @@ export const createCss = <T extends TConfig>(
       : "";
     const id =
       cssProp.toLowerCase() +
-      (selectorString || "") +
+      selectorString +
       (inlineMediaQueries ? inlineMediaQueries.join("") : "") +
       breakpoint;
 
@@ -564,19 +580,41 @@ export const createCss = <T extends TConfig>(
   let baseTokens = ":root{";
   // tslint:disable-next-line
   for (const tokenType in tokens) {
+    const isNumericScale = tokenType.match(
+      /^(sizes|space|letterSpacings|zIndices)$/
+    );
     // @ts-ignore
     // tslint:disable-next-line
-    for (const token in tokens[tokenType]) {
+    const scaleTokenKeys = Object.keys(tokens[tokenType]);
+    for (let index = 0; index < scaleTokenKeys.length; index++) {
+      const token = scaleTokenKeys[index];
       // format token to remove special characters
       // https://stackoverflow.com/a/4374890
-      const formattedToken = token.replace(/[^\w\s]/gi, "");
-      const cssvar = `--${tokenType}-${formattedToken}`;
+      const formattedToken = token.replace(/[^\w\s-]/gi, "");
+      const cssVar = `--${tokenType}-${formattedToken}`;
 
       // @ts-ignore
-      baseTokens += `${cssvar}:${tokens[tokenType][token]};`;
+      baseTokens += `${cssVar}:${tokens[tokenType][token]};`;
 
       // @ts-ignore
-      tokens[tokenType][token] = `var(${cssvar})`;
+      tokens[tokenType][token] = `var(${cssVar})`;
+
+      // Add negative tokens
+      // tslint:disable-next-line: prefer-template
+      const negativeTokenKey = "-" + token;
+      // check that it's a numericScale and that the user didn't already set a negative token witht this name
+      const isAlreadyANegativeToken =
+        // @ts-ignore
+        token[0] === "-" ? !!tokens[tokenType][token.substring(1)] : false;
+      if (
+        isNumericScale &&
+        // @ts-ignore
+        !tokens[tokenType][negativeTokenKey] &&
+        !isAlreadyANegativeToken
+      ) {
+        // @ts-ignore
+        tokens[tokenType][negativeTokenKey] = `calc(var(${cssVar}) * -1)`;
+      }
     }
   }
   baseTokens += "}";
@@ -601,11 +639,18 @@ export const createCss = <T extends TConfig>(
         args[index++] = definitions[x];
       } else {
         processStyleObject(definitions[x], config, (prop, value, path) => {
-          const { nestingPath, breakpoint } = resolvebreakpointAndSelector(
-            path,
-            config
+          const {
+            nestingPath,
+            breakpoint,
+            inlineMediaQueries,
+          } = resolveBreakpointAndSelectorAndInlineMedia(path, config);
+          args[index++] = createAtom(
+            prop,
+            value,
+            breakpoint,
+            nestingPath,
+            inlineMediaQueries
           );
-          args[index++] = createAtom(prop, value, breakpoint, nestingPath);
         });
       }
     }
@@ -648,14 +693,14 @@ export const createCss = <T extends TConfig>(
     let index = 0;
 
     processStyleObject(definitions, config, (prop, value, path) => {
-      const { nestingPath, breakpoint } = resolvebreakpointAndSelector(
+      const { nestingPath, breakpoint, inlineMediaQueries } = resolveBreakpointAndSelectorAndInlineMedia(
         path,
         config
       );
       if (!nestingPath.length) {
         throw new Error("Global styles need to be nested");
       }
-      args[index++] = createAtom(prop, value, breakpoint, nestingPath, true);
+      args[index++] = createAtom(prop, value, breakpoint, nestingPath,inlineMediaQueries, true);
     });
 
     // might cause memory leaks when doing css() inside a component

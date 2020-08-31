@@ -174,6 +174,62 @@ describe("createCss", () => {
       ./*X*/_tLwhG/*X*/{color:var(--colors-red);}"
     `);
   });
+
+  test("Should generate negative tokens for numeric scales", () => {
+    const tokens = createTokens({
+      sizes: {
+        "0": "0px",
+        "1": "1px",
+      },
+      space: {
+        "0": "0px",
+        "1": "1px",
+      },
+      letterSpacings: {
+        "0": "0px",
+        "1": "1px",
+      },
+      zIndices: {
+        "0": "0",
+        "1": "1",
+      },
+    });
+    const css = createCss({ tokens }, null);
+    const atom = css({
+      marginLeft: "-1",
+      letterSpacing: "-1",
+      width: "-1",
+      zIndex: "-1",
+    }) as any;
+
+    const { styles } = css.getStyles(() => {
+      atom.toString();
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_jOOeHx/*X*/{margin-left:calc(var(--space-1) * -1);}
+      ./*X*/_ehLivv/*X*/{letter-spacing:calc(var(--letterSpacings-1) * -1);}
+      ./*X*/_eQOPSx/*X*/{width:calc(var(--sizes-1) * -1);}
+      ./*X*/_euLKsd/*X*/{z-index:calc(var(--zIndices-1) * -1);}"
+    `);
+  });
+
+  test("Should not generate negative tokens when the user already defined a negative one", () => {
+    const tokens = createTokens({
+      sizes: {
+        "-1": "-1px",
+        "1": "1px",
+      },
+    });
+    const css = createCss({ tokens }, null);
+    expect((css as any)._config().tokens.sizes["1"]).toBeTruthy();
+    expect((css as any)._config().tokens.sizes["-1"]).toBeTruthy();
+    expect((css as any)._config().tokens.sizes["--1"]).toBeFalsy();
+  });
+
   test("should create breakpoints", () => {
     const css = createCss(
       {
@@ -488,6 +544,45 @@ describe("createCss", () => {
       fakeEnv.document.styleSheets[1].cssRules[0].cssText
     ).toMatchInlineSnapshot(`"._FdHZR._FdHZR:hover {color: red;}"`);
   });
+
+  test("Should handle ampersand correctly when not targeting pseudo selector", () => {
+    const fakeEnv = createFakeEnv([], []);
+    const css = createCss({}, (fakeEnv as unknown) as Window);
+    // @ts-ignore
+    css({ "&.red": { color: "red" } }).toString();
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[0].cssText
+    ).toMatchInlineSnapshot(`"._dzVkYU.red {color: red;}"`);
+  });
+
+  test("Should handle nesting", () => {
+    const fakeEnv = createFakeEnv([], []);
+    const css = createCss({}, (fakeEnv as unknown) as Window);
+    // @ts-ignore
+    css({
+      ".red": {
+        color: "red",
+        ".potato": {
+          backgroundColor: "red",
+          ":hover": {
+            backgroundColor: "green",
+          },
+        },
+      },
+    }).toString();
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[0].cssText
+    ).toMatchInlineSnapshot(`"._hJxieM .red {color: red;}"`);
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[1].cssText
+    ).toMatchInlineSnapshot(`"._bCrHfw .red .potato {background-color: red;}"`);
+    expect(
+      fakeEnv.document.styleSheets[1].cssRules[2].cssText
+    ).toMatchInlineSnapshot(
+      `"._cfgJGo._cfgJGo .red .potato:hover {background-color: green;}"`
+    );
+  });
+
   test("should handle screen selector", () => {
     const css = createCss(
       {
@@ -922,17 +1017,17 @@ describe("createCss", () => {
     const css = createCss({}, null);
     const atom = (css({ "div:hover &": { color: "red" } }) as any).atoms[0];
 
-    expect(atom.id).toBe("colordiv:hover &");
+    expect(atom.id).toBe("color div:hover &");
     expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.selector).toBe("div:hover &");
+    expect(atom.selector).toBe(" div:hover &");
     expect(atom.breakpoint).toBe("");
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toBe("_dkzxrg");
+      atom.toString();
     });
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      div:hover ./*X*/_dkzxrg/*X*/{color:red;}"
+       div:hover ./*X*/_bdAhzM/*X*/{color:red;}"
     `);
   });
 
@@ -1184,6 +1279,22 @@ describe("createCss", () => {
     `);
   });
 
+  test("Should omit undefined css values", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css({
+        backgroundColor: undefined,
+        color: "red",
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_eCaYfN/*X*/{color:red;}"
+    `);
+  });
+
   test("should handle global styles", () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
@@ -1231,13 +1342,13 @@ describe("createCss", () => {
       @media (min-width: 700px){ div{color:red;}}"
     `);
   });
-    test("should error when styles are used without nesting", () => {
+  
+  test("should error when styles are used without nesting", () => {
     const css = createCss({}, null);
-    expect(()=> {
+    expect(() => {
       css.global({
-          background: 'red'
-        })
-    }).toThrow()
-
+        background: "red",
+      });
+    }).toThrow();
   });
 });
