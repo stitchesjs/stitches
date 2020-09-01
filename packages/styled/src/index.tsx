@@ -44,7 +44,7 @@ export type VariantASProps<Config extends TConfig, VariantsObj> = {
     | CastStringToBoolean<VariantsObj[V]>
     | VariantsObj[V]
     | {
-        [B in BreakPointsKeys<Config> & TMainBreakPoint]?:
+        [B in BreakPointsKeys<Config> | TMainBreakPoint]?:
           | CastStringToBoolean<VariantsObj[V]>
           | VariantsObj[V];
       };
