@@ -197,7 +197,7 @@ const resolveBreakpointAndSelectorAndInlineMedia = (
         acc.nestingPath +
         // If you manually prefix with '&' we remove it for identity consistency
         // only for pseudo selectors and nothing else
-        (breakpointOrSelector[0] === "&" && breakpointOrSelector[1] === ':'
+        (breakpointOrSelector[0] === "&" && breakpointOrSelector[1] === ":"
           ? breakpointOrSelector.substr(1)
           : // pseudo elements/class
           // don't prepend with a whitespace
@@ -275,7 +275,9 @@ const createCssRule = (
     }:${atom.value};}`;
   }
 
-  return atom.breakpoint !== MAIN_BREAKPOINT_ID ? breakpoints[atom.breakpoint](cssRule) : cssRule;
+  return atom.breakpoint !== MAIN_BREAKPOINT_ID
+    ? breakpoints[atom.breakpoint](cssRule)
+    : cssRule;
 };
 
 const createToString = (
@@ -349,18 +351,12 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
     // @ts-ignore
     variablesSheet.insertRule(
       `.${themeClassName}{${Object.keys(this.definition).reduce(
-        (aggr, tokenType) => {
+        (subAggr, tokenKey) => {
           // @ts-ignore
-          return `${aggr}${Object.keys(this.definition[tokenType]).reduce(
-            (subAggr, tokenKey) => {
-              // @ts-ignore
-              return `${subAggr}--${tokenType}-${tokenKey}:${this.definition[tokenType][tokenKey]};`;
-            },
-            aggr
-          )}`;
+          return `${subAggr}--colors-${tokenKey}:${this.definition[tokenKey]};`;
         },
         ""
-      )}}`
+      )}`
     );
 
     this.toString = () => themeClassName;
@@ -670,12 +666,13 @@ export const createCss = <T extends TConfig>(
     if (themeCache.has(definition)) {
       return themeCache.get(definition)!;
     }
-
     const themeAtom = {
       // We could here also check if theme has been added from server,
       // though thinking it does not matter... just a simple rule
       name: String(themeCache.size),
-      definition,
+      // wrapping the colors in an object so that the structure matches
+      // the tokens property in the config
+      definition: definition,
       toString: themeToString,
       [ATOM]: true as true,
     };

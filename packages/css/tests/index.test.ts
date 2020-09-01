@@ -651,9 +651,7 @@ describe("createCss", () => {
       expect(
         css
           .theme({
-            colors: {
-              primary: "blue",
-            },
+            primary: "blue",
           })
           .toString()
       ).toMatchInlineSnapshot(`"theme-0"`);
@@ -663,7 +661,7 @@ describe("createCss", () => {
     expect(styles.length).toBe(2);
     expect(styles[0]).toMatchInlineSnapshot(`
       "/* STITCHES:__variables__ */
-      .theme-0{--colors-primary:blue;}
+      .theme-0{--colors-primary:blue;
       :root{--colors-primary:tomato;}"
     `);
     expect(styles[1]).toMatchInlineSnapshot(`
@@ -791,9 +789,7 @@ describe("createCss", () => {
       null
     );
     const darkTheme = css.theme({
-      colors: {
-        primary: "green",
-      },
+      primary: "green",
     });
     const atom = css(darkTheme, {
       color: "primary",

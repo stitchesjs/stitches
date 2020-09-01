@@ -431,7 +431,7 @@ export interface ITokenDefinition {
 }
 
 export interface ITokensDefinition {
-  colors?: ITokenDefinition & {modes?:{[a:string]:ITokenDefinition}};
+  colors?: ITokenDefinition & { modes?: { [a: string]: ITokenDefinition } };
   space?: ITokenDefinition;
   fontSizes?: ITokenDefinition;
   fonts?: ITokenDefinition;
@@ -461,7 +461,6 @@ export type TConfig<STRICT_MODE extends boolean = false> = {
       tokens?: ITokensDefinition;
       utils?: IUtils;
     });
-
 export type TUtilityFirstCss<
   T extends TConfig
 > = T["breakpoints"] extends unknown
@@ -508,15 +507,16 @@ export interface TCss<T extends TConfig> {
     definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>
   ) => string;
   global: (
-    definition: Record<string,(T extends { utilityFirst: true }
-          ? TUtilityFirstCss<T>
-          : TDefaultCss<T>)>
+    definition: Record<
+      string,
+      T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TDefaultCss<T>
+    >
   ) => string;
   theme: (
-    theme: Partial<
-      {
-        [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
-      }
+    colors: Partial<
+      T extends { tokens: { colors: {} } }
+        ? { [k in keyof T["tokens"]["colors"]]: string }
+        : {}
     >
   ) => string;
 }
