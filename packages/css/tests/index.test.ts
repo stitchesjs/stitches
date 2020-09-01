@@ -173,6 +173,41 @@ describe("createCss", () => {
       ./*X*/_gYxOEA/*X*/{color:var(--colors-red);}"
     `);
   });
+  test("should remove special characters from tokens in themes", () => {
+    const css = createCss(
+      {
+        tokens: {
+          colors: {
+            "$!@red@!$": "tomato",
+          },
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      // @ts-ignore
+      css({ color: "$!@red@!$" }).toString();
+      expect(
+        css
+          .theme({
+            "$!@red@!$": "red",
+          })
+          .toString()
+      ).toMatchInlineSnapshot(`"theme-0"`);
+      return "";
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[0]).toMatchInlineSnapshot(`
+      "/* STITCHES:__variables__ */
+      .theme-0{--colors-red:red;
+      :root{--colors-red:tomato;}"
+    `);
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_gYxOEA/*X*/{color:var(--colors-red);}"
+    `);
+  });
 
   test("Should generate negative tokens for numeric scales", () => {
     const tokens = createTokens({

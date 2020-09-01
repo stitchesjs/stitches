@@ -363,8 +363,11 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
     variablesSheet.insertRule(
       `.${themeClassName}{${Object.keys(this.definition).reduce(
         (subAggr, tokenKey) => {
+          // format token to remove special characters
+          // https://stackoverflow.com/a/4374890
+          const formattedTokenKey = tokenKey.replace(/[^\w\s-]/gi, "");
           // @ts-ignore
-          return `${subAggr}--colors-${tokenKey}:${this.definition[tokenKey]};`;
+          return `${subAggr}--colors-${formattedTokenKey}:${this.definition[tokenKey]};`;
         },
         ""
       )}`
