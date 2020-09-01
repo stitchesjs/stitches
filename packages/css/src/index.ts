@@ -1,3 +1,4 @@
+import { tokenTypes } from "./constants";
 import {
   ATOM,
   IAtom,
@@ -11,6 +12,7 @@ import {
   TConfig,
   TCss,
 } from "./types";
+import { unitlessKeys } from "./unitless";
 import {
   MAIN_BREAKPOINT_ID,
   createSheets,
@@ -19,8 +21,6 @@ import {
   hashString,
   specificityProps,
 } from "./utils";
-import { unitlessKeys } from "./unitless";
-import {tokenTypes} from './constants'
 
 export * from "./types";
 export * from "./css-types";
@@ -146,7 +146,8 @@ const processStyleObject = (
       // handle unitless numbers:
       valueMiddleware(
         key,
-        `${unitlessKeys[key] ? val : val + 'px'}`,
+        // tslint:disable-next-line: prefer-template
+        `${unitlessKeys[key] ? val : val + "px"}`,
         currentNestingPath
       );
     } else if (val !== undefined) {
@@ -508,7 +509,6 @@ export const createCss = <T extends TConfig>(
     inlineMediaQueries: string[],
     isGlobal?: boolean
   ) => {
-
     // generate id used for specificity check
     // two atoms are considered equal in regard to there specificity if the id is equal
     const inlineMediasAsString = inlineMediaQueries
@@ -681,7 +681,7 @@ export const createCss = <T extends TConfig>(
       name: String(themeCache.size),
       // wrapping the colors in an object so that the structure matches
       // the tokens property in the config
-      definition: definition,
+      definition,
       toString: themeToString,
       [ATOM]: true as true,
     };

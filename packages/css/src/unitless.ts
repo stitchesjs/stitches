@@ -1,4 +1,4 @@
-export let unitlessKeys: {[k: string]: 1} = {
+export let unitlessKeys: { [k: string]: 1 } = {
   // animation duration only added so that it's ignored:
   animationDuration: 1,
   animationIterationCount: 1,
@@ -47,5 +47,5 @@ export let unitlessKeys: {[k: string]: 1} = {
   strokeDashoffset: 1,
   strokeMiterlimit: 1,
   strokeOpacity: 1,
-  strokeWidth: 1
-}
+  strokeWidth: 1,
+};

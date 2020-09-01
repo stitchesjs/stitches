@@ -49,7 +49,7 @@ export interface IKeyframesAtom {
 export type TTopCss<T extends TConfig> = {
   [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
     ? ICssPropToToken<T>[K] | number | Properties[K]
-    : Properties[K] | number ;
+    : Properties[K] | number;
 };
 
 export type TRecursiveCss<T extends TConfig> =

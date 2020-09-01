@@ -1,11 +1,11 @@
 import {
+  MAIN_BREAKPOINT_ID,
   TConfig,
   TCss,
-  TMainBreakPoint,
   TDefaultCss,
+  TMainBreakPoint,
   createCss,
   hashString,
-  MAIN_BREAKPOINT_ID
 } from "@stitches/css";
 import * as React from "react";
 
@@ -151,7 +151,9 @@ export type TStyled<Config extends TConfig> = {
 
 const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
   const map = new Map();
-  map.set(MAIN_BREAKPOINT_ID, [...(existingMap?.get(MAIN_BREAKPOINT_ID) || [])]);
+  map.set(MAIN_BREAKPOINT_ID, [
+    ...(existingMap?.get(MAIN_BREAKPOINT_ID) || []),
+  ]);
   Object.keys(breakPoints).forEach((breakpoint) =>
     map.set(breakpoint, [...(existingMap?.get(breakpoint) || [])])
   );

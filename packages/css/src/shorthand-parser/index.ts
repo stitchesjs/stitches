@@ -1,5 +1,5 @@
+import { tokenTypes } from "../constants";
 import { tokenizeValue } from "./value-tokenizer";
-import {tokenTypes} from '../constants'
 
 const unitMatch = /^[0-9.]+[a-z|%]/;
 const easingMatch = /\(.*\)|ease|ease-in|ease-out|ease-in-out|linear|step-start|step-end/;
@@ -7,8 +7,8 @@ const easingMatch = /\(.*\)|ease|ease-in|ease-out|ease-in-out|linear|step-start|
 const setChainedValue = (existingValue: string, value: string) =>
   existingValue ? `${existingValue},${value}` : value;
 
-const emptyTokens:any = {}
-tokenTypes.forEach(type => emptyTokens[type] = {})
+const emptyTokens: any = {};
+tokenTypes.forEach((type) => (emptyTokens[type] = {}));
 
 /*
   The generic CSS prop value parser. Converts any css value into an
@@ -16,10 +16,11 @@ tokenTypes.forEach(type => emptyTokens[type] = {})
 */
 
 const createPropertyParser = (type: any) => (tokens: any, value: any) => {
-  const chains: any[][] = typeof value === 'number' ? [[value]] : tokenizeValue(value);
+  const chains: any[][] =
+    typeof value === "number" ? [[value]] : tokenizeValue(value);
   const css = {};
   // TODO: refactor this
-  const tmpTokens = typeof value === 'number' ? emptyTokens : tokens
+  const tmpTokens = typeof value === "number" ? emptyTokens : tokens;
 
   chains.forEach((chain, chainIndex) => {
     // tslint:disable-next-line
@@ -381,11 +382,7 @@ export const borderRadius = createPropertyParser(
 export const boxShadow = (tokens: any, value: string) => {
   return {
     boxShadow: tokenizeValue(value)
-      .map((chain) =>
-        chain
-          .map((val) => (tokens.colors[val] || val))
-          .join(" ")
-      )
+      .map((chain) => chain.map((val) => tokens.colors[val] || val).join(" "))
       .join(", "),
   };
 };

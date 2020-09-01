@@ -18,8 +18,8 @@ import {
 } from "./shorthand-parser";
 import { IBreakpoints, ICssPropToToken, ISheet } from "./types";
 
-export const MAIN_BREAKPOINT_ID = 'initial';
-export type TMainBreakPoint = typeof MAIN_BREAKPOINT_ID
+export const MAIN_BREAKPOINT_ID = "initial";
+export type TMainBreakPoint = typeof MAIN_BREAKPOINT_ID;
 
 export const cssPropToToken: ICssPropToToken<any> = {
   gap: "space",
