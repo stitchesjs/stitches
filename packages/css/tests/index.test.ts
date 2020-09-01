@@ -1351,7 +1351,7 @@ describe("createCss", () => {
     }).toThrow();
   });
 
-  test.only("Should append px to numbers if they're not unitless", () => {
+  test("Should append px to numbers if they're not unitless", () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
@@ -1369,7 +1369,7 @@ describe("createCss", () => {
       ./*X*/_clXqwH/*X*/{font-size:1px;}"
     `);
   });
-  test.only("Should append px to numbers in shorthands", () => {
+  test("Should append px to numbers in shorthands", () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
@@ -1387,7 +1387,7 @@ describe("createCss", () => {
     `);
   });
 
-  test.only("Numbers should not map to tokens", () => {
+  test("Numbers should not map to tokens", () => {
     const css = createCss(
       {
         tokens: {
