@@ -1,4 +1,5 @@
 import { tokenizeValue } from "./value-tokenizer";
+import {tokenTypes} from '../constants'
 
 const unitMatch = /^[0-9.]+[a-z|%]/;
 const easingMatch = /\(.*\)|ease|ease-in|ease-out|ease-in-out|linear|step-start|step-end/;
@@ -6,19 +7,24 @@ const easingMatch = /\(.*\)|ease|ease-in|ease-out|ease-in-out|linear|step-start|
 const setChainedValue = (existingValue: string, value: string) =>
   existingValue ? `${existingValue},${value}` : value;
 
+const emptyTokens:any = {}
+tokenTypes.forEach(type => emptyTokens[type] = {})
+
 /*
   The generic CSS prop value parser. Converts any css value into an
   array of chains, where each chain is an array of individual values
 */
 
-const createPropertyParser = (type: any) => (tokens: any, value: string) => {
-  const chains = tokenizeValue(value);
+const createPropertyParser = (type: any) => (tokens: any, value: any) => {
+  const chains: any[][] = typeof value === 'number' ? [[value]] : tokenizeValue(value);
   const css = {};
+  // TODO: refactor this
+  const tmpTokens = typeof value === 'number' ? emptyTokens : tokens
 
   chains.forEach((chain, chainIndex) => {
     // tslint:disable-next-line
-    chain.forEach((value, index) => {
-      type(tokens, css, value, index, chain, chainIndex, chains);
+    chain.forEach((_value, index) => {
+      type(tmpTokens, css, _value, index, chain, chainIndex, chains);
     });
   });
 
@@ -377,7 +383,7 @@ export const boxShadow = (tokens: any, value: string) => {
     boxShadow: tokenizeValue(value)
       .map((chain) =>
         chain
-          .map((val) => (tokens.colors[val] ? tokens.colors[val] : val))
+          .map((val) => (tokens.colors[val] || val))
           .join(" ")
       )
       .join(", "),

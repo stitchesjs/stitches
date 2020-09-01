@@ -1,9 +1,11 @@
 import {
   TConfig,
   TCss,
+  TMainBreakPoint,
   TDefaultCss,
   createCss,
   hashString,
+  MAIN_BREAKPOINT_ID
 } from "@stitches/css";
 import * as React from "react";
 
@@ -42,7 +44,7 @@ export type VariantASProps<Config extends TConfig, VariantsObj> = {
     | CastStringToBoolean<VariantsObj[V]>
     | VariantsObj[V]
     | {
-        [B in BreakPointsKeys<Config>]?:
+        [B in BreakPointsKeys<Config> | TMainBreakPoint]?:
           | CastStringToBoolean<VariantsObj[V]>
           | VariantsObj[V];
       };
@@ -149,7 +151,7 @@ export type TStyled<Config extends TConfig> = {
 
 const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
   const map = new Map();
-  map.set("", [...(existingMap?.get("") || [])]);
+  map.set(MAIN_BREAKPOINT_ID, [...(existingMap?.get(MAIN_BREAKPOINT_ID) || [])]);
   Object.keys(breakPoints).forEach((breakpoint) =>
     map.set(breakpoint, [...(existingMap?.get(breakpoint) || [])])
   );
@@ -257,7 +259,7 @@ export const createStyled = <Config extends TConfig>(
             // normalize the value so that we only have to deal with one structure:
             const keyVal =
               props[key] && typeof props[key] !== "object"
-                ? { "": props[key] }
+                ? { [MAIN_BREAKPOINT_ID]: props[key] }
                 : props[key];
             // tslint:disable-next-line: forin
             for (const breakpoint in keyVal) {
@@ -377,7 +379,7 @@ function evaluateStylesForAllBreakpoints(
   css: any
 ) {
   const breakpoints: { [key: string]: string } = {
-    "": css(styleObject),
+    [MAIN_BREAKPOINT_ID]: css(styleObject),
   };
   if (configBreakpoints) {
     // tslint:disable-next-line

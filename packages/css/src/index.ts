@@ -12,21 +12,21 @@ import {
   TCss,
 } from "./types";
 import {
+  MAIN_BREAKPOINT_ID,
   createSheets,
   cssPropToToken,
   getVendorPrefixAndProps,
   hashString,
   specificityProps,
-  tokenTypes,
 } from "./utils";
+import { unitlessKeys } from "./unitless";
+import {tokenTypes} from './constants'
 
 export * from "./types";
 export * from "./css-types";
 export * from "./utils";
 
 export const hotReloadingCache = new Map<string, any>();
-
-const MAIN_BREAKPOINT_ID = "";
 
 const createSelector = (className: string, selector: string) => {
   const cssRuleClassName = className ? `.${className}` : "";
@@ -142,10 +142,19 @@ const processStyleObject = (
       );
       continue;
     }
-    // Normal css prop
-    // Call the value middleware on it:
-    if (val !== undefined) {
-      valueMiddleware(key, val, currentNestingPath);
+    if (typeof val === "number") {
+      // handle unitless numbers:
+      valueMiddleware(
+        key,
+        `${unitlessKeys[key] ? val : val + 'px'}`,
+        currentNestingPath
+      );
+    } else if (val !== undefined) {
+      valueMiddleware(
+        key,
+        resolveTokens(key, val, config.tokens),
+        currentNestingPath
+      );
     }
   }
 };
@@ -198,7 +207,7 @@ const resolveBreakpointAndSelectorAndInlineMedia = (
         acc.nestingPath +
         // If you manually prefix with '&' we remove it for identity consistency
         // only for pseudo selectors and nothing else
-        (breakpointOrSelector[0] === "&" && breakpointOrSelector[1] === ':'
+        (breakpointOrSelector[0] === "&" && breakpointOrSelector[1] === ":"
           ? breakpointOrSelector.substr(1)
           : // pseudo elements/class
           // don't prepend with a whitespace
@@ -276,7 +285,9 @@ const createCssRule = (
     }:${atom.value};}`;
   }
 
-  return atom.breakpoint ? breakpoints[atom.breakpoint](cssRule) : cssRule;
+  return atom.breakpoint !== MAIN_BREAKPOINT_ID
+    ? breakpoints[atom.breakpoint](cssRule)
+    : cssRule;
 };
 
 const createToString = (
@@ -350,18 +361,12 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
     // @ts-ignore
     variablesSheet.insertRule(
       `.${themeClassName}{${Object.keys(this.definition).reduce(
-        (aggr, tokenType) => {
+        (subAggr, tokenKey) => {
           // @ts-ignore
-          return `${aggr}${Object.keys(this.definition[tokenType]).reduce(
-            (subAggr, tokenKey) => {
-              // @ts-ignore
-              return `${subAggr}--${tokenType}-${tokenKey}:${this.definition[tokenType][tokenKey]};`;
-            },
-            aggr
-          )}`;
+          return `${subAggr}--colors-${tokenKey}:${this.definition[tokenKey]};`;
         },
         ""
-      )}}`
+      )}`
     );
 
     this.toString = () => themeClassName;
@@ -503,7 +508,6 @@ export const createCss = <T extends TConfig>(
     inlineMediaQueries: string[],
     isGlobal?: boolean
   ) => {
-    const tokenValue: any = resolveTokens(cssProp, value, tokens);
 
     // generate id used for specificity check
     // two atoms are considered equal in regard to there specificity if the id is equal
@@ -560,7 +564,7 @@ export const createCss = <T extends TConfig>(
     const atom: IAtom = {
       id,
       cssHyphenProp,
-      value: tokenValue,
+      value,
       selector: selectorString,
       inlineMediaQueries,
       breakpoint,
@@ -671,12 +675,13 @@ export const createCss = <T extends TConfig>(
     if (themeCache.has(definition)) {
       return themeCache.get(definition)!;
     }
-
     const themeAtom = {
       // We could here also check if theme has been added from server,
       // though thinking it does not matter... just a simple rule
       name: String(themeCache.size),
-      definition,
+      // wrapping the colors in an object so that the structure matches
+      // the tokens property in the config
+      definition: definition,
       toString: themeToString,
       [ATOM]: true as true,
     };
@@ -793,7 +798,7 @@ export const createCss = <T extends TConfig>(
           `/* STITCHES:__variables__ */\n${sheets.__variables__.cssRules.join(
             "\n"
           )}`,
-          `/* STITCHES */\n${sheets[""].cssRules.join("\n")}`,
+          `/* STITCHES */\n${sheets[MAIN_BREAKPOINT_ID].cssRules.join("\n")}`,
         ]
       ),
     };
