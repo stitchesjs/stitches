@@ -1350,4 +1350,72 @@ describe("createCss", () => {
       });
     }).toThrow();
   });
+
+  test.only("Should append px to numbers if they're not unitless", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css({
+        lineHeight: 1,
+        marginLeft: 1,
+        fontSize: 1,
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_dbWduw/*X*/{line-height:1;}
+      ./*X*/_hXUSyk/*X*/{margin-left:1px;}
+      ./*X*/_clXqwH/*X*/{font-size:1px;}"
+    `);
+  });
+  test.only("Should append px to numbers in shorthands", () => {
+    const css = createCss({}, null);
+    const { styles } = css.getStyles(() => {
+      css({
+        margin: 1,
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_kYSwIs/*X*/{margin-top:1px;}
+      ./*X*/_cTIqvn/*X*/{margin-right:1px;}
+      ./*X*/_bZYdQM/*X*/{margin-bottom:1px;}
+      ./*X*/_hXUSyk/*X*/{margin-left:1px;}"
+    `);
+  });
+
+  test.only("Numbers should not map to tokens", () => {
+    const css = createCss(
+      {
+        tokens: {
+          space: {
+            1: "10px",
+          },
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      css({
+        margin: 1,
+        padding: "1",
+      }).toString();
+      return "";
+    });
+
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_kYSwIs/*X*/{margin-top:1px;}
+      ./*X*/_cTIqvn/*X*/{margin-right:1px;}
+      ./*X*/_bZYdQM/*X*/{margin-bottom:1px;}
+      ./*X*/_hXUSyk/*X*/{margin-left:1px;}
+      ./*X*/_eCjziG/*X*/{padding-top:var(--space-1);}
+      ./*X*/_bOBbkJ/*X*/{padding-right:var(--space-1);}
+      ./*X*/_gvDHwS/*X*/{padding-bottom:var(--space-1);}
+      ./*X*/_bznSbm/*X*/{padding-left:var(--space-1);}"
+    `);
+  });
 });

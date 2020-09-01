@@ -18,8 +18,9 @@ import {
   getVendorPrefixAndProps,
   hashString,
   specificityProps,
-  tokenTypes,
 } from "./utils";
+import { unitlessKeys } from "./unitless";
+import {tokenTypes} from './constants'
 
 export * from "./types";
 export * from "./css-types";
@@ -141,10 +142,21 @@ const processStyleObject = (
       );
       continue;
     }
-    // Normal css prop
-    // Call the value middleware on it:
-    if (val !== undefined) {
-      valueMiddleware(key, val, currentNestingPath);
+    if (typeof val === "number") {
+      // handle unitless numbers:
+      console.log(`${unitlessKeys[key] ? val : val + 'px'}`)
+      valueMiddleware(
+        key,
+        `${unitlessKeys[key] ? val : val + 'px'}`,
+        currentNestingPath
+      );
+    } else if (val !== undefined) {
+      console.log(val)
+      valueMiddleware(
+        key,
+        resolveTokens(key, val, config.tokens),
+        currentNestingPath
+      );
     }
   }
 };
@@ -498,7 +510,6 @@ export const createCss = <T extends TConfig>(
     inlineMediaQueries: string[],
     isGlobal?: boolean
   ) => {
-    const tokenValue: any = resolveTokens(cssProp, value, tokens);
 
     // generate id used for specificity check
     // two atoms are considered equal in regard to there specificity if the id is equal
@@ -555,7 +566,7 @@ export const createCss = <T extends TConfig>(
     const atom: IAtom = {
       id,
       cssHyphenProp,
-      value: tokenValue,
+      value,
       selector: selectorString,
       inlineMediaQueries,
       breakpoint,
