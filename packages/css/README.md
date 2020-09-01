@@ -14,10 +14,10 @@
 
 ## Get started
 
-`npm install @stitches/css`
+`npm install @stitches/core`
 
 ```ts
-import { css } from "@stitches/css";
+import { css } from "@stitches/core";
 
 const button = css({
   color: "gray",
@@ -44,7 +44,7 @@ const dynamicButton = (disabled = false) =>
 ## Configure an instance
 
 ```ts
-import { createCss } from "@stitches/css";
+import { createCss } from "@stitches/core";
 
 export const css = createCss({
   // Optinally add a prefix to all classnames to avoid crashes
@@ -102,7 +102,7 @@ css({
 Stitches also allows you to put your utils at the front. That means you can create your very own CSS abstraction, where the underlying CSS properties are secondary.
 
 ```ts
-import { createCss } from "@stitches/css";
+import { createCss } from "@stitches/core";
 
 export const css = createCss({
   utilityFirst: true,
@@ -137,7 +137,7 @@ css({
 You can create theme instances which overrides tokens:
 
 ```ts
-import { createCss } from "@stitches/css";
+import { createCss } from "@stitches/core";
 
 export const css = createCss({
   tokens: {
@@ -161,7 +161,7 @@ This theme represents a classname which can be added at any point in your DOM tr
 The `createCss` factory automatically detects if you are in a browser or server environment. That means when you this factory on the server it will **hash** the classnames (for rehydration abilities) and allow you to collect the styling to include in the responded html:
 
 ```ts
-import { createCss } from "@stitches/css";
+import { createCss } from "@stitches/core";
 
 const css = createCss({});
 const { result, styles } = css.getStyles(() => renderSomething(css));
@@ -179,7 +179,7 @@ css({
 Or you can use a [postcss](https://www.npmjs.com/package/postcss) to do the conversion:
 
 ```ts
-import { createCss } from "@stitches/css";
+import { createCss } from "@stitches/core";
 import postcss from "postcss";
 import autoprefixer from "autoprefixer";
 

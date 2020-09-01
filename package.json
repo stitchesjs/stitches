@@ -5,7 +5,7 @@
     "release": "npm run build && lerna publish",
     "build": "NODE_OPTIONS=--max_old_space_size=4096 lerna run build",
     "postinstall": "lerna bootstrap && lerna link",
-    "test:css": "lerna --scope @stitches/css run test",
+    "test:css": "lerna --scope @stitches/core run test",
     "test": "lerna run test"
   },
   "devDependencies": {
@@ -24,8 +24,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@stitches/css": "file:packages/css",
-    "@stitches/styled": "file:packages/styled",
-    "@stitches/tailwind": "file:packages/tailwind"
+    "@stitches/core": "file:packages/css",
+    "@stitches/react": "file:packages/styled"
   }
 }

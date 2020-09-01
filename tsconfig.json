@@ -5,10 +5,8 @@
     "baseUrl": "./packages",
     "jsx": "react",
     "paths": {
-      "@stitches/css": ["css/src"],
-      "@stitches/styled": ["styled/src"],
-      "@stitches/tailwind": ["tailwind/src"],
-      "@stitches/vue-directive": ["vue-directive/src"]
+      "@stitches/core": ["css/src"],
+      "@stitches/react": ["styled/src"]
     }
   }
 }

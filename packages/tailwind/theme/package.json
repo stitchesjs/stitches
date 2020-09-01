@@ -1,8 +1,0 @@
-{
-  "name": "@stitches/tailwind/theme",
-  "private": true,
-  "main": "../lib/theme",
-  "module": "../es/theme",
-  "jsnext:main": "../es/theme",
-  "typings": "../lib/theme.d.ts"
-}

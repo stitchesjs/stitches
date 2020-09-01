@@ -6,7 +6,7 @@ import {
   TMainBreakPoint,
   createCss,
   hashString,
-} from "@stitches/css";
+} from "@stitches/core";
 import * as React from "react";
 
 let hasWarnedInlineStyle = false;
@@ -236,7 +236,7 @@ export const createStyled = <Config extends TConfig>(
           if (memoStyled !== props.css && !hasWarnedInlineStyle) {
             // tslint:disable-next-line
             console.warn(
-              "@stitches/styled : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook"
+              "@stitches/react : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook"
             );
             hasWarnedInlineStyle = true;
           }

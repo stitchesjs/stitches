@@ -176,7 +176,7 @@ const resolveBreakpointAndSelectorAndInlineMedia = (
         // any level above 0
         if (i) {
           throw new Error(
-            `@stitches/css - You can not override at this level [${nestingPath
+            `@stitches/core - You can not override at this level [${nestingPath
               .slice(0, i - 1)
               .join(
                 ", "
@@ -192,7 +192,7 @@ const resolveBreakpointAndSelectorAndInlineMedia = (
       ) {
         if (acc.breakpoint !== MAIN_BREAKPOINT_ID) {
           throw new Error(
-            `@stitches/css - You are nesting the breakpoint "${breakpointOrSelector}" into "${acc.breakpoint}", that makes no sense? :-)`
+            `@stitches/core - You are nesting the breakpoint "${breakpointOrSelector}" into "${acc.breakpoint}", that makes no sense? :-)`
           );
         }
         acc.breakpoint = breakpointOrSelector;
