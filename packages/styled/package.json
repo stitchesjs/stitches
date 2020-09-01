@@ -1,6 +1,6 @@
 {
   "name": "@stitches/react",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "The modern CSS-in-JS library",
   "contributors": [
     "Christian Alfoni <christianalfoni@gmail.com>",
@@ -44,7 +44,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/core": "^0.0.0",
+    "@stitches/core": "^0.0.1",
     "@types/node": "^13.11.1",
     "tslib": "^1.11.1"
   },
