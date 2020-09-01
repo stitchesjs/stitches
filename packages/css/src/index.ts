@@ -144,14 +144,12 @@ const processStyleObject = (
     }
     if (typeof val === "number") {
       // handle unitless numbers:
-      console.log(`${unitlessKeys[key] ? val : val + 'px'}`)
       valueMiddleware(
         key,
         `${unitlessKeys[key] ? val : val + 'px'}`,
         currentNestingPath
       );
     } else if (val !== undefined) {
-      console.log(val)
       valueMiddleware(
         key,
         resolveTokens(key, val, config.tokens),
