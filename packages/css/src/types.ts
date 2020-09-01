@@ -431,7 +431,7 @@ export interface ITokenDefinition {
 }
 
 export interface ITokensDefinition {
-  colors?: ITokenDefinition & { modes?: { [a: string]: ITokenDefinition } };
+  colors?: ITokenDefinition;
   space?: ITokenDefinition;
   fontSizes?: ITokenDefinition;
   fonts?: ITokenDefinition;
@@ -513,10 +513,10 @@ export interface TCss<T extends TConfig> {
     >
   ) => string;
   theme: (
-    colors: Partial<
-      T extends { tokens: { colors: {} } }
-        ? { [k in keyof T["tokens"]["colors"]]: string }
-        : {}
+    theme: Partial<
+      {
+        [TO in keyof T["tokens"]]: Partial<T["tokens"][TO]>;
+      }
     >
   ) => string;
 }
