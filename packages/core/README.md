@@ -17,19 +17,19 @@
 `npm install @stitches/core`
 
 ```ts
-import { css } from "@stitches/core";
+import { css } from '@stitches/core';
 
 const button = css({
-  color: "gray",
-  "&:hover": {
-    color: "black",
+  color: 'gray',
+  '&:hover': {
+    color: 'black',
   },
-  borderColor: "black",
-  padding: "1rem",
+  borderColor: 'black',
+  padding: '1rem',
 });
 
 const alertButton = css(button, {
-  borderColor: "red",
+  borderColor: 'red',
 });
 
 const dynamicButton = (disabled = false) =>
@@ -44,18 +44,18 @@ const dynamicButton = (disabled = false) =>
 ## Configure an instance
 
 ```ts
-import { createCss } from "@stitches/core";
+import { createCss } from '@stitches/core';
 
 export const css = createCss({
   // Optinally add a prefix to all classnames to avoid crashes
-  prefix: "my-lib",
+  prefix: 'my-lib',
   // Maps tokens to properties. Follows the system-ui theme specification: https://system-ui.com/theme
   tokens: {
     colors: {
-      RED: "tomato",
+      RED: 'tomato',
     },
     space: {
-      0: "1rem",
+      0: '1rem',
     },
     fontSizes: {},
     fonts: {},
@@ -86,14 +86,14 @@ export const css = createCss({
 });
 
 css({
-  color: "RED", // Creates "tomato"
+  color: 'RED', // Creates "tomato"
   tablet: {
-    color: "blue", // Color is "blue" when media query is active
+    color: 'blue', // Color is "blue" when media query is active
   },
   marginX: 0, // Creates "1rem", as it composes margin, using "space" from tokens
-  border: "1px solid RED", // creates a "tomato" border
-  border: ["1px", "solid", "RED"], // You can also use array syntax to get typing
-  boxShadow: ["1px", "1px", "1px", "RED"], // You can also use array syntax with shadow
+  border: '1px solid RED', // creates a "tomato" border
+  border: ['1px', 'solid', 'RED'], // You can also use array syntax to get typing
+  boxShadow: ['1px', '1px', '1px', 'RED'], // You can also use array syntax with shadow
 });
 ```
 
@@ -102,32 +102,32 @@ css({
 Stitches also allows you to put your utils at the front. That means you can create your very own CSS abstraction, where the underlying CSS properties are secondary.
 
 ```ts
-import { createCss } from "@stitches/core";
+import { createCss } from '@stitches/core';
 
 export const css = createCss({
   utilityFirst: true,
   utils: {
     text: (config) => (value: { color?: string; size?: number }) => ({
       ...(color ? { color } : {}),
-      ...(size ? { fontSize: size + "rem" } : {}),
+      ...(size ? { fontSize: size + 'rem' } : {}),
     }),
   },
 });
 
 css({
   text: {
-    color: "red",
+    color: 'red',
     size: 2,
   },
-  ":hover": {
+  ':hover': {
     text: {
-      color: "blue",
+      color: 'blue',
     },
   },
   // Override is a property that allows you to override
   // with specific low level CSS properties
   override: {
-    padding: "2rem",
+    padding: '2rem',
   },
 });
 ```
@@ -137,19 +137,19 @@ css({
 You can create theme instances which overrides tokens:
 
 ```ts
-import { createCss } from "@stitches/core";
+import { createCss } from '@stitches/core';
 
 export const css = createCss({
   tokens: {
     colors: {
-      primary: "tomato",
+      primary: 'tomato',
     },
   },
 });
 
 export const funnyTheme = css.theme({
   colors: {
-    primary: "pink",
+    primary: 'pink',
   },
 });
 ```
@@ -161,7 +161,7 @@ This theme represents a classname which can be added at any point in your DOM tr
 The `createCss` factory automatically detects if you are in a browser or server environment. That means when you this factory on the server it will **hash** the classnames (for rehydration abilities) and allow you to collect the styling to include in the responded html:
 
 ```ts
-import { createCss } from "@stitches/core";
+import { createCss } from '@stitches/core';
 
 const css = createCss({});
 const { result, styles } = css.getStyles(() => renderSomething(css));
@@ -171,27 +171,23 @@ Note that server produced CSS does not contain vendor prefixes, as there is no b
 
 ```ts
 css({
-  WebkitFontSmoothing: "antialiased",
-  MozOsxFontSmoothing: "grayscale",
+  WebkitFontSmoothing: 'antialiased',
+  MozOsxFontSmoothing: 'grayscale',
 });
 ```
 
 Or you can use a [postcss](https://www.npmjs.com/package/postcss) to do the conversion:
 
 ```ts
-import { createCss } from "@stitches/core";
-import postcss from "postcss";
-import autoprefixer from "autoprefixer";
+import { createCss } from '@stitches/core';
+import postcss from 'postcss';
+import autoprefixer from 'autoprefixer';
 
 const css = createCss({});
 const { result, styles } = css.getStyles(() => renderSomething(css));
 
 Promise.all(
-  styles.map((style) =>
-    postcss([autoprefixer({ browsers: ["> 1%", "last 2 versions"] })]).process(
-      style
-    )
-  )
+  styles.map((style) => postcss([autoprefixer({ browsers: ['> 1%', 'last 2 versions'] })]).process(style))
 ).then((styles) => {
   // styles with vendor prefixes
 });

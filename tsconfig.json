@@ -1,12 +1,7 @@
 {
   "extends": "./tsconfig.build.json",
-
   "compilerOptions": {
-    "baseUrl": "./packages",
     "jsx": "react",
-    "paths": {
-      "@stitches/core": ["css/src"],
-      "@stitches/react": ["styled/src"]
-    }
+    "preserveSymlinks": true
   }
 }

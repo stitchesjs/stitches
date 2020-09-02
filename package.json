@@ -2,18 +2,25 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "release": "npm run build && lerna publish",
-    "build": "NODE_OPTIONS=--max_old_space_size=4096 lerna run build",
-    "postinstall": "lerna bootstrap && lerna link",
-    "test:css": "lerna --scope @stitches/core run test",
-    "test": "lerna run test"
+    "release": "yarn test && yarn build && lerna publish",
+    "build": "preconstruct build",
+    "postinstall": "lerna bootstrap && preconstruct dev",
+    "test:css": "yarn workspace @stitches/core run test",
+    "test:react": "yarn workspace @stitches/react run test",
+    "test": "yarn test:css && yarn test:react"
   },
+  "workspaces": [
+    "packages/*"
+  ],
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/react": "^16.9.34",
     "dts-bundle": "^0.7.3",
+    "husky": "4.2.5",
     "jest": "^25.3.0",
     "lerna": "^3.22.1",
+    "lint-staged": "^9.5.0",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
     "semver": "^7.3.0",
@@ -23,8 +30,21 @@
     "tslint-plugin-prettier": "^2.3.0",
     "typescript": "^3.8.3"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn workspaces run lint-staged"
+    }
+  },
   "dependencies": {
-    "@stitches/core": "file:packages/css",
-    "@stitches/react": "file:packages/styled"
+    "@babel/core": "^7.11.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.10.4",
+    "@preconstruct/cli": "^1.1.27",
+    "react": "^16.13.1"
+  },
+  "preconstruct": {
+    "packages": [
+      "packages/*"
+    ]
   }
 }

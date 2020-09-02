@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`styled Handles compound variant 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._bieopk {background-color: red;}",
+    "._dtTvho {height: 60px;}"
+  ],
+  "props": {
+    "className": "_dtTvho _bieopk scid-URbJg"
+  },
+  "children": [
+    "not compound"
+  ]
+}
+`;
+
+exports[`styled Handles compound variant 2`] = `
+{
+  "orderedAppliedStyles": [
+    "._bSHlld {height: 30px;}",
+    "._hEGtPv {background-color: compoundColor;}"
+  ],
+  "props": {
+    "className": "_hEGtPv _bSHlld scid-URbJg"
+  },
+  "children": [
+    "compound"
+  ]
+}
+`;
+
+exports[`styled Handles css prop 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._iBRUhC {background-color: gray;}",
+    "._dzoaVP {color: red;}"
+  ],
+  "props": {
+    "className": "_dzoaVP _iBRUhC scid-dmZJpl"
+  },
+  "children": [
+    "hello world"
+  ]
+}
+`;
+
+exports[`styled Handles css prop 2`] = `
+{
+  "orderedAppliedStyles": [
+    "._iBRUhC {background-color: gray;}",
+    "._dzoaVP {color: red;}"
+  ],
+  "props": {
+    "className": "_dzoaVP _iBRUhC scid-dmZJpl"
+  },
+  "children": [
+    "hello world"
+  ]
+}
+`;
+
+exports[`styled Renders basic component 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._bOFHNE div {font-size: 18px;}"
+  ],
+  "props": {
+    "className": "hi _bOFHNE scid-dIyoRL"
+  },
+  "children": [
+    "hello world"
+  ]
+}
+`;
+
+exports[`styled renders component with variant 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._iBRUhC {background-color: gray;}"
+  ],
+  "props": {
+    "className": "_iBRUhC scid-gFxMiu"
+  },
+  "children": [
+    "hello world"
+  ]
+}
+`;
+
+exports[`styled renders component with variant 2`] = `
+{
+  "orderedAppliedStyles": [
+    "._bieopk {background-color: red;}"
+  ],
+  "props": {
+    "className": "_bieopk scid-gFxMiu"
+  },
+  "children": [
+    "hello world"
+  ]
+}
+`;
+
+exports[`styled renders component with variant 3`] = `
+{
+  "orderedAppliedStyles": [
+    "._YfjLh {background-color: blue;}"
+  ],
+  "props": {
+    "className": "_YfjLh scid-gFxMiu"
+  },
+  "children": [
+    "hello world"
+  ]
+}
+`;

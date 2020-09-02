@@ -1,13 +1,6 @@
-import {
-  MAIN_BREAKPOINT_ID,
-  TConfig,
-  TCss,
-  TDefaultCss,
-  TMainBreakPoint,
-  createCss,
-  hashString,
-} from "@stitches/core";
-import * as React from "react";
+import { MAIN_BREAKPOINT_ID, TConfig, TCss, TDefaultCss, TMainBreakPoint, createCss, hashString } from '@stitches/core';
+export { _ATOM } from '@stitches/core';
+import * as React from 'react';
 
 let hasWarnedInlineStyle = false;
 
@@ -25,17 +18,13 @@ export type TExtractVariants<Styles> = Styles extends {
 /**
  * Extracts Breakpoint keys from a config
  */
-export type BreakPointsKeys<
-  Config extends TConfig
-> = keyof Config["breakpoints"];
+export type BreakPointsKeys<Config extends TConfig> = keyof Config['breakpoints'];
 
 /**
  * Takes a value and if it's one of the string type representations of a boolean ('true' | 'false')
  * it adds the actual boolean values to it
  */
-export type CastStringToBoolean<Val> = Val extends "true" | "false"
-  ? boolean | "true" | "false"
-  : never;
+export type CastStringToBoolean<Val> = Val extends 'true' | 'false' ? boolean | 'true' | 'false' : never;
 /**
  * Takes a variants object and converts it to the correct type information for usage in props
  */
@@ -44,9 +33,7 @@ export type VariantASProps<Config extends TConfig, VariantsObj> = {
     | CastStringToBoolean<VariantsObj[V]>
     | VariantsObj[V]
     | {
-        [B in BreakPointsKeys<Config> | TMainBreakPoint]?:
-          | CastStringToBoolean<VariantsObj[V]>
-          | VariantsObj[V];
+        [B in BreakPointsKeys<Config> | TMainBreakPoint]?: CastStringToBoolean<VariantsObj[V]> | VariantsObj[V];
       };
 };
 
@@ -106,9 +93,7 @@ export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
 
 /** The type for the styles in a styled call */
-export type TComponentStylesObject<
-  Config extends TConfig
-> = TCssWithBreakpoints<Config> & {
+export type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints<Config> & {
   variants?: {
     [k: string]: {
       [s: string]: TCssWithBreakpoints<Config>;
@@ -119,9 +104,7 @@ export type TComponentStylesObject<
  * Types for styled.button, styled.div, etc..
  */
 export type TProxyStyledElements<Config extends TConfig> = {
-  [key in keyof JSX.IntrinsicElements]: <
-    BaseAndVariantStyles extends TComponentStylesObject<Config>
-  >(
+  [key in keyof JSX.IntrinsicElements]: <BaseAndVariantStyles extends TComponentStylesObject<Config>>(
     a: BaseAndVariantStyles | TComponentStylesObject<Config>
   ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
 };
@@ -132,31 +115,20 @@ export type TProxyStyledElements<Config extends TConfig> = {
 export type TStyled<Config extends TConfig> = {
   // tslint:disable-next-line: callable-types
   <
-    TagOrComponent extends
-      | keyof JSX.IntrinsicElements
-      | React.ComponentType<any>
-      | IStyledComponent<any, any, Config>,
+    TagOrComponent extends keyof JSX.IntrinsicElements | React.ComponentType<any> | IStyledComponent<any, any, Config>,
     BaseAndVariantStyles extends TComponentStylesObject<Config>
   >(
     tag: TagOrComponent,
     baseStyles: BaseAndVariantStyles | TComponentStylesObject<Config>
   ): TagOrComponent extends IStyledComponent<any, any, Config>
     ? TagOrComponent
-    : IStyledComponent<
-        TagOrComponent,
-        TExtractVariants<BaseAndVariantStyles>,
-        Config
-      >;
+    : IStyledComponent<TagOrComponent, TExtractVariants<BaseAndVariantStyles>, Config>;
 } & TProxyStyledElements<Config>;
 
 const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
   const map = new Map();
-  map.set(MAIN_BREAKPOINT_ID, [
-    ...(existingMap?.get(MAIN_BREAKPOINT_ID) || []),
-  ]);
-  Object.keys(breakPoints).forEach((breakpoint) =>
-    map.set(breakpoint, [...(existingMap?.get(breakpoint) || [])])
-  );
+  map.set(MAIN_BREAKPOINT_ID, [...(existingMap?.get(MAIN_BREAKPOINT_ID) || [])]);
+  Object.keys(breakPoints).forEach((breakpoint) => map.set(breakpoint, [...(existingMap?.get(breakpoint) || [])]));
   return map;
 };
 
@@ -167,7 +139,7 @@ export const createStyled = <Config extends TConfig>(
   styled: TStyled<Config>;
 } => {
   const css = createCss(config);
-  const defaultElement = "div";
+  const defaultElement = 'div';
   const Box = React.forwardRef((props: any, ref: React.Ref<Element>) => {
     const Element = props.as || defaultElement;
 
@@ -196,134 +168,100 @@ export const createStyled = <Config extends TConfig>(
     // a map that keeps track of the required number of matching s left for each break point:
     const requiredMatches = createCompoundVariantsMatcher(configBreakpoints);
     // keep track of the number of available variants
-    const evaluatedVariantMap: Map<
-      string,
-      Map<string, { [key: string]: string }>
-    > = new Map();
+    const evaluatedVariantMap: Map<string, Map<string, { [key: string]: string }>> = new Map();
     // store pre evaluated variants
-    const evaluatedCompoundVariants: Map<
-      any,
-      { [key: string]: string }
-    > = new Map();
+    const evaluatedCompoundVariants: Map<any, { [key: string]: string }> = new Map();
 
     // tslint:disable-next-line: forin
     for (const Name in variants) {
       const variantMap: Map<string, { [key: string]: string }> = new Map();
       // tslint:disable-next-line: forin
       for (const ValueName in variants[Name]) {
-        const evaluatedStyles = evaluateStylesForAllBreakpoints(
-          variants[Name][ValueName],
-          configBreakpoints,
-          css
-        );
+        const evaluatedStyles = evaluateStylesForAllBreakpoints(variants[Name][ValueName], configBreakpoints, css);
         variantMap.set(ValueName, evaluatedStyles);
       }
       evaluatedVariantMap.set(Name, variantMap);
     }
 
-    const stitchesComponentId = `scid-${hashString(
-      JSON.stringify(baseAndVariantStyles)
-    )}`;
+    const stitchesComponentId = `scid-${hashString(JSON.stringify(baseAndVariantStyles))}`;
 
-    const StitchesComponent = React.forwardRef(
-      (props: any, ref: React.Ref<Element>) => {
-        // Check the memoCompsition's identity to warn the user
-        // remove in production
-        if (process.env.NODE_ENV === "development") {
-          // we're breaking the rules of hooks on purpose as the env will never change
-          // eslint-disable-next-line
-          const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
-          if (memoStyled !== props.css && !hasWarnedInlineStyle) {
-            // tslint:disable-next-line
-            console.warn(
-              "@stitches/react : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook"
-            );
-            hasWarnedInlineStyle = true;
-          }
+    const StitchesComponent = React.forwardRef((props: any, ref: React.Ref<Element>) => {
+      // Check the memoCompsition's identity to warn the user
+      // remove in production
+      if (process.env.NODE_ENV === 'development') {
+        // we're breaking the rules of hooks on purpose as the env will never change
+        // eslint-disable-next-line
+        const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
+        if (memoStyled !== props.css && !hasWarnedInlineStyle) {
+          // tslint:disable-next-line
+          console.warn(
+            '@stitches/react : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook'
+          );
+          hasWarnedInlineStyle = true;
         }
-
-        const compositions = [baseStyles];
-
-        const propsWithoutVariantsAndCssProp: any = {};
-        // clone the compound s matcher
-        const compoundRequiredMatches = createCompoundVariantsMatcher(
-          configBreakpoints,
-          requiredMatches
-        );
-        // keep track of the number of unResolved s so that we could bail early:
-        const numberOfUnResolvedCompoundVariants = {
-          current: numberOfCompoundVariants,
-        };
-        for (const key in props) {
-          // check if the prop is a variant
-          if (key in variants) {
-            const evaluatedVariant = evaluatedVariantMap.get(key);
-            // normalize the value so that we only have to deal with one structure:
-            const keyVal =
-              props[key] && typeof props[key] !== "object"
-                ? { [MAIN_BREAKPOINT_ID]: props[key] }
-                : props[key];
-            // tslint:disable-next-line: forin
-            for (const breakpoint in keyVal) {
-              // check if the variant exist for this breakpoint
-              if (
-                keyVal[breakpoint] &&
-                evaluatedVariant &&
-                evaluatedVariant.get(String(keyVal[breakpoint]))
-              ) {
-                compositions.push(
-                  evaluatedVariant.get(String(keyVal[breakpoint]))?.[breakpoint]
-                );
-              }
-              /** Compound variants: */
-              if (numberOfUnResolvedCompoundVariants.current) {
-                compoundVariants.forEach((compoundVariant, i) => {
-                  // if this breakpoint  matches a compound
-                  // eslint-disable-next-line
-                  if (
-                    String(keyVal[breakpoint]) === String(compoundVariant[key])
-                  ) {
-                    compoundRequiredMatches.get(breakpoint)[i]--;
-                  }
-                  // when the required matches reach 0 for any compound ...
-                  // we know we have a matched compoundVariant
-                  if (compoundRequiredMatches.get(breakpoint)[i] === 0) {
-                    numberOfUnResolvedCompoundVariants.current--;
-                    compositions.push(
-                      evaluatedCompoundVariants.get(compoundVariant)?.[
-                        breakpoint
-                      ]
-                    );
-                  }
-                });
-              }
-              /** End compound variants */
-            }
-          } else {
-            propsWithoutVariantsAndCssProp[key] = props[key];
-          }
-        }
-
-        if (propsWithoutVariantsAndCssProp.css) {
-          compositions.push(propsWithoutVariantsAndCssProp.css);
-          propsWithoutVariantsAndCssProp.css = undefined;
-        }
-
-        return React.createElement(Component, {
-          ...propsWithoutVariantsAndCssProp,
-          as: props.as || as,
-          ref,
-          className: css(stitchesComponentId, ...compositions, props.className),
-        });
       }
-    );
+
+      const compositions = [baseStyles];
+
+      const propsWithoutVariantsAndCssProp: any = {};
+      // clone the compound s matcher
+      const compoundRequiredMatches = createCompoundVariantsMatcher(configBreakpoints, requiredMatches);
+      // keep track of the number of unResolved s so that we could bail early:
+      const numberOfUnResolvedCompoundVariants = {
+        current: numberOfCompoundVariants,
+      };
+      for (const key in props) {
+        // check if the prop is a variant
+        if (key in variants) {
+          const evaluatedVariant = evaluatedVariantMap.get(key);
+          // normalize the value so that we only have to deal with one structure:
+          const keyVal =
+            props[key] && typeof props[key] !== 'object' ? { [MAIN_BREAKPOINT_ID]: props[key] } : props[key];
+          // tslint:disable-next-line: forin
+          for (const breakpoint in keyVal) {
+            // check if the variant exist for this breakpoint
+            if (keyVal[breakpoint] && evaluatedVariant && evaluatedVariant.get(String(keyVal[breakpoint]))) {
+              compositions.push(evaluatedVariant.get(String(keyVal[breakpoint]))?.[breakpoint]);
+            }
+            /** Compound variants: */
+            if (numberOfUnResolvedCompoundVariants.current) {
+              compoundVariants.forEach((compoundVariant, i) => {
+                // if this breakpoint  matches a compound
+                // eslint-disable-next-line
+                if (String(keyVal[breakpoint]) === String(compoundVariant[key])) {
+                  compoundRequiredMatches.get(breakpoint)[i]--;
+                }
+                // when the required matches reach 0 for any compound ...
+                // we know we have a matched compoundVariant
+                if (compoundRequiredMatches.get(breakpoint)[i] === 0) {
+                  numberOfUnResolvedCompoundVariants.current--;
+                  compositions.push(evaluatedCompoundVariants.get(compoundVariant)?.[breakpoint]);
+                }
+              });
+            }
+            /** End compound variants */
+          }
+        } else {
+          propsWithoutVariantsAndCssProp[key] = props[key];
+        }
+      }
+
+      if (propsWithoutVariantsAndCssProp.css) {
+        compositions.push(propsWithoutVariantsAndCssProp.css);
+        propsWithoutVariantsAndCssProp.css = undefined;
+      }
+
+      return React.createElement(Component, {
+        ...propsWithoutVariantsAndCssProp,
+        as: props.as || as,
+        ref,
+        className: css(stitchesComponentId, ...compositions, props.className),
+      });
+    });
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
-    (StitchesComponent as any).compoundVariant = (
-      compundVariantsObject: any,
-      compoundVariantStyles: any
-    ) => {
+    (StitchesComponent as any).compoundVariant = (compundVariantsObject: any, compoundVariantStyles: any) => {
       // Update component level variables:
       numberOfCompoundVariants++;
       // Each time we add
@@ -339,11 +277,7 @@ export const createStyled = <Config extends TConfig>(
         value.push(Object.keys(compundVariantsObject).length);
       });
 
-      const evaluatedStyles = evaluateStylesForAllBreakpoints(
-        compoundVariantStyles,
-        configBreakpoints,
-        css
-      );
+      const evaluatedStyles = evaluateStylesForAllBreakpoints(compoundVariantStyles, configBreakpoints, css);
 
       evaluatedCompoundVariants.set(compundVariantsObject, evaluatedStyles);
       return StitchesComponent;
@@ -354,14 +288,14 @@ export const createStyled = <Config extends TConfig>(
   // tslint:disable-next-line
   const styledProxy = new Proxy(() => {}, {
     get(_, prop) {
-      if (prop === "Box") {
+      if (prop === 'Box') {
         return Box;
       }
       currentAs = String(prop);
       return styledInstance;
     },
     apply(_, __, [Element, styling]) {
-      if (typeof Element === "string") {
+      if (typeof Element === 'string') {
         currentAs = Element;
         return styledInstance(styling);
       }
@@ -375,11 +309,7 @@ export const createStyled = <Config extends TConfig>(
     css,
   };
 };
-function evaluateStylesForAllBreakpoints(
-  styleObject: any,
-  configBreakpoints: any,
-  css: any
-) {
+function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: any, css: any) {
   const breakpoints: { [key: string]: string } = {
     [MAIN_BREAKPOINT_ID]: css(styleObject),
   };

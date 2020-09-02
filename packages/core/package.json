@@ -1,31 +1,40 @@
 {
-  "name": "@stitches/react",
+  "name": "@stitches/core",
   "version": "0.0.1",
   "description": "The modern CSS-in-JS library",
+  "main": "dist/core.cjs.js",
+  "module": "dist/core.esm.js",
   "contributors": [
     "Christian Alfoni <christianalfoni@gmail.com>",
     "Pedro Duarte <pedro@modulz.app>",
-    "Abdul Hallak <abdul@modulz.app>"
+    "Abdulhadi Alhallak <abdulhadi@modulz.app>"
   ],
   "license": "MIT",
   "repository": "git+https://github.com/modulz/stitches.git",
-  "main": "lib/index.js",
-  "module": "es/index.js",
   "publishConfig": {
     "access": "public"
   },
+  "preconstruct": {
+    "source": "src/index.ts"
+  },
+  "lint-staged": {
+    "./**/*.{js,jsx,ts,tsx}": [
+      "tslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "./**/*.{css,md,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "scripts": {
-    "build": "npm run build:lib & npm run build:es",
-    "build:lib": "tsc -p tsconfig.build.json --outDir lib --module commonjs",
-    "build:es": "tsc -p tsconfig.build.json --outDir es --module es2015",
     "clean": "rimraf dist es lib coverage",
     "typecheck": "tsc --noEmit",
     "lint": "tslint --project tsconfig.json --format stylish",
     "format": "prettier '**/*.{md,js,jsx,json,ts,tsx}' --write",
     "test": "jest --env=jsdom --coverage",
     "test:watch": "node ../../node_modules/jest/bin/jest.js --env=jsdom --watch --updateSnapshot",
-    "prebuild": "npm run clean",
-    "postbuild": "rimraf {lib,es}/**/__tests__ {lib,es}/**/*.{spec,test}.{js,d.ts,js.map}",
     "posttest": "npm run typecheck && npm run lint",
     "preversion": "npm test",
     "postversion": "git push && git push --tags"
@@ -37,14 +46,9 @@
     "library"
   ],
   "files": [
-    "lib",
-    "es"
+    "dist"
   ],
-  "peerDependencies": {
-    "react": "^16.13.1"
-  },
   "dependencies": {
-    "@stitches/core": "^0.0.1",
     "@types/node": "^13.11.1",
     "tslib": "^1.11.1"
   },

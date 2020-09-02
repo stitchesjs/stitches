@@ -10,26 +10,26 @@ import {
   margin,
   padding,
   transition,
-} from "../src/shorthand-parser";
+} from '../src/shorthand-parser';
 
 const tokens = {
-  sizes: { 1: "1px" },
+  sizes: { 1: '1px' },
   colors: {
-    gray400: "#e3e3e3",
+    gray400: '#e3e3e3',
   },
-  space: { 1: "5px", 2: "10px", 3: "15px", 4: "20px" },
-  fontSizes: { 1: "18px" },
-  lineHeights: { 1: "2" },
-  fontWeights: { 1: "500" },
-  fonts: { main: "potato-font" },
-  borderWidths: { hairLine: "1px" },
-  radii: { 1: "3px" },
+  space: { 1: '5px', 2: '10px', 3: '15px', 4: '20px' },
+  fontSizes: { 1: '18px' },
+  lineHeights: { 1: '2' },
+  fontWeights: { 1: '500' },
+  fonts: { main: 'potato-font' },
+  borderWidths: { hairLine: '1px' },
+  radii: { 1: '3px' },
 };
 
 // works
-describe("Background shorthand", () => {
-  test("Handles backgroundColor", () => {
-    expect(background(tokens, "red")).toMatchInlineSnapshot(`
+describe('Background shorthand', () => {
+  test('Handles backgroundColor', () => {
+    expect(background(tokens, 'red')).toMatchInlineSnapshot(`
       Object {
         "backgroundColor": "red",
       }
@@ -37,8 +37,8 @@ describe("Background shorthand", () => {
   });
 
   // works
-  test("Handles backgroundColor with token", () => {
-    expect(background(tokens, "gray400")).toMatchInlineSnapshot(`
+  test('Handles backgroundColor with token', () => {
+    expect(background(tokens, 'gray400')).toMatchInlineSnapshot(`
       Object {
         "backgroundColor": "#e3e3e3",
       }
@@ -46,9 +46,8 @@ describe("Background shorthand", () => {
   });
 
   // works
-  test("Handles url", () => {
-    expect(background(tokens, 'url("../../media/examples/lizard.png")'))
-      .toMatchInlineSnapshot(`
+  test('Handles url', () => {
+    expect(background(tokens, 'url("../../media/examples/lizard.png")')).toMatchInlineSnapshot(`
       Object {
         "backgroundImage": "url(\\"../../media/examples/lizard.png\\")",
       }
@@ -65,24 +64,17 @@ describe("Background shorthand", () => {
   //   `);
   // });
 
-  test("Handles gradient with nesting", () => {
-    expect(
-      background(
-        tokens,
-        "linear-gradient(rgba(0, 0, 255, 0.5), rgba(255, 255, 0, 0.5))"
-      )
-    ).toMatchInlineSnapshot(`
+  test('Handles gradient with nesting', () => {
+    expect(background(tokens, 'linear-gradient(rgba(0, 0, 255, 0.5), rgba(255, 255, 0, 0.5))')).toMatchInlineSnapshot(`
       Object {
         "backgroundImage": "linear-gradient(rgba(0, 0, 255, 0.5), rgba(255, 255, 0, 0.5))",
       }
     `);
   });
 
-  test("Handles complex combinations", () => {
+  test('Handles complex combinations', () => {
     // works
-    expect(
-      background(tokens, 'lightblue url("img_tree.gif") no-repeat fixed center')
-    ).toMatchInlineSnapshot(`
+    expect(background(tokens, 'lightblue url("img_tree.gif") no-repeat fixed center')).toMatchInlineSnapshot(`
       Object {
         "backgroundAttachment": "fixed",
         "backgroundColor": "lightblue",
@@ -92,12 +84,8 @@ describe("Background shorthand", () => {
       }
     `);
     // works
-    expect(
-      background(
-        tokens,
-        'no-repeat url("../lizard.png"), repeat-x url("../examples/dog.png")'
-      )
-    ).toMatchInlineSnapshot(`
+    expect(background(tokens, 'no-repeat url("../lizard.png"), repeat-x url("../examples/dog.png")'))
+      .toMatchInlineSnapshot(`
       Object {
         "backgroundImage": "url(\\"../lizard.png\\"),url(\\"../examples/dog.png\\")",
         "backgroundRepeat": "no-repeat,repeat-x",
@@ -135,18 +123,16 @@ describe("Background shorthand", () => {
   });
 });
 
-describe("Font shorthand", () => {
-  test("Font shorthands without tokens", () => {
-    expect(font(tokens, '1.2em "Fira Sans", sans-serif'))
-      .toMatchInlineSnapshot(`
+describe('Font shorthand', () => {
+  test('Font shorthands without tokens', () => {
+    expect(font(tokens, '1.2em "Fira Sans", sans-serif')).toMatchInlineSnapshot(`
       Object {
         "fontFamily": "\\"Fira Sans\\",sans-serif",
         "fontSize": "1.2em",
       }
     `);
 
-    expect(font(tokens, "italic bold 12px/30px Georgia, serif"))
-      .toMatchInlineSnapshot(`
+    expect(font(tokens, 'italic bold 12px/30px Georgia, serif')).toMatchInlineSnapshot(`
       Object {
         "fontFamily": "Georgia,serif",
         "fontSize": "12px",
@@ -157,8 +143,7 @@ describe("Font shorthand", () => {
     `);
 
     // match
-    expect(font(tokens, 'italic 1.2em "Fira Sans", serif'))
-      .toMatchInlineSnapshot(`
+    expect(font(tokens, 'italic 1.2em "Fira Sans", serif')).toMatchInlineSnapshot(`
           Object {
             "fontFamily": "\\"Fira Sans\\",serif",
             "fontSize": "1.2em",
@@ -166,7 +151,7 @@ describe("Font shorthand", () => {
           }
       `);
     // match
-    expect(font(tokens, "italic bold 16px/2 cursive")).toMatchInlineSnapshot(`
+    expect(font(tokens, 'italic bold 16px/2 cursive')).toMatchInlineSnapshot(`
           Object {
             "fontFamily": "cursive",
             "fontSize": "16px",
@@ -176,7 +161,7 @@ describe("Font shorthand", () => {
           }
       `);
     // match:
-    expect(font(tokens, "bold 24px/1 sans-serif")).toMatchInlineSnapshot(`
+    expect(font(tokens, 'bold 24px/1 sans-serif')).toMatchInlineSnapshot(`
       Object {
         "fontFamily": "sans-serif",
         "fontSize": "24px",
@@ -185,7 +170,7 @@ describe("Font shorthand", () => {
       }
     `);
     // match:
-    expect(font(tokens, "caption")).toMatchInlineSnapshot(`
+    expect(font(tokens, 'caption')).toMatchInlineSnapshot(`
           Object {
             "fontFamily": "caption",
           }
@@ -206,8 +191,8 @@ describe("Font shorthand", () => {
   // });
 
   // works:
-  test("Handles fontSize token", () => {
-    expect(font(tokens, "bold 1/3 arial")).toMatchInlineSnapshot(`
+  test('Handles fontSize token', () => {
+    expect(font(tokens, 'bold 1/3 arial')).toMatchInlineSnapshot(`
       Object {
         "fontFamily": "arial",
         "fontSize": "18px",
@@ -217,8 +202,8 @@ describe("Font shorthand", () => {
     `);
   });
   // match:
-  test("Handles lineHeight token", () => {
-    expect(font(tokens, "bold 13px/1 arial")).toMatchInlineSnapshot(`
+  test('Handles lineHeight token', () => {
+    expect(font(tokens, 'bold 13px/1 arial')).toMatchInlineSnapshot(`
       Object {
         "fontFamily": "arial",
         "fontSize": "13px",
@@ -228,8 +213,8 @@ describe("Font shorthand", () => {
     `);
   });
   // match
-  test("Handles font-family token", () => {
-    expect(font(tokens, "bold 13px/3 main")).toMatchInlineSnapshot(`
+  test('Handles font-family token', () => {
+    expect(font(tokens, 'bold 13px/3 main')).toMatchInlineSnapshot(`
       Object {
         "fontFamily": "potato-font",
         "fontSize": "13px",
@@ -251,12 +236,10 @@ describe("Font shorthand", () => {
   // });
 });
 // works
-describe("Animation shorthand", () => {
-  test("Handles animation shorthand", () => {
+describe('Animation shorthand', () => {
+  test('Handles animation shorthand', () => {
     // works
-    expect(
-      animation(tokens, "3s ease-in 1s infinite reverse both running slidein")
-    ).toMatchInlineSnapshot(`
+    expect(animation(tokens, '3s ease-in 1s infinite reverse both running slidein')).toMatchInlineSnapshot(`
       Object {
         "animationDelay": "1s",
         "animationDirection": "reverse",
@@ -269,8 +252,7 @@ describe("Animation shorthand", () => {
       }
     `);
     // works:
-    expect(animation(tokens, "3s linear 1s infinite running slidein"))
-      .toMatchInlineSnapshot(`
+    expect(animation(tokens, '3s linear 1s infinite running slidein')).toMatchInlineSnapshot(`
       Object {
         "animationDelay": "1s",
         "animationDuration": "3s",
@@ -282,21 +264,16 @@ describe("Animation shorthand", () => {
     `);
 
     // Works:
-    expect(animation(tokens, "slidein 3s")).toMatchInlineSnapshot(`
+    expect(animation(tokens, 'slidein 3s')).toMatchInlineSnapshot(`
       Object {
         "animationDuration": "3s",
         "animationName": "slidein",
       }
     `);
   });
-  test("Handles multiple animation groups", () => {
+  test('Handles multiple animation groups', () => {
     // works:
-    expect(
-      animation(
-        tokens,
-        "3s linear 1s infinite running slidein, 2s 1s 2 ease-in hello"
-      )
-    ).toMatchInlineSnapshot(`
+    expect(animation(tokens, '3s linear 1s infinite running slidein, 2s 1s 2 ease-in hello')).toMatchInlineSnapshot(`
       Object {
         "animationDelay": "1s,1s",
         "animationDuration": "3s,2s",
@@ -308,8 +285,7 @@ describe("Animation shorthand", () => {
     `);
 
     // works:
-    expect(animation(tokens, "3s running slidein, 2s ease-in hello"))
-      .toMatchInlineSnapshot(`
+    expect(animation(tokens, '3s running slidein, 2s ease-in hello')).toMatchInlineSnapshot(`
       Object {
         "animationDuration": "3s,2s",
         "animationName": "slidein,hello",
@@ -318,7 +294,7 @@ describe("Animation shorthand", () => {
       }
     `);
   });
-  test("Handles multiple animation groups that rely on defaults", () => {
+  test('Handles multiple animation groups that rely on defaults', () => {
     // fails:
     // most defaults are not handled
     // expect(
@@ -336,17 +312,17 @@ describe("Animation shorthand", () => {
   });
 });
 
-describe("Transition shorthand", () => {
-  test("Handles transition shorthand", () => {
+describe('Transition shorthand', () => {
+  test('Handles transition shorthand', () => {
     // works
-    expect(transition(tokens, "margin-right 2s")).toMatchInlineSnapshot(`
+    expect(transition(tokens, 'margin-right 2s')).toMatchInlineSnapshot(`
       Object {
         "transitionDuration": "2s",
         "transitionProperty": "margin-right",
       }
     `);
 
-    expect(transition(tokens, "margin-right 2s .5s")).toMatchInlineSnapshot(`
+    expect(transition(tokens, 'margin-right 2s .5s')).toMatchInlineSnapshot(`
           Object {
             "transitionDelay": ".5s",
             "transitionDuration": "2s",
@@ -354,8 +330,7 @@ describe("Transition shorthand", () => {
           }
       `);
 
-    expect(transition(tokens, "margin-right 2s ease-in-out"))
-      .toMatchInlineSnapshot(`
+    expect(transition(tokens, 'margin-right 2s ease-in-out')).toMatchInlineSnapshot(`
           Object {
             "transitionDuration": "2s",
             "transitionProperty": "margin-right",
@@ -363,8 +338,7 @@ describe("Transition shorthand", () => {
           }
       `);
 
-    expect(transition(tokens, "margin-right 2s ease-in-out .5s"))
-      .toMatchInlineSnapshot(`
+    expect(transition(tokens, 'margin-right 2s ease-in-out .5s')).toMatchInlineSnapshot(`
           Object {
             "transitionDelay": ".5s",
             "transitionDuration": "2s",
@@ -373,7 +347,7 @@ describe("Transition shorthand", () => {
           }
       `);
 
-    expect(transition(tokens, "all 1s ease-out")).toMatchInlineSnapshot(`
+    expect(transition(tokens, 'all 1s ease-out')).toMatchInlineSnapshot(`
           Object {
             "transitionDuration": "1s",
             "transitionProperty": "all",
@@ -381,10 +355,9 @@ describe("Transition shorthand", () => {
           }
       `);
   });
-  test("Handles multi-group transition shorthand", () => {
+  test('Handles multi-group transition shorthand', () => {
     // works
-    expect(transition(tokens, "margin-right 2s, color 1s"))
-      .toMatchInlineSnapshot(`
+    expect(transition(tokens, 'margin-right 2s, color 1s')).toMatchInlineSnapshot(`
       Object {
         "transitionDuration": "2s,1s",
         "transitionProperty": "margin-right,color",
@@ -392,7 +365,7 @@ describe("Transition shorthand", () => {
     `);
   });
 
-  test("Handles multi-group transition shorthand with defaults", () => {
+  test('Handles multi-group transition shorthand with defaults', () => {
     // Fails:
     // expect(transition(tokens, "margin-right 2s ease-in-out, color 1s"))
     //   .toMatchInlineSnapshot(`
@@ -405,10 +378,10 @@ describe("Transition shorthand", () => {
   });
 });
 
-describe("Margin shorthand", () => {
-  test("Handles margin shorthand", () => {
+describe('Margin shorthand', () => {
+  test('Handles margin shorthand', () => {
     // works
-    expect(margin(tokens, "1em")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '1em')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "1em",
         "marginLeft": "1em",
@@ -417,7 +390,7 @@ describe("Margin shorthand", () => {
       }
     `);
 
-    expect(margin(tokens, "5% 0")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '5% 0')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "5%",
         "marginLeft": "0",
@@ -426,7 +399,7 @@ describe("Margin shorthand", () => {
       }
     `);
 
-    expect(margin(tokens, "10px 50px 20px")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '10px 50px 20px')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "20px",
         "marginLeft": "50px",
@@ -435,7 +408,7 @@ describe("Margin shorthand", () => {
       }
     `);
 
-    expect(margin(tokens, "10px 50px 20px 0")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '10px 50px 20px 0')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "20px",
         "marginLeft": "0",
@@ -444,7 +417,7 @@ describe("Margin shorthand", () => {
       }
     `);
 
-    expect(margin(tokens, "0")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '0')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "0",
         "marginLeft": "0",
@@ -453,9 +426,9 @@ describe("Margin shorthand", () => {
       }
     `);
   });
-  test("Handles margin with tokens", () => {
+  test('Handles margin with tokens', () => {
     // works
-    expect(margin(tokens, "1")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '1')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "5px",
         "marginLeft": "5px",
@@ -463,7 +436,7 @@ describe("Margin shorthand", () => {
         "marginTop": "5px",
       }
     `);
-    expect(margin(tokens, "1 1")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '1 1')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "5px",
         "marginLeft": "5px",
@@ -471,7 +444,7 @@ describe("Margin shorthand", () => {
         "marginTop": "5px",
       }
     `);
-    expect(margin(tokens, "1 1 1")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '1 1 1')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "5px",
         "marginLeft": "5px",
@@ -479,7 +452,7 @@ describe("Margin shorthand", () => {
         "marginTop": "5px",
       }
     `);
-    expect(margin(tokens, "1 1 1 1")).toMatchInlineSnapshot(`
+    expect(margin(tokens, '1 1 1 1')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "5px",
         "marginLeft": "5px",
@@ -489,8 +462,8 @@ describe("Margin shorthand", () => {
     `);
   });
 
-  test("Handles margin with css functions", () => {
-    expect(margin(tokens, "calc(10px + 100px)")).toMatchInlineSnapshot(`
+  test('Handles margin with css functions', () => {
+    expect(margin(tokens, 'calc(10px + 100px)')).toMatchInlineSnapshot(`
       Object {
         "marginBottom": "calc(10px + 100px)",
         "marginLeft": "calc(10px + 100px)",
@@ -501,10 +474,10 @@ describe("Margin shorthand", () => {
   });
 });
 
-describe("Padding shorthand", () => {
-  test("Handles padding shorthand", () => {
+describe('Padding shorthand', () => {
+  test('Handles padding shorthand', () => {
     // works
-    expect(padding(tokens, "1em")).toMatchInlineSnapshot(`
+    expect(padding(tokens, '1em')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "1em",
         "paddingLeft": "1em",
@@ -513,7 +486,7 @@ describe("Padding shorthand", () => {
       }
     `);
 
-    expect(padding(tokens, "5% 0")).toMatchInlineSnapshot(`
+    expect(padding(tokens, '5% 0')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "5%",
         "paddingLeft": "0",
@@ -522,7 +495,7 @@ describe("Padding shorthand", () => {
       }
     `);
 
-    expect(padding(tokens, "10px 50px 20px")).toMatchInlineSnapshot(`
+    expect(padding(tokens, '10px 50px 20px')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "20px",
         "paddingLeft": "50px",
@@ -531,7 +504,7 @@ describe("Padding shorthand", () => {
       }
     `);
 
-    expect(padding(tokens, "10px 50px 20px 0")).toMatchInlineSnapshot(`
+    expect(padding(tokens, '10px 50px 20px 0')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "20px",
         "paddingLeft": "0",
@@ -540,7 +513,7 @@ describe("Padding shorthand", () => {
       }
     `);
 
-    expect(padding(tokens, "0")).toMatchInlineSnapshot(`
+    expect(padding(tokens, '0')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "0",
         "paddingLeft": "0",
@@ -549,8 +522,8 @@ describe("Padding shorthand", () => {
       }
     `);
   });
-  test("Handles padding with tokens", () => {
-    expect(padding(tokens, "1")).toMatchInlineSnapshot(`
+  test('Handles padding with tokens', () => {
+    expect(padding(tokens, '1')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "5px",
         "paddingLeft": "5px",
@@ -558,7 +531,7 @@ describe("Padding shorthand", () => {
         "paddingTop": "5px",
       }
     `);
-    expect(padding(tokens, "1 2")).toMatchInlineSnapshot(`
+    expect(padding(tokens, '1 2')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "5px",
         "paddingLeft": "10px",
@@ -566,7 +539,7 @@ describe("Padding shorthand", () => {
         "paddingTop": "5px",
       }
     `);
-    expect(padding(tokens, "1 2 3")).toMatchInlineSnapshot(`
+    expect(padding(tokens, '1 2 3')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "15px",
         "paddingLeft": "10px",
@@ -574,7 +547,7 @@ describe("Padding shorthand", () => {
         "paddingTop": "5px",
       }
     `);
-    expect(padding(tokens, "1 2 3 4")).toMatchInlineSnapshot(`
+    expect(padding(tokens, '1 2 3 4')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "15px",
         "paddingLeft": "20px",
@@ -584,8 +557,8 @@ describe("Padding shorthand", () => {
     `);
   });
 
-  test("Handles padding with css functions", () => {
-    expect(padding(tokens, "calc(10px + 100px)")).toMatchInlineSnapshot(`
+  test('Handles padding with css functions', () => {
+    expect(padding(tokens, 'calc(10px + 100px)')).toMatchInlineSnapshot(`
       Object {
         "paddingBottom": "calc(10px + 100px)",
         "paddingLeft": "calc(10px + 100px)",
@@ -596,9 +569,9 @@ describe("Padding shorthand", () => {
   });
 });
 
-describe("Border shorthands", () => {
-  test("Handles border shorthand", () => {
-    expect(border(tokens, "none")).toMatchInlineSnapshot(`
+describe('Border shorthands', () => {
+  test('Handles border shorthand', () => {
+    expect(border(tokens, 'none')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "none",
         "borderLeftStyle": "none",
@@ -606,7 +579,7 @@ describe("Border shorthands", () => {
         "borderTopStyle": "none",
       }
     `);
-    expect(border(tokens, "0")).toMatchInlineSnapshot(`
+    expect(border(tokens, '0')).toMatchInlineSnapshot(`
       Object {
         "borderBottomWidth": "0",
         "borderLeftWidth": "0",
@@ -614,7 +587,7 @@ describe("Border shorthands", () => {
         "borderTopWidth": "0",
       }
     `);
-    expect(border(tokens, "solid")).toMatchInlineSnapshot(`
+    expect(border(tokens, 'solid')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "solid",
         "borderLeftStyle": "solid",
@@ -622,7 +595,7 @@ describe("Border shorthands", () => {
         "borderTopStyle": "solid",
       }
     `);
-    expect(border(tokens, "dashed red")).toMatchInlineSnapshot(`
+    expect(border(tokens, 'dashed red')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "red",
         "borderBottomStyle": "dashed",
@@ -634,7 +607,7 @@ describe("Border shorthands", () => {
         "borderTopStyle": "dashed",
       }
     `);
-    expect(border(tokens, "1rem solid")).toMatchInlineSnapshot(`
+    expect(border(tokens, '1rem solid')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "solid",
         "borderBottomWidth": "1rem",
@@ -661,8 +634,7 @@ describe("Border shorthands", () => {
     //   }
     // `);
 
-    expect(border(tokens, "4mm ridge rgba(170, 50, 220, .6)"))
-      .toMatchInlineSnapshot(`
+    expect(border(tokens, '4mm ridge rgba(170, 50, 220, .6)')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "rgba(170, 50, 220, .6)",
         "borderBottomStyle": "ridge",
@@ -680,8 +652,8 @@ describe("Border shorthands", () => {
     `);
   });
 
-  test("Handles border-color", () => {
-    expect(borderColor(tokens, "red")).toMatchInlineSnapshot(`
+  test('Handles border-color', () => {
+    expect(borderColor(tokens, 'red')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "red",
         "borderLeftColor": "red",
@@ -690,7 +662,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderColor(tokens, "red #32a1ce")).toMatchInlineSnapshot(`
+    expect(borderColor(tokens, 'red #32a1ce')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "red",
         "borderLeftColor": "#32a1ce",
@@ -699,8 +671,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderColor(tokens, "red rgba(170, 50, 220, .6) green"))
-      .toMatchInlineSnapshot(`
+    expect(borderColor(tokens, 'red rgba(170, 50, 220, .6) green')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "green",
         "borderLeftColor": "rgba(170, 50, 220, .6)",
@@ -709,8 +680,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderColor(tokens, "red yellow green hsla(60, 90%, 50%, .8)"))
-      .toMatchInlineSnapshot(`
+    expect(borderColor(tokens, 'red yellow green hsla(60, 90%, 50%, .8)')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "green",
         "borderLeftColor": "hsla(60, 90%, 50%, .8)",
@@ -719,8 +689,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderColor(tokens, "red yellow green transparent"))
-      .toMatchInlineSnapshot(`
+    expect(borderColor(tokens, 'red yellow green transparent')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "green",
         "borderLeftColor": "transparent",
@@ -730,8 +699,8 @@ describe("Border shorthands", () => {
     `);
   });
 
-  test("Handles border-width", () => {
-    expect(borderWidth(tokens, "thick")).toMatchInlineSnapshot(`
+  test('Handles border-width', () => {
+    expect(borderWidth(tokens, 'thick')).toMatchInlineSnapshot(`
       Object {
         "borderBottomWidth": "thick",
         "borderLeftWidth": "thick",
@@ -740,7 +709,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderWidth(tokens, "1em")).toMatchInlineSnapshot(`
+    expect(borderWidth(tokens, '1em')).toMatchInlineSnapshot(`
       Object {
         "borderBottomWidth": "1em",
         "borderLeftWidth": "1em",
@@ -749,7 +718,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderWidth(tokens, "3px 1.25em")).toMatchInlineSnapshot(`
+    expect(borderWidth(tokens, '3px 1.25em')).toMatchInlineSnapshot(`
       Object {
         "borderBottomWidth": "3px",
         "borderLeftWidth": "1.25em",
@@ -758,7 +727,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderWidth(tokens, "2ex 1.25ex 0.5ex")).toMatchInlineSnapshot(`
+    expect(borderWidth(tokens, '2ex 1.25ex 0.5ex')).toMatchInlineSnapshot(`
       Object {
         "borderBottomWidth": "0.5ex",
         "borderLeftWidth": "1.25ex",
@@ -767,7 +736,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderWidth(tokens, "0 4px 8px 12px")).toMatchInlineSnapshot(`
+    expect(borderWidth(tokens, '0 4px 8px 12px')).toMatchInlineSnapshot(`
       Object {
         "borderBottomWidth": "8px",
         "borderLeftWidth": "12px",
@@ -777,8 +746,8 @@ describe("Border shorthands", () => {
     `);
   });
 
-  test("Handles border-style", () => {
-    expect(borderStyle(tokens, "none")).toMatchInlineSnapshot(`
+  test('Handles border-style', () => {
+    expect(borderStyle(tokens, 'none')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "none",
         "borderLeftStyle": "none",
@@ -787,7 +756,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderStyle(tokens, "dotted")).toMatchInlineSnapshot(`
+    expect(borderStyle(tokens, 'dotted')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "dotted",
         "borderLeftStyle": "dotted",
@@ -796,7 +765,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderStyle(tokens, "inset")).toMatchInlineSnapshot(`
+    expect(borderStyle(tokens, 'inset')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "inset",
         "borderLeftStyle": "inset",
@@ -805,7 +774,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderStyle(tokens, "dashed solid")).toMatchInlineSnapshot(`
+    expect(borderStyle(tokens, 'dashed solid')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "dashed",
         "borderLeftStyle": "solid",
@@ -814,7 +783,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderStyle(tokens, "dashed double none")).toMatchInlineSnapshot(`
+    expect(borderStyle(tokens, 'dashed double none')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "none",
         "borderLeftStyle": "double",
@@ -823,8 +792,7 @@ describe("Border shorthands", () => {
       }
     `);
 
-    expect(borderStyle(tokens, "dashed groove none dotted"))
-      .toMatchInlineSnapshot(`
+    expect(borderStyle(tokens, 'dashed groove none dotted')).toMatchInlineSnapshot(`
       Object {
         "borderBottomStyle": "none",
         "borderLeftStyle": "dotted",
@@ -834,8 +802,8 @@ describe("Border shorthands", () => {
     `);
   });
 
-  test("Handles border shorthands with tokens", () => {
-    expect(border(tokens, "hairLine gray400 solid")).toMatchInlineSnapshot(`
+  test('Handles border shorthands with tokens', () => {
+    expect(border(tokens, 'hairLine gray400 solid')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "#e3e3e3",
         "borderBottomStyle": "solid",
@@ -851,7 +819,7 @@ describe("Border shorthands", () => {
         "borderTopWidth": "1px",
       }
     `);
-    expect(borderWidth(tokens, "hairLine")).toMatchInlineSnapshot(`
+    expect(borderWidth(tokens, 'hairLine')).toMatchInlineSnapshot(`
       Object {
         "borderBottomWidth": "1px",
         "borderLeftWidth": "1px",
@@ -859,7 +827,7 @@ describe("Border shorthands", () => {
         "borderTopWidth": "1px",
       }
     `);
-    expect(borderColor(tokens, "gray400")).toMatchInlineSnapshot(`
+    expect(borderColor(tokens, 'gray400')).toMatchInlineSnapshot(`
       Object {
         "borderBottomColor": "#e3e3e3",
         "borderLeftColor": "#e3e3e3",
@@ -870,64 +838,57 @@ describe("Border shorthands", () => {
   });
 });
 
-describe("Box-shadow", () => {
-  test("Handles tokens in box-shadow", () => {
-    expect(boxShadow(tokens, "10px 5px 1px gray400")).toMatchInlineSnapshot(`
+describe('Box-shadow', () => {
+  test('Handles tokens in box-shadow', () => {
+    expect(boxShadow(tokens, '10px 5px 1px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "10px 5px 1px #e3e3e3",
       }
     `);
-    expect(boxShadow(tokens, "1px -16px gray400")).toMatchInlineSnapshot(`
+    expect(boxShadow(tokens, '1px -16px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "1px -16px #e3e3e3",
       }
     `);
-    expect(boxShadow(tokens, "1px 12px 2px 1px gray400"))
-      .toMatchInlineSnapshot(`
+    expect(boxShadow(tokens, '1px 12px 2px 1px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "1px 12px 2px 1px #e3e3e3",
       }
     `);
-    expect(boxShadow(tokens, "inset 1px 1em gray400")).toMatchInlineSnapshot(`
+    expect(boxShadow(tokens, 'inset 1px 1em gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "inset 1px 1em #e3e3e3",
       }
     `);
-    expect(boxShadow(tokens, "60px -16px gray400")).toMatchInlineSnapshot(`
+    expect(boxShadow(tokens, '60px -16px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "60px -16px #e3e3e3",
       }
     `);
   });
 
-  test("Handles tokens in multi-group box-shadow", () => {
-    expect(boxShadow(tokens, "10px 5px 1px gray400, 10px 5px 1px gray400"))
-      .toMatchInlineSnapshot(`
+  test('Handles tokens in multi-group box-shadow', () => {
+    expect(boxShadow(tokens, '10px 5px 1px gray400, 10px 5px 1px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "10px 5px 1px #e3e3e3, 10px 5px 1px #e3e3e3",
       }
     `);
-    expect(boxShadow(tokens, "1px -16px gray400, 1px -16px gray400"))
-      .toMatchInlineSnapshot(`
+    expect(boxShadow(tokens, '1px -16px gray400, 1px -16px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "1px -16px #e3e3e3, 1px -16px #e3e3e3",
       }
     `);
-    expect(
-      boxShadow(tokens, "1px 12px 2px 1px gray400, 1px 12px 2px 1px gray400")
-    ).toMatchInlineSnapshot(`
+    expect(boxShadow(tokens, '1px 12px 2px 1px gray400, 1px 12px 2px 1px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "1px 12px 2px 1px #e3e3e3, 1px 12px 2px 1px #e3e3e3",
       }
     `);
-    expect(boxShadow(tokens, "inset 1px 1em gray400, inset 1px 1em gray400"))
-      .toMatchInlineSnapshot(`
+    expect(boxShadow(tokens, 'inset 1px 1em gray400, inset 1px 1em gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "inset 1px 1em #e3e3e3, inset 1px 1em #e3e3e3",
       }
     `);
-    expect(boxShadow(tokens, "60px -16px gray400, 60px -16px gray400"))
-      .toMatchInlineSnapshot(`
+    expect(boxShadow(tokens, '60px -16px gray400, 60px -16px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "60px -16px #e3e3e3, 60px -16px #e3e3e3",
       }

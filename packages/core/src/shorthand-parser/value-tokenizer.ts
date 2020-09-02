@@ -3,15 +3,10 @@ const TOKEN_QUOTED_STRING = 2;
 const TOKEN_FUNCTION = 3;
 const TOKEN_BRACKET = 4;
 
-type TokenType =
-  | typeof TOKEN_STRING
-  | typeof TOKEN_QUOTED_STRING
-  | typeof TOKEN_FUNCTION
-  | typeof TOKEN_BRACKET
-  | 0;
+type TokenType = typeof TOKEN_STRING | typeof TOKEN_QUOTED_STRING | typeof TOKEN_FUNCTION | typeof TOKEN_BRACKET | 0;
 
 let currentType: TokenType;
-let currentToken = "";
+let currentToken = '';
 let currentDepth = 0;
 let tokenGroups: string[][] = [[]];
 
@@ -26,7 +21,7 @@ export const tokenizeValue = (str: string) => {
     const char = str[i];
     switch (char) {
       // whitespace
-      case " ":
+      case ' ':
         if (currentType === TOKEN_STRING) {
           addCurrentTokenToGroup();
         } else if (currentType) {
@@ -34,7 +29,7 @@ export const tokenizeValue = (str: string) => {
         }
         break;
       // new token group
-      case ",":
+      case ',':
         if (!currentDepth) {
           addCurrentTokenToGroup();
           addNewTokenGroup();
@@ -56,26 +51,25 @@ export const tokenizeValue = (str: string) => {
         break;
 
       // Css function:
-      case "(":
+      case '(':
         if (!currentDepth) currentType = TOKEN_FUNCTION;
         currentDepth++;
         currentToken += char;
         break;
 
-      case ")":
+      case ')':
         currentToken += char;
         currentDepth--;
-        if (currentType === TOKEN_FUNCTION && !currentDepth)
-          addCurrentTokenToGroup();
+        if (currentType === TOKEN_FUNCTION && !currentDepth) addCurrentTokenToGroup();
         break;
 
       // Bracket values:
-      case "[":
+      case '[':
         if (!currentDepth) currentType = TOKEN_BRACKET;
         currentToken += char;
         currentDepth++;
         break;
-      case "]":
+      case ']':
         currentToken += char;
         currentDepth--;
         if (!currentDepth) addCurrentTokenToGroup();
@@ -98,7 +92,7 @@ export const tokenizeValue = (str: string) => {
  */
 function resetCurrentToken() {
   currentDepth = currentType = 0;
-  currentToken = "";
+  currentToken = '';
 }
 /**
  * Adds current token to the stack then starts a new one
