@@ -5,9 +5,9 @@
     "release": "yarn test && yarn build && lerna publish",
     "build": "preconstruct build",
     "postinstall": "lerna bootstrap && preconstruct dev",
-    "test:css": "lerna --scope @stitches/core run test",
-    "test:react": "lerna --scope @stitches/react run test",
-    "test": "lerna run test"
+    "test:css": "yarn workspace @stitches/core run test",
+    "test:react": "yarn workspace @stitches/react run test",
+    "test": "yarn test:css && yarn test:react"
   },
   "workspaces": [
     "packages/*"
