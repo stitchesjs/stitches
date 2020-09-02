@@ -301,8 +301,8 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
       `.${themeClassName}{${Object.keys(this.definition).reduce((aggr, tokenType) => {
         // @ts-ignore
         return `${aggr}${Object.keys(this.definition[tokenType]).reduce((subAggr, tokenKey) => {
-          // @ts-ignore
           return `${subAggr}--${tokenType}-${tokenKey.replace(/[^\w\s-]/gi, '')}:${
+            // @ts-ignore
             this.definition[tokenType][tokenKey]
           };`;
         }, aggr)}`;
