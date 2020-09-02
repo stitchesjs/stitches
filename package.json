@@ -40,7 +40,8 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.10.4",
     "@preconstruct/cli": "^1.1.27",
-    "react": "^16.13.1"
+    "react": "^16.13.1",
+    "vue": "3.0.0-rc.10"
   },
   "preconstruct": {
     "packages": [
