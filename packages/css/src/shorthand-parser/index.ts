@@ -175,7 +175,6 @@ export const font = createPropertyParser(
 
         case lower === "italic":
         case lower === "oblique":
-        case value in tokens.fontWeights:
           css.fontStyle = value;
 
           break;
