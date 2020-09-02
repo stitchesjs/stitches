@@ -298,13 +298,15 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
 
     // @ts-ignore
     variablesSheet.insertRule(
-      `.${themeClassName}{${Object.keys(this.definition).reduce((subAggr, tokenKey) => {
-        // format token to remove special characters
-        // https://stackoverflow.com/a/4374890
-        const formattedTokenKey = tokenKey.replace(/[^\w\s-]/gi, '');
+      `.${themeClassName}{${Object.keys(this.definition).reduce((aggr, tokenType) => {
         // @ts-ignore
-        return `${subAggr}--colors-${formattedTokenKey}:${this.definition[tokenKey]};`;
-      }, '')}`
+        return `${aggr}${Object.keys(this.definition[tokenType]).reduce((subAggr, tokenKey) => {
+          return `${subAggr}--${tokenType}-${tokenKey.replace(/[^\w\s-]/gi, '')}:${
+            // @ts-ignore
+            this.definition[tokenType][tokenKey]
+          };`;
+        }, aggr)}`;
+      }, '')}}`
     );
 
     this.toString = () => themeClassName;
@@ -570,12 +572,11 @@ export const createCss = <T extends TConfig>(
     if (themeCache.has(definition)) {
       return themeCache.get(definition)!;
     }
+
     const themeAtom = {
       // We could here also check if theme has been added from server,
       // though thinking it does not matter... just a simple rule
       name: String(themeCache.size),
-      // wrapping the colors in an object so that the structure matches
-      // the tokens property in the config
       definition,
       toString: themeToString,
       [ATOM]: true as true,
