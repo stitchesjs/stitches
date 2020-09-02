@@ -15,114 +15,114 @@ import {
   margin,
   padding,
   transition,
-} from "./shorthand-parser";
-import { IBreakpoints, ICssPropToToken, ISheet } from "./types";
+} from './shorthand-parser';
+import { IBreakpoints, ICssPropToToken, ISheet } from './types';
 
-export const MAIN_BREAKPOINT_ID = "initial";
+export const MAIN_BREAKPOINT_ID = 'initial';
 export type TMainBreakPoint = typeof MAIN_BREAKPOINT_ID;
 
 export const cssPropToToken: ICssPropToToken<any> = {
-  gap: "space",
-  gridGap: "space",
-  columnGap: "space",
-  gridColumnGap: "space",
-  rowGap: "space",
-  gridRowGap: "space",
-  inset: "space",
-  insetBlock: "space",
-  insetBlockEnd: "space",
-  insetBlockStart: "space",
-  insetInline: "space",
-  insetInlineEnd: "space",
-  insetInlineStart: "space",
-  margin: "space",
-  marginTop: "space",
-  marginRight: "space",
-  marginBottom: "space",
-  marginLeft: "space",
-  marginBlock: "space",
-  marginBlockEnd: "space",
-  marginBlockStart: "space",
-  marginInline: "space",
-  marginInlineEnd: "space",
-  marginInlineStart: "space",
-  padding: "space",
-  paddingTop: "space",
-  paddingRight: "space",
-  paddingBottom: "space",
-  paddingLeft: "space",
-  paddingBlock: "space",
-  paddingBlockEnd: "space",
-  paddingBlockStart: "space",
-  paddingInline: "space",
-  paddingInlineEnd: "space",
-  paddingInlineStart: "space",
-  top: "space",
-  right: "space",
-  bottom: "space",
-  left: "space",
-  fontSize: "fontSizes",
-  backgroundColor: "colors",
-  border: ["", "borderStyles", "colors"],
-  borderColor: "colors",
-  borderTopColor: "colors",
-  borderRightColor: "colors",
-  borderBottomColor: "colors",
-  borderLeftColor: "colors",
-  caretColor: "colors",
-  color: "colors",
-  columnRuleColor: "colors",
-  outlineColor: "colors",
-  fill: "colors",
-  stroke: "colors",
-  fontFamily: "fonts",
-  fontWeight: "fontWeights",
-  lineHeight: "lineHeights",
-  letterSpacing: "letterSpacings",
-  blockSize: "sizes",
-  minBlockSize: "sizes",
-  maxBlockSize: "sizes",
-  inlineSize: "sizes",
-  minInlineSize: "sizes",
-  maxInlineSize: "sizes",
-  width: "sizes",
-  minWidth: "sizes",
-  maxWidth: "sizes",
-  height: "sizes",
-  minHeight: "sizes",
-  maxHeight: "sizes",
-  flexBasis: "sizes",
-  borderWidth: "borderWidths",
-  borderTopWidth: "borderWidths",
-  borderLeftWidth: "borderWidths",
-  borderRightWidth: "borderWidths",
-  borderBottomWidth: "borderWidths",
-  borderStyle: "borderStyles",
-  borderTopStyle: "borderStyles",
-  borderLeftStyle: "borderStyles",
-  borderRightStyle: "borderStyles",
-  borderBottomStyle: "borderStyles",
-  borderRadius: "radii",
-  borderTopLeftRadius: "radii",
-  borderTopRightRadius: "radii",
-  borderBottomRightRadius: "radii",
-  borderBottomLeftRadius: "radii",
-  boxShadow: "shadows",
-  textShadow: "shadows",
-  zIndex: "zIndices",
-  transition: "transitions",
+  gap: 'space',
+  gridGap: 'space',
+  columnGap: 'space',
+  gridColumnGap: 'space',
+  rowGap: 'space',
+  gridRowGap: 'space',
+  inset: 'space',
+  insetBlock: 'space',
+  insetBlockEnd: 'space',
+  insetBlockStart: 'space',
+  insetInline: 'space',
+  insetInlineEnd: 'space',
+  insetInlineStart: 'space',
+  margin: 'space',
+  marginTop: 'space',
+  marginRight: 'space',
+  marginBottom: 'space',
+  marginLeft: 'space',
+  marginBlock: 'space',
+  marginBlockEnd: 'space',
+  marginBlockStart: 'space',
+  marginInline: 'space',
+  marginInlineEnd: 'space',
+  marginInlineStart: 'space',
+  padding: 'space',
+  paddingTop: 'space',
+  paddingRight: 'space',
+  paddingBottom: 'space',
+  paddingLeft: 'space',
+  paddingBlock: 'space',
+  paddingBlockEnd: 'space',
+  paddingBlockStart: 'space',
+  paddingInline: 'space',
+  paddingInlineEnd: 'space',
+  paddingInlineStart: 'space',
+  top: 'space',
+  right: 'space',
+  bottom: 'space',
+  left: 'space',
+  fontSize: 'fontSizes',
+  backgroundColor: 'colors',
+  border: ['', 'borderStyles', 'colors'],
+  borderColor: 'colors',
+  borderTopColor: 'colors',
+  borderRightColor: 'colors',
+  borderBottomColor: 'colors',
+  borderLeftColor: 'colors',
+  caretColor: 'colors',
+  color: 'colors',
+  columnRuleColor: 'colors',
+  outlineColor: 'colors',
+  fill: 'colors',
+  stroke: 'colors',
+  fontFamily: 'fonts',
+  fontWeight: 'fontWeights',
+  lineHeight: 'lineHeights',
+  letterSpacing: 'letterSpacings',
+  blockSize: 'sizes',
+  minBlockSize: 'sizes',
+  maxBlockSize: 'sizes',
+  inlineSize: 'sizes',
+  minInlineSize: 'sizes',
+  maxInlineSize: 'sizes',
+  width: 'sizes',
+  minWidth: 'sizes',
+  maxWidth: 'sizes',
+  height: 'sizes',
+  minHeight: 'sizes',
+  maxHeight: 'sizes',
+  flexBasis: 'sizes',
+  borderWidth: 'borderWidths',
+  borderTopWidth: 'borderWidths',
+  borderLeftWidth: 'borderWidths',
+  borderRightWidth: 'borderWidths',
+  borderBottomWidth: 'borderWidths',
+  borderStyle: 'borderStyles',
+  borderTopStyle: 'borderStyles',
+  borderLeftStyle: 'borderStyles',
+  borderRightStyle: 'borderStyles',
+  borderBottomStyle: 'borderStyles',
+  borderRadius: 'radii',
+  borderTopLeftRadius: 'radii',
+  borderTopRightRadius: 'radii',
+  borderBottomRightRadius: 'radii',
+  borderBottomLeftRadius: 'radii',
+  boxShadow: 'shadows',
+  textShadow: 'shadows',
+  zIndex: 'zIndices',
+  transition: 'transitions',
 };
 
 export const tokenTypes = [
-  "sizes",
-  "colors",
-  "space",
-  "fontSizes",
-  "lineHeights",
-  "fontWeights",
-  "fonts",
-  "borderWidths",
-  "radii",
+  'sizes',
+  'colors',
+  'space',
+  'fontSizes',
+  'lineHeights',
+  'fontWeights',
+  'fonts',
+  'borderWidths',
+  'radii',
 ] as const;
 
 const enhanceSheet = (sheet: ISheet): ISheet => {
@@ -131,10 +131,7 @@ const enhanceSheet = (sheet: ISheet): ISheet => {
     cssRules: sheet.cssRules,
     insertRule: (rule) => {
       try {
-        const newIndex = sheet.insertRule(
-          rule,
-          rule.startsWith("@") ? sheet.cssRules.length : 0
-        );
+        const newIndex = sheet.insertRule(rule, rule.startsWith('@') ? sheet.cssRules.length : 0);
         return newIndex;
       } catch {
         return -1;
@@ -146,25 +143,25 @@ const enhanceSheet = (sheet: ISheet): ISheet => {
 export const createSheets = (env: any, screens: IBreakpoints = {}) => {
   const tags: HTMLStyleElement[] = [];
   if (env && env.document) {
-    const head = env.document.querySelector("head");
+    const head = env.document.querySelector('head');
 
     if (!head) {
-      throw new Error("There is no HEAD element on this document");
+      throw new Error('There is no HEAD element on this document');
     }
 
-    const styles = Array.from<HTMLStyleElement>(head.querySelectorAll("style"));
+    const styles = Array.from<HTMLStyleElement>(head.querySelectorAll('style'));
     const existingStyles = styles.filter((style) =>
-      Boolean(style.textContent && style.textContent.startsWith("/* STITCHES"))
+      Boolean(style.textContent && style.textContent.startsWith('/* STITCHES'))
     );
 
     return {
       tags,
-      sheets: ["__variables__", MAIN_BREAKPOINT_ID]
+      sheets: ['__variables__', MAIN_BREAKPOINT_ID]
         .concat(Object.keys(screens))
         .reduce<{ [key: string]: ISheet }>((aggr, key, index) => {
           let style = existingStyles[index];
           if (!style) {
-            style = env.document.createElement("style");
+            style = env.document.createElement('style');
             head.appendChild(style);
           }
           tags.push(style);
@@ -182,11 +179,11 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
 
   return {
     tags,
-    sheets: ["__variables__", MAIN_BREAKPOINT_ID]
+    sheets: ['__variables__', MAIN_BREAKPOINT_ID]
       .concat(Object.keys(screens))
       .reduce<{ [key: string]: ISheet }>((aggr, key) => {
         aggr[key] = enhanceSheet({
-          content: "",
+          content: '',
           cssRules: [],
           insertRule(content, index = 0) {
             this.cssRules.splice(index, 0, content);
@@ -208,9 +205,7 @@ export const specificityProps: {
       if (value.length === 2) {
         return {
           flexGrow: value[0],
-          ...(isNaN(value[1])
-            ? { flexBasis: value[1] }
-            : { flexShrink: value[1] }),
+          ...(isNaN(value[1]) ? { flexBasis: value[1] } : { flexShrink: value[1] }),
         };
       }
       if (value.length === 3) {
@@ -252,12 +247,9 @@ export const specificityProps: {
 
 export const getVendorPrefixAndProps = (env: any) => {
   const styles = env.getComputedStyle(env.document.documentElement);
-  const vendorProps = Array.from(styles).filter(
-    (prop) => (prop as string)[0] === "-"
-  );
+  const vendorProps = Array.from(styles).filter((prop) => (prop as string)[0] === '-');
   // @ts-ignore
-  const vendorPrefix = (vendorProps.join("").match(/-(moz|webkit|ms)-/) ||
-    (styles.OLink === "" && ["", "o"]))[1];
+  const vendorPrefix = (vendorProps.join('').match(/-(moz|webkit|ms)-/) || (styles.OLink === '' && ['', 'o']))[1];
 
   return { vendorPrefix: `-${vendorPrefix}-`, vendorProps };
 };
@@ -289,12 +281,11 @@ const AD_REPLACER_R = /(a)(d)/gi;
 const charsLength = 52;
 
 /* start at 75 for 'a' until 'z' (25) and then start at 65 for capitalised letters */
-const getAlphabeticChar = (code: number): string =>
-  String.fromCharCode(code + (code > 25 ? 39 : 97));
+const getAlphabeticChar = (code: number): string => String.fromCharCode(code + (code > 25 ? 39 : 97));
 
 /* input a number, usually a hash and convert it to base-52 */
 function generateAlphabeticName(code: number): string {
-  let name = "";
+  let name = '';
   let x;
 
   /* get a char and divide by alphabet-length */
@@ -302,8 +293,5 @@ function generateAlphabeticName(code: number): string {
     name = getAlphabeticChar(x % charsLength) + name;
   }
 
-  return (getAlphabeticChar(x % charsLength) + name).replace(
-    AD_REPLACER_R,
-    "$1-$2"
-  );
+  return (getAlphabeticChar(x % charsLength) + name).replace(AD_REPLACER_R, '$1-$2');
 }

@@ -1,7 +1,7 @@
-import { createCss, createTokens, hotReloadingCache } from "../src";
+import { createCss, createTokens, hotReloadingCache } from '../src';
 
 function createStyleSheet(styleTag: HTMLStyleElement): CSSStyleSheet {
-  document.querySelector("head")?.appendChild(styleTag);
+  document.querySelector('head')?.appendChild(styleTag);
 
   const sheet = document.styleSheets[document.styleSheets.length - 1];
   // @ts-ignore
@@ -10,15 +10,12 @@ function createStyleSheet(styleTag: HTMLStyleElement): CSSStyleSheet {
 }
 
 function createStyleTag(textContent: string): HTMLStyleElement {
-  const style = document.createElement("style");
+  const style = document.createElement('style');
   style.textContent = textContent;
   return style;
 }
 
-function createFakeEnv(
-  styleTagContents: string[] = [],
-  computedStyles: string[] = []
-) {
+function createFakeEnv(styleTagContents: string[] = [], computedStyles: string[] = []) {
   const styleTags = styleTagContents.map(createStyleTag);
   const styleSheets = styleTags.map(createStyleSheet);
 
@@ -30,7 +27,7 @@ function createFakeEnv(
       styleSheets,
       // Creates a style tag
       createElement() {
-        return createStyleTag("");
+        return createStyleTag('');
       },
       // Only used to grab head
       querySelector() {
@@ -54,21 +51,21 @@ beforeEach(() => {
   hotReloadingCache.clear();
 });
 
-describe("createCss", () => {
-  test("should create simple atoms", () => {
+describe('createCss', () => {
+  test('should create simple atoms', () => {
     const css = createCss({}, null);
-    const atoms = css({ color: "red" }) as any;
+    const atoms = css({ color: 'red' }) as any;
     const atom = atoms.atoms[0];
     expect(atom.id).toMatchInlineSnapshot(`"colorinitial"`);
-    expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.selector).toBe("");
+    expect(atom.cssHyphenProp).toEqual('color');
+    expect(atom.selector).toBe('');
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
     expect(atom.value).toMatchInlineSnapshot(`"red"`);
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_dzoaVP"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -78,15 +75,15 @@ describe("createCss", () => {
     `);
   });
 
-  test("should regenerate styles on ssr", () => {
-    const css = createCss({ tokens: { colors: { red100: "red" } } }, null);
+  test('should regenerate styles on ssr', () => {
+    const css = createCss({ tokens: { colors: { red100: 'red' } } }, null);
     // tslint:disable-next-line
     console.log = jest.fn();
     const keyframe = css.keyframes({
-      from: { backgroundColor: "red" },
-      to: { backgroundColor: "blue" },
+      from: { backgroundColor: 'red' },
+      to: { backgroundColor: 'blue' },
     });
-    const atoms = css({ color: "red100", animationName: keyframe }) as any;
+    const atoms = css({ color: 'red100', animationName: keyframe }) as any;
     const atom = atoms.atoms[0];
 
     const { styles } = css.getStyles(() => {
@@ -119,30 +116,28 @@ describe("createCss", () => {
     expect(styles).toEqual(secondStyles);
   });
 
-  test("should compose atoms", () => {
+  test('should compose atoms', () => {
     const css = createCss({}, null);
-    expect(
-      css({ color: "red", backgroundColor: "blue" }).toString()
-    ).toMatchInlineSnapshot(`"_YfjLh _dzoaVP"`);
+    expect(css({ color: 'red', backgroundColor: 'blue' }).toString()).toMatchInlineSnapshot(`"_YfjLh _dzoaVP"`);
   });
-  test("should create tokens", () => {
+  test('should create tokens', () => {
     const tokens = createTokens({
       colors: {
-        RED: "tomato",
+        RED: 'tomato',
       },
     });
     const css = createCss({ tokens }, null);
-    const atom = (css({ color: "RED" }) as any).atoms[0];
+    const atom = (css({ color: 'RED' }) as any).atoms[0];
 
     expect(atom.id).toMatchInlineSnapshot(`"colorinitial"`);
-    expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.selector).toBe("");
+    expect(atom.cssHyphenProp).toEqual('color');
+    expect(atom.selector).toBe('');
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
     expect(atom.value).toMatchInlineSnapshot(`"var(--colors-RED)"`);
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_oNvzU"`);
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -151,20 +146,20 @@ describe("createCss", () => {
       ./*X*/_oNvzU/*X*/{color:var(--colors-RED);}"
     `);
   });
-  test("should remove special characters from tokens", () => {
+  test('should remove special characters from tokens', () => {
     const tokens = createTokens({
       colors: {
-        "$!@red@!$": "tomato",
+        '$!@red@!$': 'tomato',
       },
     });
     const css = createCss({ tokens }, null);
-    const atom = (css({ color: "$!@red@!$" }) as any).atoms[0];
+    const atom = (css({ color: '$!@red@!$' }) as any).atoms[0];
 
     expect(atom.value).toMatchInlineSnapshot(`"var(--colors-red)"`);
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_gYxOEA"`);
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -173,12 +168,12 @@ describe("createCss", () => {
       ./*X*/_gYxOEA/*X*/{color:var(--colors-red);}"
     `);
   });
-  test("should remove special characters from tokens in themes", () => {
+  test('should remove special characters from tokens in themes', () => {
     const css = createCss(
       {
         tokens: {
           colors: {
-            "$!@red@!$": "tomato",
+            '$!@red@!$': 'tomato',
           },
         },
       },
@@ -186,15 +181,15 @@ describe("createCss", () => {
     );
     const { styles } = css.getStyles(() => {
       // @ts-ignore
-      css({ color: "$!@red@!$" }).toString();
+      css({ color: '$!@red@!$' }).toString();
       expect(
         css
           .theme({
-            "$!@red@!$": "red",
+            '$!@red@!$': 'red',
           })
           .toString()
       ).toMatchInlineSnapshot(`"theme-0"`);
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -209,36 +204,36 @@ describe("createCss", () => {
     `);
   });
 
-  test("Should generate negative tokens for numeric scales", () => {
+  test('Should generate negative tokens for numeric scales', () => {
     const tokens = createTokens({
       sizes: {
-        "0": "0px",
-        "1": "1px",
+        '0': '0px',
+        '1': '1px',
       },
       space: {
-        "0": "0px",
-        "1": "1px",
+        '0': '0px',
+        '1': '1px',
       },
       letterSpacings: {
-        "0": "0px",
-        "1": "1px",
+        '0': '0px',
+        '1': '1px',
       },
       zIndices: {
-        "0": "0",
-        "1": "1",
+        '0': '0',
+        '1': '1',
       },
     });
     const css = createCss({ tokens }, null);
     const atom = css({
-      marginLeft: "-1",
-      letterSpacing: "-1",
-      width: "-1",
-      zIndex: "-1",
+      marginLeft: '-1',
+      letterSpacing: '-1',
+      width: '-1',
+      zIndex: '-1',
     }) as any;
 
     const { styles } = css.getStyles(() => {
       atom.toString();
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -251,20 +246,20 @@ describe("createCss", () => {
     `);
   });
 
-  test("Should not generate negative tokens when the user already defined a negative one", () => {
+  test('Should not generate negative tokens when the user already defined a negative one', () => {
     const tokens = createTokens({
       sizes: {
-        "-1": "-1px",
-        "1": "1px",
+        '-1': '-1px',
+        '1': '1px',
       },
     });
     const css = createCss({ tokens }, null);
-    expect((css as any)._config().tokens.sizes["1"]).toBeTruthy();
-    expect((css as any)._config().tokens.sizes["-1"]).toBeTruthy();
-    expect((css as any)._config().tokens.sizes["--1"]).toBeFalsy();
+    expect((css as any)._config().tokens.sizes['1']).toBeTruthy();
+    expect((css as any)._config().tokens.sizes['-1']).toBeTruthy();
+    expect((css as any)._config().tokens.sizes['--1']).toBeFalsy();
   });
 
-  test("should create breakpoints", () => {
+  test('should create breakpoints', () => {
     const css = createCss(
       {
         breakpoints: {
@@ -273,14 +268,14 @@ describe("createCss", () => {
       },
       null
     );
-    const atom = (css({ tablet: { color: "red" } }) as any).atoms[0];
+    const atom = (css({ tablet: { color: 'red' } }) as any).atoms[0];
     expect(atom.id).toMatchInlineSnapshot(`"colortablet"`);
-    expect(atom.cssHyphenProp).toEqual("color");
-    expect(atom.selector).toBe("");
+    expect(atom.cssHyphenProp).toEqual('color');
+    expect(atom.selector).toBe('');
     expect(atom.breakpoint).toMatchInlineSnapshot(`"tablet"`);
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_hsxGAz"`);
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(3);
@@ -293,17 +288,17 @@ describe("createCss", () => {
       @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
     `);
   });
-  test("should handle pseudos", () => {
+  test('should handle pseudos', () => {
     const css = createCss({}, null);
-    const atom = (css({ "&:hover": { color: "red" } }) as any).atoms[0];
+    const atom = (css({ '&:hover': { color: 'red' } }) as any).atoms[0];
 
     expect(atom.id).toMatchInlineSnapshot(`"color:hoverinitial"`);
-    expect(atom.cssHyphenProp).toEqual("color");
+    expect(atom.cssHyphenProp).toEqual('color');
     expect(atom.selector).toMatchInlineSnapshot(`"&&:hover"`);
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_hXHHYX"`);
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -312,30 +307,26 @@ describe("createCss", () => {
       ./*X*/_hXHHYX/*X*/./*X*/_hXHHYX/*X*/:hover{color:red;}"
     `);
   });
-  test("should handle specificity", () => {
+  test('should handle specificity', () => {
     const css = createCss({}, null);
     expect(
       css(
         {
-          color: "red",
-          backgroundColor: "blue",
+          color: 'red',
+          backgroundColor: 'blue',
         },
         {
-          backgroundColor: "green",
+          backgroundColor: 'green',
         }
       ).toString()
     ).toMatchInlineSnapshot(`"_loCpsM _dzoaVP"`);
   });
-  test("should insert rule only once", () => {
+  test('should insert rule only once', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
-      expect(css({ color: "red" }).toString()).toMatchInlineSnapshot(
-        `"_dzoaVP"`
-      );
-      expect(css({ color: "red" }).toString()).toMatchInlineSnapshot(
-        `"_dzoaVP"`
-      );
-      return "";
+      expect(css({ color: 'red' }).toString()).toMatchInlineSnapshot(`"_dzoaVP"`);
+      expect(css({ color: 'red' }).toString()).toMatchInlineSnapshot(`"_dzoaVP"`);
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -358,7 +349,7 @@ describe("createCss", () => {
   });
   */
 
-  test("should inject screen sheets", () => {
+  test('should inject screen sheets', () => {
     const fakeEnv = createFakeEnv();
     const css = createCss(
       {
@@ -368,15 +359,13 @@ describe("createCss", () => {
       },
       (fakeEnv as unknown) as Window
     );
-    String(css({ tablet: { color: "red" } }));
+    String(css({ tablet: { color: 'red' } }));
     expect(fakeEnv.document.styleSheets.length).toBe(3);
-    expect(
-      fakeEnv.document.styleSheets[2].cssRules[0].cssText
-    ).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
       `"@media (min-width: 700px) {._hsxGAz {color: red;}}"`
     );
   });
-  test("should allow utils", () => {
+  test('should allow utils', () => {
     const css = createCss(
       {
         utils: {
@@ -388,18 +377,16 @@ describe("createCss", () => {
       },
       null
     );
-    expect(css({ marginX: "1rem" }).toString()).toMatchInlineSnapshot(
-      `"_fgMgZN _ijwQpS"`
-    );
+    expect(css({ marginX: '1rem' }).toString()).toMatchInlineSnapshot(`"_fgMgZN _ijwQpS"`);
   });
 
-  test("should allow utils that resolve into nested structures", () => {
+  test('should allow utils that resolve into nested structures', () => {
     const css = createCss(
       {
         utils: {
           hover: () => (value) => ({
-            ":hover": value,
-            ":focus": value,
+            ':hover': value,
+            ':focus': value,
           }),
         },
       },
@@ -407,14 +394,14 @@ describe("createCss", () => {
     );
     const atom = css({
       hover: {
-        color: "green",
+        color: 'green',
       },
     });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_hoOxCl _fTflhf"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -425,53 +412,49 @@ describe("createCss", () => {
     `);
   });
 
-  test("should ignore undefined atoms", () => {
+  test('should ignore undefined atoms', () => {
     const css = createCss({}, null);
 
     expect(
       // @ts-ignore
-      String(css(undefined, null, false, "", { color: "red" }))
+      String(css(undefined, null, false, '', { color: 'red' }))
     ).toMatchInlineSnapshot(`"_dzoaVP"`);
   });
-  test("should allow empty compose call", () => {
+  test('should allow empty compose call', () => {
     const css = createCss({}, null);
-    expect(String(css())).toBe("");
+    expect(String(css())).toBe('');
   });
-  test("should allow conditional compositions", () => {
+  test('should allow conditional compositions', () => {
     const css = createCss({}, null);
-    expect(String(css((false as any) && { color: "red" }))).toBe("");
-    expect(String(css(true && { color: "red" }))).toMatchInlineSnapshot(
-      `"_dzoaVP"`
-    );
+    expect(String(css((false as any) && { color: 'red' }))).toBe('');
+    expect(String(css(true && { color: 'red' }))).toMatchInlineSnapshot(`"_dzoaVP"`);
   });
-  test("should allow prefixes", () => {
+  test('should allow prefixes', () => {
     const css = createCss(
       {
-        prefix: "foo",
+        prefix: 'foo',
       },
       null
     );
-    expect(String(css({ color: "red" }))).toMatchInlineSnapshot(`"foo_dzoaVP"`);
+    expect(String(css({ color: 'red' }))).toMatchInlineSnapshot(`"foo_dzoaVP"`);
   });
-  test("should expose override with utility first", () => {
+  test('should expose override with utility first', () => {
     const css = createCss(
       {
         utilityFirst: true,
         breakpoints: {
-          mobile: () => "",
+          mobile: () => '',
         },
       },
       null
     );
-    expect(String(css({ override: { color: "red" } }))).toMatchInlineSnapshot(
-      `"_dzoaVP"`
-    );
+    expect(String(css({ override: { color: 'red' } }))).toMatchInlineSnapshot(`"_dzoaVP"`);
   });
-  test("should not inject existing styles", () => {
+  test('should not inject existing styles', () => {
     const serverCss = createCss({}, null);
     const { styles } = serverCss.getStyles(() => {
-      serverCss({ color: "red" }).toString();
-      return "";
+      serverCss({ color: 'red' }).toString();
+      return '';
     });
 
     const fakeEnv = createFakeEnv(styles);
@@ -480,20 +463,16 @@ describe("createCss", () => {
     // Lets see what is already put in
     expect(fakeEnv.document.styleSheets.length).toBe(2);
     expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(1);
-    expect(
-      fakeEnv.document.styleSheets[1].cssRules[0].cssText
-    ).toMatchInlineSnapshot(`"._dzoaVP {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(`"._dzoaVP {color: red;}"`);
     // On the client it will rerun the logic (React hydrate etc.)
-    clientCss({ color: "red" }).toString();
+    clientCss({ color: 'red' }).toString();
     // Then we add something new
-    clientCss({ color: "blue" }).toString();
+    clientCss({ color: 'blue' }).toString();
     // Lets see if it continues on the correct sequence
     expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(2);
-    expect(
-      fakeEnv.document.styleSheets[1].cssRules[0].cssText
-    ).toMatchInlineSnapshot(`"._iTsdWi {color: blue;}"`);
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(`"._iTsdWi {color: blue;}"`);
   });
-  test("should be able to show friendly classnames", () => {
+  test('should be able to show friendly classnames', () => {
     const css = createCss(
       {
         showFriendlyClassnames: true,
@@ -501,9 +480,9 @@ describe("createCss", () => {
       null
     );
     const { styles } = css.getStyles(() => {
-      css({ color: "red" }).toString();
-      css({ backgroundColor: "red" }).toString();
-      return "";
+      css({ color: 'red' }).toString();
+      css({ backgroundColor: 'red' }).toString();
+      return '';
     });
 
     expect(styles[1]).toMatchInlineSnapshot(`
@@ -512,7 +491,7 @@ describe("createCss", () => {
       ./*X*/initial_c_dzoaVP/*X*/{color:red;}"
     `);
   });
-  test("should inject vendor prefix where explicitly stating so", () => {
+  test('should inject vendor prefix where explicitly stating so', () => {
     const css = createCss(
       {
         showFriendlyClassnames: true,
@@ -521,8 +500,8 @@ describe("createCss", () => {
     );
     const { styles } = css.getStyles(() => {
       // @ts-ignore
-      css({ WebkitColor: "red" }).toString();
-      return "";
+      css({ WebkitColor: 'red' }).toString();
+      return '';
     });
 
     expect(styles[1]).toMatchInlineSnapshot(`
@@ -530,33 +509,31 @@ describe("createCss", () => {
       ./*X*/initial_c_dzoaVP/*X*/{-webkit-color:red;}"
     `);
   });
-  test("should use specificity props", () => {
+  test('should use specificity props', () => {
     const css = createCss({}, null);
-    expect(String(css({ margin: "1px" }))).toMatchInlineSnapshot(
-      `"_hXUSyk _bZYdQM _cTIqvn _kYSwIs"`
-    );
+    expect(String(css({ margin: '1px' }))).toMatchInlineSnapshot(`"_hXUSyk _bZYdQM _cTIqvn _kYSwIs"`);
   });
-  test("should map CSS Properties to Tokens", () => {
+  test('should map CSS Properties to Tokens', () => {
     const css = createCss(
       {
         tokens: {
           space: {
-            "1": "5px",
-            "2": "10px",
+            '1': '5px',
+            '2': '10px',
           },
           colors: {
-            red500: "tomato",
-            blue500: "royalblue",
+            red500: 'tomato',
+            blue500: 'royalblue',
           },
         },
       },
       null
     );
     const { styles } = css.getStyles(() => {
-      css({ marginTop: "1" }).toString();
-      css({ gap: "2" }).toString();
-      css({ outlineColor: "red500" }).toString();
-      return "";
+      css({ marginTop: '1' }).toString();
+      css({ gap: '2' }).toString();
+      css({ outlineColor: 'red500' }).toString();
+      return '';
     });
 
     expect(styles).toMatchInlineSnapshot(`
@@ -570,64 +547,58 @@ describe("createCss", () => {
       ]
     `);
   });
-  test("should have declarative api", () => {
+  test('should have declarative api', () => {
     const css = createCss({}, null);
     expect(
       css({
-        color: "red",
-        backgroundColor: "blue",
+        color: 'red',
+        backgroundColor: 'blue',
       }).toString()
     ).toMatchInlineSnapshot(`"_YfjLh _dzoaVP"`);
   });
-  test("should handle declarative pseudo selector", () => {
+  test('should handle declarative pseudo selector', () => {
     const fakeEnv = createFakeEnv([], []);
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
-    css({ "&:hover": { color: "red" } }).toString();
-    expect(
-      fakeEnv.document.styleSheets[1].cssRules[0].cssText
-    ).toMatchInlineSnapshot(`"._hXHHYX._hXHHYX:hover {color: red;}"`);
+    css({ '&:hover': { color: 'red' } }).toString();
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(
+      `"._hXHHYX._hXHHYX:hover {color: red;}"`
+    );
   });
 
-  test("Should handle ampersand correctly when not targeting pseudo selector", () => {
+  test('Should handle ampersand correctly when not targeting pseudo selector', () => {
     const fakeEnv = createFakeEnv([], []);
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
-    css({ "&.red": { color: "red" } }).toString();
-    expect(
-      fakeEnv.document.styleSheets[1].cssRules[0].cssText
-    ).toMatchInlineSnapshot(`"._jOAMao.red {color: red;}"`);
+    css({ '&.red': { color: 'red' } }).toString();
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(`"._jOAMao.red {color: red;}"`);
   });
 
-  test("Should handle nesting", () => {
+  test('Should handle nesting', () => {
     const fakeEnv = createFakeEnv([], []);
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css({
-      ".red": {
-        color: "red",
-        ".potato": {
-          backgroundColor: "red",
-          ":hover": {
-            backgroundColor: "green",
+      '.red': {
+        color: 'red',
+        '.potato': {
+          backgroundColor: 'red',
+          ':hover': {
+            backgroundColor: 'green',
           },
         },
       },
     }).toString();
-    expect(
-      fakeEnv.document.styleSheets[1].cssRules[0].cssText
-    ).toMatchInlineSnapshot(`"._kTghTu .red {color: red;}"`);
-    expect(
-      fakeEnv.document.styleSheets[1].cssRules[1].cssText
-    ).toMatchInlineSnapshot(`"._dhhpqe .red .potato {background-color: red;}"`);
-    expect(
-      fakeEnv.document.styleSheets[1].cssRules[2].cssText
-    ).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(`"._kTghTu .red {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[1].cssRules[1].cssText).toMatchInlineSnapshot(
+      `"._dhhpqe .red .potato {background-color: red;}"`
+    );
+    expect(fakeEnv.document.styleSheets[1].cssRules[2].cssText).toMatchInlineSnapshot(
       `"._lftrMy._lftrMy .red .potato:hover {background-color: green;}"`
     );
   });
 
-  test("should handle screen selector", () => {
+  test('should handle screen selector', () => {
     const css = createCss(
       {
         breakpoints: {
@@ -637,8 +608,8 @@ describe("createCss", () => {
       null
     );
     const { styles } = css.getStyles(() => {
-      css({ mobile: { color: "red" } }).toString();
-      return "";
+      css({ mobile: { color: 'red' } }).toString();
+      return '';
     });
     // @ts-ignore
 
@@ -648,7 +619,7 @@ describe("createCss", () => {
       @media(min-width:700px){./*X*/_fOxLwJ/*X*/{color:red;}}"
     `);
   });
-  test("should handle pseudo in screen selector", () => {
+  test('should handle pseudo in screen selector', () => {
     const css = createCss(
       {
         breakpoints: {
@@ -659,8 +630,8 @@ describe("createCss", () => {
     );
     const { styles } = css.getStyles(() => {
       // @ts-ignore
-      css({ mobile: { "&:hover": { color: "red" } } }).toString();
-      return "";
+      css({ mobile: { '&:hover': { color: 'red' } } }).toString();
+      return '';
     });
 
     expect(styles.length).toBe(3);
@@ -669,12 +640,12 @@ describe("createCss", () => {
       @media(min-width:700px){./*X*/_coXxUV/*X*/./*X*/_coXxUV/*X*/:hover{color:red;}}"
     `);
   });
-  test("should insert themes", () => {
+  test('should insert themes', () => {
     const css = createCss(
       {
         tokens: {
           colors: {
-            primary: "tomato",
+            primary: 'tomato',
           },
         },
       },
@@ -682,15 +653,15 @@ describe("createCss", () => {
     );
     const { styles } = css.getStyles(() => {
       // @ts-ignore
-      css({ color: "primary" }).toString();
+      css({ color: 'primary' }).toString();
       expect(
         css
           .theme({
-            primary: "blue",
+            primary: 'blue',
           })
           .toString()
       ).toMatchInlineSnapshot(`"theme-0"`);
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -704,14 +675,14 @@ describe("createCss", () => {
       ./*X*/_gknCVb/*X*/{color:var(--colors-primary);}"
     `);
   });
-  test("should allow nested pseudo", () => {
+  test('should allow nested pseudo', () => {
     const css = createCss({}, null);
-    const atom = css({ "&:hover": { "&:disabled": { color: "red" } } }) as any;
+    const atom = css({ '&:hover': { '&:disabled': { color: 'red' } } }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_bePnWZ"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -720,16 +691,16 @@ describe("createCss", () => {
       ./*X*/_bePnWZ/*X*/./*X*/_bePnWZ/*X*/:hover:disabled{color:red;}"
     `);
   });
-  test("should handle border specificity", () => {
+  test('should handle border specificity', () => {
     const css = createCss({}, null);
-    const atom = css({ border: "1px solid red" }) as any;
+    const atom = css({ border: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
         `"_kiEsJg _lgRogE _fWbRyP _iLiCSc _lyLPc _hiyybE _bGUEHj _kROsiw _gonZcB _ckYojt _fZMTUa _gQTUlh"`
       );
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -749,25 +720,25 @@ describe("createCss", () => {
       ./*X*/_kiEsJg/*X*/{border-left-color:red;}"
     `);
   });
-  test("should handle border shorthand with tokens", () => {
+  test('should handle border shorthand with tokens', () => {
     const css = createCss(
       {
         tokens: {
           colors: {
-            primary: "tomato",
+            primary: 'tomato',
           },
         },
       },
       null
     );
-    const atom = css({ border: "1px solid primary" }) as any;
+    const atom = css({ border: '1px solid primary' }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
         `"_fSAUek _dNVNzk _crCEGH _cYwVAs _lyLPc _hiyybE _bGUEHj _kROsiw _gonZcB _ckYojt _fZMTUa _gQTUlh"`
       );
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -787,23 +758,23 @@ describe("createCss", () => {
       ./*X*/_fSAUek/*X*/{border-left-color:var(--colors-primary);}"
     `);
   });
-  test("should handle box shadow with tokens", () => {
+  test('should handle box shadow with tokens', () => {
     const css = createCss(
       {
         tokens: {
           colors: {
-            primary: "tomato",
+            primary: 'tomato',
           },
         },
       },
       null
     );
-    const atom = css({ boxShadow: "1px 1px 1px primary" }) as any;
+    const atom = css({ boxShadow: '1px 1px 1px primary' }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_jUMaLt"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -812,28 +783,28 @@ describe("createCss", () => {
       ./*X*/_jUMaLt/*X*/{box-shadow:1px 1px 1px var(--colors-primary);}"
     `);
   });
-  test("should be able to compose themes", () => {
+  test('should be able to compose themes', () => {
     const css = createCss(
       {
         tokens: {
           colors: {
-            primary: "tomato",
+            primary: 'tomato',
           },
         },
       },
       null
     );
     const darkTheme = css.theme({
-      primary: "green",
+      primary: 'green',
     });
     const atom = css(darkTheme, {
-      color: "primary",
+      color: 'primary',
     }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_gknCVb theme-0"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -843,21 +814,21 @@ describe("createCss", () => {
     `);
   });
 
-  test("should generate keyframe atoms", () => {
+  test('should generate keyframe atoms', () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
-      "0%": { background: "red" },
-      "100%": { background: "green" },
+      '0%': { background: 'red' },
+      '100%': { background: 'green' },
     }) as any;
 
     expect(keyFrame._cssRuleString).toBe(
-      "@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
+      '@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}'
     );
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"dmyJCr"`);
   });
 
-  test("should support utils inside keyframes", () => {
+  test('should support utils inside keyframes', () => {
     const css = createCss(
       {
         utils: {
@@ -870,22 +841,22 @@ describe("createCss", () => {
       null
     );
     const keyFrame = css.keyframes({
-      "0%": { mx: "1px" },
-      "100%": { mx: "10px" },
+      '0%': { mx: '1px' },
+      '100%': { mx: '10px' },
     }) as any;
 
     expect(keyFrame._cssRuleString).toBe(
-      "@keyframes bFeLcH {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}"
+      '@keyframes bFeLcH {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}'
     );
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"bFeLcH"`);
   });
 
-  test("should support specificity props inside keyframes", () => {
+  test('should support specificity props inside keyframes', () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
-      "0%": { padding: "1px" },
-      "100%": { padding: "10px" },
+      '0%': { padding: '1px' },
+      '100%': { padding: '10px' },
     }) as any;
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
@@ -894,17 +865,17 @@ describe("createCss", () => {
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"bivLJn"`);
   });
-  test("should allow keyframes atom to be used as a direct object value", () => {
+  test('should allow keyframes atom to be used as a direct object value', () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
-      "0%": { background: "red" },
-      "100%": { background: "green" },
+      '0%': { background: 'red' },
+      '100%': { background: 'green' },
     }) as any;
     let atom: any;
     const { styles } = css.getStyles(() => {
       expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
       expect(atom.toString()).toMatchInlineSnapshot(`"_gDSlRG"`);
-      return "";
+      return '';
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -913,16 +884,16 @@ describe("createCss", () => {
       @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
     `);
   });
-  test("should inject styles for animations into sheet", () => {
+  test('should inject styles for animations into sheet', () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
-      "0%": { background: "red" },
-      "100%": { background: "green" },
+      '0%': { background: 'red' },
+      '100%': { background: 'green' },
     }) as any;
     const atom = css({ animationName: keyFrame }) as any;
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_gDSlRG"`);
-      return "";
+      return '';
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -931,16 +902,14 @@ describe("createCss", () => {
       @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
     `);
   });
-  test("should handle margin shorthand", () => {
+  test('should handle margin shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ margin: "1px 5px" }) as any;
+    const atom = css({ margin: '1px 5px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_hhGSUw _bZYdQM _gtgAOv _kYSwIs"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_hhGSUw _bZYdQM _gtgAOv _kYSwIs"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -953,16 +922,14 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle padding shorthand", () => {
+  test('should handle padding shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ padding: "1px 5px" }) as any;
+    const atom = css({ padding: '1px 5px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_grPRDT _eossbD _iuxmks _jCapLb"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_grPRDT _eossbD _iuxmks _jCapLb"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -975,14 +942,12 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle border-top shorthand", () => {
+  test('should handle border-top shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderTop: "1px solid red" }) as any;
+    const atom = css({ borderTop: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_iLiCSc _kROsiw _gQTUlh"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_iLiCSc _kROsiw _gQTUlh"`);
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -993,10 +958,10 @@ describe("createCss", () => {
     `);
   });
 
-  test("should allow nested inline media queries", () => {
+  test('should allow nested inline media queries', () => {
     const css = createCss({}, null);
     const atom = css({
-      "@media (hover:hover)": { "@media screen": { color: "red" } },
+      '@media (hover:hover)': { '@media screen': { color: 'red' } },
     }) as any;
 
     const { styles } = css.getStyles(() => {
@@ -1004,16 +969,14 @@ describe("createCss", () => {
     });
   });
 
-  test("should handle border-right shorthand", () => {
+  test('should handle border-right shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderRight: "1px solid red" }) as any;
+    const atom = css({ borderRight: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_fWbRyP _bGUEHj _fZMTUa"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_fWbRyP _bGUEHj _fZMTUa"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -1025,14 +988,12 @@ describe("createCss", () => {
       ./*X*/_fWbRyP/*X*/{border-right-color:red;}"
     `);
   });
-  test("should handle border-bottom shorthand", () => {
+  test('should handle border-bottom shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderBottom: "1px solid red" }) as any;
+    const atom = css({ borderBottom: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_lgRogE _hiyybE _ckYojt"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_lgRogE _hiyybE _ckYojt"`);
     });
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
@@ -1041,9 +1002,9 @@ describe("createCss", () => {
       ./*X*/_lgRogE/*X*/{border-bottom-color:red;}"
     `);
   });
-  test("should allow inline media queries", () => {
+  test('should allow inline media queries', () => {
     const css = createCss({}, null);
-    const atom = css({ "@media (hover:hover)": { color: "red" } }) as any;
+    const atom = css({ '@media (hover:hover)': { color: 'red' } }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_eIxNzM"`);
@@ -1055,12 +1016,12 @@ describe("createCss", () => {
     `);
   });
 
-  test("should allow injection of classname", () => {
+  test('should allow injection of classname', () => {
     const css = createCss({}, null);
-    const atom = (css({ "div:hover &": { color: "red" } }) as any).atoms[0];
+    const atom = (css({ 'div:hover &': { color: 'red' } }) as any).atoms[0];
 
     expect(atom.id).toMatchInlineSnapshot(`"color div:hover &initial"`);
-    expect(atom.cssHyphenProp).toEqual("color");
+    expect(atom.cssHyphenProp).toEqual('color');
     expect(atom.selector).toMatchInlineSnapshot(`" div:hover &"`);
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
 
@@ -1073,9 +1034,9 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle border-left shorthand", () => {
+  test('should handle border-left shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderLeft: "1px solid red" }) as any;
+    const atom = css({ borderLeft: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_kiEsJg _lyLPc _gonZcB"`);
@@ -1089,15 +1050,13 @@ describe("createCss", () => {
       ./*X*/_kiEsJg/*X*/{border-left-color:red;}"
     `);
   });
-  test("should handle border-radius shorthand", () => {
+  test('should handle border-radius shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderRadius: "5px" }) as any;
+    const atom = css({ borderRadius: '5px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_hniQLS _fJjMAS _jwQcuF _jVkGRV"`
-      );
-      return "";
+      expect(atom.toString()).toMatchInlineSnapshot(`"_hniQLS _fJjMAS _jwQcuF _jVkGRV"`);
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -1110,16 +1069,14 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle border-color shorthand", () => {
+  test('should handle border-color shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderColor: "red" }) as any;
+    const atom = css({ borderColor: 'red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_kiEsJg _lgRogE _fWbRyP _iLiCSc"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_kiEsJg _lgRogE _fWbRyP _iLiCSc"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -1132,16 +1089,14 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle border-style shorthand", () => {
+  test('should handle border-style shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderStyle: "solid" }) as any;
+    const atom = css({ borderStyle: 'solid' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_lyLPc _hiyybE _bGUEHj _kROsiw"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_lyLPc _hiyybE _bGUEHj _kROsiw"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -1154,16 +1109,14 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle border-width shorthand", () => {
+  test('should handle border-width shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderWidth: "2px" }) as any;
+    const atom = css({ borderWidth: '2px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_khlBMi _czVPNi _hYbLMd _jfTurm"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_khlBMi _czVPNi _hYbLMd _jfTurm"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -1176,14 +1129,14 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle background shorthand", () => {
+  test('should handle background shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ background: "red" }) as any;
+    const atom = css({ background: 'red' }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_bieopk"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -1193,16 +1146,14 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle transition shorthand", () => {
+  test('should handle transition shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ transition: "margin-right 2s ease-in-out" }) as any;
+    const atom = css({ transition: 'margin-right 2s ease-in-out' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(
-        `"_bqUgFr _dSdgMo _guSrvz"`
-      );
+      expect(atom.toString()).toMatchInlineSnapshot(`"_bqUgFr _dSdgMo _guSrvz"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -1214,14 +1165,14 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle font shorthand", () => {
+  test('should handle font shorthand', () => {
     const css = createCss({}, null);
     const atom = css({ font: '1.2em "Fira Sans", sans-serif' }) as any;
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_iLETJz _GJEnH"`);
 
-      return "";
+      return '';
     });
 
     expect(styles.length).toBe(2);
@@ -1232,37 +1183,37 @@ describe("createCss", () => {
     `);
   });
 
-  test("Should warn about potential specificity issues when an inline responsive atom appears in two different css definitions", () => {
+  test('Should warn about potential specificity issues when an inline responsive atom appears in two different css definitions', () => {
     const css = createCss({}, null);
-    const mediaString = "@media (min-width: 700px)";
+    const mediaString = '@media (min-width: 700px)';
     // tslint:disable-next-line
     console.warn = jest.fn();
     const firstDef = css({
-      [mediaString]: { color: "red" },
+      [mediaString]: { color: 'red' },
     }).toString();
 
     const secondDef = css({
-      [mediaString]: { color: "red" },
+      [mediaString]: { color: 'red' },
     }).toString();
     // tslint:disable-next-line
     expect(console.warn).toHaveBeenCalledWith(
       `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
     );
   });
-  test("should inject media queries after normal rules", () => {
+  test('should inject media queries after normal rules', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
-        color: "red",
-        "@media (min-width: 700px)": { color: "red" },
-        backgroundColor: "blue",
+        color: 'red',
+        '@media (min-width: 700px)': { color: 'red' },
+        backgroundColor: 'blue',
       }).toString();
       css({
-        color: "green",
-        "@media (min-width: 200px)": { color: "red" },
-        backgroundColor: "yello",
+        color: 'green',
+        '@media (min-width: 200px)': { color: 'red' },
+        backgroundColor: 'yello',
       }).toString();
-      return "";
+      return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -1276,36 +1227,36 @@ describe("createCss", () => {
     `);
   });
 
-  test("should inject pseudo selectors with increased specificity", () => {
+  test('should inject pseudo selectors with increased specificity', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
         // &&
-        ":hover": {
-          color: "red",
+        ':hover': {
+          color: 'red',
         },
         // &&&
-        ":active": {
-          color: "red",
+        ':active': {
+          color: 'red',
         },
         // &&&&
-        ":focus": {
-          color: "red",
+        ':focus': {
+          color: 'red',
         },
         // &&&&
-        ":focus-visible": {
-          color: "red",
+        ':focus-visible': {
+          color: 'red',
         },
         // &&&&&
-        ":read-only": {
-          color: "red",
+        ':read-only': {
+          color: 'red',
         },
         // &&&&&&
-        ":disabled": {
-          color: "red",
+        ':disabled': {
+          color: 'red',
         },
       }).toString();
-      return "";
+      return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -1319,14 +1270,14 @@ describe("createCss", () => {
     `);
   });
 
-  test("Should omit undefined css values", () => {
+  test('Should omit undefined css values', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
         backgroundColor: undefined,
-        color: "red",
+        color: 'red',
       }).toString();
-      return "";
+      return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -1335,19 +1286,19 @@ describe("createCss", () => {
     `);
   });
 
-  test("should handle global styles", () => {
+  test('should handle global styles', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css.global({
-        "@media (min-width: 700px)": {
+        '@media (min-width: 700px)': {
           div: {
-            color: "red",
-            backgroundColor: "white",
-            paddingLeft: "10px",
+            color: 'red',
+            backgroundColor: 'white',
+            paddingLeft: '10px',
           },
         },
       });
-      return "";
+      return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -1358,17 +1309,17 @@ describe("createCss", () => {
     `);
   });
 
-  test("should not re-inject global styles", () => {
+  test('should not re-inject global styles', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css.global({
-        "@media (min-width: 700px)": { div: { color: "red" } },
+        '@media (min-width: 700px)': { div: { color: 'red' } },
       });
 
       css.global({
-        "@media (min-width: 700px)": { div: { color: "red" } },
+        '@media (min-width: 700px)': { div: { color: 'red' } },
       });
-      return "";
+      return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -1377,11 +1328,11 @@ describe("createCss", () => {
     `);
   });
 
-  test("should error when styles are passed without a selector", () => {
+  test('should error when styles are passed without a selector', () => {
     const css = createCss({}, null);
     expect(() => {
       css.global({
-        background: "red",
+        background: 'red',
       });
     }).toThrow();
   });
@@ -1394,7 +1345,7 @@ describe("createCss", () => {
         marginLeft: 1,
         fontSize: 1,
       }).toString();
-      return "";
+      return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -1404,13 +1355,13 @@ describe("createCss", () => {
       ./*X*/_clXqwH/*X*/{font-size:1px;}"
     `);
   });
-  test("Should append px to numbers in shorthands", () => {
+  test('Should append px to numbers in shorthands', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
         margin: 1,
       }).toString();
-      return "";
+      return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
@@ -1422,12 +1373,12 @@ describe("createCss", () => {
     `);
   });
 
-  test("Numbers should not map to tokens", () => {
+  test('Numbers should not map to tokens', () => {
     const css = createCss(
       {
         tokens: {
           space: {
-            1: "10px",
+            1: '10px',
           },
         },
       },
@@ -1436,9 +1387,9 @@ describe("createCss", () => {
     const { styles } = css.getStyles(() => {
       css({
         margin: 1,
-        padding: "1",
+        padding: '1',
       }).toString();
-      return "";
+      return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`

@@ -6208,20 +6208,14 @@ export interface FontFace {
 }
 
 export interface FontFaceFallback {
-  MozFontFeatureSettings:
-    | FontFaceFontFeatureSettingsProperty
-    | FontFaceFontFeatureSettingsProperty[];
+  MozFontFeatureSettings: FontFaceFontFeatureSettingsProperty | FontFaceFontFeatureSettingsProperty[];
   fontDisplay: FontFaceFontDisplayProperty | FontFaceFontDisplayProperty[];
   fontFamily: string | string[];
-  fontFeatureSettings:
-    | FontFaceFontFeatureSettingsProperty
-    | FontFaceFontFeatureSettingsProperty[];
+  fontFeatureSettings: FontFaceFontFeatureSettingsProperty | FontFaceFontFeatureSettingsProperty[];
   fontStretch: FontFaceFontStretchProperty | FontFaceFontStretchProperty[];
   fontStyle: FontFaceFontStyleProperty | FontFaceFontStyleProperty[];
   fontVariant: FontFaceFontVariantProperty | FontFaceFontVariantProperty[];
-  fontVariationSettings:
-    | FontFaceFontVariationSettingsProperty
-    | FontFaceFontVariationSettingsProperty[];
+  fontVariationSettings: FontFaceFontVariationSettingsProperty | FontFaceFontVariationSettingsProperty[];
   fontWeight: FontFaceFontWeightProperty | FontFaceFontWeightProperty[];
   src: string | string[];
   unicodeRange: string | string[];
@@ -6255,19 +6249,11 @@ export interface Viewport<TLength = (string & {}) | 0> {
 
 export interface ViewportFallback<TLength = (string & {}) | 0> {
   msHeight: ViewportHeightProperty<TLength> | ViewportHeightProperty<TLength>[];
-  msMaxHeight:
-    | ViewportMaxHeightProperty<TLength>
-    | ViewportMaxHeightProperty<TLength>[];
-  msMaxWidth:
-    | ViewportMaxWidthProperty<TLength>
-    | ViewportMaxWidthProperty<TLength>[];
+  msMaxHeight: ViewportMaxHeightProperty<TLength> | ViewportMaxHeightProperty<TLength>[];
+  msMaxWidth: ViewportMaxWidthProperty<TLength> | ViewportMaxWidthProperty<TLength>[];
   msMaxZoom: ViewportMaxZoomProperty | ViewportMaxZoomProperty[];
-  msMinHeight:
-    | ViewportMinHeightProperty<TLength>
-    | ViewportMinHeightProperty<TLength>[];
-  msMinWidth:
-    | ViewportMinWidthProperty<TLength>
-    | ViewportMinWidthProperty<TLength>[];
+  msMinHeight: ViewportMinHeightProperty<TLength> | ViewportMinHeightProperty<TLength>[];
+  msMinWidth: ViewportMinWidthProperty<TLength> | ViewportMinWidthProperty<TLength>[];
   msMinZoom: ViewportMinZoomProperty | ViewportMinZoomProperty[];
   msOrientation: ViewportOrientationProperty | ViewportOrientationProperty[];
   msUserZoom: ViewportUserZoomProperty | ViewportUserZoomProperty[];
@@ -6275,19 +6261,11 @@ export interface ViewportFallback<TLength = (string & {}) | 0> {
   msZoom: ViewportZoomProperty | ViewportZoomProperty[];
   OOrientation: ViewportOrientationProperty | ViewportOrientationProperty[];
   height: ViewportHeightProperty<TLength> | ViewportHeightProperty<TLength>[];
-  maxHeight:
-    | ViewportMaxHeightProperty<TLength>
-    | ViewportMaxHeightProperty<TLength>[];
-  maxWidth:
-    | ViewportMaxWidthProperty<TLength>
-    | ViewportMaxWidthProperty<TLength>[];
+  maxHeight: ViewportMaxHeightProperty<TLength> | ViewportMaxHeightProperty<TLength>[];
+  maxWidth: ViewportMaxWidthProperty<TLength> | ViewportMaxWidthProperty<TLength>[];
   maxZoom: ViewportMaxZoomProperty | ViewportMaxZoomProperty[];
-  minHeight:
-    | ViewportMinHeightProperty<TLength>
-    | ViewportMinHeightProperty<TLength>[];
-  minWidth:
-    | ViewportMinWidthProperty<TLength>
-    | ViewportMinWidthProperty<TLength>[];
+  minHeight: ViewportMinHeightProperty<TLength> | ViewportMinHeightProperty<TLength>[];
+  minWidth: ViewportMinWidthProperty<TLength> | ViewportMinWidthProperty<TLength>[];
   minZoom: ViewportMinZoomProperty | ViewportMinZoomProperty[];
   orientation: ViewportOrientationProperty | ViewportOrientationProperty[];
   userZoom: ViewportUserZoomProperty | ViewportUserZoomProperty[];
@@ -6295,12 +6273,7 @@ export interface ViewportFallback<TLength = (string & {}) | 0> {
   zoom: ViewportZoomProperty | ViewportZoomProperty[];
 }
 
-export type Globals =
-  | "-moz-initial"
-  | "inherit"
-  | "initial"
-  | "revert"
-  | "unset";
+export type Globals = '-moz-initial' | 'inherit' | 'initial' | 'revert' | 'unset';
 
 type GlobalsString = Globals | (string & {});
 
@@ -6310,73 +6283,35 @@ export type AlignContentProperty =
   | Globals
   | ContentDistribution
   | ContentPosition
-  | "baseline"
-  | "normal"
+  | 'baseline'
+  | 'normal'
   | (string & {});
 
-export type AlignItemsProperty =
-  | Globals
-  | SelfPosition
-  | "baseline"
-  | "normal"
-  | "stretch"
-  | (string & {});
+export type AlignItemsProperty = Globals | SelfPosition | 'baseline' | 'normal' | 'stretch' | (string & {});
 
-export type AlignSelfProperty =
-  | Globals
-  | SelfPosition
-  | "auto"
-  | "baseline"
-  | "normal"
-  | "stretch"
-  | (string & {});
+export type AlignSelfProperty = Globals | SelfPosition | 'auto' | 'baseline' | 'normal' | 'stretch' | (string & {});
 
 export type AnimationProperty = Globals | SingleAnimation | (string & {});
 
-export type AnimationDirectionProperty =
-  | Globals
-  | SingleAnimationDirection
-  | (string & {});
+export type AnimationDirectionProperty = Globals | SingleAnimationDirection | (string & {});
 
-export type AnimationFillModeProperty =
-  | Globals
-  | SingleAnimationFillMode
-  | (string & {});
+export type AnimationFillModeProperty = Globals | SingleAnimationFillMode | (string & {});
 
-export type AnimationIterationCountProperty =
-  | Globals
-  | "infinite"
-  | (string & {})
-  | number;
+export type AnimationIterationCountProperty = Globals | 'infinite' | (string & {}) | number;
 
-export type AnimationNameProperty = Globals | "none" | (string & {});
+export type AnimationNameProperty = Globals | 'none' | (string & {});
 
-export type AnimationPlayStateProperty =
-  | Globals
-  | "paused"
-  | "running"
-  | (string & {});
+export type AnimationPlayStateProperty = Globals | 'paused' | 'running' | (string & {});
 
-export type AnimationTimingFunctionProperty =
-  | Globals
-  | TimingFunction
-  | (string & {});
+export type AnimationTimingFunctionProperty = Globals | TimingFunction | (string & {});
 
-export type AppearanceProperty =
-  | Globals
-  | Compat
-  | "button"
-  | "none"
-  | "textfield";
+export type AppearanceProperty = Globals | Compat | 'button' | 'none' | 'textfield';
 
-export type BackdropFilterProperty = Globals | "none" | (string & {});
+export type BackdropFilterProperty = Globals | 'none' | (string & {});
 
-export type BackfaceVisibilityProperty = Globals | "hidden" | "visible";
+export type BackfaceVisibilityProperty = Globals | 'hidden' | 'visible';
 
-export type BackgroundProperty<TLength> =
-  | Globals
-  | FinalBgLayer<TLength>
-  | (string & {});
+export type BackgroundProperty<TLength> = Globals | FinalBgLayer<TLength> | (string & {});
 
 export type BackgroundAttachmentProperty = Globals | Attachment | (string & {});
 
@@ -6386,60 +6321,50 @@ export type BackgroundClipProperty = Globals | Box | (string & {});
 
 export type BackgroundColorProperty = Globals | Color;
 
-export type BackgroundImageProperty = Globals | "none" | (string & {});
+export type BackgroundImageProperty = Globals | 'none' | (string & {});
 
 export type BackgroundOriginProperty = Globals | Box | (string & {});
 
-export type BackgroundPositionProperty<TLength> =
-  | Globals
-  | BgPosition<TLength>
-  | (string & {});
+export type BackgroundPositionProperty<TLength> = Globals | BgPosition<TLength> | (string & {});
 
 export type BackgroundPositionXProperty<TLength> =
   | Globals
   | TLength
-  | "center"
-  | "left"
-  | "right"
-  | "x-end"
-  | "x-start"
+  | 'center'
+  | 'left'
+  | 'right'
+  | 'x-end'
+  | 'x-start'
   | (string & {});
 
 export type BackgroundPositionYProperty<TLength> =
   | Globals
   | TLength
-  | "bottom"
-  | "center"
-  | "top"
-  | "y-end"
-  | "y-start"
+  | 'bottom'
+  | 'center'
+  | 'top'
+  | 'y-end'
+  | 'y-start'
   | (string & {});
 
 export type BackgroundRepeatProperty = Globals | RepeatStyle | (string & {});
 
-export type BackgroundSizeProperty<TLength> =
-  | Globals
-  | BgSize<TLength>
-  | (string & {});
+export type BackgroundSizeProperty<TLength> = Globals | BgSize<TLength> | (string & {});
 
-export type BlockOverflowProperty =
-  | Globals
-  | "clip"
-  | "ellipsis"
-  | (string & {});
+export type BlockOverflowProperty = Globals | 'clip' | 'ellipsis' | (string & {});
 
 export type BlockSizeProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fill-available"
-  | "auto"
-  | "available"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fill-available'
+  | 'auto'
+  | 'available'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
   | (string & {});
 
 export type BorderProperty<TLength> =
@@ -6450,21 +6375,11 @@ export type BorderProperty<TLength> =
   | (string & {})
   | [LineWidth<TLength>, LineStyle, Color];
 
-export type BorderBlockProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderBlockProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderBlockColorProperty = Globals | Color | (string & {});
 
-export type BorderBlockEndProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderBlockEndProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderBlockEndColorProperty = Globals | Color;
 
@@ -6472,146 +6387,75 @@ export type BorderBlockEndStyleProperty = Globals | LineStyle;
 
 export type BorderBlockEndWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
-export type BorderBlockStartProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderBlockStartProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderBlockStartColorProperty = Globals | Color;
 
 export type BorderBlockStartStyleProperty = Globals | LineStyle;
 
-export type BorderBlockStartWidthProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>;
+export type BorderBlockStartWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
 export type BorderBlockStyleProperty = Globals | LineStyle;
 
 export type BorderBlockWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
-export type BorderBottomProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderBottomProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderBottomColorProperty = Globals | Color;
 
-export type BorderBottomLeftRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type BorderBottomLeftRadiusProperty<TLength> = Globals | TLength | (string & {});
 
-export type BorderBottomRightRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type BorderBottomRightRadiusProperty<TLength> = Globals | TLength | (string & {});
 
 export type BorderBottomStyleProperty = Globals | LineStyle;
 
 export type BorderBottomWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
-export type BorderCollapseProperty = Globals | "collapse" | "separate";
+export type BorderCollapseProperty = Globals | 'collapse' | 'separate';
 
 export type BorderColorProperty = Globals | Color | (string & {});
 
-export type BorderEndEndRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type BorderEndEndRadiusProperty<TLength> = Globals | TLength | (string & {});
 
-export type BorderEndStartRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type BorderEndStartRadiusProperty<TLength> = Globals | TLength | (string & {});
 
-export type BorderImageProperty =
-  | Globals
-  | "none"
-  | "repeat"
-  | "round"
-  | "space"
-  | "stretch"
-  | (string & {})
-  | number;
+export type BorderImageProperty = Globals | 'none' | 'repeat' | 'round' | 'space' | 'stretch' | (string & {}) | number;
 
-export type BorderImageOutsetProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {})
-  | number;
+export type BorderImageOutsetProperty<TLength> = Globals | TLength | (string & {}) | number;
 
-export type BorderImageRepeatProperty =
-  | Globals
-  | "repeat"
-  | "round"
-  | "space"
-  | "stretch"
-  | (string & {});
+export type BorderImageRepeatProperty = Globals | 'repeat' | 'round' | 'space' | 'stretch' | (string & {});
 
 export type BorderImageSliceProperty = Globals | (string & {}) | number;
 
-export type BorderImageSourceProperty = Globals | "none" | (string & {});
+export type BorderImageSourceProperty = Globals | 'none' | (string & {});
 
-export type BorderImageWidthProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {})
-  | number;
+export type BorderImageWidthProperty<TLength> = Globals | TLength | 'auto' | (string & {}) | number;
 
-export type BorderInlineProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderInlineProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderInlineColorProperty = Globals | Color | (string & {});
 
-export type BorderInlineEndProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderInlineEndProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderInlineEndColorProperty = Globals | Color;
 
 export type BorderInlineEndStyleProperty = Globals | LineStyle;
 
-export type BorderInlineEndWidthProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>;
+export type BorderInlineEndWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
-export type BorderInlineStartProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderInlineStartProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderInlineStartColorProperty = Globals | Color;
 
 export type BorderInlineStartStyleProperty = Globals | LineStyle;
 
-export type BorderInlineStartWidthProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>;
+export type BorderInlineStartWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
 export type BorderInlineStyleProperty = Globals | LineStyle;
 
 export type BorderInlineWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
-export type BorderLeftProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderLeftProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderLeftColorProperty = Globals | Color;
 
@@ -6621,12 +6465,7 @@ export type BorderLeftWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
 export type BorderRadiusProperty<TLength> = Globals | TLength | (string & {});
 
-export type BorderRightProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderRightProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderRightColorProperty = Globals | Color;
 
@@ -6636,254 +6475,183 @@ export type BorderRightWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
 export type BorderSpacingProperty<TLength> = Globals | TLength | (string & {});
 
-export type BorderStartEndRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type BorderStartEndRadiusProperty<TLength> = Globals | TLength | (string & {});
 
-export type BorderStartStartRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type BorderStartStartRadiusProperty<TLength> = Globals | TLength | (string & {});
 
 export type BorderStyleProperty = Globals | LineStyle | (string & {});
 
-export type BorderTopProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type BorderTopProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderTopColorProperty = Globals | Color;
 
-export type BorderTopLeftRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type BorderTopLeftRadiusProperty<TLength> = Globals | TLength | (string & {});
 
-export type BorderTopRightRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type BorderTopRightRadiusProperty<TLength> = Globals | TLength | (string & {});
 
 export type BorderTopStyleProperty = Globals | LineStyle;
 
 export type BorderTopWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
-export type BorderWidthProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | (string & {});
+export type BorderWidthProperty<TLength> = Globals | LineWidth<TLength> | (string & {});
 
-export type BottomProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type BottomProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type BoxAlignProperty =
-  | Globals
-  | "baseline"
-  | "center"
-  | "end"
-  | "start"
-  | "stretch";
+export type BoxAlignProperty = Globals | 'baseline' | 'center' | 'end' | 'start' | 'stretch';
 
-export type BoxDecorationBreakProperty = Globals | "clone" | "slice";
+export type BoxDecorationBreakProperty = Globals | 'clone' | 'slice';
 
-export type BoxDirectionProperty = Globals | "inherit" | "normal" | "reverse";
+export type BoxDirectionProperty = Globals | 'inherit' | 'normal' | 'reverse';
 
-export type BoxLinesProperty = Globals | "multiple" | "single";
+export type BoxLinesProperty = Globals | 'multiple' | 'single';
 
-export type BoxOrientProperty =
-  | Globals
-  | "block-axis"
-  | "horizontal"
-  | "inherit"
-  | "inline-axis"
-  | "vertical";
+export type BoxOrientProperty = Globals | 'block-axis' | 'horizontal' | 'inherit' | 'inline-axis' | 'vertical';
 
-export type BoxPackProperty = Globals | "center" | "end" | "justify" | "start";
+export type BoxPackProperty = Globals | 'center' | 'end' | 'justify' | 'start';
 
-export type BoxShadowProperty = Globals | "none" | (string & {});
+export type BoxShadowProperty = Globals | 'none' | (string & {});
 
-export type BoxSizingProperty = Globals | "border-box" | "content-box";
+export type BoxSizingProperty = Globals | 'border-box' | 'content-box';
 
 export type BreakAfterProperty =
   | Globals
-  | "all"
-  | "always"
-  | "auto"
-  | "avoid"
-  | "avoid-column"
-  | "avoid-page"
-  | "avoid-region"
-  | "column"
-  | "left"
-  | "page"
-  | "recto"
-  | "region"
-  | "right"
-  | "verso";
+  | 'all'
+  | 'always'
+  | 'auto'
+  | 'avoid'
+  | 'avoid-column'
+  | 'avoid-page'
+  | 'avoid-region'
+  | 'column'
+  | 'left'
+  | 'page'
+  | 'recto'
+  | 'region'
+  | 'right'
+  | 'verso';
 
 export type BreakBeforeProperty =
   | Globals
-  | "all"
-  | "always"
-  | "auto"
-  | "avoid"
-  | "avoid-column"
-  | "avoid-page"
-  | "avoid-region"
-  | "column"
-  | "left"
-  | "page"
-  | "recto"
-  | "region"
-  | "right"
-  | "verso";
+  | 'all'
+  | 'always'
+  | 'auto'
+  | 'avoid'
+  | 'avoid-column'
+  | 'avoid-page'
+  | 'avoid-region'
+  | 'column'
+  | 'left'
+  | 'page'
+  | 'recto'
+  | 'region'
+  | 'right'
+  | 'verso';
 
-export type BreakInsideProperty =
-  | Globals
-  | "auto"
-  | "avoid"
-  | "avoid-column"
-  | "avoid-page"
-  | "avoid-region";
+export type BreakInsideProperty = Globals | 'auto' | 'avoid' | 'avoid-column' | 'avoid-page' | 'avoid-region';
 
 export type CaptionSideProperty =
   | Globals
-  | "block-end"
-  | "block-start"
-  | "bottom"
-  | "inline-end"
-  | "inline-start"
-  | "top";
+  | 'block-end'
+  | 'block-start'
+  | 'bottom'
+  | 'inline-end'
+  | 'inline-start'
+  | 'top';
 
-export type CaretColorProperty = Globals | Color | "auto";
+export type CaretColorProperty = Globals | Color | 'auto';
 
-export type ClearProperty =
-  | Globals
-  | "both"
-  | "inline-end"
-  | "inline-start"
-  | "left"
-  | "none"
-  | "right";
+export type ClearProperty = Globals | 'both' | 'inline-end' | 'inline-start' | 'left' | 'none' | 'right';
 
-export type ClipProperty = Globals | "auto" | (string & {});
+export type ClipProperty = Globals | 'auto' | (string & {});
 
-export type ClipPathProperty = Globals | GeometryBox | "none" | (string & {});
+export type ClipPathProperty = Globals | GeometryBox | 'none' | (string & {});
 
 export type ColorProperty = Globals | Color;
 
-export type ColorAdjustProperty = Globals | "economy" | "exact";
+export type ColorAdjustProperty = Globals | 'economy' | 'exact';
 
-export type ColumnCountProperty = Globals | "auto" | number;
+export type ColumnCountProperty = Globals | 'auto' | number;
 
-export type ColumnFillProperty = Globals | "auto" | "balance" | "balance-all";
+export type ColumnFillProperty = Globals | 'auto' | 'balance' | 'balance-all';
 
-export type ColumnGapProperty<TLength> =
-  | Globals
-  | TLength
-  | "normal"
-  | (string & {});
+export type ColumnGapProperty<TLength> = Globals | TLength | 'normal' | (string & {});
 
-export type ColumnRuleProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type ColumnRuleProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type ColumnRuleColorProperty = Globals | Color;
 
 export type ColumnRuleStyleProperty = Globals | LineStyle | (string & {});
 
-export type ColumnRuleWidthProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | (string & {});
+export type ColumnRuleWidthProperty<TLength> = Globals | LineWidth<TLength> | (string & {});
 
-export type ColumnSpanProperty = Globals | "all" | "none";
+export type ColumnSpanProperty = Globals | 'all' | 'none';
 
-export type ColumnWidthProperty<TLength> = Globals | TLength | "auto";
+export type ColumnWidthProperty<TLength> = Globals | TLength | 'auto';
 
-export type ColumnsProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {})
-  | number;
+export type ColumnsProperty<TLength> = Globals | TLength | 'auto' | (string & {}) | number;
 
 export type ContainProperty =
   | Globals
-  | "content"
-  | "layout"
-  | "none"
-  | "paint"
-  | "size"
-  | "strict"
-  | "style"
+  | 'content'
+  | 'layout'
+  | 'none'
+  | 'paint'
+  | 'size'
+  | 'strict'
+  | 'style'
   | (string & {});
 
-export type ContentProperty =
-  | Globals
-  | ContentList
-  | "none"
-  | "normal"
-  | (string & {});
+export type ContentProperty = Globals | ContentList | 'none' | 'normal' | (string & {});
 
-export type CounterIncrementProperty = Globals | "none" | (string & {});
+export type CounterIncrementProperty = Globals | 'none' | (string & {});
 
-export type CounterResetProperty = Globals | "none" | (string & {});
+export type CounterResetProperty = Globals | 'none' | (string & {});
 
-export type CounterSetProperty = Globals | "none" | (string & {});
+export type CounterSetProperty = Globals | 'none' | (string & {});
 
 export type CursorProperty =
   | Globals
-  | "-moz-grab"
-  | "-webkit-grab"
-  | "alias"
-  | "all-scroll"
-  | "auto"
-  | "cell"
-  | "col-resize"
-  | "context-menu"
-  | "copy"
-  | "crosshair"
-  | "default"
-  | "e-resize"
-  | "ew-resize"
-  | "grab"
-  | "grabbing"
-  | "help"
-  | "move"
-  | "n-resize"
-  | "ne-resize"
-  | "nesw-resize"
-  | "no-drop"
-  | "none"
-  | "not-allowed"
-  | "ns-resize"
-  | "nw-resize"
-  | "nwse-resize"
-  | "pointer"
-  | "progress"
-  | "row-resize"
-  | "s-resize"
-  | "se-resize"
-  | "sw-resize"
-  | "text"
-  | "vertical-text"
-  | "w-resize"
-  | "wait"
-  | "zoom-in"
-  | "zoom-out"
+  | '-moz-grab'
+  | '-webkit-grab'
+  | 'alias'
+  | 'all-scroll'
+  | 'auto'
+  | 'cell'
+  | 'col-resize'
+  | 'context-menu'
+  | 'copy'
+  | 'crosshair'
+  | 'default'
+  | 'e-resize'
+  | 'ew-resize'
+  | 'grab'
+  | 'grabbing'
+  | 'help'
+  | 'move'
+  | 'n-resize'
+  | 'ne-resize'
+  | 'nesw-resize'
+  | 'no-drop'
+  | 'none'
+  | 'not-allowed'
+  | 'ns-resize'
+  | 'nw-resize'
+  | 'nwse-resize'
+  | 'pointer'
+  | 'progress'
+  | 'row-resize'
+  | 's-resize'
+  | 'se-resize'
+  | 'sw-resize'
+  | 'text'
+  | 'vertical-text'
+  | 'w-resize'
+  | 'wait'
+  | 'zoom-in'
+  | 'zoom-out'
   | (string & {});
 
-export type DirectionProperty = Globals | "ltr" | "rtl";
+export type DirectionProperty = Globals | 'ltr' | 'rtl';
 
 export type DisplayProperty =
   | Globals
@@ -6891,25 +6659,25 @@ export type DisplayProperty =
   | DisplayInside
   | DisplayInternal
   | DisplayLegacy
-  | "contents"
-  | "list-item"
-  | "none"
+  | 'contents'
+  | 'list-item'
+  | 'none'
   | (string & {});
 
-export type EmptyCellsProperty = Globals | "hide" | "show";
+export type EmptyCellsProperty = Globals | 'hide' | 'show';
 
-export type FilterProperty = Globals | "none" | (string & {});
+export type FilterProperty = Globals | 'none' | (string & {});
 
 export type FlexProperty<TLength> =
   | Globals
   | TLength
-  | "auto"
-  | "available"
-  | "content"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
-  | "none"
+  | 'auto'
+  | 'available'
+  | 'content'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
+  | 'none'
   | (string & {})
   | number
   | [number, number | (string & {})]
@@ -6918,208 +6686,162 @@ export type FlexProperty<TLength> =
 export type FlexBasisProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-auto"
-  | "auto"
-  | "available"
-  | "content"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-auto'
+  | 'auto'
+  | 'available'
+  | 'content'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
   | (string & {});
 
-export type FlexDirectionProperty =
-  | Globals
-  | "column"
-  | "column-reverse"
-  | "row"
-  | "row-reverse";
+export type FlexDirectionProperty = Globals | 'column' | 'column-reverse' | 'row' | 'row-reverse';
 
 export type FlexFlowProperty =
   | Globals
-  | "column"
-  | "column-reverse"
-  | "nowrap"
-  | "row"
-  | "row-reverse"
-  | "wrap"
-  | "wrap-reverse"
+  | 'column'
+  | 'column-reverse'
+  | 'nowrap'
+  | 'row'
+  | 'row-reverse'
+  | 'wrap'
+  | 'wrap-reverse'
   | (string & {});
 
-export type FlexWrapProperty = Globals | "nowrap" | "wrap" | "wrap-reverse";
+export type FlexWrapProperty = Globals | 'nowrap' | 'wrap' | 'wrap-reverse';
 
-export type FloatProperty =
-  | Globals
-  | "inline-end"
-  | "inline-start"
-  | "left"
-  | "none"
-  | "right";
+export type FloatProperty = Globals | 'inline-end' | 'inline-start' | 'left' | 'none' | 'right';
 
 export type FontProperty =
   | Globals
-  | "caption"
-  | "icon"
-  | "menu"
-  | "message-box"
-  | "small-caption"
-  | "status-bar"
+  | 'caption'
+  | 'icon'
+  | 'menu'
+  | 'message-box'
+  | 'small-caption'
+  | 'status-bar'
   | (string & {});
 
 export type FontFamilyProperty = Globals | GenericFamily | (string & {});
 
-export type FontFeatureSettingsProperty = Globals | "normal" | (string & {});
+export type FontFeatureSettingsProperty = Globals | 'normal' | (string & {});
 
-export type FontKerningProperty = Globals | "auto" | "none" | "normal";
+export type FontKerningProperty = Globals | 'auto' | 'none' | 'normal';
 
-export type FontLanguageOverrideProperty = Globals | "normal" | (string & {});
+export type FontLanguageOverrideProperty = Globals | 'normal' | (string & {});
 
-export type FontOpticalSizingProperty = Globals | "auto" | "none";
+export type FontOpticalSizingProperty = Globals | 'auto' | 'none';
 
-export type FontSizeProperty<TLength> =
-  | Globals
-  | AbsoluteSize
-  | TLength
-  | "larger"
-  | "smaller"
-  | (string & {});
+export type FontSizeProperty<TLength> = Globals | AbsoluteSize | TLength | 'larger' | 'smaller' | (string & {});
 
-export type FontSizeAdjustProperty = Globals | "none" | number;
+export type FontSizeAdjustProperty = Globals | 'none' | number;
 
 export type FontStretchProperty = Globals | FontStretchAbsolute;
 
-export type FontStyleProperty =
-  | Globals
-  | "italic"
-  | "normal"
-  | "oblique"
-  | (string & {});
+export type FontStyleProperty = Globals | 'italic' | 'normal' | 'oblique' | (string & {});
 
-export type FontSynthesisProperty =
-  | Globals
-  | "none"
-  | "style"
-  | "weight"
-  | (string & {});
+export type FontSynthesisProperty = Globals | 'none' | 'style' | 'weight' | (string & {});
 
 export type FontVariantProperty =
   | Globals
   | EastAsianVariantValues
-  | "all-petite-caps"
-  | "all-small-caps"
-  | "common-ligatures"
-  | "contextual"
-  | "diagonal-fractions"
-  | "discretionary-ligatures"
-  | "full-width"
-  | "historical-forms"
-  | "historical-ligatures"
-  | "lining-nums"
-  | "no-common-ligatures"
-  | "no-contextual"
-  | "no-discretionary-ligatures"
-  | "no-historical-ligatures"
-  | "none"
-  | "normal"
-  | "oldstyle-nums"
-  | "ordinal"
-  | "petite-caps"
-  | "proportional-nums"
-  | "proportional-width"
-  | "ruby"
-  | "slashed-zero"
-  | "small-caps"
-  | "stacked-fractions"
-  | "tabular-nums"
-  | "titling-caps"
-  | "unicase"
+  | 'all-petite-caps'
+  | 'all-small-caps'
+  | 'common-ligatures'
+  | 'contextual'
+  | 'diagonal-fractions'
+  | 'discretionary-ligatures'
+  | 'full-width'
+  | 'historical-forms'
+  | 'historical-ligatures'
+  | 'lining-nums'
+  | 'no-common-ligatures'
+  | 'no-contextual'
+  | 'no-discretionary-ligatures'
+  | 'no-historical-ligatures'
+  | 'none'
+  | 'normal'
+  | 'oldstyle-nums'
+  | 'ordinal'
+  | 'petite-caps'
+  | 'proportional-nums'
+  | 'proportional-width'
+  | 'ruby'
+  | 'slashed-zero'
+  | 'small-caps'
+  | 'stacked-fractions'
+  | 'tabular-nums'
+  | 'titling-caps'
+  | 'unicase'
   | (string & {});
 
-export type FontVariantAlternatesProperty =
-  | Globals
-  | "historical-forms"
-  | "normal"
-  | (string & {});
+export type FontVariantAlternatesProperty = Globals | 'historical-forms' | 'normal' | (string & {});
 
 export type FontVariantCapsProperty =
   | Globals
-  | "all-petite-caps"
-  | "all-small-caps"
-  | "normal"
-  | "petite-caps"
-  | "small-caps"
-  | "titling-caps"
-  | "unicase";
+  | 'all-petite-caps'
+  | 'all-small-caps'
+  | 'normal'
+  | 'petite-caps'
+  | 'small-caps'
+  | 'titling-caps'
+  | 'unicase';
 
 export type FontVariantEastAsianProperty =
   | Globals
   | EastAsianVariantValues
-  | "full-width"
-  | "normal"
-  | "proportional-width"
-  | "ruby"
+  | 'full-width'
+  | 'normal'
+  | 'proportional-width'
+  | 'ruby'
   | (string & {});
 
 export type FontVariantLigaturesProperty =
   | Globals
-  | "common-ligatures"
-  | "contextual"
-  | "discretionary-ligatures"
-  | "historical-ligatures"
-  | "no-common-ligatures"
-  | "no-contextual"
-  | "no-discretionary-ligatures"
-  | "no-historical-ligatures"
-  | "none"
-  | "normal"
+  | 'common-ligatures'
+  | 'contextual'
+  | 'discretionary-ligatures'
+  | 'historical-ligatures'
+  | 'no-common-ligatures'
+  | 'no-contextual'
+  | 'no-discretionary-ligatures'
+  | 'no-historical-ligatures'
+  | 'none'
+  | 'normal'
   | (string & {});
 
 export type FontVariantNumericProperty =
   | Globals
-  | "diagonal-fractions"
-  | "lining-nums"
-  | "normal"
-  | "oldstyle-nums"
-  | "ordinal"
-  | "proportional-nums"
-  | "slashed-zero"
-  | "stacked-fractions"
-  | "tabular-nums"
+  | 'diagonal-fractions'
+  | 'lining-nums'
+  | 'normal'
+  | 'oldstyle-nums'
+  | 'ordinal'
+  | 'proportional-nums'
+  | 'slashed-zero'
+  | 'stacked-fractions'
+  | 'tabular-nums'
   | (string & {});
 
-export type FontVariantPositionProperty = Globals | "normal" | "sub" | "super";
+export type FontVariantPositionProperty = Globals | 'normal' | 'sub' | 'super';
 
-export type FontVariationSettingsProperty = Globals | "normal" | (string & {});
+export type FontVariationSettingsProperty = Globals | 'normal' | (string & {});
 
-export type FontWeightProperty =
-  | Globals
-  | FontWeightAbsolute
-  | "bolder"
-  | "lighter";
+export type FontWeightProperty = Globals | FontWeightAbsolute | 'bolder' | 'lighter';
 
-export type GapProperty<TLength> = Globals | TLength | "normal" | (string & {});
+export type GapProperty<TLength> = Globals | TLength | 'normal' | (string & {});
 
-export type GridProperty = Globals | "none" | (string & {});
+export type GridProperty = Globals | 'none' | (string & {});
 
 export type GridAreaProperty = Globals | GridLine | (string & {});
 
-export type GridAutoColumnsProperty<TLength> =
-  | Globals
-  | TrackBreadth<TLength>
-  | (string & {});
+export type GridAutoColumnsProperty<TLength> = Globals | TrackBreadth<TLength> | (string & {});
 
-export type GridAutoFlowProperty =
-  | Globals
-  | "column"
-  | "dense"
-  | "row"
-  | (string & {});
+export type GridAutoFlowProperty = Globals | 'column' | 'dense' | 'row' | (string & {});
 
-export type GridAutoRowsProperty<TLength> =
-  | Globals
-  | TrackBreadth<TLength>
-  | (string & {});
+export type GridAutoRowsProperty<TLength> = Globals | TrackBreadth<TLength> | (string & {});
 
 export type GridColumnProperty = Globals | GridLine | (string & {});
 
@@ -7139,513 +6861,361 @@ export type GridRowGapProperty<TLength> = Globals | TLength | (string & {});
 
 export type GridRowStartProperty = Globals | GridLine;
 
-export type GridTemplateProperty = Globals | "none" | (string & {});
+export type GridTemplateProperty = Globals | 'none' | (string & {});
 
-export type GridTemplateAreasProperty = Globals | "none" | (string & {});
+export type GridTemplateAreasProperty = Globals | 'none' | (string & {});
 
-export type GridTemplateColumnsProperty<TLength> =
-  | Globals
-  | TrackBreadth<TLength>
-  | "none"
-  | "subgrid"
-  | (string & {});
+export type GridTemplateColumnsProperty<TLength> = Globals | TrackBreadth<TLength> | 'none' | 'subgrid' | (string & {});
 
-export type GridTemplateRowsProperty<TLength> =
-  | Globals
-  | TrackBreadth<TLength>
-  | "none"
-  | "subgrid"
-  | (string & {});
+export type GridTemplateRowsProperty<TLength> = Globals | TrackBreadth<TLength> | 'none' | 'subgrid' | (string & {});
 
 export type HangingPunctuationProperty =
   | Globals
-  | "allow-end"
-  | "first"
-  | "force-end"
-  | "last"
-  | "none"
+  | 'allow-end'
+  | 'first'
+  | 'force-end'
+  | 'last'
+  | 'none'
   | (string & {});
 
 export type HeightProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fit-content"
-  | "auto"
-  | "available"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fit-content'
+  | 'auto'
+  | 'available'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
   | (string & {});
 
-export type HyphensProperty = Globals | "auto" | "manual" | "none";
+export type HyphensProperty = Globals | 'auto' | 'manual' | 'none';
 
-export type ImageOrientationProperty =
-  | Globals
-  | "flip"
-  | "from-image"
-  | (string & {});
+export type ImageOrientationProperty = Globals | 'flip' | 'from-image' | (string & {});
 
 export type ImageRenderingProperty =
   | Globals
-  | "-moz-crisp-edges"
-  | "-o-crisp-edges"
-  | "-webkit-optimize-contrast"
-  | "auto"
-  | "crisp-edges"
-  | "pixelated";
+  | '-moz-crisp-edges'
+  | '-o-crisp-edges'
+  | '-webkit-optimize-contrast'
+  | 'auto'
+  | 'crisp-edges'
+  | 'pixelated';
 
-export type ImageResolutionProperty = Globals | "from-image" | (string & {});
+export type ImageResolutionProperty = Globals | 'from-image' | (string & {});
 
-export type ImeModeProperty =
-  | Globals
-  | "active"
-  | "auto"
-  | "disabled"
-  | "inactive"
-  | "normal";
+export type ImeModeProperty = Globals | 'active' | 'auto' | 'disabled' | 'inactive' | 'normal';
 
-export type InitialLetterProperty = Globals | "normal" | (string & {}) | number;
+export type InitialLetterProperty = Globals | 'normal' | (string & {}) | number;
 
 export type InlineSizeProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fill-available"
-  | "auto"
-  | "available"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fill-available'
+  | 'auto'
+  | 'available'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
   | (string & {});
 
-export type InsetProperty<TLength> = Globals | TLength | "auto" | (string & {});
+export type InsetProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type InsetBlockProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type InsetBlockProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type InsetBlockEndProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type InsetBlockEndProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type InsetBlockStartProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type InsetBlockStartProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type InsetInlineProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type InsetInlineProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type InsetInlineEndProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type InsetInlineEndProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type InsetInlineStartProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type InsetInlineStartProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type IsolationProperty = Globals | "auto" | "isolate";
+export type IsolationProperty = Globals | 'auto' | 'isolate';
 
 export type JustifyContentProperty =
   | Globals
   | ContentDistribution
   | ContentPosition
-  | "left"
-  | "normal"
-  | "right"
+  | 'left'
+  | 'normal'
+  | 'right'
   | (string & {});
 
 export type JustifyItemsProperty =
   | Globals
   | SelfPosition
-  | "baseline"
-  | "left"
-  | "legacy"
-  | "normal"
-  | "right"
-  | "stretch"
+  | 'baseline'
+  | 'left'
+  | 'legacy'
+  | 'normal'
+  | 'right'
+  | 'stretch'
   | (string & {});
 
 export type JustifySelfProperty =
   | Globals
   | SelfPosition
-  | "auto"
-  | "baseline"
-  | "left"
-  | "normal"
-  | "right"
-  | "stretch"
+  | 'auto'
+  | 'baseline'
+  | 'left'
+  | 'normal'
+  | 'right'
+  | 'stretch'
   | (string & {});
 
-export type LeftProperty<TLength> = Globals | TLength | "auto" | (string & {});
+export type LeftProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type LetterSpacingProperty<TLength> = Globals | TLength | "normal";
+export type LetterSpacingProperty<TLength> = Globals | TLength | 'normal';
 
-export type LineBreakProperty =
-  | Globals
-  | "anywhere"
-  | "auto"
-  | "loose"
-  | "normal"
-  | "strict";
+export type LineBreakProperty = Globals | 'anywhere' | 'auto' | 'loose' | 'normal' | 'strict';
 
-export type LineClampProperty = Globals | "none" | number;
+export type LineClampProperty = Globals | 'none' | number;
 
-export type LineHeightProperty<TLength> =
-  | Globals
-  | TLength
-  | "normal"
-  | (string & {})
-  | number;
+export type LineHeightProperty<TLength> = Globals | TLength | 'normal' | (string & {}) | number;
 
 export type LineHeightStepProperty<TLength> = Globals | TLength;
 
-export type ListStyleProperty =
-  | Globals
-  | "inside"
-  | "none"
-  | "outside"
-  | (string & {});
+export type ListStyleProperty = Globals | 'inside' | 'none' | 'outside' | (string & {});
 
-export type ListStyleImageProperty = Globals | "none" | (string & {});
+export type ListStyleImageProperty = Globals | 'none' | (string & {});
 
-export type ListStylePositionProperty = Globals | "inside" | "outside";
+export type ListStylePositionProperty = Globals | 'inside' | 'outside';
 
-export type ListStyleTypeProperty = Globals | "none" | (string & {});
+export type ListStyleTypeProperty = Globals | 'none' | (string & {});
 
 export type MarginProperty<TLength> =
   | Globals
   | TLength
-  | "auto"
+  | 'auto'
   | (string & {})
+  | [Globals | TLength | 'auto' | (string & {}), Globals | TLength | 'auto' | (string & {})]
   | [
-      Globals | TLength | "auto" | (string & {}),
-      Globals | TLength | "auto" | (string & {})
+      Globals | TLength | 'auto' | (string & {}),
+      Globals | TLength | 'auto' | (string & {}),
+      Globals | TLength | 'auto' | (string & {})
     ]
   | [
-      Globals | TLength | "auto" | (string & {}),
-      Globals | TLength | "auto" | (string & {}),
-      Globals | TLength | "auto" | (string & {})
-    ]
-  | [
-      Globals | TLength | "auto" | (string & {}),
-      Globals | TLength | "auto" | (string & {}),
-      Globals | TLength | "auto" | (string & {}),
-      Globals | TLength | "auto" | (string & {})
+      Globals | TLength | 'auto' | (string & {}),
+      Globals | TLength | 'auto' | (string & {}),
+      Globals | TLength | 'auto' | (string & {}),
+      Globals | TLength | 'auto' | (string & {})
     ];
 
-export type MarginBlockProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginBlockProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginBlockEndProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginBlockEndProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginBlockStartProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginBlockStartProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginBottomProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginBottomProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginInlineProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginInlineProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginInlineEndProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginInlineEndProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginInlineStartProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginInlineStartProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginLeftProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginLeftProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginRightProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginRightProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MarginTopProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type MarginTopProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type MaskProperty<TLength> =
-  | Globals
-  | MaskLayer<TLength>
-  | (string & {});
+export type MaskProperty<TLength> = Globals | MaskLayer<TLength> | (string & {});
 
 export type MaskBorderProperty =
   | Globals
-  | "alpha"
-  | "luminance"
-  | "none"
-  | "repeat"
-  | "round"
-  | "space"
-  | "stretch"
+  | 'alpha'
+  | 'luminance'
+  | 'none'
+  | 'repeat'
+  | 'round'
+  | 'space'
+  | 'stretch'
   | (string & {})
   | number;
 
-export type MaskBorderModeProperty = Globals | "alpha" | "luminance";
+export type MaskBorderModeProperty = Globals | 'alpha' | 'luminance';
 
-export type MaskBorderOutsetProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {})
-  | number;
+export type MaskBorderOutsetProperty<TLength> = Globals | TLength | (string & {}) | number;
 
-export type MaskBorderRepeatProperty =
-  | Globals
-  | "repeat"
-  | "round"
-  | "space"
-  | "stretch"
-  | (string & {});
+export type MaskBorderRepeatProperty = Globals | 'repeat' | 'round' | 'space' | 'stretch' | (string & {});
 
 export type MaskBorderSliceProperty = Globals | (string & {}) | number;
 
-export type MaskBorderSourceProperty = Globals | "none" | (string & {});
+export type MaskBorderSourceProperty = Globals | 'none' | (string & {});
 
-export type MaskBorderWidthProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {})
-  | number;
+export type MaskBorderWidthProperty<TLength> = Globals | TLength | 'auto' | (string & {}) | number;
 
-export type MaskClipProperty =
-  | Globals
-  | GeometryBox
-  | "no-clip"
-  | (string & {});
+export type MaskClipProperty = Globals | GeometryBox | 'no-clip' | (string & {});
 
-export type MaskCompositeProperty =
-  | Globals
-  | CompositingOperator
-  | (string & {});
+export type MaskCompositeProperty = Globals | CompositingOperator | (string & {});
 
-export type MaskImageProperty = Globals | "none" | (string & {});
+export type MaskImageProperty = Globals | 'none' | (string & {});
 
 export type MaskModeProperty = Globals | MaskingMode | (string & {});
 
-export type MaskOriginProperty = Globals | Box | "margin-box" | (string & {});
+export type MaskOriginProperty = Globals | Box | 'margin-box' | (string & {});
 
-export type MaskPositionProperty<TLength> =
-  | Globals
-  | Position<TLength>
-  | (string & {});
+export type MaskPositionProperty<TLength> = Globals | Position<TLength> | (string & {});
 
 export type MaskRepeatProperty = Globals | RepeatStyle | (string & {});
 
-export type MaskSizeProperty<TLength> =
-  | Globals
-  | BgSize<TLength>
-  | (string & {});
+export type MaskSizeProperty<TLength> = Globals | BgSize<TLength> | (string & {});
 
-export type MaskTypeProperty = Globals | "alpha" | "luminance";
+export type MaskTypeProperty = Globals | 'alpha' | 'luminance';
 
 export type MaxBlockSizeProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fill-available"
-  | "fill-available"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
-  | "none"
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fill-available'
+  | 'fill-available'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
+  | 'none'
   | (string & {});
 
 export type MaxHeightProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fit-content"
-  | "-webkit-max-content"
-  | "-webkit-min-content"
-  | "fill-available"
-  | "fit-content"
-  | "intrinsic"
-  | "max-content"
-  | "min-content"
-  | "none"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fit-content'
+  | '-webkit-max-content'
+  | '-webkit-min-content'
+  | 'fill-available'
+  | 'fit-content'
+  | 'intrinsic'
+  | 'max-content'
+  | 'min-content'
+  | 'none'
   | (string & {});
 
 export type MaxInlineSizeProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fill-available"
-  | "fill-available"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
-  | "none"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fill-available'
+  | 'fill-available'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
+  | 'none'
   | (string & {});
 
-export type MaxLinesProperty = Globals | "none" | number;
+export type MaxLinesProperty = Globals | 'none' | number;
 
 export type MaxWidthProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fit-content"
-  | "-webkit-max-content"
-  | "-webkit-min-content"
-  | "fill-available"
-  | "fit-content"
-  | "intrinsic"
-  | "max-content"
-  | "min-content"
-  | "none"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fit-content'
+  | '-webkit-max-content'
+  | '-webkit-min-content'
+  | 'fill-available'
+  | 'fit-content'
+  | 'intrinsic'
+  | 'max-content'
+  | 'min-content'
+  | 'none'
   | (string & {});
 
 export type MinBlockSizeProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fill-available"
-  | "auto"
-  | "fill-available"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fill-available'
+  | 'auto'
+  | 'fill-available'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
   | (string & {});
 
 export type MinHeightProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fit-content"
-  | "-webkit-max-content"
-  | "-webkit-min-content"
-  | "auto"
-  | "fill-available"
-  | "fit-content"
-  | "intrinsic"
-  | "max-content"
-  | "min-content"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fit-content'
+  | '-webkit-max-content'
+  | '-webkit-min-content'
+  | 'auto'
+  | 'fill-available'
+  | 'fit-content'
+  | 'intrinsic'
+  | 'max-content'
+  | 'min-content'
   | (string & {});
 
 export type MinInlineSizeProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fill-available"
-  | "auto"
-  | "fill-available"
-  | "fit-content"
-  | "max-content"
-  | "min-content"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fill-available'
+  | 'auto'
+  | 'fill-available'
+  | 'fit-content'
+  | 'max-content'
+  | 'min-content'
   | (string & {});
 
 export type MinWidthProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fill-available"
-  | "-webkit-fit-content"
-  | "-webkit-max-content"
-  | "-webkit-min-content"
-  | "auto"
-  | "fill-available"
-  | "fit-content"
-  | "intrinsic"
-  | "max-content"
-  | "min-content"
-  | "min-intrinsic"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fill-available'
+  | '-webkit-fit-content'
+  | '-webkit-max-content'
+  | '-webkit-min-content'
+  | 'auto'
+  | 'fill-available'
+  | 'fit-content'
+  | 'intrinsic'
+  | 'max-content'
+  | 'min-content'
+  | 'min-intrinsic'
   | (string & {});
 
 export type MixBlendModeProperty = Globals | BlendMode;
 
-export type OffsetProperty<TLength> =
-  | Globals
-  | Position<TLength>
-  | GeometryBox
-  | "auto"
-  | "none"
-  | (string & {});
+export type OffsetProperty<TLength> = Globals | Position<TLength> | GeometryBox | 'auto' | 'none' | (string & {});
 
 export type OffsetDistanceProperty<TLength> = Globals | TLength | (string & {});
 
-export type OffsetPathProperty = Globals | GeometryBox | "none" | (string & {});
+export type OffsetPathProperty = Globals | GeometryBox | 'none' | (string & {});
 
-export type OffsetRotateProperty = Globals | "auto" | "reverse" | (string & {});
+export type OffsetRotateProperty = Globals | 'auto' | 'reverse' | (string & {});
 
-export type ObjectFitProperty =
-  | Globals
-  | "contain"
-  | "cover"
-  | "fill"
-  | "none"
-  | "scale-down";
+export type ObjectFitProperty = Globals | 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 
 export type ObjectPositionProperty<TLength> = Globals | Position<TLength>;
 
-export type OffsetAnchorProperty<TLength> =
-  | Globals
-  | Position<TLength>
-  | "auto";
+export type OffsetAnchorProperty<TLength> = Globals | Position<TLength> | 'auto';
 
-export type OffsetPositionProperty<TLength> =
-  | Globals
-  | Position<TLength>
-  | "auto";
+export type OffsetPositionProperty<TLength> = Globals | Position<TLength> | 'auto';
 
 export type OpacityProperty = Globals | (string & {}) | number;
 
@@ -7654,90 +7224,46 @@ export type OutlineProperty<TLength> =
   | Color
   | LineStyle
   | LineWidth<TLength>
-  | "auto"
-  | "invert"
+  | 'auto'
+  | 'invert'
   | (string & {});
 
-export type OutlineColorProperty = Globals | Color | "invert";
+export type OutlineColorProperty = Globals | Color | 'invert';
 
 export type OutlineOffsetProperty<TLength> = Globals | TLength;
 
-export type OutlineStyleProperty = Globals | LineStyle | "auto" | (string & {});
+export type OutlineStyleProperty = Globals | LineStyle | 'auto' | (string & {});
 
 export type OutlineWidthProperty<TLength> = Globals | LineWidth<TLength>;
 
-export type OverflowProperty =
-  | Globals
-  | "auto"
-  | "clip"
-  | "hidden"
-  | "scroll"
-  | "visible"
-  | (string & {});
+export type OverflowProperty = Globals | 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible' | (string & {});
 
-export type OverflowAnchorProperty = Globals | "auto" | "none";
+export type OverflowAnchorProperty = Globals | 'auto' | 'none';
 
-export type OverflowBlockProperty =
-  | Globals
-  | "auto"
-  | "clip"
-  | "hidden"
-  | "scroll"
-  | "visible";
+export type OverflowBlockProperty = Globals | 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible';
 
-export type OverflowClipBoxProperty = Globals | "content-box" | "padding-box";
+export type OverflowClipBoxProperty = Globals | 'content-box' | 'padding-box';
 
-export type OverflowInlineProperty =
-  | Globals
-  | "auto"
-  | "clip"
-  | "hidden"
-  | "scroll"
-  | "visible";
+export type OverflowInlineProperty = Globals | 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible';
 
-export type OverflowWrapProperty =
-  | Globals
-  | "anywhere"
-  | "break-word"
-  | "normal";
+export type OverflowWrapProperty = Globals | 'anywhere' | 'break-word' | 'normal';
 
-export type OverflowXProperty =
-  | Globals
-  | "auto"
-  | "clip"
-  | "hidden"
-  | "scroll"
-  | "visible";
+export type OverflowXProperty = Globals | 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible';
 
-export type OverflowYProperty =
-  | Globals
-  | "auto"
-  | "clip"
-  | "hidden"
-  | "scroll"
-  | "visible";
+export type OverflowYProperty = Globals | 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible';
 
-export type OverscrollBehaviorProperty =
-  | Globals
-  | "auto"
-  | "contain"
-  | "none"
-  | (string & {});
+export type OverscrollBehaviorProperty = Globals | 'auto' | 'contain' | 'none' | (string & {});
 
-export type OverscrollBehaviorXProperty = Globals | "auto" | "contain" | "none";
+export type OverscrollBehaviorXProperty = Globals | 'auto' | 'contain' | 'none';
 
-export type OverscrollBehaviorYProperty = Globals | "auto" | "contain" | "none";
+export type OverscrollBehaviorYProperty = Globals | 'auto' | 'contain' | 'none';
 
 export type PaddingProperty<TLength> =
   | Globals
   | TLength
   | (string & {})
   | [Globals | TLength | (string & {}), Globals | TLength | (string & {})]
-  | [
-      Globals | TLength | (string & {}),
-      Globals | TLength | (string & {}),
-      Globals | TLength | (string & {})
-    ]
+  | [Globals | TLength | (string & {}), Globals | TLength | (string & {}), Globals | TLength | (string & {})]
   | [
       Globals | TLength | (string & {}),
       Globals | TLength | (string & {}),
@@ -7747,29 +7273,17 @@ export type PaddingProperty<TLength> =
 
 export type PaddingBlockProperty<TLength> = Globals | TLength | (string & {});
 
-export type PaddingBlockEndProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type PaddingBlockEndProperty<TLength> = Globals | TLength | (string & {});
 
-export type PaddingBlockStartProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type PaddingBlockStartProperty<TLength> = Globals | TLength | (string & {});
 
 export type PaddingBottomProperty<TLength> = Globals | TLength | (string & {});
 
 export type PaddingInlineProperty<TLength> = Globals | TLength | (string & {});
 
-export type PaddingInlineEndProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type PaddingInlineEndProperty<TLength> = Globals | TLength | (string & {});
 
-export type PaddingInlineStartProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type PaddingInlineStartProperty<TLength> = Globals | TLength | (string & {});
 
 export type PaddingLeftProperty<TLength> = Globals | TLength | (string & {});
 
@@ -7777,37 +7291,15 @@ export type PaddingRightProperty<TLength> = Globals | TLength | (string & {});
 
 export type PaddingTopProperty<TLength> = Globals | TLength | (string & {});
 
-export type PageBreakAfterProperty =
-  | Globals
-  | "always"
-  | "auto"
-  | "avoid"
-  | "left"
-  | "recto"
-  | "right"
-  | "verso";
+export type PageBreakAfterProperty = Globals | 'always' | 'auto' | 'avoid' | 'left' | 'recto' | 'right' | 'verso';
 
-export type PageBreakBeforeProperty =
-  | Globals
-  | "always"
-  | "auto"
-  | "avoid"
-  | "left"
-  | "recto"
-  | "right"
-  | "verso";
+export type PageBreakBeforeProperty = Globals | 'always' | 'auto' | 'avoid' | 'left' | 'recto' | 'right' | 'verso';
 
-export type PageBreakInsideProperty = Globals | "auto" | "avoid";
+export type PageBreakInsideProperty = Globals | 'auto' | 'avoid';
 
-export type PaintOrderProperty =
-  | Globals
-  | "fill"
-  | "markers"
-  | "normal"
-  | "stroke"
-  | (string & {});
+export type PaintOrderProperty = Globals | 'fill' | 'markers' | 'normal' | 'stroke' | (string & {});
 
-export type PerspectiveProperty<TLength> = Globals | TLength | "none";
+export type PerspectiveProperty<TLength> = Globals | TLength | 'none';
 
 export type PerspectiveOriginProperty<TLength> = Globals | Position<TLength>;
 
@@ -7815,92 +7307,53 @@ export type PlaceContentProperty =
   | Globals
   | ContentDistribution
   | ContentPosition
-  | "baseline"
-  | "normal"
+  | 'baseline'
+  | 'normal'
   | (string & {});
 
-export type PlaceItemsProperty =
-  | Globals
-  | SelfPosition
-  | "baseline"
-  | "normal"
-  | "stretch"
-  | (string & {});
+export type PlaceItemsProperty = Globals | SelfPosition | 'baseline' | 'normal' | 'stretch' | (string & {});
 
-export type PlaceSelfProperty =
-  | Globals
-  | SelfPosition
-  | "auto"
-  | "baseline"
-  | "normal"
-  | "stretch"
-  | (string & {});
+export type PlaceSelfProperty = Globals | SelfPosition | 'auto' | 'baseline' | 'normal' | 'stretch' | (string & {});
 
 export type PointerEventsProperty =
   | Globals
-  | "all"
-  | "auto"
-  | "fill"
-  | "inherit"
-  | "none"
-  | "painted"
-  | "stroke"
-  | "visible"
-  | "visibleFill"
-  | "visiblePainted"
-  | "visibleStroke";
+  | 'all'
+  | 'auto'
+  | 'fill'
+  | 'inherit'
+  | 'none'
+  | 'painted'
+  | 'stroke'
+  | 'visible'
+  | 'visibleFill'
+  | 'visiblePainted'
+  | 'visibleStroke';
 
-export type PositionProperty =
-  | Globals
-  | "-webkit-sticky"
-  | "absolute"
-  | "fixed"
-  | "relative"
-  | "static"
-  | "sticky";
+export type PositionProperty = Globals | '-webkit-sticky' | 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky';
 
-export type QuotesProperty = Globals | "auto" | "none" | (string & {});
+export type QuotesProperty = Globals | 'auto' | 'none' | (string & {});
 
-export type ResizeProperty =
-  | Globals
-  | "block"
-  | "both"
-  | "horizontal"
-  | "inline"
-  | "none"
-  | "vertical";
+export type ResizeProperty = Globals | 'block' | 'both' | 'horizontal' | 'inline' | 'none' | 'vertical';
 
-export type RightProperty<TLength> = Globals | TLength | "auto" | (string & {});
+export type RightProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type RotateProperty = Globals | "none" | (string & {});
+export type RotateProperty = Globals | 'none' | (string & {});
 
-export type RowGapProperty<TLength> =
-  | Globals
-  | TLength
-  | "normal"
-  | (string & {});
+export type RowGapProperty<TLength> = Globals | TLength | 'normal' | (string & {});
 
-export type RubyAlignProperty =
-  | Globals
-  | "center"
-  | "space-around"
-  | "space-between"
-  | "start";
+export type RubyAlignProperty = Globals | 'center' | 'space-around' | 'space-between' | 'start';
 
-export type RubyMergeProperty = Globals | "auto" | "collapse" | "separate";
+export type RubyMergeProperty = Globals | 'auto' | 'collapse' | 'separate';
 
-export type RubyPositionProperty = Globals | "over" | "under";
+export type RubyPositionProperty = Globals | 'over' | 'under';
 
-export type ScaleProperty = Globals | "none" | (string & {}) | number;
+export type ScaleProperty = Globals | 'none' | (string & {}) | number;
 
-export type ScrollBehaviorProperty = Globals | "auto" | "smooth";
+export type ScrollBehaviorProperty = Globals | 'auto' | 'smooth';
 
 export type ScrollMarginProperty<TLength> = Globals | TLength | (string & {});
 
-export type ScrollMarginBlockProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type ScrollMarginBlockProperty<TLength> = Globals | TLength | (string & {});
 
 export type ScrollMarginBlockEndProperty<TLength> = Globals | TLength;
 
@@ -7908,10 +7361,7 @@ export type ScrollMarginBlockStartProperty<TLength> = Globals | TLength;
 
 export type ScrollMarginBottomProperty<TLength> = Globals | TLength;
 
-export type ScrollMarginInlineProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type ScrollMarginInlineProperty<TLength> = Globals | TLength | (string & {});
 
 export type ScrollMarginInlineEndProperty<TLength> = Globals | TLength;
 
@@ -7923,771 +7373,505 @@ export type ScrollMarginRightProperty<TLength> = Globals | TLength;
 
 export type ScrollMarginTopProperty<TLength> = Globals | TLength;
 
-export type ScrollPaddingProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingBlockProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingBlockProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingBlockEndProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingBlockEndProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingBlockStartProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingBlockStartProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingBottomProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingBottomProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingInlineProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingInlineProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingInlineEndProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingInlineEndProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingInlineStartProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingInlineStartProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingLeftProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingLeftProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingRightProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingRightProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollPaddingTopProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | (string & {});
+export type ScrollPaddingTopProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
-export type ScrollSnapAlignProperty =
-  | Globals
-  | "center"
-  | "end"
-  | "none"
-  | "start"
-  | (string & {});
+export type ScrollSnapAlignProperty = Globals | 'center' | 'end' | 'none' | 'start' | (string & {});
 
-export type ScrollSnapCoordinateProperty<TLength> =
-  | Globals
-  | Position<TLength>
-  | "none"
-  | (string & {});
+export type ScrollSnapCoordinateProperty<TLength> = Globals | Position<TLength> | 'none' | (string & {});
 
-export type ScrollSnapDestinationProperty<TLength> =
-  | Globals
-  | Position<TLength>;
+export type ScrollSnapDestinationProperty<TLength> = Globals | Position<TLength>;
 
-export type ScrollSnapPointsXProperty = Globals | "none" | (string & {});
+export type ScrollSnapPointsXProperty = Globals | 'none' | (string & {});
 
-export type ScrollSnapPointsYProperty = Globals | "none" | (string & {});
+export type ScrollSnapPointsYProperty = Globals | 'none' | (string & {});
 
-export type ScrollSnapStopProperty = Globals | "always" | "normal";
+export type ScrollSnapStopProperty = Globals | 'always' | 'normal';
 
-export type ScrollSnapTypeProperty =
-  | Globals
-  | "block"
-  | "both"
-  | "inline"
-  | "none"
-  | "x"
-  | "y"
-  | (string & {});
+export type ScrollSnapTypeProperty = Globals | 'block' | 'both' | 'inline' | 'none' | 'x' | 'y' | (string & {});
 
-export type ScrollSnapTypeXProperty =
-  | Globals
-  | "mandatory"
-  | "none"
-  | "proximity";
+export type ScrollSnapTypeXProperty = Globals | 'mandatory' | 'none' | 'proximity';
 
-export type ScrollSnapTypeYProperty =
-  | Globals
-  | "mandatory"
-  | "none"
-  | "proximity";
+export type ScrollSnapTypeYProperty = Globals | 'mandatory' | 'none' | 'proximity';
 
-export type ScrollbarColorProperty =
-  | Globals
-  | Color
-  | "auto"
-  | "dark"
-  | "light";
+export type ScrollbarColorProperty = Globals | Color | 'auto' | 'dark' | 'light';
 
-export type ScrollbarWidthProperty = Globals | "auto" | "none" | "thin";
+export type ScrollbarWidthProperty = Globals | 'auto' | 'none' | 'thin';
 
 export type ShapeImageThresholdProperty = Globals | (string & {}) | number;
 
 export type ShapeMarginProperty<TLength> = Globals | TLength | (string & {});
 
-export type ShapeOutsideProperty =
-  | Globals
-  | Box
-  | "margin-box"
-  | "none"
-  | (string & {});
+export type ShapeOutsideProperty = Globals | Box | 'margin-box' | 'none' | (string & {});
 
 export type TabSizeProperty<TLength> = Globals | TLength | number;
 
-export type TableLayoutProperty = Globals | "auto" | "fixed";
+export type TableLayoutProperty = Globals | 'auto' | 'fixed';
 
-export type TextAlignProperty =
-  | Globals
-  | "center"
-  | "end"
-  | "justify"
-  | "left"
-  | "match-parent"
-  | "right"
-  | "start";
+export type TextAlignProperty = Globals | 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start';
 
-export type TextAlignLastProperty =
-  | Globals
-  | "auto"
-  | "center"
-  | "end"
-  | "justify"
-  | "left"
-  | "right"
-  | "start";
+export type TextAlignLastProperty = Globals | 'auto' | 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
 
-export type TextCombineUprightProperty =
-  | Globals
-  | "all"
-  | "digits"
-  | "none"
-  | (string & {});
+export type TextCombineUprightProperty = Globals | 'all' | 'digits' | 'none' | (string & {});
 
 export type TextDecorationProperty<TLength> =
   | Globals
   | Color
   | TLength
-  | "auto"
-  | "blink"
-  | "dashed"
-  | "dotted"
-  | "double"
-  | "from-font"
-  | "grammar-error"
-  | "line-through"
-  | "none"
-  | "overline"
-  | "solid"
-  | "spelling-error"
-  | "underline"
-  | "wavy"
+  | 'auto'
+  | 'blink'
+  | 'dashed'
+  | 'dotted'
+  | 'double'
+  | 'from-font'
+  | 'grammar-error'
+  | 'line-through'
+  | 'none'
+  | 'overline'
+  | 'solid'
+  | 'spelling-error'
+  | 'underline'
+  | 'wavy'
   | (string & {});
 
 export type TextDecorationColorProperty = Globals | Color;
 
 export type TextDecorationLineProperty =
   | Globals
-  | "blink"
-  | "grammar-error"
-  | "line-through"
-  | "none"
-  | "overline"
-  | "spelling-error"
-  | "underline"
+  | 'blink'
+  | 'grammar-error'
+  | 'line-through'
+  | 'none'
+  | 'overline'
+  | 'spelling-error'
+  | 'underline'
   | (string & {});
 
 export type TextDecorationSkipProperty =
   | Globals
-  | "box-decoration"
-  | "edges"
-  | "leading-spaces"
-  | "none"
-  | "objects"
-  | "spaces"
-  | "trailing-spaces"
+  | 'box-decoration'
+  | 'edges'
+  | 'leading-spaces'
+  | 'none'
+  | 'objects'
+  | 'spaces'
+  | 'trailing-spaces'
   | (string & {});
 
-export type TextDecorationSkipInkProperty = Globals | "auto" | "none";
+export type TextDecorationSkipInkProperty = Globals | 'auto' | 'none';
 
-export type TextDecorationStyleProperty =
-  | Globals
-  | "dashed"
-  | "dotted"
-  | "double"
-  | "solid"
-  | "wavy";
+export type TextDecorationStyleProperty = Globals | 'dashed' | 'dotted' | 'double' | 'solid' | 'wavy';
 
-export type TextDecorationThicknessProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | "from-font";
+export type TextDecorationThicknessProperty<TLength> = Globals | TLength | 'auto' | 'from-font';
 
 export type TextEmphasisProperty =
   | Globals
   | Color
-  | "circle"
-  | "dot"
-  | "double-circle"
-  | "filled"
-  | "none"
-  | "open"
-  | "sesame"
-  | "triangle"
+  | 'circle'
+  | 'dot'
+  | 'double-circle'
+  | 'filled'
+  | 'none'
+  | 'open'
+  | 'sesame'
+  | 'triangle'
   | (string & {});
 
 export type TextEmphasisColorProperty = Globals | Color;
 
 export type TextEmphasisStyleProperty =
   | Globals
-  | "circle"
-  | "dot"
-  | "double-circle"
-  | "filled"
-  | "none"
-  | "open"
-  | "sesame"
-  | "triangle"
+  | 'circle'
+  | 'dot'
+  | 'double-circle'
+  | 'filled'
+  | 'none'
+  | 'open'
+  | 'sesame'
+  | 'triangle'
   | (string & {});
 
 export type TextIndentProperty<TLength> = Globals | TLength | (string & {});
 
-export type TextJustifyProperty =
-  | Globals
-  | "auto"
-  | "inter-character"
-  | "inter-word"
-  | "none";
+export type TextJustifyProperty = Globals | 'auto' | 'inter-character' | 'inter-word' | 'none';
 
-export type TextOrientationProperty =
-  | Globals
-  | "mixed"
-  | "sideways"
-  | "upright";
+export type TextOrientationProperty = Globals | 'mixed' | 'sideways' | 'upright';
 
-export type TextOverflowProperty =
-  | Globals
-  | "clip"
-  | "ellipsis"
-  | (string & {});
+export type TextOverflowProperty = Globals | 'clip' | 'ellipsis' | (string & {});
 
-export type TextRenderingProperty =
-  | Globals
-  | "auto"
-  | "geometricPrecision"
-  | "optimizeLegibility"
-  | "optimizeSpeed";
+export type TextRenderingProperty = Globals | 'auto' | 'geometricPrecision' | 'optimizeLegibility' | 'optimizeSpeed';
 
-export type TextShadowProperty = Globals | "none" | (string & {});
+export type TextShadowProperty = Globals | 'none' | (string & {});
 
-export type TextSizeAdjustProperty = Globals | "auto" | "none" | (string & {});
+export type TextSizeAdjustProperty = Globals | 'auto' | 'none' | (string & {});
 
 export type TextTransformProperty =
   | Globals
-  | "capitalize"
-  | "full-size-kana"
-  | "full-width"
-  | "lowercase"
-  | "none"
-  | "uppercase";
+  | 'capitalize'
+  | 'full-size-kana'
+  | 'full-width'
+  | 'lowercase'
+  | 'none'
+  | 'uppercase';
 
-export type TextUnderlineOffsetProperty<TLength> =
-  | Globals
-  | TLength
-  | "auto"
-  | "from-font";
+export type TextUnderlineOffsetProperty<TLength> = Globals | TLength | 'auto' | 'from-font';
 
-export type TextUnderlinePositionProperty =
-  | Globals
-  | "auto"
-  | "left"
-  | "right"
-  | "under"
-  | (string & {});
+export type TextUnderlinePositionProperty = Globals | 'auto' | 'left' | 'right' | 'under' | (string & {});
 
-export type TopProperty<TLength> = Globals | TLength | "auto" | (string & {});
+export type TopProperty<TLength> = Globals | TLength | 'auto' | (string & {});
 
 export type TouchActionProperty =
   | Globals
-  | "-ms-manipulation"
-  | "-ms-none"
-  | "-ms-pinch-zoom"
-  | "auto"
-  | "manipulation"
-  | "none"
-  | "pan-down"
-  | "pan-left"
-  | "pan-right"
-  | "pan-up"
-  | "pan-x"
-  | "pan-y"
-  | "pinch-zoom"
+  | '-ms-manipulation'
+  | '-ms-none'
+  | '-ms-pinch-zoom'
+  | 'auto'
+  | 'manipulation'
+  | 'none'
+  | 'pan-down'
+  | 'pan-left'
+  | 'pan-right'
+  | 'pan-up'
+  | 'pan-x'
+  | 'pan-y'
+  | 'pinch-zoom'
   | (string & {});
 
-export type TransformProperty = Globals | "none" | (string & {});
+export type TransformProperty = Globals | 'none' | (string & {});
 
-export type TransformBoxProperty =
-  | Globals
-  | "border-box"
-  | "fill-box"
-  | "view-box";
+export type TransformBoxProperty = Globals | 'border-box' | 'fill-box' | 'view-box';
 
 export type TransformOriginProperty<TLength> =
   | Globals
   | TLength
-  | "bottom"
-  | "center"
-  | "left"
-  | "right"
-  | "top"
+  | 'bottom'
+  | 'center'
+  | 'left'
+  | 'right'
+  | 'top'
   | (string & {});
 
-export type TransformStyleProperty = Globals | "flat" | "preserve-3d";
+export type TransformStyleProperty = Globals | 'flat' | 'preserve-3d';
 
 export type TransitionProperty = Globals | SingleTransition | (string & {});
 
-export type TransitionPropertyProperty =
-  | Globals
-  | "all"
-  | "none"
-  | (string & {});
+export type TransitionPropertyProperty = Globals | 'all' | 'none' | (string & {});
 
-export type TransitionTimingFunctionProperty =
-  | Globals
-  | TimingFunction
-  | (string & {});
+export type TransitionTimingFunctionProperty = Globals | TimingFunction | (string & {});
 
-export type TranslateProperty<TLength> =
-  | Globals
-  | TLength
-  | "none"
-  | (string & {});
+export type TranslateProperty<TLength> = Globals | TLength | 'none' | (string & {});
 
 export type UnicodeBidiProperty =
   | Globals
-  | "-moz-isolate"
-  | "-moz-isolate-override"
-  | "-moz-plaintext"
-  | "-webkit-isolate"
-  | "bidi-override"
-  | "embed"
-  | "isolate"
-  | "isolate-override"
-  | "normal"
-  | "plaintext";
+  | '-moz-isolate'
+  | '-moz-isolate-override'
+  | '-moz-plaintext'
+  | '-webkit-isolate'
+  | 'bidi-override'
+  | 'embed'
+  | 'isolate'
+  | 'isolate-override'
+  | 'normal'
+  | 'plaintext';
 
-export type UserSelectProperty =
-  | Globals
-  | "-moz-none"
-  | "all"
-  | "auto"
-  | "contain"
-  | "element"
-  | "none"
-  | "text";
+export type UserSelectProperty = Globals | '-moz-none' | 'all' | 'auto' | 'contain' | 'element' | 'none' | 'text';
 
 export type VerticalAlignProperty<TLength> =
   | Globals
   | TLength
-  | "baseline"
-  | "bottom"
-  | "middle"
-  | "sub"
-  | "super"
-  | "text-bottom"
-  | "text-top"
-  | "top"
+  | 'baseline'
+  | 'bottom'
+  | 'middle'
+  | 'sub'
+  | 'super'
+  | 'text-bottom'
+  | 'text-top'
+  | 'top'
   | (string & {});
 
-export type VisibilityProperty = Globals | "collapse" | "hidden" | "visible";
+export type VisibilityProperty = Globals | 'collapse' | 'hidden' | 'visible';
 
 export type WhiteSpaceProperty =
   | Globals
-  | "-moz-pre-wrap"
-  | "break-spaces"
-  | "normal"
-  | "nowrap"
-  | "pre"
-  | "pre-line"
-  | "pre-wrap";
+  | '-moz-pre-wrap'
+  | 'break-spaces'
+  | 'normal'
+  | 'nowrap'
+  | 'pre'
+  | 'pre-line'
+  | 'pre-wrap';
 
 export type WidthProperty<TLength> =
   | Globals
   | TLength
-  | "-moz-fit-content"
-  | "-moz-max-content"
-  | "-moz-min-content"
-  | "-webkit-fill-available"
-  | "-webkit-fit-content"
-  | "-webkit-max-content"
-  | "auto"
-  | "available"
-  | "fit-content"
-  | "intrinsic"
-  | "max-content"
-  | "min-content"
-  | "min-intrinsic"
+  | '-moz-fit-content'
+  | '-moz-max-content'
+  | '-moz-min-content'
+  | '-webkit-fill-available'
+  | '-webkit-fit-content'
+  | '-webkit-max-content'
+  | 'auto'
+  | 'available'
+  | 'fit-content'
+  | 'intrinsic'
+  | 'max-content'
+  | 'min-content'
+  | 'min-intrinsic'
   | (string & {});
 
-export type WillChangeProperty =
-  | Globals
-  | AnimateableFeature
-  | "auto"
-  | (string & {});
+export type WillChangeProperty = Globals | AnimateableFeature | 'auto' | (string & {});
 
-export type WordBreakProperty =
-  | Globals
-  | "break-all"
-  | "break-word"
-  | "keep-all"
-  | "normal";
+export type WordBreakProperty = Globals | 'break-all' | 'break-word' | 'keep-all' | 'normal';
 
-export type WordSpacingProperty<TLength> =
-  | Globals
-  | TLength
-  | "normal"
-  | (string & {});
+export type WordSpacingProperty<TLength> = Globals | TLength | 'normal' | (string & {});
 
-export type WordWrapProperty = Globals | "break-word" | "normal";
+export type WordWrapProperty = Globals | 'break-word' | 'normal';
 
 export type WritingModeProperty =
   | Globals
-  | "horizontal-tb"
-  | "sideways-lr"
-  | "sideways-rl"
-  | "vertical-lr"
-  | "vertical-rl";
+  | 'horizontal-tb'
+  | 'sideways-lr'
+  | 'sideways-rl'
+  | 'vertical-lr'
+  | 'vertical-rl';
 
-export type ZIndexProperty = Globals | "auto" | number | string;
+export type ZIndexProperty = Globals | 'auto' | number | string;
 
-export type ZoomProperty =
-  | Globals
-  | "normal"
-  | "reset"
-  | (string & {})
-  | number;
+export type ZoomProperty = Globals | 'normal' | 'reset' | (string & {}) | number;
 
 export type MozAppearanceProperty =
   | Globals
-  | "-moz-mac-unified-toolbar"
-  | "-moz-win-borderless-glass"
-  | "-moz-win-browsertabbar-toolbox"
-  | "-moz-win-communications-toolbox"
-  | "-moz-win-communicationstext"
-  | "-moz-win-exclude-glass"
-  | "-moz-win-glass"
-  | "-moz-win-media-toolbox"
-  | "-moz-win-mediatext"
-  | "-moz-window-button-box"
-  | "-moz-window-button-box-maximized"
-  | "-moz-window-button-close"
-  | "-moz-window-button-maximize"
-  | "-moz-window-button-minimize"
-  | "-moz-window-button-restore"
-  | "-moz-window-frame-bottom"
-  | "-moz-window-frame-left"
-  | "-moz-window-frame-right"
-  | "-moz-window-titlebar"
-  | "-moz-window-titlebar-maximized"
-  | "button"
-  | "button-arrow-down"
-  | "button-arrow-next"
-  | "button-arrow-previous"
-  | "button-arrow-up"
-  | "button-bevel"
-  | "button-focus"
-  | "caret"
-  | "checkbox"
-  | "checkbox-container"
-  | "checkbox-label"
-  | "checkmenuitem"
-  | "dualbutton"
-  | "groupbox"
-  | "listbox"
-  | "listitem"
-  | "menuarrow"
-  | "menubar"
-  | "menucheckbox"
-  | "menuimage"
-  | "menuitem"
-  | "menuitemtext"
-  | "menulist"
-  | "menulist-button"
-  | "menulist-text"
-  | "menulist-textfield"
-  | "menupopup"
-  | "menuradio"
-  | "menuseparator"
-  | "meterbar"
-  | "meterchunk"
-  | "none"
-  | "progressbar"
-  | "progressbar-vertical"
-  | "progresschunk"
-  | "progresschunk-vertical"
-  | "radio"
-  | "radio-container"
-  | "radio-label"
-  | "radiomenuitem"
-  | "range"
-  | "range-thumb"
-  | "resizer"
-  | "resizerpanel"
-  | "scale-horizontal"
-  | "scale-vertical"
-  | "scalethumb-horizontal"
-  | "scalethumb-vertical"
-  | "scalethumbend"
-  | "scalethumbstart"
-  | "scalethumbtick"
-  | "scrollbarbutton-down"
-  | "scrollbarbutton-left"
-  | "scrollbarbutton-right"
-  | "scrollbarbutton-up"
-  | "scrollbarthumb-horizontal"
-  | "scrollbarthumb-vertical"
-  | "scrollbartrack-horizontal"
-  | "scrollbartrack-vertical"
-  | "searchfield"
-  | "separator"
-  | "sheet"
-  | "spinner"
-  | "spinner-downbutton"
-  | "spinner-textfield"
-  | "spinner-upbutton"
-  | "splitter"
-  | "statusbar"
-  | "statusbarpanel"
-  | "tab"
-  | "tab-scroll-arrow-back"
-  | "tab-scroll-arrow-forward"
-  | "tabpanel"
-  | "tabpanels"
-  | "textfield"
-  | "textfield-multiline"
-  | "toolbar"
-  | "toolbarbutton"
-  | "toolbarbutton-dropdown"
-  | "toolbargripper"
-  | "toolbox"
-  | "tooltip"
-  | "treeheader"
-  | "treeheadercell"
-  | "treeheadersortarrow"
-  | "treeitem"
-  | "treeline"
-  | "treetwisty"
-  | "treetwistyopen"
-  | "treeview";
+  | '-moz-mac-unified-toolbar'
+  | '-moz-win-borderless-glass'
+  | '-moz-win-browsertabbar-toolbox'
+  | '-moz-win-communications-toolbox'
+  | '-moz-win-communicationstext'
+  | '-moz-win-exclude-glass'
+  | '-moz-win-glass'
+  | '-moz-win-media-toolbox'
+  | '-moz-win-mediatext'
+  | '-moz-window-button-box'
+  | '-moz-window-button-box-maximized'
+  | '-moz-window-button-close'
+  | '-moz-window-button-maximize'
+  | '-moz-window-button-minimize'
+  | '-moz-window-button-restore'
+  | '-moz-window-frame-bottom'
+  | '-moz-window-frame-left'
+  | '-moz-window-frame-right'
+  | '-moz-window-titlebar'
+  | '-moz-window-titlebar-maximized'
+  | 'button'
+  | 'button-arrow-down'
+  | 'button-arrow-next'
+  | 'button-arrow-previous'
+  | 'button-arrow-up'
+  | 'button-bevel'
+  | 'button-focus'
+  | 'caret'
+  | 'checkbox'
+  | 'checkbox-container'
+  | 'checkbox-label'
+  | 'checkmenuitem'
+  | 'dualbutton'
+  | 'groupbox'
+  | 'listbox'
+  | 'listitem'
+  | 'menuarrow'
+  | 'menubar'
+  | 'menucheckbox'
+  | 'menuimage'
+  | 'menuitem'
+  | 'menuitemtext'
+  | 'menulist'
+  | 'menulist-button'
+  | 'menulist-text'
+  | 'menulist-textfield'
+  | 'menupopup'
+  | 'menuradio'
+  | 'menuseparator'
+  | 'meterbar'
+  | 'meterchunk'
+  | 'none'
+  | 'progressbar'
+  | 'progressbar-vertical'
+  | 'progresschunk'
+  | 'progresschunk-vertical'
+  | 'radio'
+  | 'radio-container'
+  | 'radio-label'
+  | 'radiomenuitem'
+  | 'range'
+  | 'range-thumb'
+  | 'resizer'
+  | 'resizerpanel'
+  | 'scale-horizontal'
+  | 'scale-vertical'
+  | 'scalethumb-horizontal'
+  | 'scalethumb-vertical'
+  | 'scalethumbend'
+  | 'scalethumbstart'
+  | 'scalethumbtick'
+  | 'scrollbarbutton-down'
+  | 'scrollbarbutton-left'
+  | 'scrollbarbutton-right'
+  | 'scrollbarbutton-up'
+  | 'scrollbarthumb-horizontal'
+  | 'scrollbarthumb-vertical'
+  | 'scrollbartrack-horizontal'
+  | 'scrollbartrack-vertical'
+  | 'searchfield'
+  | 'separator'
+  | 'sheet'
+  | 'spinner'
+  | 'spinner-downbutton'
+  | 'spinner-textfield'
+  | 'spinner-upbutton'
+  | 'splitter'
+  | 'statusbar'
+  | 'statusbarpanel'
+  | 'tab'
+  | 'tab-scroll-arrow-back'
+  | 'tab-scroll-arrow-forward'
+  | 'tabpanel'
+  | 'tabpanels'
+  | 'textfield'
+  | 'textfield-multiline'
+  | 'toolbar'
+  | 'toolbarbutton'
+  | 'toolbarbutton-dropdown'
+  | 'toolbargripper'
+  | 'toolbox'
+  | 'tooltip'
+  | 'treeheader'
+  | 'treeheadercell'
+  | 'treeheadersortarrow'
+  | 'treeitem'
+  | 'treeline'
+  | 'treetwisty'
+  | 'treetwistyopen'
+  | 'treeview';
 
-export type MozBindingProperty = Globals | "none" | (string & {});
+export type MozBindingProperty = Globals | 'none' | (string & {});
 
-export type MozBorderBottomColorsProperty =
-  | Globals
-  | Color
-  | "none"
-  | (string & {});
+export type MozBorderBottomColorsProperty = Globals | Color | 'none' | (string & {});
 
-export type MozBorderLeftColorsProperty =
-  | Globals
-  | Color
-  | "none"
-  | (string & {});
+export type MozBorderLeftColorsProperty = Globals | Color | 'none' | (string & {});
 
-export type MozBorderRightColorsProperty =
-  | Globals
-  | Color
-  | "none"
-  | (string & {});
+export type MozBorderRightColorsProperty = Globals | Color | 'none' | (string & {});
 
-export type MozBorderTopColorsProperty =
-  | Globals
-  | Color
-  | "none"
-  | (string & {});
+export type MozBorderTopColorsProperty = Globals | Color | 'none' | (string & {});
 
 export type MozContextPropertiesProperty =
   | Globals
-  | "fill"
-  | "fill-opacity"
-  | "none"
-  | "stroke"
-  | "stroke-opacity"
+  | 'fill'
+  | 'fill-opacity'
+  | 'none'
+  | 'stroke'
+  | 'stroke-opacity'
   | (string & {});
 
-export type MozFloatEdgeProperty =
-  | Globals
-  | "border-box"
-  | "content-box"
-  | "margin-box"
-  | "padding-box";
+export type MozFloatEdgeProperty = Globals | 'border-box' | 'content-box' | 'margin-box' | 'padding-box';
 
-export type MozImageRegionProperty = Globals | "auto" | (string & {});
+export type MozImageRegionProperty = Globals | 'auto' | (string & {});
 
-export type MozOrientProperty =
-  | Globals
-  | "block"
-  | "horizontal"
-  | "inline"
-  | "vertical";
+export type MozOrientProperty = Globals | 'block' | 'horizontal' | 'inline' | 'vertical';
 
-export type MozOutlineRadiusProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type MozOutlineRadiusProperty<TLength> = Globals | TLength | (string & {});
 
-export type MozOutlineRadiusBottomleftProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type MozOutlineRadiusBottomleftProperty<TLength> = Globals | TLength | (string & {});
 
-export type MozOutlineRadiusBottomrightProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type MozOutlineRadiusBottomrightProperty<TLength> = Globals | TLength | (string & {});
 
-export type MozOutlineRadiusTopleftProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type MozOutlineRadiusTopleftProperty<TLength> = Globals | TLength | (string & {});
 
-export type MozOutlineRadiusToprightProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type MozOutlineRadiusToprightProperty<TLength> = Globals | TLength | (string & {});
 
-export type MozStackSizingProperty = Globals | "ignore" | "stretch-to-fit";
+export type MozStackSizingProperty = Globals | 'ignore' | 'stretch-to-fit';
 
-export type MozTextBlinkProperty = Globals | "blink" | "none";
+export type MozTextBlinkProperty = Globals | 'blink' | 'none';
 
 export type MozUserFocusProperty =
   | Globals
-  | "ignore"
-  | "none"
-  | "normal"
-  | "select-after"
-  | "select-all"
-  | "select-before"
-  | "select-menu"
-  | "select-same";
+  | 'ignore'
+  | 'none'
+  | 'normal'
+  | 'select-after'
+  | 'select-all'
+  | 'select-before'
+  | 'select-menu'
+  | 'select-same';
 
-export type MozUserInputProperty =
-  | Globals
-  | "auto"
-  | "disabled"
-  | "enabled"
-  | "none";
+export type MozUserInputProperty = Globals | 'auto' | 'disabled' | 'enabled' | 'none';
 
-export type MozUserModifyProperty =
-  | Globals
-  | "read-only"
-  | "read-write"
-  | "write-only";
+export type MozUserModifyProperty = Globals | 'read-only' | 'read-write' | 'write-only';
 
-export type MozWindowDraggingProperty = Globals | "drag" | "no-drag";
+export type MozWindowDraggingProperty = Globals | 'drag' | 'no-drag';
 
-export type MozWindowShadowProperty =
-  | Globals
-  | "default"
-  | "menu"
-  | "none"
-  | "sheet"
-  | "tooltip";
+export type MozWindowShadowProperty = Globals | 'default' | 'menu' | 'none' | 'sheet' | 'tooltip';
 
-export type MsAcceleratorProperty = Globals | "false" | "true";
+export type MsAcceleratorProperty = Globals | 'false' | 'true';
 
-export type MsBlockProgressionProperty = Globals | "bt" | "lr" | "rl" | "tb";
+export type MsBlockProgressionProperty = Globals | 'bt' | 'lr' | 'rl' | 'tb';
 
-export type MsContentZoomChainingProperty = Globals | "chained" | "none";
+export type MsContentZoomChainingProperty = Globals | 'chained' | 'none';
 
-export type MsContentZoomSnapProperty =
-  | Globals
-  | "mandatory"
-  | "none"
-  | "proximity"
-  | (string & {});
+export type MsContentZoomSnapProperty = Globals | 'mandatory' | 'none' | 'proximity' | (string & {});
 
-export type MsContentZoomSnapTypeProperty =
-  | Globals
-  | "mandatory"
-  | "none"
-  | "proximity";
+export type MsContentZoomSnapTypeProperty = Globals | 'mandatory' | 'none' | 'proximity';
 
-export type MsContentZoomingProperty = Globals | "none" | "zoom";
+export type MsContentZoomingProperty = Globals | 'none' | 'zoom';
 
-export type MsFlowFromProperty = Globals | "none" | (string & {});
+export type MsFlowFromProperty = Globals | 'none' | (string & {});
 
-export type MsFlowIntoProperty = Globals | "none" | (string & {});
+export type MsFlowIntoProperty = Globals | 'none' | (string & {});
 
-export type MsHighContrastAdjustProperty = Globals | "auto" | "none";
+export type MsHighContrastAdjustProperty = Globals | 'auto' | 'none';
 
-export type MsHyphenateLimitCharsProperty =
-  | Globals
-  | "auto"
-  | (string & {})
-  | number;
+export type MsHyphenateLimitCharsProperty = Globals | 'auto' | (string & {}) | number;
 
-export type MsHyphenateLimitLinesProperty = Globals | "no-limit" | number;
+export type MsHyphenateLimitLinesProperty = Globals | 'no-limit' | number;
 
-export type MsHyphenateLimitZoneProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type MsHyphenateLimitZoneProperty<TLength> = Globals | TLength | (string & {});
 
-export type MsImeAlignProperty = Globals | "after" | "auto";
+export type MsImeAlignProperty = Globals | 'after' | 'auto';
 
-export type MsOverflowStyleProperty =
-  | Globals
-  | "-ms-autohiding-scrollbar"
-  | "auto"
-  | "none"
-  | "scrollbar";
+export type MsOverflowStyleProperty = Globals | '-ms-autohiding-scrollbar' | 'auto' | 'none' | 'scrollbar';
 
-export type MsScrollChainingProperty = Globals | "chained" | "none";
+export type MsScrollChainingProperty = Globals | 'chained' | 'none';
 
-export type MsScrollLimitXMaxProperty<TLength> = Globals | TLength | "auto";
+export type MsScrollLimitXMaxProperty<TLength> = Globals | TLength | 'auto';
 
 export type MsScrollLimitXMinProperty<TLength> = Globals | TLength;
 
-export type MsScrollLimitYMaxProperty<TLength> = Globals | TLength | "auto";
+export type MsScrollLimitYMaxProperty<TLength> = Globals | TLength | 'auto';
 
 export type MsScrollLimitYMinProperty<TLength> = Globals | TLength;
 
-export type MsScrollRailsProperty = Globals | "none" | "railed";
+export type MsScrollRailsProperty = Globals | 'none' | 'railed';
 
-export type MsScrollSnapTypeProperty =
-  | Globals
-  | "mandatory"
-  | "none"
-  | "proximity";
+export type MsScrollSnapTypeProperty = Globals | 'mandatory' | 'none' | 'proximity';
 
-export type MsScrollTranslationProperty =
-  | Globals
-  | "none"
-  | "vertical-to-horizontal";
+export type MsScrollTranslationProperty = Globals | 'none' | 'vertical-to-horizontal';
 
 export type MsScrollbar3dlightColorProperty = Globals | Color;
 
@@ -8707,388 +7891,274 @@ export type MsScrollbarTrackColorProperty = Globals | Color;
 
 export type MsTextAutospaceProperty =
   | Globals
-  | "ideograph-alpha"
-  | "ideograph-numeric"
-  | "ideograph-parenthesis"
-  | "ideograph-space"
-  | "none";
+  | 'ideograph-alpha'
+  | 'ideograph-numeric'
+  | 'ideograph-parenthesis'
+  | 'ideograph-space'
+  | 'none';
 
-export type MsTouchSelectProperty = Globals | "grippers" | "none";
+export type MsTouchSelectProperty = Globals | 'grippers' | 'none';
 
-export type MsUserSelectProperty = Globals | "element" | "none" | "text";
+export type MsUserSelectProperty = Globals | 'element' | 'none' | 'text';
 
-export type MsWrapFlowProperty =
-  | Globals
-  | "auto"
-  | "both"
-  | "clear"
-  | "end"
-  | "maximum"
-  | "start";
+export type MsWrapFlowProperty = Globals | 'auto' | 'both' | 'clear' | 'end' | 'maximum' | 'start';
 
 export type MsWrapMarginProperty<TLength> = Globals | TLength;
 
-export type MsWrapThroughProperty = Globals | "none" | "wrap";
+export type MsWrapThroughProperty = Globals | 'none' | 'wrap';
 
 export type WebkitAppearanceProperty =
   | Globals
-  | "button"
-  | "button-bevel"
-  | "caret"
-  | "checkbox"
-  | "default-button"
-  | "inner-spin-button"
-  | "listbox"
-  | "listitem"
-  | "media-controls-background"
-  | "media-controls-fullscreen-background"
-  | "media-current-time-display"
-  | "media-enter-fullscreen-button"
-  | "media-exit-fullscreen-button"
-  | "media-fullscreen-button"
-  | "media-mute-button"
-  | "media-overlay-play-button"
-  | "media-play-button"
-  | "media-seek-back-button"
-  | "media-seek-forward-button"
-  | "media-slider"
-  | "media-sliderthumb"
-  | "media-time-remaining-display"
-  | "media-toggle-closed-captions-button"
-  | "media-volume-slider"
-  | "media-volume-slider-container"
-  | "media-volume-sliderthumb"
-  | "menulist"
-  | "menulist-button"
-  | "menulist-text"
-  | "menulist-textfield"
-  | "meter"
-  | "none"
-  | "progress-bar"
-  | "progress-bar-value"
-  | "push-button"
-  | "radio"
-  | "searchfield"
-  | "searchfield-cancel-button"
-  | "searchfield-decoration"
-  | "searchfield-results-button"
-  | "searchfield-results-decoration"
-  | "slider-horizontal"
-  | "slider-vertical"
-  | "sliderthumb-horizontal"
-  | "sliderthumb-vertical"
-  | "square-button"
-  | "textarea"
-  | "textfield";
+  | 'button'
+  | 'button-bevel'
+  | 'caret'
+  | 'checkbox'
+  | 'default-button'
+  | 'inner-spin-button'
+  | 'listbox'
+  | 'listitem'
+  | 'media-controls-background'
+  | 'media-controls-fullscreen-background'
+  | 'media-current-time-display'
+  | 'media-enter-fullscreen-button'
+  | 'media-exit-fullscreen-button'
+  | 'media-fullscreen-button'
+  | 'media-mute-button'
+  | 'media-overlay-play-button'
+  | 'media-play-button'
+  | 'media-seek-back-button'
+  | 'media-seek-forward-button'
+  | 'media-slider'
+  | 'media-sliderthumb'
+  | 'media-time-remaining-display'
+  | 'media-toggle-closed-captions-button'
+  | 'media-volume-slider'
+  | 'media-volume-slider-container'
+  | 'media-volume-sliderthumb'
+  | 'menulist'
+  | 'menulist-button'
+  | 'menulist-text'
+  | 'menulist-textfield'
+  | 'meter'
+  | 'none'
+  | 'progress-bar'
+  | 'progress-bar-value'
+  | 'push-button'
+  | 'radio'
+  | 'searchfield'
+  | 'searchfield-cancel-button'
+  | 'searchfield-decoration'
+  | 'searchfield-results-button'
+  | 'searchfield-results-decoration'
+  | 'slider-horizontal'
+  | 'slider-vertical'
+  | 'sliderthumb-horizontal'
+  | 'sliderthumb-vertical'
+  | 'square-button'
+  | 'textarea'
+  | 'textfield';
 
-export type WebkitBorderBeforeProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | (string & {});
+export type WebkitBorderBeforeProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type WebkitBorderBeforeColorProperty = Globals | Color;
 
-export type WebkitBorderBeforeStyleProperty =
-  | Globals
-  | LineStyle
-  | (string & {});
+export type WebkitBorderBeforeStyleProperty = Globals | LineStyle | (string & {});
 
-export type WebkitBorderBeforeWidthProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | (string & {});
+export type WebkitBorderBeforeWidthProperty<TLength> = Globals | LineWidth<TLength> | (string & {});
 
 export type WebkitBoxReflectProperty<TLength> =
   | Globals
   | TLength
-  | "above"
-  | "below"
-  | "left"
-  | "right"
+  | 'above'
+  | 'below'
+  | 'left'
+  | 'right'
   | (string & {});
 
-export type WebkitLineClampProperty = Globals | "none" | number;
+export type WebkitLineClampProperty = Globals | 'none' | number;
 
 export type WebkitMaskProperty<TLength> =
   | Globals
   | Position<TLength>
   | RepeatStyle
   | Box
-  | "border"
-  | "content"
-  | "none"
-  | "padding"
-  | "text"
+  | 'border'
+  | 'content'
+  | 'none'
+  | 'padding'
+  | 'text'
   | (string & {});
 
 export type WebkitMaskAttachmentProperty = Globals | Attachment | (string & {});
 
-export type WebkitMaskClipProperty =
-  | Globals
-  | Box
-  | "border"
-  | "content"
-  | "padding"
-  | "text"
-  | (string & {});
+export type WebkitMaskClipProperty = Globals | Box | 'border' | 'content' | 'padding' | 'text' | (string & {});
 
-export type WebkitMaskCompositeProperty =
-  | Globals
-  | CompositeStyle
-  | (string & {});
+export type WebkitMaskCompositeProperty = Globals | CompositeStyle | (string & {});
 
-export type WebkitMaskImageProperty = Globals | "none" | (string & {});
+export type WebkitMaskImageProperty = Globals | 'none' | (string & {});
 
-export type WebkitMaskOriginProperty =
-  | Globals
-  | Box
-  | "border"
-  | "content"
-  | "padding"
-  | (string & {});
+export type WebkitMaskOriginProperty = Globals | Box | 'border' | 'content' | 'padding' | (string & {});
 
-export type WebkitMaskPositionProperty<TLength> =
-  | Globals
-  | Position<TLength>
-  | (string & {});
+export type WebkitMaskPositionProperty<TLength> = Globals | Position<TLength> | (string & {});
 
-export type WebkitMaskPositionXProperty<TLength> =
-  | Globals
-  | TLength
-  | "center"
-  | "left"
-  | "right"
-  | (string & {});
+export type WebkitMaskPositionXProperty<TLength> = Globals | TLength | 'center' | 'left' | 'right' | (string & {});
 
-export type WebkitMaskPositionYProperty<TLength> =
-  | Globals
-  | TLength
-  | "bottom"
-  | "center"
-  | "top"
-  | (string & {});
+export type WebkitMaskPositionYProperty<TLength> = Globals | TLength | 'bottom' | 'center' | 'top' | (string & {});
 
 export type WebkitMaskRepeatProperty = Globals | RepeatStyle | (string & {});
 
-export type WebkitMaskRepeatXProperty =
-  | Globals
-  | "no-repeat"
-  | "repeat"
-  | "round"
-  | "space";
+export type WebkitMaskRepeatXProperty = Globals | 'no-repeat' | 'repeat' | 'round' | 'space';
 
-export type WebkitMaskRepeatYProperty =
-  | Globals
-  | "no-repeat"
-  | "repeat"
-  | "round"
-  | "space";
+export type WebkitMaskRepeatYProperty = Globals | 'no-repeat' | 'repeat' | 'round' | 'space';
 
-export type WebkitMaskSizeProperty<TLength> =
-  | Globals
-  | BgSize<TLength>
-  | (string & {});
+export type WebkitMaskSizeProperty<TLength> = Globals | BgSize<TLength> | (string & {});
 
-export type WebkitOverflowScrollingProperty = Globals | "auto" | "touch";
+export type WebkitOverflowScrollingProperty = Globals | 'auto' | 'touch';
 
 export type WebkitTapHighlightColorProperty = Globals | Color;
 
 export type WebkitTextFillColorProperty = Globals | Color;
 
-export type WebkitTextStrokeProperty<TLength> =
-  | Globals
-  | Color
-  | TLength
-  | (string & {});
+export type WebkitTextStrokeProperty<TLength> = Globals | Color | TLength | (string & {});
 
 export type WebkitTextStrokeColorProperty = Globals | Color;
 
 export type WebkitTextStrokeWidthProperty<TLength> = Globals | TLength;
 
-export type WebkitTouchCalloutProperty = Globals | "default" | "none";
+export type WebkitTouchCalloutProperty = Globals | 'default' | 'none';
 
-export type WebkitUserModifyProperty =
-  | Globals
-  | "read-only"
-  | "read-write"
-  | "read-write-plaintext-only";
+export type WebkitUserModifyProperty = Globals | 'read-only' | 'read-write' | 'read-write-plaintext-only';
 
 export type AlignmentBaselineProperty =
   | Globals
-  | "after-edge"
-  | "alphabetic"
-  | "auto"
-  | "baseline"
-  | "before-edge"
-  | "central"
-  | "hanging"
-  | "ideographic"
-  | "mathematical"
-  | "middle"
-  | "text-after-edge"
-  | "text-before-edge";
+  | 'after-edge'
+  | 'alphabetic'
+  | 'auto'
+  | 'baseline'
+  | 'before-edge'
+  | 'central'
+  | 'hanging'
+  | 'ideographic'
+  | 'mathematical'
+  | 'middle'
+  | 'text-after-edge'
+  | 'text-before-edge';
 
-export type BaselineShiftProperty<TLength> =
-  | Globals
-  | TLength
-  | "baseline"
-  | "sub"
-  | "super"
-  | (string & {});
+export type BaselineShiftProperty<TLength> = Globals | TLength | 'baseline' | 'sub' | 'super' | (string & {});
 
-export type ClipRuleProperty = Globals | "evenodd" | "nonzero";
+export type ClipRuleProperty = Globals | 'evenodd' | 'nonzero';
 
-export type ColorInterpolationProperty =
-  | Globals
-  | "auto"
-  | "linearRGB"
-  | "sRGB";
+export type ColorInterpolationProperty = Globals | 'auto' | 'linearRGB' | 'sRGB';
 
-export type ColorRenderingProperty =
-  | Globals
-  | "auto"
-  | "optimizeQuality"
-  | "optimizeSpeed";
+export type ColorRenderingProperty = Globals | 'auto' | 'optimizeQuality' | 'optimizeSpeed';
 
 export type DominantBaselineProperty =
   | Globals
-  | "alphabetic"
-  | "auto"
-  | "central"
-  | "hanging"
-  | "ideographic"
-  | "mathematical"
-  | "middle"
-  | "no-change"
-  | "reset-size"
-  | "text-after-edge"
-  | "text-before-edge"
-  | "use-script";
+  | 'alphabetic'
+  | 'auto'
+  | 'central'
+  | 'hanging'
+  | 'ideographic'
+  | 'mathematical'
+  | 'middle'
+  | 'no-change'
+  | 'reset-size'
+  | 'text-after-edge'
+  | 'text-before-edge'
+  | 'use-script';
 
 export type FillProperty = Globals | Paint;
 
-export type FillRuleProperty = Globals | "evenodd" | "nonzero";
+export type FillRuleProperty = Globals | 'evenodd' | 'nonzero';
 
-export type FloodColorProperty = Globals | Color | "currentColor";
+export type FloodColorProperty = Globals | Color | 'currentColor';
 
-export type GlyphOrientationVerticalProperty =
-  | Globals
-  | "auto"
-  | (string & {})
-  | number;
+export type GlyphOrientationVerticalProperty = Globals | 'auto' | (string & {}) | number;
 
-export type LightingColorProperty = Globals | Color | "currentColor";
+export type LightingColorProperty = Globals | Color | 'currentColor';
 
-export type MarkerProperty = Globals | "none" | (string & {});
+export type MarkerProperty = Globals | 'none' | (string & {});
 
-export type MarkerEndProperty = Globals | "none" | (string & {});
+export type MarkerEndProperty = Globals | 'none' | (string & {});
 
-export type MarkerMidProperty = Globals | "none" | (string & {});
+export type MarkerMidProperty = Globals | 'none' | (string & {});
 
-export type MarkerStartProperty = Globals | "none" | (string & {});
+export type MarkerStartProperty = Globals | 'none' | (string & {});
 
-export type ShapeRenderingProperty =
-  | Globals
-  | "auto"
-  | "crispEdges"
-  | "geometricPrecision"
-  | "optimizeSpeed";
+export type ShapeRenderingProperty = Globals | 'auto' | 'crispEdges' | 'geometricPrecision' | 'optimizeSpeed';
 
-export type StopColorProperty = Globals | Color | "currentColor";
+export type StopColorProperty = Globals | Color | 'currentColor';
 
 export type StrokeProperty = Globals | Paint;
 
-export type StrokeDasharrayProperty<TLength> =
-  | Globals
-  | Dasharray<TLength>
-  | "none";
+export type StrokeDasharrayProperty<TLength> = Globals | Dasharray<TLength> | 'none';
 
-export type StrokeDashoffsetProperty<TLength> =
-  | Globals
-  | TLength
-  | (string & {});
+export type StrokeDashoffsetProperty<TLength> = Globals | TLength | (string & {});
 
-export type StrokeLinecapProperty = Globals | "butt" | "round" | "square";
+export type StrokeLinecapProperty = Globals | 'butt' | 'round' | 'square';
 
-export type StrokeLinejoinProperty = Globals | "bevel" | "miter" | "round";
+export type StrokeLinejoinProperty = Globals | 'bevel' | 'miter' | 'round';
 
 export type StrokeWidthProperty<TLength> = Globals | TLength | (string & {});
 
-export type TextAnchorProperty = Globals | "end" | "middle" | "start";
+export type TextAnchorProperty = Globals | 'end' | 'middle' | 'start';
 
-export type VectorEffectProperty = Globals | "non-scaling-stroke" | "none";
+export type VectorEffectProperty = Globals | 'non-scaling-stroke' | 'none';
 
-type CounterStyleRangeProperty = "auto" | "infinite" | (string & {}) | number;
+type CounterStyleRangeProperty = 'auto' | 'infinite' | (string & {}) | number;
 
-type CounterStyleSpeakAsProperty =
-  | "auto"
-  | "bullets"
-  | "numbers"
-  | "spell-out"
-  | "words"
-  | (string & {});
+type CounterStyleSpeakAsProperty = 'auto' | 'bullets' | 'numbers' | 'spell-out' | 'words' | (string & {});
 
 type CounterStyleSystemProperty =
-  | "additive"
-  | "alphabetic"
-  | "cyclic"
-  | "fixed"
-  | "numeric"
-  | "symbolic"
+  | 'additive'
+  | 'alphabetic'
+  | 'cyclic'
+  | 'fixed'
+  | 'numeric'
+  | 'symbolic'
   | (string & {});
 
-type FontFaceFontFeatureSettingsProperty = "normal" | (string & {});
+type FontFaceFontFeatureSettingsProperty = 'normal' | (string & {});
 
-type FontFaceFontDisplayProperty =
-  | "auto"
-  | "block"
-  | "fallback"
-  | "optional"
-  | "swap";
+type FontFaceFontDisplayProperty = 'auto' | 'block' | 'fallback' | 'optional' | 'swap';
 
 type FontFaceFontStretchProperty = FontStretchAbsolute | (string & {});
 
-type FontFaceFontStyleProperty =
-  | "italic"
-  | "normal"
-  | "oblique"
-  | (string & {});
+type FontFaceFontStyleProperty = 'italic' | 'normal' | 'oblique' | (string & {});
 
 type FontFaceFontVariantProperty =
   | EastAsianVariantValues
-  | "all-petite-caps"
-  | "all-small-caps"
-  | "common-ligatures"
-  | "contextual"
-  | "diagonal-fractions"
-  | "discretionary-ligatures"
-  | "full-width"
-  | "historical-forms"
-  | "historical-ligatures"
-  | "lining-nums"
-  | "no-common-ligatures"
-  | "no-contextual"
-  | "no-discretionary-ligatures"
-  | "no-historical-ligatures"
-  | "none"
-  | "normal"
-  | "oldstyle-nums"
-  | "ordinal"
-  | "petite-caps"
-  | "proportional-nums"
-  | "proportional-width"
-  | "ruby"
-  | "slashed-zero"
-  | "small-caps"
-  | "stacked-fractions"
-  | "tabular-nums"
-  | "titling-caps"
-  | "unicase"
+  | 'all-petite-caps'
+  | 'all-small-caps'
+  | 'common-ligatures'
+  | 'contextual'
+  | 'diagonal-fractions'
+  | 'discretionary-ligatures'
+  | 'full-width'
+  | 'historical-forms'
+  | 'historical-ligatures'
+  | 'lining-nums'
+  | 'no-common-ligatures'
+  | 'no-contextual'
+  | 'no-discretionary-ligatures'
+  | 'no-historical-ligatures'
+  | 'none'
+  | 'normal'
+  | 'oldstyle-nums'
+  | 'ordinal'
+  | 'petite-caps'
+  | 'proportional-nums'
+  | 'proportional-width'
+  | 'ruby'
+  | 'slashed-zero'
+  | 'small-caps'
+  | 'stacked-fractions'
+  | 'tabular-nums'
+  | 'titling-caps'
+  | 'unicase'
   | (string & {});
 
-type FontFaceFontVariationSettingsProperty = "normal" | (string & {});
+type FontFaceFontVariationSettingsProperty = 'normal' | (string & {});
 
 type FontFaceFontWeightProperty = FontWeightAbsolute | (string & {});
 
@@ -9098,243 +8168,198 @@ type ViewportMaxHeightProperty<TLength> = ViewportLength<TLength>;
 
 type ViewportMaxWidthProperty<TLength> = ViewportLength<TLength>;
 
-type ViewportMaxZoomProperty = "auto" | (string & {}) | number;
+type ViewportMaxZoomProperty = 'auto' | (string & {}) | number;
 
 type ViewportMinHeightProperty<TLength> = ViewportLength<TLength>;
 
 type ViewportMinWidthProperty<TLength> = ViewportLength<TLength>;
 
-type ViewportMinZoomProperty = "auto" | (string & {}) | number;
+type ViewportMinZoomProperty = 'auto' | (string & {}) | number;
 
-type ViewportOrientationProperty = "auto" | "landscape" | "portrait";
+type ViewportOrientationProperty = 'auto' | 'landscape' | 'portrait';
 
-type ViewportUserZoomProperty = "-ms-zoom" | "fixed" | "zoom";
+type ViewportUserZoomProperty = '-ms-zoom' | 'fixed' | 'zoom';
 
 type ViewportWidthProperty<TLength> = ViewportLength<TLength> | (string & {});
 
-type ViewportZoomProperty = "auto" | (string & {}) | number;
+type ViewportZoomProperty = 'auto' | (string & {}) | number;
 
-type AbsoluteSize =
-  | "large"
-  | "medium"
-  | "small"
-  | "x-large"
-  | "x-small"
-  | "xx-large"
-  | "xx-small";
+type AbsoluteSize = 'large' | 'medium' | 'small' | 'x-large' | 'x-small' | 'xx-large' | 'xx-small';
 
-type AnimateableFeature = "contents" | "scroll-position" | (string & {});
+type AnimateableFeature = 'contents' | 'scroll-position' | (string & {});
 
-type Attachment = "fixed" | "local" | "scroll";
+type Attachment = 'fixed' | 'local' | 'scroll';
 
-type BgPosition<TLength> =
-  | TLength
-  | "bottom"
-  | "center"
-  | "left"
-  | "right"
-  | "top"
-  | (string & {});
+type BgPosition<TLength> = TLength | 'bottom' | 'center' | 'left' | 'right' | 'top' | (string & {});
 
-type BgSize<TLength> = TLength | "auto" | "contain" | "cover" | (string & {});
+type BgSize<TLength> = TLength | 'auto' | 'contain' | 'cover' | (string & {});
 
 type BlendMode =
-  | "color"
-  | "color-burn"
-  | "color-dodge"
-  | "darken"
-  | "difference"
-  | "exclusion"
-  | "hard-light"
-  | "hue"
-  | "lighten"
-  | "luminosity"
-  | "multiply"
-  | "normal"
-  | "overlay"
-  | "saturation"
-  | "screen"
-  | "soft-light";
+  | 'color'
+  | 'color-burn'
+  | 'color-dodge'
+  | 'darken'
+  | 'difference'
+  | 'exclusion'
+  | 'hard-light'
+  | 'hue'
+  | 'lighten'
+  | 'luminosity'
+  | 'multiply'
+  | 'normal'
+  | 'overlay'
+  | 'saturation'
+  | 'screen'
+  | 'soft-light';
 
-type Box = "border-box" | "content-box" | "padding-box";
+type Box = 'border-box' | 'content-box' | 'padding-box';
 
-export type Color =
-  | NamedColor
-  | DeprecatedSystemColor
-  | "currentcolor"
-  | (string & {});
+export type Color = NamedColor | DeprecatedSystemColor | 'currentcolor' | (string & {});
 
 type Compat =
-  | "button-bevel"
-  | "checkbox"
-  | "listbox"
-  | "menulist"
-  | "menulist-button"
-  | "meter"
-  | "progress-bar"
-  | "push-button"
-  | "radio"
-  | "searchfield"
-  | "slider-horizontal"
-  | "square-button"
-  | "textarea";
+  | 'button-bevel'
+  | 'checkbox'
+  | 'listbox'
+  | 'menulist'
+  | 'menulist-button'
+  | 'meter'
+  | 'progress-bar'
+  | 'push-button'
+  | 'radio'
+  | 'searchfield'
+  | 'slider-horizontal'
+  | 'square-button'
+  | 'textarea';
 
 type CompositeStyle =
-  | "clear"
-  | "copy"
-  | "destination-atop"
-  | "destination-in"
-  | "destination-out"
-  | "destination-over"
-  | "source-atop"
-  | "source-in"
-  | "source-out"
-  | "source-over"
-  | "xor";
+  | 'clear'
+  | 'copy'
+  | 'destination-atop'
+  | 'destination-in'
+  | 'destination-out'
+  | 'destination-over'
+  | 'source-atop'
+  | 'source-in'
+  | 'source-out'
+  | 'source-over'
+  | 'xor';
 
-type CompositingOperator = "add" | "exclude" | "intersect" | "subtract";
+type CompositingOperator = 'add' | 'exclude' | 'intersect' | 'subtract';
 
-type ContentDistribution =
-  | "space-around"
-  | "space-between"
-  | "space-evenly"
-  | "stretch";
+type ContentDistribution = 'space-around' | 'space-between' | 'space-evenly' | 'stretch';
 
-type ContentList = Quote | "contents" | (string & {});
+type ContentList = Quote | 'contents' | (string & {});
 
-type ContentPosition = "center" | "end" | "flex-end" | "flex-start" | "start";
+type ContentPosition = 'center' | 'end' | 'flex-end' | 'flex-start' | 'start';
 
-type CubicBezierTimingFunction =
-  | "ease"
-  | "ease-in"
-  | "ease-in-out"
-  | "ease-out"
-  | (string & {});
+type CubicBezierTimingFunction = 'ease' | 'ease-in' | 'ease-in-out' | 'ease-out' | (string & {});
 
 type Dasharray<TLength> = TLength | (string & {}) | number;
 
 type DeprecatedSystemColor =
-  | "ActiveBorder"
-  | "ActiveCaption"
-  | "AppWorkspace"
-  | "Background"
-  | "ButtonFace"
-  | "ButtonHighlight"
-  | "ButtonShadow"
-  | "ButtonText"
-  | "CaptionText"
-  | "GrayText"
-  | "Highlight"
-  | "HighlightText"
-  | "InactiveBorder"
-  | "InactiveCaption"
-  | "InactiveCaptionText"
-  | "InfoBackground"
-  | "InfoText"
-  | "Menu"
-  | "MenuText"
-  | "Scrollbar"
-  | "ThreeDDarkShadow"
-  | "ThreeDFace"
-  | "ThreeDHighlight"
-  | "ThreeDLightShadow"
-  | "ThreeDShadow"
-  | "Window"
-  | "WindowFrame"
-  | "WindowText";
+  | 'ActiveBorder'
+  | 'ActiveCaption'
+  | 'AppWorkspace'
+  | 'Background'
+  | 'ButtonFace'
+  | 'ButtonHighlight'
+  | 'ButtonShadow'
+  | 'ButtonText'
+  | 'CaptionText'
+  | 'GrayText'
+  | 'Highlight'
+  | 'HighlightText'
+  | 'InactiveBorder'
+  | 'InactiveCaption'
+  | 'InactiveCaptionText'
+  | 'InfoBackground'
+  | 'InfoText'
+  | 'Menu'
+  | 'MenuText'
+  | 'Scrollbar'
+  | 'ThreeDDarkShadow'
+  | 'ThreeDFace'
+  | 'ThreeDHighlight'
+  | 'ThreeDLightShadow'
+  | 'ThreeDShadow'
+  | 'Window'
+  | 'WindowFrame'
+  | 'WindowText';
 
 type DisplayInside =
-  | "-ms-flexbox"
-  | "-ms-grid"
-  | "-webkit-flex"
-  | "flex"
-  | "flow"
-  | "flow-root"
-  | "grid"
-  | "ruby"
-  | "table";
+  | '-ms-flexbox'
+  | '-ms-grid'
+  | '-webkit-flex'
+  | 'flex'
+  | 'flow'
+  | 'flow-root'
+  | 'grid'
+  | 'ruby'
+  | 'table';
 
 type DisplayInternal =
-  | "ruby-base"
-  | "ruby-base-container"
-  | "ruby-text"
-  | "ruby-text-container"
-  | "table-caption"
-  | "table-cell"
-  | "table-column"
-  | "table-column-group"
-  | "table-footer-group"
-  | "table-header-group"
-  | "table-row"
-  | "table-row-group";
+  | 'ruby-base'
+  | 'ruby-base-container'
+  | 'ruby-text'
+  | 'ruby-text-container'
+  | 'table-caption'
+  | 'table-cell'
+  | 'table-column'
+  | 'table-column-group'
+  | 'table-footer-group'
+  | 'table-header-group'
+  | 'table-row'
+  | 'table-row-group';
 
 type DisplayLegacy =
-  | "-ms-inline-flexbox"
-  | "-ms-inline-grid"
-  | "-webkit-inline-flex"
-  | "inline-block"
-  | "inline-flex"
-  | "inline-grid"
-  | "inline-list-item"
-  | "inline-table";
+  | '-ms-inline-flexbox'
+  | '-ms-inline-grid'
+  | '-webkit-inline-flex'
+  | 'inline-block'
+  | 'inline-flex'
+  | 'inline-grid'
+  | 'inline-list-item'
+  | 'inline-table';
 
-type DisplayOutside = "block" | "inline" | "run-in";
+type DisplayOutside = 'block' | 'inline' | 'run-in';
 
-type EastAsianVariantValues =
-  | "jis04"
-  | "jis78"
-  | "jis83"
-  | "jis90"
-  | "simplified"
-  | "traditional";
+type EastAsianVariantValues = 'jis04' | 'jis78' | 'jis83' | 'jis90' | 'simplified' | 'traditional';
 
-type FinalBgLayer<TLength> =
-  | Color
-  | BgPosition<TLength>
-  | RepeatStyle
-  | Attachment
-  | Box
-  | "none"
-  | (string & {});
+type FinalBgLayer<TLength> = Color | BgPosition<TLength> | RepeatStyle | Attachment | Box | 'none' | (string & {});
 
 type FontStretchAbsolute =
-  | "condensed"
-  | "expanded"
-  | "extra-condensed"
-  | "extra-expanded"
-  | "normal"
-  | "semi-condensed"
-  | "semi-expanded"
-  | "ultra-condensed"
-  | "ultra-expanded"
+  | 'condensed'
+  | 'expanded'
+  | 'extra-condensed'
+  | 'extra-expanded'
+  | 'normal'
+  | 'semi-condensed'
+  | 'semi-expanded'
+  | 'ultra-condensed'
+  | 'ultra-expanded'
   | (string & {});
 
-type FontWeightAbsolute = "bold" | "normal" | number;
+type FontWeightAbsolute = 'bold' | 'normal' | number;
 
-type GenericFamily =
-  | "cursive"
-  | "fantasy"
-  | "monospace"
-  | "sans-serif"
-  | "serif";
+type GenericFamily = 'cursive' | 'fantasy' | 'monospace' | 'sans-serif' | 'serif';
 
-type GeometryBox = Box | "fill-box" | "margin-box" | "stroke-box" | "view-box";
+type GeometryBox = Box | 'fill-box' | 'margin-box' | 'stroke-box' | 'view-box';
 
-type GridLine = "auto" | (string & {}) | number;
+type GridLine = 'auto' | (string & {}) | number;
 
 export type LineStyle =
-  | "dashed"
-  | "dotted"
-  | "double"
-  | "groove"
-  | "hidden"
-  | "inset"
-  | "none"
-  | "outset"
-  | "ridge"
-  | "solid";
+  | 'dashed'
+  | 'dotted'
+  | 'double'
+  | 'groove'
+  | 'hidden'
+  | 'inset'
+  | 'none'
+  | 'outset'
+  | 'ridge'
+  | 'solid';
 
-export type LineWidth<TLength> = TLength | "medium" | "thick" | "thin";
+export type LineWidth<TLength> = TLength | 'medium' | 'thick' | 'thin';
 
 type MaskLayer<TLength> =
   | Position<TLength>
@@ -9342,230 +8367,194 @@ type MaskLayer<TLength> =
   | GeometryBox
   | CompositingOperator
   | MaskingMode
-  | "no-clip"
-  | "none"
+  | 'no-clip'
+  | 'none'
   | (string & {});
 
-type MaskingMode = "alpha" | "luminance" | "match-source";
+type MaskingMode = 'alpha' | 'luminance' | 'match-source';
 
 type NamedColor =
-  | "aliceblue"
-  | "antiquewhite"
-  | "aqua"
-  | "aquamarine"
-  | "azure"
-  | "beige"
-  | "bisque"
-  | "black"
-  | "blanchedalmond"
-  | "blue"
-  | "blueviolet"
-  | "brown"
-  | "burlywood"
-  | "cadetblue"
-  | "chartreuse"
-  | "chocolate"
-  | "coral"
-  | "cornflowerblue"
-  | "cornsilk"
-  | "crimson"
-  | "cyan"
-  | "darkblue"
-  | "darkcyan"
-  | "darkgoldenrod"
-  | "darkgray"
-  | "darkgreen"
-  | "darkgrey"
-  | "darkkhaki"
-  | "darkmagenta"
-  | "darkolivegreen"
-  | "darkorange"
-  | "darkorchid"
-  | "darkred"
-  | "darksalmon"
-  | "darkseagreen"
-  | "darkslateblue"
-  | "darkslategray"
-  | "darkslategrey"
-  | "darkturquoise"
-  | "darkviolet"
-  | "deeppink"
-  | "deepskyblue"
-  | "dimgray"
-  | "dimgrey"
-  | "dodgerblue"
-  | "firebrick"
-  | "floralwhite"
-  | "forestgreen"
-  | "fuchsia"
-  | "gainsboro"
-  | "ghostwhite"
-  | "gold"
-  | "goldenrod"
-  | "gray"
-  | "green"
-  | "greenyellow"
-  | "grey"
-  | "honeydew"
-  | "hotpink"
-  | "indianred"
-  | "indigo"
-  | "ivory"
-  | "khaki"
-  | "lavender"
-  | "lavenderblush"
-  | "lawngreen"
-  | "lemonchiffon"
-  | "lightblue"
-  | "lightcoral"
-  | "lightcyan"
-  | "lightgoldenrodyellow"
-  | "lightgray"
-  | "lightgreen"
-  | "lightgrey"
-  | "lightpink"
-  | "lightsalmon"
-  | "lightseagreen"
-  | "lightskyblue"
-  | "lightslategray"
-  | "lightslategrey"
-  | "lightsteelblue"
-  | "lightyellow"
-  | "lime"
-  | "limegreen"
-  | "linen"
-  | "magenta"
-  | "maroon"
-  | "mediumaquamarine"
-  | "mediumblue"
-  | "mediumorchid"
-  | "mediumpurple"
-  | "mediumseagreen"
-  | "mediumslateblue"
-  | "mediumspringgreen"
-  | "mediumturquoise"
-  | "mediumvioletred"
-  | "midnightblue"
-  | "mintcream"
-  | "mistyrose"
-  | "moccasin"
-  | "navajowhite"
-  | "navy"
-  | "oldlace"
-  | "olive"
-  | "olivedrab"
-  | "orange"
-  | "orangered"
-  | "orchid"
-  | "palegoldenrod"
-  | "palegreen"
-  | "paleturquoise"
-  | "palevioletred"
-  | "papayawhip"
-  | "peachpuff"
-  | "peru"
-  | "pink"
-  | "plum"
-  | "powderblue"
-  | "purple"
-  | "rebeccapurple"
-  | "red"
-  | "rosybrown"
-  | "royalblue"
-  | "saddlebrown"
-  | "salmon"
-  | "sandybrown"
-  | "seagreen"
-  | "seashell"
-  | "sienna"
-  | "silver"
-  | "skyblue"
-  | "slateblue"
-  | "slategray"
-  | "slategrey"
-  | "snow"
-  | "springgreen"
-  | "steelblue"
-  | "tan"
-  | "teal"
-  | "thistle"
-  | "tomato"
-  | "transparent"
-  | "turquoise"
-  | "violet"
-  | "wheat"
-  | "white"
-  | "whitesmoke"
-  | "yellow"
-  | "yellowgreen";
+  | 'aliceblue'
+  | 'antiquewhite'
+  | 'aqua'
+  | 'aquamarine'
+  | 'azure'
+  | 'beige'
+  | 'bisque'
+  | 'black'
+  | 'blanchedalmond'
+  | 'blue'
+  | 'blueviolet'
+  | 'brown'
+  | 'burlywood'
+  | 'cadetblue'
+  | 'chartreuse'
+  | 'chocolate'
+  | 'coral'
+  | 'cornflowerblue'
+  | 'cornsilk'
+  | 'crimson'
+  | 'cyan'
+  | 'darkblue'
+  | 'darkcyan'
+  | 'darkgoldenrod'
+  | 'darkgray'
+  | 'darkgreen'
+  | 'darkgrey'
+  | 'darkkhaki'
+  | 'darkmagenta'
+  | 'darkolivegreen'
+  | 'darkorange'
+  | 'darkorchid'
+  | 'darkred'
+  | 'darksalmon'
+  | 'darkseagreen'
+  | 'darkslateblue'
+  | 'darkslategray'
+  | 'darkslategrey'
+  | 'darkturquoise'
+  | 'darkviolet'
+  | 'deeppink'
+  | 'deepskyblue'
+  | 'dimgray'
+  | 'dimgrey'
+  | 'dodgerblue'
+  | 'firebrick'
+  | 'floralwhite'
+  | 'forestgreen'
+  | 'fuchsia'
+  | 'gainsboro'
+  | 'ghostwhite'
+  | 'gold'
+  | 'goldenrod'
+  | 'gray'
+  | 'green'
+  | 'greenyellow'
+  | 'grey'
+  | 'honeydew'
+  | 'hotpink'
+  | 'indianred'
+  | 'indigo'
+  | 'ivory'
+  | 'khaki'
+  | 'lavender'
+  | 'lavenderblush'
+  | 'lawngreen'
+  | 'lemonchiffon'
+  | 'lightblue'
+  | 'lightcoral'
+  | 'lightcyan'
+  | 'lightgoldenrodyellow'
+  | 'lightgray'
+  | 'lightgreen'
+  | 'lightgrey'
+  | 'lightpink'
+  | 'lightsalmon'
+  | 'lightseagreen'
+  | 'lightskyblue'
+  | 'lightslategray'
+  | 'lightslategrey'
+  | 'lightsteelblue'
+  | 'lightyellow'
+  | 'lime'
+  | 'limegreen'
+  | 'linen'
+  | 'magenta'
+  | 'maroon'
+  | 'mediumaquamarine'
+  | 'mediumblue'
+  | 'mediumorchid'
+  | 'mediumpurple'
+  | 'mediumseagreen'
+  | 'mediumslateblue'
+  | 'mediumspringgreen'
+  | 'mediumturquoise'
+  | 'mediumvioletred'
+  | 'midnightblue'
+  | 'mintcream'
+  | 'mistyrose'
+  | 'moccasin'
+  | 'navajowhite'
+  | 'navy'
+  | 'oldlace'
+  | 'olive'
+  | 'olivedrab'
+  | 'orange'
+  | 'orangered'
+  | 'orchid'
+  | 'palegoldenrod'
+  | 'palegreen'
+  | 'paleturquoise'
+  | 'palevioletred'
+  | 'papayawhip'
+  | 'peachpuff'
+  | 'peru'
+  | 'pink'
+  | 'plum'
+  | 'powderblue'
+  | 'purple'
+  | 'rebeccapurple'
+  | 'red'
+  | 'rosybrown'
+  | 'royalblue'
+  | 'saddlebrown'
+  | 'salmon'
+  | 'sandybrown'
+  | 'seagreen'
+  | 'seashell'
+  | 'sienna'
+  | 'silver'
+  | 'skyblue'
+  | 'slateblue'
+  | 'slategray'
+  | 'slategrey'
+  | 'snow'
+  | 'springgreen'
+  | 'steelblue'
+  | 'tan'
+  | 'teal'
+  | 'thistle'
+  | 'tomato'
+  | 'transparent'
+  | 'turquoise'
+  | 'violet'
+  | 'wheat'
+  | 'white'
+  | 'whitesmoke'
+  | 'yellow'
+  | 'yellowgreen';
 
-type Paint =
-  | Color
-  | "child"
-  | "context-fill"
-  | "context-stroke"
-  | "none"
-  | (string & {});
+type Paint = Color | 'child' | 'context-fill' | 'context-stroke' | 'none' | (string & {});
 
-type Position<TLength> =
-  | TLength
-  | "bottom"
-  | "center"
-  | "left"
-  | "right"
-  | "top"
-  | (string & {});
+type Position<TLength> = TLength | 'bottom' | 'center' | 'left' | 'right' | 'top' | (string & {});
 
-type Quote = "close-quote" | "no-close-quote" | "no-open-quote" | "open-quote";
+type Quote = 'close-quote' | 'no-close-quote' | 'no-open-quote' | 'open-quote';
 
-type RepeatStyle =
-  | "no-repeat"
-  | "repeat"
-  | "repeat-x"
-  | "repeat-y"
-  | "round"
-  | "space"
-  | (string & {});
+type RepeatStyle = 'no-repeat' | 'repeat' | 'repeat-x' | 'repeat-y' | 'round' | 'space' | (string & {});
 
-type SelfPosition =
-  | "center"
-  | "end"
-  | "flex-end"
-  | "flex-start"
-  | "self-end"
-  | "self-start"
-  | "start";
+type SelfPosition = 'center' | 'end' | 'flex-end' | 'flex-start' | 'self-end' | 'self-start' | 'start';
 
 type SingleAnimation =
   | TimingFunction
   | SingleAnimationDirection
   | SingleAnimationFillMode
-  | "infinite"
-  | "none"
-  | "paused"
-  | "running"
+  | 'infinite'
+  | 'none'
+  | 'paused'
+  | 'running'
   | (string & {})
   | number;
 
-type SingleAnimationDirection =
-  | "alternate"
-  | "alternate-reverse"
-  | "normal"
-  | "reverse";
+type SingleAnimationDirection = 'alternate' | 'alternate-reverse' | 'normal' | 'reverse';
 
-type SingleAnimationFillMode = "backwards" | "both" | "forwards" | "none";
+type SingleAnimationFillMode = 'backwards' | 'both' | 'forwards' | 'none';
 
-type SingleTransition = TimingFunction | "all" | "none" | (string & {});
+type SingleTransition = TimingFunction | 'all' | 'none' | (string & {});
 
-type StepTimingFunction = "step-end" | "step-start" | (string & {});
+type StepTimingFunction = 'step-end' | 'step-start' | (string & {});
 
-type TimingFunction = CubicBezierTimingFunction | StepTimingFunction | "linear";
+type TimingFunction = CubicBezierTimingFunction | StepTimingFunction | 'linear';
 
-type TrackBreadth<TLength> =
-  | TLength
-  | "auto"
-  | "max-content"
-  | "min-content"
-  | (string & {});
+type TrackBreadth<TLength> = TLength | 'auto' | 'max-content' | 'min-content' | (string & {});
 
-type ViewportLength<TLength> = TLength | "auto" | (string & {});
+type ViewportLength<TLength> = TLength | 'auto' | (string & {});

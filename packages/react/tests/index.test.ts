@@ -1,3 +1,3 @@
-test("pending", () => {
+test('pending', () => {
   expect(true).toBe(true);
 });
