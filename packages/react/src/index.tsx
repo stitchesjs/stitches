@@ -1,4 +1,5 @@
 import { MAIN_BREAKPOINT_ID, TConfig, TCss, TDefaultCss, TMainBreakPoint, createCss, hashString } from '@stitches/core';
+export { _ATOM } from '@stitches/core';
 import * as React from 'react';
 
 let hasWarnedInlineStyle = false;

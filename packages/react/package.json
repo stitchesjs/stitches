@@ -29,17 +29,11 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run build:lib & npm run build:es",
-    "build:lib": "tsc -p tsconfig.build.json --outDir lib --module commonjs",
-    "build:es": "tsc -p tsconfig.build.json --outDir es --module es2015",
-    "clean": "rimraf dist es lib coverage",
     "typecheck": "tsc --noEmit",
     "lint": "tslint --project tsconfig.json --format stylish",
     "format": "prettier '**/*.{md,js,jsx,json,ts,tsx}' --write",
     "test": "jest --env=jsdom --coverage",
     "test:watch": "node ../../node_modules/jest/bin/jest.js --env=jsdom --watch --updateSnapshot",
-    "prebuild": "npm run clean",
-    "postbuild": "rimraf {lib,es}/**/__tests__ {lib,es}/**/*.{spec,test}.{js,d.ts,js.map}",
     "posttest": "npm run typecheck && npm run lint",
     "preversion": "npm test",
     "postversion": "git push && git push --tags"
@@ -59,7 +53,11 @@
   "dependencies": {
     "@stitches/core": "^0.0.1",
     "@types/node": "^13.11.1",
+    "@types/react-test-renderer": "^16.9.3",
     "tslib": "^1.11.1"
+  },
+  "devDependencies": {
+    "react-test-renderer": "^16.13.1"
   },
   "gitHead": "01e369aa687777e751cb32633010a881071cb6e5"
 }

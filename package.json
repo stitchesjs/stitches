@@ -2,10 +2,11 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "release": "preconstruct build && lerna publish",
-    "build": "NODE_OPTIONS=--max_old_space_size=4096 lerna run build",
+    "release": "yarn test && yarn build && lerna publish",
+    "build": "preconstruct build",
     "postinstall": "lerna bootstrap && preconstruct dev",
     "test:css": "lerna --scope @stitches/core run test",
+    "test:react": "lerna --scope @stitches/react run test",
     "test": "lerna run test"
   },
   "workspaces": [
@@ -38,7 +39,8 @@
     "@babel/core": "^7.11.5",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.10.4",
-    "@preconstruct/cli": "^1.1.27"
+    "@preconstruct/cli": "^1.1.27",
+    "react": "^16.13.1"
   },
   "preconstruct": {
     "packages": [

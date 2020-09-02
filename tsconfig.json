@@ -2,5 +2,6 @@
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "jsx": "react",
+    "preserveSymlinks": true
   }
 }

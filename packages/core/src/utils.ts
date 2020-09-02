@@ -165,12 +165,7 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
             head.appendChild(style);
           }
           tags.push(style);
-          for (let x = 0; x < document.styleSheets.length; x++) {
-            if (document.styleSheets[x].ownerNode === style) {
-              aggr[key] = enhanceSheet(document.styleSheets[x] as any);
-              break;
-            }
-          }
+          aggr[key] = enhanceSheet(style.sheet as any);
 
           return aggr;
         }, {}),
