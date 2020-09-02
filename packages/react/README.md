@@ -21,7 +21,7 @@ Not quite ready :)
 - Christian Alfoni ([@christianalfoni](https://twitter.com/christianalfoni)) - Codesandbox, Cerebral
 - Pedro Duarte ([@peduarte](https://twitter.com/peduarte)) - [Modulz](https://modulz.app)
 - Jenna Smith ([@jjenzz](https://twitter.com/jjenzz)) - [Modulz](https://modulz.app)
-- Abdul Hallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [Modulz](https://modulz.app)
+- Abdulhadi Alhallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [Modulz](https://modulz.app)
 - Fabrice Weinberg ([@fweinb](https://twitter.com/fweinb))
 
 ## License
