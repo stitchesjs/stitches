@@ -10,6 +10,10 @@ import {
   margin,
   padding,
   transition,
+  textDecoration,
+  textDecorationLine,
+  textDecorationStyle,
+  textDecorationColor,
 } from '../src/shorthand-parser';
 
 const tokens = {
@@ -891,6 +895,119 @@ describe('Box-shadow', () => {
     expect(boxShadow(tokens, '60px -16px gray400, 60px -16px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "60px -16px #e3e3e3, 60px -16px #e3e3e3",
+      }
+    `);
+  });
+});
+
+describe('Text decoration shorthand', () => {
+  test('Handles text-decoration shorthand', () => {
+    expect(textDecoration(tokens, 'none')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "none",
+      }
+    `);
+    expect(textDecoration(tokens, 'none none')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "none none",
+      }
+    `);
+    expect(textDecoration(tokens, 'red wavy')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationStyle": "wavy",
+      }
+    `);
+    expect(textDecoration(tokens, 'underline overline red wavy')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationLine": "underline overline",
+        "textDecorationStyle": "wavy",
+      }
+    `);
+    expect(textDecoration(tokens, 'gray400 overline wavy')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "#e3e3e3",
+        "textDecorationLine": "overline",
+        "textDecorationStyle": "wavy",
+      }
+    `);
+    expect(textDecoration(tokens, 'underline dotted red')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationLine": "underline",
+        "textDecorationStyle": "dotted",
+      }
+    `);
+  });
+  test('Handles text-decoration-line', () => {
+    expect(textDecorationLine(tokens, 'underline overline')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "underline overline",
+      }
+    `);
+    expect(textDecorationLine(tokens, 'none none')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "none none",
+      }
+    `);
+    expect(textDecorationLine(tokens, 'underline')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "underline",
+      }
+    `);
+    expect(textDecorationLine(tokens, 'blink')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "blink",
+      }
+    `);
+    expect(textDecorationLine(tokens, 'line-through none')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "line-through none",
+      }
+    `);
+  });
+  test('Handles text-decoration-style', () => {
+    expect(textDecorationStyle(tokens, 'wavy')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationStyle": "wavy",
+      }
+    `);
+    expect(textDecorationStyle(tokens, 'dashed')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationStyle": "dashed",
+      }
+    `);
+    expect(textDecorationStyle(tokens, 'dotted')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationStyle": "dotted",
+      }
+    `);
+    expect(textDecorationStyle(tokens, 'solid')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationStyle": "solid",
+      }
+    `);
+    expect(textDecorationStyle(tokens, 'double')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationStyle": "double",
+      }
+    `);
+  });
+  test('Handles text-decoration-color', () => {
+    expect(textDecorationColor(tokens, 'red')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+      }
+    `);
+    expect(textDecorationColor(tokens, 'blue')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "blue",
+      }
+    `);
+    expect(textDecorationColor(tokens, 'gray400')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "#e3e3e3",
       }
     `);
   });

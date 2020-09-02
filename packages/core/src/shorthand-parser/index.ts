@@ -4,7 +4,8 @@ import { tokenizeValue } from './value-tokenizer';
 const unitMatch = /^[0-9.]+[a-z|%]/;
 const easingMatch = /\(.*\)|ease|ease-in|ease-out|ease-in-out|linear|step-start|step-end/;
 
-const setChainedValue = (existingValue: string, value: string) => (existingValue ? `${existingValue},${value}` : value);
+const setChainedValue = (existingValue: string, value: string, separator = ',') =>
+  existingValue ? `${existingValue}${separator}${value}` : value;
 
 const emptyTokens: any = {};
 tokenTypes.forEach((type) => (emptyTokens[type] = {}));
@@ -286,3 +287,29 @@ export const boxShadow = (tokens: any, value: string) => {
       .join(', '),
   };
 };
+
+export const textDecoration = createPropertyParser((tokens: any, css: any, value: any) => {
+  if (value.match(/solid|double|dotted|dashed|wavy/)) {
+    css.textDecorationStyle = value;
+  } else if (value.match(/none|underline|overline|line-through|blink/)) {
+    css.textDecorationLine = setChainedValue(css.textDecorationLine, value, ' ');
+  } else {
+    css.textDecorationColor = tokens.colors[value] || value;
+  }
+});
+
+export const textDecorationStyle = createPropertyParser((tokens: any, css: any, value: any) => {
+  if (value.match(/solid|double|dotted|dashed|wavy/)) {
+    css.textDecorationStyle = value;
+  }
+});
+
+export const textDecorationLine = createPropertyParser((tokens: any, css: any, value: any) => {
+  if (value.match(/none|underline|overline|line-through|blink/)) {
+    css.textDecorationLine = setChainedValue(css.textDecorationLine, value, ' ');
+  }
+});
+
+export const textDecorationColor = createPropertyParser((tokens: any, css: any, value: any) => {
+  css.textDecorationColor = tokens.colors[value] || value;
+});
