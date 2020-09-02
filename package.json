@@ -24,7 +24,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@stitches/core": "file:packages/css",
-    "@stitches/react": "file:packages/styled"
+    "@stitches/core": "file:packages/core",
+    "@stitches/react": "file:packages/react"
   }
 }
