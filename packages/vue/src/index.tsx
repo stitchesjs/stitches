@@ -5,8 +5,6 @@ import type { IntrinsicElements } from '../types/jsx';
 
 export { _ATOM } from '@stitches/core';
 
-const hasWarnedInlineStyle = false;
-
 export type VueProps = Vue.AllowedComponentProps & Vue.VNodeProps & Vue.ComponentCustomProps;
 export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
 
@@ -187,19 +185,6 @@ export const createStyled = <Config extends TConfig>(
     const stitchesComponentId = `scid-${hashString(JSON.stringify(baseAndVariantStyles))}`;
 
     const StitchesComponent = (props: any, ctx: Vue.SetupContext) => {
-      // if (process.env.NODE_ENV === 'development') {
-      //   // we're breaking the rules of hooks on purpose as the env will never change
-      //   // eslint-disable-next-line
-      //   const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
-      //   if (memoStyled !== props.css && !hasWarnedInlineStyle) {
-      //     // tslint:disable-next-line
-      //     console.warn(
-      //       '@stitches/react : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook'
-      //     );
-      //     hasWarnedInlineStyle = true;
-      //   }
-      // }
-
       const compositions = [baseStyles];
 
       const propsWithoutVariantsAndCssProp: any = {};
