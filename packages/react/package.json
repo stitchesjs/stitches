@@ -2,11 +2,16 @@
   "name": "@stitches/react",
   "version": "0.0.1",
   "description": "The modern CSS-in-JS library",
+  "main": "dist/react.cjs.js",
+  "module": "dist/react.esm.js",
   "contributors": [
     "Christian Alfoni <christianalfoni@gmail.com>",
     "Pedro Duarte <pedro@modulz.app>",
     "Abdul Hallak <abdul@modulz.app>"
   ],
+  "preconstruct": {
+    "source": "src/index.tsx"
+  },
   "lint-staged": {
     "./**/*.{js,jsx,ts,tsx}": [
       "tslint --fix",
@@ -20,8 +25,6 @@
   },
   "license": "MIT",
   "repository": "git+https://github.com/modulz/stitches.git",
-  "main": "lib/index.js",
-  "module": "es/index.js",
   "publishConfig": {
     "access": "public"
   },
@@ -48,8 +51,7 @@
     "library"
   ],
   "files": [
-    "lib",
-    "es"
+    "dist"
   ],
   "peerDependencies": {
     "react": "^16.13.1"

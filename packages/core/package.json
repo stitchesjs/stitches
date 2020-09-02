@@ -2,6 +2,8 @@
   "name": "@stitches/core",
   "version": "0.0.1",
   "description": "The modern CSS-in-JS library",
+  "main": "dist/core.cjs.js",
+  "module": "dist/core.esm.js",
   "contributors": [
     "Christian Alfoni <christianalfoni@gmail.com>",
     "Pedro Duarte <pedro@modulz.app>",
@@ -9,10 +11,11 @@
   ],
   "license": "MIT",
   "repository": "git+https://github.com/modulz/stitches.git",
-  "main": "lib/index.js",
-  "module": "es/index.js",
   "publishConfig": {
     "access": "public"
+  },
+  "preconstruct": {
+    "source": "src/index.ts"
   },
   "lint-staged": {
     "./**/*.{js,jsx,ts,tsx}": [
@@ -48,8 +51,7 @@
     "library"
   ],
   "files": [
-    "lib",
-    "es"
+    "dist"
   ],
   "dependencies": {
     "@types/node": "^13.11.1",

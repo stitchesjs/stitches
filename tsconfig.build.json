@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "outDir": ".code",
     "lib": ["dom", "es2017"],
     "moduleResolution": "node",
     "importHelpers": true,
