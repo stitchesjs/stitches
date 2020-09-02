@@ -156,14 +156,14 @@ describe('Font shorthand', () => {
       `);
     // match
     expect(font(tokens, 'italic bold 16px/2 cursive')).toMatchInlineSnapshot(`
-          Object {
-            "fontFamily": "cursive",
-            "fontSize": "16px",
-            "fontStyle": "italic",
-            "fontWeight": 700,
-            "lineHeight": "2",
-          }
-      `);
+      Object {
+        "fontFamily": "cursive",
+        "fontSize": "16px",
+        "fontStyle": "italic",
+        "fontWeight": 700,
+        "lineHeight": "2",
+      }
+    `);
     // match:
     expect(font(tokens, 'bold 24px/1 sans-serif')).toMatchInlineSnapshot(`
       Object {
