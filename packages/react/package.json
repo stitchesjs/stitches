@@ -7,6 +7,17 @@
     "Pedro Duarte <pedro@modulz.app>",
     "Abdul Hallak <abdul@modulz.app>"
   ],
+  "lint-staged": {
+    "./**/*.{js,jsx,ts,tsx}": [
+      "tslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "./**/*.{css,md,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "license": "MIT",
   "repository": "git+https://github.com/modulz/stitches.git",
   "main": "lib/index.js",

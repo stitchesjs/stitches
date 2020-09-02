@@ -14,6 +14,17 @@
   "publishConfig": {
     "access": "public"
   },
+  "lint-staged": {
+    "./**/*.{js,jsx,ts,tsx}": [
+      "tslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "./**/*.{css,md,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "scripts": {
     "build": "npm run build:lib & npm run build:es",
     "build:lib": "tsc -p tsconfig.build.json --outDir lib --module commonjs",
