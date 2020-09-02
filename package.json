@@ -29,10 +29,6 @@
     "tslint-plugin-prettier": "^2.3.0",
     "typescript": "^3.8.3"
   },
-  "dependencies": {
-    "@stitches/core": "file:packages/core",
-    "@stitches/react": "file:packages/react"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "yarn workspaces run lint-staged"

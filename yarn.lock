@@ -1371,19 +1371,6 @@
   dependencies:
     type-detect "4.0.8"
 
-"@stitches/core@file:packages/core":
-  version "0.0.1"
-  dependencies:
-    "@types/node" "^13.11.1"
-    tslib "^1.11.1"
-
-"@stitches/react@file:packages/react":
-  version "0.0.1"
-  dependencies:
-    "@stitches/core" "^0.0.1"
-    "@types/node" "^13.11.1"
-    tslib "^1.11.1"
-
 "@types/babel__core@^7.1.7":
   version "7.1.9"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.9.tgz#77e59d438522a6fb898fa43dc3455c6e72f3963d"
