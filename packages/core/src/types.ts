@@ -299,7 +299,11 @@ export interface TCss<T extends TConfig> {
     definition: Record<string, T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TDefaultCss<T>>
   ) => string;
   theme: (
-    colors: Partial<T extends { tokens: { colors: {} } } ? { [k in keyof T['tokens']['colors']]: string } : {}>
+    theme: Partial<
+      {
+        [TO in keyof T['tokens']]: Partial<T['tokens'][TO]>;
+      }
+    >
   ) => string;
 }
 
