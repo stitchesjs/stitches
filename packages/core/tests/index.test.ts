@@ -1206,7 +1206,7 @@ describe('createCss', () => {
       `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
     );
   });
-  test('should inject media queries after normal rules', () => {
+  test('should inject inline media queries after normal rules', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
@@ -1230,6 +1230,34 @@ describe('createCss', () => {
       ./*X*/_YfjLh/*X*/{background-color:blue;}
       @media (min-width: 700px){./*X*/_bHgrjq/*X*/{color:red;}}
       @media (min-width: 200px){./*X*/_jpNofT/*X*/{color:red;}}"
+    `);
+  });
+
+  test('should inject inline media queries after normal rules inside breakpoints', () => {
+    const css = createCss(
+      {
+        breakpoints: {
+          large: (rule) => `@media(min-width: 300px){${rule}}`,
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      css({
+        large: {
+          color: 'blue',
+          '@supports (color: red)': {
+            color: 'red',
+          },
+        },
+      }).toString();
+      return '';
+    });
+
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:large */
+      @media(min-width: 300px){./*X*/_kBCYwd/*X*/{color:blue;}}
+      @media(min-width: 300px){@supports (color: red){./*X*/_kVIRdt/*X*/{color:red;}}}"
     `);
   });
 
