@@ -489,10 +489,126 @@ describe('createCss', () => {
 
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/initial_bc_bieopk/*X*/{background-color:red;}
-      ./*X*/initial_c_dzoaVP/*X*/{color:red;}"
+      ./*X*/_initial_bc_bieopk/*X*/{background-color:red;}
+      ./*X*/_initial_c_dzoaVP/*X*/{color:red;}"
     `);
   });
+
+  test('Jest producing wrong snapshot for escaped characters', () => {
+    // the snapshot output is wrong so we're just asserting that it's going to be wrong
+    // just for the sake of the next tests
+    // https://github.com/facebook/jest/issues/5660
+    const fun = () => `\\@should-not-fail-unless-jest-issue-is-fixed`;
+    expect(fun()).toMatchInlineSnapshot(`"\\\\@should-not-fail-unless-jest-issue-is-fixed"`);
+  });
+
+  test('should escape classname for the cssRule when showFriendlyClassnames is on and is running on the server', () => {
+    const css = createCss(
+      {
+        showFriendlyClassnames: true,
+        breakpoints: {
+          '@mobile': (rule) => `@media(min-width:300px){${rule}}`,
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      const cleanClass = css({ '@mobile': { color: 'red' } }).toString();
+      // make sure that the classname from .toString() is clean and un escaped
+      expect(cleanClass).toMatchInlineSnapshot(`"_@mobile_c_jWtRMJ"`);
+      return '';
+    });
+    // make sure that the injected rules are escaped:
+    expect(styles[2]).toMatchInlineSnapshot(`
+      "/* STITCHES:@mobile */
+      @media(min-width:300px){./*X*/_\\\\@mobile_c_jWtRMJ/*X*/{color:red;}}"
+    `);
+  });
+
+  test('escaping should not produce any hydration issues or double injection of styles', () => {
+    const serverCss = createCss(
+      {
+        showFriendlyClassnames: true,
+        breakpoints: {
+          '@mobile': (rule: string) => `@media(min-width:300px){${rule}}`,
+        },
+      },
+      null
+    );
+    const { styles } = serverCss.getStyles(() => {
+      serverCss({ '@mobile': { color: 'red' } }).toString();
+      return '';
+    });
+
+    const fakeEnv = createFakeEnv(styles);
+    hotReloadingCache.clear();
+    const clientCss = createCss(
+      {
+        showFriendlyClassnames: true,
+        breakpoints: {
+          '@mobile': (rule: string) => `@media(min-width:300px){${rule}}`,
+        },
+      },
+      fakeEnv as any
+    );
+
+    expect(fakeEnv.document.styleSheets.length).toBe(3);
+    expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(1);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+      `"@media (min-width:300px) {._\\\\@mobile_c_jWtRMJ {color: red;}}"`
+    );
+    clientCss({ '@mobile': { color: 'red' } }).toString();
+    clientCss({ '@mobile': { color: 'blue' } }).toString();
+    clientCss({ color: 'blue' }).toString();
+    expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(2);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+      `"@media (min-width:300px) {._@mobile_c_cxoytQ {color: blue;}}"`
+    );
+    // this rule was hydrated and cleaned from the server:
+    expect(fakeEnv.document.styleSheets[2].cssRules[1].cssText).toMatchInlineSnapshot(
+      `"@media (min-width:300px) {._\\\\@mobile_c_jWtRMJ {color: red;}}"`
+    );
+    // this new one wasn'tjkkk
+  });
+
+  test('css classes should start with "_" regardless of showFriendlyClassnames', () => {
+    // on the client, the insertRule api automatically escapes selectors
+    // so this test case just makes sure that the breakpoint isn't going to endup
+    // escaped twice:
+    const cssWithShowFriendlyClassnames = createCss(
+      {
+        showFriendlyClassnames: true,
+      },
+      null
+    );
+    const cssWithoutShowFriendlyClassnames = createCss({}, null);
+    expect(cssWithShowFriendlyClassnames({ '@mobile': { color: 'red' } }).toString()[0]).toBe('_');
+    expect(cssWithoutShowFriendlyClassnames({ '@mobile': { color: 'red' } }).toString()[0]).toBe('_');
+    expect(cssWithShowFriendlyClassnames({ color: 'red' }).toString()[0]).toBe('_');
+    expect(cssWithoutShowFriendlyClassnames({ color: 'red' }).toString()[0]).toBe('_');
+  });
+
+  test('should not escape breakpoint rule when running on the client', () => {
+    // on the client, the insertRule api automatically escapes selectors
+    // so this test case just makes sure that the breakpoint isn't going to endup
+    // escaped twice:
+    const fakeEnv = createFakeEnv([]);
+    const css = createCss(
+      {
+        showFriendlyClassnames: true,
+        breakpoints: {
+          '@mobile': (rule) => `@media(min-width:300px){${rule}}`,
+        },
+      },
+      (fakeEnv as any) as Window
+    );
+    css({ '@mobile': { color: 'red' } }).toString();
+
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+      `"@media (min-width:300px) {._@mobile_c_jWtRMJ {color: red;}}"`
+    );
+  });
+
   test('should inject vendor prefix where explicitly stating so', () => {
     const css = createCss(
       {
@@ -508,7 +624,7 @@ describe('createCss', () => {
 
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/initial_c_dzoaVP/*X*/{-webkit-color:red;}"
+      ./*X*/_initial_c_dzoaVP/*X*/{-webkit-color:red;}"
     `);
   });
   test('should use specificity props', () => {
@@ -1206,7 +1322,7 @@ describe('createCss', () => {
       `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
     );
   });
-  test('should inject media queries after normal rules', () => {
+  test('should inject inline media queries after normal rules', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css({
@@ -1230,6 +1346,34 @@ describe('createCss', () => {
       ./*X*/_YfjLh/*X*/{background-color:blue;}
       @media (min-width: 700px){./*X*/_bHgrjq/*X*/{color:red;}}
       @media (min-width: 200px){./*X*/_jpNofT/*X*/{color:red;}}"
+    `);
+  });
+
+  test('should inject inline media queries after normal rules inside breakpoints', () => {
+    const css = createCss(
+      {
+        breakpoints: {
+          large: (rule) => `@media(min-width: 300px){${rule}}`,
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      css({
+        large: {
+          color: 'blue',
+          '@supports (color: red)': {
+            color: 'red',
+          },
+        },
+      }).toString();
+      return '';
+    });
+
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:large */
+      @media(min-width: 300px){./*X*/_kBCYwd/*X*/{color:blue;}}
+      @media(min-width: 300px){@supports (color: red){./*X*/_kVIRdt/*X*/{color:red;}}}"
     `);
   });
 

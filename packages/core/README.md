@@ -1,13 +1,13 @@
 ## Why
 
-- **Atomic mindset**: Each CSS property is a an atomic part of your complete CSS
+- **Atomic mindset**: Each CSS property is an atomic part of your complete CSS
 - **Reusability**: Each CSS property, given the same screen, pseudo and value is considered the same, giving high degree of reusability
 - **Optimal injection**: You can compose your styles outside of your UI, but no injection happens until it is actually used
 - **Tokenized**: Configure with tokens to give design restrictions
 - **Screens**: Define a set of media queries as screens to easily express CSS active within a screen
 - **Utils**: Create your own CSS properties
 - **Typed**: Fully typed API, even though you are not using Typescript
-- **Specificity solved**: No more specificity issues as an atomic mindset opens up a more efficient and straight forward way to solve it
+- **Specificity solved**: No more specificity issues, as an atomic mindset opens up a more efficient and straight forward way to solve it
 - **Token based theming**: Tokens are CSS variables. Create themes overriding the tokens and expose themes to any parts of your app
 
 [A simple benchmark VS styled-components](https://codesandbox.io/s/benchmark-stitches-vs-styled-components-xi7qh?file=/src/App.js)
