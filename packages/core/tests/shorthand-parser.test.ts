@@ -1052,5 +1052,10 @@ describe('Text decoration shorthand', () => {
         "textDecorationColor": "#e3e3e3",
       }
     `);
+    expect(textDecorationColor(tokens, 'unset')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "unset",
+      }
+    `);
   });
 });
