@@ -21,8 +21,6 @@ import {
   hashString,
   specificityProps,
 } from './utils';
-import { stringify } from 'querystring';
-
 export * from './types';
 export * from './css-types';
 export * from './utils';
