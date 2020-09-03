@@ -141,7 +141,7 @@ describe('Font shorthand', () => {
         "fontFamily": "Georgia,serif",
         "fontSize": "12px",
         "fontStyle": "italic",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "30px",
       }
     `);
@@ -160,7 +160,7 @@ describe('Font shorthand', () => {
         "fontFamily": "cursive",
         "fontSize": "16px",
         "fontStyle": "italic",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "2",
       }
     `);
@@ -169,7 +169,7 @@ describe('Font shorthand', () => {
       Object {
         "fontFamily": "sans-serif",
         "fontSize": "24px",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "2",
       }
     `);
@@ -200,7 +200,7 @@ describe('Font shorthand', () => {
       Object {
         "fontFamily": "arial",
         "fontSize": "18px",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "3",
       }
     `);
@@ -211,7 +211,7 @@ describe('Font shorthand', () => {
       Object {
         "fontFamily": "arial",
         "fontSize": "13px",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "2",
       }
     `);
@@ -222,7 +222,7 @@ describe('Font shorthand', () => {
       Object {
         "fontFamily": "potato-font",
         "fontSize": "13px",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "3",
       }
     `);

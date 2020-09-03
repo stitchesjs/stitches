@@ -1290,25 +1290,25 @@ describe('createCss', () => {
   test('should handle font shorthand', () => {
     const css = createCss({}, null);
     const atom = css({
-      "example-1": {
-        font: "12pt/14pt sans-serif",
+      'example-1': {
+        font: '12pt/14pt sans-serif',
       },
-      "example-2": {
-        font: "80% sans-serif",
+      'example-2': {
+        font: '80% sans-serif',
       },
-      "example-3": {
+      'example-3': {
         font: 'x-large/110% "new century schoolbook", serif',
       },
-      "example-4": {
-        font: "bold italic large Palatino, serif",
+      'example-4': {
+        font: 'bold italic large Palatino, serif',
       },
-      "example-5": {
-        font: "normal small-caps 120%/120% fantasy",
+      'example-5': {
+        font: 'normal small-caps 120%/120% fantasy',
       },
-      "example-6": {
+      'example-6': {
         font: 'condensed oblique 12pt "Helvetica Neue", serif',
       },
-      "example-7": {
+      'example-7': {
         font: 'condensed oblique 25deg 753 12pt "Helvetica Neue", serif',
       },
     }) as any;
