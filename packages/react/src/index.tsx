@@ -37,11 +37,16 @@ export type VariantASProps<Config extends TConfig, VariantsObj> = {
       };
 };
 
+type MergeElementProps<T extends React.ElementType, P extends object = {}> = Omit<
+  React.ComponentPropsWithRef<T>,
+  keyof P
+> &
+  P;
+
 /**
  * Types for a styled component which contain:
- * 1. First overload which matches when the as prop isn't passed
- * 2. Second overload which matches when the as prop *IS* passed
- * 3. The compoundVariants function typings
+ * 1. Props of a styled component
+ * 2. The compoundVariants function typings
  */
 export interface IStyledComponent<
   ComponentOrTag extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
@@ -49,27 +54,19 @@ export interface IStyledComponent<
   Config extends TConfig
 > {
   /**
-   * First overload without the "as" prop
+   * Props of a styled component
    */
-  (
-    props: React.ComponentPropsWithRef<ComponentOrTag> & {
-      as?: never;
+  <T extends React.ElementType = ComponentOrTag>(
+    // Merge native props with variant props to prevent props clashing.
+    // e.g. some HTML elements have `size` attribute. And when you combine
+    // both types (native and variant props) the common props become
+    // unusable (in typing-wise)
+    props: MergeElementProps<T, VariantASProps<Config, Variants>> & {
+      as?: T;
       css?: TCssWithBreakpoints<Config>;
       className?: string;
       children?: any;
-    } & VariantASProps<Config, Variants>
-  ): any;
-  /**
-   * Second overload * WITH * the "as" prop.
-   */
-  <AS extends keyof JSX.IntrinsicElements | React.ComponentType>(
-    props: {
-      as: AS;
-      css?: TCssWithBreakpoints<Config>;
-      className?: string;
-      children?: any;
-    } & VariantASProps<Config, Variants> &
-      React.ComponentPropsWithRef<AS>
+    }
   ): any;
   /**
    * Compound Variant typing:
