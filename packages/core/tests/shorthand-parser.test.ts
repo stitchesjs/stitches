@@ -5,6 +5,10 @@ import {
   borderColor,
   borderStyle,
   borderWidth,
+  borderBottom,
+  borderLeft,
+  borderTop,
+  borderRight,
   boxShadow,
   font,
   margin,
@@ -801,7 +805,28 @@ describe('Border shorthands', () => {
       }
     `);
   });
-
+  test('Handles 0 values for border', () => {
+    expect(borderTop(tokens, 0)).toMatchInlineSnapshot(`
+      Object {
+        "borderTopWidth": 0,
+      }
+    `);
+    expect(borderRight(tokens, 0)).toMatchInlineSnapshot(`
+      Object {
+        "borderRightWidth": 0,
+      }
+    `);
+    expect(borderBottom(tokens, 0)).toMatchInlineSnapshot(`
+      Object {
+        "borderBottomWidth": 0,
+      }
+    `);
+    expect(borderLeft(tokens, 0)).toMatchInlineSnapshot(`
+      Object {
+        "borderLeftWidth": 0,
+      }
+    `);
+  });
   test('Handles border shorthands with tokens', () => {
     expect(border(tokens, 'hairLine gray400 solid')).toMatchInlineSnapshot(`
       Object {
