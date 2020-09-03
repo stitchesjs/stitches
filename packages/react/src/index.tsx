@@ -48,21 +48,17 @@ type MergeElementProps<T extends React.ElementType, P extends object = {}> = Omi
  * 1. Props of a styled component
  * 2. The compoundVariants function typings
  */
-export interface IStyledComponent<
-  ComponentOrTag extends React.ElementType,
-  Variants,
-  Config extends TConfig
-> {
+export interface IStyledComponent<ComponentOrTag extends React.ElementType, Variants, Config extends TConfig> {
   /**
    * Props of a styled component
    */
-  <T extends React.ElementType = ComponentOrTag>(
+  <AS extends React.ElementType = ComponentOrTag>(
     // Merge native props with variant props to prevent props clashing.
     // e.g. some HTML elements have `size` attribute. And when you combine
     // both types (native and variant props) the common props become
     // unusable (in typing-wise)
-    props: MergeElementProps<T, VariantASProps<Config, Variants>> & {
-      as?: T;
+    props: MergeElementProps<AS, VariantASProps<Config, Variants>> & {
+      as?: AS;
       css?: TCssWithBreakpoints<Config>;
       className?: string;
       children?: any;
