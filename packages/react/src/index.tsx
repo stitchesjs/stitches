@@ -49,7 +49,7 @@ type MergeElementProps<T extends React.ElementType, P extends object = {}> = Omi
  * 2. The compoundVariants function typings
  */
 export interface IStyledComponent<
-  ComponentOrTag extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
+  ComponentOrTag extends React.ElementType,
   Variants,
   Config extends TConfig
 > {
