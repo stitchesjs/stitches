@@ -295,7 +295,11 @@ export const boxShadow = (tokens: any, value: string) => {
 };
 
 export const textDecoration = createPropertyParser((tokens: any, css: any, value: any) => {
-  if (matchString(value, /solid|double|dotted|dashed|wavy/)) {
+  if (matchString(value, /unset/)) {
+    css.textDecorationStyle = value;
+    css.textDecorationLine = value;
+    css.textDecorationColor = value;
+  } else if (matchString(value, /solid|double|dotted|dashed|wavy/)) {
     css.textDecorationStyle = value;
   } else if (value.match(/none|underline|overline|line-through|blink/)) {
     css.textDecorationLine = setChainedValue(css.textDecorationLine, value, ' ');

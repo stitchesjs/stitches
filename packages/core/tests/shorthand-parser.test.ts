@@ -964,6 +964,13 @@ describe('Text decoration shorthand', () => {
         "textDecorationStyle": "dotted",
       }
     `);
+    expect(textDecoration(tokens, 'unset')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "unset",
+        "textDecorationLine": "unset",
+        "textDecorationStyle": "unset",
+      }
+    `);
   });
   test('Handles text-decoration-line', () => {
     expect(textDecorationLine(tokens, 'underline overline')).toMatchInlineSnapshot(`
