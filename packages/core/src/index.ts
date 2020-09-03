@@ -250,7 +250,11 @@ const createToString = (
     const shouldInject = !preInjectedRules.size || !preInjectedRules.has(`.${className}`);
 
     if (shouldInject) {
-      sheets[this.breakpoint].insertRule(createCssRule(breakpoints, this, className));
+      const sheet = sheets[this.breakpoint];
+      sheet.insertRule(
+        createCssRule(breakpoints, this, className),
+        this.inlineMediaQueries.length ? sheet.cssRules.length : 0
+      );
     }
 
     // We are switching this atom from IAtom simpler representation
@@ -277,12 +281,14 @@ const createServerToString = (
   return function toString(this: IAtom) {
     const className = cssClassnameProvider(this);
 
+    const sheet = sheets[this.breakpoint];
     sheets[this.breakpoint].insertRule(
       createCssRule(
         breakpoints,
         this,
         className.length ? `/*X*/${className.replace(/[^-_a-zA-Z\d]/g, `\\$&`)}/*X*/` : ''
-      )
+      ),
+      this.inlineMediaQueries.length ? sheet.cssRules.length : 0
     );
 
     // We do not clean out the atom here, cause it will be reused

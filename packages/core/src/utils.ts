@@ -129,10 +129,10 @@ const enhanceSheet = (sheet: ISheet): ISheet => {
   return {
     content: sheet.content,
     cssRules: sheet.cssRules,
-    insertRule: (rule) => {
+    insertRule: (rule, index) => {
       try {
-        const newIndex = sheet.insertRule(rule, rule.startsWith('@') ? sheet.cssRules.length : 0);
-        return newIndex;
+        sheet.insertRule(rule, index);
+        return index;
       } catch {
         return -1;
       }
