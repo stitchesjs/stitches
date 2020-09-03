@@ -21,6 +21,7 @@ import {
   hashString,
   specificityProps,
 } from './utils';
+import { stringify } from 'querystring';
 
 export * from './types';
 export * from './css-types';
@@ -29,6 +30,11 @@ export * from './utils';
 export const _ATOM = ATOM;
 
 export const hotReloadingCache = new Map<string, any>();
+
+const cleanSSRClass = (s: string) => {
+  // removes the atom class marker & removes any escaping that was done on the server for the class
+  return s.replace(/(\/\*X\*\/|\\([^-_a-zA-Z\d]*))/g, '$2');
+};
 
 const createSelector = (className: string, selector: string) => {
   const cssRuleClassName = className ? `.${className}` : '';
@@ -414,7 +420,7 @@ export const createCss = <T extends TConfig>(
   for (const tag of tags) {
     ((tag.textContent || '').match(/\/\*\X\*\/.*?\/\*\X\*\//g) || []).forEach((rule) => {
       // tslint:disable-next-line
-      preInjectedRules.add('.' + rule.replace(/\/\*X\*\//g, ''));
+      preInjectedRules.add('.' + cleanSSRClass(rule));
     });
   }
 

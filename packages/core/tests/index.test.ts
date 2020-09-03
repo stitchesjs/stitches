@@ -525,6 +525,52 @@ describe('createCss', () => {
     `);
   });
 
+  test('escaping should not produce any hydration issues or double injection of styles', () => {
+    const serverCss = createCss(
+      {
+        showFriendlyClassnames: true,
+        breakpoints: {
+          '@mobile': (rule: string) => `@media(min-width:300px){${rule}}`,
+        },
+      },
+      null
+    );
+    const { styles } = serverCss.getStyles(() => {
+      serverCss({ '@mobile': { color: 'red' } }).toString();
+      return '';
+    });
+
+    const fakeEnv = createFakeEnv(styles);
+    hotReloadingCache.clear();
+    const clientCss = createCss(
+      {
+        showFriendlyClassnames: true,
+        breakpoints: {
+          '@mobile': (rule: string) => `@media(min-width:300px){${rule}}`,
+        },
+      },
+      fakeEnv as any
+    );
+
+    expect(fakeEnv.document.styleSheets.length).toBe(3);
+    expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(1);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+      `"@media (min-width:300px) {._\\\\@mobile_c_jWtRMJ {color: red;}}"`
+    );
+    clientCss({ '@mobile': { color: 'red' } }).toString();
+    clientCss({ '@mobile': { color: 'blue' } }).toString();
+    clientCss({ color: 'blue' }).toString();
+    expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(2);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+      `"@media (min-width:300px) {._@mobile_c_cxoytQ {color: blue;}}"`
+    );
+    // this rule was hydrated and cleaned from the server:
+    expect(fakeEnv.document.styleSheets[2].cssRules[1].cssText).toMatchInlineSnapshot(
+      `"@media (min-width:300px) {._\\\\@mobile_c_jWtRMJ {color: red;}}"`
+    );
+    // this new one wasn'tjkkk
+  });
+
   test('css classes should start with "_" regardless of showFriendlyClassnames', () => {
     // on the client, the insertRule api automatically escapes selectors
     // so this test case just makes sure that the breakpoint isn't going to endup
