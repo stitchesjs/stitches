@@ -4,6 +4,7 @@
   "description": "The modern CSS-in-JS library",
   "main": "dist/core.cjs.js",
   "module": "dist/core.esm.js",
+  "types": "dist/declarations/src",
   "contributors": [
     "Christian Alfoni <christianalfoni@gmail.com>",
     "Pedro Duarte <pedro@modulz.app>",
