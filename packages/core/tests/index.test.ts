@@ -489,10 +489,80 @@ describe('createCss', () => {
 
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/initial_bc_bieopk/*X*/{background-color:red;}
-      ./*X*/initial_c_dzoaVP/*X*/{color:red;}"
+      ./*X*/_initial_bc_bieopk/*X*/{background-color:red;}
+      ./*X*/_initial_c_dzoaVP/*X*/{color:red;}"
     `);
   });
+
+  test('Jest producing wrong snapshot for escaped characters', () => {
+    // the snapshot output is wrong so we're just asserting that it's going to be wrong
+    // just for the sake of the next tests
+    // https://github.com/facebook/jest/issues/5660
+    const fun = () => `\\@should-not-fail-unless-jest-issue-is-fixed`;
+    expect(fun()).toMatchInlineSnapshot(`"\\\\@should-not-fail-unless-jest-issue-is-fixed"`);
+  });
+
+  test('should escape classname for the cssRule when showFriendlyClassnames is on and is running on the server', () => {
+    const css = createCss(
+      {
+        showFriendlyClassnames: true,
+        breakpoints: {
+          '@mobile': (rule) => `@media(min-width:300px){${rule}}`,
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      const cleanClass = css({ '@mobile': { color: 'red' } }).toString();
+      // make sure that the classname from .toString() is clean and un escaped
+      expect(cleanClass).toMatchInlineSnapshot(`"_@mobile_c_jWtRMJ"`);
+      return '';
+    });
+    // make sure that the injected rules are escaped:
+    expect(styles[2]).toMatchInlineSnapshot(`
+      "/* STITCHES:@mobile */
+      @media(min-width:300px){./*X*/_\\\\@mobile_c_jWtRMJ/*X*/{color:red;}}"
+    `);
+  });
+
+  test('css classes should start with "_" regardless of showFriendlyClassnames', () => {
+    // on the client, the insertRule api automatically escapes selectors
+    // so this test case just makes sure that the breakpoint isn't going to endup
+    // escaped twice:
+    const cssWithShowFriendlyClassnames = createCss(
+      {
+        showFriendlyClassnames: true,
+      },
+      null
+    );
+    const cssWithoutShowFriendlyClassnames = createCss({}, null);
+    expect(cssWithShowFriendlyClassnames({ '@mobile': { color: 'red' } }).toString()[0]).toBe('_');
+    expect(cssWithoutShowFriendlyClassnames({ '@mobile': { color: 'red' } }).toString()[0]).toBe('_');
+    expect(cssWithShowFriendlyClassnames({ color: 'red' }).toString()[0]).toBe('_');
+    expect(cssWithoutShowFriendlyClassnames({ color: 'red' }).toString()[0]).toBe('_');
+  });
+
+  test('should not escape breakpoint rule when running on the client', () => {
+    // on the client, the insertRule api automatically escapes selectors
+    // so this test case just makes sure that the breakpoint isn't going to endup
+    // escaped twice:
+    const fakeEnv = createFakeEnv([]);
+    const css = createCss(
+      {
+        showFriendlyClassnames: true,
+        breakpoints: {
+          '@mobile': (rule) => `@media(min-width:300px){${rule}}`,
+        },
+      },
+      (fakeEnv as any) as Window
+    );
+    css({ '@mobile': { color: 'red' } }).toString();
+
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+      `"@media (min-width:300px) {._@mobile_c_jWtRMJ {color: red;}}"`
+    );
+  });
+
   test('should inject vendor prefix where explicitly stating so', () => {
     const css = createCss(
       {
@@ -508,7 +578,7 @@ describe('createCss', () => {
 
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/initial_c_dzoaVP/*X*/{-webkit-color:red;}"
+      ./*X*/_initial_c_dzoaVP/*X*/{-webkit-color:red;}"
     `);
   });
   test('should use specificity props', () => {

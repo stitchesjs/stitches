@@ -277,7 +277,13 @@ const createServerToString = (
   return function toString(this: IAtom) {
     const className = cssClassnameProvider(this);
 
-    sheets[this.breakpoint].insertRule(createCssRule(breakpoints, this, className ? `/*X*/${className}/*X*/` : ''));
+    sheets[this.breakpoint].insertRule(
+      createCssRule(
+        breakpoints,
+        this,
+        className.length ? `/*X*/${className.replace(/[^-_a-zA-Z\d]/g, `\\$&`)}/*X*/` : ''
+      )
+    );
 
     // We do not clean out the atom here, cause it will be reused
     // to inject multiple times for each request
@@ -383,7 +389,10 @@ export const createCss = <T extends TConfig>(
       }${atom.value}`
     );
     const name = showFriendlyClassnames
-      ? `${atom.breakpoint ? `${atom.breakpoint}_` : ''}${atom.cssHyphenProp
+      ? // HTML has this weird treatment to css classes. it's ok if they start with everything except digits
+        // where in CSS a class can only start with an underscore (_), a hyphen (-) or a letter (a-z)/(A-Z)
+        // so we're prefixing the breakpoint with _ incase the user sets an invalid character at the start of the string
+        `${atom.breakpoint ? `_${atom.breakpoint}_` : ''}${atom.cssHyphenProp
           .replace(/-(moz|webkit|ms)-/, '')
           .split('-')
           .map((part) => part[0])
