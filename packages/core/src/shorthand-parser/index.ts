@@ -299,13 +299,13 @@ export const textDecoration = createPropertyParser((tokens: any, css: any, value
 });
 
 export const textDecorationStyle = createPropertyParser((tokens: any, css: any, value: any) => {
-  if (value.match(/solid|double|dotted|dashed|wavy/)) {
+  if (value.match(/solid|double|dotted|dashed|wavy|unset/)) {
     css.textDecorationStyle = value;
   }
 });
 
 export const textDecorationLine = createPropertyParser((tokens: any, css: any, value: any) => {
-  if (value.match(/none|underline|overline|line-through|blink/)) {
+  if (value.match(/none|underline|overline|line-through|blink|unset/)) {
     css.textDecorationLine = setChainedValue(css.textDecorationLine, value, ' ');
   }
 });

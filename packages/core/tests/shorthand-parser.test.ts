@@ -966,6 +966,11 @@ describe('Text decoration shorthand', () => {
         "textDecorationLine": "line-through none",
       }
     `);
+    expect(textDecorationLine(tokens, 'unset')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "unset",
+      }
+    `);
   });
   test('Handles text-decoration-style', () => {
     expect(textDecorationStyle(tokens, 'wavy')).toMatchInlineSnapshot(`
@@ -991,6 +996,11 @@ describe('Text decoration shorthand', () => {
     expect(textDecorationStyle(tokens, 'double')).toMatchInlineSnapshot(`
       Object {
         "textDecorationStyle": "double",
+      }
+    `);
+    expect(textDecorationStyle(tokens, 'unset')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationStyle": "unset",
       }
     `);
   });
