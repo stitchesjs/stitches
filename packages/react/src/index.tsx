@@ -37,11 +37,11 @@ export type VariantASProps<Config extends TConfig, VariantsObj> = {
       };
 };
 
-type MergeElementProps<T extends React.ElementType, P extends object = {}> = Omit<
-  React.ComponentPropsWithRef<T>,
-  keyof P
+type MergeElementProps<As extends React.ElementType, Props extends object = {}> = Omit<
+  React.ComponentPropsWithRef<As>,
+  keyof Props
 > &
-  P;
+  Props;
 
 /**
  * Types for a styled component which contain:
@@ -52,13 +52,13 @@ export interface IStyledComponent<ComponentOrTag extends React.ElementType, Vari
   /**
    * Props of a styled component
    */
-  <AS extends React.ElementType = ComponentOrTag>(
+  <As extends React.ElementType = ComponentOrTag>(
     // Merge native props with variant props to prevent props clashing.
     // e.g. some HTML elements have `size` attribute. And when you combine
     // both types (native and variant props) the common props become
     // unusable (in typing-wise)
-    props: MergeElementProps<AS, VariantASProps<Config, Variants>> & {
-      as?: AS;
+    props: MergeElementProps<As, VariantASProps<Config, Variants>> & {
+      as?: As;
       css?: TCssWithBreakpoints<Config>;
       className?: string;
       children?: any;
