@@ -140,16 +140,16 @@ describe('styled', () => {
         .toJSON()
     ).toMatchSnapshot();
   });
-  test.only('It has default displayName when a string based element is passed', () => {
+  test('It has default displayName when a string based element is passed', () => {
     const Button = styled('button', {});
     expect(Button.displayName).toBe('styled(button)');
   });
-  test.only('It defaults to styled(component) when styling a react component that has no displayName', () => {
+  test('It defaults to styled(component) when styling a react component that has no displayName', () => {
     const Component = () => <div></div>;
     const Button = styled(Component, {});
     expect(Button.displayName).toBe('styled(Component)');
   });
-  test.only("It defaults to a displayName that uses the internal styled component's displayName if it has one", () => {
+  test("It defaults to a displayName that uses the internal styled component's displayName if it has one", () => {
     const Component = () => <div></div>;
     Component.displayName = 'MyFancyComponent';
     const Button = styled(Component, {});
