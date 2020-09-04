@@ -5,6 +5,10 @@ import {
   borderColor,
   borderStyle,
   borderWidth,
+  borderBottom,
+  borderLeft,
+  borderTop,
+  borderRight,
   boxShadow,
   font,
   margin,
@@ -137,7 +141,7 @@ describe('Font shorthand', () => {
         "fontFamily": "Georgia,serif",
         "fontSize": "12px",
         "fontStyle": "italic",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "30px",
       }
     `);
@@ -152,20 +156,20 @@ describe('Font shorthand', () => {
       `);
     // match
     expect(font(tokens, 'italic bold 16px/2 cursive')).toMatchInlineSnapshot(`
-          Object {
-            "fontFamily": "cursive",
-            "fontSize": "16px",
-            "fontStyle": "italic",
-            "fontWeight": 700,
-            "lineHeight": "2",
-          }
-      `);
+      Object {
+        "fontFamily": "cursive",
+        "fontSize": "16px",
+        "fontStyle": "italic",
+        "fontWeight": "bold",
+        "lineHeight": "2",
+      }
+    `);
     // match:
     expect(font(tokens, 'bold 24px/1 sans-serif')).toMatchInlineSnapshot(`
       Object {
         "fontFamily": "sans-serif",
         "fontSize": "24px",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "2",
       }
     `);
@@ -196,7 +200,7 @@ describe('Font shorthand', () => {
       Object {
         "fontFamily": "arial",
         "fontSize": "18px",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "3",
       }
     `);
@@ -207,7 +211,7 @@ describe('Font shorthand', () => {
       Object {
         "fontFamily": "arial",
         "fontSize": "13px",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "2",
       }
     `);
@@ -218,7 +222,7 @@ describe('Font shorthand', () => {
       Object {
         "fontFamily": "potato-font",
         "fontSize": "13px",
-        "fontWeight": 700,
+        "fontWeight": "bold",
         "lineHeight": "3",
       }
     `);
@@ -801,7 +805,28 @@ describe('Border shorthands', () => {
       }
     `);
   });
-
+  test('Handles 0 values for border', () => {
+    expect(borderTop(tokens, 0)).toMatchInlineSnapshot(`
+      Object {
+        "borderTopWidth": 0,
+      }
+    `);
+    expect(borderRight(tokens, 0)).toMatchInlineSnapshot(`
+      Object {
+        "borderRightWidth": 0,
+      }
+    `);
+    expect(borderBottom(tokens, 0)).toMatchInlineSnapshot(`
+      Object {
+        "borderBottomWidth": 0,
+      }
+    `);
+    expect(borderLeft(tokens, 0)).toMatchInlineSnapshot(`
+      Object {
+        "borderLeftWidth": 0,
+      }
+    `);
+  });
   test('Handles border shorthands with tokens', () => {
     expect(border(tokens, 'hairLine gray400 solid')).toMatchInlineSnapshot(`
       Object {

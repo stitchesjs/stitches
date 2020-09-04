@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "release": "yarn test && yarn build && lerna publish",
+    "release": "yarn build && yarn test && lerna publish",
     "build": "preconstruct build",
     "postinstall": "lerna bootstrap && preconstruct dev",
     "test:css": "yarn workspace @stitches/core run test",

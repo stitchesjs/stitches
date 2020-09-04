@@ -21,7 +21,6 @@ import {
   hashString,
   specificityProps,
 } from './utils';
-
 export * from './types';
 export * from './css-types';
 export * from './utils';
@@ -29,6 +28,14 @@ export * from './utils';
 export const _ATOM = ATOM;
 
 export const hotReloadingCache = new Map<string, any>();
+
+const cleanSSRClass = (s: string) => {
+  // removes the atom class marker & removes any escaping that was done on the server for the class
+  return s.replace(/(\/\*X\*\/|\\([^-_a-zA-Z\d]*))/g, '$2');
+};
+const createSSRCssRuleClass = (s: string) => {
+  return `/*X*/${s.replace(/[^-_a-zA-Z\d]/g, `\\$&`)}/*X*/`;
+};
 
 const createSelector = (className: string, selector: string) => {
   const cssRuleClassName = className ? `.${className}` : '';
@@ -250,7 +257,11 @@ const createToString = (
     const shouldInject = !preInjectedRules.size || !preInjectedRules.has(`.${className}`);
 
     if (shouldInject) {
-      sheets[this.breakpoint].insertRule(createCssRule(breakpoints, this, className));
+      const sheet = sheets[this.breakpoint];
+      sheet.insertRule(
+        createCssRule(breakpoints, this, className),
+        this.inlineMediaQueries.length ? sheet.cssRules.length : 0
+      );
     }
 
     // We are switching this atom from IAtom simpler representation
@@ -277,7 +288,11 @@ const createServerToString = (
   return function toString(this: IAtom) {
     const className = cssClassnameProvider(this);
 
-    sheets[this.breakpoint].insertRule(createCssRule(breakpoints, this, className ? `/*X*/${className}/*X*/` : ''));
+    const sheet = sheets[this.breakpoint];
+    sheets[this.breakpoint].insertRule(
+      createCssRule(breakpoints, this, className.length ? createSSRCssRuleClass(className) : ''),
+      this.inlineMediaQueries.length ? sheet.cssRules.length : 0
+    );
 
     // We do not clean out the atom here, cause it will be reused
     // to inject multiple times for each request
@@ -383,7 +398,10 @@ export const createCss = <T extends TConfig>(
       }${atom.value}`
     );
     const name = showFriendlyClassnames
-      ? `${atom.breakpoint ? `${atom.breakpoint}_` : ''}${atom.cssHyphenProp
+      ? // HTML has this weird treatment to css classes. it's ok if they start with everything except digits
+        // where in CSS a class can only start with an underscore (_), a hyphen (-) or a letter (a-z)/(A-Z)
+        // so we're prefixing the breakpoint with _ incase the user sets an invalid character at the start of the string
+        `${atom.breakpoint ? `_${atom.breakpoint}_` : ''}${atom.cssHyphenProp
           .replace(/-(moz|webkit|ms)-/, '')
           .split('-')
           .map((part) => part[0])
@@ -399,7 +417,7 @@ export const createCss = <T extends TConfig>(
   for (const tag of tags) {
     ((tag.textContent || '').match(/\/\*\X\*\/.*?\/\*\X\*\//g) || []).forEach((rule) => {
       // tslint:disable-next-line
-      preInjectedRules.add('.' + rule.replace(/\/\*X\*\//g, ''));
+      preInjectedRules.add('.' + cleanSSRClass(rule));
     });
   }
 
