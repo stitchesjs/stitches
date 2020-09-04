@@ -1,4 +1,4 @@
-# Contributing to Stiches
+# Contributing to Stitches
 
 Welcome and thanks for your interest! Before submitting a pull request, please take a moment to review these guidelines.
 
