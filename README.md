@@ -14,7 +14,8 @@ For full documentation, visit [stitches.dev](https://stitches.dev).
 
 ## Contributing
 
-Wanna help? Follow our [contributing guidelines](./CONTRIBUTING.md)
+
+Please follow our [contributing guidelines](./CONTRIBUTING.md).
 
 ## Authors
 
