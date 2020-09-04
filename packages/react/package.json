@@ -4,7 +4,6 @@
   "description": "The modern CSS-in-JS library",
   "main": "dist/react.cjs.js",
   "module": "dist/react.esm.js",
-  "types": "dist/declarations/src",
   "contributors": [
     "Christian Alfoni <christianalfoni@gmail.com>",
     "Pedro Duarte <pedro@modulz.app>",
