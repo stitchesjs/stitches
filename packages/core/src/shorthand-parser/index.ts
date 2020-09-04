@@ -4,6 +4,10 @@ import { tokenizeValue } from './value-tokenizer';
 const unitMatch = /^[0-9.]+[a-z|%]/;
 const easingMatch = /\(.*\)|ease|ease-in|ease-out|ease-in-out|linear|step-start|step-end/;
 
+const fontSizeMatch = /^([+-]?[0-9.]+([a-z]+|%)?|large(r)?|medium|small(er)?|x{1,3}-large|x{1,2}-small)(\/[+-]?[0-9.]+([a-z]+|%)?)?$/;
+const fontStyleMatch = /^[+-]?[0-9.]+deg$/;
+const fontWeightMatch = /^(0*[1-9][0-9]{0,2}|1000|bold(er)?|lighter)$/;
+
 const matchString = (val: number | string, regex: RegExp) => (typeof val === 'number' ? false : val.match(regex));
 const setChainedValue = (existingValue: string, value: string) => (existingValue ? `${existingValue},${value}` : value);
 
@@ -92,26 +96,77 @@ export const animation = createPropertyParser((_: any, css: any, value: any, ind
   }
 });
 
-export const font = createPropertyParser((tokens: any, css: any, value: any) => {
-  if (matchString(value, /^[0-9.]+deg/)) css.fontStyle += ` ${value}`;
-  else if (matchString(value, /\//)) {
-    const [fontSize, lineHeight] = value.split('/');
-    css.fontSize = tokens.fontSizes[fontSize] || fontSize;
-    css.lineHeight = tokens.lineHeights[lineHeight] || lineHeight;
-  } else if (
-    matchString(value, unitMatch) ||
-    matchString(value, /xx-small|x-small|small|medium|large|x-large|xx-large|xxx-large/) ||
-    tokens.fontSizes[value]
-  )
-    css.fontSize = tokens.fontSizes[value] || value;
-  else if (matchString(value, /normal|italic|oblique/)) css.fontStyle = value;
-  else if (matchString(value, /normal|bold/) || tokens.fontWeights[value])
-    css.fontWeight = value === 'normal' ? 400 : tokens.fontWeights[value] || 700;
-  else if (matchString(value, unitMatch) || tokens.fontSizes[value]) css.fontSize = tokens.fontSizes[value] || value;
-  else {
-    css.fontFamily = setChainedValue(css.fontFamily, tokens.fonts[value] || value);
+export const font = createPropertyParser(
+  (tokens: any, css: any, value: any, index: any, chain: any, chainIndex: any, chains: any) => {
+    if (chains.shouldParseFontFamily) {
+      css.fontFamily = setChainedValue(css.fontFamily, tokens.fonts[value] || value);
+    } else {
+      const lower = value.toLowerCase();
+
+      switch (true) {
+        case fontStyleMatch.test(lower):
+          css.fontStyle += ` ${value}`;
+
+          break;
+
+        case fontWeightMatch.test(lower):
+          css.fontWeight = tokens.fontWeights[value] || value;
+
+          break;
+
+        case fontSizeMatch.test(lower):
+          chains.shouldParseFontFamily = true;
+
+          const [fontSize, lineHeight] = value.split('/');
+          css.fontSize = tokens.fontSizes[fontSize] || fontSize;
+
+          if (lineHeight) {
+            css.lineHeight = tokens.lineHeights[lineHeight] || lineHeight;
+          }
+
+          break;
+
+        case lower === 'italic':
+        case lower === 'oblique':
+          css.fontStyle = value;
+
+          break;
+
+        case lower === 'small-caps':
+          css.fontVariant = value;
+
+          break;
+
+        case lower === 'condensed':
+        case lower === 'expanded':
+        case lower === 'extra-condensed':
+        case lower === 'extra-expanded':
+        case lower === 'semi-condensed':
+        case lower === 'semi-expanded':
+        case lower === 'ultra-condensed':
+        case lower === 'ultra-expanded':
+          css.fontStretch = value;
+
+          break;
+
+        case lower === 'caption':
+        case lower === 'icon':
+        case lower === 'menu':
+        case lower === 'message-box':
+        case lower === 'small-caption':
+        case lower === 'status-bar':
+          chains.shouldParseFontFamily = true;
+
+          css.fontFamily = setChainedValue(css.fontFamily, tokens.fonts[value] || value);
+
+          break;
+
+        default:
+          break;
+      }
+    }
   }
-});
+);
 
 export const transition = createPropertyParser(
   // The whole token is a transition, so need to grab it before passing in here

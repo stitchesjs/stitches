@@ -1289,10 +1289,34 @@ describe('createCss', () => {
 
   test('should handle font shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ font: '1.2em "Fira Sans", sans-serif' }) as any;
+    const atom = css({
+      'example-1': {
+        font: '12pt/14pt sans-serif',
+      },
+      'example-2': {
+        font: '80% sans-serif',
+      },
+      'example-3': {
+        font: 'x-large/110% "new century schoolbook", serif',
+      },
+      'example-4': {
+        font: 'bold italic large Palatino, serif',
+      },
+      'example-5': {
+        font: 'normal small-caps 120%/120% fantasy',
+      },
+      'example-6': {
+        font: 'condensed oblique 12pt "Helvetica Neue", serif',
+      },
+      'example-7': {
+        font: 'condensed oblique 25deg 753 12pt "Helvetica Neue", serif',
+      },
+    }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_iLETJz _GJEnH"`);
+      expect(atom.toString()).toMatchInlineSnapshot(
+        `"_evtXhu _kLdlRP _gGNwiM _jJGKqi _ddGabZ _ekzqCb _fSDMVi _ljWgwq _jfSqew _bAQCzH _efCFJv _eMIkUU _ibSieH _fxdrSf _bSnMBq _bjFYEb _iyzbHn _defIGb _dBAIKu _kFHhBs _jKRvhX _jZzWgc _bJWoRY _bByFok _jftlLF"`
+      );
 
       return '';
     });
@@ -1300,8 +1324,31 @@ describe('createCss', () => {
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_GJEnH/*X*/{font-size:1.2em;}
-      ./*X*/_iLETJz/*X*/{font-family:\\"Fira Sans\\",sans-serif;}"
+      ./*X*/_jftlLF/*X*/ example-1{font-size:12pt;}
+      ./*X*/_bByFok/*X*/ example-1{line-height:14pt;}
+      ./*X*/_bJWoRY/*X*/ example-1{font-family:sans-serif;}
+      ./*X*/_jZzWgc/*X*/ example-2{font-size:80%;}
+      ./*X*/_jKRvhX/*X*/ example-2{font-family:sans-serif;}
+      ./*X*/_kFHhBs/*X*/ example-3{font-size:x-large;}
+      ./*X*/_dBAIKu/*X*/ example-3{line-height:110%;}
+      ./*X*/_defIGb/*X*/ example-3{font-family:\\"new century schoolbook\\",serif;}
+      ./*X*/_iyzbHn/*X*/ example-4{font-weight:bold;}
+      ./*X*/_bjFYEb/*X*/ example-4{font-style:italic;}
+      ./*X*/_bSnMBq/*X*/ example-4{font-size:large;}
+      ./*X*/_fxdrSf/*X*/ example-4{font-family:Palatino,serif;}
+      ./*X*/_ibSieH/*X*/ example-5{font-variant:small-caps;}
+      ./*X*/_eMIkUU/*X*/ example-5{font-size:120%;}
+      ./*X*/_efCFJv/*X*/ example-5{line-height:120%;}
+      ./*X*/_bAQCzH/*X*/ example-5{font-family:fantasy;}
+      ./*X*/_jfSqew/*X*/ example-6{font-stretch:condensed;}
+      ./*X*/_ljWgwq/*X*/ example-6{font-style:oblique;}
+      ./*X*/_fSDMVi/*X*/ example-6{font-size:12pt;}
+      ./*X*/_ekzqCb/*X*/ example-6{font-family:\\"Helvetica Neue\\",serif;}
+      ./*X*/_ddGabZ/*X*/ example-7{font-stretch:condensed;}
+      ./*X*/_jJGKqi/*X*/ example-7{font-style:oblique 25deg;}
+      ./*X*/_gGNwiM/*X*/ example-7{font-weight:753;}
+      ./*X*/_kLdlRP/*X*/ example-7{font-size:12pt;}
+      ./*X*/_evtXhu/*X*/ example-7{font-family:\\"Helvetica Neue\\",serif;}"
     `);
   });
 
