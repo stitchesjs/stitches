@@ -1,10 +1,18 @@
-import { MAIN_BREAKPOINT_ID, TConfig, TCss, TDefaultCss, TMainBreakPoint, createCss, hashString } from '@stitches/core';
+import {
+  MAIN_BREAKPOINT_ID,
+  TConfig,
+  TCss,
+  TCssProperties,
+  TMainBreakPoint,
+  createCss,
+  hashString,
+} from '@stitches/core';
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
 
 let hasWarnedInlineStyle = false;
 
-export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
+export type TCssProp<T extends TConfig> = TCssProperties<T> | (string & {});
 
 /**
  * Extracts Variants from an object:
