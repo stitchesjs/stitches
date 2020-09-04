@@ -150,7 +150,7 @@ export const createStyled = <Config extends TConfig>(
     });
   });
 
-  let currentAs: string | undefined;
+  let currentAs: React.ElementType | string | undefined;
 
   const configBreakpoints = config.breakpoints || {};
 
@@ -258,6 +258,12 @@ export const createStyled = <Config extends TConfig>(
         className: css(stitchesComponentId, ...compositions, props.className),
       });
     });
+    StitchesComponent.displayName =
+      typeof currentAs === 'string'
+        ? `styled(${currentAs})`
+        : Component && Component.displayName
+        ? `styled(${Component.displayName})`
+        : `styled(Component\)`;
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
