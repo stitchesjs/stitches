@@ -150,7 +150,7 @@ export const createStyled = <Config extends TConfig>(
     });
   });
 
-  let currentAs: React.ElementType | string | undefined;
+  let currentAs: string | undefined;
 
   const configBreakpoints = config.breakpoints || {};
 
