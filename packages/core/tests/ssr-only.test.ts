@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { createCss, createTokens, hotReloadingCache } from '../src';
+import { createCss } from '../src';
 describe('createCss: SSR', () => {
   test.only('should regenerate styles when server side rendered', () => {
     const css = createCss({}, null);
