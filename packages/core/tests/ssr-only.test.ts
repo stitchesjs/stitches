@@ -20,25 +20,13 @@ describe('createCss: SSR', () => {
     // are actually generating styles instead of relying on the cache like on
     // the client
 
-    expect(styles).toMatchInlineSnapshot(`
-      Array [
-        "/* STITCHES:__variables__ */
-      :root{--colors-red100:red;}",
-        "/* STITCHES */
-      ./*X*/_eaTrZx/*X*/{color:var(--colors-red100);}
-      ./*X*/_dwsMDu/*X*/{animation-name:ftEIjK;}
-      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
-      ]
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
-    expect(secondStyles).toMatchInlineSnapshot(`
-      Array [
-        "/* STITCHES:__variables__ */
-      :root{--colors-red100:red;}",
-        "/* STITCHES */
-      ./*X*/_eaTrZx/*X*/{color:var(--colors-red100);}
-      ./*X*/_dwsMDu/*X*/{animation-name:ftEIjK;}
-      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
-      ]
+    expect(secondStyles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
     expect(styles).toEqual(secondStyles);
   });
