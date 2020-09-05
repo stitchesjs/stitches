@@ -168,22 +168,23 @@ export const font = createPropertyParser(
   }
 );
 
-export const transition = createPropertyParser(
+export const transition = (tokens: any, value: string) => {
   // The whole token is a transition, so need to grab it before passing in here
-  (_: any, css: any, value: any, index: any, chain: any) => {
-    if (matchString(value, unitMatch)) {
+  const tokenOrValue = tokens.transitions[value] || value;
+  return createPropertyParser((_: any, css: any, parsedValue: any, index: any, chain: any) => {
+    if (matchString(parsedValue, unitMatch)) {
       if (chain.findIndex((part: any) => part.match(unitMatch)) === index) {
-        css.transitionDuration = setChainedValue(css.transitionDuration, value);
+        css.transitionDuration = setChainedValue(css.transitionDuration, parsedValue);
       } else {
-        css.transitionDelay = setChainedValue(css.transitionDelay, value);
+        css.transitionDelay = setChainedValue(css.transitionDelay, parsedValue);
       }
-    } else if (matchString(value, easingMatch)) {
-      css.transitionTimingFunction = setChainedValue(css.transitionTimingFunction, value);
+    } else if (matchString(parsedValue, easingMatch)) {
+      css.transitionTimingFunction = setChainedValue(css.transitionTimingFunction, parsedValue);
     } else {
-      css.transitionProperty = setChainedValue(css.transitionProperty, value);
+      css.transitionProperty = setChainedValue(css.transitionProperty, parsedValue);
     }
-  }
-);
+  })(tokens, tokenOrValue);
+};
 
 export const margin = createPropertyParser((tokens: any, css: any, value: any, index: any) => {
   if (index === 0) {

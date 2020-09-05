@@ -28,6 +28,7 @@ const tokens = {
   fonts: { main: 'potato-font' },
   borderWidths: { hairLine: '1px' },
   radii: { 1: '3px' },
+  transitions: { slow: 'all 1000ms', multiGroup: 'margin-right 2s, color 1s' },
 };
 
 // works
@@ -358,10 +359,22 @@ describe('Transition shorthand', () => {
             "transitionTimingFunction": "ease-out",
           }
       `);
+    expect(transition(tokens, 'slow')).toMatchInlineSnapshot(`
+          Object {
+            "transitionDuration": "1000ms",
+            "transitionProperty": "all",
+          }
+      `);
   });
   test('Handles multi-group transition shorthand', () => {
     // works
     expect(transition(tokens, 'margin-right 2s, color 1s')).toMatchInlineSnapshot(`
+      Object {
+        "transitionDuration": "2s,1s",
+        "transitionProperty": "margin-right,color",
+      }
+    `);
+    expect(transition(tokens, 'multiGroup')).toMatchInlineSnapshot(`
       Object {
         "transitionDuration": "2s,1s",
         "transitionProperty": "margin-right,color",
