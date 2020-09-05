@@ -16,4 +16,3 @@ export const tokenTypes = [
 ] as const;
 
 export const isServer = typeof window === 'undefined';
-export const isClient = !isServer;

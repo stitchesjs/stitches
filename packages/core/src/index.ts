@@ -1,4 +1,4 @@
-import { tokenTypes, isClient } from './constants';
+import { tokenTypes, isServer } from './constants';
 import {
   ATOM,
   IAtom,
@@ -222,8 +222,8 @@ const toStringCompose = function (this: IComposedAtom) {
   // @ts-ignore
   this._className = className;
   // we only want to enable caching on the client
-  // because on the server we want to make sure that the composition it evaluated on each request
-  if (isClient) {
+  // because on the server we want to make sure that the composition is evaluated on each request
+  if (!isServer) {
     this.toString = toStringCachedAtom;
   }
   return className;
