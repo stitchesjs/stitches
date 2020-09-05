@@ -142,19 +142,6 @@ const processStyleObject = (
 const resolveBreakpointAndSelectorAndInlineMedia = (nestingPath: string[], config: TConfig<true>) =>
   nestingPath.reduce(
     (acc, breakpointOrSelector, i) => {
-      // utilityFirst selector specific resolution:
-      const isOverride = config.utilityFirst && breakpointOrSelector === 'override';
-      if (isOverride) {
-        // any level above 0
-        if (i) {
-          throw new Error(
-            `@stitches/core - You can not override at this level [${nestingPath
-              .slice(0, i - 1)
-              .join(', ')}, -> ${breakpointOrSelector}], only at the top level definition`
-          );
-        }
-        return acc;
-      }
       // breakpoints handling:
       if (breakpointOrSelector in config.breakpoints || breakpointOrSelector === MAIN_BREAKPOINT_ID) {
         if (acc.breakpoint !== MAIN_BREAKPOINT_ID) {

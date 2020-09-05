@@ -440,18 +440,6 @@ describe('createCss', () => {
     );
     expect(String(css({ color: 'red' }))).toMatchInlineSnapshot(`"foo_dzoaVP"`);
   });
-  test('should expose override with utility first', () => {
-    const css = createCss(
-      {
-        utilityFirst: true,
-        breakpoints: {
-          mobile: () => '',
-        },
-      },
-      null
-    );
-    expect(String(css({ override: { color: 'red' } }))).toMatchInlineSnapshot(`"_dzoaVP"`);
-  });
   test('should not inject existing styles', () => {
     const serverCss = createCss({}, null);
     const { styles } = serverCss.getStyles(() => {
