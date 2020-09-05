@@ -51,7 +51,7 @@ beforeEach(() => {
   hotReloadingCache.clear();
 });
 
-describe('createCss', () => {
+describe('createCss: mixed(SSR & Client)', () => {
   test('should create simple atoms', () => {
     const css = createCss({}, null);
     const atoms = css({ color: 'red' }) as any;
@@ -73,47 +73,6 @@ describe('createCss', () => {
       "/* STITCHES */
       ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
-  });
-
-  test('should regenerate styles on ssr', () => {
-    const css = createCss({ tokens: { colors: { red100: 'red' } } }, null);
-    // tslint:disable-next-line
-    console.log = jest.fn();
-    const keyframe = css.keyframes({
-      from: { backgroundColor: 'red' },
-      to: { backgroundColor: 'blue' },
-    });
-    const atoms = css({ color: 'red100', animationName: keyframe }) as any;
-    const atom = atoms.atoms[0];
-
-    const { styles } = css.getStyles(() => {
-      atoms.toString();
-    });
-
-    const { styles: secondStyles } = css.getStyles(() => {
-      atoms.toString();
-    });
-    expect(styles).toMatchInlineSnapshot(`
-      Array [
-        "/* STITCHES:__variables__ */
-      :root{--colors-red100:red;}",
-        "/* STITCHES */
-      ./*X*/_eaTrZx/*X*/{color:var(--colors-red100);}
-      ./*X*/_dwsMDu/*X*/{animation-name:ftEIjK;}
-      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
-      ]
-    `);
-    expect(secondStyles).toMatchInlineSnapshot(`
-      Array [
-        "/* STITCHES:__variables__ */
-      :root{--colors-red100:red;}",
-        "/* STITCHES */
-      ./*X*/_eaTrZx/*X*/{color:var(--colors-red100);}
-      ./*X*/_dwsMDu/*X*/{animation-name:ftEIjK;}
-      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
-      ]
-    `);
-    expect(styles).toEqual(secondStyles);
   });
 
   test('should compose atoms', () => {

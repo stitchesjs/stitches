@@ -14,3 +14,6 @@ export const tokenTypes = [
   'zIndices',
   'transitions',
 ] as const;
+
+export const isServer = typeof window === 'undefined';
+export const isClient = !isServer;
