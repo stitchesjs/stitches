@@ -1,5 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`styled Breakpoints work in variants 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._initial_c_dzoaVP {color: red;}",
+    "._breakpointOne_h_hGDbbG {height: 10px;}",
+    "._breakpointTwo_h_cvoKvR {height: 20px;}"
+  ],
+  "props": {
+    "className": "_initial_c_dzoaVP _breakpointOne_h_hGDbbG _breakpointTwo_h_cvoKvR scid-kvQUME"
+  },
+  "children": [
+    "no variant"
+  ]
+}
+`;
+
+exports[`styled Breakpoints work in variants and when a responsive variant is passed ot the element 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._initial_c_dzoaVP {color: red;}",
+    "._breakpointOne_h_ctNPWK {height: 100px;}",
+    "._breakpointTwo_h_clZhDR {height: 200px;}"
+  ],
+  "props": {
+    "className": "_breakpointOne_h_ctNPWK _breakpointTwo_h_clZhDR _initial_c_dzoaVP scid-cXpAaU"
+  },
+  "children": [
+    "with responsive variant"
+  ]
+}
+`;
+
+exports[`styled Breakpoints work in variants and when the variant is passed to the jsx element 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._initial_c_dzoaVP {color: red;}",
+    "._breakpointOne_h_inlnue {height: 1000px;}",
+    "._breakpointTwo_h_dbWWOp {height: 2000px;}"
+  ],
+  "props": {
+    "className": "_breakpointOne_h_inlnue _breakpointTwo_h_dbWWOp _initial_c_dzoaVP scid-cXpAaU"
+  },
+  "children": [
+    "with variant"
+  ]
+}
+`;
+
 exports[`styled Handles compound variant 1`] = `
 {
   "orderedAppliedStyles": [
