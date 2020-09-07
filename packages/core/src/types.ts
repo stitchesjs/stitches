@@ -226,7 +226,7 @@ export interface ITokenDefinition {
 }
 
 export interface ITokensDefinition {
-  colors?: ITokenDefinition & { modes?: { [a: string]: ITokenDefinition } };
+  colors?: ITokenDefinition;
   space?: ITokenDefinition;
   fontSizes?: ITokenDefinition;
   fonts?: ITokenDefinition;
