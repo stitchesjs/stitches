@@ -1,4 +1,4 @@
-import { tokenTypes } from './constants';
+import { tokenTypes, isServer } from './constants';
 import {
   ATOM,
   IAtom,
@@ -194,7 +194,7 @@ const hyphenAndVendorPrefixCssProp = (cssProp: string, vendorProps: any[], vendo
   return cssHyphenProp;
 };
 
-const toStringCachedAtom = function (this: IAtom) {
+const toStringCachedAtom = function (this: IAtom | IComposedAtom) {
   return this._className!;
 };
 
@@ -203,8 +203,11 @@ const toStringCompose = function (this: IComposedAtom) {
   // cache the className on this instance
   // @ts-ignore
   this._className = className;
-  // @ts-ignore
-  this.toString = toStringCachedAtom;
+  // we only want to enable caching on the client
+  // because on the server we want to make sure that the composition is evaluated on each request
+  if (!isServer) {
+    this.toString = toStringCachedAtom;
+  }
   return className;
 };
 
@@ -529,7 +532,6 @@ export const createCss = <T extends TConfig>(
     sheets.__variables__.insertRule(baseTokens);
   }
   // Keeping track of all atoms for SSR
-  const compositionsCache = new Set<IComposedAtom>();
   const atomCache = new Map<string, IAtom>();
   const keyFramesCache = new Map<string, IKeyframesAtom>();
   const themeCache = new Map<ITokensDefinition, IThemeAtom>();
@@ -556,7 +558,6 @@ export const createCss = <T extends TConfig>(
     // might cause memory leaks when doing css() inside a component
     // but we need this for now to fix SSR
     const composition = compose(...args);
-    compositionsCache.add(composition);
 
     return composition;
   }) as any;
@@ -635,10 +636,6 @@ export const createCss = <T extends TConfig>(
   };
 
   cssInstance.getStyles = (cb: any) => {
-    // Reset the composition to avoid ssr issues
-    compositionsCache.forEach((composition) => {
-      composition.toString = toStringCompose;
-    });
     // tslint:disable-next-line
     for (let sheet in sheets) {
       sheets[sheet].cssRules.length = 0;
