@@ -1589,4 +1589,37 @@ describe('createCss', () => {
       ./*X*/_bznSbm/*X*/{padding-left:var(--space-1);}"
     `);
   });
+
+  test('Nesting config breakpoints into each other uses the deepest one for the rule', () => {
+    const css = createCss(
+      {
+        breakpoints: {
+          breakpointOne: (rule) => `@media(min-width:400px){${rule}}`,
+          breakpointTwo: (rule) => `@media(min-width:800px){${rule}}`,
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      css({
+        breakpointOne: {
+          color: 'red',
+          breakpointTwo: {
+            color: 'blue',
+          },
+        },
+      }).toString();
+      return '';
+    });
+
+    expect(styles[2]).toMatchInlineSnapshot(`
+      "/* STITCHES:breakpointOne */
+      @media(min-width:400px){./*X*/_hmODGS/*X*/{color:red;}}"
+    `);
+
+    expect(styles[3]).toMatchInlineSnapshot(`
+      "/* STITCHES:breakpointTwo */
+      @media(min-width:800px){./*X*/_fQKrRn/*X*/{color:blue;}}"
+    `);
+  });
 });

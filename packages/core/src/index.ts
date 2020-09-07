@@ -144,11 +144,6 @@ const resolveBreakpointAndSelectorAndInlineMedia = (nestingPath: string[], confi
     (acc, breakpointOrSelector, i) => {
       // breakpoints handling:
       if (breakpointOrSelector in config.breakpoints || breakpointOrSelector === MAIN_BREAKPOINT_ID) {
-        if (acc.breakpoint !== MAIN_BREAKPOINT_ID) {
-          throw new Error(
-            `@stitches/core - You are nesting the breakpoint "${breakpointOrSelector}" into "${acc.breakpoint}", that makes no sense? :-)`
-          );
-        }
         acc.breakpoint = breakpointOrSelector;
         return acc;
       }
