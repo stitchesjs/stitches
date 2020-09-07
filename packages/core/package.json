@@ -1,6 +1,6 @@
 {
   "name": "@stitches/core",
-  "version": "0.0.3-canary.0",
+  "version": "0.0.2",
   "description": "The modern CSS-in-JS library",
   "main": "dist/core.cjs.js",
   "module": "dist/core.esm.js",
