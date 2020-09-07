@@ -15,9 +15,6 @@ import {
   padding,
   transition,
   textDecoration,
-  textDecorationLine,
-  textDecorationStyle,
-  textDecorationColor,
 } from '../src/shorthand-parser';
 
 const tokens = {
@@ -969,92 +966,41 @@ describe('Text decoration shorthand', () => {
         "textDecorationColor": "unset",
         "textDecorationLine": "unset",
         "textDecorationStyle": "unset",
+        "textDecorationThickness": "unset",
       }
     `);
-  });
-  test('Handles text-decoration-line', () => {
-    expect(textDecorationLine(tokens, 'underline overline')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationLine": "underline overline",
-      }
-    `);
-    expect(textDecorationLine(tokens, 'none none')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationLine": "none none",
-      }
-    `);
-    expect(textDecorationLine(tokens, 'underline')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationLine": "underline",
-      }
-    `);
-    expect(textDecorationLine(tokens, 'blink')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationLine": "blink",
-      }
-    `);
-    expect(textDecorationLine(tokens, 'line-through none')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationLine": "line-through none",
-      }
-    `);
-    expect(textDecorationLine(tokens, 'unset')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationLine": "unset",
-      }
-    `);
-  });
-  test('Handles text-decoration-style', () => {
-    expect(textDecorationStyle(tokens, 'wavy')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationStyle": "wavy",
-      }
-    `);
-    expect(textDecorationStyle(tokens, 'dashed')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationStyle": "dashed",
-      }
-    `);
-    expect(textDecorationStyle(tokens, 'dotted')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationStyle": "dotted",
-      }
-    `);
-    expect(textDecorationStyle(tokens, 'solid')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationStyle": "solid",
-      }
-    `);
-    expect(textDecorationStyle(tokens, 'double')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationStyle": "double",
-      }
-    `);
-    expect(textDecorationStyle(tokens, 'unset')).toMatchInlineSnapshot(`
-      Object {
-        "textDecorationStyle": "unset",
-      }
-    `);
-  });
-  test('Handles text-decoration-color', () => {
-    expect(textDecorationColor(tokens, 'red')).toMatchInlineSnapshot(`
+    expect(textDecoration(tokens, 'underline dotted red 50%')).toMatchInlineSnapshot(`
       Object {
         "textDecorationColor": "red",
+        "textDecorationLine": "underline",
+        "textDecorationStyle": "dotted",
+        "textDecorationThickness": "50%",
       }
     `);
-    expect(textDecorationColor(tokens, 'blue')).toMatchInlineSnapshot(`
+    expect(textDecoration(tokens, 'dotted red 4px')).toMatchInlineSnapshot(`
       Object {
-        "textDecorationColor": "blue",
+        "textDecorationColor": "red",
+        "textDecorationStyle": "dotted",
+        "textDecorationThickness": "4px",
       }
     `);
-    expect(textDecorationColor(tokens, 'gray400')).toMatchInlineSnapshot(`
+    expect(textDecoration(tokens, 'dotted red auto')).toMatchInlineSnapshot(`
       Object {
-        "textDecorationColor": "#e3e3e3",
+        "textDecorationColor": "red",
+        "textDecorationStyle": "dotted",
+        "textDecorationThickness": "auto",
       }
     `);
-    expect(textDecorationColor(tokens, 'unset')).toMatchInlineSnapshot(`
+    expect(textDecoration(tokens, 'red 4rem')).toMatchInlineSnapshot(`
       Object {
-        "textDecorationColor": "unset",
+        "textDecorationColor": "red",
+        "textDecorationThickness": "4rem",
+      }
+    `);
+    expect(textDecoration(tokens, 'red from-font')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationThickness": "from-font",
       }
     `);
   });

@@ -296,43 +296,17 @@ export const boxShadow = (tokens: any, value: string) => {
 
 export const textDecoration = createPropertyParser((tokens: any, css: any, value: any) => {
   if (matchString(value, /unset/)) {
-    // we are checking the existing value here because we want to retain the long hand property that was previously applied
-    /**
-     * For example:
-     * textDecorationColor: red
-     * textDecoration: unset
-     *
-     * The above should result in a final css rule like the following
-     * text-decoration-style: unset;
-     * text-decoration-line: unset;
-     * text-decoration-color: red
-     *
-     * This is as per the css rules
-     */
-    css.textDecorationStyle = css.textDecorationStyle || value;
-    css.textDecorationLine = css.textDecorationLine || value;
-    css.textDecorationColor = css.textDecorationColor || value;
+    css.textDecorationStyle = value;
+    css.textDecorationLine = value;
+    css.textDecorationColor = value;
+    css.textDecorationThickness = value;
   } else if (matchString(value, /solid|double|dotted|dashed|wavy/)) {
     css.textDecorationStyle = value;
-  } else if (value.match(/none|underline|overline|line-through|blink/)) {
+  } else if (matchString(value, /none|underline|overline|line-through|blink/)) {
     css.textDecorationLine = setChainedValue(css.textDecorationLine, value, ' ');
+  } else if (matchString(value, unitMatch) || matchString(value, /auto|from-font/)) {
+    css.textDecorationThickness = value;
   } else {
     css.textDecorationColor = tokens.colors[value] || value;
   }
-});
-
-export const textDecorationStyle = createPropertyParser((tokens: any, css: any, value: any) => {
-  if (matchString(value, /solid|double|dotted|dashed|wavy|unset/)) {
-    css.textDecorationStyle = value;
-  }
-});
-
-export const textDecorationLine = createPropertyParser((tokens: any, css: any, value: any) => {
-  if (matchString(value, /none|underline|overline|line-through|blink|unset/)) {
-    css.textDecorationLine = setChainedValue(css.textDecorationLine, value, ' ');
-  }
-});
-
-export const textDecorationColor = createPropertyParser((tokens: any, css: any, value: any) => {
-  css.textDecorationColor = tokens.colors[value] || value;
 });
