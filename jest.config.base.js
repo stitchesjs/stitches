@@ -19,18 +19,11 @@ function getSupportedTypescriptTarget() {
 module.exports = {
   roots: ["<rootDir>/src", "<rootDir>/tests"],
   testURL: "http://localhost",
-  preset: "ts-jest",
   testRegex: "(/tests/.*.(test|spec)).(jsx?|tsx?)$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   collectCoverageFrom: ["src/**/*.{t,j}s?(x)", "!src/**/*.d.ts"],
   collectCoverage: true,
   coveragePathIgnorePatterns: ["(tests/.*.mock).(jsx?|tsx?)$"],
   verbose: true,
-  globals: {
-    "ts-jest": {
-      tsConfig: {
-        target: getSupportedTypescriptTarget(),
-      },
-    },
-  },
+  transform: { '^.+\\.(t|j)sx?$': ['@swc-node/jest', { target: getSupportedTypescriptTarget() }] },
 };
