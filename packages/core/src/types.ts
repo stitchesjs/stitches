@@ -226,7 +226,7 @@ export interface ITokenDefinition {
 }
 
 export interface ITokensDefinition {
-  colors?: ITokenDefinition & { modes?: { [a: string]: ITokenDefinition } };
+  colors?: ITokenDefinition;
   space?: ITokenDefinition;
   fontSizes?: ITokenDefinition;
   fonts?: ITokenDefinition;
@@ -248,7 +248,6 @@ export interface IUtils {
 export type TConfig<STRICT_MODE extends boolean = false> = {
   showFriendlyClassnames?: boolean;
   prefix?: string;
-  utilityFirst?: boolean;
 } & (STRICT_MODE extends true
   ? { breakpoints: IBreakpoints; tokens: ITokensDefinition; utils: IUtils }
   : {
@@ -256,21 +255,8 @@ export type TConfig<STRICT_MODE extends boolean = false> = {
       tokens?: ITokensDefinition;
       utils?: IUtils;
     });
-export type TUtilityFirstCss<T extends TConfig> = T['breakpoints'] extends unknown
-  ? {
-      override?: TRecursiveCss<T>;
-    } & TRecursiveUtils<T>
-  : {
-      override?: TRecursiveCss<T> &
-        {
-          [S in keyof T['breakpoints']]?: TRecursiveCss<T>;
-        };
-    } & {
-      [S in keyof T['breakpoints']]?: TRecursiveUtils<T>;
-    } &
-      TRecursiveUtils<T>;
 
-export type TDefaultCss<T extends TConfig> = T['breakpoints'] extends object
+export type TCssProperties<T extends TConfig> = T['breakpoints'] extends object
   ? TRecursiveCss<T> &
       TRecursiveUtils<T> &
       {
@@ -279,15 +265,7 @@ export type TDefaultCss<T extends TConfig> = T['breakpoints'] extends object
   : TRecursiveCss<T> & TRecursiveUtils<T>;
 
 export interface TCss<T extends TConfig> {
-  (
-    ...styles: (
-      | (T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TDefaultCss<T>)
-      | string
-      | boolean
-      | null
-      | undefined
-    )[]
-  ): string;
+  (...styles: (TCssProperties<T> | string | boolean | null | undefined)[]): string;
   getStyles: (
     callback: () => any
   ) => {
@@ -295,9 +273,7 @@ export interface TCss<T extends TConfig> {
     result: any;
   };
   keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
-  global: (
-    definition: Record<string, T extends { utilityFirst: true } ? TUtilityFirstCss<T> : TDefaultCss<T>>
-  ) => string;
+  global: (definition: Record<string, TCssProperties<T>>) => string;
   theme: (
     theme: Partial<
       {

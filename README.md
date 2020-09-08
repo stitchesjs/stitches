@@ -1,5 +1,5 @@
-<a href="https://stitches-site.modulz-deploys.com" >
-  <img width="149" alt="stitches" src="https://user-images.githubusercontent.com/372831/91163750-59a72880-e6ce-11ea-80b6-131a34da954c.png">
+<a href="https://stitches.dev" >
+  <img alt="stitches" src="https://stitches.dev/social.png">
 </a>
 
 # The modern styling library.
@@ -14,7 +14,8 @@ For full documentation, visit [stitches.dev](https://stitches.dev).
 
 ## Contributing
 
-Not quite ready :)
+
+Please follow our [contributing guidelines](./CONTRIBUTING.md).
 
 ## Authors
 

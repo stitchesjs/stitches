@@ -3,31 +3,59 @@ import * as renderer from 'react-test-renderer';
 import { createStyled, _ATOM } from '../src';
 
 /**
- * TODO: improve serializer to handle multiple breakpoints, recursion and media queries
+ * resolves nested rules for media queries into CSSStyleRules
  */
+const resolveRules = (rule: CSSRule, resolvedRules: CSSStyleRule[] = []) => {
+  if (rule instanceof CSSStyleRule) {
+    resolvedRules.push(rule);
+  }
+
+  if (rule instanceof CSSMediaRule) {
+    for (let i = 0; i < rule.cssRules.length; i++) {
+      resolveRules(rule.cssRules[i], resolvedRules);
+    }
+  }
+  return resolvedRules;
+};
+
+/**
+ * TODO: improve looping
+ */
+const getMatchingRulesForClasses = (classesAsArray: string[]) => {
+  const orderedAppliedStyles: string[] = [];
+  for (let i = 0; i < window.document.styleSheets.length; i++) {
+    const sheetRules = window.document.styleSheets[i].cssRules as any;
+    for (let b = 0; b < sheetRules.length; b++) {
+      const rule = sheetRules[b];
+      const resolvedRules = resolveRules(rule);
+      resolvedRules.forEach((cssRule) => {
+        classesAsArray.forEach((atomClass: any) => {
+          if (cssRule.selectorText.includes(atomClass)) {
+            orderedAppliedStyles.push(cssRule.cssText);
+          }
+        });
+      });
+    }
+  }
+  return orderedAppliedStyles;
+};
+
 let { styled, css } = createStyled({});
 const resolveVal = (val: any) => {
   const { className, ...props } = val.props;
-  const orderedAppliedStyles: string[] = [];
+
   // inject styles by calling to string on the atom
   const injectedClasses = className.toString();
   const classesAsArray = injectedClasses.split(' ').map((atomClass: any) => `.${atomClass}`);
+  const orderedAppliedStyles = getMatchingRulesForClasses(classesAsArray);
 
-  const mainSheetRules = window.document.styleSheets[1].cssRules;
-  for (let index = 0; index < mainSheetRules.length; index++) {
-    const rule = mainSheetRules[index] as CSSStyleRule;
-    classesAsArray.forEach((atomClass: any) => {
-      if (rule!.selectorText.includes(atomClass)) {
-        orderedAppliedStyles.push(rule.cssText);
-      }
-    });
-  }
   return {
     orderedAppliedStyles,
     props: { ...props, className: injectedClasses },
     children: val.children,
   };
 };
+
 expect.addSnapshotSerializer({
   serialize(val, config, indentation, depth, refs, printer) {
     return JSON.stringify(resolveVal(val), null, 2);
@@ -154,5 +182,119 @@ describe('styled', () => {
     Component.displayName = 'MyFancyComponent';
     const Button = styled(Component, {});
     expect(Button.displayName).toBe(`styled(${Component.displayName})`);
+  });
+
+  test('Breakpoints work in variants', () => {
+    const { styled: _styled, css: _css } = createStyled({
+      showFriendlyClassnames: true,
+      breakpoints: {
+        breakpointOne: (rule) => `@media(min-width:400px){${rule}}`,
+        breakpointTwo: (rule) => `@media(min-width:800px){${rule}}`,
+      },
+    });
+    const Button = _styled('button', {
+      color: 'red',
+      breakpointOne: {
+        height: '10px',
+      },
+      breakpointTwo: {
+        height: '20px',
+      },
+      variants: {
+        size: {
+          big: {
+            breakpointOne: {
+              height: '100px',
+            },
+          },
+        },
+      },
+    });
+    expect(renderer.create(<Button>no variant</Button>).toJSON()).toMatchSnapshot();
+    (_css as any).dispose();
+  });
+
+  test('Breakpoints work in variants and when the variant is passed to the jsx element', () => {
+    const { styled: _styled, css: _css } = createStyled({
+      showFriendlyClassnames: true,
+      breakpoints: {
+        breakpointOne: (rule) => `@media(min-width:400px){${rule}}`,
+        breakpointTwo: (rule) => `@media(min-width:800px){${rule}}`,
+      },
+    });
+    const Button = _styled('button', {
+      color: 'red',
+      breakpointOne: {
+        height: '10px',
+      },
+      breakpointTwo: {
+        height: '20px',
+      },
+      variants: {
+        size: {
+          small: {
+            breakpointOne: {
+              height: '100px',
+            },
+            breakpointTwo: {
+              height: '200px',
+            },
+          },
+          big: {
+            breakpointOne: {
+              height: '1000px',
+            },
+            breakpointTwo: {
+              height: '2000px',
+            },
+          },
+        },
+      },
+    });
+    expect(renderer.create(<Button size="big">with variant</Button>).toJSON()).toMatchSnapshot();
+    (_css as any).dispose();
+  });
+
+  test('Breakpoints work in variants and when a responsive variant is passed ot the element', () => {
+    const { styled: _styled, css: _css } = createStyled({
+      showFriendlyClassnames: true,
+      breakpoints: {
+        breakpointOne: (rule) => `@media(min-width:400px){${rule}}`,
+        breakpointTwo: (rule) => `@media(min-width:800px){${rule}}`,
+      },
+    });
+    const Button = _styled('button', {
+      color: 'red',
+      breakpointOne: {
+        height: '10px',
+      },
+      breakpointTwo: {
+        height: '20px',
+      },
+      variants: {
+        size: {
+          small: {
+            breakpointOne: {
+              height: '100px',
+            },
+            breakpointTwo: {
+              height: '200px',
+            },
+          },
+          big: {
+            breakpointOne: {
+              height: '1000px',
+            },
+            breakpointTwo: {
+              height: '2000px',
+            },
+          },
+        },
+      },
+    });
+    expect(
+      renderer.create(<Button size={{ breakpointOne: 'small' }}>with responsive variant</Button>).toJSON()
+    ).toMatchSnapshot();
+    (_css as any).dispose();
   });
 });

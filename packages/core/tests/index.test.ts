@@ -51,7 +51,7 @@ beforeEach(() => {
   hotReloadingCache.clear();
 });
 
-describe('createCss', () => {
+describe('createCss: mixed(SSR & Client)', () => {
   test('should create simple atoms', () => {
     const css = createCss({}, null);
     const atoms = css({ color: 'red' }) as any;
@@ -73,47 +73,6 @@ describe('createCss', () => {
       "/* STITCHES */
       ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
-  });
-
-  test('should regenerate styles on ssr', () => {
-    const css = createCss({ tokens: { colors: { red100: 'red' } } }, null);
-    // tslint:disable-next-line
-    console.log = jest.fn();
-    const keyframe = css.keyframes({
-      from: { backgroundColor: 'red' },
-      to: { backgroundColor: 'blue' },
-    });
-    const atoms = css({ color: 'red100', animationName: keyframe }) as any;
-    const atom = atoms.atoms[0];
-
-    const { styles } = css.getStyles(() => {
-      atoms.toString();
-    });
-
-    const { styles: secondStyles } = css.getStyles(() => {
-      atoms.toString();
-    });
-    expect(styles).toMatchInlineSnapshot(`
-      Array [
-        "/* STITCHES:__variables__ */
-      :root{--colors-red100:red;}",
-        "/* STITCHES */
-      ./*X*/_eaTrZx/*X*/{color:var(--colors-red100);}
-      ./*X*/_dwsMDu/*X*/{animation-name:ftEIjK;}
-      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
-      ]
-    `);
-    expect(secondStyles).toMatchInlineSnapshot(`
-      Array [
-        "/* STITCHES:__variables__ */
-      :root{--colors-red100:red;}",
-        "/* STITCHES */
-      ./*X*/_eaTrZx/*X*/{color:var(--colors-red100);}
-      ./*X*/_dwsMDu/*X*/{animation-name:ftEIjK;}
-      @keyframes ftEIjK {from {background-color: red;}to {background-color: blue;}",
-      ]
-    `);
-    expect(styles).toEqual(secondStyles);
   });
 
   test('should compose atoms', () => {
@@ -439,18 +398,6 @@ describe('createCss', () => {
       null
     );
     expect(String(css({ color: 'red' }))).toMatchInlineSnapshot(`"foo_dzoaVP"`);
-  });
-  test('should expose override with utility first', () => {
-    const css = createCss(
-      {
-        utilityFirst: true,
-        breakpoints: {
-          mobile: () => '',
-        },
-      },
-      null
-    );
-    expect(String(css({ override: { color: 'red' } }))).toMatchInlineSnapshot(`"_dzoaVP"`);
   });
   test('should not inject existing styles', () => {
     const serverCss = createCss({}, null);
@@ -1599,6 +1546,39 @@ describe('createCss', () => {
       ./*X*/_bOBbkJ/*X*/{padding-right:var(--space-1);}
       ./*X*/_gvDHwS/*X*/{padding-bottom:var(--space-1);}
       ./*X*/_bznSbm/*X*/{padding-left:var(--space-1);}"
+    `);
+  });
+
+  test('Nesting config breakpoints into each other uses the deepest one for the rule', () => {
+    const css = createCss(
+      {
+        breakpoints: {
+          breakpointOne: (rule) => `@media(min-width:400px){${rule}}`,
+          breakpointTwo: (rule) => `@media(min-width:800px){${rule}}`,
+        },
+      },
+      null
+    );
+    const { styles } = css.getStyles(() => {
+      css({
+        breakpointOne: {
+          color: 'red',
+          breakpointTwo: {
+            color: 'blue',
+          },
+        },
+      }).toString();
+      return '';
+    });
+
+    expect(styles[2]).toMatchInlineSnapshot(`
+      "/* STITCHES:breakpointOne */
+      @media(min-width:400px){./*X*/_hmODGS/*X*/{color:red;}}"
+    `);
+
+    expect(styles[3]).toMatchInlineSnapshot(`
+      "/* STITCHES:breakpointTwo */
+      @media(min-width:800px){./*X*/_fQKrRn/*X*/{color:blue;}}"
     `);
   });
 });

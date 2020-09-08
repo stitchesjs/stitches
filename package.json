@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "release": "yarn build && yarn test && lerna publish",
+    "release:canary": "yarn build && yarn test && lerna publish --dist-tag canary",
     "build": "preconstruct build",
     "postinstall": "lerna bootstrap && preconstruct dev",
     "test:css": "yarn workspace @stitches/core run test",
