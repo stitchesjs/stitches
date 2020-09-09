@@ -12,7 +12,6 @@ export interface IAtom {
   value: string;
   selector: string;
   breakpoint: string;
-  _isGlobal?: boolean;
   inlineMediaQueries: string[];
   _className?: string;
   toString: (this: IAtom) => string;

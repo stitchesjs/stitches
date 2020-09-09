@@ -68,8 +68,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
@@ -79,6 +79,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, null);
     expect(css({ color: 'red', backgroundColor: 'blue' }).toString()).toMatchInlineSnapshot(`"_YfjLh _dzoaVP"`);
   });
+
   test('should create tokens', () => {
     const tokens = createTokens({
       colors: {
@@ -99,12 +100,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_oNvzU/*X*/{color:var(--colors-RED);}"
     `);
   });
+
   test('should remove special characters from tokens', () => {
     const tokens = createTokens({
       colors: {
@@ -121,12 +123,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gYxOEA/*X*/{color:var(--colors-red);}"
     `);
   });
+
   test('should remove special characters from tokens in themes', () => {
     const css = createCss(
       {
@@ -153,13 +156,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[0]).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES:__variables__ */
       .theme-0{--colors-red:red;}
       :root{--colors-red:tomato;}"
     `);
-    expect(styles[1]).toMatchInlineSnapshot(`
+    expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gYxOEA/*X*/{color:var(--colors-red);}"
     `);
@@ -197,8 +200,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_esPDyf/*X*/{margin-left:calc(var(--space-1) * -1);}
       ./*X*/_dWjnQp/*X*/{letter-spacing:calc(var(--letterSpacings-1) * -1);}
@@ -239,16 +242,17 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(4);
+    expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:tablet */
       @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
     `);
-    expect(styles[2].trim()).toMatchInlineSnapshot(`
+    expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:tablet */
       @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
     `);
   });
+
   test('should handle pseudos', () => {
     const css = createCss({}, null);
     const atom = (css({ '&:hover': { color: 'red' } }) as any).atoms[0];
@@ -262,12 +266,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_hXHHYX/*X*/./*X*/_hXHHYX/*X*/:hover{color:red;}"
     `);
   });
+
   test('should handle specificity', () => {
     const css = createCss({}, null);
     expect(
@@ -282,6 +287,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       ).toString()
     ).toMatchInlineSnapshot(`"_loCpsM _dzoaVP"`);
   });
+
   test('should insert rule only once', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
@@ -290,8 +296,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
@@ -321,11 +327,12 @@ describe('createCss: mixed(SSR & Client)', () => {
       (fakeEnv as unknown) as Window
     );
     String(css({ tablet: { color: 'red' } }));
-    expect(fakeEnv.document.styleSheets.length).toBe(3);
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets.length).toBe(4);
+    expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
       `"@media (min-width: 700px) {._hsxGAz {color: red;}}"`
     );
   });
+
   test('should allow utils', () => {
     const css = createCss(
       {
@@ -365,8 +372,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_fTflhf/*X*/./*X*/_fTflhf/*X*/:hover{color:green;}
       ./*X*/_hoOxCl/*X*/./*X*/_hoOxCl/*X*/./*X*/_hoOxCl/*X*/./*X*/_hoOxCl/*X*/:focus{color:green;}"
@@ -381,15 +388,18 @@ describe('createCss: mixed(SSR & Client)', () => {
       String(css(undefined, null, false, '', { color: 'red' }))
     ).toMatchInlineSnapshot(`"_dzoaVP"`);
   });
+
   test('should allow empty compose call', () => {
     const css = createCss({}, null);
     expect(String(css())).toBe('');
   });
+
   test('should allow conditional compositions', () => {
     const css = createCss({}, null);
     expect(String(css((false as any) && { color: 'red' }))).toBe('');
     expect(String(css(true && { color: 'red' }))).toMatchInlineSnapshot(`"_dzoaVP"`);
   });
+
   test('should allow prefixes', () => {
     const css = createCss(
       {
@@ -399,6 +409,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     );
     expect(String(css({ color: 'red' }))).toMatchInlineSnapshot(`"foo_dzoaVP"`);
   });
+
   test('should not inject existing styles', () => {
     const serverCss = createCss({}, null);
     const { styles } = serverCss.getStyles(() => {
@@ -410,17 +421,18 @@ describe('createCss: mixed(SSR & Client)', () => {
     hotReloadingCache.clear();
     const clientCss = createCss({}, fakeEnv as any);
     // Lets see what is already put in
-    expect(fakeEnv.document.styleSheets.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(1);
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(`"._dzoaVP {color: red;}"`);
+    expect(fakeEnv.document.styleSheets.length).toBe(3);
+    expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(1);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._dzoaVP {color: red;}"`);
     // On the client it will rerun the logic (React hydrate etc.)
     clientCss({ color: 'red' }).toString();
     // Then we add something new
     clientCss({ color: 'blue' }).toString();
-    // Lets see if it continues on the correct sequence
-    expect(fakeEnv.document.styleSheets[1].cssRules.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(`"._iTsdWi {color: blue;}"`);
+    // // Lets see if it continues on the correct sequence
+    expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(2);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._iTsdWi {color: blue;}"`);
   });
+
   test('should be able to show friendly classnames', () => {
     const css = createCss(
       {
@@ -434,7 +446,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1]).toMatchInlineSnapshot(`
+    expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_initial_bc_bieopk/*X*/{background-color:red;}
       ./*X*/_initial_c_dzoaVP/*X*/{color:red;}"
@@ -466,7 +478,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
     // make sure that the injected rules are escaped:
-    expect(styles[2]).toMatchInlineSnapshot(`
+    expect(styles[3]).toMatchInlineSnapshot(`
       "/* STITCHES:@mobile */
       @media(min-width:300px){./*X*/_\\\\@mobile_c_jWtRMJ/*X*/{color:red;}}"
     `);
@@ -499,20 +511,20 @@ describe('createCss: mixed(SSR & Client)', () => {
       fakeEnv as any
     );
 
-    expect(fakeEnv.document.styleSheets.length).toBe(3);
-    expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(1);
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets.length).toBe(4);
+    expect(fakeEnv.document.styleSheets[3].cssRules.length).toBe(1);
+    expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
       `"@media (min-width:300px) {._\\\\@mobile_c_jWtRMJ {color: red;}}"`
     );
     clientCss({ '@mobile': { color: 'red' } }).toString();
     clientCss({ '@mobile': { color: 'blue' } }).toString();
     clientCss({ color: 'blue' }).toString();
-    expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets[3].cssRules.length).toBe(2);
+    expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
       `"@media (min-width:300px) {._@mobile_c_cxoytQ {color: blue;}}"`
     );
     // this rule was hydrated and cleaned from the server:
-    expect(fakeEnv.document.styleSheets[2].cssRules[1].cssText).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets[3].cssRules[1].cssText).toMatchInlineSnapshot(
       `"@media (min-width:300px) {._\\\\@mobile_c_jWtRMJ {color: red;}}"`
     );
     // this new one wasn'tjkkk
@@ -551,7 +563,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     );
     css({ '@mobile': { color: 'red' } }).toString();
 
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
       `"@media (min-width:300px) {._@mobile_c_jWtRMJ {color: red;}}"`
     );
   });
@@ -569,15 +581,17 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1]).toMatchInlineSnapshot(`
+    expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_initial_c_dzoaVP/*X*/{-webkit-color:red;}"
     `);
   });
+
   test('should use specificity props', () => {
     const css = createCss({}, null);
     expect(String(css({ margin: '1px' }))).toMatchInlineSnapshot(`"_hXUSyk _bZYdQM _cTIqvn _kYSwIs"`);
   });
+
   test('should map CSS Properties to Tokens', () => {
     const css = createCss(
       {
@@ -603,6 +617,8 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles).toMatchInlineSnapshot(`
       Array [
+        "/* STITCHES:__global__ */
+      ",
         "/* STITCHES:__variables__ */
       :root{--space-1:5px;--space-2:10px;--colors-red500:tomato;--colors-blue500:royalblue;}",
         "/* STITCHES */
@@ -612,6 +628,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       ]
     `);
   });
+
   test('should have declarative api', () => {
     const css = createCss({}, null);
     expect(
@@ -621,12 +638,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       }).toString()
     ).toMatchInlineSnapshot(`"_YfjLh _dzoaVP"`);
   });
+
   test('should handle declarative pseudo selector', () => {
     const fakeEnv = createFakeEnv([], []);
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css({ '&:hover': { color: 'red' } }).toString();
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
       `"._hXHHYX._hXHHYX:hover {color: red;}"`
     );
   });
@@ -636,7 +654,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css({ '&.red': { color: 'red' } }).toString();
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(`"._jOAMao.red {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._jOAMao.red {color: red;}"`);
   });
 
   test('Should handle nesting', () => {
@@ -654,11 +672,11 @@ describe('createCss: mixed(SSR & Client)', () => {
         },
       },
     }).toString();
-    expect(fakeEnv.document.styleSheets[1].cssRules[0].cssText).toMatchInlineSnapshot(`"._kTghTu .red {color: red;}"`);
-    expect(fakeEnv.document.styleSheets[1].cssRules[1].cssText).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._kTghTu .red {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[2].cssRules[1].cssText).toMatchInlineSnapshot(
       `"._dhhpqe .red .potato {background-color: red;}"`
     );
-    expect(fakeEnv.document.styleSheets[1].cssRules[2].cssText).toMatchInlineSnapshot(
+    expect(fakeEnv.document.styleSheets[2].cssRules[2].cssText).toMatchInlineSnapshot(
       `"._lftrMy._lftrMy .red .potato:hover {background-color: green;}"`
     );
   });
@@ -678,12 +696,13 @@ describe('createCss: mixed(SSR & Client)', () => {
     });
     // @ts-ignore
 
-    expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(4);
+    expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:mobile */
       @media(min-width:700px){./*X*/_fOxLwJ/*X*/{color:red;}}"
     `);
   });
+
   test('should handle pseudo in screen selector', () => {
     const css = createCss(
       {
@@ -699,12 +718,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(4);
+    expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:mobile */
       @media(min-width:700px){./*X*/_coXxUV/*X*/./*X*/_coXxUV/*X*/:hover{color:red;}}"
     `);
   });
+
   test('should insert themes', () => {
     const css = createCss(
       {
@@ -731,17 +751,18 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[0]).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES:__variables__ */
       .theme-0{--colors-primary:blue;}
       :root{--colors-primary:tomato;}"
     `);
-    expect(styles[1]).toMatchInlineSnapshot(`
+    expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gknCVb/*X*/{color:var(--colors-primary);}"
     `);
   });
+
   test('should allow nested pseudo', () => {
     const css = createCss({}, null);
     const atom = css({ '&:hover': { '&:disabled': { color: 'red' } } }) as any;
@@ -752,12 +773,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_bePnWZ/*X*/./*X*/_bePnWZ/*X*/:hover:disabled{color:red;}"
     `);
   });
+
   test('should handle border specificity', () => {
     const css = createCss({}, null);
     const atom = css({ border: '1px solid red' }) as any;
@@ -770,8 +792,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gQTUlh/*X*/{border-top-width:1px;}
       ./*X*/_fZMTUa/*X*/{border-right-width:1px;}
@@ -787,6 +809,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       ./*X*/_kiEsJg/*X*/{border-left-color:red;}"
     `);
   });
+
   test('should handle border shorthand with tokens', () => {
     const css = createCss(
       {
@@ -808,8 +831,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gQTUlh/*X*/{border-top-width:1px;}
       ./*X*/_fZMTUa/*X*/{border-right-width:1px;}
@@ -825,6 +848,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       ./*X*/_fSAUek/*X*/{border-left-color:var(--colors-primary);}"
     `);
   });
+
   test('should handle box shadow with tokens', () => {
     const css = createCss(
       {
@@ -844,12 +868,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1]).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jUMaLt/*X*/{box-shadow:1px 1px 1px var(--colors-primary);}"
     `);
   });
+
   test('should be able to compose themes', () => {
     const css = createCss(
       {
@@ -876,8 +901,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gknCVb/*X*/{color:var(--colors-primary);}"
     `);
@@ -934,6 +959,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"bivLJn"`);
   });
+
   test('should allow keyframes atom to be used as a direct object value', () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
@@ -946,13 +972,14 @@ describe('createCss: mixed(SSR & Client)', () => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_gDSlRG"`);
       return '';
     });
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gDSlRG/*X*/{animation-name:dmyJCr;}
       @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
     `);
   });
+
   test('should inject styles for animations into sheet', () => {
     const css = createCss({}, null);
     const keyFrame = css.keyframes({
@@ -964,13 +991,14 @@ describe('createCss: mixed(SSR & Client)', () => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_gDSlRG"`);
       return '';
     });
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gDSlRG/*X*/{animation-name:dmyJCr;}
       @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
     `);
   });
+
   test('should handle margin shorthand', () => {
     const css = createCss({}, null);
     const atom = css({ margin: '1px 5px' }) as any;
@@ -981,8 +1009,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_kYSwIs/*X*/{margin-top:1px;}
       ./*X*/_gtgAOv/*X*/{margin-right:5px;}
@@ -1001,8 +1029,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jCapLb/*X*/{padding-top:1px;}
       ./*X*/_iuxmks/*X*/{padding-right:5px;}
@@ -1018,8 +1046,8 @@ describe('createCss: mixed(SSR & Client)', () => {
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_iLiCSc _kROsiw _gQTUlh"`);
     });
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gQTUlh/*X*/{border-top-width:1px;}
       ./*X*/_kROsiw/*X*/{border-top-style:solid;}
@@ -1048,15 +1076,16 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
+    expect(styles.length).toBe(3);
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_fZMTUa/*X*/{border-right-width:1px;}
       ./*X*/_bGUEHj/*X*/{border-right-style:solid;}
       ./*X*/_fWbRyP/*X*/{border-right-color:red;}"
     `);
   });
+
   test('should handle border-bottom shorthand', () => {
     const css = createCss({}, null);
     const atom = css({ borderBottom: '1px solid red' }) as any;
@@ -1064,13 +1093,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_lgRogE _hiyybE _ckYojt"`);
     });
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_ckYojt/*X*/{border-bottom-width:1px;}
       ./*X*/_hiyybE/*X*/{border-bottom-style:solid;}
       ./*X*/_lgRogE/*X*/{border-bottom-color:red;}"
     `);
   });
+
   test('should allow inline media queries', () => {
     const css = createCss({}, null);
     const atom = css({ '@media (hover:hover)': { color: 'red' } }) as any;
@@ -1078,8 +1108,8 @@ describe('createCss: mixed(SSR & Client)', () => {
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_eIxNzM"`);
     });
-    expect(styles.length).toBe(2);
-    expect(styles[1]).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       @media (hover:hover){./*X*/_eIxNzM/*X*/{color:red;}}"
     `);
@@ -1097,7 +1127,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const { styles } = css.getStyles(() => {
       atom.toString();
     });
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
        div:hover ./*X*/_fSJjjq/*X*/{color:red;}"
     `);
@@ -1111,14 +1141,15 @@ describe('createCss: mixed(SSR & Client)', () => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_kiEsJg _lyLPc _gonZcB"`);
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gonZcB/*X*/{border-left-width:1px;}
       ./*X*/_lyLPc/*X*/{border-left-style:solid;}
       ./*X*/_kiEsJg/*X*/{border-left-color:red;}"
     `);
   });
+
   test('should handle border-radius shorthand', () => {
     const css = createCss({}, null);
     const atom = css({ borderRadius: '5px' }) as any;
@@ -1128,8 +1159,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jVkGRV/*X*/{border-bottom-left-radius:5px;}
       ./*X*/_jwQcuF/*X*/{border-top-left-radius:5px;}
@@ -1148,8 +1179,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_iLiCSc/*X*/{border-top-color:red;}
       ./*X*/_fWbRyP/*X*/{border-right-color:red;}
@@ -1168,8 +1199,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_kROsiw/*X*/{border-top-style:solid;}
       ./*X*/_bGUEHj/*X*/{border-right-style:solid;}
@@ -1188,8 +1219,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jfTurm/*X*/{border-top-width:2px;}
       ./*X*/_hYbLMd/*X*/{border-right-width:2px;}
@@ -1208,8 +1239,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_bieopk/*X*/{background-color:red;}"
     `);
@@ -1225,8 +1256,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_guSrvz/*X*/{transition-property:margin-right;}
       ./*X*/_dSdgMo/*X*/{transition-duration:2s;}
@@ -1253,8 +1284,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_cyLCEu/*X*/{text-decoration-line:underline overline;}
       ./*X*/_fkaZbo/*X*/{text-decoration-color:var(--colors-primary);}
@@ -1296,8 +1327,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(2);
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jftlLF/*X*/ example-1{font-size:12pt;}
       ./*X*/_bByFok/*X*/ example-1{line-height:14pt;}
@@ -1344,6 +1375,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
     );
   });
+
   test('should inject inline media queries after normal rules', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
@@ -1360,7 +1392,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jasyBb/*X*/{color:green;}
       ./*X*/_fODNDI/*X*/{background-color:yello;}
@@ -1392,7 +1424,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[2].trim()).toMatchInlineSnapshot(`
+    expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:large */
       @media(min-width: 300px){./*X*/_kBCYwd/*X*/{color:blue;}}
       @media(min-width: 300px){@supports (color: red){./*X*/_kVIRdt/*X*/{color:red;}}}"
@@ -1431,7 +1463,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_hXHHYX/*X*/./*X*/_hXHHYX/*X*/:hover{color:red;}
       ./*X*/_dOwmSv/*X*/./*X*/_dOwmSv/*X*/./*X*/_dOwmSv/*X*/:active{color:red;}
@@ -1452,7 +1484,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
@@ -1462,6 +1494,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
       css.global({
+        body: { margin: '0px' },
         '@media (min-width: 700px)': {
           div: {
             color: 'red',
@@ -1473,8 +1506,12 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
-      "/* STITCHES */
+    expect(styles[0].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:__global__ */
+       body{margin-left:0px;}
+       body{margin-bottom:0px;}
+       body{margin-right:0px;}
+       body{margin-top:0px;}
       @media (min-width: 700px){ div{color:red;}}
       @media (min-width: 700px){ div{background-color:white;}}
       @media (min-width: 700px){ div{padding-left:10px;}}"
@@ -1494,8 +1531,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
-      "/* STITCHES */
+    expect(styles[0].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES:__global__ */
       @media (min-width: 700px){ div{color:red;}}"
     `);
   });
@@ -1520,13 +1557,14 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dbWduw/*X*/{line-height:1;}
       ./*X*/_hXUSyk/*X*/{margin-left:1px;}
       ./*X*/_clXqwH/*X*/{font-size:1px;}"
     `);
   });
+
   test('Should append px to numbers in shorthands', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
@@ -1536,7 +1574,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_kYSwIs/*X*/{margin-top:1px;}
       ./*X*/_cTIqvn/*X*/{margin-right:1px;}
@@ -1564,7 +1602,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[1].trim()).toMatchInlineSnapshot(`
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_kYSwIs/*X*/{margin-top:1px;}
       ./*X*/_cTIqvn/*X*/{margin-right:1px;}
@@ -1599,12 +1637,12 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles[2]).toMatchInlineSnapshot(`
+    expect(styles[3]).toMatchInlineSnapshot(`
       "/* STITCHES:breakpointOne */
       @media(min-width:400px){./*X*/_hmODGS/*X*/{color:red;}}"
     `);
 
-    expect(styles[3]).toMatchInlineSnapshot(`
+    expect(styles[4]).toMatchInlineSnapshot(`
       "/* STITCHES:breakpointTwo */
       @media(min-width:800px){./*X*/_fQKrRn/*X*/{color:blue;}}"
     `);

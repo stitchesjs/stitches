@@ -228,7 +228,9 @@ const createCssRule = (breakpoints: IBreakpoints, atom: IAtom, className: string
     cssRule = `${createSelector(className, atom.selector)}{${atom.cssHyphenProp}:${atom.value};}`;
   }
 
-  return atom.breakpoint !== MAIN_BREAKPOINT_ID ? breakpoints[atom.breakpoint](cssRule) : cssRule;
+  return atom.breakpoint === MAIN_BREAKPOINT_ID || atom.breakpoint === '__global__'
+    ? cssRule
+    : breakpoints[atom.breakpoint](cssRule);
 };
 
 const createToString = (
@@ -271,7 +273,8 @@ const createServerToString = (
   cssClassnameProvider: (atom: IAtom) => string
 ) => {
   return function toString(this: IAtom) {
-    const className = cssClassnameProvider(this);
+    const isGlobal = this.breakpoint === '__global__';
+    const className = isGlobal ? '' : cssClassnameProvider(this);
 
     const sheet = sheets[this.breakpoint];
     sheets[this.breakpoint].insertRule(
@@ -374,9 +377,6 @@ export const createCss = <T extends TConfig>(
   // pre-compute class prefix
   const classPrefix = prefix ? (showFriendlyClassnames ? `${prefix}_` : prefix) : '';
   const cssClassnameProvider = (atom: IAtom): string => {
-    if (atom._isGlobal) {
-      return '';
-    }
     const hash = hashString(
       `${atom.breakpoint || ''}${atom.cssHyphenProp.replace(/-(moz|webkit|ms)-/, '')}${atom.selector || ''}${
         atom.inlineMediaQueries?.join('') || ''
@@ -422,12 +422,12 @@ export const createCss = <T extends TConfig>(
     };
   };
   const createAtom = (
+    cache: Map<string, IAtom>,
     cssProp: string,
     value: any,
     breakpoint = MAIN_BREAKPOINT_ID,
     selectorString: string,
-    inlineMediaQueries: string[],
-    isGlobal?: boolean
+    inlineMediaQueries: string[]
   ) => {
     // generate id used for specificity check
     // two atoms are considered equal in regard to there specificity if the id is equal
@@ -439,7 +439,7 @@ export const createCss = <T extends TConfig>(
     const uid = id + value;
 
     // If this was created before return the cached atom
-    if (atomCache.has(uid)) {
+    if (cache.has(uid)) {
       // check if this has a breakpoint based media query
       if (inlineMediasAsString.match(/@media.*\((min|max)?.*(width|height).*\)/)) {
         // tslint:disable-next-line
@@ -447,7 +447,7 @@ export const createCss = <T extends TConfig>(
           `The property "${cssProp}" with media query ${inlineMediasAsString} can cause a specificity issue. You should create a breakpoint`
         );
       }
-      return atomCache.get(uid)!;
+      return cache.get(uid)!;
     }
 
     // prepare the cssProp
@@ -479,11 +479,10 @@ export const createCss = <T extends TConfig>(
       breakpoint,
       toString,
       [ATOM]: true,
-      _isGlobal: isGlobal,
     };
 
     // Cache it
-    atomCache.set(uid, atom);
+    cache.set(uid, atom);
 
     return atom;
   };
@@ -533,8 +532,10 @@ export const createCss = <T extends TConfig>(
   }
   // Keeping track of all atoms for SSR
   const atomCache = new Map<string, IAtom>();
+  const globalCache = new Map<string, IAtom>();
   const keyFramesCache = new Map<string, IKeyframesAtom>();
   const themeCache = new Map<ITokensDefinition, IThemeAtom>();
+
   const cssInstance = ((...definitions: any[]) => {
     const args: any[] = [];
     let index = 0;
@@ -551,7 +552,7 @@ export const createCss = <T extends TConfig>(
             path,
             config
           );
-          args[index++] = createAtom(prop, value, breakpoint, nestingPath, inlineMediaQueries);
+          args[index++] = createAtom(atomCache, prop, value, breakpoint, nestingPath, inlineMediaQueries);
         });
       }
     }
@@ -592,11 +593,11 @@ export const createCss = <T extends TConfig>(
     processStyleObject(definitions, config, (prop, value, path) => {
       const { nestingPath, breakpoint, inlineMediaQueries } = resolveBreakpointAndSelectorAndInlineMedia(path, config);
       if (!nestingPath.length) {
-        throw new Error('Global styles need to be nested');
+        throw new Error('Global styles need to be nested within a selector');
       }
       // Create a global atom and call toString() on it directly to inject it
       // as global atoms don't generate class names of their own
-      createAtom(prop, value, breakpoint, nestingPath, inlineMediaQueries, true).toString();
+      createAtom(globalCache, prop, value, '__global__', nestingPath, inlineMediaQueries).toString();
     });
   };
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
@@ -638,7 +639,9 @@ export const createCss = <T extends TConfig>(
   cssInstance.getStyles = (cb: any) => {
     // tslint:disable-next-line
     for (let sheet in sheets) {
-      sheets[sheet].cssRules.length = 0;
+      if (sheet !== '__global__') {
+        sheets[sheet].cssRules.length = 0;
+      }
     }
     if (baseTokens) {
       sheets.__variables__.insertRule(baseTokens);
@@ -651,6 +654,10 @@ export const createCss = <T extends TConfig>(
     themeToString = createThemeToString(classPrefix, sheets.__variables__);
 
     atomCache.forEach((atom) => {
+      atom.toString = toString;
+    });
+
+    globalCache.forEach((atom) => {
       atom.toString = toString;
     });
 
@@ -671,6 +678,7 @@ export const createCss = <T extends TConfig>(
           return aggr.concat(`/* STITCHES:${key} */\n${sheets[key].cssRules.join('\n')}`);
         },
         [
+          `/* STITCHES:__global__ */\n${sheets.__global__.cssRules.join('\n')}`,
           `/* STITCHES:__variables__ */\n${sheets.__variables__.cssRules.join('\n')}`,
           `/* STITCHES */\n${sheets[MAIN_BREAKPOINT_ID].cssRules.join('\n')}`,
         ]
