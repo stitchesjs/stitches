@@ -657,10 +657,6 @@ export const createCss = <T extends TConfig>(
       atom.toString = toString;
     });
 
-    globalCache.forEach((atom) => {
-      atom.toString = toString;
-    });
-
     keyFramesCache.forEach((atom) => {
       atom.toString = keyframesToString;
     });
