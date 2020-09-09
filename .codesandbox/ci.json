@@ -1,0 +1,4 @@
+{
+  "packages": ["packages/core", "packages/react"],
+  "sandboxes": ["react-new"]
+}
