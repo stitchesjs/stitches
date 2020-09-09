@@ -3,7 +3,7 @@
  */
 import { createCss } from '../src';
 describe('createCss: SSR', () => {
-  test.only('should regenerate styles when server side rendered', () => {
+  test('should regenerate styles when server side rendered', () => {
     const css = createCss({}, null);
     const atoms = css({ color: 'red' }) as any;
     // this acts like a request on the server
@@ -29,5 +29,25 @@ describe('createCss: SSR', () => {
       ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
     expect(styles).toEqual(secondStyles);
+  });
+});
+
+// https://github.com/modulz/stitches/issues/200
+describe('#200 - getStyles() does not close keyframes block', () => {
+  test('should using keyframes with getStyles() emit valid css', () => {
+    const css = createCss({}, null);
+    const atoms = css.keyframes({
+      '0%': { transform: 'scale(1)' },
+      '100%': { transform: 'scale(1.5)' },
+    }) as any;
+    // this acts like a request on the server
+    const { styles } = css.getStyles(() => {
+      atoms.toString();
+    });
+
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      @keyframes hIMhiY {0% {transform: scale(1);}100% {transform: scale(1.5);}}"
+    `);
   });
 });
