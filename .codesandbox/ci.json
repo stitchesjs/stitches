@@ -1,4 +1,4 @@
 {
   "packages": ["packages/core", "packages/react"],
-  "sandboxes": ["react-new"]
+  "sandboxes": ["react-new", "stitches-ci-nextjs-2uwsq"]
 }
