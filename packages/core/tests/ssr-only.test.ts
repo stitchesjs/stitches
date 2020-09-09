@@ -34,7 +34,7 @@ describe('createCss: SSR', () => {
 
 // https://github.com/modulz/stitches/issues/200
 describe('#200 - getStyles() does not close keyframes block', () => {
-  test('should using keyframes with getStyles() emit valid css', () => {
+  test('should closes keyframe block on getStyles()', () => {
     const css = createCss({}, null);
     const atoms = css.keyframes({
       '0%': { transform: 'scale(1)' },
