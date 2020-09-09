@@ -1,4 +1,4 @@
 {
   "packages": ["packages/core", "packages/react"],
-  "sandboxes": ["stitches-ci-nextjs-2uwsq", "stitches-ci-cra-ts-7njqn"]
+  "sandboxes": ["2uwsq", "7njqn"]
 }
