@@ -891,7 +891,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toBe(
-      '@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}'
+      '@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}}'
     );
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"dmyJCr"`);
@@ -915,7 +915,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toBe(
-      '@keyframes bFeLcH {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}'
+      '@keyframes bFeLcH {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}}'
     );
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"bFeLcH"`);
@@ -929,7 +929,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
-      `"@keyframes bivLJn {0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;}100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}"`
+      `"@keyframes bivLJn {0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;}100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}}"`
     );
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"bivLJn"`);
