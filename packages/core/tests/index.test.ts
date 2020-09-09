@@ -891,10 +891,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toBe(
-      '@keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}}'
+      '@keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}'
     );
 
-    expect(keyFrame.toString()).toMatchInlineSnapshot(`"dmyJCr"`);
+    expect(keyFrame.toString()).toMatchInlineSnapshot(`"keYeiS"`);
   });
 
   test('should support utils inside keyframes', () => {
@@ -915,10 +915,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toBe(
-      '@keyframes bFeLcH {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}}'
+      '@keyframes jxILgC {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}}'
     );
 
-    expect(keyFrame.toString()).toMatchInlineSnapshot(`"bFeLcH"`);
+    expect(keyFrame.toString()).toMatchInlineSnapshot(`"jxILgC"`);
   });
 
   test('should support specificity props inside keyframes', () => {
@@ -929,10 +929,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
-      `"@keyframes bivLJn {0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;}100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}}"`
+      `"@keyframes hOBUdi {0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;}100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}}"`
     );
 
-    expect(keyFrame.toString()).toMatchInlineSnapshot(`"bivLJn"`);
+    expect(keyFrame.toString()).toMatchInlineSnapshot(`"hOBUdi"`);
   });
   test('should allow keyframes atom to be used as a direct object value', () => {
     const css = createCss({}, null);
@@ -943,14 +943,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     let atom: any;
     const { styles } = css.getStyles(() => {
       expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
-      expect(atom.toString()).toMatchInlineSnapshot(`"_gDSlRG"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_iGYUIN"`);
       return '';
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gDSlRG/*X*/{animation-name:dmyJCr;}
-      @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
+      ./*X*/_iGYUIN/*X*/{animation-name:keYeiS;}
+      @keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"
     `);
   });
   test('should inject styles for animations into sheet', () => {
@@ -961,14 +961,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
     const atom = css({ animationName: keyFrame }) as any;
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_gDSlRG"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_iGYUIN"`);
       return '';
     });
     expect(styles.length).toBe(2);
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gDSlRG/*X*/{animation-name:dmyJCr;}
-      @keyframes dmyJCr {0% {background-color: red;}100% {background-color: green;}"
+      ./*X*/_iGYUIN/*X*/{animation-name:keYeiS;}
+      @keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"
     `);
   });
   test('should handle margin shorthand', () => {
