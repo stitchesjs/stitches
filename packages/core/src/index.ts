@@ -343,12 +343,19 @@ const composeIntoMap = (map: Map<string, IAtom>, atoms: (IAtom | IComposedAtom)[
   }
 };
 
+declare global {
+  interface Window {
+    Deno: any;
+  }
+}
+
 export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
 export const createCss = <T extends TConfig>(
   _config: T,
-  env: Window | null = typeof window === 'undefined' ? null : window
+  // Check against Deno env explicitly #199
+  env: Window | null = typeof window === 'undefined' || window?.Deno ? null : window
 ): TCss<T> => {
   // pre-checked config to avoid checking these all the time
   // tslint:disable-next-line
