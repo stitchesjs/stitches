@@ -1518,6 +1518,90 @@ describe('createCss: mixed(SSR & Client)', () => {
     `);
   });
 
+  test('should handle breakpoints in global styles', () => {
+    const css = createCss(
+      {
+        breakpoints: {
+          bp1: (rule) => `@media (min-width: 480px){ ${rule} }`,
+        },
+      },
+      null
+    );
+
+    // this acts like a request on the server
+    const { styles } = css.getStyles(() => {
+      css.global({
+        body: {
+          backgroundColor: 'red',
+          bp1: {
+            backgroundColor: 'blue',
+          },
+        },
+      });
+    });
+
+    expect(styles[0]).toMatchInlineSnapshot(`
+      "/* STITCHES:__global__ */
+       body{background-color:red;}
+      @media (min-width: 480px){ body{background-color:blue;}}"
+    `);
+  });
+
+  test('should handle inline media queries in global styles', () => {
+    const css = createCss({}, null);
+
+    // this acts like a request on the server
+    const { styles } = css.getStyles(() => {
+      css.global({
+        body: {
+          backgroundColor: 'red',
+          '@media (min-width: 666px)': {
+            backgroundColor: 'black',
+          },
+        },
+      });
+    });
+
+    expect(styles[0]).toMatchInlineSnapshot(`
+      "/* STITCHES:__global__ */
+       body{background-color:red;}
+      @media (min-width: 666px){ body{background-color:black;}}"
+    `);
+  });
+
+  test('should handle breakpoints and inline media queries in global styles in order', () => {
+    const css = createCss(
+      {
+        breakpoints: {
+          bp1: (rule) => `@media (min-width: 480px){ ${rule} }`,
+        },
+      },
+      null
+    );
+
+    // this acts like a request on the server
+    const { styles } = css.getStyles(() => {
+      css.global({
+        body: {
+          backgroundColor: 'red',
+          bp1: {
+            backgroundColor: 'blue',
+          },
+          '@media (min-width: 666px)': {
+            backgroundColor: 'black',
+          },
+        },
+      });
+    });
+
+    expect(styles[0]).toMatchInlineSnapshot(`
+      "/* STITCHES:__global__ */
+       body{background-color:red;}
+      @media (min-width: 480px){ body{background-color:blue;}}"
+      @media (min-width: 666px){ body{background-color:black;}}"
+    `);
+  });
+
   test('should not re-inject global styles', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
@@ -1537,7 +1621,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     `);
   });
 
-  test('should error when styles are passed without a selector', () => {
+  test('should error when global styles are passed without a selector', () => {
     const css = createCss({}, null);
     expect(() => {
       css.global({
