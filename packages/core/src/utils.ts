@@ -15,6 +15,7 @@ import {
   margin,
   padding,
   transition,
+  textDecoration,
 } from './shorthand-parser';
 import { IBreakpoints, ICssPropToToken, ISheet } from './types';
 
@@ -238,6 +239,7 @@ export const specificityProps: {
   borderLeft,
   borderTop,
   borderRight,
+  textDecoration,
 };
 
 export const getVendorPrefixAndProps = (env: any) => {

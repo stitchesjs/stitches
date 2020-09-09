@@ -14,6 +14,7 @@ import {
   margin,
   padding,
   transition,
+  textDecoration,
 } from '../src/shorthand-parser';
 
 const tokens = {
@@ -916,6 +917,90 @@ describe('Box-shadow', () => {
     expect(boxShadow(tokens, '60px -16px gray400, 60px -16px gray400')).toMatchInlineSnapshot(`
       Object {
         "boxShadow": "60px -16px #e3e3e3, 60px -16px #e3e3e3",
+      }
+    `);
+  });
+});
+
+describe('Text decoration shorthand', () => {
+  test('Handles text-decoration shorthand', () => {
+    expect(textDecoration(tokens, 'none')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "none",
+      }
+    `);
+    expect(textDecoration(tokens, 'none none')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationLine": "none none",
+      }
+    `);
+    expect(textDecoration(tokens, 'red wavy')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationStyle": "wavy",
+      }
+    `);
+    expect(textDecoration(tokens, 'underline overline red wavy')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationLine": "underline overline",
+        "textDecorationStyle": "wavy",
+      }
+    `);
+    expect(textDecoration(tokens, 'gray400 overline wavy')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "#e3e3e3",
+        "textDecorationLine": "overline",
+        "textDecorationStyle": "wavy",
+      }
+    `);
+    expect(textDecoration(tokens, 'underline dotted red')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationLine": "underline",
+        "textDecorationStyle": "dotted",
+      }
+    `);
+    expect(textDecoration(tokens, 'unset')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "unset",
+        "textDecorationLine": "unset",
+        "textDecorationStyle": "unset",
+        "textDecorationThickness": "unset",
+      }
+    `);
+    expect(textDecoration(tokens, 'underline dotted red 50%')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationLine": "underline",
+        "textDecorationStyle": "dotted",
+        "textDecorationThickness": "50%",
+      }
+    `);
+    expect(textDecoration(tokens, 'dotted red 4px')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationStyle": "dotted",
+        "textDecorationThickness": "4px",
+      }
+    `);
+    expect(textDecoration(tokens, 'dotted red auto')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationStyle": "dotted",
+        "textDecorationThickness": "auto",
+      }
+    `);
+    expect(textDecoration(tokens, 'red 4rem')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationThickness": "4rem",
+      }
+    `);
+    expect(textDecoration(tokens, 'red from-font')).toMatchInlineSnapshot(`
+      Object {
+        "textDecorationColor": "red",
+        "textDecorationThickness": "from-font",
       }
     `);
   });

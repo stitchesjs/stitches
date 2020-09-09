@@ -9,7 +9,8 @@ const fontStyleMatch = /^[+-]?[0-9.]+deg$/;
 const fontWeightMatch = /^(0*[1-9][0-9]{0,2}|1000|bold(er)?|lighter)$/;
 
 const matchString = (val: number | string, regex: RegExp) => (typeof val === 'number' ? false : val.match(regex));
-const setChainedValue = (existingValue: string, value: string) => (existingValue ? `${existingValue},${value}` : value);
+const setChainedValue = (existingValue: string, value: string, separator = ',') =>
+  existingValue ? `${existingValue}${separator}${value}` : value;
 
 const emptyTokens: any = {};
 tokenTypes.forEach((type) => (emptyTokens[type] = {}));
@@ -347,3 +348,20 @@ export const boxShadow = (tokens: any, value: string) => {
       .join(', '),
   };
 };
+
+export const textDecoration = createPropertyParser((tokens: any, css: any, value: any) => {
+  if (matchString(value, /unset/)) {
+    css.textDecorationStyle = value;
+    css.textDecorationLine = value;
+    css.textDecorationColor = value;
+    css.textDecorationThickness = value;
+  } else if (matchString(value, /solid|double|dotted|dashed|wavy/)) {
+    css.textDecorationStyle = value;
+  } else if (matchString(value, /none|underline|overline|line-through|blink/)) {
+    css.textDecorationLine = setChainedValue(css.textDecorationLine, value, ' ');
+  } else if (matchString(value, unitMatch) || matchString(value, /auto|from-font/)) {
+    css.textDecorationThickness = value;
+  } else {
+    css.textDecorationColor = tokens.colors[value] || value;
+  }
+});

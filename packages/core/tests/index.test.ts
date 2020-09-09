@@ -1234,6 +1234,34 @@ describe('createCss: mixed(SSR & Client)', () => {
     `);
   });
 
+  test('should handle text-decoration shorthand', () => {
+    const css = createCss(
+      {
+        tokens: {
+          colors: {
+            primary: '#222',
+          },
+        },
+      },
+      null
+    );
+    const atom = css({ textDecoration: 'underline overline primary 2px' }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_AphwG _fkaZbo _cyLCEu"`);
+
+      return '';
+    });
+
+    expect(styles.length).toBe(2);
+    expect(styles[1].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_cyLCEu/*X*/{text-decoration-line:underline overline;}
+      ./*X*/_fkaZbo/*X*/{text-decoration-color:var(--colors-primary);}
+      ./*X*/_AphwG/*X*/{text-decoration-thickness:2px;}"
+    `);
+  });
+
   test('should handle font shorthand', () => {
     const css = createCss({}, null);
     const atom = css({
