@@ -3,7 +3,7 @@
  */
 import { createCss } from '../src';
 describe('createCss: SSR', () => {
-  test.only('should regenerate styles when server side rendered', () => {
+  test('should regenerate styles when server side rendered', () => {
     const css = createCss({}, null);
     const atoms = css({ color: 'red' }) as any;
     // this acts like a request on the server

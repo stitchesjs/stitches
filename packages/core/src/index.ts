@@ -623,6 +623,7 @@ export const createCss = <T extends TConfig>(
         tokens
       )};`;
     });
+    cssRule += `}`;
 
     const hash = hashString(cssRule);
     // Check if an atom exist with the same hash and return it if so
