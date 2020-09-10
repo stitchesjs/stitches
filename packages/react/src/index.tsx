@@ -80,6 +80,12 @@ export interface IStyledComponent<ComponentOrTag extends React.ElementType, Vari
     possibleValues: TCssWithBreakpoints<Config>
   ) => IStyledComponent<ComponentOrTag, Variants, Config>;
   /**
+   * witComponent typing:
+   */
+  withComponent: <NewComponentOrTag extends React.ElementType>(
+    component: NewComponentOrTag
+  ) => IStyledComponent<NewComponentOrTag, Variants, Config>;
+  /**
    * Default props typing:
    */
   defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
@@ -290,6 +296,16 @@ export const createStyled = <Config extends TConfig>(
       evaluatedCompoundVariants.set(compundVariantsObject, evaluatedStyles);
       return StitchesComponent;
     };
+
+    (StitchesComponent as any).withComponent = (Element: React.ElementType) => {
+      if (typeof Element === 'string') {
+        currentAs = Element;
+        return styledInstance(baseAndVariantStyles);
+      }
+      currentAs = undefined;
+      return styledInstance(baseAndVariantStyles, Element);
+    };
+
     return StitchesComponent;
   };
 

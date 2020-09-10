@@ -168,6 +168,17 @@ describe('styled', () => {
         .toJSON()
     ).toMatchSnapshot();
   });
+  test('Handles withComponent', () => {
+    const Base = styled('div', {});
+    const baseJson = renderer.create(<Base />).toJSON();
+
+    const Replaced = Base.withComponent('span');
+    const replacedJson = renderer.create(<Replaced />).toJSON();
+
+    expect(Base.displayName).toBe('styled(div)');
+    expect(Replaced.displayName).toBe('styled(span)');
+    expect({ ...replacedJson, type: null }).toEqual({ ...baseJson, type: null });
+  });
   test('It has default displayName when a string based element is passed', () => {
     const Button = styled('button', {});
     expect(Button.displayName).toBe('styled(button)');
