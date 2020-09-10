@@ -157,7 +157,7 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
 
     return {
       tags,
-      sheets: ['__variables__', MAIN_BREAKPOINT_ID]
+      sheets: ['__variables__', '__keyframes__', MAIN_BREAKPOINT_ID]
         .concat(Object.keys(screens))
         .reduce<{ [key: string]: ISheet }>((aggr, key, index) => {
           let style = existingStyles[index];
@@ -175,7 +175,7 @@ export const createSheets = (env: any, screens: IBreakpoints = {}) => {
 
   return {
     tags,
-    sheets: ['__variables__', MAIN_BREAKPOINT_ID]
+    sheets: ['__variables__', '__keyframes__', MAIN_BREAKPOINT_ID]
       .concat(Object.keys(screens))
       .reduce<{ [key: string]: ISheet }>((aggr, key) => {
         aggr[key] = enhanceSheet({
