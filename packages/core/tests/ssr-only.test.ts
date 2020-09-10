@@ -3,6 +3,48 @@
  */
 import { createCss } from '../src';
 describe('createCss: SSR', () => {
+  test('should regenerate global styles on the server', () => {
+    const css = createCss(
+      {
+        breakpoints: {
+          bp1: (rule) => `@media (min-width: 480px) { ${rule} }`,
+        },
+      },
+      null
+    );
+
+    const global = css.global({
+      body: {
+        backgroundColor: 'red',
+        margin: '0',
+      },
+      bp1: {
+        body: {
+          backgroundColor: 'blue',
+        },
+      },
+    });
+
+    // this acts like a request on the server
+    const { styles } = css.getStyles(() => {
+      global();
+    });
+
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+       body{background-color:red;}
+       body{margin-top:0;}
+       body{margin-right:0;}
+       body{margin-bottom:0;}
+       body{margin-left:0;}"
+    `);
+
+    expect(styles[2]).toMatchInlineSnapshot(`
+      "/* STITCHES:bp1 */
+      @media (min-width: 480px) {  body{background-color:blue;} }"
+    `);
+  });
+
   test('should regenerate styles when server side rendered', () => {
     const css = createCss({}, null);
     const atoms = css({ color: 'red' }) as any;

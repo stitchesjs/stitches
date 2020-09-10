@@ -596,16 +596,19 @@ export const createCss = <T extends TConfig>(
   };
 
   cssInstance.global = (definitions: any) => {
+    const atoms: IAtom[] = [];
     processStyleObject(definitions, config, (prop, value, path) => {
       const { nestingPath, breakpoint, inlineMediaQueries } = resolveBreakpointAndSelectorAndInlineMedia(path, config);
       if (!nestingPath.length) {
-        throw new Error('Global styles need to be nested');
+        throw new Error('Global styles need to be nested within a selector');
       }
       // Create a global atom and call toString() on it directly to inject it
       // as global atoms don't generate class names of their own
-      createAtom(prop, value, breakpoint, nestingPath, inlineMediaQueries, true).toString();
+      atoms.push(createAtom(prop, value, breakpoint, nestingPath, inlineMediaQueries, true));
     });
+    return () => compose(...atoms).toString();
   };
+
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
     let cssRule = '';
     let currentTimeProp = '';

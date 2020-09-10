@@ -1458,26 +1458,29 @@ describe('createCss: mixed(SSR & Client)', () => {
     `);
   });
 
-  test('should handle global styles', () => {
+  test.only('should handle global styles', () => {
     const css = createCss({}, null);
-    const { styles } = css.getStyles(() => {
-      css.global({
-        '@media (min-width: 700px)': {
-          div: {
-            color: 'red',
-            backgroundColor: 'white',
-            paddingLeft: '10px',
-          },
+
+    const global = css.global({
+      '@media (min-width: 700px)': {
+        div: {
+          color: 'red',
+          backgroundColor: 'white',
+          paddingLeft: '10px',
         },
-      });
+      },
+    });
+
+    const { styles } = css.getStyles(() => {
+      global();
       return '';
     });
 
     expect(styles[1].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      @media (min-width: 700px){ div{color:red;}}
+      @media (min-width: 700px){ div{padding-left:10px;}}
       @media (min-width: 700px){ div{background-color:white;}}
-      @media (min-width: 700px){ div{padding-left:10px;}}"
+      @media (min-width: 700px){ div{color:red;}}"
     `);
   });
 
