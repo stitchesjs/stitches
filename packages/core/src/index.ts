@@ -109,7 +109,7 @@ const processStyleObject = (
     /** Utils: */
     if (isUtilProp) {
       // Resolve the util from the util function:
-      const resolvedUtils = config.utils[key](config)(val);
+      const resolvedUtils = config.utils[key](val, config);
       processStyleObject(resolvedUtils, config, valueMiddleware, [...currentNestingPath], false);
       continue;
     }

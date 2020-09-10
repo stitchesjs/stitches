@@ -338,7 +338,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss(
       {
         utils: {
-          marginX: () => (value: string) => ({
+          marginX: (value: string, config) => ({
             marginLeft: value,
             marginRight: value,
           }),
@@ -353,7 +353,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss(
       {
         utils: {
-          hover: () => (value) => ({
+          hover: (value, config) => ({
             ':hover': value,
             ':focus': value,
           }),
@@ -926,7 +926,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss(
       {
         utils: {
-          mx: (config) => (value) => ({
+          mx: (value, config) => ({
             marginLeft: value,
             marginRight: value,
           }),
