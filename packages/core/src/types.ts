@@ -273,7 +273,7 @@ export interface TCss<T extends TConfig> {
     result: any;
   };
   keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
-  global: (definition: Record<string, TCssProperties<T>>) => string;
+  global: (definition: Record<string, TCssProperties<T>>) => () => string;
   theme: (
     theme: Partial<
       {
