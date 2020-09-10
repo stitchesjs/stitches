@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 import { createCss } from '../src';
+
 describe('createCss: SSR', () => {
   test('should regenerate global styles on the server', () => {
     const css = createCss(
@@ -30,7 +31,7 @@ describe('createCss: SSR', () => {
       global();
     });
 
-    expect(styles[1]).toMatchInlineSnapshot(`
+    expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
        body{background-color:red;}
        body{margin-top:0;}
@@ -39,7 +40,7 @@ describe('createCss: SSR', () => {
        body{margin-left:0;}"
     `);
 
-    expect(styles[2]).toMatchInlineSnapshot(`
+    expect(styles[3]).toMatchInlineSnapshot(`
       "/* STITCHES:bp1 */
       @media (min-width: 480px) {  body{background-color:blue;} }"
     `);
@@ -62,14 +63,39 @@ describe('createCss: SSR', () => {
     // are actually generating styles instead of relying on the cache like on
     // the client
 
-    expect(styles[1]).toMatchInlineSnapshot(`
+    expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
-    expect(secondStyles[1]).toMatchInlineSnapshot(`
+    expect(secondStyles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dzoaVP/*X*/{color:red;}"
     `);
     expect(styles).toEqual(secondStyles);
+  });
+
+  test('should regenerate keyframes on the server', () => {
+    const css = createCss({}, null);
+
+    const fade = css.keyframes({
+      '0%': { opacity: '0' },
+      '100%': { opacity: '1' },
+    });
+    const atoms = css({ animation: `${fade} 333ms` }) as any;
+    // this acts like a request on the server
+    const { styles } = css.getStyles(() => {
+      atoms.toString();
+    });
+
+    expect(styles[1]).toMatchInlineSnapshot(`
+      "/* STITCHES:__keyframes__ */
+      @keyframes dhzmon {0% {opacity: 0;}100% {opacity: 1;}}"
+		`);
+
+    expect(styles[2]).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_ddbraT/*X*/{animation-name:dhzmon;}
+      ./*X*/_dxvqmd/*X*/{animation-duration:333ms;}"
+    `);
   });
 });

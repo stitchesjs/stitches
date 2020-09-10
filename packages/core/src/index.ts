@@ -418,7 +418,7 @@ export const createCss = <T extends TConfig>(
     : createServerToString(sheets, config.breakpoints, cssClassnameProvider);
 
   let themeToString = createThemeToString(classPrefix, sheets.__variables__);
-  let keyframesToString = createKeyframesToString(sheets[MAIN_BREAKPOINT_ID]);
+  let keyframesToString = createKeyframesToString(sheets.__keyframes__);
   const compose = (...atoms: IAtom[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
@@ -649,7 +649,9 @@ export const createCss = <T extends TConfig>(
   cssInstance.getStyles = (cb: any) => {
     // tslint:disable-next-line
     for (let sheet in sheets) {
-      sheets[sheet].cssRules.length = 0;
+      if (sheet !== '__keyframes__') {
+        sheets[sheet].cssRules.length = 0;
+      }
     }
     if (baseTokens) {
       sheets.__variables__.insertRule(baseTokens);
@@ -683,6 +685,7 @@ export const createCss = <T extends TConfig>(
         },
         [
           `/* STITCHES:__variables__ */\n${sheets.__variables__.cssRules.join('\n')}`,
+          `/* STITCHES:__keyframes__ */\n${sheets.__keyframes__.cssRules.join('\n')}`,
           `/* STITCHES */\n${sheets[MAIN_BREAKPOINT_ID].cssRules.join('\n')}`,
         ]
       ),
