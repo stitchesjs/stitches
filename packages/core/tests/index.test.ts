@@ -1610,3 +1610,49 @@ describe('createCss: mixed(SSR & Client)', () => {
     `);
   });
 });
+
+describe('strict mode', () => {
+  test('should not yield type errors when raw values are used even though tokens are defined', () => {
+    const css = createCss({
+      tokens: {
+        colors: {
+          primary: 'red',
+        },
+      },
+    });
+    css({
+      color: 'lime',
+    });
+  });
+
+  test('should yield type errors in strict mode when tokens are defined but raw values are used', () => {
+    const css = createCss({
+      strict: true,
+      tokens: {
+        colors: {
+          primary: 'red',
+        },
+      },
+    });
+    css({
+      color: 'primary',
+      // @ts-expect-error
+      backgroundColor: 'red',
+    });
+  });
+
+  test('should not yield type errors when a token category is missing', () => {
+    const css = createCss({
+      strict: true,
+      tokens: {
+        radii: {
+          tiny: '3px',
+        },
+      },
+    });
+    css({
+      borderRadius: 'tiny',
+      color: 'lime', // allowed since no color tokens are defined
+    });
+  });
+});
