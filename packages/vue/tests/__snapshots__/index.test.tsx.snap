@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`styled - vue Breakpoints work in variants 1`] = `"<button class=\\"_initial_c_dzoaVP _breakpointOne_h_hGDbbG _breakpointTwo_h_cvoKvR scid-kvQUME\\">no variant</button>"`;
+
+exports[`styled - vue Breakpoints work in variants and when a responsive variant is passed ot the element 1`] = `"<button class=\\"_breakpointOne_h_ctNPWK _breakpointTwo_h_clZhDR _initial_c_dzoaVP scid-cXpAaU\\">with responsive variant</button>"`;
+
+exports[`styled - vue Breakpoints work in variants and when the variant is passed to the jsx element 1`] = `"<button class=\\"_breakpointOne_h_inlnue _breakpointTwo_h_dbWWOp _initial_c_dzoaVP scid-cXpAaU\\">with variant</button>"`;
+
+exports[`styled - vue Handles compound variant 1`] = `"<button class=\\"_dtTvho _bieopk scid-URbJg\\">not compound</button><button class=\\"_hEGtPv _bSHlld scid-URbJg\\">compound</button>"`;
+
+exports[`styled - vue Handles css prop 1`] = `"<button class=\\"_dzoaVP _iBRUhC scid-dmZJpl\\">Hello World</button>"`;
+
+exports[`styled - vue Renders basic component 1`] = `"<h1 class=\\"_dzoaVP scid-gmqXFB\\">Hello World!</h1>"`;
+
+exports[`styled - vue renders component with variant 1`] = `"<div><button class=\\"_iBRUhC scid-gFxMiu\\">Hello World!</button><button class=\\"_bieopk scid-gFxMiu\\">Hello World!</button><button class=\\"_YfjLh scid-gFxMiu\\">Hello World!</button></div>"`;

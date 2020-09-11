@@ -1,7 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.build.json",
   "include": ["src/**/*", "tests/**/*"],
   "compilerOptions": {
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "preserveSymlinks": true,
+    "skipLibCheck": true
   }
 }

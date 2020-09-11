@@ -8,7 +8,8 @@
     "postinstall": "lerna bootstrap && preconstruct dev",
     "test:css": "yarn workspace @stitches/core run test",
     "test:react": "yarn workspace @stitches/react run test",
-    "test": "yarn test:css && yarn test:react"
+    "test:vue": "yarn workspace @stitches/vue run test",
+    "test": "yarn test:css && yarn test:react && yarn test:vue"
   },
   "workspaces": [
     "packages/*"

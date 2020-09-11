@@ -1,12 +1,24 @@
-import { MAIN_BREAKPOINT_ID, createCss, hashString, TConfig, TCss, TDefaultCss, TMainBreakPoint } from '@stitches/core';
+import {
+  MAIN_BREAKPOINT_ID,
+  createCss,
+  hashString,
+  TConfig,
+  TCss,
+  TCssProperties,
+  TMainBreakPoint,
+} from '@stitches/core';
 import * as Vue from 'vue';
 
-import type { IntrinsicElements } from '../types/jsx';
-
-export { _ATOM } from '@stitches/core';
+import type { IntrinsicElements } from './types';
 
 export type VueProps = Vue.AllowedComponentProps & Vue.VNodeProps & Vue.ComponentCustomProps;
-export type TCssProp<T extends TConfig> = TDefaultCss<T> | (string & {});
+export type TCssProp<T extends TConfig> = TCssProperties<T> | (string & {});
+export type Component<Props> = Vue.ComponentPublicInstance<Props> &
+  Vue.FunctionalComponent<Props> & {
+    props: Vue.VNodeProps;
+    [key: string]: any;
+  } & JSX.Element &
+  Vue.VNodeChild;
 
 /**
  * Extracts Variants from an object:
@@ -47,7 +59,7 @@ export type VariantASProps<Config extends TConfig, VariantsObj> = {
  * 3. The compoundVariants function typings
  */
 export interface IStyledComponent<
-  ComponentOrTag extends keyof IntrinsicElements | Vue.Component,
+  ComponentOrTag extends keyof IntrinsicElements | Component<any>,
   Variants,
   Config extends TConfig
 > {
@@ -65,14 +77,13 @@ export interface IStyledComponent<
   /**
    * Second overload * WITH * the "as" prop.
    */
-  <AS extends keyof IntrinsicElements | Vue.Component>(
-    props: {
+  <AS extends keyof IntrinsicElements | Component<any>>(
+    props: VueProps & {
       as: AS;
       css?: TCssWithBreakpoints<Config>;
       className?: string;
       children?: any;
-    } & VariantASProps<Config, Variants> &
-      VueProps
+    } & VariantASProps<Config, Variants>
   ): any;
   /**
    * Compound Variant typing:
@@ -81,10 +92,6 @@ export interface IStyledComponent<
     compoundVariants: VariantASProps<Config, Variants>,
     possibleValues: TCssWithBreakpoints<Config>
   ) => IStyledComponent<ComponentOrTag, Variants, Config>;
-  /**
-   * Default props typing:
-   */
-  defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
   /**
    * DisplayName typing:
    */
@@ -118,7 +125,7 @@ export type TProxyStyledElements<Config extends TConfig> = {
 export type TStyled<Config extends TConfig> = {
   // tslint:disable-next-line: callable-types
   <
-    TagOrComponent extends keyof IntrinsicElements | IStyledComponent<any, any, Config>,
+    TagOrComponent extends keyof IntrinsicElements | Component<any> | IStyledComponent<any, any, Config>,
     BaseAndVariantStyles extends TComponentStylesObject<Config>
   >(
     tag: TagOrComponent,
@@ -135,7 +142,7 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
   return map;
 };
 
-const getChildren = (slots: Vue.Slots) => (slots.default ? slots.default() : []);
+const getChildren = (slots: Vue.Slots) => (slots.default ? slots.default() : null);
 
 export const createStyled = <Config extends TConfig>(
   config: Config
@@ -155,7 +162,7 @@ export const createStyled = <Config extends TConfig>(
 
   const styledInstance = (
     baseAndVariantStyles: any = (cssComposer: any) => cssComposer.compose(),
-    Component: Vue.Component = Box
+    Component: Component<any> = Box
   ) => {
     let numberOfCompoundVariants = 0;
     const as = currentAs;
@@ -183,7 +190,6 @@ export const createStyled = <Config extends TConfig>(
     }
 
     const stitchesComponentId = `scid-${hashString(JSON.stringify(baseAndVariantStyles))}`;
-
     const StitchesComponent = (props: any, ctx: Vue.SetupContext) => {
       const compositions = [baseStyles];
 
@@ -240,19 +246,26 @@ export const createStyled = <Config extends TConfig>(
         {
           ...propsWithoutVariantsAndCssProp,
           as: props.as || as,
-          className: css(stitchesComponentId, ...compositions, props.className),
+          className: css(stitchesComponentId, ...compositions, props.className, props.class),
         },
         getChildren(ctx.slots)
       );
     };
 
+    StitchesComponent.displayName =
+      typeof currentAs === 'string'
+        ? `styled(${currentAs})`
+        : Component && Component.displayName
+        ? `styled(${Component.displayName})`
+        : `styled(Component\)`;
+
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
-    (StitchesComponent as any).compoundVariant = (compundVariantsObject: any, compoundVariantStyles: any) => {
+    (StitchesComponent as any).compoundVariant = (compoundVariantsObject: any, compoundVariantStyles: any) => {
       // Update component level variables:
       numberOfCompoundVariants++;
       // Each time we add
-      compoundVariants.push(compundVariantsObject);
+      compoundVariants.push(compoundVariantsObject);
       // required matches is a map with breakpoints
       // each time we add a compound variant, we also push its length to
       // all of the breakpoints so:
@@ -261,12 +274,12 @@ export const createStyled = <Config extends TConfig>(
       // the required matches for this compound variant at this breakpoint
       // when the required matches hit 0 we know it's a mtach
       requiredMatches.forEach((value, key) => {
-        value.push(Object.keys(compundVariantsObject).length);
+        value.push(Object.keys(compoundVariantsObject).length);
       });
 
       const evaluatedStyles = evaluateStylesForAllBreakpoints(compoundVariantStyles, configBreakpoints, css);
 
-      evaluatedCompoundVariants.set(compundVariantsObject, evaluatedStyles);
+      evaluatedCompoundVariants.set(compoundVariantsObject, evaluatedStyles);
       return StitchesComponent;
     };
     return StitchesComponent;
@@ -297,7 +310,7 @@ export const createStyled = <Config extends TConfig>(
   };
 };
 
-function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: any, css: any) {
+const evaluateStylesForAllBreakpoints = (styleObject: any, configBreakpoints: any, css: any) => {
   const breakpoints: { [key: string]: string } = {
     [MAIN_BREAKPOINT_ID]: css(styleObject),
   };
@@ -310,4 +323,4 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
     }
   }
   return breakpoints;
-}
+};
