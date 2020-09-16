@@ -117,13 +117,14 @@ export type TStyled<Config extends TConfig> = {
   // tslint:disable-next-line: callable-types
   <
     TagOrComponent extends keyof JSX.IntrinsicElements | React.ComponentType<any> | IStyledComponent<any, any, Config>,
-    BaseAndVariantStyles extends TComponentStylesObject<Config>
+    BaseAndVariantStyles extends TComponentStylesObject<Config>,
+    Variants = TExtractVariants<BaseAndVariantStyles>
   >(
     tag: TagOrComponent,
     baseStyles: BaseAndVariantStyles | TComponentStylesObject<Config>
-  ): TagOrComponent extends IStyledComponent<any, any, Config>
-    ? TagOrComponent
-    : IStyledComponent<TagOrComponent, TExtractVariants<BaseAndVariantStyles>, Config>;
+  ): TagOrComponent extends IStyledComponent<infer T, infer V, Config>
+    ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, Config>
+    : IStyledComponent<TagOrComponent, Variants, Config>;
 } & TProxyStyledElements<Config>;
 
 const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
