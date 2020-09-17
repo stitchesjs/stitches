@@ -1,6 +1,6 @@
 {
   "name": "@stitches/react",
-  "version": "0.0.2",
+  "version": "0.0.3-canary.1",
   "description": "The modern CSS-in-JS library",
   "main": "dist/react.cjs.js",
   "module": "dist/react.esm.js",
@@ -51,7 +51,7 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/core": "^0.0.2",
+    "@stitches/core": "^0.0.3-canary.1",
     "@types/node": "^13.11.1",
     "@types/react-test-renderer": "^16.9.3",
     "tslib": "^1.11.1"
