@@ -48,7 +48,7 @@
   "files": [
     "dist"
   ],
-  "dependencies": {
+  "devDependencies": {
     "@types/node": "^13.11.1",
     "tslib": "^1.11.1"
   },

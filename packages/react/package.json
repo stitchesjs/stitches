@@ -51,13 +51,13 @@
     "react": "^16.13.1"
   },
   "dependencies": {
-    "@stitches/core": "^0.0.3-canary.1",
-    "@types/node": "^13.11.1",
-    "@types/react-test-renderer": "^16.9.3",
-    "tslib": "^1.11.1"
+    "@stitches/core": "^0.0.3-canary.1"
   },
   "devDependencies": {
-    "react-test-renderer": "^16.13.1"
+    "@types/node": "^13.11.1",
+    "@types/react-test-renderer": "^16.9.3",
+    "react-test-renderer": "^16.13.1",
+    "tslib": "^1.11.1"
   },
   "gitHead": "01e369aa687777e751cb32633010a881071cb6e5"
 }
