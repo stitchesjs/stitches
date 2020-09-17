@@ -6385,7 +6385,7 @@ export type BorderBlockEndColorProperty = Globals | Color;
 
 export type BorderBlockEndStyleProperty = Globals | LineStyle;
 
-export type BorderBlockEndWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderBlockEndWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
 export type BorderBlockStartProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
@@ -6393,67 +6393,79 @@ export type BorderBlockStartColorProperty = Globals | Color;
 
 export type BorderBlockStartStyleProperty = Globals | LineStyle;
 
-export type BorderBlockStartWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderBlockStartWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
 export type BorderBlockStyleProperty = Globals | LineStyle;
 
-export type BorderBlockWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderBlockWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
 export type BorderBottomProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderBottomColorProperty = Globals | Color;
 
-export type BorderBottomLeftRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderBottomLeftRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type BorderBottomRightRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderBottomRightRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type BorderBottomStyleProperty = Globals | LineStyle;
 
-export type BorderBottomWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderBottomWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
 export type BorderCollapseProperty = Globals | 'collapse' | 'separate';
 
 export type BorderColorProperty = Globals | Color | (string & {});
 
-export type BorderEndEndRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderEndEndRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type BorderEndStartRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderEndStartRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type BorderImageProperty = Globals | 'none' | 'repeat' | 'round' | 'space' | 'stretch' | (string & {}) | number;
+export type BorderImageProperty = Globals | 'none' | 'repeat' | 'round' | 'space' | 'stretch' | number | (string & {});
 
-export type BorderImageOutsetProperty<TLength> = Globals | TLength | (string & {}) | number;
+export type BorderImageOutsetProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type BorderImageRepeatProperty = Globals | 'repeat' | 'round' | 'space' | 'stretch' | (string & {});
 
-export type BorderImageSliceProperty = Globals | (string & {}) | number;
+export type BorderImageSliceProperty = Globals | number | (string & {});
 
 export type BorderImageSourceProperty = Globals | 'none' | (string & {});
 
-export type BorderImageWidthProperty<TLength> = Globals | TLength | 'auto' | (string & {}) | number;
+export type BorderImageWidthProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
 export type BorderInlineProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
 export type BorderInlineColorProperty = Globals | Color | (string & {});
 
-export type BorderInlineEndProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
+export type BorderInlineEndProperty<TLength> =
+  | Globals
+  | LineWidth<TLength>
+  | LineStyle
+  | Color
+  | number
+  | (string & {});
 
 export type BorderInlineEndColorProperty = Globals | Color;
 
 export type BorderInlineEndStyleProperty = Globals | LineStyle;
 
-export type BorderInlineEndWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderInlineEndWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
-export type BorderInlineStartProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
+export type BorderInlineStartProperty<TLength> =
+  | Globals
+  | LineWidth<TLength>
+  | LineStyle
+  | Color
+  | number
+  | (string & {});
 
 export type BorderInlineStartColorProperty = Globals | Color;
 
 export type BorderInlineStartStyleProperty = Globals | LineStyle;
 
-export type BorderInlineStartWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderInlineStartWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
 export type BorderInlineStyleProperty = Globals | LineStyle;
 
-export type BorderInlineWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderInlineWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
 export type BorderLeftProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
 
@@ -6461,41 +6473,48 @@ export type BorderLeftColorProperty = Globals | Color;
 
 export type BorderLeftStyleProperty = Globals | LineStyle;
 
-export type BorderLeftWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderLeftWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
-export type BorderRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type BorderRightProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
+export type BorderRightProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | number | (string & {});
 
 export type BorderRightColorProperty = Globals | Color;
 
 export type BorderRightStyleProperty = Globals | LineStyle;
 
-export type BorderRightWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderRightWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
-export type BorderSpacingProperty<TLength> = Globals | TLength | (string & {});
+export type BorderSpacingProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type BorderStartEndRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderStartEndRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type BorderStartStartRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderStartStartRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type BorderStyleProperty = Globals | LineStyle | (string & {});
 
-export type BorderTopProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {});
+export type BorderTopProperty<TLength> =
+  | Globals
+  | LineWidth<TLength>
+  | LineStyle
+  | Color
+  | number
+  | number
+  | (string & {});
 
 export type BorderTopColorProperty = Globals | Color;
 
-export type BorderTopLeftRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderTopLeftRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type BorderTopRightRadiusProperty<TLength> = Globals | TLength | (string & {});
+export type BorderTopRightRadiusProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type BorderTopStyleProperty = Globals | LineStyle;
 
-export type BorderTopWidthProperty<TLength> = Globals | LineWidth<TLength>;
+export type BorderTopWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
-export type BorderWidthProperty<TLength> = Globals | LineWidth<TLength> | (string & {});
+export type BorderWidthProperty<TLength> = Globals | LineWidth<TLength> | number | (string & {});
 
-export type BottomProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type BottomProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
 export type BoxAlignProperty = Globals | 'baseline' | 'center' | 'end' | 'start' | 'stretch';
 
@@ -6734,7 +6753,14 @@ export type FontLanguageOverrideProperty = Globals | 'normal' | (string & {});
 
 export type FontOpticalSizingProperty = Globals | 'auto' | 'none';
 
-export type FontSizeProperty<TLength> = Globals | AbsoluteSize | TLength | 'larger' | 'smaller' | (string & {});
+export type FontSizeProperty<TLength> =
+  | Globals
+  | AbsoluteSize
+  | TLength
+  | 'larger'
+  | 'smaller'
+  | number
+  | (string & {});
 
 export type FontSizeAdjustProperty = Globals | 'none' | number;
 
@@ -6829,9 +6855,9 @@ export type FontVariantPositionProperty = Globals | 'normal' | 'sub' | 'super';
 
 export type FontVariationSettingsProperty = Globals | 'normal' | (string & {});
 
-export type FontWeightProperty = Globals | FontWeightAbsolute | 'bolder' | 'lighter';
+export type FontWeightProperty = Globals | FontWeightAbsolute | 'bolder' | 'lighter' | (string & {});
 
-export type GapProperty<TLength> = Globals | TLength | 'normal' | (string & {});
+export type GapProperty<TLength> = Globals | TLength | 'normal' | number | (string & {});
 
 export type GridProperty = Globals | 'none' | (string & {});
 
@@ -6847,17 +6873,17 @@ export type GridColumnProperty = Globals | GridLine | (string & {});
 
 export type GridColumnEndProperty = Globals | GridLine;
 
-export type GridColumnGapProperty<TLength> = Globals | TLength | (string & {});
+export type GridColumnGapProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type GridColumnStartProperty = Globals | GridLine;
 
-export type GridGapProperty<TLength> = Globals | TLength | (string & {});
+export type GridGapProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type GridRowProperty = Globals | GridLine | (string & {});
 
 export type GridRowEndProperty = Globals | GridLine;
 
-export type GridRowGapProperty<TLength> = Globals | TLength | (string & {});
+export type GridRowGapProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type GridRowStartProperty = Globals | GridLine;
 
@@ -6971,15 +6997,15 @@ export type JustifySelfProperty =
   | 'stretch'
   | (string & {});
 
-export type LeftProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type LeftProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type LetterSpacingProperty<TLength> = Globals | TLength | 'normal';
+export type LetterSpacingProperty<TLength> = Globals | TLength | 'normal' | number | (string & {});
 
 export type LineBreakProperty = Globals | 'anywhere' | 'auto' | 'loose' | 'normal' | 'strict';
 
 export type LineClampProperty = Globals | 'none' | number;
 
-export type LineHeightProperty<TLength> = Globals | TLength | 'normal' | (string & {}) | number;
+export type LineHeightProperty<TLength> = Globals | TLength | 'normal' | number | (string & {});
 
 export type LineHeightStepProperty<TLength> = Globals | TLength;
 
@@ -6995,39 +7021,40 @@ export type MarginProperty<TLength> =
   | Globals
   | TLength
   | 'auto'
+  | number
   | (string & {})
-  | [Globals | TLength | 'auto' | (string & {}), Globals | TLength | 'auto' | (string & {})]
+  | [Globals | TLength | 'auto' | number | (string & {}), Globals | TLength | 'auto' | number | (string & {})]
   | [
-      Globals | TLength | 'auto' | (string & {}),
-      Globals | TLength | 'auto' | (string & {}),
-      Globals | TLength | 'auto' | (string & {})
+      Globals | TLength | 'auto' | number | (string & {}),
+      Globals | TLength | 'auto' | number | (string & {}),
+      Globals | TLength | 'auto' | number | (string & {})
     ]
   | [
-      Globals | TLength | 'auto' | (string & {}),
-      Globals | TLength | 'auto' | (string & {}),
-      Globals | TLength | 'auto' | (string & {}),
-      Globals | TLength | 'auto' | (string & {})
+      Globals | TLength | 'auto' | number | (string & {}),
+      Globals | TLength | 'auto' | number | (string & {}),
+      Globals | TLength | 'auto' | number | (string & {}),
+      Globals | TLength | 'auto' | number | (string & {})
     ];
 
-export type MarginBlockProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginBlockProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginBlockEndProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginBlockEndProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginBlockStartProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginBlockStartProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginBottomProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginBottomProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginInlineProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginInlineProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginInlineEndProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginInlineEndProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginInlineStartProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginInlineStartProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginLeftProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginLeftProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginRightProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginRightProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
-export type MarginTopProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type MarginTopProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
 export type MaskProperty<TLength> = Globals | MaskLayer<TLength> | (string & {});
 
@@ -7084,6 +7111,7 @@ export type MaxBlockSizeProperty<TLength> =
   | 'max-content'
   | 'min-content'
   | 'none'
+  | number
   | (string & {});
 
 export type MaxHeightProperty<TLength> =
@@ -7101,6 +7129,7 @@ export type MaxHeightProperty<TLength> =
   | 'max-content'
   | 'min-content'
   | 'none'
+  | number
   | (string & {});
 
 export type MaxInlineSizeProperty<TLength> =
@@ -7115,6 +7144,7 @@ export type MaxInlineSizeProperty<TLength> =
   | 'max-content'
   | 'min-content'
   | 'none'
+  | number
   | (string & {});
 
 export type MaxLinesProperty = Globals | 'none' | number;
@@ -7134,6 +7164,7 @@ export type MaxWidthProperty<TLength> =
   | 'max-content'
   | 'min-content'
   | 'none'
+  | number
   | (string & {});
 
 export type MinBlockSizeProperty<TLength> =
@@ -7147,6 +7178,7 @@ export type MinBlockSizeProperty<TLength> =
   | 'fit-content'
   | 'max-content'
   | 'min-content'
+  | number
   | (string & {});
 
 export type MinHeightProperty<TLength> =
@@ -7164,6 +7196,7 @@ export type MinHeightProperty<TLength> =
   | 'intrinsic'
   | 'max-content'
   | 'min-content'
+  | number
   | (string & {});
 
 export type MinInlineSizeProperty<TLength> =
@@ -7178,6 +7211,7 @@ export type MinInlineSizeProperty<TLength> =
   | 'fit-content'
   | 'max-content'
   | 'min-content'
+  | number
   | (string & {});
 
 export type MinWidthProperty<TLength> =
@@ -7197,13 +7231,21 @@ export type MinWidthProperty<TLength> =
   | 'max-content'
   | 'min-content'
   | 'min-intrinsic'
+  | number
   | (string & {});
 
 export type MixBlendModeProperty = Globals | BlendMode;
 
-export type OffsetProperty<TLength> = Globals | Position<TLength> | GeometryBox | 'auto' | 'none' | (string & {});
+export type OffsetProperty<TLength> =
+  | Globals
+  | Position<TLength>
+  | GeometryBox
+  | 'auto'
+  | 'none'
+  | number
+  | (string & {});
 
-export type OffsetDistanceProperty<TLength> = Globals | TLength | (string & {});
+export type OffsetDistanceProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type OffsetPathProperty = Globals | GeometryBox | 'none' | (string & {});
 
@@ -7261,35 +7303,40 @@ export type OverscrollBehaviorYProperty = Globals | 'auto' | 'contain' | 'none';
 export type PaddingProperty<TLength> =
   | Globals
   | TLength
+  | number
   | (string & {})
-  | [Globals | TLength | (string & {}), Globals | TLength | (string & {})]
-  | [Globals | TLength | (string & {}), Globals | TLength | (string & {}), Globals | TLength | (string & {})]
+  | [Globals | TLength | number | (string & {}), Globals | TLength | number | (string & {})]
   | [
-      Globals | TLength | (string & {}),
-      Globals | TLength | (string & {}),
-      Globals | TLength | (string & {}),
-      Globals | TLength | (string & {})
+      Globals | TLength | number | (string & {}),
+      Globals | TLength | number | (string & {}),
+      Globals | TLength | number | (string & {})
+    ]
+  | [
+      Globals | TLength | number | (string & {}),
+      Globals | TLength | number | (string & {}),
+      Globals | TLength | number | (string & {}),
+      Globals | TLength | number | (string & {})
     ];
 
-export type PaddingBlockProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingBlockProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingBlockEndProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingBlockEndProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingBlockStartProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingBlockStartProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingBottomProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingBottomProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingInlineProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingInlineProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingInlineEndProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingInlineEndProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingInlineStartProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingInlineStartProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingLeftProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingLeftProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingRightProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingRightProperty<TLength> = Globals | TLength | number | (string & {});
 
-export type PaddingTopProperty<TLength> = Globals | TLength | (string & {});
+export type PaddingTopProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type PageBreakAfterProperty = Globals | 'always' | 'auto' | 'avoid' | 'left' | 'recto' | 'right' | 'verso';
 
@@ -7335,7 +7382,7 @@ export type QuotesProperty = Globals | 'auto' | 'none' | (string & {});
 
 export type ResizeProperty = Globals | 'block' | 'both' | 'horizontal' | 'inline' | 'none' | 'vertical';
 
-export type RightProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type RightProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
 export type RotateProperty = Globals | 'none' | (string & {});
 
@@ -7510,7 +7557,7 @@ export type TextEmphasisStyleProperty =
   | 'triangle'
   | (string & {});
 
-export type TextIndentProperty<TLength> = Globals | TLength | (string & {});
+export type TextIndentProperty<TLength> = Globals | TLength | number | (string & {});
 
 export type TextJustifyProperty = Globals | 'auto' | 'inter-character' | 'inter-word' | 'none';
 
@@ -7537,7 +7584,7 @@ export type TextUnderlineOffsetProperty<TLength> = Globals | TLength | 'auto' | 
 
 export type TextUnderlinePositionProperty = Globals | 'auto' | 'left' | 'right' | 'under' | (string & {});
 
-export type TopProperty<TLength> = Globals | TLength | 'auto' | (string & {});
+export type TopProperty<TLength> = Globals | TLength | 'auto' | number | (string & {});
 
 export type TouchActionProperty =
   | Globals
