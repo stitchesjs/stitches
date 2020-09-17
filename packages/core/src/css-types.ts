@@ -7677,6 +7677,7 @@ export type WidthProperty<TLength> =
   | 'max-content'
   | 'min-content'
   | 'min-intrinsic'
+  | number
   | (string & {});
 
 export type WillChangeProperty = Globals | AnimateableFeature | 'auto' | (string & {});
