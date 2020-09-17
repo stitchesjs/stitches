@@ -6493,14 +6493,7 @@ export type BorderStartStartRadiusProperty<TLength> = Globals | TLength | number
 
 export type BorderStyleProperty = Globals | LineStyle | (string & {});
 
-export type BorderTopProperty<TLength> =
-  | Globals
-  | LineWidth<TLength>
-  | LineStyle
-  | Color
-  | number
-  | number
-  | (string & {});
+export type BorderTopProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | number | (string & {});
 
 export type BorderTopColorProperty = Globals | Color;
 
@@ -6915,6 +6908,7 @@ export type HeightProperty<TLength> =
   | 'fit-content'
   | 'max-content'
   | 'min-content'
+  | number
   | (string & {});
 
 export type HyphensProperty = Globals | 'auto' | 'manual' | 'none';
