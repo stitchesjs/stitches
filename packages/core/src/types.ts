@@ -362,20 +362,25 @@ export interface ITokenDefinition {
   [key: number]: string;
 }
 
+export interface INumericTokenDefinition {
+  [key: string]: number;
+  [key: number]: number;
+}
+
 export interface ITokensDefinition {
   colors?: ITokenDefinition;
   space?: ITokenDefinition;
   fontSizes?: ITokenDefinition;
   fonts?: ITokenDefinition;
-  fontWeights?: ITokenDefinition;
-  lineHeights?: ITokenDefinition;
+  fontWeights?: INumericTokenDefinition;
+  lineHeights?: ITokenDefinition | INumericTokenDefinition;
   letterSpacings?: ITokenDefinition;
   sizes?: ITokenDefinition;
   borderWidths?: ITokenDefinition;
   borderStyles?: ITokenDefinition;
   radii?: ITokenDefinition;
   shadows?: ITokenDefinition;
-  zIndices?: ITokenDefinition;
+  zIndices?: INumericTokenDefinition;
   transitions?: ITokenDefinition;
 }
 export interface IUtils {
