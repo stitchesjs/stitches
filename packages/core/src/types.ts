@@ -372,7 +372,7 @@ export interface ITokensDefinition {
   space?: ITokenDefinition;
   fontSizes?: ITokenDefinition;
   fonts?: ITokenDefinition;
-  fontWeights?: INumericTokenDefinition;
+  fontWeights?: ITokenDefinition | INumericTokenDefinition;
   lineHeights?: ITokenDefinition | INumericTokenDefinition;
   letterSpacings?: ITokenDefinition;
   sizes?: ITokenDefinition;
@@ -380,7 +380,7 @@ export interface ITokensDefinition {
   borderStyles?: ITokenDefinition;
   radii?: ITokenDefinition;
   shadows?: ITokenDefinition;
-  zIndices?: INumericTokenDefinition;
+  zIndices?: ITokenDefinition | INumericTokenDefinition;
   transitions?: ITokenDefinition;
 }
 export interface IUtils {
