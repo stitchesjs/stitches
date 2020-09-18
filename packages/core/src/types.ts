@@ -367,12 +367,34 @@ export interface INumericTokenDefinition {
   [key: number]: number;
 }
 
+type TokenKey = string | number;
+
+export type IFontWeightTokenDefinition = {
+  [key in TokenKey]:
+    | 'normal'
+    | 'bold'
+    | 'bolder'
+    | 'lighter'
+    | 100
+    | 200
+    | 300
+    | 400
+    | 500
+    | 600
+    | 700
+    | 800
+    | 900
+    | 'inherit'
+    | 'initial'
+    | 'unset';
+};
+
 export interface ITokensDefinition {
   colors?: ITokenDefinition;
   space?: ITokenDefinition;
   fontSizes?: ITokenDefinition;
   fonts?: ITokenDefinition;
-  fontWeights?: ITokenDefinition | INumericTokenDefinition;
+  fontWeights?: IFontWeightTokenDefinition | ITokenDefinition | INumericTokenDefinition;
   lineHeights?: ITokenDefinition | INumericTokenDefinition;
   letterSpacings?: ITokenDefinition;
   sizes?: ITokenDefinition;
