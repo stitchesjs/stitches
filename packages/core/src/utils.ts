@@ -12,6 +12,7 @@ import {
   borderWidth,
   boxShadow,
   font,
+  gap,
   margin,
   padding,
   transition,
@@ -240,6 +241,7 @@ export const specificityProps: {
   borderTop,
   borderRight,
   textDecoration,
+  gap,
 };
 
 export const getVendorPrefixAndProps = (env: any) => {

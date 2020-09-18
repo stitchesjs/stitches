@@ -11,6 +11,7 @@ import {
   borderRight,
   boxShadow,
   font,
+  gap,
   margin,
   padding,
   transition,
@@ -1001,6 +1002,64 @@ describe('Text decoration shorthand', () => {
       Object {
         "textDecorationColor": "red",
         "textDecorationThickness": "from-font",
+      }
+    `);
+  });
+});
+
+describe('Gap shorthand', () => {
+  test('Handles gap shorthand', () => {
+    // works
+    expect(gap(tokens, '1em')).toMatchInlineSnapshot(`
+      Object {
+        "columnGap": "1em",
+        "rowGap": "1em",
+      }
+    `);
+
+    expect(gap(tokens, '5% 0')).toMatchInlineSnapshot(`
+      Object {
+        "columnGap": "0",
+        "rowGap": "5%",
+      }
+    `);
+
+    expect(gap(tokens, '10px 50px')).toMatchInlineSnapshot(`
+      Object {
+        "columnGap": "50px",
+        "rowGap": "10px",
+      }
+    `);
+
+    expect(gap(tokens, '0')).toMatchInlineSnapshot(`
+      Object {
+        "columnGap": "0",
+        "rowGap": "0",
+      }
+    `);
+  });
+
+  test('Handles gap with tokens', () => {
+    expect(gap(tokens, '1')).toMatchInlineSnapshot(`
+      Object {
+        "columnGap": "5px",
+        "rowGap": "5px",
+      }
+		`);
+
+    expect(gap(tokens, '1 2')).toMatchInlineSnapshot(`
+      Object {
+        "columnGap": "10px",
+        "rowGap": "5px",
+      }
+    `);
+  });
+
+  test('Handles gap with css functions', () => {
+    expect(gap(tokens, 'calc(10px + 100px)')).toMatchInlineSnapshot(`
+      Object {
+        "columnGap": "calc(10px + 100px)",
+        "rowGap": "calc(10px + 100px)",
       }
     `);
   });
