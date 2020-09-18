@@ -186,6 +186,15 @@ export const transition = createPropertyParser(
   }
 );
 
+export const gap = createPropertyParser((tokens: any, css: any, value: any, index: any) => {
+  if (index === 0) {
+    css.rowGap = tokens.space[value] || value;
+    css.columnGap = tokens.space[value] || value;
+  } else {
+    css.columnGap = tokens.space[value] || value;
+  }
+});
+
 export const margin = createPropertyParser((tokens: any, css: any, value: any, index: any) => {
   if (index === 0) {
     css.marginTop = tokens.space[value] || value;

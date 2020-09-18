@@ -623,7 +623,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       ",
         "/* STITCHES */
       ./*X*/_fVszNU/*X*/{outline-color:var(--colors-red500);}
-      ./*X*/_hyxNOI/*X*/{gap:var(--space-2);}
+      ./*X*/_fBRTrr/*X*/{row-gap:var(--space-2);}
+      ./*X*/_bXQiUr/*X*/{column-gap:var(--space-2);}
       ./*X*/_bpzGvB/*X*/{margin-top:var(--space-1);}",
       ]
     `);
@@ -1036,6 +1037,24 @@ describe('createCss: mixed(SSR & Client)', () => {
       ./*X*/_iuxmks/*X*/{padding-right:5px;}
       ./*X*/_eossbD/*X*/{padding-bottom:1px;}
       ./*X*/_grPRDT/*X*/{padding-left:5px;}"
+    `);
+  });
+
+  test('should handle gap shorthand', () => {
+    const css = createCss({}, null);
+    const atom = css({ gap: '1px 5px' }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cKnGEZ _jSCSWZ"`);
+
+      return '';
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_jSCSWZ/*X*/{row-gap:1px;}
+      ./*X*/_cKnGEZ/*X*/{column-gap:5px;}"
     `);
   });
 
