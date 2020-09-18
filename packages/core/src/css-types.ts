@@ -6707,6 +6707,7 @@ export type FlexBasisProperty<TLength> =
   | 'fit-content'
   | 'max-content'
   | 'min-content'
+  | number
   | (string & {});
 
 export type FlexDirectionProperty = Globals | 'column' | 'column-reverse' | 'row' | 'row-reverse';
