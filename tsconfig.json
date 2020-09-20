@@ -1,7 +1,17 @@
 {
-  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "jsx": "react",
-    "preserveSymlinks": true
-  }
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["dom", "es2017"],
+    "preserveSymlinks": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "declaration": true,
+    "pretty": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "resolveJsonModule": true,
+    "strict": true
+  },
+  "exclude": ["node_modules", "dist", "es", "lib", "coverage"]
 }
