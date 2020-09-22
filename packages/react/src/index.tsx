@@ -218,19 +218,20 @@ export const createStyled = <Config extends TConfig>(
           const evaluatedVariant = evaluatedVariantMap.get(key);
           // normalize the value so that we only have to deal with one structure:
           const keyVal =
-            props[key] && typeof props[key] !== 'object' ? { [MAIN_BREAKPOINT_ID]: props[key] } : props[key];
+            props[key] && typeof props[key] === 'object' ? props[key] : { [MAIN_BREAKPOINT_ID]: props[key] };
           // tslint:disable-next-line: forin
           for (const breakpoint in keyVal) {
+            const stringBreakpointVal = String(keyVal[breakpoint]);
             // check if the variant exist for this breakpoint
-            if (keyVal[breakpoint] && evaluatedVariant && evaluatedVariant.get(String(keyVal[breakpoint]))) {
-              compositions.push(evaluatedVariant.get(String(keyVal[breakpoint]))?.[breakpoint]);
+            if (evaluatedVariant && evaluatedVariant.get(stringBreakpointVal)) {
+              compositions.push(evaluatedVariant.get(stringBreakpointVal)?.[breakpoint]);
             }
             /** Compound variants: */
             if (numberOfUnResolvedCompoundVariants.current) {
               compoundVariants.forEach((compoundVariant, i) => {
                 // if this breakpoint  matches a compound
                 // eslint-disable-next-line
-                if (String(keyVal[breakpoint]) === String(compoundVariant[key])) {
+                if (stringBreakpointVal === String(compoundVariant[key])) {
                   compoundRequiredMatches.get(breakpoint)[i]--;
                 }
                 // when the required matches reach 0 for any compound ...
