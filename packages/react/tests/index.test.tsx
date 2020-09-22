@@ -62,7 +62,7 @@ expect.addSnapshotSerializer({
   },
 
   test(val) {
-    return val && val.props && val.props.className[_ATOM] && val.children && val.type;
+    return val && val.props && val.props.className && val.children && val.type;
   },
 });
 
@@ -296,5 +296,13 @@ describe('styled', () => {
       renderer.create(<Button size={{ breakpointOne: 'small' }}>with responsive variant</Button>).toJSON()
     ).toMatchSnapshot();
     (_css as any).dispose();
+  });
+  test('It creates a string className', () => {
+    const Component = ({ className }: any) => {
+      expect(typeof className).toBe('string');
+      return <div>hello</div>;
+    };
+    const Button = styled(Component, {});
+    renderer.create(<Button size={{ breakpointOne: 'small' }}>with responsive variant</Button>);
   });
 });
