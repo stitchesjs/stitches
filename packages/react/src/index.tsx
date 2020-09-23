@@ -162,9 +162,15 @@ export const createStyled = <Config extends TConfig>(
 
   const configBreakpoints = config.breakpoints || {};
 
+  type EvaluatedVariantMap = Map<string, Map<string, { [key: string]: string }>>;
+  type EvaluatedCompoundVariants = Map<any, { [key: string]: string }>;
   const styledInstance = (
     baseAndVariantStyles: any = (cssComposer: any) => cssComposer.compose(),
-    Component: React.ComponentType<any> = Box
+    Component: React.ComponentType<any> = Box,
+    prevState?: {
+      evaluatedVariantMap: EvaluatedVariantMap;
+      evaluatedCompoundVariants: EvaluatedCompoundVariants;
+    }
   ) => {
     let numberOfCompoundVariants = 0;
     const as = currentAs;
@@ -176,19 +182,21 @@ export const createStyled = <Config extends TConfig>(
     // a map that keeps track of the required number of matching s left for each break point:
     const requiredMatches = createCompoundVariantsMatcher(configBreakpoints);
     // keep track of the number of available variants
-    const evaluatedVariantMap: Map<string, Map<string, { [key: string]: string }>> = new Map();
+    const evaluatedVariantMap: EvaluatedVariantMap = prevState?.evaluatedVariantMap || new Map();
     // store pre evaluated variants
-    const evaluatedCompoundVariants: Map<any, { [key: string]: string }> = new Map();
+    const evaluatedCompoundVariants: EvaluatedCompoundVariants = prevState?.evaluatedCompoundVariants || new Map();
 
     // tslint:disable-next-line: forin
-    for (const Name in variants) {
-      const variantMap: Map<string, { [key: string]: string }> = new Map();
-      // tslint:disable-next-line: forin
-      for (const ValueName in variants[Name]) {
-        const evaluatedStyles = evaluateStylesForAllBreakpoints(variants[Name][ValueName], configBreakpoints, css);
-        variantMap.set(ValueName, evaluatedStyles);
+    if (!prevState) {
+      for (const Name in variants) {
+        const variantMap: Map<string, { [key: string]: string }> = new Map();
+        // tslint:disable-next-line: forin
+        for (const ValueName in variants[Name]) {
+          const evaluatedStyles = evaluateStylesForAllBreakpoints(variants[Name][ValueName], configBreakpoints, css);
+          variantMap.set(ValueName, evaluatedStyles);
+        }
+        evaluatedVariantMap.set(Name, variantMap);
       }
-      evaluatedVariantMap.set(Name, variantMap);
     }
 
     const stitchesComponentId = `scid-${hashString(JSON.stringify(baseAndVariantStyles))}`;
@@ -208,7 +216,6 @@ export const createStyled = <Config extends TConfig>(
           hasWarnedInlineStyle = true;
         }
       }
-
       const compositions = [baseStyles];
 
       const propsWithoutVariantsAndCssProp: any = {};
@@ -291,19 +298,23 @@ export const createStyled = <Config extends TConfig>(
         value.push(Object.keys(compundVariantsObject).length);
       });
 
-      const evaluatedStyles = evaluateStylesForAllBreakpoints(compoundVariantStyles, configBreakpoints, css);
+      if (!prevState) {
+        const evaluatedStyles = evaluateStylesForAllBreakpoints(compoundVariantStyles, configBreakpoints, css);
 
-      evaluatedCompoundVariants.set(compundVariantsObject, evaluatedStyles);
+        evaluatedCompoundVariants.set(compundVariantsObject, evaluatedStyles);
+      }
+
       return StitchesComponent;
     };
 
     (StitchesComponent as any).withComponent = (Element: React.ElementType) => {
+      const state = { evaluatedVariantMap, evaluatedCompoundVariants };
       if (typeof Element === 'string') {
         currentAs = Element;
-        return styledInstance(baseAndVariantStyles);
+        return styledInstance(baseAndVariantStyles, Box, state);
       }
       currentAs = undefined;
-      return styledInstance(baseAndVariantStyles, Element);
+      return styledInstance(baseAndVariantStyles, Element, state);
     };
 
     return StitchesComponent;
