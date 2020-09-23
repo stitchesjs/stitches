@@ -8,7 +8,8 @@
     "postinstall": "lerna bootstrap && preconstruct dev",
     "test:css": "yarn workspace @stitches/core run test",
     "test:react": "yarn workspace @stitches/react run test",
-    "test": "yarn test:css && yarn test:react"
+    "test": "jest --runInBand --ci --coverage",
+    "test:watch": "jest --watch --updateSnapshot"
   },
   "workspaces": [
     "packages/*"
@@ -27,7 +28,6 @@
     "lint-staged": "^9.5.0",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
-    "semver": "^7.3.0",
     "ts-jest": "~25.3.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
