@@ -34,14 +34,23 @@ export type BreakPointsKeys<Config extends TConfig> = keyof Config['breakpoints'
  */
 export type CastStringToBoolean<Val> = Val extends 'true' | 'false' ? boolean | 'true' | 'false' : never;
 /**
+ * adds the string type to number while also preserving autocomplete for other string values
+ */
+export type CastNumberToString<Val> = Val extends number ? string & {} : never;
+
+/**
  * Takes a variants object and converts it to the correct type information for usage in props
  */
 export type VariantASProps<Config extends TConfig, VariantsObj> = {
   [V in keyof VariantsObj]?:
     | CastStringToBoolean<VariantsObj[V]>
     | VariantsObj[V]
+    | CastNumberToString<VariantsObj[V]>
     | {
-        [B in BreakPointsKeys<Config> | TMainBreakPoint]?: CastStringToBoolean<VariantsObj[V]> | VariantsObj[V];
+        [B in BreakPointsKeys<Config> | TMainBreakPoint]?:
+          | CastStringToBoolean<VariantsObj[V]>
+          | VariantsObj[V]
+          | CastNumberToString<VariantsObj[V]>;
       };
 };
 
