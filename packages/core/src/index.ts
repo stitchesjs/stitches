@@ -79,11 +79,9 @@ const mergeSelectors = (firstSelector: string, secondSelector: string) => {
     // if it starts with ':' merge it  without space
   } else if (secondSelector[0] === ':') {
     return firstSelector + secondSelector;
-  } else if (firstSelector) {
-    // else: merge it while adding a whitespace
-    return `${firstSelector} ${secondSelector}`;
   }
-  return secondSelector;
+  // else: merge it while adding a whitespace
+  return `${firstSelector} ${secondSelector}`;
 };
 
 const fixSpecificity = (selectorString: string) => {

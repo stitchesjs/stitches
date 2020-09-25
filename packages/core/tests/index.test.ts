@@ -655,7 +655,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css({ '&.red': { color: 'red' } }).toString();
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._klXDmU.red {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._jOAMao.red {color: red;}"`);
   });
 
   test('Should handle nesting', () => {
@@ -673,12 +673,12 @@ describe('createCss: mixed(SSR & Client)', () => {
         },
       },
     }).toString();
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._krUqGO.red {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._kTghTu .red {color: red;}"`);
     expect(fakeEnv.document.styleSheets[2].cssRules[1].cssText).toMatchInlineSnapshot(
-      `"._ekDCu.red .potato {background-color: red;}"`
+      `"._dhhpqe .red .potato {background-color: red;}"`
     );
     expect(fakeEnv.document.styleSheets[2].cssRules[2].cssText).toMatchInlineSnapshot(
-      `"._iUKzQO._iUKzQO.red .potato:hover {background-color: green;}"`
+      `"._lftrMy._lftrMy .red .potato:hover {background-color: green;}"`
     );
   });
 
@@ -917,10 +917,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
-      `"@keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"`
+      `"@keyframes gUGIFa { 0% {background-color: red;} 100% {background-color: green;}}"`
     );
 
-    expect(keyFrame.toString()).toMatchInlineSnapshot(`"keYeiS"`);
+    expect(keyFrame.toString()).toMatchInlineSnapshot(`"gUGIFa"`);
   });
 
   test('should support utils inside keyframes', () => {
@@ -941,10 +941,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
-      `"@keyframes jxILgC {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}}"`
+      `"@keyframes ihVVYm { 0% {margin-left: 1px;margin-right: 1px;} 100% {margin-left: 10px;margin-right: 10px;}}"`
     );
 
-    expect(keyFrame.toString()).toMatchInlineSnapshot(`"jxILgC"`);
+    expect(keyFrame.toString()).toMatchInlineSnapshot(`"ihVVYm"`);
   });
 
   test('should support specificity props inside keyframes', () => {
@@ -955,10 +955,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
-      `"@keyframes hOBUdi {0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;}100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}}"`
+      `"@keyframes cLvCwm { 0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;} 100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}}"`
     );
 
-    expect(keyFrame.toString()).toMatchInlineSnapshot(`"hOBUdi"`);
+    expect(keyFrame.toString()).toMatchInlineSnapshot(`"cLvCwm"`);
   });
 
   test('should allow keyframes atom to be used as a direct object value', () => {
@@ -970,14 +970,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     let atom: any;
     const { styles } = css.getStyles(() => {
       expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
-      expect(atom.toString()).toMatchInlineSnapshot(`"_iGYUIN"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cXmrsK"`);
       return '';
     });
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_iGYUIN/*X*/{animation-name:keYeiS;}
-      @keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"
+      ./*X*/_cXmrsK/*X*/{animation-name:gUGIFa;}
+      @keyframes gUGIFa { 0% {background-color: red;} 100% {background-color: green;}}"
     `);
   });
 
@@ -989,14 +989,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
     const atom = css({ animationName: keyFrame }) as any;
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_iGYUIN"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cXmrsK"`);
       return '';
     });
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_iGYUIN/*X*/{animation-name:keYeiS;}
-      @keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"
+      ./*X*/_cXmrsK/*X*/{animation-name:gUGIFa;}
+      @keyframes gUGIFa { 0% {background-color: red;} 100% {background-color: green;}}"
     `);
   });
 
@@ -1138,9 +1138,9 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, null);
     const atom = (css({ 'div:hover &': { color: 'red' } }) as any).atoms[0];
 
-    expect(atom.id).toMatchInlineSnapshot(`"colordiv:hover &initial"`);
+    expect(atom.id).toMatchInlineSnapshot(`"color div:hover &initial"`);
     expect(atom.cssHyphenProp).toEqual('color');
-    expect(atom.selector).toMatchInlineSnapshot(`"div:hover &"`);
+    expect(atom.selector).toMatchInlineSnapshot(`" div:hover &"`);
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
 
     const { styles } = css.getStyles(() => {
@@ -1148,7 +1148,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     });
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      div:hover ./*X*/_jlKHfG/*X*/{color:red;}"
+       div:hover ./*X*/_fSJjjq/*X*/{color:red;}"
     `);
   });
 
@@ -1340,7 +1340,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
-        `"_fTpTya _fsFLtj _beLWlk _deOecG _jAlgih _fgAzaH _iYEzDa _kgNVVS _jLdEIE _ksAgxP _HueCX _bmKZKM _cscZHT _dsLTzH _eNrDta _cfKqwH _jWWMfT _knwcIz _ftbGTa _hkKvqU _ijYsdX _jThCeQ _jMQFEM _eOPswA _iBYOWZ"`
+        `"_evtXhu _kLdlRP _gGNwiM _jJGKqi _ddGabZ _ekzqCb _fSDMVi _ljWgwq _jfSqew _bAQCzH _efCFJv _eMIkUU _ibSieH _fxdrSf _bSnMBq _bjFYEb _iyzbHn _defIGb _dBAIKu _kFHhBs _jKRvhX _jZzWgc _bJWoRY _bByFok _jftlLF"`
       );
 
       return '';
@@ -1349,31 +1349,31 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_iBYOWZ/*X*/example-1{font-size:12pt;}
-      ./*X*/_eOPswA/*X*/example-1{line-height:14pt;}
-      ./*X*/_jMQFEM/*X*/example-1{font-family:sans-serif;}
-      ./*X*/_jThCeQ/*X*/example-2{font-size:80%;}
-      ./*X*/_ijYsdX/*X*/example-2{font-family:sans-serif;}
-      ./*X*/_hkKvqU/*X*/example-3{font-size:x-large;}
-      ./*X*/_ftbGTa/*X*/example-3{line-height:110%;}
-      ./*X*/_knwcIz/*X*/example-3{font-family:\\"new century schoolbook\\",serif;}
-      ./*X*/_jWWMfT/*X*/example-4{font-weight:bold;}
-      ./*X*/_cfKqwH/*X*/example-4{font-style:italic;}
-      ./*X*/_eNrDta/*X*/example-4{font-size:large;}
-      ./*X*/_dsLTzH/*X*/example-4{font-family:Palatino,serif;}
-      ./*X*/_cscZHT/*X*/example-5{font-variant:small-caps;}
-      ./*X*/_bmKZKM/*X*/example-5{font-size:120%;}
-      ./*X*/_HueCX/*X*/example-5{line-height:120%;}
-      ./*X*/_ksAgxP/*X*/example-5{font-family:fantasy;}
-      ./*X*/_jLdEIE/*X*/example-6{font-stretch:condensed;}
-      ./*X*/_kgNVVS/*X*/example-6{font-style:oblique;}
-      ./*X*/_iYEzDa/*X*/example-6{font-size:12pt;}
-      ./*X*/_fgAzaH/*X*/example-6{font-family:\\"Helvetica Neue\\",serif;}
-      ./*X*/_jAlgih/*X*/example-7{font-stretch:condensed;}
-      ./*X*/_deOecG/*X*/example-7{font-style:oblique 25deg;}
-      ./*X*/_beLWlk/*X*/example-7{font-weight:753;}
-      ./*X*/_fsFLtj/*X*/example-7{font-size:12pt;}
-      ./*X*/_fTpTya/*X*/example-7{font-family:\\"Helvetica Neue\\",serif;}"
+      ./*X*/_jftlLF/*X*/ example-1{font-size:12pt;}
+      ./*X*/_bByFok/*X*/ example-1{line-height:14pt;}
+      ./*X*/_bJWoRY/*X*/ example-1{font-family:sans-serif;}
+      ./*X*/_jZzWgc/*X*/ example-2{font-size:80%;}
+      ./*X*/_jKRvhX/*X*/ example-2{font-family:sans-serif;}
+      ./*X*/_kFHhBs/*X*/ example-3{font-size:x-large;}
+      ./*X*/_dBAIKu/*X*/ example-3{line-height:110%;}
+      ./*X*/_defIGb/*X*/ example-3{font-family:\\"new century schoolbook\\",serif;}
+      ./*X*/_iyzbHn/*X*/ example-4{font-weight:bold;}
+      ./*X*/_bjFYEb/*X*/ example-4{font-style:italic;}
+      ./*X*/_bSnMBq/*X*/ example-4{font-size:large;}
+      ./*X*/_fxdrSf/*X*/ example-4{font-family:Palatino,serif;}
+      ./*X*/_ibSieH/*X*/ example-5{font-variant:small-caps;}
+      ./*X*/_eMIkUU/*X*/ example-5{font-size:120%;}
+      ./*X*/_efCFJv/*X*/ example-5{line-height:120%;}
+      ./*X*/_bAQCzH/*X*/ example-5{font-family:fantasy;}
+      ./*X*/_jfSqew/*X*/ example-6{font-stretch:condensed;}
+      ./*X*/_ljWgwq/*X*/ example-6{font-style:oblique;}
+      ./*X*/_fSDMVi/*X*/ example-6{font-size:12pt;}
+      ./*X*/_ekzqCb/*X*/ example-6{font-family:\\"Helvetica Neue\\",serif;}
+      ./*X*/_ddGabZ/*X*/ example-7{font-stretch:condensed;}
+      ./*X*/_jJGKqi/*X*/ example-7{font-style:oblique 25deg;}
+      ./*X*/_gGNwiM/*X*/ example-7{font-weight:753;}
+      ./*X*/_kLdlRP/*X*/ example-7{font-size:12pt;}
+      ./*X*/_evtXhu/*X*/ example-7{font-family:\\"Helvetica Neue\\",serif;}"
     `);
   });
 
@@ -1529,9 +1529,9 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      @media (min-width: 700px){div{padding-left:10px;}}
-      @media (min-width: 700px){div{background-color:white;}}
-      @media (min-width: 700px){div{color:red;}}"
+      @media (min-width: 700px){ div{padding-left:10px;}}
+      @media (min-width: 700px){ div{background-color:white;}}
+      @media (min-width: 700px){ div{color:red;}}"
     `);
   });
 
@@ -1551,7 +1551,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      @media (min-width: 700px){div{color:red;}}"
+      @media (min-width: 700px){ div{color:red;}}"
     `);
   });
 
@@ -1712,10 +1712,10 @@ describe('strict mode', () => {
   });
   test('should allow comma separated rules', () => {
     const css = createCss({}, null);
-    const atom = css({ '&:hover': { ':hi, .m': { ':one,:two': { color: 'red' } } } }) as any;
+    const atom = css({ '.parent': { '.a, .b': { color: 'red' } } }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_bwcmjL"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_dlBCcs"`);
 
       return '';
     });
@@ -1723,7 +1723,7 @@ describe('strict mode', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_bwcmjL/*X*/./*X*/_bwcmjL/*X*/:hover:hi:one, ./*X*/_bwcmjL/*X*/./*X*/_bwcmjL/*X*/:hover .m:one, ./*X*/_bwcmjL/*X*/./*X*/_bwcmjL/*X*/:hover:hi:two, ./*X*/_bwcmjL/*X*/./*X*/_bwcmjL/*X*/:hover .m:two{color:red;}"
+      ./*X*/_dlBCcs/*X*/ .parent .a,  .parent .b{color:red;}"
     `);
   });
 });
