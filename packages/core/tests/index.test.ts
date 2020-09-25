@@ -1376,6 +1376,22 @@ describe('createCss: mixed(SSR & Client)', () => {
       ./*X*/_evtXhu/*X*/ example-7{font-family:\\"Helvetica Neue\\",serif;}"
     `);
   });
+  test('should handle flex shorthand', () => {
+    const css = createCss({}, null);
+    const atom = css({ flex: '1' }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_bfdwlb"`);
+
+      return '';
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_bfdwlb/*X*/{flex-grow:1;}"
+    `);
+  });
 
   test('Should warn about potential specificity issues when an inline responsive atom appears in two different css definitions', () => {
     const css = createCss({}, null);

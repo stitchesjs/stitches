@@ -17,6 +17,7 @@ import {
   padding,
   transition,
   textDecoration,
+  flex,
 } from './shorthand-parser';
 import { IBreakpoints, ICssPropToToken, ISheet } from './types';
 
@@ -197,31 +198,6 @@ export const specificityProps: {
 } = {
   border,
   boxShadow,
-  flex: (tokens: any, value: any) => {
-    if (Array.isArray(value)) {
-      if (value.length === 2) {
-        return {
-          flexGrow: value[0],
-          ...(isNaN(value[1]) ? { flexBasis: value[1] } : { flexShrink: value[1] }),
-        };
-      }
-      if (value.length === 3) {
-        return {
-          flexGrow: value[0],
-          flexShrink: value[1],
-          flexBasis: value[2],
-        };
-      }
-    }
-
-    return isNaN(value)
-      ? {
-          flexBasis: value,
-        }
-      : {
-          flexGrow: value,
-        };
-  },
   overflow: (tokens: any, value: any) => ({
     overflowX: value,
     overflowY: value,
@@ -242,6 +218,7 @@ export const specificityProps: {
   borderRight,
   textDecoration,
   gap,
+  flex,
 };
 
 export const getVendorPrefixAndProps = (env: any) => {
