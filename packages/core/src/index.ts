@@ -227,7 +227,7 @@ const processStyleObject = (
      * which we would then use inside the valueMiddleware
      */
     const stuff = nestingPath ? [...selectors, [nestingPath]] : selectors;
-    const finalSelector = allPossibleCases(stuff).map(fixSpecificity).join(', ');
+    const finalSelector = allPossibleCases(stuff).map(fixSpecificity).join(',');
 
     /** Unitless handling: */
     if (typeof val === 'number') {
