@@ -1745,28 +1745,7 @@ describe('strict mode', () => {
     `);
   });
 
-  test('testing stuff', () => {
-    const css = createCss({}, null);
-    const atom = css({
-      '.hello &': { background: 'red' },
-      '&hola div': { background: 'red' },
-      ':hover': { background: 'red' },
-    }) as any;
-
-    const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_cmKWJU _leDhys _hCXsMh"`);
-      return '';
-    });
-
-    expect(styles.length).toBe(3);
-    expect(styles[2].trim()).toMatchInlineSnapshot(`
-      "/* STITCHES */
-      .hello ./*X*/_hCXsMh/*X*/{background-color:red;}
-      ./*X*/_leDhys/*X*/hola div{background-color:red;}
-      ./*X*/_cmKWJU/*X*/./*X*/_cmKWJU/*X*/:hover{background-color:red;}"
-    `);
-  });
-  test('should generate ', () => {
+  test('should handle deeply nested comma based rules by generating all possible combinations as a single rule', () => {
     const css = createCss({}, null);
     const atom = css({
       '.one': {
@@ -1800,6 +1779,37 @@ describe('strict mode', () => {
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jOZzkI/*X*/.parent .a, ./*X*/_jOZzkI/*X*/.parent.b{color:red;}"
+    `);
+  });
+
+  test('Should handle nested ampersand correctly', () => {
+    const css = createCss({}, null);
+    const atom = css({
+      '.one:hover': {
+        '&.two': {
+          backgroundColor: 'pink',
+        },
+      },
+
+      div: {
+        h1: {
+          '.wow &': {
+            color: 'black',
+          },
+        },
+      },
+    }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_eLiTcV _dDvPWD"`);
+      return '';
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_dDvPWD/*X*/./*X*/_dDvPWD/*X*/ .one:hover.two{background-color:pink;}
+      .wow ./*X*/_eLiTcV/*X*/ div h1{color:black;}"
     `);
   });
 });
