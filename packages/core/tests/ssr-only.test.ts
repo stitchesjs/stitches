@@ -65,11 +65,11 @@ describe('createCss: SSR', () => {
 
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_dzoaVP/*X*/{color:red;}"
+      ./*X*/_vfarC/*X*/{color:red;}"
     `);
     expect(secondStyles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_dzoaVP/*X*/{color:red;}"
+      ./*X*/_vfarC/*X*/{color:red;}"
     `);
     expect(styles).toEqual(secondStyles);
   });
@@ -89,13 +89,13 @@ describe('createCss: SSR', () => {
 
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES:__keyframes__ */
-      @keyframes cyfBNP { 0% {opacity: 0;} 100% {opacity: 1;}}"
+      @keyframes dhzmon {0% {opacity: 0;}100% {opacity: 1;}}"
     `);
 
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_flRQqN/*X*/{animation-name:cyfBNP;}
-      ./*X*/_dxvqmd/*X*/{animation-duration:333ms;}"
+      ./*X*/_btwGrK/*X*/{animation-name:dhzmon;}
+      ./*X*/_gVejHY/*X*/{animation-duration:333ms;}"
     `);
   });
 });

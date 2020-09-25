@@ -39,7 +39,7 @@ const createSSRCssRuleClass = (s: string) => {
 
 const createSelector = (className: string, selector: string) => {
   const cssRuleClassName = className ? `.${className}` : '';
-  if (selector && selector.includes('&')) return selector.replace(/&/gi, cssRuleClassName);
+  if (selector && selector.includes('%')) return selector.replace(/\%/gi, cssRuleClassName);
   if (selector) {
     return `${cssRuleClassName}${selector}`;
   }
@@ -74,31 +74,39 @@ const resolveTokens = (cssProp: string, value: any, tokens: any) => {
  */
 const mergeSelectors = (firstSelector: string, secondSelector: string) => {
   // a pseudo class and starts with &, normalize it:
-  if (secondSelector[0] === '&' && secondSelector[1] === ':') {
-    return firstSelector + secondSelector.substr(1);
-    // if it starts with ':' merge it  without space
-  } else if (secondSelector[0] === ':') {
-    return firstSelector + secondSelector;
+  const normalizedSelector =
+    secondSelector[0] === '&' && secondSelector[1] === ':' ? secondSelector.substr(1) : secondSelector;
+
+  if (!firstSelector && normalizedSelector.indexOf('&') > -1) {
+    return normalizedSelector.replace(/&/g, `%${firstSelector}`);
   }
-  // else: merge it while adding a whitespace
-  return `${firstSelector} ${secondSelector}`;
+  if (normalizedSelector.indexOf('&') > -1) {
+    return normalizedSelector.replace(/&/g, firstSelector);
+  }
+  if (normalizedSelector[0] === ':') {
+    return normalizedSelector.replace(':', `${firstSelector}:`);
+  }
+  return `${firstSelector} ${normalizedSelector.trim()}`;
 };
 
+// this is hacky as hell.
+// we should experiment handling pseudo classes
+// specificity via buckets in the sheet
 const fixSpecificity = (selectorString: string) => {
   let _selectorString = selectorString;
   // We want certain pseudo selectors to take precedence over other pseudo
   // selectors, so we increase specificity
-  if (!_selectorString?.match('&')) {
+  if (_selectorString[0] === '%' || !_selectorString.match('%')) {
     if (_selectorString?.match(/\:hover/)) {
-      _selectorString = `&&${_selectorString}`;
+      _selectorString = `%${_selectorString}`;
     } else if (_selectorString?.match(/\:active/)) {
-      _selectorString = `&&&${_selectorString}`;
+      _selectorString = `%%${_selectorString}`;
     } else if (_selectorString?.match(/\:focus|\:focus-visible/)) {
-      _selectorString = `&&&&${_selectorString}`;
+      _selectorString = `%%%${_selectorString}`;
     } else if (_selectorString?.match(/\:read-only/)) {
-      _selectorString = `&&&&&${_selectorString}`;
+      _selectorString = `%%%%${_selectorString}`;
     } else if (_selectorString?.match(/\:disabled/)) {
-      _selectorString = `&&&&&&${_selectorString}`;
+      _selectorString = `%%%%%${_selectorString}`;
     }
   }
   return _selectorString;
@@ -113,6 +121,7 @@ const allPossibleCases = ([first, ...rest]: string[][]): string[] => {
   } else {
     const result = [];
     const allCasesOfRest = allPossibleCases(rest);
+
     for (let i = 0; i < allCasesOfRest.length; i++) {
       for (let j = 0; j < first.length; j++) {
         result.push(mergeSelectors(first[j], allCasesOfRest[i]));
@@ -143,7 +152,7 @@ const processStyleObject = (
     mediaQueries: string[],
     nestingPath: string
   ) => void,
-  nestingPath = '',
+  nestingPath = '%',
   selectors: string[][] = [],
   breakpoint = MAIN_BREAKPOINT_ID,
   mediaQueries: string[] = [],
@@ -197,13 +206,13 @@ const processStyleObject = (
       }
 
       /**
-       * handle path merging:j
+       * handle path merging:
        */
 
       /** Current key is a comma separated rule */
       if (key.indexOf(',') > -1) {
         // split by comma and then merge it with he current nesting path
-        const newSelectors = [...selectors, key.split(',').map((el) => mergeSelectors(nestingPath, el.trim()))];
+        const newSelectors = [...selectors, key.split(',').map((el) => mergeSelectors(nestingPath, el))];
         // reset the nesting path to '' as it's already no part of selectors
         processStyleObject(val, config, valueMiddleware, '', newSelectors, breakpoint, mediaQueries);
         continue;
@@ -214,6 +223,8 @@ const processStyleObject = (
         val,
         config,
         valueMiddleware,
+        // merging normal selectors
+        // this is the case when we have no comma separated rules
         mergeSelectors(nestingPath, key),
         selectors,
         breakpoint,
@@ -653,7 +664,7 @@ export const createCss = <T extends TConfig>(
   cssInstance.global = (definitions: any) => {
     const atoms: IAtom[] = [];
     processStyleObject(definitions, config, (prop, value, breakpoint, mediaQueries, path) => {
-      if (!path.length) {
+      if (path === '%') {
         throw new Error('Global styles need to be nested within a selector');
       }
       // Create a global atom and call toString() on it directly to inject it
@@ -672,7 +683,7 @@ export const createCss = <T extends TConfig>(
           cssRule += `}`;
         }
         currentTimeProp = timeProp;
-        cssRule += `${timeProp} {`;
+        cssRule += `${timeProp.substr(2)} {`;
       }
       cssRule += `${hyphenAndVendorPrefixCssProp(key, vendorProps, vendorPrefix)}: ${resolveTokens(
         key,
