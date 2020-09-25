@@ -34,14 +34,23 @@ export type BreakPointsKeys<Config extends TConfig> = keyof Config['breakpoints'
  */
 export type CastStringToBoolean<Val> = Val extends 'true' | 'false' ? boolean | 'true' | 'false' : never;
 /**
+ * adds the string type to number while also preserving autocomplete for other string values
+ */
+export type CastNumberToString<Val> = Val extends number ? string & {} : never;
+
+/**
  * Takes a variants object and converts it to the correct type information for usage in props
  */
 export type VariantASProps<Config extends TConfig, VariantsObj> = {
   [V in keyof VariantsObj]?:
     | CastStringToBoolean<VariantsObj[V]>
     | VariantsObj[V]
+    | CastNumberToString<VariantsObj[V]>
     | {
-        [B in BreakPointsKeys<Config> | TMainBreakPoint]?: CastStringToBoolean<VariantsObj[V]> | VariantsObj[V];
+        [B in BreakPointsKeys<Config> | TMainBreakPoint]?:
+          | CastStringToBoolean<VariantsObj[V]>
+          | VariantsObj[V]
+          | CastNumberToString<VariantsObj[V]>;
       };
 };
 
@@ -218,19 +227,20 @@ export const createStyled = <Config extends TConfig>(
           const evaluatedVariant = evaluatedVariantMap.get(key);
           // normalize the value so that we only have to deal with one structure:
           const keyVal =
-            props[key] && typeof props[key] !== 'object' ? { [MAIN_BREAKPOINT_ID]: props[key] } : props[key];
+            props[key] && typeof props[key] === 'object' ? props[key] : { [MAIN_BREAKPOINT_ID]: props[key] };
           // tslint:disable-next-line: forin
           for (const breakpoint in keyVal) {
+            const stringBreakpointVal = String(keyVal[breakpoint]);
             // check if the variant exist for this breakpoint
-            if (keyVal[breakpoint] && evaluatedVariant && evaluatedVariant.get(String(keyVal[breakpoint]))) {
-              compositions.push(evaluatedVariant.get(String(keyVal[breakpoint]))?.[breakpoint]);
+            if (evaluatedVariant && evaluatedVariant.get(stringBreakpointVal)) {
+              compositions.push(evaluatedVariant.get(stringBreakpointVal)?.[breakpoint]);
             }
             /** Compound variants: */
             if (numberOfUnResolvedCompoundVariants.current) {
               compoundVariants.forEach((compoundVariant, i) => {
                 // if this breakpoint  matches a compound
                 // eslint-disable-next-line
-                if (String(keyVal[breakpoint]) === String(compoundVariant[key])) {
+                if (stringBreakpointVal === String(compoundVariant[key])) {
                   compoundRequiredMatches.get(breakpoint)[i]--;
                 }
                 // when the required matches reach 0 for any compound ...

@@ -108,6 +108,20 @@ exports[`styled Handles css prop 2`] = `
 }
 `;
 
+exports[`styled It handles variants with a numeric value of 0 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._jefWVX {height: 1px;}"
+  ],
+  "props": {
+    "className": "_jefWVX scid-fUwIQk"
+  },
+  "children": [
+    "height should equal '1px'"
+  ]
+}
+`;
+
 exports[`styled Renders basic component 1`] = `
 {
   "orderedAppliedStyles": [

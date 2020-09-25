@@ -305,4 +305,17 @@ describe('styled', () => {
     const Button = styled(Component, {});
     renderer.create(<Button size={{ breakpointOne: 'small' }}>with responsive variant</Button>);
   });
+
+  test('It handles variants with a numeric value of 0', () => {
+    const Button = styled('button', {
+      variants: {
+        size: {
+          0: {
+            height: '1px',
+          },
+        },
+      },
+    });
+    expect(renderer.create(<Button size={0}>height should equal '1px'</Button>).toJSON()).toMatchSnapshot();
+  });
 });
