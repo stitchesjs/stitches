@@ -33,16 +33,16 @@ describe('createCss: SSR', () => {
 
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-       body{background-color:red;}
-       body{margin-top:0;}
-       body{margin-right:0;}
-       body{margin-bottom:0;}
-       body{margin-left:0;}"
+      body{background-color:red;}
+      body{margin-top:0;}
+      body{margin-right:0;}
+      body{margin-bottom:0;}
+      body{margin-left:0;}"
     `);
 
     expect(styles[3]).toMatchInlineSnapshot(`
       "/* STITCHES:bp1 */
-      @media (min-width: 480px) {  body{background-color:blue;} }"
+      @media (min-width: 480px) { body{background-color:blue;} }"
     `);
   });
 
@@ -90,7 +90,7 @@ describe('createCss: SSR', () => {
     expect(styles[1]).toMatchInlineSnapshot(`
       "/* STITCHES:__keyframes__ */
       @keyframes dhzmon {0% {opacity: 0;}100% {opacity: 1;}}"
-		`);
+    `);
 
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
