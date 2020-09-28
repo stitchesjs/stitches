@@ -374,3 +374,29 @@ export const textDecoration = createPropertyParser((tokens: any, css: any, value
     css.textDecorationColor = tokens.colors[value] || value;
   }
 });
+
+export const flex = (tokens: any, value: any) => {
+  const parsedValue = tokenizeValue(value)[0];
+
+  if (parsedValue.length === 2) {
+    return {
+      flexGrow: parsedValue[0],
+      ...(isNaN(Number(parsedValue[1])) ? { flexBasis: parsedValue[1] } : { flexShrink: parsedValue[1] }),
+    };
+  }
+  if (parsedValue.length === 3) {
+    return {
+      flexGrow: parsedValue[0],
+      flexShrink: parsedValue[1],
+      flexBasis: parsedValue[2],
+    };
+  }
+
+  return isNaN(Number(parsedValue[0]))
+    ? {
+        flexBasis: parsedValue[0],
+      }
+    : {
+        flexGrow: parsedValue[0],
+      };
+};
