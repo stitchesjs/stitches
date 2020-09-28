@@ -56,14 +56,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, null);
     const atoms = css({ color: 'red' }) as any;
     const atom = atoms.atoms[0];
-    expect(atom.id).toMatchInlineSnapshot(`"colorinitial"`);
+    expect(atom.id).toMatchInlineSnapshot(`"color%initial"`);
     expect(atom.cssHyphenProp).toEqual('color');
-    expect(atom.selector).toBe('');
+    expect(atom.selector).toBe('%');
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
     expect(atom.value).toMatchInlineSnapshot(`"red"`);
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_dzoaVP"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_vfarC"`);
 
       return '';
     });
@@ -71,13 +71,13 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_dzoaVP/*X*/{color:red;}"
+      ./*X*/_vfarC/*X*/{color:red;}"
     `);
   });
 
   test('should compose atoms', () => {
     const css = createCss({}, null);
-    expect(css({ color: 'red', backgroundColor: 'blue' }).toString()).toMatchInlineSnapshot(`"_YfjLh _dzoaVP"`);
+    expect(css({ color: 'red', backgroundColor: 'blue' }).toString()).toMatchInlineSnapshot(`"_htDnsg _vfarC"`);
   });
 
   test('should create tokens', () => {
@@ -89,21 +89,21 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({ tokens }, null);
     const atom = (css({ color: 'RED' }) as any).atoms[0];
 
-    expect(atom.id).toMatchInlineSnapshot(`"colorinitial"`);
+    expect(atom.id).toMatchInlineSnapshot(`"color%initial"`);
     expect(atom.cssHyphenProp).toEqual('color');
-    expect(atom.selector).toBe('');
+    expect(atom.selector).toBe('%');
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
     expect(atom.value).toMatchInlineSnapshot(`"var(--colors-RED)"`);
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_oNvzU"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cvKCax"`);
       return '';
     });
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_oNvzU/*X*/{color:var(--colors-RED);}"
+      ./*X*/_cvKCax/*X*/{color:var(--colors-RED);}"
     `);
   });
 
@@ -119,14 +119,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(atom.value).toMatchInlineSnapshot(`"var(--colors-red)"`);
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_gYxOEA"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_kTKeUF"`);
       return '';
     });
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gYxOEA/*X*/{color:var(--colors-red);}"
+      ./*X*/_kTKeUF/*X*/{color:var(--colors-red);}"
     `);
   });
 
@@ -164,7 +164,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     `);
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gYxOEA/*X*/{color:var(--colors-red);}"
+      ./*X*/_kTKeUF/*X*/{color:var(--colors-red);}"
     `);
   });
 
@@ -203,10 +203,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_esPDyf/*X*/{margin-left:calc(var(--space-1) * -1);}
-      ./*X*/_dWjnQp/*X*/{letter-spacing:calc(var(--letterSpacings-1) * -1);}
-      ./*X*/_gTiRnv/*X*/{width:calc(var(--sizes-1) * -1);}
-      ./*X*/_dbupHX/*X*/{z-index:calc(var(--zIndices-1) * -1);}"
+      ./*X*/_jAzCtu/*X*/{margin-left:calc(var(--space-1) * -1);}
+      ./*X*/_ihWrEA/*X*/{letter-spacing:calc(var(--letterSpacings-1) * -1);}
+      ./*X*/_cXGKjy/*X*/{width:calc(var(--sizes-1) * -1);}
+      ./*X*/_gSisrC/*X*/{z-index:calc(var(--zIndices-1) * -1);}"
     `);
   });
 
@@ -233,24 +233,24 @@ describe('createCss: mixed(SSR & Client)', () => {
       null
     );
     const atom = (css({ tablet: { color: 'red' } }) as any).atoms[0];
-    expect(atom.id).toMatchInlineSnapshot(`"colortablet"`);
+    expect(atom.id).toMatchInlineSnapshot(`"color%tablet"`);
     expect(atom.cssHyphenProp).toEqual('color');
-    expect(atom.selector).toBe('');
+    expect(atom.selector).toBe('%');
     expect(atom.breakpoint).toMatchInlineSnapshot(`"tablet"`);
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_hsxGAz"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_wRHxO"`);
       return '';
     });
 
     expect(styles.length).toBe(4);
     expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:tablet */
-      @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
+      @media (min-width: 700px) { ./*X*/_wRHxO/*X*/{color:red;} }"
     `);
     expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:tablet */
-      @media (min-width: 700px) { ./*X*/_hsxGAz/*X*/{color:red;} }"
+      @media (min-width: 700px) { ./*X*/_wRHxO/*X*/{color:red;} }"
     `);
   });
 
@@ -258,19 +258,19 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, null);
     const atom = (css({ '&:hover': { color: 'red' } }) as any).atoms[0];
 
-    expect(atom.id).toMatchInlineSnapshot(`"color:hoverinitial"`);
+    expect(atom.id).toMatchInlineSnapshot(`"color%%:hoverinitial"`);
     expect(atom.cssHyphenProp).toEqual('color');
-    expect(atom.selector).toMatchInlineSnapshot(`"&&:hover"`);
+    expect(atom.selector).toMatchInlineSnapshot(`"%%:hover"`);
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_hXHHYX"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_eqYDFT"`);
       return '';
     });
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_hXHHYX/*X*/./*X*/_hXHHYX/*X*/:hover{color:red;}"
+      ./*X*/_eqYDFT/*X*/./*X*/_eqYDFT/*X*/:hover{color:red;}"
     `);
   });
 
@@ -286,21 +286,21 @@ describe('createCss: mixed(SSR & Client)', () => {
           backgroundColor: 'green',
         }
       ).toString()
-    ).toMatchInlineSnapshot(`"_loCpsM _dzoaVP"`);
+    ).toMatchInlineSnapshot(`"_cIgueR _vfarC"`);
   });
 
   test('should insert rule only once', () => {
     const css = createCss({}, null);
     const { styles } = css.getStyles(() => {
-      expect(css({ color: 'red' }).toString()).toMatchInlineSnapshot(`"_dzoaVP"`);
-      expect(css({ color: 'red' }).toString()).toMatchInlineSnapshot(`"_dzoaVP"`);
+      expect(css({ color: 'red' }).toString()).toMatchInlineSnapshot(`"_vfarC"`);
+      expect(css({ color: 'red' }).toString()).toMatchInlineSnapshot(`"_vfarC"`);
       return '';
     });
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_dzoaVP/*X*/{color:red;}"
+      ./*X*/_vfarC/*X*/{color:red;}"
     `);
   });
   /*
@@ -330,7 +330,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     String(css({ tablet: { color: 'red' } }));
     expect(fakeEnv.document.styleSheets.length).toBe(4);
     expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
-      `"@media (min-width: 700px) {._hsxGAz {color: red;}}"`
+      `"@media (min-width: 700px) {._wRHxO {color: red;}}"`
     );
   });
 
@@ -346,7 +346,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       },
       null
     );
-    expect(css({ marginX: '1rem' }).toString()).toMatchInlineSnapshot(`"_fgMgZN _ijwQpS"`);
+    expect(css({ marginX: '1rem' }).toString()).toMatchInlineSnapshot(`"_kXWDug _dcoWJH"`);
   });
 
   test('should allow utils that resolve into nested structures', () => {
@@ -368,7 +368,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     });
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_hoOxCl _fTflhf"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_fFBJtF _kSFrLT"`);
 
       return '';
     });
@@ -376,8 +376,8 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_fTflhf/*X*/./*X*/_fTflhf/*X*/:hover{color:green;}
-      ./*X*/_hoOxCl/*X*/./*X*/_hoOxCl/*X*/./*X*/_hoOxCl/*X*/./*X*/_hoOxCl/*X*/:focus{color:green;}"
+      ./*X*/_kSFrLT/*X*/./*X*/_kSFrLT/*X*/:hover{color:green;}
+      ./*X*/_fFBJtF/*X*/./*X*/_fFBJtF/*X*/./*X*/_fFBJtF/*X*/./*X*/_fFBJtF/*X*/:focus{color:green;}"
     `);
   });
 
@@ -387,7 +387,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(
       // @ts-ignore
       String(css(undefined, null, false, '', { color: 'red' }))
-    ).toMatchInlineSnapshot(`"_dzoaVP"`);
+    ).toMatchInlineSnapshot(`"_vfarC"`);
   });
 
   test('should allow empty compose call', () => {
@@ -398,7 +398,7 @@ describe('createCss: mixed(SSR & Client)', () => {
   test('should allow conditional compositions', () => {
     const css = createCss({}, null);
     expect(String(css((false as any) && { color: 'red' }))).toBe('');
-    expect(String(css(true && { color: 'red' }))).toMatchInlineSnapshot(`"_dzoaVP"`);
+    expect(String(css(true && { color: 'red' }))).toMatchInlineSnapshot(`"_vfarC"`);
   });
 
   test('should allow prefixes', () => {
@@ -408,7 +408,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       },
       null
     );
-    expect(String(css({ color: 'red' }))).toMatchInlineSnapshot(`"foo_dzoaVP"`);
+    expect(String(css({ color: 'red' }))).toMatchInlineSnapshot(`"foo_vfarC"`);
   });
 
   test('should not inject existing styles', () => {
@@ -424,14 +424,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     // Lets see what is already put in
     expect(fakeEnv.document.styleSheets.length).toBe(3);
     expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(1);
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._dzoaVP {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._vfarC {color: red;}"`);
     // On the client it will rerun the logic (React hydrate etc.)
     clientCss({ color: 'red' }).toString();
     // Then we add something new
     clientCss({ color: 'blue' }).toString();
     // Lets see if it continues on the correct sequence
     expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(2);
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._iTsdWi {color: blue;}"`);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._gtxchX {color: blue;}"`);
   });
 
   test('should be able to show friendly classnames', () => {
@@ -449,8 +449,8 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_initial_bc_bieopk/*X*/{background-color:red;}
-      ./*X*/_initial_c_dzoaVP/*X*/{color:red;}"
+      ./*X*/_initial_bc_gwFOTp/*X*/{background-color:red;}
+      ./*X*/_initial_c_vfarC/*X*/{color:red;}"
     `);
   });
 
@@ -475,13 +475,13 @@ describe('createCss: mixed(SSR & Client)', () => {
     const { styles } = css.getStyles(() => {
       const cleanClass = css({ '@mobile': { color: 'red' } }).toString();
       // make sure that the classname from .toString() is clean and un escaped
-      expect(cleanClass).toMatchInlineSnapshot(`"_@mobile_c_jWtRMJ"`);
+      expect(cleanClass).toMatchInlineSnapshot(`"_@mobile_c_fmbjMM"`);
       return '';
     });
     // make sure that the injected rules are escaped:
     expect(styles[3]).toMatchInlineSnapshot(`
       "/* STITCHES:@mobile */
-      @media(min-width:300px){./*X*/_\\\\@mobile_c_jWtRMJ/*X*/{color:red;}}"
+      @media(min-width:300px){./*X*/_\\\\@mobile_c_fmbjMM/*X*/{color:red;}}"
     `);
   });
 
@@ -515,18 +515,18 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(fakeEnv.document.styleSheets.length).toBe(4);
     expect(fakeEnv.document.styleSheets[3].cssRules.length).toBe(1);
     expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
-      `"@media (min-width:300px) {._\\\\@mobile_c_jWtRMJ {color: red;}}"`
+      `"@media (min-width:300px) {._\\\\@mobile_c_fmbjMM {color: red;}}"`
     );
     clientCss({ '@mobile': { color: 'red' } }).toString();
     clientCss({ '@mobile': { color: 'blue' } }).toString();
     clientCss({ color: 'blue' }).toString();
     expect(fakeEnv.document.styleSheets[3].cssRules.length).toBe(2);
     expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
-      `"@media (min-width:300px) {._@mobile_c_cxoytQ {color: blue;}}"`
+      `"@media (min-width:300px) {._@mobile_c_foBsOd {color: blue;}}"`
     );
     // this rule was hydrated and cleaned from the server:
     expect(fakeEnv.document.styleSheets[3].cssRules[1].cssText).toMatchInlineSnapshot(
-      `"@media (min-width:300px) {._\\\\@mobile_c_jWtRMJ {color: red;}}"`
+      `"@media (min-width:300px) {._\\\\@mobile_c_fmbjMM {color: red;}}"`
     );
   });
 
@@ -564,7 +564,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     css({ '@mobile': { color: 'red' } }).toString();
 
     expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
-      `"@media (min-width:300px) {._@mobile_c_jWtRMJ {color: red;}}"`
+      `"@media (min-width:300px) {._@mobile_c_fmbjMM {color: red;}}"`
     );
   });
 
@@ -583,13 +583,13 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_initial_c_dzoaVP/*X*/{-webkit-color:red;}"
+      ./*X*/_initial_c_vfarC/*X*/{-webkit-color:red;}"
     `);
   });
 
   test('should use specificity props', () => {
     const css = createCss({}, null);
-    expect(String(css({ margin: '1px' }))).toMatchInlineSnapshot(`"_hXUSyk _bZYdQM _cTIqvn _kYSwIs"`);
+    expect(String(css({ margin: '1px' }))).toMatchInlineSnapshot(`"_fftfXl _iOZlal _laWIba _iGAIiF"`);
   });
 
   test('should map CSS Properties to Tokens', () => {
@@ -622,10 +622,10 @@ describe('createCss: mixed(SSR & Client)', () => {
         "/* STITCHES:__keyframes__ */
       ",
         "/* STITCHES */
-      ./*X*/_fVszNU/*X*/{outline-color:var(--colors-red500);}
-      ./*X*/_fBRTrr/*X*/{row-gap:var(--space-2);}
-      ./*X*/_bXQiUr/*X*/{column-gap:var(--space-2);}
-      ./*X*/_bpzGvB/*X*/{margin-top:var(--space-1);}",
+      ./*X*/_bKAHZJ/*X*/{outline-color:var(--colors-red500);}
+      ./*X*/_gTWOjC/*X*/{row-gap:var(--space-2);}
+      ./*X*/_liLbrO/*X*/{column-gap:var(--space-2);}
+      ./*X*/_jzEHzw/*X*/{margin-top:var(--space-1);}",
       ]
     `);
   });
@@ -637,7 +637,7 @@ describe('createCss: mixed(SSR & Client)', () => {
         color: 'red',
         backgroundColor: 'blue',
       }).toString()
-    ).toMatchInlineSnapshot(`"_YfjLh _dzoaVP"`);
+    ).toMatchInlineSnapshot(`"_htDnsg _vfarC"`);
   });
 
   test('should handle declarative pseudo selector', () => {
@@ -646,7 +646,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     // @ts-ignore
     css({ '&:hover': { color: 'red' } }).toString();
     expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
-      `"._hXHHYX._hXHHYX:hover {color: red;}"`
+      `"._eqYDFT._eqYDFT:hover {color: red;}"`
     );
   });
 
@@ -655,7 +655,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, (fakeEnv as unknown) as Window);
     // @ts-ignore
     css({ '&.red': { color: 'red' } }).toString();
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._jOAMao.red {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._ldUPST.red {color: red;}"`);
   });
 
   test('Should handle nesting', () => {
@@ -673,12 +673,12 @@ describe('createCss: mixed(SSR & Client)', () => {
         },
       },
     }).toString();
-    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._kTghTu .red {color: red;}"`);
+    expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._fNDTVr .red {color: red;}"`);
     expect(fakeEnv.document.styleSheets[2].cssRules[1].cssText).toMatchInlineSnapshot(
-      `"._dhhpqe .red .potato {background-color: red;}"`
+      `"._KmHaH .red .potato {background-color: red;}"`
     );
     expect(fakeEnv.document.styleSheets[2].cssRules[2].cssText).toMatchInlineSnapshot(
-      `"._lftrMy._lftrMy .red .potato:hover {background-color: green;}"`
+      `"._kpUhua._kpUhua .red .potato:hover {background-color: green;}"`
     );
   });
 
@@ -700,7 +700,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(4);
     expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:mobile */
-      @media(min-width:700px){./*X*/_fOxLwJ/*X*/{color:red;}}"
+      @media(min-width:700px){./*X*/_kOddJI/*X*/{color:red;}}"
     `);
   });
 
@@ -722,7 +722,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(4);
     expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:mobile */
-      @media(min-width:700px){./*X*/_coXxUV/*X*/./*X*/_coXxUV/*X*/:hover{color:red;}}"
+      @media(min-width:700px){./*X*/_cUeUHd/*X*/./*X*/_cUeUHd/*X*/:hover{color:red;}}"
     `);
   });
 
@@ -760,7 +760,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     `);
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gknCVb/*X*/{color:var(--colors-primary);}"
+      ./*X*/_jOpFbe/*X*/{color:var(--colors-primary);}"
     `);
   });
 
@@ -769,7 +769,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ '&:hover': { '&:disabled': { color: 'red' } } }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_bePnWZ"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_jEsxaZ"`);
 
       return '';
     });
@@ -777,7 +777,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_bePnWZ/*X*/./*X*/_bePnWZ/*X*/:hover:disabled{color:red;}"
+      ./*X*/_jEsxaZ/*X*/./*X*/_jEsxaZ/*X*/:hover:disabled{color:red;}"
     `);
   });
 
@@ -787,7 +787,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
-        `"_kiEsJg _lgRogE _fWbRyP _iLiCSc _lyLPc _hiyybE _bGUEHj _kROsiw _gonZcB _ckYojt _fZMTUa _gQTUlh"`
+        `"_hzfgoV _gjJLeZ _gOEYoe _iffwNR _fsNLp _iyDEp _jClUIq _bKudwR _dFXvMo _dICIiI _bxAjFr _itFHCM"`
       );
 
       return '';
@@ -796,18 +796,18 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gQTUlh/*X*/{border-top-width:1px;}
-      ./*X*/_fZMTUa/*X*/{border-right-width:1px;}
-      ./*X*/_ckYojt/*X*/{border-bottom-width:1px;}
-      ./*X*/_gonZcB/*X*/{border-left-width:1px;}
-      ./*X*/_kROsiw/*X*/{border-top-style:solid;}
-      ./*X*/_bGUEHj/*X*/{border-right-style:solid;}
-      ./*X*/_hiyybE/*X*/{border-bottom-style:solid;}
-      ./*X*/_lyLPc/*X*/{border-left-style:solid;}
-      ./*X*/_iLiCSc/*X*/{border-top-color:red;}
-      ./*X*/_fWbRyP/*X*/{border-right-color:red;}
-      ./*X*/_lgRogE/*X*/{border-bottom-color:red;}
-      ./*X*/_kiEsJg/*X*/{border-left-color:red;}"
+      ./*X*/_itFHCM/*X*/{border-top-width:1px;}
+      ./*X*/_bxAjFr/*X*/{border-right-width:1px;}
+      ./*X*/_dICIiI/*X*/{border-bottom-width:1px;}
+      ./*X*/_dFXvMo/*X*/{border-left-width:1px;}
+      ./*X*/_bKudwR/*X*/{border-top-style:solid;}
+      ./*X*/_jClUIq/*X*/{border-right-style:solid;}
+      ./*X*/_iyDEp/*X*/{border-bottom-style:solid;}
+      ./*X*/_fsNLp/*X*/{border-left-style:solid;}
+      ./*X*/_iffwNR/*X*/{border-top-color:red;}
+      ./*X*/_gOEYoe/*X*/{border-right-color:red;}
+      ./*X*/_gjJLeZ/*X*/{border-bottom-color:red;}
+      ./*X*/_hzfgoV/*X*/{border-left-color:red;}"
     `);
   });
 
@@ -826,7 +826,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
-        `"_fSAUek _dNVNzk _crCEGH _cYwVAs _lyLPc _hiyybE _bGUEHj _kROsiw _gonZcB _ckYojt _fZMTUa _gQTUlh"`
+        `"_eYsoPR _iInlxp _excfDq _eFAuOV _fsNLp _iyDEp _jClUIq _bKudwR _dFXvMo _dICIiI _bxAjFr _itFHCM"`
       );
 
       return '';
@@ -835,18 +835,18 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gQTUlh/*X*/{border-top-width:1px;}
-      ./*X*/_fZMTUa/*X*/{border-right-width:1px;}
-      ./*X*/_ckYojt/*X*/{border-bottom-width:1px;}
-      ./*X*/_gonZcB/*X*/{border-left-width:1px;}
-      ./*X*/_kROsiw/*X*/{border-top-style:solid;}
-      ./*X*/_bGUEHj/*X*/{border-right-style:solid;}
-      ./*X*/_hiyybE/*X*/{border-bottom-style:solid;}
-      ./*X*/_lyLPc/*X*/{border-left-style:solid;}
-      ./*X*/_cYwVAs/*X*/{border-top-color:var(--colors-primary);}
-      ./*X*/_crCEGH/*X*/{border-right-color:var(--colors-primary);}
-      ./*X*/_dNVNzk/*X*/{border-bottom-color:var(--colors-primary);}
-      ./*X*/_fSAUek/*X*/{border-left-color:var(--colors-primary);}"
+      ./*X*/_itFHCM/*X*/{border-top-width:1px;}
+      ./*X*/_bxAjFr/*X*/{border-right-width:1px;}
+      ./*X*/_dICIiI/*X*/{border-bottom-width:1px;}
+      ./*X*/_dFXvMo/*X*/{border-left-width:1px;}
+      ./*X*/_bKudwR/*X*/{border-top-style:solid;}
+      ./*X*/_jClUIq/*X*/{border-right-style:solid;}
+      ./*X*/_iyDEp/*X*/{border-bottom-style:solid;}
+      ./*X*/_fsNLp/*X*/{border-left-style:solid;}
+      ./*X*/_eFAuOV/*X*/{border-top-color:var(--colors-primary);}
+      ./*X*/_excfDq/*X*/{border-right-color:var(--colors-primary);}
+      ./*X*/_iInlxp/*X*/{border-bottom-color:var(--colors-primary);}
+      ./*X*/_eYsoPR/*X*/{border-left-color:var(--colors-primary);}"
     `);
   });
 
@@ -864,7 +864,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ boxShadow: '1px 1px 1px primary' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_jUMaLt"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_bPfRIA"`);
 
       return '';
     });
@@ -872,7 +872,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_jUMaLt/*X*/{box-shadow:1px 1px 1px var(--colors-primary);}"
+      ./*X*/_bPfRIA/*X*/{box-shadow:1px 1px 1px var(--colors-primary);}"
     `);
   });
 
@@ -897,7 +897,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_gknCVb theme-0"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_jOpFbe theme-0"`);
 
       return '';
     });
@@ -905,7 +905,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gknCVb/*X*/{color:var(--colors-primary);}"
+      ./*X*/_jOpFbe/*X*/{color:var(--colors-primary);}"
     `);
   });
 
@@ -916,8 +916,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       '100%': { background: 'green' },
     }) as any;
 
-    expect(keyFrame._cssRuleString).toBe(
-      '@keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}'
+    expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
+      `"@keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"`
     );
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"keYeiS"`);
@@ -940,8 +940,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       '100%': { mx: '10px' },
     }) as any;
 
-    expect(keyFrame._cssRuleString).toBe(
-      '@keyframes jxILgC {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}}'
+    expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
+      `"@keyframes jxILgC {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}}"`
     );
 
     expect(keyFrame.toString()).toMatchInlineSnapshot(`"jxILgC"`);
@@ -970,13 +970,13 @@ describe('createCss: mixed(SSR & Client)', () => {
     let atom: any;
     const { styles } = css.getStyles(() => {
       expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
-      expect(atom.toString()).toMatchInlineSnapshot(`"_iGYUIN"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_lghWLg"`);
       return '';
     });
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_iGYUIN/*X*/{animation-name:keYeiS;}
+      ./*X*/_lghWLg/*X*/{animation-name:keYeiS;}
       @keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"
     `);
   });
@@ -989,13 +989,13 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
     const atom = css({ animationName: keyFrame }) as any;
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_iGYUIN"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_lghWLg"`);
       return '';
     });
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_iGYUIN/*X*/{animation-name:keYeiS;}
+      ./*X*/_lghWLg/*X*/{animation-name:keYeiS;}
       @keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"
     `);
   });
@@ -1005,7 +1005,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ margin: '1px 5px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_hhGSUw _bZYdQM _gtgAOv _kYSwIs"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_bfdzTx _iOZlal _gIAWea _iGAIiF"`);
 
       return '';
     });
@@ -1013,10 +1013,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_kYSwIs/*X*/{margin-top:1px;}
-      ./*X*/_gtgAOv/*X*/{margin-right:5px;}
-      ./*X*/_bZYdQM/*X*/{margin-bottom:1px;}
-      ./*X*/_hhGSUw/*X*/{margin-left:5px;}"
+      ./*X*/_iGAIiF/*X*/{margin-top:1px;}
+      ./*X*/_gIAWea/*X*/{margin-right:5px;}
+      ./*X*/_iOZlal/*X*/{margin-bottom:1px;}
+      ./*X*/_bfdzTx/*X*/{margin-left:5px;}"
     `);
   });
 
@@ -1025,7 +1025,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ padding: '1px 5px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_grPRDT _eossbD _iuxmks _jCapLb"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_kwBuXq _bprxXq _fPyDox _MMkEy"`);
 
       return '';
     });
@@ -1033,10 +1033,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_jCapLb/*X*/{padding-top:1px;}
-      ./*X*/_iuxmks/*X*/{padding-right:5px;}
-      ./*X*/_eossbD/*X*/{padding-bottom:1px;}
-      ./*X*/_grPRDT/*X*/{padding-left:5px;}"
+      ./*X*/_MMkEy/*X*/{padding-top:1px;}
+      ./*X*/_fPyDox/*X*/{padding-right:5px;}
+      ./*X*/_bprxXq/*X*/{padding-bottom:1px;}
+      ./*X*/_kwBuXq/*X*/{padding-left:5px;}"
     `);
   });
 
@@ -1045,7 +1045,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ gap: '1px 5px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_cKnGEZ _jSCSWZ"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_kAGDsw _hFqUCg"`);
 
       return '';
     });
@@ -1053,8 +1053,8 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_jSCSWZ/*X*/{row-gap:1px;}
-      ./*X*/_cKnGEZ/*X*/{column-gap:5px;}"
+      ./*X*/_hFqUCg/*X*/{row-gap:1px;}
+      ./*X*/_kAGDsw/*X*/{column-gap:5px;}"
     `);
   });
 
@@ -1063,14 +1063,14 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ borderTop: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_iLiCSc _kROsiw _gQTUlh"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_iffwNR _bKudwR _itFHCM"`);
     });
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gQTUlh/*X*/{border-top-width:1px;}
-      ./*X*/_kROsiw/*X*/{border-top-style:solid;}
-      ./*X*/_iLiCSc/*X*/{border-top-color:red;}"
+      ./*X*/_itFHCM/*X*/{border-top-width:1px;}
+      ./*X*/_bKudwR/*X*/{border-top-style:solid;}
+      ./*X*/_iffwNR/*X*/{border-top-color:red;}"
     `);
   });
 
@@ -1081,7 +1081,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_ieRCSY"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_tdSbZ"`);
     });
   });
 
@@ -1090,7 +1090,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ borderRight: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_fWbRyP _bGUEHj _fZMTUa"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_gOEYoe _jClUIq _bxAjFr"`);
 
       return '';
     });
@@ -1099,9 +1099,9 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_fZMTUa/*X*/{border-right-width:1px;}
-      ./*X*/_bGUEHj/*X*/{border-right-style:solid;}
-      ./*X*/_fWbRyP/*X*/{border-right-color:red;}"
+      ./*X*/_bxAjFr/*X*/{border-right-width:1px;}
+      ./*X*/_jClUIq/*X*/{border-right-style:solid;}
+      ./*X*/_gOEYoe/*X*/{border-right-color:red;}"
     `);
   });
 
@@ -1110,13 +1110,13 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ borderBottom: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_lgRogE _hiyybE _ckYojt"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_gjJLeZ _iyDEp _dICIiI"`);
     });
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_ckYojt/*X*/{border-bottom-width:1px;}
-      ./*X*/_hiyybE/*X*/{border-bottom-style:solid;}
-      ./*X*/_lgRogE/*X*/{border-bottom-color:red;}"
+      ./*X*/_dICIiI/*X*/{border-bottom-width:1px;}
+      ./*X*/_iyDEp/*X*/{border-bottom-style:solid;}
+      ./*X*/_gjJLeZ/*X*/{border-bottom-color:red;}"
     `);
   });
 
@@ -1125,12 +1125,12 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ '@media (hover:hover)': { color: 'red' } }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_eIxNzM"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cDQzLB"`);
     });
     expect(styles.length).toBe(3);
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
-      @media (hover:hover){./*X*/_eIxNzM/*X*/{color:red;}}"
+      @media (hover:hover){./*X*/_cDQzLB/*X*/{color:red;}}"
     `);
   });
 
@@ -1138,9 +1138,9 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, null);
     const atom = (css({ 'div:hover &': { color: 'red' } }) as any).atoms[0];
 
-    expect(atom.id).toMatchInlineSnapshot(`"color div:hover &initial"`);
+    expect(atom.id).toMatchInlineSnapshot(`"colordiv:hover %initial"`);
     expect(atom.cssHyphenProp).toEqual('color');
-    expect(atom.selector).toMatchInlineSnapshot(`" div:hover &"`);
+    expect(atom.selector).toMatchInlineSnapshot(`"div:hover %"`);
     expect(atom.breakpoint).toMatchInlineSnapshot(`"initial"`);
 
     const { styles } = css.getStyles(() => {
@@ -1148,7 +1148,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     });
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-       div:hover ./*X*/_fSJjjq/*X*/{color:red;}"
+      div:hover ./*X*/_ckTvUp/*X*/{color:red;}"
     `);
   });
 
@@ -1157,15 +1157,15 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ borderLeft: '1px solid red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_kiEsJg _lyLPc _gonZcB"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_hzfgoV _fsNLp _dFXvMo"`);
     });
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_gonZcB/*X*/{border-left-width:1px;}
-      ./*X*/_lyLPc/*X*/{border-left-style:solid;}
-      ./*X*/_kiEsJg/*X*/{border-left-color:red;}"
+      ./*X*/_dFXvMo/*X*/{border-left-width:1px;}
+      ./*X*/_fsNLp/*X*/{border-left-style:solid;}
+      ./*X*/_hzfgoV/*X*/{border-left-color:red;}"
     `);
   });
 
@@ -1174,17 +1174,17 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ borderRadius: '5px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_hniQLS _fJjMAS _jwQcuF _jVkGRV"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_iTMjWf _iVpQMz _iMdbNo _dWbHjQ"`);
       return '';
     });
 
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_jVkGRV/*X*/{border-bottom-left-radius:5px;}
-      ./*X*/_jwQcuF/*X*/{border-top-left-radius:5px;}
-      ./*X*/_fJjMAS/*X*/{border-top-right-radius:5px;}
-      ./*X*/_hniQLS/*X*/{border-bottom-right-radius:5px;}"
+      ./*X*/_dWbHjQ/*X*/{border-bottom-left-radius:5px;}
+      ./*X*/_iMdbNo/*X*/{border-top-left-radius:5px;}
+      ./*X*/_iVpQMz/*X*/{border-top-right-radius:5px;}
+      ./*X*/_iTMjWf/*X*/{border-bottom-right-radius:5px;}"
     `);
   });
 
@@ -1193,7 +1193,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ borderColor: 'red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_kiEsJg _lgRogE _fWbRyP _iLiCSc"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_hzfgoV _gjJLeZ _gOEYoe _iffwNR"`);
 
       return '';
     });
@@ -1201,10 +1201,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_iLiCSc/*X*/{border-top-color:red;}
-      ./*X*/_fWbRyP/*X*/{border-right-color:red;}
-      ./*X*/_lgRogE/*X*/{border-bottom-color:red;}
-      ./*X*/_kiEsJg/*X*/{border-left-color:red;}"
+      ./*X*/_iffwNR/*X*/{border-top-color:red;}
+      ./*X*/_gOEYoe/*X*/{border-right-color:red;}
+      ./*X*/_gjJLeZ/*X*/{border-bottom-color:red;}
+      ./*X*/_hzfgoV/*X*/{border-left-color:red;}"
     `);
   });
 
@@ -1213,7 +1213,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ borderStyle: 'solid' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_lyLPc _hiyybE _bGUEHj _kROsiw"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_fsNLp _iyDEp _jClUIq _bKudwR"`);
 
       return '';
     });
@@ -1221,10 +1221,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_kROsiw/*X*/{border-top-style:solid;}
-      ./*X*/_bGUEHj/*X*/{border-right-style:solid;}
-      ./*X*/_hiyybE/*X*/{border-bottom-style:solid;}
-      ./*X*/_lyLPc/*X*/{border-left-style:solid;}"
+      ./*X*/_bKudwR/*X*/{border-top-style:solid;}
+      ./*X*/_jClUIq/*X*/{border-right-style:solid;}
+      ./*X*/_iyDEp/*X*/{border-bottom-style:solid;}
+      ./*X*/_fsNLp/*X*/{border-left-style:solid;}"
     `);
   });
 
@@ -1233,7 +1233,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ borderWidth: '2px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_khlBMi _czVPNi _hYbLMd _jfTurm"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_fsebJj _fNZgtf _gTZsgw _ciQgfb"`);
 
       return '';
     });
@@ -1241,10 +1241,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_jfTurm/*X*/{border-top-width:2px;}
-      ./*X*/_hYbLMd/*X*/{border-right-width:2px;}
-      ./*X*/_czVPNi/*X*/{border-bottom-width:2px;}
-      ./*X*/_khlBMi/*X*/{border-left-width:2px;}"
+      ./*X*/_ciQgfb/*X*/{border-top-width:2px;}
+      ./*X*/_gTZsgw/*X*/{border-right-width:2px;}
+      ./*X*/_fNZgtf/*X*/{border-bottom-width:2px;}
+      ./*X*/_fsebJj/*X*/{border-left-width:2px;}"
     `);
   });
 
@@ -1253,7 +1253,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ background: 'red' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_bieopk"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_gwFOTp"`);
 
       return '';
     });
@@ -1261,7 +1261,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_bieopk/*X*/{background-color:red;}"
+      ./*X*/_gwFOTp/*X*/{background-color:red;}"
     `);
   });
 
@@ -1270,7 +1270,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ transition: 'margin-right 2s ease-in-out' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_bqUgFr _dSdgMo _guSrvz"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_bRbaPK _rNWIB _gqYqQa"`);
 
       return '';
     });
@@ -1278,9 +1278,9 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_guSrvz/*X*/{transition-property:margin-right;}
-      ./*X*/_dSdgMo/*X*/{transition-duration:2s;}
-      ./*X*/_bqUgFr/*X*/{transition-timing-function:ease-in-out;}"
+      ./*X*/_gqYqQa/*X*/{transition-property:margin-right;}
+      ./*X*/_rNWIB/*X*/{transition-duration:2s;}
+      ./*X*/_bRbaPK/*X*/{transition-timing-function:ease-in-out;}"
     `);
   });
 
@@ -1298,7 +1298,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const atom = css({ textDecoration: 'underline overline primary 2px' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_AphwG _fkaZbo _cyLCEu"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_eUgKqn _jyoroV _fOyFCP"`);
 
       return '';
     });
@@ -1306,9 +1306,9 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_cyLCEu/*X*/{text-decoration-line:underline overline;}
-      ./*X*/_fkaZbo/*X*/{text-decoration-color:var(--colors-primary);}
-      ./*X*/_AphwG/*X*/{text-decoration-thickness:2px;}"
+      ./*X*/_fOyFCP/*X*/{text-decoration-line:underline overline;}
+      ./*X*/_jyoroV/*X*/{text-decoration-color:var(--colors-primary);}
+      ./*X*/_eUgKqn/*X*/{text-decoration-thickness:2px;}"
     `);
   });
 
@@ -1340,7 +1340,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
-        `"_evtXhu _kLdlRP _gGNwiM _jJGKqi _ddGabZ _ekzqCb _fSDMVi _ljWgwq _jfSqew _bAQCzH _efCFJv _eMIkUU _ibSieH _fxdrSf _bSnMBq _bjFYEb _iyzbHn _defIGb _dBAIKu _kFHhBs _jKRvhX _jZzWgc _bJWoRY _bByFok _jftlLF"`
+        `"_jUfuYn _eiOiyq _gQlmwl _ihldFX _hQDTVg _bxTEsS _fyegBv _kZntLz _eCkMWJ _fybAy _akfja _TkcKZ _Jwhwm _fGmbFK _iuQxUH _bYaAxW _dYUIDq _iBNCFy _cHbYPT _dCTgBF _knjcOO _hvBPLR _dbzAGl _ivpoFl _kBawpk"`
       );
 
       return '';
@@ -1349,31 +1349,31 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_jftlLF/*X*/ example-1{font-size:12pt;}
-      ./*X*/_bByFok/*X*/ example-1{line-height:14pt;}
-      ./*X*/_bJWoRY/*X*/ example-1{font-family:sans-serif;}
-      ./*X*/_jZzWgc/*X*/ example-2{font-size:80%;}
-      ./*X*/_jKRvhX/*X*/ example-2{font-family:sans-serif;}
-      ./*X*/_kFHhBs/*X*/ example-3{font-size:x-large;}
-      ./*X*/_dBAIKu/*X*/ example-3{line-height:110%;}
-      ./*X*/_defIGb/*X*/ example-3{font-family:\\"new century schoolbook\\",serif;}
-      ./*X*/_iyzbHn/*X*/ example-4{font-weight:bold;}
-      ./*X*/_bjFYEb/*X*/ example-4{font-style:italic;}
-      ./*X*/_bSnMBq/*X*/ example-4{font-size:large;}
-      ./*X*/_fxdrSf/*X*/ example-4{font-family:Palatino,serif;}
-      ./*X*/_ibSieH/*X*/ example-5{font-variant:small-caps;}
-      ./*X*/_eMIkUU/*X*/ example-5{font-size:120%;}
-      ./*X*/_efCFJv/*X*/ example-5{line-height:120%;}
-      ./*X*/_bAQCzH/*X*/ example-5{font-family:fantasy;}
-      ./*X*/_jfSqew/*X*/ example-6{font-stretch:condensed;}
-      ./*X*/_ljWgwq/*X*/ example-6{font-style:oblique;}
-      ./*X*/_fSDMVi/*X*/ example-6{font-size:12pt;}
-      ./*X*/_ekzqCb/*X*/ example-6{font-family:\\"Helvetica Neue\\",serif;}
-      ./*X*/_ddGabZ/*X*/ example-7{font-stretch:condensed;}
-      ./*X*/_jJGKqi/*X*/ example-7{font-style:oblique 25deg;}
-      ./*X*/_gGNwiM/*X*/ example-7{font-weight:753;}
-      ./*X*/_kLdlRP/*X*/ example-7{font-size:12pt;}
-      ./*X*/_evtXhu/*X*/ example-7{font-family:\\"Helvetica Neue\\",serif;}"
+      ./*X*/_kBawpk/*X*/ example-1{font-size:12pt;}
+      ./*X*/_ivpoFl/*X*/ example-1{line-height:14pt;}
+      ./*X*/_dbzAGl/*X*/ example-1{font-family:sans-serif;}
+      ./*X*/_hvBPLR/*X*/ example-2{font-size:80%;}
+      ./*X*/_knjcOO/*X*/ example-2{font-family:sans-serif;}
+      ./*X*/_dCTgBF/*X*/ example-3{font-size:x-large;}
+      ./*X*/_cHbYPT/*X*/ example-3{line-height:110%;}
+      ./*X*/_iBNCFy/*X*/ example-3{font-family:\\"new century schoolbook\\",serif;}
+      ./*X*/_dYUIDq/*X*/ example-4{font-weight:bold;}
+      ./*X*/_bYaAxW/*X*/ example-4{font-style:italic;}
+      ./*X*/_iuQxUH/*X*/ example-4{font-size:large;}
+      ./*X*/_fGmbFK/*X*/ example-4{font-family:Palatino,serif;}
+      ./*X*/_Jwhwm/*X*/ example-5{font-variant:small-caps;}
+      ./*X*/_TkcKZ/*X*/ example-5{font-size:120%;}
+      ./*X*/_akfja/*X*/ example-5{line-height:120%;}
+      ./*X*/_fybAy/*X*/ example-5{font-family:fantasy;}
+      ./*X*/_eCkMWJ/*X*/ example-6{font-stretch:condensed;}
+      ./*X*/_kZntLz/*X*/ example-6{font-style:oblique;}
+      ./*X*/_fyegBv/*X*/ example-6{font-size:12pt;}
+      ./*X*/_bxTEsS/*X*/ example-6{font-family:\\"Helvetica Neue\\",serif;}
+      ./*X*/_hQDTVg/*X*/ example-7{font-stretch:condensed;}
+      ./*X*/_ihldFX/*X*/ example-7{font-style:oblique 25deg;}
+      ./*X*/_gQlmwl/*X*/ example-7{font-weight:753;}
+      ./*X*/_eiOiyq/*X*/ example-7{font-size:12pt;}
+      ./*X*/_jUfuYn/*X*/ example-7{font-family:\\"Helvetica Neue\\",serif;}"
     `);
   });
   test('should handle flex shorthand', () => {
@@ -1429,12 +1429,12 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_jasyBb/*X*/{color:green;}
-      ./*X*/_fODNDI/*X*/{background-color:yello;}
-      ./*X*/_dzoaVP/*X*/{color:red;}
-      ./*X*/_YfjLh/*X*/{background-color:blue;}
-      @media (min-width: 700px){./*X*/_bHgrjq/*X*/{color:red;}}
-      @media (min-width: 200px){./*X*/_jpNofT/*X*/{color:red;}}"
+      ./*X*/_cazTGi/*X*/{color:green;}
+      ./*X*/_kWEtBh/*X*/{background-color:yello;}
+      ./*X*/_vfarC/*X*/{color:red;}
+      ./*X*/_htDnsg/*X*/{background-color:blue;}
+      @media (min-width: 700px){./*X*/_gaorMP/*X*/{color:red;}}
+      @media (min-width: 200px){./*X*/_bZjnQC/*X*/{color:red;}}"
     `);
   });
 
@@ -1461,8 +1461,8 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:large */
-      @media(min-width: 300px){./*X*/_kBCYwd/*X*/{color:blue;}}
-      @media(min-width: 300px){@supports (color: red){./*X*/_kVIRdt/*X*/{color:red;}}}"
+      @media(min-width: 300px){./*X*/_kjtUTA/*X*/{color:blue;}}
+      @media(min-width: 300px){@supports (color: red){./*X*/_hYsiEc/*X*/{color:red;}}}"
     `);
   });
 
@@ -1500,12 +1500,12 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_hXHHYX/*X*/./*X*/_hXHHYX/*X*/:hover{color:red;}
-      ./*X*/_dOwmSv/*X*/./*X*/_dOwmSv/*X*/./*X*/_dOwmSv/*X*/:active{color:red;}
-      ./*X*/_jiTAIB/*X*/./*X*/_jiTAIB/*X*/./*X*/_jiTAIB/*X*/./*X*/_jiTAIB/*X*/:focus{color:red;}
-      ./*X*/_cQRznS/*X*/./*X*/_cQRznS/*X*/./*X*/_cQRznS/*X*/./*X*/_cQRznS/*X*/:focus-visible{color:red;}
-      ./*X*/_cwbTVM/*X*/./*X*/_cwbTVM/*X*/./*X*/_cwbTVM/*X*/./*X*/_cwbTVM/*X*/./*X*/_cwbTVM/*X*/:read-only{color:red;}
-      ./*X*/_gXPzmF/*X*/./*X*/_gXPzmF/*X*/./*X*/_gXPzmF/*X*/./*X*/_gXPzmF/*X*/./*X*/_gXPzmF/*X*/./*X*/_gXPzmF/*X*/:disabled{color:red;}"
+      ./*X*/_eqYDFT/*X*/./*X*/_eqYDFT/*X*/:hover{color:red;}
+      ./*X*/_bvXVSg/*X*/./*X*/_bvXVSg/*X*/./*X*/_bvXVSg/*X*/:active{color:red;}
+      ./*X*/_dkIcjV/*X*/./*X*/_dkIcjV/*X*/./*X*/_dkIcjV/*X*/./*X*/_dkIcjV/*X*/:focus{color:red;}
+      ./*X*/_bqjfTS/*X*/./*X*/_bqjfTS/*X*/./*X*/_bqjfTS/*X*/./*X*/_bqjfTS/*X*/:focus-visible{color:red;}
+      ./*X*/_fmOyoP/*X*/./*X*/_fmOyoP/*X*/./*X*/_fmOyoP/*X*/./*X*/_fmOyoP/*X*/./*X*/_fmOyoP/*X*/:read-only{color:red;}
+      ./*X*/_bANtAh/*X*/./*X*/_bANtAh/*X*/./*X*/_bANtAh/*X*/./*X*/_bANtAh/*X*/./*X*/_bANtAh/*X*/./*X*/_bANtAh/*X*/:disabled{color:red;}"
     `);
   });
 
@@ -1521,7 +1521,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_dzoaVP/*X*/{color:red;}"
+      ./*X*/_vfarC/*X*/{color:red;}"
     `);
   });
 
@@ -1593,9 +1593,9 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_dbWduw/*X*/{line-height:1;}
-      ./*X*/_hXUSyk/*X*/{margin-left:1px;}
-      ./*X*/_clXqwH/*X*/{font-size:1px;}"
+      ./*X*/_cqPkSJ/*X*/{line-height:1;}
+      ./*X*/_fftfXl/*X*/{margin-left:1px;}
+      ./*X*/_kxWgGC/*X*/{font-size:1px;}"
     `);
   });
   test('Should append px to numbers in shorthands', () => {
@@ -1609,10 +1609,10 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_kYSwIs/*X*/{margin-top:1px;}
-      ./*X*/_cTIqvn/*X*/{margin-right:1px;}
-      ./*X*/_bZYdQM/*X*/{margin-bottom:1px;}
-      ./*X*/_hXUSyk/*X*/{margin-left:1px;}"
+      ./*X*/_iGAIiF/*X*/{margin-top:1px;}
+      ./*X*/_laWIba/*X*/{margin-right:1px;}
+      ./*X*/_iOZlal/*X*/{margin-bottom:1px;}
+      ./*X*/_fftfXl/*X*/{margin-left:1px;}"
     `);
   });
 
@@ -1637,14 +1637,14 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_kYSwIs/*X*/{margin-top:1px;}
-      ./*X*/_cTIqvn/*X*/{margin-right:1px;}
-      ./*X*/_bZYdQM/*X*/{margin-bottom:1px;}
-      ./*X*/_hXUSyk/*X*/{margin-left:1px;}
-      ./*X*/_eCjziG/*X*/{padding-top:var(--space-1);}
-      ./*X*/_bOBbkJ/*X*/{padding-right:var(--space-1);}
-      ./*X*/_gvDHwS/*X*/{padding-bottom:var(--space-1);}
-      ./*X*/_bznSbm/*X*/{padding-left:var(--space-1);}"
+      ./*X*/_iGAIiF/*X*/{margin-top:1px;}
+      ./*X*/_laWIba/*X*/{margin-right:1px;}
+      ./*X*/_iOZlal/*X*/{margin-bottom:1px;}
+      ./*X*/_fftfXl/*X*/{margin-left:1px;}
+      ./*X*/_iPHVKv/*X*/{padding-top:var(--space-1);}
+      ./*X*/_kmGPJs/*X*/{padding-right:var(--space-1);}
+      ./*X*/_exWIYj/*X*/{padding-bottom:var(--space-1);}
+      ./*X*/_fYlBIn/*X*/{padding-left:var(--space-1);}"
     `);
   });
 
@@ -1672,12 +1672,12 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     expect(styles[3]).toMatchInlineSnapshot(`
       "/* STITCHES:breakpointOne */
-      @media(min-width:400px){./*X*/_hmODGS/*X*/{color:red;}}"
+      @media(min-width:400px){./*X*/_kuSiuj/*X*/{color:red;}}"
     `);
 
     expect(styles[4]).toMatchInlineSnapshot(`
       "/* STITCHES:breakpointTwo */
-      @media(min-width:800px){./*X*/_fQKrRn/*X*/{color:blue;}}"
+      @media(min-width:800px){./*X*/_bHfEuS/*X*/{color:blue;}}"
     `);
   });
 });
@@ -1725,5 +1725,107 @@ describe('strict mode', () => {
       borderRadius: 'tiny',
       color: 'lime', // allowed since no color tokens are defined
     });
+  });
+
+  test("should generate the correct rule for a comma separated rule that isn't nested", () => {
+    const css = createCss({}, null);
+    const atom = css({ '.a,.b': { color: 'red' } }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_fbcevw"`);
+
+      return '';
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_fbcevw/*X*/ .a,./*X*/_fbcevw/*X*/ .b{color:red;}"
+    `);
+  });
+
+  test("should generate the correct rule for a comma separated rule that isn't nested and handle ampersand", () => {
+    const css = createCss({}, null);
+    const atom = css({ '&.a,&.b': { color: 'red' } }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cfhXDM"`);
+
+      return '';
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_cfhXDM/*X*/.a,./*X*/_cfhXDM/*X*/.b{color:red;}"
+    `);
+  });
+
+  test('should handle deeply nested comma based rules by generating all possible combinations as a single rule', () => {
+    const css = createCss({}, null);
+    const atom = css({
+      '.one': {
+        ' .a, .b': { '.c, .d': { color: 'blue' } },
+      },
+    }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cMlZFy"`);
+      return '';
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_cMlZFy/*X*/ .one .a .c,./*X*/_cMlZFy/*X*/ .one .b .c,./*X*/_cMlZFy/*X*/ .one .a .d,./*X*/_cMlZFy/*X*/ .one .b .d{color:blue;}"
+    `);
+  });
+
+  test('should allow comma separated rules', () => {
+    const css = createCss({}, null);
+    const atom = css({ '&.parent': { '.a, &.b': { color: 'red' } } }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_jOZzkI"`);
+
+      return '';
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_jOZzkI/*X*/.parent .a, ./*X*/_jOZzkI/*X*/.parent.b{color:red;}"
+    `);
+  });
+
+  test('Should handle nested ampersand correctly', () => {
+    const css = createCss({}, null);
+    const atom = css({
+      '.one:hover': {
+        '&.two': {
+          backgroundColor: 'pink',
+        },
+      },
+
+      div: {
+        h1: {
+          '.wow &': {
+            color: 'black',
+          },
+        },
+      },
+    }) as any;
+
+    const { styles } = css.getStyles(() => {
+      expect(atom.toString()).toMatchInlineSnapshot(`"_eLiTcV _dDvPWD"`);
+      return '';
+    });
+
+    expect(styles.length).toBe(3);
+    expect(styles[2].trim()).toMatchInlineSnapshot(`
+      "/* STITCHES */
+      ./*X*/_dDvPWD/*X*/./*X*/_dDvPWD/*X*/ .one:hover.two{background-color:pink;}
+      .wow ./*X*/_eLiTcV/*X*/ div h1{color:black;}"
+    `);
   });
 });
