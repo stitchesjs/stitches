@@ -318,4 +318,17 @@ describe('styled', () => {
     });
     expect(renderer.create(<Button size={0}>height should equal '1px'</Button>).toJSON()).toMatchSnapshot();
   });
+
+  test('it has the as prop typed correctly inside defaultProps', () => {
+    const Button = styled.button({});
+
+    Button.defaultProps = {
+      as: 'div',
+    };
+
+    Button.defaultProps = {
+      // @ts-expect-error
+      as: 'potato',
+    };
+  });
 });

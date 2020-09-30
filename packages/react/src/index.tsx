@@ -91,7 +91,7 @@ export interface IStyledComponent<ComponentOrTag extends React.ElementType, Vari
   /**
    * Default props typing:
    */
-  defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
+  defaultProps?: VariantASProps<Config, Variants> & { as?: React.ElementType } & { [k: string]: any };
   /**
    * DisplayName typing:
    */
@@ -341,3 +341,13 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   }
   return breakpoints;
 }
+
+const { styled } = createStyled({});
+
+const Button = styled.button({
+  backgroundColor: 'red',
+});
+
+Button.defaultProps = {
+  as: 'div',
+};
