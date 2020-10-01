@@ -381,7 +381,15 @@ export const flex = (tokens: any, value: any) => {
   if (parsedValue.length === 2) {
     return {
       flexGrow: parsedValue[0],
-      ...(isNaN(Number(parsedValue[1])) ? { flexBasis: parsedValue[1] } : { flexShrink: parsedValue[1] }),
+      ...(isNaN(Number(parsedValue[1]))
+        ? {
+            flexShrink: '1',
+            flexBasis: parsedValue[1],
+          }
+        : {
+            flexShrink: parsedValue[1],
+            flexBasis: '0%',
+          }),
     };
   }
   if (parsedValue.length === 3) {
@@ -394,9 +402,13 @@ export const flex = (tokens: any, value: any) => {
 
   return isNaN(Number(parsedValue[0]))
     ? {
+        flexGrow: '1',
+        flexShrink: '1',
         flexBasis: parsedValue[0],
       }
     : {
         flexGrow: parsedValue[0],
+        flexShrink: '1',
+        flexBasis: '0%',
       };
 };
