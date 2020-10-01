@@ -1046,7 +1046,7 @@ describe('Gap shorthand', () => {
         "columnGap": "5px",
         "rowGap": "5px",
       }
-		`);
+    `);
 
     expect(gap(tokens, '1 2')).toMatchInlineSnapshot(`
       Object {
@@ -1070,32 +1070,51 @@ describe('Flex shorthand', () => {
   test('Handles flex shorthand (One value, unitless number: flex-grow)', () => {
     expect(flex(tokens, '1')).toMatchInlineSnapshot(`
       Object {
+        "flexBasis": "0%",
         "flexGrow": "1",
+        "flexShrink": "1",
+      }
+    `);
+
+    expect(flex(tokens, '0')).toMatchInlineSnapshot(`
+      Object {
+        "flexBasis": "0%",
+        "flexGrow": "0",
+        "flexShrink": "1",
       }
     `);
   });
+
   test('Handles flex shorthand (One value, width/height: flex-basis)', () => {
     expect(flex(tokens, '10em')).toMatchInlineSnapshot(`
       Object {
         "flexBasis": "10em",
+        "flexGrow": "1",
+        "flexShrink": "1",
       }
     `);
     expect(flex(tokens, '10%')).toMatchInlineSnapshot(`
       Object {
         "flexBasis": "10%",
+        "flexGrow": "1",
+        "flexShrink": "1",
       }
     `);
     expect(flex(tokens, 'min-content')).toMatchInlineSnapshot(`
       Object {
         "flexBasis": "min-content",
+        "flexGrow": "1",
+        "flexShrink": "1",
       }
     `);
   });
+
   test('Handles flex shorthand (Two values, unitless number | width: flex-grow | flex-basis)', () => {
     expect(flex(tokens, '1 30px')).toMatchInlineSnapshot(`
       Object {
         "flexBasis": "30px",
         "flexGrow": "1",
+        "flexShrink": "1",
       }
     `);
   });
@@ -1103,6 +1122,7 @@ describe('Flex shorthand', () => {
   test('Handles flex shorthand (Two values, unitless number | unitless number: flex-grow | flex-shrink)', () => {
     expect(flex(tokens, '1 3')).toMatchInlineSnapshot(`
       Object {
+        "flexBasis": "0%",
         "flexGrow": "1",
         "flexShrink": "3",
       }
