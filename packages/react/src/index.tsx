@@ -267,7 +267,7 @@ export const createStyled = <Config extends TConfig>(
         ...propsWithoutVariantsAndCssProp,
         as: props.as || as,
         ref,
-        className: css(stitchesComponentId, ...compositions, props.className),
+        className: `${stitchesComponentId} ${css(...compositions).toString()} ${props.className || ''}`,
       });
     });
 
