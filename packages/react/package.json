@@ -1,6 +1,6 @@
 {
   "name": "@stitches/react",
-  "version": "0.0.3-canary.2",
+  "version": "0.0.3-canary.3",
   "description": "The modern CSS-in-JS library",
   "main": "dist/react.cjs.js",
   "module": "dist/react.esm.js",
