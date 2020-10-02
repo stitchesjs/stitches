@@ -94,7 +94,7 @@ describe('styled', () => {
     expect(renderer.create(<Code>console.log</Code>).toJSON()).toMatchSnapshot();
   });
 
-  test.only('Renders components from other libraries', () => {
+  test('Renders components from other libraries', () => {
     function LibraryComponent({ className = '', ...props }) {
       // Some 3rd party libraries may call assume className is a string
       // and call some string methods on it.
