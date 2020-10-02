@@ -263,13 +263,27 @@ export const createStyled = <Config extends TConfig>(
         propsWithoutVariantsAndCssProp.css = undefined;
       }
 
+      // By default we don't stringify the classname (composition), so that
+      // the children Stitches component is responsible for the final composition
+      let className = css(stitchesComponentId, ...compositions, props.className);
+
+      // If we're not wrapping a Stitches component,
+      // we ensure the classname is stringified
+      // https://github.com/modulz/stitches/issues/229
+      if (!(Component as any).__isStitchesComponent) {
+        className = className.toString();
+      }
+
       return React.createElement(Component, {
         ...propsWithoutVariantsAndCssProp,
         as: props.as || as,
         ref,
-        className: css(stitchesComponentId, ...compositions, props.className).toString(),
+        className,
       });
     });
+
+    (StitchesComponent as any).__isStitchesComponent = true;
+
     StitchesComponent.displayName =
       typeof currentAs === 'string'
         ? `styled(${currentAs})`
