@@ -139,11 +139,10 @@ exports[`styled Renders basic component 1`] = `
 exports[`styled Renders components from other libraries 1`] = `
 {
   "orderedAppliedStyles": [
-    "._vfarC {color: red;}",
     "._vfarC {color: red;}"
   ],
   "props": {
-    "className": "scid-gmqXFB _vfarC "
+    "className": "_vfarC scid-gmqXFB"
   },
   "children": [
     "hello world"
