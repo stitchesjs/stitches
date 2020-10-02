@@ -84,9 +84,14 @@ describe('styled', () => {
       },
     });
 
-    const tree = renderer.create(<H1 className="hi">hello world</H1>).toJSON();
+    expect(renderer.create(<H1 className="hi">hello world</H1>).toJSON()).toMatchSnapshot();
+  });
 
-    expect(tree).toMatchSnapshot();
+  test.only('Renders composed component', () => {
+    const Text = styled('span', { fontFamily: 'serif', color: 'black' });
+    const Code = styled(Text, { fontFamily: 'monospace' });
+
+    expect(renderer.create(<Code>console.log</Code>).toJSON()).toMatchSnapshot();
   });
 
   test('renders component with variant', () => {

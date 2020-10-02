@@ -267,9 +267,10 @@ export const createStyled = <Config extends TConfig>(
         ...propsWithoutVariantsAndCssProp,
         as: props.as || as,
         ref,
-        className: css(stitchesComponentId, ...compositions, props.className).toString(),
+        className: css(stitchesComponentId, ...compositions, props.className),
       });
     });
+
     StitchesComponent.displayName =
       typeof currentAs === 'string'
         ? `styled(${currentAs})`
