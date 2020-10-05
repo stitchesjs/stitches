@@ -223,11 +223,14 @@ export const createStyled = <Config extends TConfig>(
           propsWithoutVariantsAndCssProp[key] = props[key];
         }
       }
+
+      // Compound variants:
       compoundVariants.forEach((compoundVariant) => {
         const resolvedStyleObject = resolveCompoundVariantIntoStyleObj(props, compoundVariant, config);
         if (resolvedStyleObject) compositions.push(resolvedStyleObject);
       });
 
+      // Overrides:
       if (propsWithoutVariantsAndCssProp.css) {
         compositions.push(propsWithoutVariantsAndCssProp.css);
         propsWithoutVariantsAndCssProp.css = undefined;

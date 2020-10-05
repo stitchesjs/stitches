@@ -10,7 +10,8 @@ export const createFinalMediaQueryFromCombinations = (config: any, combos: strin
     return `${prev}, ${mergeQueries(config, curr)}`;
   }, '');
 
-export const matchBreakpointObjAgainstVal = (breakpointObj: Record<string, any>, val: string | number | boolean) => {
+export const matchBreakpointObjAgainstVal = (breakpointObj: Record<string, any> | string, val: string) => {
+  if (typeof breakpointObj !== 'object' && String(breakpointObj) === val) return ['initial'];
   const matchedBreakpoints = [];
   for (const [breakpoint, variantVal] of Object.entries(breakpointObj)) {
     if (variantVal === val) matchedBreakpoints.push(breakpoint);
@@ -25,7 +26,7 @@ export const resolveCompoundVariantIntoStyleObj = (
 ) => {
   const combos = [];
   for (const [key, val] of Object.entries(condition)) {
-    const breakpointObj = props[key] && matchBreakpointObjAgainstVal(props[key], val);
+    const breakpointObj = props[key] && matchBreakpointObjAgainstVal(props[key], String(val));
     if (breakpointObj.length) {
       combos.push(breakpointObj);
     } else {
