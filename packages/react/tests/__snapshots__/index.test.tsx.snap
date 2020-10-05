@@ -67,10 +67,10 @@ exports[`styled Handles compound variant 2`] = `
 {
   "orderedAppliedStyles": [
     "._izHeYc {height: 30px;}",
-    "._eBRzFG {background-color: compoundColor;}"
+    "._gwFOTp {background-color: red;}"
   ],
   "props": {
-    "className": "_eBRzFG _izHeYc scid-URbJg"
+    "className": "_izHeYc _gwFOTp scid-URbJg"
   },
   "children": [
     "compound"
@@ -132,6 +132,35 @@ exports[`styled Renders basic component 1`] = `
   },
   "children": [
     "hello world"
+  ]
+}
+`;
+
+exports[`styled Renders components from other libraries 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._vfarC {color: red;}"
+  ],
+  "props": {
+    "className": "_vfarC scid-gmqXFB"
+  },
+  "children": [
+    "hello world"
+  ]
+}
+`;
+
+exports[`styled Renders composed component 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._genYDa {color: black;}",
+    "._bQrNcz {font-family: monospace;}"
+  ],
+  "props": {
+    "className": "scid-kngyIZ _bQrNcz _genYDa scid-dvWlMZ"
+  },
+  "children": [
+    "console.log"
   ]
 }
 `;

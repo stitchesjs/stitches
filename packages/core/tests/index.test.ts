@@ -1376,12 +1376,13 @@ describe('createCss: mixed(SSR & Client)', () => {
       ./*X*/_jUfuYn/*X*/ example-7{font-family:\\"Helvetica Neue\\",serif;}"
     `);
   });
+
   test('should handle flex shorthand', () => {
     const css = createCss({}, null);
     const atom = css({ flex: '1' }) as any;
 
     const { styles } = css.getStyles(() => {
-      expect(atom.toString()).toMatchInlineSnapshot(`"_bfdwlb"`);
+      expect(atom.toString()).toMatchInlineSnapshot(`"_cHjBal _jBlSGq _itEjDe"`);
 
       return '';
     });
@@ -1389,7 +1390,9 @@ describe('createCss: mixed(SSR & Client)', () => {
     expect(styles.length).toBe(3);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
-      ./*X*/_bfdwlb/*X*/{flex-grow:1;}"
+      ./*X*/_itEjDe/*X*/{flex-grow:1;}
+      ./*X*/_jBlSGq/*X*/{flex-shrink:1;}
+      ./*X*/_cHjBal/*X*/{flex-basis:0%;}"
     `);
   });
 

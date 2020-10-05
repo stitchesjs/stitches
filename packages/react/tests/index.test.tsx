@@ -84,9 +84,28 @@ describe('styled', () => {
       },
     });
 
-    const tree = renderer.create(<H1 className="hi">hello world</H1>).toJSON();
+    expect(renderer.create(<H1 className="hi">hello world</H1>).toJSON()).toMatchSnapshot();
+  });
 
-    expect(tree).toMatchSnapshot();
+  test('Renders composed component', () => {
+    const Text = styled('span', { fontFamily: 'serif', color: 'black' });
+    const Code = styled(Text, { fontFamily: 'monospace' });
+
+    expect(renderer.create(<Code>console.log</Code>).toJSON()).toMatchSnapshot();
+  });
+
+  test('Renders components from other libraries', () => {
+    function LibraryComponent({ className = '', ...props }) {
+      // Some 3rd party libraries may call assume className is a string
+      // and call some string methods on it.
+      // https://github.com/modulz/stitches/issues/229
+      const classes = className.split(' ');
+      return <div className={classes.join(' ')} {...props} />;
+    }
+
+    const MyComponent = styled(LibraryComponent, { color: 'red' });
+
+    expect(renderer.create(<MyComponent>hello world</MyComponent>).toJSON()).toMatchSnapshot();
   });
 
   test('renders component with variant', () => {
@@ -319,7 +338,7 @@ describe('styled', () => {
     expect(renderer.create(<Button size={0}>height should equal '1px'</Button>).toJSON()).toMatchSnapshot();
   });
 
-  test.only('it matches compound variants with multiple breakpoints', () => {
+  test('it matches compound variants with multiple breakpoints', () => {
     const { styled: _styled, css: _css } = createStyled({
       showFriendlyClassnames: true,
       breakpoints: {
