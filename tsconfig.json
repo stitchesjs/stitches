@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES6",
     "module": "commonjs",
-    "lib": ["dom", "es2017"],
+    "lib": ["dom", "es2019"],
     "preserveSymlinks": true,
     "moduleResolution": "node",
     "importHelpers": true,

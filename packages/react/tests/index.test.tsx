@@ -318,4 +318,58 @@ describe('styled', () => {
     });
     expect(renderer.create(<Button size={0}>height should equal '1px'</Button>).toJSON()).toMatchSnapshot();
   });
+
+  test.only('it matches compound variants with multiple breakpoints', () => {
+    const { styled: _styled, css: _css } = createStyled({
+      showFriendlyClassnames: true,
+      breakpoints: {
+        breakpointOne: (rule) => `@media(min-width:400px){${rule}}`,
+        breakpointTwo: (rule) => `@media(min-width:800px){${rule}}`,
+      },
+    });
+
+    const Button = _styled('button', {
+      color: 'gray',
+
+      variants: {
+        color: {
+          red: {
+            background: 'red',
+          },
+          yellow: {
+            background: 'yellow',
+          },
+        },
+        size: {
+          small: {
+            height: 20,
+          },
+          big: {
+            height: 40,
+          },
+        },
+      },
+    });
+
+    Button.compoundVariant(
+      {
+        color: 'red',
+        size: 'big',
+      },
+      {
+        backgroundColor: 'potato',
+      }
+    );
+
+    expect(
+      renderer
+        .create(
+          <Button color={{ initial: 'red', breakpointOne: 'yellow' }} size={{ breakpointTwo: 'big' }}>
+            no variant
+          </Button>
+        )
+        .toJSON()
+    ).toMatchSnapshot();
+    (_css as any).dispose();
+  });
 });

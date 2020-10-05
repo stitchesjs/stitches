@@ -9,6 +9,7 @@ import {
 } from '@stitches/core';
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
+import { resolveCompoundVariantIntoStyleObj } from './utils';
 
 let hasWarnedInlineStyle = false;
 
@@ -136,13 +137,6 @@ export type TStyled<Config extends TConfig> = {
     : IStyledComponent<TagOrComponent, Variants, Config>;
 } & TProxyStyledElements<Config>;
 
-const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
-  const map = new Map();
-  map.set(MAIN_BREAKPOINT_ID, [...(existingMap?.get(MAIN_BREAKPOINT_ID) || [])]);
-  Object.keys(breakPoints).forEach((breakpoint) => map.set(breakpoint, [...(existingMap?.get(breakpoint) || [])]));
-  return map;
-};
-
 export const createStyled = <Config extends TConfig>(
   config: Config
 ): {
@@ -169,19 +163,14 @@ export const createStyled = <Config extends TConfig>(
     baseAndVariantStyles: any = (cssComposer: any) => cssComposer.compose(),
     Component: React.ComponentType<any> = Box
   ) => {
-    let numberOfCompoundVariants = 0;
     const as = currentAs;
     const { variants = {}, ...base } = baseAndVariantStyles;
     const baseStyles: any = css(base);
     // compound s vars & constants:
     // keep track of all compound variants:
     const compoundVariants: any[] = [];
-    // a map that keeps track of the required number of matching s left for each break point:
-    const requiredMatches = createCompoundVariantsMatcher(configBreakpoints);
     // keep track of the number of available variants
     const evaluatedVariantMap: Map<string, Map<string, { [key: string]: string }>> = new Map();
-    // store pre evaluated variants
-    const evaluatedCompoundVariants: Map<any, { [key: string]: string }> = new Map();
 
     // tslint:disable-next-line: forin
     for (const Name in variants) {
@@ -215,12 +204,6 @@ export const createStyled = <Config extends TConfig>(
       const compositions = [baseStyles];
 
       const propsWithoutVariantsAndCssProp: any = {};
-      // clone the compound s matcher
-      const compoundRequiredMatches = createCompoundVariantsMatcher(configBreakpoints, requiredMatches);
-      // keep track of the number of unResolved s so that we could bail early:
-      const numberOfUnResolvedCompoundVariants = {
-        current: numberOfCompoundVariants,
-      };
       for (const key in props) {
         // check if the prop is a variant
         if (key in variants) {
@@ -235,28 +218,15 @@ export const createStyled = <Config extends TConfig>(
             if (evaluatedVariant && evaluatedVariant.get(stringBreakpointVal)) {
               compositions.push(evaluatedVariant.get(stringBreakpointVal)?.[breakpoint]);
             }
-            /** Compound variants: */
-            if (numberOfUnResolvedCompoundVariants.current) {
-              compoundVariants.forEach((compoundVariant, i) => {
-                // if this breakpoint  matches a compound
-                // eslint-disable-next-line
-                if (stringBreakpointVal === String(compoundVariant[key])) {
-                  compoundRequiredMatches.get(breakpoint)[i]--;
-                }
-                // when the required matches reach 0 for any compound ...
-                // we know we have a matched compoundVariant
-                if (compoundRequiredMatches.get(breakpoint)[i] === 0) {
-                  numberOfUnResolvedCompoundVariants.current--;
-                  compositions.push(evaluatedCompoundVariants.get(compoundVariant)?.[breakpoint]);
-                }
-              });
-            }
-            /** End compound variants */
           }
         } else {
           propsWithoutVariantsAndCssProp[key] = props[key];
         }
       }
+      compoundVariants.forEach((compoundVariant) => {
+        const resolvedStyleObject = resolveCompoundVariantIntoStyleObj(props, compoundVariant, config);
+        if (resolvedStyleObject) compositions.push(resolvedStyleObject);
+      });
 
       if (propsWithoutVariantsAndCssProp.css) {
         compositions.push(propsWithoutVariantsAndCssProp.css);
@@ -279,27 +249,11 @@ export const createStyled = <Config extends TConfig>(
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
-    (StitchesComponent as any).compoundVariant = (compundVariantsObject: any, compoundVariantStyles: any) => {
-      // Update component level variables:
-      numberOfCompoundVariants++;
-      // Each time we add
-      compoundVariants.push(compundVariantsObject);
-      // required matches is a map with breakpoints
-      // each time we add a compound variant, we also push its length to
-      // all of the breakpoints so:
-      // requiredMatches.get(breakpoint)[i] === Object.keys(compoundVariants[i]).length
-      // at render time we clone the requiredMatches map and whenever a prop matches a compound variant we decrement
-      // the required matches for this compound variant at this breakpoint
-      // when the required matches hit 0 we know it's a mtach
-      requiredMatches.forEach((value, key) => {
-        value.push(Object.keys(compundVariantsObject).length);
-      });
-
-      const evaluatedStyles = evaluateStylesForAllBreakpoints(compoundVariantStyles, configBreakpoints, css);
-
-      evaluatedCompoundVariants.set(compundVariantsObject, evaluatedStyles);
+    (StitchesComponent as any).compoundVariant = (compoundVariantsObject: any, compoundVariantStyles: any) => {
+      compoundVariants.push([compoundVariantsObject, compoundVariantStyles]);
       return StitchesComponent;
     };
+
     return StitchesComponent;
   };
 
