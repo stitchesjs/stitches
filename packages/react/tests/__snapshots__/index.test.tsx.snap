@@ -67,10 +67,11 @@ exports[`styled Handles compound variant 2`] = `
 {
   "orderedAppliedStyles": [
     "._izHeYc {height: 30px;}",
-    "._gwFOTp {background-color: red;}"
+    "._gwFOTp {background-color: red;}",
+    "._fhWNnZ {background-color: compoundColor;}"
   ],
   "props": {
-    "className": "_izHeYc _gwFOTp scid-URbJg"
+    "className": "_fhWNnZ _izHeYc _gwFOTp scid-URbJg"
   },
   "children": [
     "compound"
@@ -170,12 +171,12 @@ exports[`styled it matches compound variants with multiple breakpoints 1`] = `
   "orderedAppliedStyles": [
     "._initial_c_jNAccg {color: gray;}",
     "._initial_bc_gwFOTp {background-color: red;}",
-    "._initial_bc_ddCnWb {background-color: potato;}",
     "._breakpointOne_bc_cCahHP {background-color: yellow;}",
-    "._breakpointTwo_h_fvQVAu {height: 40px;}"
+    "._breakpointTwo_h_fvQVAu {height: 40px;}",
+    ".__COMPOUND_VARIANTS_bc_dfppQs {background-color: potato;}"
   ],
   "props": {
-    "className": "_initial_bc_ddCnWb _breakpointTwo_h_fvQVAu _breakpointOne_bc_cCahHP _initial_bc_gwFOTp _initial_c_jNAccg scid-gzMEKS"
+    "className": "__COMPOUND_VARIANTS_bc_dfppQs _breakpointTwo_h_fvQVAu _breakpointOne_bc_cCahHP _initial_bc_gwFOTp _initial_c_jNAccg scid-gzMEKS"
   },
   "children": [
     "no variant"

@@ -3,7 +3,6 @@ export const product = (a: string[][]) =>
 export const extractMedia = (media: string) => media.replace(/@media\s*(.*?\(.+\))\s*{.*}/gi, '$1').trim();
 export const mergeQueries = (config: any, breakpointsToMerge: string[]) =>
   breakpointsToMerge.map((bp) => extractMedia(config.breakpoints[bp](''))).join(' AND ');
-
 export const createFinalMediaQueryFromCombinations = (config: any, combos: string[][]) =>
   product(combos).reduce((prev, curr) => {
     if (!prev) return mergeQueries(config, curr);
@@ -36,6 +35,8 @@ export const resolveCompoundVariantIntoStyleObj = (
   }
   const rule = createFinalMediaQueryFromCombinations(config, combos);
   return {
-    [rule ? `@media ${rule}` : '']: compoundStyles,
+    _COMPOUND_VARIANTS: {
+      [rule ? `@media ${rule}` : '']: compoundStyles,
+    },
   };
 };

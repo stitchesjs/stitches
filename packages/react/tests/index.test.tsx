@@ -180,7 +180,7 @@ describe('styled', () => {
     expect(
       renderer
         .create(
-          <Button variant="red" size={1}>
+          <Button variant={{ initial: 'red' }} size={{ initial: 1 }}>
             compound
           </Button>
         )

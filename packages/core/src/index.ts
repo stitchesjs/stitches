@@ -434,7 +434,7 @@ declare global {
     Deno: any;
   }
 }
-
+const COMPOUND_VARIANTS_BREAKPOINT_NAME = '_COMPOUND_VARIANTS';
 export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
@@ -446,6 +446,8 @@ export const createCss = <T extends TConfig>(
   // pre-checked config to avoid checking these all the time
   // tslint:disable-next-line
   const config: TConfig<true> = Object.assign({ tokens: {}, utils: {}, breakpoints: {} }, _config);
+  // add the compound variants breakpoint
+  config.breakpoints[COMPOUND_VARIANTS_BREAKPOINT_NAME] = (val: string) => val;
   // prefill with empty token groups
   tokenTypes.forEach((tokenType) => (config.tokens[tokenType] = config.tokens[tokenType] || {}));
   const { tokens, breakpoints } = config;

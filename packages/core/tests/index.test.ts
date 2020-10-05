@@ -68,7 +68,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_vfarC/*X*/{color:red;}"
@@ -100,7 +100,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_cvKCax/*X*/{color:var(--colors-RED);}"
@@ -123,7 +123,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_kTKeUF/*X*/{color:var(--colors-red);}"
@@ -156,7 +156,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[0]).toMatchInlineSnapshot(`
       "/* STITCHES:__variables__ */
       .theme-0{--colors-red:red;}
@@ -200,7 +200,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jAzCtu/*X*/{margin-left:calc(var(--space-1) * -1);}
@@ -243,7 +243,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(4);
+    expect(styles.length).toBe(5);
     expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:tablet */
       @media (min-width: 700px) { ./*X*/_wRHxO/*X*/{color:red;} }"
@@ -267,7 +267,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_eqYDFT/*X*/./*X*/_eqYDFT/*X*/:hover{color:red;}"
@@ -297,7 +297,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_vfarC/*X*/{color:red;}"
@@ -328,7 +328,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       (fakeEnv as unknown) as Window
     );
     String(css({ tablet: { color: 'red' } }));
-    expect(fakeEnv.document.styleSheets.length).toBe(4);
+    expect(fakeEnv.document.styleSheets.length).toBe(5);
     expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
       `"@media (min-width: 700px) {._wRHxO {color: red;}}"`
     );
@@ -373,7 +373,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_kSFrLT/*X*/./*X*/_kSFrLT/*X*/:hover{color:green;}
@@ -422,7 +422,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     hotReloadingCache.clear();
     const clientCss = createCss({}, fakeEnv as any);
     // Lets see what is already put in
-    expect(fakeEnv.document.styleSheets.length).toBe(3);
+    expect(fakeEnv.document.styleSheets.length).toBe(4);
     expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(1);
     expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._vfarC {color: red;}"`);
     // On the client it will rerun the logic (React hydrate etc.)
@@ -512,7 +512,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       fakeEnv as any
     );
 
-    expect(fakeEnv.document.styleSheets.length).toBe(4);
+    expect(fakeEnv.document.styleSheets.length).toBe(5);
     expect(fakeEnv.document.styleSheets[3].cssRules.length).toBe(1);
     expect(fakeEnv.document.styleSheets[3].cssRules[0].cssText).toMatchInlineSnapshot(
       `"@media (min-width:300px) {._\\\\@mobile_c_fmbjMM {color: red;}}"`
@@ -626,6 +626,8 @@ describe('createCss: mixed(SSR & Client)', () => {
       ./*X*/_gTWOjC/*X*/{row-gap:var(--space-2);}
       ./*X*/_liLbrO/*X*/{column-gap:var(--space-2);}
       ./*X*/_jzEHzw/*X*/{margin-top:var(--space-1);}",
+        "/* STITCHES:_COMPOUND_VARIANTS */
+      ",
       ]
     `);
   });
@@ -697,7 +699,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     });
     // @ts-ignore
 
-    expect(styles.length).toBe(4);
+    expect(styles.length).toBe(5);
     expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:mobile */
       @media(min-width:700px){./*X*/_kOddJI/*X*/{color:red;}}"
@@ -719,7 +721,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(4);
+    expect(styles.length).toBe(5);
     expect(styles[3].trim()).toMatchInlineSnapshot(`
       "/* STITCHES:mobile */
       @media(min-width:700px){./*X*/_cUeUHd/*X*/./*X*/_cUeUHd/*X*/:hover{color:red;}}"
@@ -752,7 +754,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[0]).toMatchInlineSnapshot(`
       "/* STITCHES:__variables__ */
       .theme-0{--colors-primary:blue;}
@@ -774,7 +776,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jEsxaZ/*X*/./*X*/_jEsxaZ/*X*/:hover:disabled{color:red;}"
@@ -793,7 +795,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_itFHCM/*X*/{border-top-width:1px;}
@@ -832,7 +834,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_itFHCM/*X*/{border-top-width:1px;}
@@ -869,7 +871,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_bPfRIA/*X*/{box-shadow:1px 1px 1px var(--colors-primary);}"
@@ -902,7 +904,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jOpFbe/*X*/{color:var(--colors-primary);}"
@@ -973,7 +975,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_lghWLg"`);
       return '';
     });
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_lghWLg/*X*/{animation-name:keYeiS;}
@@ -992,7 +994,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_lghWLg"`);
       return '';
     });
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_lghWLg/*X*/{animation-name:keYeiS;}
@@ -1010,7 +1012,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_iGAIiF/*X*/{margin-top:1px;}
@@ -1030,7 +1032,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_MMkEy/*X*/{padding-top:1px;}
@@ -1050,7 +1052,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_hFqUCg/*X*/{row-gap:1px;}
@@ -1065,7 +1067,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_iffwNR _bKudwR _itFHCM"`);
     });
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_itFHCM/*X*/{border-top-width:1px;}
@@ -1095,7 +1097,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
 
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
@@ -1127,7 +1129,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_cDQzLB"`);
     });
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2]).toMatchInlineSnapshot(`
       "/* STITCHES */
       @media (hover:hover){./*X*/_cDQzLB/*X*/{color:red;}}"
@@ -1160,7 +1162,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_hzfgoV _fsNLp _dFXvMo"`);
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dFXvMo/*X*/{border-left-width:1px;}
@@ -1178,7 +1180,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dWbHjQ/*X*/{border-bottom-left-radius:5px;}
@@ -1198,7 +1200,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_iffwNR/*X*/{border-top-color:red;}
@@ -1218,7 +1220,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_bKudwR/*X*/{border-top-style:solid;}
@@ -1238,7 +1240,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_ciQgfb/*X*/{border-top-width:2px;}
@@ -1258,7 +1260,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gwFOTp/*X*/{background-color:red;}"
@@ -1275,7 +1277,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_gqYqQa/*X*/{transition-property:margin-right;}
@@ -1303,7 +1305,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_fOyFCP/*X*/{text-decoration-line:underline overline;}
@@ -1346,7 +1348,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_kBawpk/*X*/ example-1{font-size:12pt;}
@@ -1387,7 +1389,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_itEjDe/*X*/{flex-grow:1;}
@@ -1740,7 +1742,7 @@ describe('strict mode', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_fbcevw/*X*/ .a,./*X*/_fbcevw/*X*/ .b{color:red;}"
@@ -1757,7 +1759,7 @@ describe('strict mode', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_cfhXDM/*X*/.a,./*X*/_cfhXDM/*X*/.b{color:red;}"
@@ -1777,7 +1779,7 @@ describe('strict mode', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_cMlZFy/*X*/ .one .a .c,./*X*/_cMlZFy/*X*/ .one .b .c,./*X*/_cMlZFy/*X*/ .one .a .d,./*X*/_cMlZFy/*X*/ .one .b .d{color:blue;}"
@@ -1794,7 +1796,7 @@ describe('strict mode', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_jOZzkI/*X*/.parent .a, ./*X*/_jOZzkI/*X*/.parent.b{color:red;}"
@@ -1824,7 +1826,7 @@ describe('strict mode', () => {
       return '';
     });
 
-    expect(styles.length).toBe(3);
+    expect(styles.length).toBe(4);
     expect(styles[2].trim()).toMatchInlineSnapshot(`
       "/* STITCHES */
       ./*X*/_dDvPWD/*X*/./*X*/_dDvPWD/*X*/ .one:hover.two{background-color:pink;}
