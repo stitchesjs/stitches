@@ -384,7 +384,7 @@ describe('styled', () => {
       renderer
         .create(
           <Button color={{ initial: 'red', breakpointOne: 'yellow' }} size={{ breakpointTwo: 'big' }}>
-            no variant
+            Responsive compound variants
           </Button>
         )
         .toJSON()

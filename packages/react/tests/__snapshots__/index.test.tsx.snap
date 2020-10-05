@@ -179,7 +179,7 @@ exports[`styled it matches compound variants with multiple breakpoints 1`] = `
     "className": "__COMPOUND_VARIANTS_bc_dfppQs _breakpointTwo_h_fvQVAu _breakpointOne_bc_cCahHP _initial_bc_gwFOTp _initial_c_jNAccg scid-gzMEKS"
   },
   "children": [
-    "no variant"
+    "Responsive compound variants"
   ]
 }
 `;
