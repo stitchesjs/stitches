@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "type": "module",
+  "main": "benchmark.mjs",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}

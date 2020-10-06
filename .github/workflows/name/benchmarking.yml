@@ -1,0 +1,22 @@
+name: Pull Request Benchmarking
+
+on:
+  pull_request:
+    branches: [ canary ]
+
+jobs:
+  benchmarking:
+    name: Benchmarking
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Benchmark
+        run: |
+          npm install
+          cd .github/run
+          npm install
+          node benchmark.mjs
+        with:
+          who-to-greet: 'Mona the Octocat'
