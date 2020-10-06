@@ -166,17 +166,37 @@ exports[`styled Renders composed component 1`] = `
 }
 `;
 
+exports[`styled it matches compound variants matching multiple times at different breakpoints 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._initial_c_jNAccg {color: gray;}",
+    "._initial_bc_gwFOTp {background-color: red;}",
+    "._initial_h_cNVOTj {height: 40px;}",
+    "._breakpointOne_bc_gvZKdE {background-color: red;}",
+    "._breakpointOne_h_dbmauu {height: 40px;}",
+    "._breakpointTwo_bc_bHGecQ {background-color: red;}",
+    "._breakpointTwo_h_fvQVAu {height: 40px;}",
+    ".__COMPOUND_VARIANTS_bc_gLCsRY {background-color: potato;}"
+  ],
+  "props": {
+    "className": "__COMPOUND_VARIANTS_bc_gLCsRY _breakpointTwo_h_fvQVAu _breakpointOne_h_dbmauu _initial_h_cNVOTj _breakpointTwo_bc_bHGecQ _breakpointOne_bc_gvZKdE _initial_bc_gwFOTp _initial_c_jNAccg scid-gzMEKS"
+  },
+  "children": [
+    "Responsive compound variants"
+  ]
+}
+`;
+
 exports[`styled it matches compound variants with multiple breakpoints 1`] = `
 {
   "orderedAppliedStyles": [
     "._initial_c_jNAccg {color: gray;}",
     "._initial_bc_gwFOTp {background-color: red;}",
     "._breakpointOne_bc_cCahHP {background-color: yellow;}",
-    "._breakpointTwo_h_fvQVAu {height: 40px;}",
-    ".__COMPOUND_VARIANTS_bc_eMAwKu {background-color: potato;}"
+    "._breakpointTwo_h_fvQVAu {height: 40px;}"
   ],
   "props": {
-    "className": "__COMPOUND_VARIANTS_bc_eMAwKu _breakpointTwo_h_fvQVAu _breakpointOne_bc_cCahHP _initial_bc_gwFOTp _initial_c_jNAccg scid-gzMEKS"
+    "className": "_breakpointTwo_h_fvQVAu _breakpointOne_bc_cCahHP _initial_bc_gwFOTp _initial_c_jNAccg scid-gzMEKS"
   },
   "children": [
     "Responsive compound variants"

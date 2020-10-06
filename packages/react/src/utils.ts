@@ -9,18 +9,22 @@ export const mergeQueries = (config: any, breakpointsToMerge: string[]) =>
     .map((bp) => extractMedia(bp === 'initial' ? '' : config.breakpoints[bp]('')))
     .filter(Boolean)
     .join(' AND ');
-export const createFinalMediaQueryFromCombinations = (config: any, combos: string[][]) =>
-  product(combos).reduce((prev: any, curr: any) => {
+export const createFinalMediaQueryFromCombinations = (config: any, combos: string[][]) => {
+  return product(combos).reduce((prev: any, curr: any) => {
     if (!prev) return mergeQueries(config, curr);
     if (!curr) return prev;
     return `${prev}, ${mergeQueries(config, curr)}`;
   }, '');
+};
 
 export const matchBreakpointObjAgainstVal = (breakpointObj: Record<string, any> | string, val: string) => {
-  if (typeof breakpointObj !== 'object' && String(breakpointObj) === val) return ['initial'];
-  const matchedBreakpoints = [];
+  if (typeof breakpointObj !== 'object' && String(breakpointObj) === val) return [];
+  let matchedBreakpoints: null | string[] = null;
   for (const [breakpoint, variantVal] of Object.entries(breakpointObj)) {
-    if (variantVal === val) matchedBreakpoints.push(breakpoint);
+    if (variantVal === val && breakpoint !== 'initial') {
+      matchedBreakpoints = matchedBreakpoints || [];
+      matchedBreakpoints.push(breakpoint);
+    }
   }
   return matchedBreakpoints;
 };
@@ -33,7 +37,7 @@ export const resolveCompoundVariantIntoStyleObj = (
   const combos = [];
   for (const [key, val] of Object.entries(condition)) {
     const breakpointObj = props[key] && matchBreakpointObjAgainstVal(props[key], String(val));
-    if (breakpointObj.length) {
+    if (breakpointObj) {
       combos.push(breakpointObj);
     } else {
       // break out as a prop in the compound variant didn't match
