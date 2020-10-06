@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "type": "module",
+  "main": "action.mjs",
+  "files": [
+    "action.mjs",
+    "pre.action.mjs"
+  ],
+  "scripts": {
+    "start": "node ./action.mjs",
+    "prestart": "node ./pre.action.mjs"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}

@@ -17,9 +17,6 @@ jobs:
       - run: npm install
 
       - name: Benchmark
-        run: |
-          cd .github/run
-          npm install
-          node benchmark.mjs
+        uses: ./.github/actions/benchmark
         with:
           who-to-greet: 'Mona the Octocat'
