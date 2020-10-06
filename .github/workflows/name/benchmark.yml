@@ -1,4 +1,4 @@
-name: Pull Request Benchmarking
+name: Pull Request Benchmark
 
 on:
   push:
@@ -9,16 +9,15 @@ on:
       - canary
 
 jobs:
-  benchmarking:
-    name: Benchmarking
+  benchmark:
+    name: Benchmark
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - run: npm install
 
       - name: Benchmark
         run: |
-          npm install
           cd .github/run
           npm install
           node benchmark.mjs
