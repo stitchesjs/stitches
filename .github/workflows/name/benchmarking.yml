@@ -1,8 +1,12 @@
 name: Pull Request Benchmarking
 
 on:
+  push:
+    branches:
+      - canary
   pull_request:
-    branches: [ canary ]
+    branches:
+      - canary
 
 jobs:
   benchmarking:
