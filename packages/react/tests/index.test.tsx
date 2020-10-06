@@ -392,7 +392,7 @@ describe('styled', () => {
     (_css as any).dispose();
   });
 
-  test.only('it matches compound variants with multiple breakpoints 2', () => {
+  test('it matches compound variants with multiple breakpoints 2', () => {
     const { styled: _styled, css: _css } = createStyled({
       showFriendlyClassnames: true,
       breakpoints: {
@@ -446,7 +446,7 @@ describe('styled', () => {
     (_css as any).dispose();
   });
 
-  test.only('it matches compound variants matching multiple times at different breakpoints', () => {
+  test('it matches compound variants matching multiple times at different breakpoints', () => {
     const { styled: _styled, css: _css } = createStyled({
       showFriendlyClassnames: true,
       breakpoints: {
