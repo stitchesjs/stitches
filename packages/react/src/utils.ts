@@ -1,10 +1,16 @@
-export const product = (a: string[][]) =>
-  !a ? [] : a.reduce<string[][]>((_a, b) => _a.flatMap((d) => b.map((e) => [...new Set([d, e].flat())])), []);
+export const product = (a: any) =>
+  !a || !a.length
+    ? []
+    : a.reduce((_a: any, b: any) => _a.flatMap((d: any) => b.map((e: any) => [...new Set([d, e].flat())])));
+
 export const extractMedia = (media: string) => media.replace(/@media\s*(.*?\(.+\))\s*{.*}/gi, '$1').trim();
 export const mergeQueries = (config: any, breakpointsToMerge: string[]) =>
-  breakpointsToMerge.map((bp) => extractMedia(config.breakpoints[bp](''))).join(' AND ');
+  breakpointsToMerge
+    .map((bp) => extractMedia(bp === 'initial' ? '' : config.breakpoints[bp]('')))
+    .filter(Boolean)
+    .join(' AND ');
 export const createFinalMediaQueryFromCombinations = (config: any, combos: string[][]) =>
-  product(combos).reduce((prev, curr) => {
+  product(combos).reduce((prev: any, curr: any) => {
     if (!prev) return mergeQueries(config, curr);
     if (!curr) return prev;
     return `${prev}, ${mergeQueries(config, curr)}`;

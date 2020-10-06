@@ -173,10 +173,27 @@ exports[`styled it matches compound variants with multiple breakpoints 1`] = `
     "._initial_bc_gwFOTp {background-color: red;}",
     "._breakpointOne_bc_cCahHP {background-color: yellow;}",
     "._breakpointTwo_h_fvQVAu {height: 40px;}",
-    ".__COMPOUND_VARIANTS_bc_dfppQs {background-color: potato;}"
+    ".__COMPOUND_VARIANTS_bc_eMAwKu {background-color: potato;}"
   ],
   "props": {
-    "className": "__COMPOUND_VARIANTS_bc_dfppQs _breakpointTwo_h_fvQVAu _breakpointOne_bc_cCahHP _initial_bc_gwFOTp _initial_c_jNAccg scid-gzMEKS"
+    "className": "__COMPOUND_VARIANTS_bc_eMAwKu _breakpointTwo_h_fvQVAu _breakpointOne_bc_cCahHP _initial_bc_gwFOTp _initial_c_jNAccg scid-gzMEKS"
+  },
+  "children": [
+    "Responsive compound variants"
+  ]
+}
+`;
+
+exports[`styled it matches compound variants with multiple breakpoints 2 1`] = `
+{
+  "orderedAppliedStyles": [
+    "._initial_c_jNAccg {color: gray;}",
+    "._breakpointOne_bc_gvZKdE {background-color: red;}",
+    "._breakpointTwo_h_fvQVAu {height: 40px;}",
+    ".__COMPOUND_VARIANTS_bc_jzqgSz {background-color: potato;}"
+  ],
+  "props": {
+    "className": "__COMPOUND_VARIANTS_bc_jzqgSz _breakpointTwo_h_fvQVAu _breakpointOne_bc_gvZKdE _initial_c_jNAccg scid-gzMEKS"
   },
   "children": [
     "Responsive compound variants"
