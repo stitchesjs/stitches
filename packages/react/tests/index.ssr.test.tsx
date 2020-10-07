@@ -171,4 +171,97 @@ describe('styled', () => {
       @media (min-width:400px){./*X*/__COMPOUND_VARIANTS_bc_fMEIfK/*X*/{background-color:potato;}}"
     `);
   });
+
+  test('Handles compound variant with implicit initial values', () => {
+    const Button = styled('button', {
+      backgroundColor: 'gray',
+      variants: {
+        variant: {
+          red: {
+            backgroundColor: 'red',
+          },
+        },
+        size: {
+          1: {
+            height: 30,
+          },
+          2: {
+            height: 60,
+          },
+        },
+      },
+    }).compoundVariant(
+      {
+        variant: 'red',
+        size: 1,
+      },
+      {
+        backgroundColor: 'compoundColor',
+      }
+    );
+
+    const { styles } = css.getStyles(() => {
+      renderer.create(
+        <Button variant="red" size={1}>
+          compound
+        </Button>
+      );
+      // @ts-ignore
+      return '';
+    });
+    expect(styles.length).toBe(6);
+    expect(styles[5]).toMatchInlineSnapshot(`
+      "/* STITCHES:_COMPOUND_VARIANTS */
+      ./*X*/__COMPOUND_VARIANTS_bc_fhWNnZ/*X*/ {background-color:compoundColor;}"
+    `);
+  });
+
+  test('it matches no-implicit initial values', () => {
+    const Button = styled('button', {
+      color: 'gray',
+
+      variants: {
+        variant: {
+          red: {
+            background: 'red',
+          },
+          yellow: {
+            background: 'yellow',
+          },
+        },
+        size: {
+          1: {
+            height: 20,
+          },
+          2: {
+            height: 40,
+          },
+        },
+      },
+    });
+
+    Button.compoundVariant(
+      {
+        variant: 'red',
+        size: 2,
+      },
+      {
+        backgroundColor: 'potato',
+      }
+    );
+    const { styles } = css.getStyles(() => {
+      renderer.create(
+        <Button variant={{ initial: 'red' }} size={{ initial: 2 }}>
+          compound
+        </Button>
+      );
+      // @ts-ignore
+      return '';
+    });
+    expect(styles.length).toBe(6);
+    expect(styles[5]).toMatchInlineSnapshot(`
+      "/* STITCHES:_COMPOUND_VARIANTS */
+      "
+    `);
+  });
 });

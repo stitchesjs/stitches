@@ -48,37 +48,6 @@ exports[`styled Breakpoints work in variants and when the variant is passed to t
 }
 `;
 
-exports[`styled Handles compound variant 1`] = `
-{
-  "orderedAppliedStyles": [
-    "._gwFOTp {background-color: red;}",
-    "._cDgDLB {height: 60px;}"
-  ],
-  "props": {
-    "className": "_cDgDLB _gwFOTp scid-URbJg"
-  },
-  "children": [
-    "not compound"
-  ]
-}
-`;
-
-exports[`styled Handles compound variant 2`] = `
-{
-  "orderedAppliedStyles": [
-    "._izHeYc {height: 30px;}",
-    "._gwFOTp {background-color: red;}",
-    "._fhWNnZ {background-color: compoundColor;}"
-  ],
-  "props": {
-    "className": "_fhWNnZ _izHeYc _gwFOTp scid-URbJg"
-  },
-  "children": [
-    "compound"
-  ]
-}
-`;
-
 exports[`styled Handles css prop 1`] = `
 {
   "orderedAppliedStyles": [

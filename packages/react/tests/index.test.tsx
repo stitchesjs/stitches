@@ -140,53 +140,6 @@ describe('styled', () => {
     expect(renderer.create(<Button css={{ color: 'red' }}>hello world</Button>).toJSON()).toMatchSnapshot();
   });
 
-  test('Handles compound variant', () => {
-    const Button = styled('button', {
-      backgroundColor: 'gray',
-      variants: {
-        variant: {
-          red: {
-            backgroundColor: 'red',
-          },
-        },
-        size: {
-          1: {
-            height: 30,
-          },
-          2: {
-            height: 60,
-          },
-        },
-      },
-    }).compoundVariant(
-      {
-        variant: 'red',
-        size: 1,
-      },
-      {
-        backgroundColor: 'compoundColor',
-      }
-    );
-
-    expect(
-      renderer
-        .create(
-          <Button variant="red" size={2}>
-            not compound
-          </Button>
-        )
-        .toJSON()
-    ).toMatchSnapshot();
-    expect(
-      renderer
-        .create(
-          <Button variant="red" size={1}>
-            compound
-          </Button>
-        )
-        .toJSON()
-    ).toMatchSnapshot();
-  });
   test('It has default displayName when a string based element is passed', () => {
     const Button = styled('button', {});
     expect(Button.displayName).toBe('styled(button)');
