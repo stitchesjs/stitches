@@ -21,9 +21,11 @@ export const matchBreakpointObjAgainstVal = (breakpointObj: Record<string, any> 
   if (typeof breakpointObj !== 'object' && String(breakpointObj) === val) return [];
   let matchedBreakpoints: null | string[] = null;
   for (const [breakpoint, variantVal] of Object.entries(breakpointObj)) {
-    if (variantVal === val && breakpoint !== 'initial') {
+    if (String(variantVal) === val) {
       matchedBreakpoints = matchedBreakpoints || [];
-      matchedBreakpoints.push(breakpoint);
+      if (breakpoint !== 'initial') {
+        matchedBreakpoints.push(breakpoint);
+      }
     }
   }
   return matchedBreakpoints;

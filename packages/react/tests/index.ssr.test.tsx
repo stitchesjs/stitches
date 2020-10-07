@@ -216,7 +216,7 @@ describe('styled', () => {
     `);
   });
 
-  test('it matches no-implicit initial values', () => {
+  test.only('it matches non-implicit initial values', () => {
     const Button = styled('button', {
       color: 'gray',
 
@@ -261,7 +261,7 @@ describe('styled', () => {
     expect(styles.length).toBe(6);
     expect(styles[5]).toMatchInlineSnapshot(`
       "/* STITCHES:_COMPOUND_VARIANTS */
-      "
+      ./*X*/__COMPOUND_VARIANTS_bc_dfppQs/*X*/ {background-color:potato;}"
     `);
   });
 });
