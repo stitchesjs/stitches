@@ -266,7 +266,7 @@ const processStyleObject = (
  * borderColor => border-color
  */
 const hyphenAndVendorPrefixCssProp = (cssProp: string, vendorProps: any[], vendorPrefix: string) => {
-  const isVendorPrefixed = cssProp[0] === cssProp[0].toUpperCase();
+  const isVendorPrefixed = /^[A-Z]/.test(cssProp);
   let cssHyphenProp = cssProp
     .split(/(?=[A-Z])/)
     .map((g) => g.toLowerCase())
