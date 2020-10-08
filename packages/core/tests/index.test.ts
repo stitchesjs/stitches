@@ -334,6 +334,13 @@ describe('createCss: mixed(SSR & Client)', () => {
     );
   });
 
+  test('should preserve custom properties', () => {
+    const css = createCss({}, null);
+    const atom = (css({ '--magic': 'red' }) as any).atoms[0];
+
+    expect(atom.cssHyphenProp).toMatchInlineSnapshot(`"--magic"`);
+  });
+
   test('should allow utils', () => {
     const css = createCss(
       {
