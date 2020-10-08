@@ -293,11 +293,11 @@ export const createStyled = <Config extends TConfig>(
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
-    (StitchesComponent as any).compoundVariant = (compundVariantsObject: any, compoundVariantStyles: any) => {
+    (StitchesComponent as any).compoundVariant = (compoundVariantsObject: any, compoundVariantStyles: any) => {
       // Update component level variables:
       numberOfCompoundVariants++;
       // Each time we add
-      compoundVariants.push(compundVariantsObject);
+      compoundVariants.push(compoundVariantsObject);
       // required matches is a map with breakpoints
       // each time we add a compound variant, we also push its length to
       // all of the breakpoints so:
@@ -306,12 +306,12 @@ export const createStyled = <Config extends TConfig>(
       // the required matches for this compound variant at this breakpoint
       // when the required matches hit 0 we know it's a mtach
       requiredMatches.forEach((value, key) => {
-        value.push(Object.keys(compundVariantsObject).length);
+        value.push(Object.keys(compoundVariantsObject).length);
       });
 
       const evaluatedStyles = evaluateStylesForAllBreakpoints(compoundVariantStyles, configBreakpoints, css);
 
-      evaluatedCompoundVariants.set(compundVariantsObject, evaluatedStyles);
+      evaluatedCompoundVariants.set(compoundVariantsObject, evaluatedStyles);
       return StitchesComponent;
     };
     return StitchesComponent;
