@@ -65,7 +65,17 @@ type MergeElementProps<As extends React.ElementType, Props extends object = {}> 
  * 1. Props of a styled component
  * 2. The compoundVariants function typings
  */
-export interface IStyledComponent<ComponentOrTag extends React.ElementType, Variants, Config extends TConfig> {
+export interface IStyledComponent<
+  ComponentOrTag extends React.ElementType,
+  Variants,
+  Config extends TConfig
+> extends React.FC<
+    MergeElementProps<ComponentOrTag, VariantASProps<Config, Variants>> & {
+      css?: TCssWithBreakpoints<Config>;
+      className?: string;
+      children?: any;
+    }
+  > {
   /**
    * Props of a styled component
    */
@@ -74,7 +84,6 @@ export interface IStyledComponent<ComponentOrTag extends React.ElementType, Vari
     // e.g. some HTML elements have `size` attribute. And when you combine
     // both types (native and variant props) the common props become
     // unusable (in typing-wise)
-
     props: MergeElementProps<As, VariantASProps<Config, Variants>> & {
       as?: As;
       css?: TCssWithBreakpoints<Config>;
@@ -89,16 +98,12 @@ export interface IStyledComponent<ComponentOrTag extends React.ElementType, Vari
     compoundVariants: VariantASProps<Config, Variants>,
     possibleValues: TCssWithBreakpoints<Config>
   ) => IStyledComponent<ComponentOrTag, Variants, Config>;
-  /**
-   * Default props typing:
-   */
-  defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
-  /**
-   * DisplayName typing:
-   */
-  displayName?: string;
-}
 
+  /**
+   * @deprecated
+   */
+  defaultProps?: never;
+}
 /** Typed css with tokens and breakpoints */
 export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
@@ -119,19 +124,6 @@ export type TProxyStyledElements<Config extends TConfig> = {
     a: BaseAndVariantStyles | TComponentStylesObject<Config>
   ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
 };
-
-export type TExtractVariantProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
-  ? VariantASProps<G, V>
-  : never;
-
-export type TStyledComponentProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
-  ? MergeElementProps<T, VariantASProps<G, V>> & {
-      as?: T;
-      css?: TCssWithBreakpoints<G>;
-      className?: string;
-      children?: any;
-    }
-  : never;
 
 /**
  * Styled Components creator Type.
