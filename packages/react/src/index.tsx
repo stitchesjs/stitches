@@ -103,19 +103,43 @@ export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
 
 /** The type for the styles in a styled call */
-export type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints<Config> & {
+export type StitchesComponentStyles<Config extends TConfig> = TCssWithBreakpoints<Config> & {
   variants?: {
     [k: string]: {
       [s: string]: TCssWithBreakpoints<Config>;
     };
   };
 };
+
+/** Helper that extracts keys from your tokens object */
+interface StitchesTokenKeys<Tokens> {
+  colors?: Tokens extends { colors: infer C } ? keyof C : never;
+  space?: Tokens extends { space: infer C } ? keyof C : never;
+  fonts?: Tokens extends { fonts: infer C } ? keyof C : never;
+  fontWeights?: Tokens extends { fontWeights: infer C } ? keyof C : never;
+  lineHeights?: Tokens extends { lineHeights: infer C } ? keyof C : never;
+  letterSpacings?: Tokens extends { letterSpacings: infer C } ? keyof C : never;
+  sizes?: Tokens extends { sizes: infer C } ? keyof C : never;
+  borderWidths?: Tokens extends { borderWidths: infer C } ? keyof C : never;
+  borderStyles?: Tokens extends { borderStyles: infer C } ? keyof C : never;
+  radii?: Tokens extends { radii: infer C } ? keyof C : never;
+  shadows?: Tokens extends { shadows: infer C } ? keyof C : never;
+  zIndices?: Tokens extends { zIndices: infer C } ? keyof C : never;
+  transitions?: Tokens extends { transitions: infer C } ? keyof C : never;
+}
+
+/** Given a config it returns StitchesComponentStyles & StitchesTokenKeys */
+interface StitchesTypes<Config extends TConfig> {
+  css: StitchesComponentStyles<Config>;
+  tokens: StitchesTokenKeys<Config['tokens']>;
+}
+
 /**
  * Types for styled.button, styled.div, etc..
  */
 export type TProxyStyledElements<Config extends TConfig> = {
-  [key in keyof JSX.IntrinsicElements]: <BaseAndVariantStyles extends TComponentStylesObject<Config>>(
-    a: BaseAndVariantStyles | TComponentStylesObject<Config>
+  [key in keyof JSX.IntrinsicElements]: <BaseAndVariantStyles extends StitchesComponentStyles<Config>>(
+    a: BaseAndVariantStyles | StitchesComponentStyles<Config>
   ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
 };
 /**
@@ -126,15 +150,15 @@ export type TStyled<Config extends TConfig> = {
   // tslint:disable-next-line: callable-types
   <
     TagOrComponent extends keyof JSX.IntrinsicElements | React.ComponentType<any> | IStyledComponent<any, any, Config>,
-    BaseAndVariantStyles extends TComponentStylesObject<Config>,
+    BaseAndVariantStyles extends StitchesComponentStyles<Config>,
     Variants = TExtractVariants<BaseAndVariantStyles>
   >(
     tag: TagOrComponent,
-    baseStyles: BaseAndVariantStyles | TComponentStylesObject<Config>
+    baseStyles: BaseAndVariantStyles | StitchesComponentStyles<Config>
   ): TagOrComponent extends IStyledComponent<infer T, infer V, Config>
     ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, Config>
     : IStyledComponent<TagOrComponent, Variants, Config>;
-} & TProxyStyledElements<Config>;
+} & TProxyStyledElements<Config> & { __TYPE_HELPERS: StitchesTypes<Config> };
 
 const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
   const map = new Map();
@@ -322,6 +346,13 @@ export const createStyled = <Config extends TConfig>(
     get(_, prop) {
       if (prop === 'Box') {
         return Box;
+      }
+      if (process.env.NODE_ENV !== 'production') {
+        if (prop === '__TYPE_HELPERS') {
+          throw new Error(
+            '__TYPE_HELPERS is a fake prop is intended as a helper to give access the inferred typescript types from the config and not to be used outside that.'
+          );
+        }
       }
       currentAs = String(prop);
       return styledInstance;

@@ -337,4 +337,16 @@ describe('styled', () => {
     });
     expect(renderer.create(<Button size={0}>height should equal '1px'</Button>).toJSON()).toMatchSnapshot();
   });
+
+  test('It throws an error when trying to access the __TYPE_HELPERS outside of types', () => {
+    let err;
+    try {
+      const dontDoThis = styled.__TYPE_HELPERS;
+    } catch (e) {
+      err = e;
+    }
+    expect(err).toMatchInlineSnapshot(
+      `[Error: __TYPE_HELPERS is a fake prop is intended as a helper to give access the inferred typescript types from the config and not to be used outside that.]`
+    );
+  });
 });
