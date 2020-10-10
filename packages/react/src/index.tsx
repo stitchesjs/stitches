@@ -39,6 +39,13 @@ export type CastStringToBoolean<Val> = Val extends 'true' | 'false' ? boolean | 
 export type CastNumberToString<Val> = Val extends number ? string & {} : never;
 
 /**
+ * Extract variant props from Stitches components
+ */
+export type ExtractVariantProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
+  ? VariantASProps<G, V>
+  : never;
+
+/**
  * Takes a variants object and converts it to the correct type information for usage in props
  */
 export type VariantASProps<Config extends TConfig, VariantsObj> = {
