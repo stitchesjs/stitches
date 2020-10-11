@@ -19,7 +19,7 @@ import {
   textDecoration,
   flex,
 } from './shorthand-parser';
-import { IBreakpoints, ICssPropToToken, ISheet } from './types';
+import { IBreakpoints, ICssPropToToken, ISheet, ATOM, IAtom, IComposedAtom } from './types';
 
 export const MAIN_BREAKPOINT_ID = 'initial';
 export type TMainBreakPoint = typeof MAIN_BREAKPOINT_ID;
@@ -270,4 +270,23 @@ function generateAlphabeticName(code: number): string {
   }
 
   return (getAlphabeticChar(x % charsLength) + name).replace(AD_REPLACER_R, '$1-$2');
+}
+
+/**
+ * Type Guard for an IAtom object. As this is only checking for Symbol ATOM on the object.
+ * We might need to narrow this as there are other objects with ATOM.
+ * - IAtom
+ * - IThemeAtom
+ * - IComposedAtom
+ * - IKeyframesAtom
+ */
+export function isAtom(item: any): item is IAtom {
+  return item[ATOM];
+}
+
+/**
+ * Type Guard for IComposedAtom.
+ */
+export function isComposedAtom(item: any): item is IComposedAtom {
+  return item[ATOM] && item.atoms;
 }
