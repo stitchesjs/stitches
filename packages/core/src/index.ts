@@ -20,6 +20,8 @@ import {
   getVendorPrefixAndProps,
   hashString,
   specificityProps,
+  isComposedAtom,
+  isAtom,
 } from './utils';
 export * from './types';
 export * from './css-types';
@@ -287,7 +289,6 @@ const toStringCachedAtom = function (this: IAtom | IComposedAtom) {
 const toStringCompose = function (this: IComposedAtom) {
   const className = this.atoms.map((atom) => atom.toString()).join(' ');
   // cache the className on this instance
-  // @ts-ignore
   this._className = className;
   // we only want to enable caching on the client
   // because on the server we want to make sure that the composition is evaluated on each request
@@ -382,7 +383,6 @@ const createThemeToString = (classPrefix: string, variablesSheet: ISheet) =>
   function toString(this: IThemeAtom) {
     const themeClassName = `${classPrefix ? `${classPrefix}-` : ''}theme-${this.name}`;
 
-    // @ts-ignore
     variablesSheet.insertRule(
       `.${themeClassName}{${Object.keys(this.definition).reduce((aggr, tokenType) => {
         // @ts-ignore
@@ -411,20 +411,20 @@ const createKeyframesToString = (sheet: ISheet) =>
     return this.id;
   };
 
-const composeIntoMap = (map: Map<string, IAtom>, atoms: (IAtom | IComposedAtom)[]) => {
+const composeIntoMap = (map: Map<string, IAtom | string>, atoms: (IAtom | IComposedAtom | string)[]) => {
   let i = atoms.length - 1;
   for (; i >= 0; i--) {
     const item = atoms[i];
     // atoms can be undefined, null, false or '' using ternary like
     // expressions with the properties
-    if (item && item[ATOM] && 'atoms' in item) {
+    if (isComposedAtom(item)) {
       composeIntoMap(map, item.atoms);
-    } else if (item && item[ATOM]) {
-      if (!map.has((item as IAtom).id)) {
-        map.set((item as IAtom).id, item as IAtom);
+    } else if (isAtom(item)) {
+      if (!map.has(item.id)) {
+        map.set(item.id, item);
       }
     } else if (item) {
-      map.set((item as unknown) as string, item as IAtom);
+      map.set(item, item);
     }
   }
 };
@@ -444,7 +444,7 @@ export const createCss = <T extends TConfig>(
   env: Window | null = typeof window === 'undefined' || window?.Deno ? null : window
 ): TCss<T> => {
   // pre-checked config to avoid checking these all the time
-  // tslint:disable-next-line
+  // tslint:disable-next-line: prefer-object-spread
   const config: TConfig<true> = Object.assign({ tokens: {}, utils: {}, breakpoints: {} }, _config);
   // prefill with empty token groups
   tokenTypes.forEach((tokenType) => (config.tokens[tokenType] = config.tokens[tokenType] || {}));
@@ -491,10 +491,9 @@ export const createCss = <T extends TConfig>(
 
   const { tags, sheets } = createSheets(env, config.breakpoints);
   const preInjectedRules = new Set<string>();
-  // tslint:disable-next-line
   for (const tag of tags) {
     ((tag.textContent || '').match(/\/\*\X\*\/.*?\/\*\X\*\//g) || []).forEach((rule) => {
-      // tslint:disable-next-line
+      // tslint:disable-next-line: prefer-template
       preInjectedRules.add('.' + cleanSSRClass(rule));
     });
   }
@@ -505,7 +504,7 @@ export const createCss = <T extends TConfig>(
 
   let themeToString = createThemeToString(classPrefix, sheets.__variables__);
   let keyframesToString = createKeyframesToString(sheets.__keyframes__);
-  const compose = (...atoms: IAtom[]): IComposedAtom => {
+  const compose = (...atoms: (IAtom | string)[]): IComposedAtom => {
     const map = new Map<string, IAtom>();
     composeIntoMap(map, atoms);
     return {
@@ -521,7 +520,7 @@ export const createCss = <T extends TConfig>(
     selectorString: string,
     inlineMediaQueries: string[],
     isGlobal?: boolean
-  ) => {
+  ): IAtom => {
     // generate id used for specificity check
     // two atoms are considered equal in regard to there specificity if the id is equal
     const inlineMediasAsString = inlineMediaQueries ? inlineMediaQueries.join('') : '';
@@ -535,7 +534,7 @@ export const createCss = <T extends TConfig>(
     if (atomCache.has(uid)) {
       // check if this has a breakpoint based media query
       if (inlineMediasAsString.match(/@media.*\((min|max)?.*(width|height).*\)/)) {
-        // tslint:disable-next-line
+        // tslint:disable-next-line: no-console
         console.warn(
           `The property "${cssProp}" with media query ${inlineMediasAsString} can cause a specificity issue. You should create a breakpoint`
         );
@@ -566,11 +565,10 @@ export const createCss = <T extends TConfig>(
   };
 
   let baseTokens = ':root{';
-  // tslint:disable-next-line
+  // tslint:disable-next-line: forin
   for (const tokenType in tokens) {
     const isNumericScale = tokenType.match(/^(sizes|space|letterSpacings|zIndices)$/);
     // @ts-ignore
-    // tslint:disable-next-line
     const scaleTokenKeys = Object.keys(tokens[tokenType]);
     for (let index = 0; index < scaleTokenKeys.length; index++) {
       const token = scaleTokenKeys[index];
@@ -612,18 +610,20 @@ export const createCss = <T extends TConfig>(
   const atomCache = new Map<string, IAtom>();
   const keyFramesCache = new Map<string, IKeyframesAtom>();
   const themeCache = new Map<ITokensDefinition, IThemeAtom>();
-  const cssInstance = ((...definitions: any[]) => {
-    const args: any[] = [];
+  const cssInstance: TCss<T> = (...definitions): IComposedAtom => {
+    const args: (IAtom | string)[] = [];
     let index = 0;
 
     for (let x = 0; x < definitions.length; x++) {
-      if (!definitions[x]) {
+      const item = definitions[x];
+      if (!item || typeof item === 'boolean') {
         continue;
       }
-      if (typeof definitions[x] === 'string' || definitions[x][ATOM]) {
-        args[index++] = definitions[x];
+
+      if (typeof item === 'string' || isAtom(item)) {
+        args[index++] = item;
       } else {
-        processStyleObject(definitions[x], config, (prop, value, breakpoint, mediaQueries, path) => {
+        processStyleObject(item, config, (prop, value, breakpoint, mediaQueries, path) => {
           args[index++] = createAtom(prop, value, breakpoint, path, mediaQueries);
         });
       }
@@ -633,7 +633,7 @@ export const createCss = <T extends TConfig>(
     const composition = compose(...args);
 
     return composition;
-  }) as any;
+  };
 
   cssInstance.dispose = () => {
     atomCache.clear();
@@ -642,18 +642,18 @@ export const createCss = <T extends TConfig>(
     });
   };
   cssInstance._config = () => config;
-  cssInstance.theme = (definition: any): IThemeAtom => {
+  cssInstance.theme = (definition) => {
     if (themeCache.has(definition)) {
       return themeCache.get(definition)!;
     }
 
-    const themeAtom = {
+    const themeAtom: IThemeAtom = {
       // We could here also check if theme has been added from server,
       // though thinking it does not matter... just a simple rule
       name: String(themeCache.size),
       definition,
       toString: themeToString,
-      [ATOM]: true as true,
+      [ATOM]: true,
     };
 
     themeCache.set(definition, themeAtom);
@@ -661,7 +661,7 @@ export const createCss = <T extends TConfig>(
     return themeAtom;
   };
 
-  cssInstance.global = (definitions: any) => {
+  cssInstance.global = (definitions) => {
     const atoms: IAtom[] = [];
     processStyleObject(definitions, config, (prop, value, breakpoint, mediaQueries, path) => {
       if (path === '%') {
@@ -674,7 +674,7 @@ export const createCss = <T extends TConfig>(
     return () => compose(...atoms).toString();
   };
 
-  cssInstance.keyframes = (definition: any): IKeyframesAtom => {
+  cssInstance.keyframes = (definition) => {
     let cssRule = '';
     let currentTimeProp = '';
     processStyleObject(definition, config, (key, value, _, __, timeProp) => {
@@ -701,19 +701,18 @@ export const createCss = <T extends TConfig>(
     }
     // wrap it with the generated keyframes name
     cssRule = `@keyframes ${hash} {${cssRule}}`;
-    const keyframesAtom = {
+    const keyframesAtom: IKeyframesAtom = {
       id: String(hash),
       _cssRuleString: cssRule,
       toString: keyframesToString,
-      [ATOM]: true as true,
+      [ATOM]: true,
     };
     keyFramesCache.set(hash, keyframesAtom);
     return keyframesAtom;
   };
 
-  cssInstance.getStyles = (cb: any) => {
-    // tslint:disable-next-line
-    for (let sheet in sheets) {
+  cssInstance.getStyles = (cb) => {
+    for (const sheet in sheets) {
       if (sheet !== '__keyframes__') {
         sheets[sheet].cssRules.length = 0;
       }

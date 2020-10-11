@@ -24,12 +24,12 @@ const resolveRules = (rule: CSSRule, resolvedRules: CSSStyleRule[] = []) => {
 const getMatchingRulesForClasses = (classesAsArray: string[]) => {
   const orderedAppliedStyles: string[] = [];
   for (let i = 0; i < window.document.styleSheets.length; i++) {
-    const sheetRules = window.document.styleSheets[i].cssRules as any;
+    const sheetRules = window.document.styleSheets[i].cssRules;
     for (let b = 0; b < sheetRules.length; b++) {
       const rule = sheetRules[b];
       const resolvedRules = resolveRules(rule);
       resolvedRules.forEach((cssRule) => {
-        classesAsArray.forEach((atomClass: any) => {
+        classesAsArray.forEach((atomClass) => {
           if (cssRule.selectorText.includes(atomClass)) {
             orderedAppliedStyles.push(cssRule.cssText);
           }
@@ -73,7 +73,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  (css as any).dispose();
+  css.dispose();
 });
 
 describe('styled', () => {
@@ -230,7 +230,7 @@ describe('styled', () => {
       },
     });
     expect(renderer.create(<Button>no variant</Button>).toJSON()).toMatchSnapshot();
-    (_css as any).dispose();
+    _css.dispose();
   });
 
   test('Breakpoints work in variants and when the variant is passed to the jsx element', () => {

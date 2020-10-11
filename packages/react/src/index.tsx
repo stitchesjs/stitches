@@ -6,6 +6,7 @@ import {
   TMainBreakPoint,
   createCss,
   hashString,
+  IComposedAtom,
 } from '@stitches/core';
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
@@ -204,7 +205,7 @@ export const createStyled = <Config extends TConfig>(
         // eslint-disable-next-line
         const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
         if (memoStyled !== props.css && !hasWarnedInlineStyle) {
-          // tslint:disable-next-line
+          // tslint:disable-next-line: no-console
           console.warn(
             '@stitches/react : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook'
           );
@@ -265,7 +266,7 @@ export const createStyled = <Config extends TConfig>(
 
       // By default we don't stringify the classname (composition), so that
       // the children Stitches component is responsible for the final composition
-      let className = css(stitchesComponentId, ...compositions, props.className);
+      let className: IComposedAtom | string = css(stitchesComponentId, ...compositions, props.className);
 
       // If we're not wrapping a Stitches component,
       // we ensure the classname is stringified
@@ -317,7 +318,7 @@ export const createStyled = <Config extends TConfig>(
     return StitchesComponent;
   };
 
-  // tslint:disable-next-line
+  // tslint:disable-next-line: no-empty
   const styledProxy = new Proxy(() => {}, {
     get(_, prop) {
       if (prop === 'Box') {
@@ -346,7 +347,7 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
     [MAIN_BREAKPOINT_ID]: css(styleObject),
   };
   if (configBreakpoints) {
-    // tslint:disable-next-line
+    // tslint:disable-next-line: forin
     for (const breakpoint in configBreakpoints) {
       breakpoints[breakpoint] = css({
         [breakpoint]: styleObject,

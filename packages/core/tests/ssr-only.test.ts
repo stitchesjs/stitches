@@ -48,7 +48,7 @@ describe('createCss: SSR', () => {
 
   test('should regenerate styles when server side rendered', () => {
     const css = createCss({}, null);
-    const atoms = css({ color: 'red' }) as any;
+    const atoms = css({ color: 'red' });
     // this acts like a request on the server
     const { styles } = css.getStyles(() => {
       atoms.toString();
@@ -81,7 +81,7 @@ describe('createCss: SSR', () => {
       '0%': { opacity: '0' },
       '100%': { opacity: '1' },
     });
-    const atoms = css({ animation: `${fade} 333ms` }) as any;
+    const atoms = css({ animation: `${fade} 333ms` });
     // this acts like a request on the server
     const { styles } = css.getStyles(() => {
       atoms.toString();

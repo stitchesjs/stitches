@@ -27,7 +27,6 @@ const createPropertyParser = (type: any) => (tokens: any, value: any) => {
   const tmpTokens = typeof value === 'number' ? emptyTokens : tokens;
 
   chains.forEach((chain, chainIndex) => {
-    // tslint:disable-next-line
     chain.forEach((_value, index) => {
       type(tmpTokens, css, _value, index, chain, chainIndex, chains);
     });

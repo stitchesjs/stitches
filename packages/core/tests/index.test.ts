@@ -1,4 +1,4 @@
-import { createCss, createTokens, hotReloadingCache } from '../src';
+import { createCss, createTokens, hotReloadingCache, IComposedAtom } from '../src';
 
 function createStyleSheet(styleTag: HTMLStyleElement): CSSStyleSheet {
   document.querySelector('head')?.appendChild(styleTag);
@@ -6,7 +6,7 @@ function createStyleSheet(styleTag: HTMLStyleElement): CSSStyleSheet {
   const sheet = document.styleSheets[document.styleSheets.length - 1];
   // @ts-ignore
   sheet.ownerNode = styleTag;
-  return sheet as any;
+  return sheet;
 }
 
 function createStyleTag(textContent: string): HTMLStyleElement {
@@ -15,11 +15,11 @@ function createStyleTag(textContent: string): HTMLStyleElement {
   return style;
 }
 
-function createFakeEnv(styleTagContents: string[] = [], computedStyles: string[] = []) {
+function createFakeEnv(styleTagContents: string[] = [], computedStyles: string[] = []): Window {
   const styleTags = styleTagContents.map(createStyleTag);
   const styleSheets = styleTags.map(createStyleSheet);
 
-  return {
+  return ({
     getComputedStyle() {
       return computedStyles;
     },
@@ -44,7 +44,7 @@ function createFakeEnv(styleTagContents: string[] = [], computedStyles: string[]
         };
       },
     },
-  };
+  } as unknown) as Window;
 }
 
 beforeEach(() => {
@@ -54,7 +54,7 @@ beforeEach(() => {
 describe('createCss: mixed(SSR & Client)', () => {
   test('should create simple atoms', () => {
     const css = createCss({}, null);
-    const atoms = css({ color: 'red' }) as any;
+    const atoms = css({ color: 'red' });
     const atom = atoms.atoms[0];
     expect(atom.id).toMatchInlineSnapshot(`"color%initial"`);
     expect(atom.cssHyphenProp).toEqual('color');
@@ -86,8 +86,9 @@ describe('createCss: mixed(SSR & Client)', () => {
         RED: 'tomato',
       },
     });
+
     const css = createCss({ tokens }, null);
-    const atom = (css({ color: 'RED' }) as any).atoms[0];
+    const atom = css({ color: 'RED' }).atoms[0];
 
     expect(atom.id).toMatchInlineSnapshot(`"color%initial"`);
     expect(atom.cssHyphenProp).toEqual('color');
@@ -114,7 +115,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       },
     });
     const css = createCss({ tokens }, null);
-    const atom = (css({ color: '$!@red@!$' }) as any).atoms[0];
+    const atom = css({ color: '$!@red@!$' }).atoms[0];
 
     expect(atom.value).toMatchInlineSnapshot(`"var(--colors-red)"`);
 
@@ -142,7 +143,6 @@ describe('createCss: mixed(SSR & Client)', () => {
       null
     );
     const { styles } = css.getStyles(() => {
-      // @ts-ignore
       css({ color: '$!@red@!$' }).toString();
       expect(
         css
@@ -193,7 +193,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       letterSpacing: '-1',
       width: '-1',
       zIndex: '-1',
-    }) as any;
+    });
 
     const { styles } = css.getStyles(() => {
       atom.toString();
@@ -218,9 +218,9 @@ describe('createCss: mixed(SSR & Client)', () => {
       },
     });
     const css = createCss({ tokens }, null);
-    expect((css as any)._config().tokens.sizes['1']).toBeTruthy();
-    expect((css as any)._config().tokens.sizes['-1']).toBeTruthy();
-    expect((css as any)._config().tokens.sizes['--1']).toBeFalsy();
+    expect(css._config().tokens.sizes?.['1']).toBeTruthy();
+    expect(css._config().tokens.sizes?.['-1']).toBeTruthy();
+    expect(css._config().tokens.sizes?.['--1']).toBeFalsy();
   });
 
   test('should create breakpoints', () => {
@@ -232,7 +232,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       },
       null
     );
-    const atom = (css({ tablet: { color: 'red' } }) as any).atoms[0];
+    const atom = css({ tablet: { color: 'red' } }).atoms[0];
     expect(atom.id).toMatchInlineSnapshot(`"color%tablet"`);
     expect(atom.cssHyphenProp).toEqual('color');
     expect(atom.selector).toBe('%');
@@ -256,7 +256,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle pseudos', () => {
     const css = createCss({}, null);
-    const atom = (css({ '&:hover': { color: 'red' } }) as any).atoms[0];
+    const atom = css({ '&:hover': { color: 'red' } }).atoms[0];
 
     expect(atom.id).toMatchInlineSnapshot(`"color%%:hoverinitial"`);
     expect(atom.cssHyphenProp).toEqual('color');
@@ -325,7 +325,7 @@ describe('createCss: mixed(SSR & Client)', () => {
           tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
         },
       },
-      (fakeEnv as unknown) as Window
+      fakeEnv
     );
     String(css({ tablet: { color: 'red' } }));
     expect(fakeEnv.document.styleSheets.length).toBe(4);
@@ -336,7 +336,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should preserve custom properties', () => {
     const css = createCss({}, null);
-    const atom = (css({ '--magic': 'red' }) as any).atoms[0];
+    const atom = css({ '--magic': 'red' }).atoms[0];
 
     expect(atom.cssHyphenProp).toMatchInlineSnapshot(`"--magic"`);
   });
@@ -391,10 +391,7 @@ describe('createCss: mixed(SSR & Client)', () => {
   test('should ignore undefined atoms', () => {
     const css = createCss({}, null);
 
-    expect(
-      // @ts-ignore
-      String(css(undefined, null, false, '', { color: 'red' }))
-    ).toMatchInlineSnapshot(`"_vfarC"`);
+    expect(String(css(undefined, null, false, '', { color: 'red' }))).toMatchInlineSnapshot(`"_vfarC"`);
   });
 
   test('should allow empty compose call', () => {
@@ -404,7 +401,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should allow conditional compositions', () => {
     const css = createCss({}, null);
-    expect(String(css((false as any) && { color: 'red' }))).toBe('');
+    expect(String(css(false && { color: 'red' }))).toBe('');
     expect(String(css(true && { color: 'red' }))).toMatchInlineSnapshot(`"_vfarC"`);
   });
 
@@ -427,7 +424,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
     const fakeEnv = createFakeEnv(styles);
     hotReloadingCache.clear();
-    const clientCss = createCss({}, fakeEnv as any);
+    const clientCss = createCss({}, fakeEnv);
     // Lets see what is already put in
     expect(fakeEnv.document.styleSheets.length).toBe(3);
     expect(fakeEnv.document.styleSheets[2].cssRules.length).toBe(1);
@@ -516,7 +513,7 @@ describe('createCss: mixed(SSR & Client)', () => {
           '@mobile': (rule: string) => `@media(min-width:300px){${rule}}`,
         },
       },
-      fakeEnv as any
+      fakeEnv
     );
 
     expect(fakeEnv.document.styleSheets.length).toBe(4);
@@ -566,7 +563,7 @@ describe('createCss: mixed(SSR & Client)', () => {
           '@mobile': (rule) => `@media(min-width:300px){${rule}}`,
         },
       },
-      (fakeEnv as any) as Window
+      fakeEnv
     );
     css({ '@mobile': { color: 'red' } }).toString();
 
@@ -583,7 +580,6 @@ describe('createCss: mixed(SSR & Client)', () => {
       null
     );
     const { styles } = css.getStyles(() => {
-      // @ts-ignore
       css({ WebkitColor: 'red' }).toString();
       return '';
     });
@@ -649,8 +645,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle declarative pseudo selector', () => {
     const fakeEnv = createFakeEnv([], []);
-    const css = createCss({}, (fakeEnv as unknown) as Window);
-    // @ts-ignore
+    const css = createCss({}, fakeEnv);
     css({ '&:hover': { color: 'red' } }).toString();
     expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(
       `"._eqYDFT._eqYDFT:hover {color: red;}"`
@@ -659,16 +654,14 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('Should handle ampersand correctly when not targeting pseudo selector', () => {
     const fakeEnv = createFakeEnv([], []);
-    const css = createCss({}, (fakeEnv as unknown) as Window);
-    // @ts-ignore
+    const css = createCss({}, fakeEnv);
     css({ '&.red': { color: 'red' } }).toString();
     expect(fakeEnv.document.styleSheets[2].cssRules[0].cssText).toMatchInlineSnapshot(`"._ldUPST.red {color: red;}"`);
   });
 
   test('Should handle nesting', () => {
     const fakeEnv = createFakeEnv([], []);
-    const css = createCss({}, (fakeEnv as unknown) as Window);
-    // @ts-ignore
+    const css = createCss({}, fakeEnv);
     css({
       '.red': {
         color: 'red',
@@ -702,7 +695,6 @@ describe('createCss: mixed(SSR & Client)', () => {
       css({ mobile: { color: 'red' } }).toString();
       return '';
     });
-    // @ts-ignore
 
     expect(styles.length).toBe(4);
     expect(styles[3].trim()).toMatchInlineSnapshot(`
@@ -721,7 +713,6 @@ describe('createCss: mixed(SSR & Client)', () => {
       null
     );
     const { styles } = css.getStyles(() => {
-      // @ts-ignore
       css({ mobile: { '&:hover': { color: 'red' } } }).toString();
       return '';
     });
@@ -745,7 +736,6 @@ describe('createCss: mixed(SSR & Client)', () => {
       null
     );
     const { styles } = css.getStyles(() => {
-      // @ts-ignore
       css({ color: 'primary' }).toString();
       expect(
         css
@@ -773,7 +763,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should allow nested pseudo', () => {
     const css = createCss({}, null);
-    const atom = css({ '&:hover': { '&:disabled': { color: 'red' } } }) as any;
+    const atom = css({ '&:hover': { '&:disabled': { color: 'red' } } });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_jEsxaZ"`);
@@ -790,7 +780,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border specificity', () => {
     const css = createCss({}, null);
-    const atom = css({ border: '1px solid red' }) as any;
+    const atom = css({ border: '1px solid red' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
@@ -829,7 +819,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       },
       null
     );
-    const atom = css({ border: '1px solid primary' }) as any;
+    const atom = css({ border: '1px solid primary' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
@@ -868,7 +858,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       },
       null
     );
-    const atom = css({ boxShadow: '1px 1px 1px primary' }) as any;
+    const atom = css({ boxShadow: '1px 1px 1px primary' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_bPfRIA"`);
@@ -901,7 +891,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     });
     const atom = css(darkTheme, {
       color: 'primary',
-    }) as any;
+    });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_jOpFbe theme-0"`);
@@ -921,7 +911,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const keyFrame = css.keyframes({
       '0%': { background: 'red' },
       '100%': { background: 'green' },
-    }) as any;
+    });
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
       `"@keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"`
@@ -945,7 +935,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const keyFrame = css.keyframes({
       '0%': { mx: '1px' },
       '100%': { mx: '10px' },
-    }) as any;
+    });
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
       `"@keyframes jxILgC {0% {margin-left: 1px;margin-right: 1px;}100% {margin-left: 10px;margin-right: 10px;}}"`
@@ -959,7 +949,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const keyFrame = css.keyframes({
       '0%': { padding: '1px' },
       '100%': { padding: '10px' },
-    }) as any;
+    });
 
     expect(keyFrame._cssRuleString).toMatchInlineSnapshot(
       `"@keyframes hOBUdi {0% {padding-top: 1px;padding-right: 1px;padding-bottom: 1px;padding-left: 1px;}100% {padding-top: 10px;padding-right: 10px;padding-bottom: 10px;padding-left: 10px;}}"`
@@ -973,9 +963,10 @@ describe('createCss: mixed(SSR & Client)', () => {
     const keyFrame = css.keyframes({
       '0%': { background: 'red' },
       '100%': { background: 'green' },
-    }) as any;
-    let atom: any;
+    });
+    let atom: IComposedAtom;
     const { styles } = css.getStyles(() => {
+      // @ts-ignore
       expect(() => (atom = css({ animationName: keyFrame }))).not.toThrow();
       expect(atom.toString()).toMatchInlineSnapshot(`"_lghWLg"`);
       return '';
@@ -993,8 +984,9 @@ describe('createCss: mixed(SSR & Client)', () => {
     const keyFrame = css.keyframes({
       '0%': { background: 'red' },
       '100%': { background: 'green' },
-    }) as any;
-    const atom = css({ animationName: keyFrame }) as any;
+    });
+    // @ts-ignore
+    const atom = css({ animationName: keyFrame });
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_lghWLg"`);
       return '';
@@ -1009,7 +1001,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle margin shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ margin: '1px 5px' }) as any;
+    const atom = css({ margin: '1px 5px' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_bfdzTx _iOZlal _gIAWea _iGAIiF"`);
@@ -1029,7 +1021,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle padding shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ padding: '1px 5px' }) as any;
+    const atom = css({ padding: '1px 5px' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_kwBuXq _bprxXq _fPyDox _MMkEy"`);
@@ -1049,7 +1041,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle gap shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ gap: '1px 5px' }) as any;
+    const atom = css({ gap: '1px 5px' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_kAGDsw _hFqUCg"`);
@@ -1067,7 +1059,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border-top shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderTop: '1px solid red' }) as any;
+    const atom = css({ borderTop: '1px solid red' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_iffwNR _bKudwR _itFHCM"`);
@@ -1085,7 +1077,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, null);
     const atom = css({
       '@media (hover:hover)': { '@media screen': { color: 'red' } },
-    }) as any;
+    });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_tdSbZ"`);
@@ -1094,7 +1086,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border-right shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderRight: '1px solid red' }) as any;
+    const atom = css({ borderRight: '1px solid red' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_gOEYoe _jClUIq _bxAjFr"`);
@@ -1114,7 +1106,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border-bottom shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderBottom: '1px solid red' }) as any;
+    const atom = css({ borderBottom: '1px solid red' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_gjJLeZ _iyDEp _dICIiI"`);
@@ -1129,7 +1121,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should allow inline media queries', () => {
     const css = createCss({}, null);
-    const atom = css({ '@media (hover:hover)': { color: 'red' } }) as any;
+    const atom = css({ '@media (hover:hover)': { color: 'red' } });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_cDQzLB"`);
@@ -1143,7 +1135,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should allow injection of classname', () => {
     const css = createCss({}, null);
-    const atom = (css({ 'div:hover &': { color: 'red' } }) as any).atoms[0];
+    const atom = css({ 'div:hover &': { color: 'red' } }).atoms[0];
 
     expect(atom.id).toMatchInlineSnapshot(`"colordiv:hover %initial"`);
     expect(atom.cssHyphenProp).toEqual('color');
@@ -1161,7 +1153,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border-left shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderLeft: '1px solid red' }) as any;
+    const atom = css({ borderLeft: '1px solid red' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_hzfgoV _fsNLp _dFXvMo"`);
@@ -1178,7 +1170,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border-radius shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderRadius: '5px' }) as any;
+    const atom = css({ borderRadius: '5px' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_iTMjWf _iVpQMz _iMdbNo _dWbHjQ"`);
@@ -1197,7 +1189,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border-color shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderColor: 'red' }) as any;
+    const atom = css({ borderColor: 'red' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_hzfgoV _gjJLeZ _gOEYoe _iffwNR"`);
@@ -1217,7 +1209,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border-style shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderStyle: 'solid' }) as any;
+    const atom = css({ borderStyle: 'solid' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_fsNLp _iyDEp _jClUIq _bKudwR"`);
@@ -1237,7 +1229,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle border-width shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ borderWidth: '2px' }) as any;
+    const atom = css({ borderWidth: '2px' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_fsebJj _fNZgtf _gTZsgw _ciQgfb"`);
@@ -1257,7 +1249,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle background shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ background: 'red' }) as any;
+    const atom = css({ background: 'red' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_gwFOTp"`);
@@ -1274,7 +1266,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle transition shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ transition: 'margin-right 2s ease-in-out' }) as any;
+    const atom = css({ transition: 'margin-right 2s ease-in-out' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_bRbaPK _rNWIB _gqYqQa"`);
@@ -1302,7 +1294,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       },
       null
     );
-    const atom = css({ textDecoration: 'underline overline primary 2px' }) as any;
+    const atom = css({ textDecoration: 'underline overline primary 2px' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_eUgKqn _jyoroV _fOyFCP"`);
@@ -1343,7 +1335,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       'example-7': {
         font: 'condensed oblique 25deg 753 12pt "Helvetica Neue", serif',
       },
-    }) as any;
+    });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(
@@ -1386,7 +1378,7 @@ describe('createCss: mixed(SSR & Client)', () => {
 
   test('should handle flex shorthand', () => {
     const css = createCss({}, null);
-    const atom = css({ flex: '1' }) as any;
+    const atom = css({ flex: '1' });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_cHjBal _jBlSGq _itEjDe"`);
@@ -1406,7 +1398,7 @@ describe('createCss: mixed(SSR & Client)', () => {
   test('Should warn about potential specificity issues when an inline responsive atom appears in two different css definitions', () => {
     const css = createCss({}, null);
     const mediaString = '@media (min-width: 700px)';
-    // tslint:disable-next-line
+    // tslint:disable-next-line: no-console
     console.warn = jest.fn();
     const firstDef = css({
       [mediaString]: { color: 'red' },
@@ -1415,7 +1407,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const secondDef = css({
       [mediaString]: { color: 'red' },
     }).toString();
-    // tslint:disable-next-line
+    // tslint:disable-next-line: no-console
     expect(console.warn).toHaveBeenCalledWith(
       `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
     );
@@ -1739,7 +1731,7 @@ describe('strict mode', () => {
 
   test("should generate the correct rule for a comma separated rule that isn't nested", () => {
     const css = createCss({}, null);
-    const atom = css({ '.a,.b': { color: 'red' } }) as any;
+    const atom = css({ '.a,.b': { color: 'red' } });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_fbcevw"`);
@@ -1756,7 +1748,7 @@ describe('strict mode', () => {
 
   test("should generate the correct rule for a comma separated rule that isn't nested and handle ampersand", () => {
     const css = createCss({}, null);
-    const atom = css({ '&.a,&.b': { color: 'red' } }) as any;
+    const atom = css({ '&.a,&.b': { color: 'red' } });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_cfhXDM"`);
@@ -1777,7 +1769,7 @@ describe('strict mode', () => {
       '.one': {
         ' .a, .b': { '.c, .d': { color: 'blue' } },
       },
-    }) as any;
+    });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_cMlZFy"`);
@@ -1793,7 +1785,7 @@ describe('strict mode', () => {
 
   test('should allow comma separated rules', () => {
     const css = createCss({}, null);
-    const atom = css({ '&.parent': { '.a, &.b': { color: 'red' } } }) as any;
+    const atom = css({ '&.parent': { '.a, &.b': { color: 'red' } } });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_jOZzkI"`);
@@ -1824,7 +1816,7 @@ describe('strict mode', () => {
           },
         },
       },
-    }) as any;
+    });
 
     const { styles } = css.getStyles(() => {
       expect(atom.toString()).toMatchInlineSnapshot(`"_eLiTcV _dDvPWD"`);

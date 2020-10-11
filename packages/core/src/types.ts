@@ -95,7 +95,7 @@ export const ATOM = Symbol('ATOM');
 export interface IAtom {
   id: string;
   cssHyphenProp: string;
-  value: string;
+  value: string | IKeyframesAtom;
   selector: string;
   breakpoint: string;
   _isGlobal?: boolean;
@@ -403,14 +403,16 @@ export type TCssProperties<T extends TConfig> = T['breakpoints'] extends object
   : TRecursiveCss<T> & TRecursiveUtils<T>;
 
 export interface TCss<T extends TConfig> {
-  (...styles: (TCssProperties<T> | string | boolean | null | undefined)[]): string;
+  (
+    ...styles: (TCssProperties<T> | IAtom | { [key: string]: IKeyframesAtom } | string | boolean | null | undefined)[]
+  ): IComposedAtom;
   getStyles: (
     callback: () => any
   ) => {
     styles: string[];
     result: any;
   };
-  keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
+  keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => IKeyframesAtom;
   global: (definition: Record<string, TCssProperties<T>>) => () => string;
   theme: (
     theme: Partial<
@@ -418,7 +420,9 @@ export interface TCss<T extends TConfig> {
         [TO in keyof T['tokens']]: Partial<T['tokens'][TO]>;
       }
     >
-  ) => string;
+  ) => IThemeAtom;
+  dispose: () => void;
+  _config: () => TConfig<true>;
 }
 
 export interface ISheet {
