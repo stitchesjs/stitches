@@ -6,7 +6,6 @@ import {
   TMainBreakPoint,
   createCss,
   hashString,
-  IComposedAtom,
 } from '@stitches/core';
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
@@ -266,14 +265,12 @@ export const createStyled = <Config extends TConfig>(
 
       // By default we don't stringify the classname (composition), so that
       // the children Stitches component is responsible for the final composition
-      let className: IComposedAtom | string = css(stitchesComponentId, ...compositions, props.className);
+      const composedAtom = css(stitchesComponentId, ...compositions, props.className);
 
       // If we're not wrapping a Stitches component,
       // we ensure the classname is stringified
       // https://github.com/modulz/stitches/issues/229
-      if (!(Component as any).__isStitchesComponent) {
-        className = className.toString();
-      }
+      const className = !(Component as any).__isStitchesComponent ? composedAtom.toString() : composedAtom;
 
       return React.createElement(Component, {
         ...propsWithoutVariantsAndCssProp,
