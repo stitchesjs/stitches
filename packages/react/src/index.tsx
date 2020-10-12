@@ -10,8 +10,6 @@ import {
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
 
-let hasWarnedInlineStyle = false;
-
 export type TCssProp<T extends TConfig> = TCssProperties<T> | (string & {});
 
 /**
@@ -197,21 +195,6 @@ export const createStyled = <Config extends TConfig>(
     const stitchesComponentId = `scid-${hashString(JSON.stringify(baseAndVariantStyles))}`;
 
     const StitchesComponent = React.forwardRef((props: any, ref: React.Ref<Element>) => {
-      // Check the memoCompsition's identity to warn the user
-      // remove in production
-      if (process.env.NODE_ENV === 'development') {
-        // we're breaking the rules of hooks on purpose as the env will never change
-        // eslint-disable-next-line
-        const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
-        if (memoStyled !== props.css && !hasWarnedInlineStyle) {
-          // tslint:disable-next-line
-          console.warn(
-            '@stitches/react : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook'
-          );
-          hasWarnedInlineStyle = true;
-        }
-      }
-
       const compositions = [baseStyles];
 
       const propsWithoutVariantsAndCssProp: any = {};
