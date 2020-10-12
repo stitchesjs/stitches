@@ -1416,9 +1416,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       [mediaString]: { color: 'red' },
     }).toString();
     // tslint:disable-next-line
-    expect(console.warn).toHaveBeenCalledWith(
-      `The property "color" with media query ${mediaString} can cause a specificity issue. You should create a breakpoint`
-    );
+    expect(console.warn).toHaveBeenCalled();
   });
 
   test('should inject inline media queries after normal rules', () => {
