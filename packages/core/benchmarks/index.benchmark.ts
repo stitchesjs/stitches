@@ -117,4 +117,21 @@ describe('createCss', () => {
 
     createCss({ tokens }, null);
   });
+
+  test('create breakpoints', () => {
+    const css = createCss(
+      {
+        breakpoints: {
+          tablet: (rule) => `@media (min-width: 700px) { ${rule} }`,
+        },
+      },
+      null
+    );
+    const atom = (css({ tablet: { color: 'red' } }) as any).atoms[0];
+
+    css.getStyles(() => {
+      atom.toString();
+      return '';
+    });
+  });
 });
