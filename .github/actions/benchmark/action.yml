@@ -1,0 +1,22 @@
+name: 'Hello World'
+description: Run a benchmark using the GitHub client
+branding:
+  color: blue
+  icon: code
+
+inputs:
+  script-file:
+    description: The script path used to run and return benchmarks
+    default: 'benchmark.js'
+    required: false
+  github-token:
+    description: The GitHub token used to create an authenticated client
+    required: true
+  user-agent:
+    description: An optional user-agent string
+    default: actions/github-script
+    required: false
+
+runs:
+  using: node12
+  main: action.js

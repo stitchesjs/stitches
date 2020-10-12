@@ -1,0 +1,24 @@
+name: Benchmark
+
+on:
+  push:
+    branches: [ canary ]
+  pull_request:
+    branches: [ canary ]
+
+jobs:
+  benchmark:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+      - run: yarn install
+
+      - name: Benchmark
+        uses: ./.github/actions/benchmark
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script-file: 'benchmark.js'

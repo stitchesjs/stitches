@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "actions-benchmark",
+  "description": "Run a benchmark using the GitHub client",
+  "version": "0.1.0",
+  "main": "action.js",
+  "scripts": {
+    "start": "node ./action.js"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "@babel/register": "^7.11.5"
+  }
+}
