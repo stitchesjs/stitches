@@ -3,7 +3,7 @@ name: Benchmark
 on:
   push:
     branches: [ canary ]
-  pull_request:
+  pull_request_target:
     branches: [ canary ]
 
 jobs:
