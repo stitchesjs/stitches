@@ -10,8 +10,6 @@ import {
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
 
-let hasWarnedInlineStyle = false;
-
 export type TCssProp<T extends TConfig> = TCssProperties<T> | (string & {});
 
 /**
@@ -37,6 +35,24 @@ export type CastStringToBoolean<Val> = Val extends 'true' | 'false' ? boolean | 
  * adds the string type to number while also preserving autocomplete for other string values
  */
 export type CastNumberToString<Val> = Val extends number ? string & {} : never;
+
+/**
+ * Extract variant props from a Stitches component
+ */
+export type StitchesVariants<C> = C extends IStyledComponent<infer T, infer V, infer G> ? VariantASProps<G, V> : never;
+
+/**
+ * Extracts the props from a Stitches component
+ *
+ */
+export type StitchesProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
+  ? MergeElementProps<T, VariantASProps<G, V>> & {
+      as?: T;
+      css?: TCssWithBreakpoints<G>;
+      className?: string;
+      children?: any;
+    }
+  : never;
 
 /**
  * Takes a variants object and converts it to the correct type information for usage in props
@@ -65,7 +81,17 @@ type MergeElementProps<As extends React.ElementType, Props extends object = {}> 
  * 1. Props of a styled component
  * 2. The compoundVariants function typings
  */
-export interface IStyledComponent<ComponentOrTag extends React.ElementType, Variants, Config extends TConfig> {
+export interface IStyledComponent<
+  ComponentOrTag extends React.ElementType,
+  Variants,
+  Config extends TConfig
+> extends React.FC<
+    MergeElementProps<ComponentOrTag, VariantASProps<Config, Variants>> & {
+      css?: TCssWithBreakpoints<Config>;
+      className?: string;
+      children?: any;
+    }
+  > {
   /**
    * Props of a styled component
    */
@@ -88,16 +114,12 @@ export interface IStyledComponent<ComponentOrTag extends React.ElementType, Vari
     compoundVariants: VariantASProps<Config, Variants>,
     possibleValues: TCssWithBreakpoints<Config>
   ) => IStyledComponent<ComponentOrTag, Variants, Config>;
-  /**
-   * Default props typing:
-   */
-  defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
-  /**
-   * DisplayName typing:
-   */
-  displayName?: string;
-}
 
+  /**
+   * @deprecated
+   */
+  defaultProps?: never;
+}
 /** Typed css with tokens and breakpoints */
 export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
@@ -118,6 +140,7 @@ export type TProxyStyledElements<Config extends TConfig> = {
     a: BaseAndVariantStyles | TComponentStylesObject<Config>
   ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
 };
+
 /**
  * Styled Components creator Type.
  * ie: styled.div(styles) | styled('div', {styles})
@@ -197,21 +220,6 @@ export const createStyled = <Config extends TConfig>(
     const stitchesComponentId = `scid-${hashString(JSON.stringify(baseAndVariantStyles))}`;
 
     const StitchesComponent = React.forwardRef((props: any, ref: React.Ref<Element>) => {
-      // Check the memoCompsition's identity to warn the user
-      // remove in production
-      if (process.env.NODE_ENV === 'development') {
-        // we're breaking the rules of hooks on purpose as the env will never change
-        // eslint-disable-next-line
-        const memoStyled = React.useMemo(() => props.css, []); // We want this to only eval once
-        if (memoStyled !== props.css && !hasWarnedInlineStyle) {
-          // tslint:disable-next-line: no-console
-          console.warn(
-            '@stitches/react : The css prop should ideally not be dynamic. Define it outside your component using the css composer, or use a memo hook'
-          );
-          hasWarnedInlineStyle = true;
-        }
-      }
-
       const compositions = [baseStyles];
 
       const propsWithoutVariantsAndCssProp: any = {};
