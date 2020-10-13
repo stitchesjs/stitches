@@ -41,8 +41,19 @@ export type CastNumberToString<Val> = Val extends number ? string & {} : never;
 /**
  * Extract variant props from Stitches components
  */
-export type ExtractVariantProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
-  ? VariantASProps<G, V>
+export type StitchesVariants<C> = C extends IStyledComponent<infer T, infer V, infer G> ? VariantASProps<G, V> : never;
+
+/**
+ * Extracts the props types of a stitches component
+ *
+ */
+export type StitchesComponentProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
+  ? MergeElementProps<T, VariantASProps<G, V>> & {
+      as?: T;
+      css?: TCssWithBreakpoints<G>;
+      className?: string;
+      children?: any;
+    }
   : never;
 
 /**
