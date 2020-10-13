@@ -1416,7 +1416,9 @@ describe('createCss: mixed(SSR & Client)', () => {
       [mediaString]: { color: 'red' },
     }).toString();
     // tslint:disable-next-line
-    expect(console.warn).toHaveBeenCalled();
+    expect(console.warn).toHaveBeenCalledWith(
+      'The property "color" with media query @media (min-width: 700px) could cause specificity issues due to injection order. We recommend abstracting media queries used more than once onto the config object. Learn more: https://stitches.dev/docs/breakpoints'
+    );
   });
 
   test('should inject inline media queries after normal rules', () => {
