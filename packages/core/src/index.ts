@@ -534,10 +534,14 @@ export const createCss = <T extends TConfig>(
     // If this was created before return the cached atom
     if (atomCache.has(uid)) {
       // check if this has a breakpoint based media query
-      if (inlineMediasAsString.match(/@media.*\((min|max)?.*(width|height).*\)/)) {
+      // and that it's not production environment
+      if (
+        inlineMediasAsString.match(/@media.*\((min|max)?.*(width|height).*\)/) &&
+        process.env.NODE_ENV !== 'production'
+      ) {
         // tslint:disable-next-line
         console.warn(
-          `The property "${cssProp}" with media query ${inlineMediasAsString} can cause a specificity issue. You should create a breakpoint`
+          `The property "${cssProp}" with media query ${inlineMediasAsString} could cause specificity issues due to injection order. We recommend abstracting media queries used more than once onto the config object. Learn more: https://stitches.dev/docs/breakpoints`
         );
       }
       return atomCache.get(uid)!;
