@@ -39,15 +39,15 @@ export type CastStringToBoolean<Val> = Val extends 'true' | 'false' ? boolean | 
 export type CastNumberToString<Val> = Val extends number ? string & {} : never;
 
 /**
- * Extract variant props from Stitches components
+ * Extract variant props from a Stitches component
  */
 export type StitchesVariants<C> = C extends IStyledComponent<infer T, infer V, infer G> ? VariantASProps<G, V> : never;
 
 /**
- * Extracts the props types of a stitches component
+ * Extracts the props from a Stitches component
  *
  */
-export type StitchesComponentProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
+export type StitchesProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
   ? MergeElementProps<T, VariantASProps<G, V>> & {
       as?: T;
       css?: TCssWithBreakpoints<G>;
