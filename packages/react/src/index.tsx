@@ -156,8 +156,8 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
   return map;
 };
 
-export const createStyled = <Config extends TConfig, Filtered = Partial<Config>>(
-  config: Filtered
+export const createStyled = <Config extends TConfig>(
+  config: Config
 ): {
   css: TCss<Config>;
   styled: TStyled<Config>;
