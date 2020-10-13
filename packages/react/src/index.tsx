@@ -39,6 +39,24 @@ export type CastStringToBoolean<Val> = Val extends 'true' | 'false' ? boolean | 
 export type CastNumberToString<Val> = Val extends number ? string & {} : never;
 
 /**
+ * Extract variant props from Stitches components
+ */
+export type StitchesVariants<C> = C extends IStyledComponent<infer T, infer V, infer G> ? VariantASProps<G, V> : never;
+
+/**
+ * Extracts the props types of a stitches component
+ *
+ */
+export type StitchesComponentProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
+  ? MergeElementProps<T, VariantASProps<G, V>> & {
+      as?: T;
+      css?: TCssWithBreakpoints<G>;
+      className?: string;
+      children?: any;
+    }
+  : never;
+
+/**
  * Takes a variants object and converts it to the correct type information for usage in props
  */
 export type VariantASProps<Config extends TConfig, VariantsObj> = {
@@ -65,7 +83,17 @@ type MergeElementProps<As extends React.ElementType, Props extends object = {}> 
  * 1. Props of a styled component
  * 2. The compoundVariants function typings
  */
-export interface IStyledComponent<ComponentOrTag extends React.ElementType, Variants, Config extends TConfig> {
+export interface IStyledComponent<
+  ComponentOrTag extends React.ElementType,
+  Variants,
+  Config extends TConfig
+> extends React.FC<
+    MergeElementProps<ComponentOrTag, VariantASProps<Config, Variants>> & {
+      css?: TCssWithBreakpoints<Config>;
+      className?: string;
+      children?: any;
+    }
+  > {
   /**
    * Props of a styled component
    */
@@ -88,16 +116,12 @@ export interface IStyledComponent<ComponentOrTag extends React.ElementType, Vari
     compoundVariants: VariantASProps<Config, Variants>,
     possibleValues: TCssWithBreakpoints<Config>
   ) => IStyledComponent<ComponentOrTag, Variants, Config>;
-  /**
-   * Default props typing:
-   */
-  defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
-  /**
-   * DisplayName typing:
-   */
-  displayName?: string;
-}
 
+  /**
+   * @deprecated
+   */
+  defaultProps?: never;
+}
 /** Typed css with tokens and breakpoints */
 export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
@@ -118,6 +142,7 @@ export type TProxyStyledElements<Config extends TConfig> = {
     a: BaseAndVariantStyles | TComponentStylesObject<Config>
   ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
 };
+
 /**
  * Styled Components creator Type.
  * ie: styled.div(styles) | styled('div', {styles})
