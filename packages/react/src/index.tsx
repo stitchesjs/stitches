@@ -81,6 +81,13 @@ type MergeElementProps<As extends React.ElementType, Props extends object = {}> 
  * 1. Props of a styled component
  * 2. The compoundVariants function typings
  */
+
+/**
+ * Merges tha passed type with type string
+ * Used to make component behave as strings when they're in style object keys.
+ */
+type ToStringHelper<T> = T & string;
+
 export interface IStyledComponent<
   ComponentOrTag extends React.ElementType,
   Variants,
@@ -113,7 +120,7 @@ export interface IStyledComponent<
   compoundVariant: (
     compoundVariants: VariantASProps<Config, Variants>,
     possibleValues: TCssWithBreakpoints<Config>
-  ) => IStyledComponent<ComponentOrTag, Variants, Config>;
+  ) => ToStringHelper<IStyledComponent<ComponentOrTag, Variants, Config>>;
 
   /**
    * @deprecated
@@ -138,7 +145,7 @@ export type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints
 export type TProxyStyledElements<Config extends TConfig> = {
   [key in keyof JSX.IntrinsicElements]: <BaseAndVariantStyles extends TComponentStylesObject<Config>>(
     a: BaseAndVariantStyles | TComponentStylesObject<Config>
-  ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
+  ) => ToStringHelper<IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>>;
 };
 
 /**
@@ -155,8 +162,8 @@ export type TStyled<Config extends TConfig> = {
     tag: TagOrComponent,
     baseStyles: BaseAndVariantStyles | TComponentStylesObject<Config>
   ): TagOrComponent extends IStyledComponent<infer T, infer V, Config>
-    ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, Config>
-    : IStyledComponent<TagOrComponent, Variants, Config>;
+    ? ToStringHelper<IStyledComponent<T, Omit<V, keyof Variants> & Variants, Config>>
+    : ToStringHelper<IStyledComponent<TagOrComponent, Variants, Config>>;
 } & TProxyStyledElements<Config>;
 
 const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
