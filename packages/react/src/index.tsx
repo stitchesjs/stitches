@@ -95,13 +95,26 @@ export interface IStyledComponent<
   /**
    * Props of a styled component
    */
+  // We need two overloads to prevent events
+  // from being typed as any
+
+  // First overload (no as prop):
+  (
+    props: MergeElementProps<ComponentOrTag, VariantASProps<Config, Variants>> & {
+      as?: never;
+      css?: TCssWithBreakpoints<Config>;
+      className?: string;
+      children?: any;
+    }
+  ): any;
+  // Second overload (with as prop):
   <As extends React.ElementType = ComponentOrTag>(
     // Merge native props with variant props to prevent props clashing.
     // e.g. some HTML elements have `size` attribute. And when you combine
     // both types (native and variant props) the common props become
     // unusable (in typing-wise)
     props: MergeElementProps<As, VariantASProps<Config, Variants>> & {
-      as?: As;
+      as: As;
       css?: TCssWithBreakpoints<Config>;
       className?: string;
       children?: any;
@@ -186,7 +199,7 @@ export const createStyled = <Config extends TConfig>(
 
   let currentAs: string | undefined;
 
-  const configBreakpoints = config.breakpoints || {};
+  const configBreakpoints = (config as any).breakpoints || {};
 
   const styledInstance = (
     baseAndVariantStyles: any = (cssComposer: any) => cssComposer.compose(),
