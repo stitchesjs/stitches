@@ -1007,6 +1007,21 @@ describe('createCss: mixed(SSR & Client)', () => {
     `);
   });
 
+  test('should generate font atoms', () => {
+    const css = createCss({}, null);
+    const font = css.font({
+      fontWeight: 400,
+      fontDisplay: 'swap',
+      src:
+        "url(https://develop.modulz.app/fonts/UntitledSansWeb-Regular.woff2) format('woff2'), url(https://develop.modulz.app/fonts/UntitledSansWeb-Regular.woff) format('woff')",
+    });
+
+    expect(font._cssRuleString).toMatchInlineSnapshot(
+      `"@keyframes keYeiS {0% {background-color: red;}100% {background-color: green;}}"`
+    );
+    expect(font.toString()).toMatchInlineSnapshot(`"bbKwuh"`);
+  });
+
   test('should handle margin shorthand', () => {
     const css = createCss({}, null);
     const atom = css({ margin: '1px 5px' }) as any;

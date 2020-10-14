@@ -678,6 +678,43 @@ export const createCss = <T extends TConfig>(
     return () => compose(...atoms).toString();
   };
 
+  cssInstance.font = (definition: any): IKeyframesAtom => {
+    let cssRule = '';
+    let currentTimeProp = '';
+    processStyleObject(definition, config, (key, value, _, __, timeProp) => {
+      if (timeProp !== currentTimeProp) {
+        if (cssRule) {
+          cssRule += `}`;
+        }
+        currentTimeProp = timeProp;
+        cssRule += `${timeProp.substr(2)} {`;
+      }
+      cssRule += `${hyphenAndVendorPrefixCssProp(key, vendorProps, vendorPrefix)}: ${resolveTokens(
+        key,
+        value,
+        tokens
+      )};`;
+    });
+    cssRule += `}`;
+
+    const hash = hashString(cssRule);
+    // Check if an atom exist with the same hash and return it if so
+    const cachedAtom = keyFramesCache.get(hash);
+    if (cachedAtom) {
+      return cachedAtom;
+    }
+    // wrap it with the generated keyframes name
+    cssRule = `@font-face { font-family: ${hash}; ${cssRule} }`;
+    const keyframesAtom = {
+      id: String(hash),
+      _cssRuleString: cssRule,
+      toString: keyframesToString,
+      [ATOM]: true as true,
+    };
+    keyFramesCache.set(hash, keyframesAtom);
+    return keyframesAtom;
+  };
+
   cssInstance.keyframes = (definition: any): IKeyframesAtom => {
     let cssRule = '';
     let currentTimeProp = '';
