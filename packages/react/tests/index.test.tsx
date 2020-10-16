@@ -187,6 +187,29 @@ describe('styled', () => {
         .toJSON()
     ).toMatchSnapshot();
   });
+
+  test('handles boolean compound variant', () => {
+    const Button = styled('button', {
+      variants: { bold: { true: { fontWeight: 'bold' } }, italic: { true: { textStyle: 'italic' } } },
+    })
+      .compoundVariant({ bold: true, italic: false }, { textDecoration: 'underline' })
+      .compoundVariant({ bold: false, italic: true }, { textTransform: 'uppercase' });
+    Button.defaultProps = { bold: false, italic: false };
+    expect(
+      renderer
+        .create(
+          <>
+            <Button bold>bold, underline</Button>
+            <Button italic>italic, uppercase</Button>
+            <Button bold italic>
+              italic, bold
+            </Button>
+          </>
+        )
+        .toJSON()
+    ).toMatchSnapshot();
+  });
+
   test('It has default displayName when a string based element is passed', () => {
     const Button = styled('button', {});
     expect(Button.displayName).toBe('styled(button)');

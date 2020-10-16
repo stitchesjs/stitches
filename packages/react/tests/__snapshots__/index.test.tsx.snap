@@ -165,6 +165,47 @@ exports[`styled Renders composed component 1`] = `
 }
 `;
 
+exports[`styled handles boolean compound variant 1`] = `
+Array [
+  {
+  "orderedAppliedStyles": [
+    "._oRObr {font-weight: bold;}",
+    "._kXqcij {text-decoration-line: underline;}"
+  ],
+  "props": {
+    "className": "_kXqcij _oRObr scid-idZRwg"
+  },
+  "children": [
+    "bold, underline"
+  ]
+},
+  {
+  "orderedAppliedStyles": [
+    "._ldesWJ {text-style: italic;}",
+    "._UNaLq {text-transform: uppercase;}"
+  ],
+  "props": {
+    "className": "_UNaLq _ldesWJ scid-idZRwg"
+  },
+  "children": [
+    "italic, uppercase"
+  ]
+},
+  {
+  "orderedAppliedStyles": [
+    "._ldesWJ {text-style: italic;}",
+    "._oRObr {font-weight: bold;}"
+  ],
+  "props": {
+    "className": "_ldesWJ _oRObr scid-idZRwg"
+  },
+  "children": [
+    "italic, bold"
+  ]
+},
+]
+`;
+
 exports[`styled renders component with variant 1`] = `
 {
   "orderedAppliedStyles": [
