@@ -382,13 +382,20 @@ export interface IUtils {
   [name: string]: TUtility<any, any>;
 }
 
-export interface TConfig<Tokens = any> {
-  showFriendlyClassnames: boolean;
-  prefix: string;
-  strict: boolean;
-  breakpoints: IBreakpoints;
+export interface TConfig<
+  Tokens = any,
+  Breakpoints = any,
+  Utils = any,
+  showFriendlyClassnames = any,
+  prefix = string,
+  strict = any
+> {
   tokens: Tokens & ITokensDefinition<Tokens>;
-  utils: IUtils;
+  breakpoints: IBreakpoints & Breakpoints;
+  utils: IUtils & Utils;
+  showFriendlyClassnames: showFriendlyClassnames & boolean;
+  prefix: prefix & string;
+  strict: strict & boolean;
 }
 
 export type TCssProperties<T extends TConfig> = TRecursiveCss<T>;

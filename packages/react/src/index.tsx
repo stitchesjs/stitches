@@ -167,11 +167,19 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
 };
 
 // tslint:disable-next-line:prettier
-export const createStyled = <Config extends TConfig, A = Config extends TConfig<infer B> ? B : never>(
-  config: TConfig<A>
+export const createStyled = <
+  Config extends TConfig,
+  A = Config extends TConfig<infer I> ? I : never,
+  B = Config extends TConfig<infer _, infer I> ? I : never,
+  C = Config extends TConfig<infer _, infer __, infer I> ? I : never,
+  D extends boolean = Config extends TConfig<infer _, infer __, infer ___, infer I> ? I : never,
+  E extends string = Config extends TConfig<infer _, infer __, infer ___, infer ____, infer I> ? I : never,
+  F extends boolean = Config extends TConfig<infer _, infer __, infer ___, infer ____, infer _____, infer I> ? I : never
+>(
+  config: TConfig<A, B, C, D, E, F>
 ): {
-  css: TCss<TConfig<A>>;
-  styled: TStyled<TConfig<A>>;
+  css: TCss<TConfig<A, B, C, D, E, F>>;
+  styled: TStyled<TConfig<A, B, C, D, E, F>>;
 } => {
   const css = createCss(config);
   const defaultElement = 'div';
@@ -367,7 +375,7 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
 
 const { css: _css, styled } = createStyled({
   showFriendlyClassnames: false,
-  prefix: '',
+  prefix: 's',
   strict: false,
   breakpoints: {},
   utils: {},
@@ -403,7 +411,7 @@ const yo = _css.keyframes({
 
 const global = _css.global({
   hllo: {
-    color: 'red',
+    color: 'red100',
   },
 });
 
