@@ -166,11 +166,12 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
   return map;
 };
 
-export const createStyled = <Config extends TConfig>(
-  config: Config
+// tslint:disable-next-line:prettier
+export const createStyled = <Config extends TConfig, A = Config extends TConfig<infer B> ? B : never>(
+  config: TConfig<A>
 ): {
-  css: TCss<Config>;
-  styled: TStyled<Config>;
+  css: TCss<TConfig<A>>;
+  styled: TStyled<TConfig<A>>;
 } => {
   const css = createCss(config);
   const defaultElement = 'div';
@@ -292,12 +293,12 @@ export const createStyled = <Config extends TConfig>(
 
     (StitchesComponent as any).__isStitchesComponent = true;
 
-    StitchesComponent.displayName =
-      typeof currentAs === 'string'
-        ? `styled(${currentAs})`
-        : Component && Component.displayName
-        ? `styled(${Component.displayName})`
-        : `styled(Component\)`;
+    // StitchesComponent.displayName =
+    //   typeof currentAs === 'string'
+    //     ? `styled(${currentAs})`
+    //     : Component && Component.displayName
+    //     ? `styled(${Component.displayName})`
+    //     : `styled(Component\)`;
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
@@ -363,3 +364,51 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   }
   return breakpoints;
 }
+
+const { css: _css, styled } = createStyled({
+  showFriendlyClassnames: false,
+  prefix: '',
+  strict: false,
+  breakpoints: {},
+  utils: {},
+  tokens: {
+    sizes: {},
+    space: {},
+    fonts: {},
+    fontSizes: {},
+    lineHeights: {},
+    letterSpacings: {},
+    borderWidths: {},
+    fontWeights: {},
+    borderStyles: {},
+    radii: {},
+    shadows: {},
+    zIndices: {},
+    transitions: {},
+    colors: {
+      red100: 'tomato',
+    },
+  },
+});
+
+const buttonclass = _css({
+  color: 'red100',
+});
+
+const yo = _css.keyframes({
+  hllo: {
+    color: 'red100',
+  },
+});
+
+const global = _css.global({
+  hllo: {
+    color: 'red',
+  },
+});
+
+const Button = styled.button({
+  div: {
+    color: '',
+  },
+});

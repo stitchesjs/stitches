@@ -362,45 +362,36 @@ export interface ITokenDefinition {
   [key: number]: string;
 }
 
-export interface ITokensDefinition {
-  colors?: ITokenDefinition;
-  space?: ITokenDefinition;
-  fontSizes?: ITokenDefinition;
-  fonts?: ITokenDefinition;
-  fontWeights?: ITokenDefinition;
-  lineHeights?: ITokenDefinition;
-  letterSpacings?: ITokenDefinition;
-  sizes?: ITokenDefinition;
-  borderWidths?: ITokenDefinition;
-  borderStyles?: ITokenDefinition;
-  radii?: ITokenDefinition;
-  shadows?: ITokenDefinition;
-  zIndices?: ITokenDefinition;
-  transitions?: ITokenDefinition;
+export interface ITokensDefinition<Tokens = {}> {
+  colors: Tokens extends { colors: infer C } ? C : ITokenDefinition;
+  space: Tokens extends { space: infer C } ? C : ITokenDefinition;
+  fontSizes: Tokens extends { fontSizes: infer C } ? C : ITokenDefinition;
+  fonts: Tokens extends { fonts: infer C } ? C : ITokenDefinition;
+  fontWeights: Tokens extends { fontWeights: infer C } ? C : ITokenDefinition;
+  lineHeights: Tokens extends { lineHeights: infer C } ? C : ITokenDefinition;
+  letterSpacings: Tokens extends { letterSpacings: infer C } ? C : ITokenDefinition;
+  sizes: Tokens extends { sizes: infer C } ? C : ITokenDefinition;
+  borderWidths: Tokens extends { borderWidths: infer C } ? C : ITokenDefinition;
+  borderStyles: Tokens extends { borderStyles: infer C } ? C : ITokenDefinition;
+  radii: Tokens extends { radii: infer C } ? C : ITokenDefinition;
+  shadows: Tokens extends { shadows: infer C } ? C : ITokenDefinition;
+  zIndices: Tokens extends { zIndices: infer C } ? C : ITokenDefinition;
+  transitions: Tokens extends { transitions: infer C } ? C : ITokenDefinition;
 }
 export interface IUtils {
   [name: string]: TUtility<any, any>;
 }
 
-export type TConfig<STRICT_MODE extends boolean = false> = {
-  showFriendlyClassnames?: boolean;
-  prefix?: string;
-  strict?: boolean;
-} & (STRICT_MODE extends true
-  ? { breakpoints: IBreakpoints; tokens: ITokensDefinition; utils: IUtils }
-  : {
-      breakpoints?: IBreakpoints;
-      tokens?: ITokensDefinition;
-      utils?: IUtils;
-    });
+export interface TConfig<Tokens = any> {
+  showFriendlyClassnames: boolean;
+  prefix: string;
+  strict: boolean;
+  breakpoints: IBreakpoints;
+  tokens: Tokens & ITokensDefinition<Tokens>;
+  utils: IUtils;
+}
 
-export type TCssProperties<T extends TConfig> = T['breakpoints'] extends object
-  ? TRecursiveCss<T> &
-      TRecursiveUtils<T> &
-      {
-        [S in keyof T['breakpoints']]?: TRecursiveCss<T> & TRecursiveUtils<T>;
-      }
-  : TRecursiveCss<T> & TRecursiveUtils<T>;
+export type TCssProperties<T extends TConfig> = TRecursiveCss<T>;
 
 export interface TCss<T extends TConfig> {
   (...styles: (TCssProperties<T> | string | boolean | null | undefined)[]): string;
