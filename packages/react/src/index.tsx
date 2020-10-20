@@ -1,6 +1,6 @@
 import {
   MAIN_BREAKPOINT_ID,
-  TConfig,
+  IConfig,
   TCss,
   TCssProperties,
   TMainBreakPoint,
@@ -10,7 +10,7 @@ import {
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
 
-export type TCssProp<T extends TConfig> = TCssProperties<T> | (string & {});
+export type TCssProp<T extends IConfig> = TCssProperties<T> | (string & {});
 
 /**
  * Extracts Variants from an object:
@@ -24,7 +24,7 @@ export type TExtractVariants<Styles> = Styles extends {
 /**
  * Extracts Breakpoint keys from a config
  */
-export type BreakPointsKeys<Config extends TConfig> = keyof Config['breakpoints'];
+export type BreakPointsKeys<Config extends IConfig> = keyof Config['breakpoints'];
 
 /**
  * Takes a value and if it's one of the string type representations of a boolean ('true' | 'false')
@@ -57,7 +57,7 @@ export type StitchesProps<C> = C extends IStyledComponent<infer T, infer V, infe
 /**
  * Takes a variants object and converts it to the correct type information for usage in props
  */
-export type VariantASProps<Config extends TConfig, VariantsObj> = {
+export type VariantASProps<Config extends IConfig, VariantsObj> = {
   [V in keyof VariantsObj]?:
     | CastStringToBoolean<VariantsObj[V]>
     | VariantsObj[V]
@@ -84,7 +84,7 @@ type MergeElementProps<As extends React.ElementType, Props extends object = {}> 
 export interface IStyledComponent<
   ComponentOrTag extends React.ElementType,
   Variants,
-  Config extends TConfig
+  Config extends IConfig
 > extends React.FC<
     MergeElementProps<ComponentOrTag, VariantASProps<Config, Variants>> & {
       css?: TCssWithBreakpoints<Config>;
@@ -121,11 +121,11 @@ export interface IStyledComponent<
   defaultProps?: never;
 }
 /** Typed css with tokens and breakpoints */
-export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
+export type TCssWithBreakpoints<Config extends IConfig> = TCssProp<Config> &
   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
 
 /** The type for the styles in a styled call */
-export type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints<Config> & {
+export type TComponentStylesObject<Config extends IConfig> = TCssWithBreakpoints<Config> & {
   variants?: {
     [k: string]: {
       [s: string]: TCssWithBreakpoints<Config>;
@@ -135,7 +135,7 @@ export type TComponentStylesObject<Config extends TConfig> = TCssWithBreakpoints
 /**
  * Types for styled.button, styled.div, etc..
  */
-export type TProxyStyledElements<Config extends TConfig> = {
+export type TProxyStyledElements<Config extends IConfig> = {
   [key in keyof JSX.IntrinsicElements]: <BaseAndVariantStyles extends TComponentStylesObject<Config>>(
     a: BaseAndVariantStyles | TComponentStylesObject<Config>
   ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
@@ -145,7 +145,7 @@ export type TProxyStyledElements<Config extends TConfig> = {
  * Styled Components creator Type.
  * ie: styled.div(styles) | styled('div', {styles})
  */
-export type TStyled<Config extends TConfig> = {
+export type TStyled<Config extends IConfig> = {
   // tslint:disable-next-line: callable-types
   <
     TagOrComponent extends keyof JSX.IntrinsicElements | React.ComponentType<any> | IStyledComponent<any, any, Config>,
@@ -168,23 +168,23 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
 
 // tslint:disable-next-line:prettier
 export const createStyled = <
-  Config extends TConfig,
+  Config extends IConfig,
   // Inferring the config generic arguments:
-  A = Config extends TConfig<infer I> ? I : never,
-  B = Config extends TConfig<infer _, infer I> ? I : never,
-  C = Config extends TConfig<infer _, infer __, infer I> ? I : never,
-  D extends boolean = Config extends TConfig<infer _, infer __, infer ___, infer I> ? I : never,
-  E extends string = Config extends TConfig<infer _, infer __, infer ___, infer ____, infer I> ? I : never,
-  F extends boolean = Config extends TConfig<infer _, infer __, infer ___, infer ____, infer _____, infer I> ? I : never
+  A = Config extends IConfig<infer I> ? I : never,
+  B = Config extends IConfig<infer _, infer I> ? I : never,
+  C = Config extends IConfig<infer _, infer __, infer I> ? I : never,
+  D extends boolean = Config extends IConfig<infer _, infer __, infer ___, infer I> ? I : never,
+  E extends string = Config extends IConfig<infer _, infer __, infer ___, infer ____, infer I> ? I : never,
+  F extends boolean = Config extends IConfig<infer _, infer __, infer ___, infer ____, infer _____, infer I> ? I : never
 >(
   // Re-constructing the config based on the inferred values:
   // this way utils will get a typed config.
   // this will also help us with preventing unknown properties from being
   // allowed in the config
-  config: TConfig<A, B, C, D, E, F>
+  config: IConfig<A, B, C, D, E, F>
 ): {
-  css: TCss<TConfig<A, B, C, D, E, F>>;
-  styled: TStyled<TConfig<A, B, C, D, E, F>>;
+  css: TCss<IConfig<A, B, C, D, E, F>>;
+  styled: TStyled<IConfig<A, B, C, D, E, F>>;
 } => {
   const css = createCss(config);
   const defaultElement = 'div';
@@ -379,7 +379,6 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
 }
 
 const { css: _css, styled } = createStyled({
-  showFriendlyClassnames: false,
   prefix: 's',
   strict: false,
   breakpoints: { breakthisshit: () => '' },

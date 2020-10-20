@@ -9,7 +9,7 @@ import {
   ISheet,
   IThemeAtom,
   ITokensDefinition,
-  TConfig,
+  IConfig,
   TCss,
 } from './types';
 import { unitlessKeys } from './unitless';
@@ -144,7 +144,7 @@ const allPossibleCases = ([first, ...rest]: string[][]): string[] => {
  */
 const processStyleObject = (
   obj: any,
-  config: TConfig<true>,
+  config: IConfig<true>,
   valueMiddleware: (
     prop: string,
     value: string,
@@ -438,14 +438,14 @@ declare global {
 export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
-export const createCss = <T extends TConfig>(
+export const createCss = <T extends IConfig>(
   _config: T,
   // Check against Deno env explicitly #199
   env: Window | null = typeof window === 'undefined' || window?.Deno ? null : window
 ): TCss<T> => {
   // pre-checked config to avoid checking these all the time
   // tslint:disable-next-line
-  const config: TConfig<true> = Object.assign({ tokens: {}, utils: {}, breakpoints: {} }, _config);
+  const config: IConfig<true> = Object.assign({ tokens: {}, utils: {}, breakpoints: {} }, _config);
   // prefill with empty token groups
   tokenTypes.forEach((tokenType) => (config.tokens[tokenType] = config.tokens[tokenType] || {}));
   const { tokens, breakpoints } = config;

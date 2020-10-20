@@ -126,13 +126,13 @@ export interface IKeyframesAtom {
   [ATOM]: true;
 }
 
-export type TTopCss<T extends TConfig> = {
+export type TTopCss<T extends IConfig> = {
   [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
     ? ICssPropToToken<T>[K] | number | Properties[K]
     : Properties[K] | number;
 };
 
-export type TRecursiveCss<T extends TConfig, D = TFlatCSS<T>> = (
+export type TRecursiveCss<T extends IConfig, D = TFlatCSS<T>> = (
   | D
   | {
       [pseudo: string]: (D | { [pseudo: string]: (D | { [pseudo: string]: D }) & D }) & D;
@@ -140,7 +140,7 @@ export type TRecursiveCss<T extends TConfig, D = TFlatCSS<T>> = (
 ) &
   D;
 
-export type TFlatCSS<T extends TConfig> = {
+export type TFlatCSS<T extends IConfig> = {
   [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
     ? T extends { strict: true }
       ? ICssPropToToken<T>[K]
@@ -149,7 +149,7 @@ export type TFlatCSS<T extends TConfig> = {
 };
 
 export type TFlatUtils<
-  T extends TConfig,
+  T extends IConfig,
   UT = {
     [U in keyof T['utils']]?: T['utils'][U] extends TUtility<any, any>
       ? T['utils'][U] extends (arg: infer A, config: T) => {}
@@ -159,7 +159,7 @@ export type TFlatUtils<
   }
 > = UT;
 
-export type TTopUtils<T extends TConfig> = {
+export type TTopUtils<T extends IConfig> = {
   [U in keyof T['utils']]?: T['utils'][U] extends TUtility<any, any>
     ? T['utils'][U] extends (arg: infer A, config: T) => {}
       ? A
@@ -167,15 +167,15 @@ export type TTopUtils<T extends TConfig> = {
     : never;
 };
 
-export type TRecursiveUtils<T extends TConfig> =
+export type TRecursiveUtils<T extends IConfig> =
   | TTopUtils<T>
   | {
       [pseudo: string]: TRecursiveUtils<T>;
     };
 
-export type TUtility<A extends any, T extends TConfig> = (arg: A, config: T) => TRecursiveCss<T>;
+export type TUtility<A extends any, T extends IConfig> = (arg: A, config: T) => TRecursiveCss<T>;
 
-export type ICssPropToToken<T extends TConfig> = T['tokens'] extends object
+export type ICssPropToToken<T extends IConfig> = T['tokens'] extends object
   ? {
       gap: T['tokens']['space'] extends object ? keyof T['tokens']['space'] : GridGapProperty<never>;
       gridGap: T['tokens']['space'] extends object ? keyof T['tokens']['space'] : GridGapProperty<never>;
@@ -378,7 +378,7 @@ export interface ITokensDefinition<Tokens = {}> {
   zIndices: Tokens extends { zIndices: infer C } ? C : ITokenDefinition;
   transitions: Tokens extends { transitions: infer C } ? C : ITokenDefinition;
 }
-export interface IUtils<config extends TConfig> {
+export interface IUtils<config extends IConfig> {
   [name: string]: TUtility<any, config>;
 }
 
@@ -388,7 +388,7 @@ export type GuardAgainstSchema<ObjToValidate, Schema> = {
   [k in Exclude<keyof ObjToValidate, keyof Schema>]: never;
 };
 
-export interface TConfig<
+export interface IConfig<
   // Used to type config based on itself
   // these will act as pointers for typescript
   // so that it can infer the types correctly
@@ -410,7 +410,7 @@ export interface TConfig<
   strict: strict & boolean;
 }
 
-export type TCssProperties<T extends TConfig> = T['breakpoints'] extends object
+export type TCssProperties<T extends IConfig> = T['breakpoints'] extends object
   ? TRecursiveCss<T> &
       TRecursiveUtils<T> &
       {
@@ -418,7 +418,7 @@ export type TCssProperties<T extends TConfig> = T['breakpoints'] extends object
       }
   : TRecursiveCss<T> & TRecursiveUtils<T>;
 
-export interface TCss<T extends TConfig> {
+export interface TCss<T extends IConfig> {
   (...styles: (TCssProperties<T> | string | boolean | null | undefined)[]): string;
   getStyles: (
     callback: () => any
