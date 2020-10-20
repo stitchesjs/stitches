@@ -378,27 +378,45 @@ export interface ITokensDefinition<Tokens = {}> {
   zIndices: Tokens extends { zIndices: infer C } ? C : ITokenDefinition;
   transitions: Tokens extends { transitions: infer C } ? C : ITokenDefinition;
 }
-export interface IUtils {
-  [name: string]: TUtility<any, any>;
+export interface IUtils<config extends TConfig> {
+  [name: string]: TUtility<any, config>;
 }
 
+// Creates a new type that validates that ObjToValidate does not have any extra
+// properties over the Schema type
+export type GuardAgainstSchema<ObjToValidate, Schema> = {
+  [k in Exclude<keyof ObjToValidate, keyof Schema>]: never;
+};
+
 export interface TConfig<
-  Tokens = any,
+  // Used to type config based on itself
+  // these will act as pointers for typescript
+  // so that it can infer the types correctly
   Breakpoints = any,
+  Tokens = any,
   Utils = any,
   showFriendlyClassnames = any,
-  prefix = string,
+  prefix = any,
   strict = any
+  // we don't care about infering utils as it's the only thing in the config
+  // that requires access to the config, so we're giving it special treatment
+  // so that it can access the values of its sibilngs
 > {
-  tokens: Tokens & ITokensDefinition<Tokens>;
-  breakpoints: IBreakpoints & Breakpoints;
-  utils: IUtils & Utils;
+  tokens: Tokens & GuardAgainstSchema<Tokens, ITokensDefinition> & ITokensDefinition<Tokens>;
+  breakpoints: Breakpoints | IBreakpoints;
+  utils: IUtils<this> | Utils;
   showFriendlyClassnames: showFriendlyClassnames & boolean;
   prefix: prefix & string;
   strict: strict & boolean;
 }
 
-export type TCssProperties<T extends TConfig> = TRecursiveCss<T>;
+export type TCssProperties<T extends TConfig> = T['breakpoints'] extends object
+  ? TRecursiveCss<T> &
+      TRecursiveUtils<T> &
+      {
+        [S in keyof T['breakpoints']]?: TRecursiveCss<T> & TRecursiveUtils<T>;
+      }
+  : TRecursiveCss<T> & TRecursiveUtils<T>;
 
 export interface TCss<T extends TConfig> {
   (...styles: (TCssProperties<T> | string | boolean | null | undefined)[]): string;

@@ -169,6 +169,7 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
 // tslint:disable-next-line:prettier
 export const createStyled = <
   Config extends TConfig,
+  // Inferring the config generic arguments:
   A = Config extends TConfig<infer I> ? I : never,
   B = Config extends TConfig<infer _, infer I> ? I : never,
   C = Config extends TConfig<infer _, infer __, infer I> ? I : never,
@@ -176,6 +177,10 @@ export const createStyled = <
   E extends string = Config extends TConfig<infer _, infer __, infer ___, infer ____, infer I> ? I : never,
   F extends boolean = Config extends TConfig<infer _, infer __, infer ___, infer ____, infer _____, infer I> ? I : never
 >(
+  // Re-constructing the config based on the inferred values:
+  // this way utils will get a typed config.
+  // this will also help us with preventing unknown properties from being
+  // allowed in the config
   config: TConfig<A, B, C, D, E, F>
 ): {
   css: TCss<TConfig<A, B, C, D, E, F>>;
@@ -377,8 +382,12 @@ const { css: _css, styled } = createStyled({
   showFriendlyClassnames: false,
   prefix: 's',
   strict: false,
-  breakpoints: {},
-  utils: {},
+  breakpoints: { breakthisshit: () => '' },
+  utils: {
+    mx: (val, config) => {
+      return {};
+    },
+  },
   tokens: {
     sizes: {},
     space: {},
@@ -400,6 +409,9 @@ const { css: _css, styled } = createStyled({
 });
 
 const buttonclass = _css({
+  breakthisshit: {
+    backgroundColor: 'red100',
+  },
   color: 'red100',
 });
 
@@ -417,6 +429,6 @@ const global = _css.global({
 
 const Button = styled.button({
   div: {
-    color: '',
+    color: 'red100',
   },
 });
