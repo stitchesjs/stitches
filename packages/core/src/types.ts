@@ -362,21 +362,21 @@ export interface ITokenDefinition {
   [key: number]: string;
 }
 
-export interface ITokensDefinition<Tokens = {}> {
-  colors: Tokens extends { colors: infer C } ? C : ITokenDefinition;
-  space: Tokens extends { space: infer C } ? C : ITokenDefinition;
-  fontSizes: Tokens extends { fontSizes: infer C } ? C : ITokenDefinition;
-  fonts: Tokens extends { fonts: infer C } ? C : ITokenDefinition;
-  fontWeights: Tokens extends { fontWeights: infer C } ? C : ITokenDefinition;
-  lineHeights: Tokens extends { lineHeights: infer C } ? C : ITokenDefinition;
-  letterSpacings: Tokens extends { letterSpacings: infer C } ? C : ITokenDefinition;
-  sizes: Tokens extends { sizes: infer C } ? C : ITokenDefinition;
-  borderWidths: Tokens extends { borderWidths: infer C } ? C : ITokenDefinition;
-  borderStyles: Tokens extends { borderStyles: infer C } ? C : ITokenDefinition;
-  radii: Tokens extends { radii: infer C } ? C : ITokenDefinition;
-  shadows: Tokens extends { shadows: infer C } ? C : ITokenDefinition;
-  zIndices: Tokens extends { zIndices: infer C } ? C : ITokenDefinition;
-  transitions: Tokens extends { transitions: infer C } ? C : ITokenDefinition;
+export interface ITokensDefinition {
+  colors?: ITokenDefinition;
+  space?: ITokenDefinition;
+  fontSizes?: ITokenDefinition;
+  fonts?: ITokenDefinition;
+  fontWeights?: ITokenDefinition;
+  lineHeights?: ITokenDefinition;
+  letterSpacings?: ITokenDefinition;
+  sizes?: ITokenDefinition;
+  borderWidths?: ITokenDefinition;
+  borderStyles?: ITokenDefinition;
+  radii?: ITokenDefinition;
+  shadows?: ITokenDefinition;
+  zIndices?: ITokenDefinition;
+  transitions?: ITokenDefinition;
 }
 export interface IUtils<config extends IConfig> {
   [name: string]: TUtility<any, config>;
@@ -384,8 +384,8 @@ export interface IUtils<config extends IConfig> {
 
 // Creates a new type that validates that ObjToValidate does not have any extra
 // properties over the Schema type
-export type GuardAgainstSchema<ObjToValidate, Schema> = {
-  [k in Exclude<keyof ObjToValidate, keyof Schema>]: never;
+export type GuardedTokens<Tokens, Def> = {
+  [k in Exclude<keyof Def, keyof Tokens>]?: Def[k];
 };
 
 export interface IConfig<
@@ -398,16 +398,16 @@ export interface IConfig<
   showFriendlyClassnames = any,
   prefix = any,
   strict = any
-  // we don't care about infering utils as it's the only thing in the config
+  // we don't care about inferring utils as it's the only thing in the config
   // that requires access to the config, so we're giving it special treatment
-  // so that it can access the values of its sibilngs
+  // so that it can access the values of its siblings
 > {
-  tokens: Tokens & GuardAgainstSchema<Tokens, ITokensDefinition> & ITokensDefinition<Tokens>;
   breakpoints: Breakpoints | IBreakpoints;
+  tokens: Tokens & Omit<ITokensDefinition, keyof Tokens>;
   utils: IUtils<this> | Utils;
-  showFriendlyClassnames: showFriendlyClassnames & boolean;
-  prefix: prefix & string;
-  strict: strict & boolean;
+  showFriendlyClassnames: showFriendlyClassnames | boolean;
+  prefix: prefix | string;
+  strict: strict | boolean;
 }
 
 export type TCssProperties<T extends IConfig> = T['breakpoints'] extends object

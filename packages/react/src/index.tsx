@@ -6,6 +6,7 @@ import {
   TMainBreakPoint,
   createCss,
   hashString,
+  ITokensDefinition,
 } from '@stitches/core';
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
@@ -171,11 +172,11 @@ export const createStyled = <
   Config extends IConfig,
   // Inferring the config generic arguments:
   A = Config extends IConfig<infer I> ? I : never,
-  B = Config extends IConfig<infer _, infer I> ? I : never,
-  C = Config extends IConfig<infer _, infer __, infer I> ? I : never,
-  D extends boolean = Config extends IConfig<infer _, infer __, infer ___, infer I> ? I : never,
-  E extends string = Config extends IConfig<infer _, infer __, infer ___, infer ____, infer I> ? I : never,
-  F extends boolean = Config extends IConfig<infer _, infer __, infer ___, infer ____, infer _____, infer I> ? I : never
+  B = Config extends IConfig<any, infer I> ? I : never,
+  C = Config extends IConfig<any, any, infer I> ? I : never,
+  D = Config extends IConfig<any, any, any, infer I> ? I : never,
+  E = Config extends IConfig<any, any, any, any, infer I> ? I : never,
+  F = Config extends IConfig<any, any, any, any, any, infer I> ? I : never
 >(
   // Re-constructing the config based on the inferred values:
   // this way utils will get a typed config.
@@ -378,7 +379,8 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   return breakpoints;
 }
 
-const { css: _css, styled } = createStyled({
+export const { css: _css, styled } = createStyled({
+  showFriendlyClassnames: true,
   prefix: 's',
   strict: false,
   breakpoints: { breakthisshit: () => '' },
@@ -390,44 +392,21 @@ const { css: _css, styled } = createStyled({
   tokens: {
     sizes: {},
     space: {},
-    fonts: {},
-    fontSizes: {},
-    lineHeights: {},
-    letterSpacings: {},
-    borderWidths: {},
-    fontWeights: {},
-    borderStyles: {},
-    radii: {},
-    shadows: {},
-    zIndices: {},
-    transitions: {},
     colors: {
       red100: 'tomato',
     },
   },
 });
 
-const buttonclass = _css({
+export const buttonclass = _css({
   breakthisshit: {
-    backgroundColor: 'red100',
+    backgroundColor: '',
   },
   color: 'red100',
 });
 
-const yo = _css.keyframes({
-  hllo: {
-    color: 'red100',
-  },
-});
-
-const global = _css.global({
-  hllo: {
-    color: 'red100',
-  },
-});
-
-const Button = styled.button({
+export const Button = styled.button({
   div: {
-    color: 'red100',
+    color: 'red',
   },
 });
