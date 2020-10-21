@@ -177,9 +177,9 @@ export const createStyled = <
   A = Config extends IConfig<infer I> ? I : never,
   B = Config extends IConfig<any, infer I> ? I : never,
   C = Config extends IConfig<any, any, infer I> ? I : never,
-  D = Config extends IConfig<any, any, any, infer I> ? I : never,
-  E = Config extends IConfig<any, any, any, any, infer I> ? I : never,
-  F = Config extends IConfig<any, any, any, any, any, infer I> ? I : never
+  D extends boolean | undefined = Config extends IConfig<any, any, any, infer I> ? I : never,
+  E extends string = Config extends IConfig<any, any, any, any, infer I> ? I : never,
+  F extends boolean | undefined = Config extends IConfig<any, any, any, any, any, infer I> ? I : never
 >(
   // Re-constructing the config based on the inferred values:
   // this way utils will get a typed config.
@@ -386,8 +386,11 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
 }
 
 export const { css: _css, styled } = createStyled({
+  breakpoints: {
+    hellothere: () => ``,
+  },
   utils: {
-    mx: (val, config) => {
+    maxthisshit: (val, config) => {
       return {};
     },
   },
@@ -396,12 +399,14 @@ export const { css: _css, styled } = createStyled({
     space: {},
     colors: {
       red100: 'tomato',
+      blue100: 'tomato',
     },
   },
 });
 
 export const buttonclass = _css({
-  color: 'red100',
+  hellothere: '',
+  color: 'blue100',
 });
 
 export const Button = styled.button({

@@ -382,19 +382,13 @@ export interface IUtils<config extends IConfig> {
   [name: string]: TUtility<any, config>;
 }
 
-// Creates a new type that validates that ObjToValidate does not have any extra
-// properties over the Schema type
-export type GuardedTokens<Tokens, Def> = {
-  [k in Exclude<keyof Def, keyof Tokens>]?: Def[k];
-};
-
 export interface IConfig<
   // Used to type config based on itself
   // these will act as pointers for typescript
   // so that it can infer the types correctly
-  Breakpoints = any,
-  Tokens = any,
-  Utils = any,
+  Breakpoints = {},
+  Tokens = {},
+  Utils = {},
   showFriendlyClassnames = any,
   prefix = any,
   strict = any
@@ -403,7 +397,9 @@ export interface IConfig<
   // so that it can access the values of its siblings
 > {
   breakpoints: Breakpoints | IBreakpoints;
-  tokens: Tokens & Omit<Partial<ITokensDefinition>, keyof Tokens>;
+  tokens: Tokens &
+    Omit<Partial<ITokensDefinition>, keyof Tokens> &
+    { [k in Exclude<keyof Tokens, keyof ITokensDefinition>]: never };
   utils: IUtils<this> | Utils;
   showFriendlyClassnames: showFriendlyClassnames | boolean;
   prefix: prefix | string;
