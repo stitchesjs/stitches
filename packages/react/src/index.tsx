@@ -360,8 +360,11 @@ export const createStyled = <
   });
 
   return {
+    // both of these are typed externally
+    // so casting here is only meant for the library internals
+    // so that the types won't collide
     styled: styledProxy as any,
-    css,
+    css: css as any,
   };
 };
 function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: any, css: any) {
