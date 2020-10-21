@@ -107,7 +107,7 @@ export interface IAtom {
 
 export interface IThemeAtom {
   name: string;
-  definition: ITokensDefinition;
+  definition: Partial<ITokensDefinition>;
   toString: (this: IThemeAtom) => string;
   [ATOM]: true;
 }
@@ -363,20 +363,20 @@ export interface ITokenDefinition {
 }
 
 export interface ITokensDefinition {
-  colors?: ITokenDefinition;
-  space?: ITokenDefinition;
-  fontSizes?: ITokenDefinition;
-  fonts?: ITokenDefinition;
-  fontWeights?: ITokenDefinition;
-  lineHeights?: ITokenDefinition;
-  letterSpacings?: ITokenDefinition;
-  sizes?: ITokenDefinition;
-  borderWidths?: ITokenDefinition;
-  borderStyles?: ITokenDefinition;
-  radii?: ITokenDefinition;
-  shadows?: ITokenDefinition;
-  zIndices?: ITokenDefinition;
-  transitions?: ITokenDefinition;
+  colors: ITokenDefinition;
+  space: ITokenDefinition;
+  fontSizes: ITokenDefinition;
+  fonts: ITokenDefinition;
+  fontWeights: ITokenDefinition;
+  lineHeights: ITokenDefinition;
+  letterSpacings: ITokenDefinition;
+  sizes: ITokenDefinition;
+  borderWidths: ITokenDefinition;
+  borderStyles: ITokenDefinition;
+  radii: ITokenDefinition;
+  shadows: ITokenDefinition;
+  zIndices: ITokenDefinition;
+  transitions: ITokenDefinition;
 }
 export interface IUtils<config extends IConfig> {
   [name: string]: TUtility<any, config>;
@@ -403,7 +403,7 @@ export interface IConfig<
   // so that it can access the values of its siblings
 > {
   breakpoints: Breakpoints | IBreakpoints;
-  tokens: Tokens & Omit<ITokensDefinition, keyof Tokens>;
+  tokens: Tokens & Omit<Partial<ITokensDefinition>, keyof Tokens>;
   utils: IUtils<this> | Utils;
   showFriendlyClassnames: showFriendlyClassnames | boolean;
   prefix: prefix | string;

@@ -388,6 +388,7 @@ export const { css: _css, styled } = createStyled({
       return {};
     },
   },
+  strict: false,
   tokens: {
     sizes: {},
     space: {},
@@ -403,6 +404,6 @@ export const buttonclass = _css({
 
 export const Button = styled.button({
   div: {
-    color: 'red100',
+    color: 'ActiveBorder',
   },
 });
