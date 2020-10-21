@@ -171,6 +171,9 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
 export const createStyled = <
   Config extends IConfig,
   // Inferring the config generic arguments:
+  // for some reason, typescript isn't able to infer correctly
+  // if we just try to infer things in the same argument so we're
+  // creating multiple generic arguments
   A = Config extends IConfig<infer I> ? I : never,
   B = Config extends IConfig<any, infer I> ? I : never,
   C = Config extends IConfig<any, any, infer I> ? I : never,
