@@ -182,7 +182,7 @@ export const createStyled = <
   // this way utils will get a typed config.
   // this will also help us with preventing unknown properties from being
   // allowed in the config
-  config: IConfig<A, B, C, D, E, F>
+  config: Partial<IConfig<A, B, C, D, E, F>>
 ): {
   css: TCss<IConfig<A, B, C, D, E, F>>;
   styled: TStyled<IConfig<A, B, C, D, E, F>>;
@@ -380,10 +380,6 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
 }
 
 export const { css: _css, styled } = createStyled({
-  showFriendlyClassnames: true,
-  prefix: 's',
-  strict: false,
-  breakpoints: { breakthisshit: () => '' },
   utils: {
     mx: (val, config) => {
       return {};
@@ -399,14 +395,11 @@ export const { css: _css, styled } = createStyled({
 });
 
 export const buttonclass = _css({
-  breakthisshit: {
-    backgroundColor: '',
-  },
   color: 'red100',
 });
 
 export const Button = styled.button({
   div: {
-    color: 'red',
+    color: 'red100',
   },
 });

@@ -438,7 +438,7 @@ declare global {
 export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
   return tokens;
 };
-export const createCss = <T extends IConfig>(
+export const createCss = <T extends Partial<IConfig>>(
   _config: T,
   // Check against Deno env explicitly #199
   env: Window | null = typeof window === 'undefined' || window?.Deno ? null : window
