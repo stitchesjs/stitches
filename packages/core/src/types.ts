@@ -140,9 +140,9 @@ export type TRecursiveCss<T extends IConfig, D = TFlatCSS<T>> = (
 ) &
   D;
 
-export type TFlatCSS<T extends IConfig> = {
+export type TFlatCSS<T extends IConfig, Strict = T extends IConfig<any, any, any, any, any, infer S> ? S : false> = {
   [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
-    ? T extends { strict: true }
+    ? Strict extends true
       ? ICssPropToToken<T>[K]
       : ICssPropToToken<T>[K] | Properties[K]
     : Properties[K];
