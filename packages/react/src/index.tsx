@@ -173,22 +173,13 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
 
 // tslint:disable-next-line:prettier
 export const createStyled = <
-  Config extends IConfig,
-  // Inferring the config generic arguments:
-  // for some reason, typescript isn't able to infer correctly
-  // if we just try to infer things in the same argument so we're
-  // creating multiple generic arguments
-  A extends TBreakpoints = Config extends IConfig<infer I> ? I : never,
-  B extends TTokens = Config extends IConfig<any, infer I> ? I : never,
-  C extends boolean = Config extends IConfig<any, any, infer I> ? I : never,
-  D extends boolean = Config extends IConfig<any, any, any, infer I> ? I : false,
-  E extends string = Config extends IConfig<any, any, any, any, infer I> ? I : false,
-  F extends TUtils = Config extends IConfig<any, any, any, any, any, infer I> ? I : never
+  A extends TBreakpoints = {},
+  B extends TTokens = {},
+  C extends boolean = false,
+  D extends boolean = false,
+  E extends string = '',
+  F extends TUtils = {}
 >(
-  // Re-constructing the config based on the inferred values:
-  // this way utils will get a typed config.
-  // this will also help us with preventing unknown properties from being
-  // allowed in the config
   config: Partial<IConfig<A, B, C, D, E, F>>
 ): {
   css: TCss<A, B, C, F>;
@@ -409,6 +400,7 @@ export const { css: _css } = createStyled({
 });
 
 export const buttonclass = _css({
-  hi: 'hello',
+  hi: '',
+  hellothere: {},
   backgroundColor: 'red100',
 });
