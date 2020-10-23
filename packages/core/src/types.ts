@@ -86,10 +86,6 @@ import {
   MaxInlineSizeProperty,
 } from './css-types';
 
-export interface IBreakpoints {
-  [key: string]: (css: string) => string;
-}
-
 export const ATOM = Symbol('ATOM');
 
 export interface IAtom {
@@ -126,56 +122,7 @@ export interface IKeyframesAtom {
   [ATOM]: true;
 }
 
-export type TTopCss<T extends IConfig> = {
-  [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
-    ? ICssPropToToken<T>[K] | number | Properties[K]
-    : Properties[K] | number;
-};
-
-export type TRecursiveCss<T extends IConfig, D = TFlatCSS<T>> = (
-  | D
-  | {
-      [pseudo: string]: (D | { [pseudo: string]: (D | { [pseudo: string]: D }) & D }) & D;
-    }
-) &
-  D;
-
-export type TFlatCSS<T extends IConfig, Strict = T extends IConfig<any, any, any, any, any, infer S> ? S : false> = {
-  [K in keyof Properties]?: K extends keyof ICssPropToToken<T>
-    ? Strict extends true
-      ? ICssPropToToken<T>[K]
-      : ICssPropToToken<T>[K] | Properties[K]
-    : Properties[K];
-};
-
-export type TFlatUtils<
-  T extends IConfig,
-  UT = {
-    [U in keyof T['utils']]?: T['utils'][U] extends TUtility<any, any>
-      ? T['utils'][U] extends (arg: infer A, config: T) => {}
-        ? A
-        : never
-      : never;
-  }
-> = UT;
-
-export type TTopUtils<T extends IConfig> = {
-  [U in keyof T['utils']]?: T['utils'][U] extends TUtility<any, any>
-    ? T['utils'][U] extends (arg: infer A, config: T) => {}
-      ? A
-      : never
-    : never;
-};
-
-export type TRecursiveUtils<T extends IConfig> =
-  | TTopUtils<T>
-  | {
-      [pseudo: string]: TRecursiveUtils<T>;
-    };
-
-export type TUtility<A extends any, T extends IConfig> = (arg: A, config: T) => TRecursiveCss<T>;
-
-export type ICssPropToToken<T extends IConfig> = T['tokens'] extends object
+export type ICssPropToToken<T extends Partial<IConfig>> = T['tokens'] extends object
   ? {
       gap: T['tokens']['space'] extends object ? keyof T['tokens']['space'] : GridGapProperty<never>;
       gridGap: T['tokens']['space'] extends object ? keyof T['tokens']['space'] : GridGapProperty<never>;
@@ -357,80 +304,120 @@ export type ICssPropToToken<T extends IConfig> = T['tokens'] extends object
     }
   : {};
 
+export type TokenScales =
+  | 'colors'
+  | 'space'
+  | 'fontSizes'
+  | 'fonts'
+  | 'fontWeights'
+  | 'lineHeights'
+  | 'letterSpacings'
+  | 'sizes'
+  | 'borderWidths'
+  | 'borderStyles'
+  | 'radii'
+  | 'shadows'
+  | 'zIndices'
+  | 'transitions';
+
 export interface ITokenDefinition {
   [key: string]: string;
   [key: number]: string;
 }
+export type ITokensDefinition = Record<TokenScales, ITokenDefinition>;
 
-export interface ITokensDefinition {
-  colors: ITokenDefinition;
-  space: ITokenDefinition;
-  fontSizes: ITokenDefinition;
-  fonts: ITokenDefinition;
-  fontWeights: ITokenDefinition;
-  lineHeights: ITokenDefinition;
-  letterSpacings: ITokenDefinition;
-  sizes: ITokenDefinition;
-  borderWidths: ITokenDefinition;
-  borderStyles: ITokenDefinition;
-  radii: ITokenDefinition;
-  shadows: ITokenDefinition;
-  zIndices: ITokenDefinition;
-  transitions: ITokenDefinition;
+export type TUtils<
+  Utils extends TUtils = {},
+  Breakpoints extends TBreakpoints = {},
+  Tokens extends TTokens = {},
+  Strict extends boolean = false,
+  UtilConfigType = { tokens: Tokens; breakpoints: Breakpoints; strict: Strict }
+> =
+  | {
+      [k: string]: (a: any, b: UtilConfigType) => void;
+    }
+  | {
+      [k in keyof Utils]: (a: any, b: UtilConfigType) => void;
+    };
+
+export type CSSPropertyKeys = keyof Properties;
+export interface CSSPropertiesToTokenScale {
+  backgroundColor: 'colors';
 }
-export interface IUtils<config extends IConfig> {
-  [name: string]: TUtility<any, config>;
-}
+export type TokenMappedCSSPropertyKeys = keyof CSSPropertiesToTokenScale;
+export type TBreakpoints = Record<string, (value: string) => string>;
+export type TTokens = { [k in TokenScales]?: Record<string, string> };
+
+// prettier-ignore
+export type StitchesCSS<
+  Breakpoints extends TBreakpoints = {},
+  Tokens extends TTokens = {},
+  Utils extends TUtils= {} ,
+  Strict extends boolean = false,
+  BreakpointKeys extends string = Extract<keyof Breakpoints, string>,
+  UtilKeys extends string = Extract<keyof Utils, string>,
+> = {
+  [k in | CSSPropertyKeys | BreakpointKeys | UtilKeys]?: k extends BreakpointKeys 
+    /** Breakpoint type: */
+    ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, BreakpointKeys, UtilKeys> 
+    : k extends UtilKeys 
+    /** Utils type: */
+    ? {} 
+    : k extends TokenMappedCSSPropertyKeys
+    /** Token mapped value type: */
+    ?  Tokens extends TTokens ? keyof Tokens[CSSPropertiesToTokenScale[k]] 
+    : k extends CSSPropertyKeys
+    /** Normal Css property type: */
+    ? Properties[k]
+    : never : never;
+};
 
 export interface IConfig<
   // Used to type config based on itself
   // these will act as pointers for typescript
   // so that it can infer the types correctly
-  Breakpoints = {},
-  Tokens = {},
-  Utils = {},
-  showFriendlyClassnames = any,
-  prefix = any,
-  strict = any
+  Breakpoints extends TBreakpoints = {},
+  Tokens extends TTokens = {},
+  strict extends boolean = false,
+  showFriendlyClassnames extends boolean = false,
+  prefix extends string = '',
+  Utils extends TUtils = {}
   // we don't care about inferring utils as it's the only thing in the config
   // that requires access to the config, so we're giving it special treatment
   // so that it can access the values of its siblings
 > {
-  breakpoints: Breakpoints | IBreakpoints;
+  breakpoints: Breakpoints | TBreakpoints;
   tokens: Tokens &
     Omit<Partial<ITokensDefinition>, keyof Tokens> &
     { [k in Exclude<keyof Tokens, keyof ITokensDefinition>]: never };
-  utils: IUtils<this> | Utils;
+  utils: Utils | TUtils<Utils, Breakpoints, Tokens, strict>;
   showFriendlyClassnames: showFriendlyClassnames | boolean;
   prefix: prefix | string;
   strict: strict | boolean;
 }
 
-export type TCssProperties<T extends IConfig> = T['breakpoints'] extends object
-  ? TRecursiveCss<T> &
-      TRecursiveUtils<T> &
-      {
-        [S in keyof T['breakpoints']]?: TRecursiveCss<T> & TRecursiveUtils<T>;
-      }
-  : TRecursiveCss<T> & TRecursiveUtils<T>;
-
-export interface TCss<T extends IConfig> {
-  (...styles: (TCssProperties<T> | string | boolean | null | undefined)[]): string;
+export interface TCss<
+  A extends TBreakpoints = {},
+  B extends TTokens = {},
+  D extends boolean = false,
+  C extends TUtils = {}
+> {
+  (styles: StitchesCSS<A, B, C, D>): string;
   getStyles: (
     callback: () => any
   ) => {
     styles: string[];
     result: any;
   };
-  keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
-  global: (definition: Record<string, TCssProperties<T>>) => () => string;
-  theme: (
-    theme: Partial<
-      {
-        [TO in keyof T['tokens']]: Partial<T['tokens'][TO]>;
-      }
-    >
-  ) => string;
+  // keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
+  // global: (definition: Record<string, TCssProperties<T>>) => () => string;
+  // theme: (
+  //   theme: Partial<
+  //     {
+  //       [TO in keyof T['tokens']]: Partial<T['tokens'][TO]>;
+  //     }
+  //   >
+  // ) => string;
 }
 
 export interface ISheet {

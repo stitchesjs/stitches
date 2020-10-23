@@ -2,16 +2,16 @@ import {
   MAIN_BREAKPOINT_ID,
   IConfig,
   TCss,
-  TCssProperties,
   TMainBreakPoint,
   createCss,
   hashString,
+  TBreakpoints,
   ITokensDefinition,
+  TTokens,
+  TUtils,
 } from '@stitches/core';
 export { _ATOM } from '@stitches/core';
 import * as React from 'react';
-
-export type TCssProp<T extends IConfig> = TCssProperties<T> | (string & {});
 
 /**
  * Extracts Variants from an object:
@@ -122,17 +122,21 @@ export interface IStyledComponent<
   defaultProps?: never;
 }
 /** Typed css with tokens and breakpoints */
-export type TCssWithBreakpoints<Config extends IConfig> = TCssProp<Config> &
-  { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
+// export type TCssWithBreakpoints<Config extends IConfig> = TCssProp<Config> &
+//   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
+
+export type TCssWithBreakpoints<Config extends IConfig> = any;
 
 /** The type for the styles in a styled call */
-export type TComponentStylesObject<Config extends IConfig> = TCssWithBreakpoints<Config> & {
-  variants?: {
-    [k: string]: {
-      [s: string]: TCssWithBreakpoints<Config>;
-    };
-  };
-};
+// export type TComponentStylesObject<Config extends IConfig> = TCssWithBreakpoints<Config> & {
+//   variants?: {
+//     [k: string]: {
+//       [s: string]: TCssWithBreakpoints<Config>;
+//     };
+//   };
+// };
+
+export type TComponentStylesObject<Config extends IConfig> = any;
 /**
  * Types for styled.button, styled.div, etc..
  */
@@ -174,12 +178,12 @@ export const createStyled = <
   // for some reason, typescript isn't able to infer correctly
   // if we just try to infer things in the same argument so we're
   // creating multiple generic arguments
-  A = Config extends IConfig<infer I> ? I : never,
-  B = Config extends IConfig<any, infer I> ? I : never,
-  C = Config extends IConfig<any, any, infer I> ? I : never,
-  D extends boolean | undefined = Config extends IConfig<any, any, any, infer I> ? I : never,
-  E extends string = Config extends IConfig<any, any, any, any, infer I> ? I : never,
-  F extends boolean | undefined = Config extends IConfig<any, any, any, any, any, infer I> ? I : never
+  A extends TBreakpoints = Config extends IConfig<infer I> ? I : never,
+  B extends TTokens = Config extends IConfig<any, infer I> ? I : never,
+  C extends boolean = Config extends IConfig<any, any, infer I> ? I : never,
+  D extends boolean = Config extends IConfig<any, any, any, infer I> ? I : false,
+  E extends string = Config extends IConfig<any, any, any, any, infer I> ? I : false,
+  F extends TUtils = Config extends IConfig<any, any, any, any, any, infer I> ? I : never
 >(
   // Re-constructing the config based on the inferred values:
   // this way utils will get a typed config.
@@ -187,10 +191,10 @@ export const createStyled = <
   // allowed in the config
   config: Partial<IConfig<A, B, C, D, E, F>>
 ): {
-  css: TCss<IConfig<A, B, C, D, E, F>>;
-  styled: TStyled<IConfig<A, B, C, D, E, F>>;
+  css: TCss<A, B, C, F>;
+  // styled: TStyled<IConfig<A, B, C, D, E, F>>;
 } => {
-  const css = createCss(config);
+  const css: any = createCss(config);
   const defaultElement = 'div';
   const Box = React.forwardRef((props: any, ref: React.Ref<Element>) => {
     const Element = props.as || defaultElement;
@@ -366,7 +370,7 @@ export const createStyled = <
     // both of these are typed externally
     // so casting here is only meant for the library internals
     // so that the types won't collide
-    styled: styledProxy as any,
+    // styled: styledProxy as any,
     css: css as any,
   };
 };
@@ -385,15 +389,15 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   return breakpoints;
 }
 
-export const { css: _css, styled } = createStyled({
+export const { css: _css } = createStyled({
   breakpoints: {
     hellothere: () => ``,
   },
   utils: {
-    maxthisshit: (val, config) => {
-      return {};
-    },
+    hi: (val, config) => val,
+    maxthisshit: (val: string, config) => val,
   },
+  strict: false,
   tokens: {
     sizes: {},
     space: {},
@@ -405,12 +409,6 @@ export const { css: _css, styled } = createStyled({
 });
 
 export const buttonclass = _css({
-  hellothere: '',
-  color: 'blue100',
-});
-
-export const Button = styled.button({
-  div: {
-    color: 'red100',
-  },
+  hi: 'hello',
+  backgroundColor: 'red100',
 });
