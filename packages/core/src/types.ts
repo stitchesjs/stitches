@@ -207,7 +207,7 @@ export interface TCss<
   D extends boolean = false,
   C extends TUtils = {}
 > {
-  (styles: StitchesCSS<A, B, C, D, true>): string;
+  (styles: StitchesCSS<A, B, C, D>): string;
   getStyles: (
     callback: () => any
   ) => {

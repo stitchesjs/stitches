@@ -425,6 +425,13 @@ const buttonClass = _css({
 const keyframe = _css.keyframes({
   back: {
     background: 'ActiveCaption',
+    backgroundColor: 'red100',
     padding: 8,
+  },
+});
+
+const global = _css.global({
+  hello: {
+    backgroundColor: 'red100',
   },
 });
