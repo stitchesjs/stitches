@@ -385,10 +385,9 @@ export const { css: _css } = createStyled({
     hellothere: () => ``,
   },
   utils: {
-    hi: (val, config) => val,
-    maxthisshit: (val: string, config) => val,
+    hi: (val: 'hi', config) => ({}),
+    maxthisshit: (val: number, config) => ({ h: val }),
   },
-  strict: false,
   tokens: {
     sizes: {},
     space: {},
@@ -400,7 +399,8 @@ export const { css: _css } = createStyled({
 });
 
 export const buttonclass = _css({
-  hi: '',
-  hellothere: {},
-  backgroundColor: 'red100',
+  backgroundColor: 'blue100',
+  hellothere: {
+    backgroundColor: 'red100',
+  },
 });
