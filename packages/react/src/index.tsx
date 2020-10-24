@@ -9,8 +9,9 @@ import {
   ITokensDefinition,
   TTokens,
   TUtils,
+  StitchesCSS,
 } from '@stitches/core';
-export { _ATOM } from '@stitches/core';
+export { _ATOM, StitchesCSS } from '@stitches/core';
 import * as React from 'react';
 
 /**
@@ -21,11 +22,6 @@ export type TExtractVariants<Styles> = Styles extends {
 }
   ? { [a in keyof Variants]: keyof Variants[a] }
   : {};
-
-/**
- * Extracts Breakpoint keys from a config
- */
-export type BreakPointsKeys<Config extends IConfig> = keyof Config['breakpoints'];
 
 /**
  * Takes a value and if it's one of the string type representations of a boolean ('true' | 'false')
@@ -40,16 +36,25 @@ export type CastNumberToString<Val> = Val extends number ? string & {} : never;
 /**
  * Extract variant props from a Stitches component
  */
-export type StitchesVariants<C> = C extends IStyledComponent<infer T, infer V, infer G> ? VariantASProps<G, V> : never;
+export type StitchesVariants<C> = C extends IStyledComponent<any, infer V, infer Breakpoints>
+  ? VariantASProps<Extract<keyof Breakpoints, string>, V>
+  : never;
 
 /**
  * Extracts the props from a Stitches component
  *
  */
-export type StitchesProps<C> = C extends IStyledComponent<infer T, infer V, infer G>
-  ? MergeElementProps<T, VariantASProps<G, V>> & {
+export type StitchesProps<C> = C extends IStyledComponent<
+  infer T,
+  infer V,
+  infer Breakpoints,
+  infer Utils,
+  infer Tokens,
+  infer Strict
+>
+  ? MergeElementProps<T, VariantASProps<Extract<keyof Breakpoints, string>, V>> & {
       as?: T;
-      css?: TCssWithBreakpoints<G>;
+      css?: StitchesCSS<Breakpoints, Utils, Tokens, Strict>;
       className?: string;
       children?: any;
     }
@@ -58,13 +63,13 @@ export type StitchesProps<C> = C extends IStyledComponent<infer T, infer V, infe
 /**
  * Takes a variants object and converts it to the correct type information for usage in props
  */
-export type VariantASProps<Config extends IConfig, VariantsObj> = {
+export type VariantASProps<BreakpointKeys extends string, VariantsObj> = {
   [V in keyof VariantsObj]?:
     | CastStringToBoolean<VariantsObj[V]>
     | VariantsObj[V]
     | CastNumberToString<VariantsObj[V]>
     | {
-        [B in BreakPointsKeys<Config> | TMainBreakPoint]?:
+        [B in BreakpointKeys | TMainBreakPoint]?:
           | CastStringToBoolean<VariantsObj[V]>
           | VariantsObj[V]
           | CastNumberToString<VariantsObj[V]>;
@@ -85,10 +90,13 @@ type MergeElementProps<As extends React.ElementType, Props extends object = {}> 
 export interface IStyledComponent<
   ComponentOrTag extends React.ElementType,
   Variants,
-  Config extends IConfig
+  BreakpointKeys extends TBreakpoints = {},
+  Utils extends TUtils = {},
+  Tokens extends TTokens = {},
+  Strict extends boolean = false
 > extends React.FC<
-    MergeElementProps<ComponentOrTag, VariantASProps<Config, Variants>> & {
-      css?: TCssWithBreakpoints<Config>;
+    MergeElementProps<ComponentOrTag, VariantASProps<Extract<keyof BreakpointKeys, string>, Variants>> & {
+      css?: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
       className?: string;
       children?: any;
     }
@@ -96,14 +104,23 @@ export interface IStyledComponent<
   /**
    * Props of a styled component
    */
+  (
+    props: MergeElementProps<ComponentOrTag, VariantASProps<Extract<keyof BreakpointKeys, string>, Variants>> & {
+      as?: never;
+      css?: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
+      className?: string;
+      children?: any;
+    }
+  ): any;
+  // Second overload (with as prop):
   <As extends React.ElementType = ComponentOrTag>(
     // Merge native props with variant props to prevent props clashing.
     // e.g. some HTML elements have `size` attribute. And when you combine
     // both types (native and variant props) the common props become
     // unusable (in typing-wise)
-    props: MergeElementProps<As, VariantASProps<Config, Variants>> & {
+    props: MergeElementProps<As, VariantASProps<Extract<keyof BreakpointKeys, string>, Variants>> & {
       as?: As;
-      css?: TCssWithBreakpoints<Config>;
+      css?: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
       className?: string;
       children?: any;
     }
@@ -112,57 +129,71 @@ export interface IStyledComponent<
    * Compound Variant typing:
    */
   compoundVariant: (
-    compoundVariants: VariantASProps<Config, Variants>,
-    possibleValues: TCssWithBreakpoints<Config>
-  ) => IStyledComponent<ComponentOrTag, Variants, Config>;
+    compoundVariants: VariantASProps<Extract<keyof BreakpointKeys, string>, Variants>,
+    possibleValues: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>
+  ) => IStyledComponent<ComponentOrTag, Variants, BreakpointKeys, Utils, Tokens, Strict>;
 
   /**
    * @deprecated
    */
   defaultProps?: never;
 }
-/** Typed css with tokens and breakpoints */
-// export type TCssWithBreakpoints<Config extends IConfig> = TCssProp<Config> &
-//   { [key in BreakPointsKeys<Config>]?: TCssProp<Config> };
-
-export type TCssWithBreakpoints<Config extends IConfig> = any;
 
 /** The type for the styles in a styled call */
-// export type TComponentStylesObject<Config extends IConfig> = TCssWithBreakpoints<Config> & {
-//   variants?: {
-//     [k: string]: {
-//       [s: string]: TCssWithBreakpoints<Config>;
-//     };
-//   };
-// };
+export type TComponentStylesObject<
+  BreakpointKeys extends TBreakpoints = {},
+  Utils extends TUtils = {},
+  Tokens extends TTokens = {},
+  Strict extends boolean = false
+> = StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> & {
+  variants?: {
+    [k: string]: {
+      [s: string]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
+    };
+  };
+};
 
-export type TComponentStylesObject<Config extends IConfig> = any;
 /**
  * Types for styled.button, styled.div, etc..
  */
-export type TProxyStyledElements<Config extends IConfig> = {
-  [key in keyof JSX.IntrinsicElements]: <BaseAndVariantStyles extends TComponentStylesObject<Config>>(
-    a: BaseAndVariantStyles | TComponentStylesObject<Config>
-  ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, Config>;
+export type TProxyStyledElements<
+  BreakpointKeys extends TBreakpoints = {},
+  Utils extends TUtils = {},
+  Tokens extends TTokens = {},
+  Strict extends boolean = false
+> = {
+  [key in keyof JSX.IntrinsicElements]: <
+    BaseAndVariantStyles extends TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
+  >(
+    a: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
+  ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, BreakpointKeys, Utils, Tokens, Strict>;
 };
 
 /**
  * Styled Components creator Type.
  * ie: styled.div(styles) | styled('div', {styles})
  */
-export type TStyled<Config extends IConfig> = {
+export type TStyled<
+  BreakpointKeys extends TBreakpoints = {},
+  Utils extends TUtils = {},
+  Tokens extends TTokens = {},
+  Strict extends boolean = false
+> = {
   // tslint:disable-next-line: callable-types
   <
-    TagOrComponent extends keyof JSX.IntrinsicElements | React.ComponentType<any> | IStyledComponent<any, any, Config>,
-    BaseAndVariantStyles extends TComponentStylesObject<Config>,
+    TagOrComponent extends
+      | keyof JSX.IntrinsicElements
+      | React.ComponentType<any>
+      | IStyledComponent<any, any, BreakpointKeys, Utils, Tokens, Strict>,
+    BaseAndVariantStyles extends TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>,
     Variants = TExtractVariants<BaseAndVariantStyles>
   >(
     tag: TagOrComponent,
-    baseStyles: BaseAndVariantStyles | TComponentStylesObject<Config>
-  ): TagOrComponent extends IStyledComponent<infer T, infer V, Config>
-    ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, Config>
-    : IStyledComponent<TagOrComponent, Variants, Config>;
-} & TProxyStyledElements<Config>;
+    baseStyles: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
+  ): TagOrComponent extends IStyledComponent<infer T, infer V>
+    ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, BreakpointKeys, Utils, Tokens, Strict>
+    : IStyledComponent<TagOrComponent, Variants, BreakpointKeys, Utils, Tokens, Strict>;
+} & TProxyStyledElements<BreakpointKeys, Utils, Tokens, Strict>;
 
 const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
   const map = new Map();
@@ -173,6 +204,7 @@ const createCompoundVariantsMatcher = (breakPoints: any, existingMap?: any) => {
 
 // tslint:disable-next-line:prettier
 export const createStyled = <
+  // tslint:disable-next-line
   A extends TBreakpoints = {},
   B extends TTokens = {},
   C extends boolean = false,
@@ -183,7 +215,7 @@ export const createStyled = <
   config: Partial<IConfig<A, B, C, D, E, F>>
 ): {
   css: TCss<A, B, C, F>;
-  // styled: TStyled<IConfig<A, B, C, D, E, F>>;
+  styled: TStyled<A, F, B, C>;
 } => {
   const css: any = createCss(config);
   const defaultElement = 'div';
@@ -361,8 +393,7 @@ export const createStyled = <
     // both of these are typed externally
     // so casting here is only meant for the library internals
     // so that the types won't collide
-    // styled: styledProxy as any,
-    // styled: styledProxy as any,
+    styled: styledProxy as any,
     css: css as any,
   };
 };
@@ -381,7 +412,7 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   return breakpoints;
 }
 
-export const { css: _css } = createStyled({
+export const { css: _css, styled } = createStyled({
   breakpoints: {
     hellothere: () => ``,
   },
@@ -398,8 +429,7 @@ export const { css: _css } = createStyled({
     },
   },
 });
-const buttonClass = _css({
-  backgroundColor: 'blue100',
+export const buttonClass = _css({
   position: 'fixed',
   hiz: {
     background: 'ActiveBorder',
@@ -422,16 +452,47 @@ const buttonClass = _css({
     },
   },
 });
-const keyframe = _css.keyframes({
+export const keyframe = _css.keyframes({
   back: {
-    background: 'ActiveCaption',
     backgroundColor: 'red100',
-    padding: 8,
   },
 });
 
-const global = _css.global({
+export const global = _css.global({
   hello: {
+    backdropFilter: 'initial',
     backgroundColor: 'red100',
+  },
+});
+
+export const Button = styled.button({
+  padding: 'inherit',
+  backgroundColor: 'bisque',
+  variants: {
+    variant: {
+      red: {
+        background: 'red',
+      },
+    },
+  },
+});
+
+Button.compoundVariant(
+  { variant: 'red' },
+  {
+    color: 'red100',
+  }
+);
+
+export const A = styled('a', {
+  borderWidth: 'medium',
+  padding: 'inherit',
+  backgroundColor: 'red100',
+  variants: {
+    variant: {
+      red: {
+        backgroundColor: 'red100',
+      },
+    },
   },
 });

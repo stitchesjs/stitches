@@ -35,22 +35,8 @@ export interface IKeyframesAtom {
   toString: (this: IKeyframesAtom) => string;
   [ATOM]: true;
 }
-
-export type TokenScales =
-  | 'colors'
-  | 'space'
-  | 'fontSizes'
-  | 'fonts'
-  | 'fontWeights'
-  | 'lineHeights'
-  | 'letterSpacings'
-  | 'sizes'
-  | 'borderWidths'
-  | 'borderStyles'
-  | 'radii'
-  | 'shadows'
-  | 'zIndices'
-  | 'transitions';
+// prettier-ignore
+export type TokenScales = | 'colors' | 'space' | 'fontSizes' | 'fonts' | 'fontWeights' | 'lineHeights' | 'letterSpacings' | 'sizes' | 'borderWidths' | 'borderStyles' | 'radii' | 'shadows' | 'zIndices' | 'transitions';
 
 export type ITokenDefinition = Record<string | number, string>;
 export type ITokensDefinition = Record<TokenScales, ITokenDefinition>;
@@ -172,9 +158,10 @@ export type StitchesCSS<
   Utils extends TUtils = {},
   Strict extends boolean = false,
   AllowNesting = true
-> =({ [k in keyof Breakpoints]?: StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting>; }
+> = 
+    { [k in CSSPropertyKeys]?: k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k]; }
+  | { [k in keyof Breakpoints]?: StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting>; }
   | { [k in keyof Utils]?: Utils[k] extends (a: infer A, b: any) => any ? A : never; }
-  | { [k in CSSPropertyKeys]?: k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k]; })
   | { [k: string]: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> :  never}
 
 export interface IConfig<
