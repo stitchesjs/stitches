@@ -45,10 +45,12 @@ export type TUtils<
   Utils extends TUtils = {},
   Breakpoints extends TBreakpoints = {},
   Tokens extends TTokens = {},
-  Strict extends boolean = false,
-  UtilConfigType = { tokens: Tokens; breakpoints: Breakpoints; strict: Strict }
+  Strict extends boolean = false
 > = {
-  [k in keyof Utils]: (a: any, b: UtilConfigType) => any;
+  [k in keyof Utils]: (
+    a: any,
+    b: { tokens: Tokens; breakpoints: Breakpoints; strict: Strict }
+  ) => StitchesCSS<Breakpoints, Tokens, {}, Strict>;
 };
 
 export type CSSPropertyKeys = keyof Properties;
@@ -164,24 +166,21 @@ export type StitchesCSS<
   | { [k: string]: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> :  never}
 
 export interface IConfig<
-  // Used to type config based on itself
-  // these will act as pointers for typescript
-  // so that it can infer the types correctly
   Breakpoints extends TBreakpoints = {},
   Tokens extends TTokens = {},
   strict extends boolean = false,
   showFriendlyClassnames extends boolean = false,
   prefix extends string = '',
   Utils extends TUtils = {}
-  // we don't care about inferring utils as it's the only thing in the config
-  // that requires access to the config, so we're giving it special treatment
-  // so that it can access the values of its siblings
 > {
   breakpoints: Breakpoints | TBreakpoints;
   tokens: Tokens &
     Omit<Partial<ITokensDefinition>, keyof Tokens> &
     { [k in Exclude<keyof Tokens, keyof ITokensDefinition>]: never };
-  utils: TUtils<Utils, Breakpoints, Tokens, strict> | Utils;
+  // we don't care about inferring utils as it's the only thing in the config
+  // that requires access to the config, so we're giving it special treatment
+  // so that it can access the values of its siblings
+  utils: Utils | TUtils<Utils, Breakpoints, Tokens, strict>;
   showFriendlyClassnames: showFriendlyClassnames | boolean;
   prefix: prefix | string;
   strict: strict | boolean;
