@@ -335,12 +335,12 @@ export const createStyled = <
 
     (StitchesComponent as any).__isStitchesComponent = true;
 
-    // StitchesComponent.displayName =
-    //   typeof currentAs === 'string'
-    //     ? `styled(${currentAs})`
-    //     : Component && Component.displayName
-    //     ? `styled(${Component.displayName})`
-    //     : `styled(Component\)`;
+    StitchesComponent.displayName =
+      typeof currentAs === 'string'
+        ? `styled(${currentAs})`
+        : Component && Component.displayName
+        ? `styled(${Component.displayName})`
+        : `styled(Component\)`;
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
@@ -409,51 +409,3 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   }
   return breakpoints;
 }
-
-export const { css: _css, styled } = createStyled({
-  breakpoints: {
-    bp1: () => ``,
-  },
-  utils: {
-    whatthefuck: (val: 'hi', config) => {
-      // Config is typed here:
-      return {};
-    },
-    pd: (val: number, config) => {
-      return {};
-    },
-  },
-  tokens: {
-    colors: {
-      red100: 'tomato',
-      blue100: 'tomato',
-    },
-  },
-});
-
-export const buttonClass = _css({
-  backgroundColor: 'red100',
-  bp1: {
-    backgroundColor: 'red100',
-  },
-});
-
-export const Button = styled('button', {
-  bp1: {
-    backgroundColor: 'red',
-  },
-  backgroundColor: 'red100',
-  backfaceVisibility: 'inherit',
-  variants: {
-    variant: {
-      red: {
-        bp1: {
-          backgroundColor: 'red100',
-        },
-        backgroundColor: 'blue',
-        padding: 10,
-        color: 'red100',
-      },
-    },
-  },
-});
