@@ -169,26 +169,13 @@ export type TTokens = { [k in TokenScales]?: Record<string, string> };
 export type StitchesCSS<
   Breakpoints extends TBreakpoints = {},
   Tokens extends TTokens = {},
-  Utils extends TUtils= {} ,
+  Utils extends TUtils = {},
   Strict extends boolean = false,
-  BreakpointKeys extends string = Extract<keyof Breakpoints, string>,
-  UtilKeys extends string = Extract<keyof Utils, string>,
-> = {
-  [k in | CSSPropertyKeys | keyof Breakpoints | keyof Utils]?: k extends BreakpointKeys 
-    /** Breakpoint type: */
-    ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, BreakpointKeys, UtilKeys> 
-    : k extends keyof Utils 
-    /** Utils type: */
-    ? (Utils[k] extends (a: infer A, b:any) => any ? A : never )
-    /** Is this a css property */
-    : k extends CSSPropertyKeys
-    /** First we try to match it with a token and if we're not in strict mode then we add types from properties as well */
-    ? k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k])
-    /** Normal Css property type: */
-    : Properties[k]
-    /** this should never happen: */
-    : never;
-};
+  AllowNesting = true
+> =({ [k in keyof Breakpoints]?: StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting>; }
+  | { [k in keyof Utils]?: Utils[k] extends (a: infer A, b: any) => any ? A : never; }
+  | { [k in CSSPropertyKeys]?: k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k]; })
+  | { [k: string]: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> :  never}
 
 export interface IConfig<
   // Used to type config based on itself
@@ -220,22 +207,22 @@ export interface TCss<
   D extends boolean = false,
   C extends TUtils = {}
 > {
-  (styles: StitchesCSS<A, B, C, D>): string;
+  (styles: StitchesCSS<A, B, C, D, true>): string;
   getStyles: (
     callback: () => any
   ) => {
     styles: string[];
     result: any;
   };
-  // keyframes: (definition: Record<string, TFlatCSS<T> & TFlatUtils<T>>) => string;
-  // global: (definition: Record<string, TCssProperties<T>>) => () => string;
-  // theme: (
-  //   theme: Partial<
-  //     {
-  //       [TO in keyof T['tokens']]: Partial<T['tokens'][TO]>;
-  //     }
-  //   >
-  // ) => string;
+  keyframes: (definition: Record<string, StitchesCSS<never, B, C, D, false>>) => string;
+  global: (definition: Record<string, StitchesCSS<A, B, C, D>>) => () => string;
+  theme: (
+    theme: Partial<
+      {
+        [TO in keyof B]: Partial<B[TO]>;
+      }
+    >
+  ) => string;
 }
 
 export interface ISheet {

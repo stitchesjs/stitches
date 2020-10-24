@@ -362,6 +362,7 @@ export const createStyled = <
     // so casting here is only meant for the library internals
     // so that the types won't collide
     // styled: styledProxy as any,
+    // styled: styledProxy as any,
     css: css as any,
   };
 };
@@ -397,10 +398,33 @@ export const { css: _css } = createStyled({
     },
   },
 });
-
-export const buttonclass = _css({
+const buttonClass = _css({
   backgroundColor: 'blue100',
+  position: 'fixed',
+  hiz: {
+    background: 'ActiveBorder',
+    hello: {
+      background: 'red',
+      nice: {
+        background: 'hotpink',
+      },
+    },
+  },
   hellothere: {
+    paddingBlock: '',
+    padding: 'inherit',
     backgroundColor: 'red100',
+    hmmm: {
+      backgroundColor: 'red',
+      hellothere: {
+        backgroundColor: 'red100',
+      },
+    },
+  },
+});
+const keyframe = _css.keyframes({
+  back: {
+    background: 'ActiveCaption',
+    padding: 8,
   },
 });
