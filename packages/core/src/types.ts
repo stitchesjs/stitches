@@ -158,8 +158,7 @@ export type StitchesCSS<
   Utils extends TUtils = {},
   Strict extends boolean = false,
   AllowNesting = true
-> = 
-    { [k in CSSPropertyKeys]?: k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k]; }
+> = { [k in CSSPropertyKeys]?: k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k]; }
   | { [k in keyof Breakpoints]?: StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting>; }
   | { [k in keyof Utils]?: Utils[k] extends (a: infer A, b: any) => any ? A : never; }
   | { [k: string]: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> :  never}

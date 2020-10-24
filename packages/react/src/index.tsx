@@ -11,8 +11,11 @@ import {
   TUtils,
   StitchesCSS,
 } from '@stitches/core';
+import { padding } from '@stitches/core/src/shorthand-parser';
 export { _ATOM, StitchesCSS } from '@stitches/core';
 import * as React from 'react';
+
+type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 
 /**
  * Extracts Variants from an object:
@@ -76,8 +79,8 @@ export type VariantASProps<BreakpointKeys extends string, VariantsObj> = {
       };
 };
 
-type MergeElementProps<As extends React.ElementType, Props extends object = {}> = Omit<
-  React.ComponentPropsWithRef<As>,
+type MergeElementProps<As extends any, Props extends object = {}> = Omit<
+  React.ComponentPropsWithoutRef<As extends IntrinsicElementsKeys | React.ElementType<any> ? As : never>,
   keyof Props
 > &
   Props;
@@ -88,7 +91,7 @@ type MergeElementProps<As extends React.ElementType, Props extends object = {}> 
  * 2. The compoundVariants function typings
  */
 export interface IStyledComponent<
-  ComponentOrTag extends React.ElementType,
+  ComponentOrTag extends string | React.ElementType<any>,
   Variants,
   BreakpointKeys extends TBreakpoints = {},
   Utils extends TUtils = {},
@@ -106,21 +109,27 @@ export interface IStyledComponent<
    */
   (
     props: MergeElementProps<ComponentOrTag, VariantASProps<Extract<keyof BreakpointKeys, string>, Variants>> & {
-      as?: never;
       css?: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
+      as?: never;
       className?: string;
       children?: any;
     }
   ): any;
   // Second overload (with as prop):
-  <As extends React.ElementType = ComponentOrTag>(
+  <
+    As extends IntrinsicElementsKeys | React.ElementType<any> = ComponentOrTag extends
+      | IntrinsicElementsKeys
+      | React.ElementType<any>
+      ? ComponentOrTag
+      : never
+  >(
     // Merge native props with variant props to prevent props clashing.
     // e.g. some HTML elements have `size` attribute. And when you combine
     // both types (native and variant props) the common props become
     // unusable (in typing-wise)
     props: MergeElementProps<As, VariantASProps<Extract<keyof BreakpointKeys, string>, Variants>> & {
-      as?: As;
       css?: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
+      as?: As;
       className?: string;
       children?: any;
     }
@@ -145,13 +154,7 @@ export type TComponentStylesObject<
   Utils extends TUtils = {},
   Tokens extends TTokens = {},
   Strict extends boolean = false
-> = StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> & {
-  variants?: {
-    [k: string]: {
-      [s: string]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
-    };
-  };
-};
+> = StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
 
 /**
  * Types for styled.button, styled.div, etc..
@@ -162,7 +165,7 @@ export type TProxyStyledElements<
   Tokens extends TTokens = {},
   Strict extends boolean = false
 > = {
-  [key in keyof JSX.IntrinsicElements]: <
+  [key in IntrinsicElementsKeys]: <
     BaseAndVariantStyles extends TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
   >(
     a: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
@@ -181,15 +184,12 @@ export type TStyled<
 > = {
   // tslint:disable-next-line: callable-types
   <
-    TagOrComponent extends
-      | keyof JSX.IntrinsicElements
-      | React.ComponentType<any>
-      | IStyledComponent<any, any, BreakpointKeys, Utils, Tokens, Strict>,
-    BaseAndVariantStyles extends TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>,
+    TagOrComponent extends IntrinsicElementsKeys | React.ElementType<any>,
+    BaseAndVariantStyles,
     Variants = TExtractVariants<BaseAndVariantStyles>
   >(
     tag: TagOrComponent,
-    baseStyles: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
+    baseStyles: TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
   ): TagOrComponent extends IStyledComponent<infer T, infer V>
     ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, BreakpointKeys, Utils, Tokens, Strict>
     : IStyledComponent<TagOrComponent, Variants, BreakpointKeys, Utils, Tokens, Strict>;
@@ -235,7 +235,7 @@ export const createStyled = <
 
   const styledInstance = (
     baseAndVariantStyles: any = (cssComposer: any) => cssComposer.compose(),
-    Component: React.ComponentType<any> = Box
+    Component: React.ElementType<any> = Box
   ) => {
     let numberOfCompoundVariants = 0;
     const as = currentAs;
@@ -430,6 +430,7 @@ export const { css: _css, styled } = createStyled({
   },
 });
 export const buttonClass = _css({
+  backdropFilter: 'inherit',
   position: 'fixed',
   hiz: {
     background: 'ActiveBorder',
@@ -454,12 +455,14 @@ export const buttonClass = _css({
 });
 export const keyframe = _css.keyframes({
   back: {
+    background: 'ActiveCaption',
     backgroundColor: 'red100',
   },
 });
 
 export const global = _css.global({
   hello: {
+    background: 'ActiveBorder',
     backdropFilter: 'initial',
     backgroundColor: 'red100',
   },
@@ -467,7 +470,9 @@ export const global = _css.global({
 
 export const Button = styled.button({
   padding: 'inherit',
+  paddingLeft: 'inherit',
   backgroundColor: 'bisque',
+  background: 'ActiveCaption',
   variants: {
     variant: {
       red: {
@@ -485,14 +490,31 @@ Button.compoundVariant(
 );
 
 export const A = styled('a', {
-  borderWidth: 'medium',
-  padding: 'inherit',
-  backgroundColor: 'red100',
+  backfaceVisibility: 'hidden',
+  paddingInline: 'inherit',
+  background: 'red',
+  padding: 'initial',
+  clipPath: 'fill-box',
+  backdropFilter: 'inherit',
+  backgroundColor: 'ActiveBorder',
+  paddingBottom: 'inherit',
+  paddingBlockEnd: 'inherit',
+  paddingBlock: 'inherit',
+  backgroundBlendMode: 'color',
+  backgroundAttachment: 'inherit',
   variants: {
     variant: {
       red: {
-        backgroundColor: 'red100',
+        backfaceVisibility: 'hidden',
       },
     },
   },
 });
+
+export const App = () => {
+  return (
+    <Button as="a" onClick={() => ''} css={{ background: 'back', padding: 'inherit', paddingBlockEnd: 'inherit' }}>
+      <A css={{ padding: 'inherit', backdropFilter: 'inherit', backgroundClip: '' }}> hello</A>
+    </Button>
+  );
+};
