@@ -340,7 +340,7 @@ export const createStyled = <
         ? `styled(${currentAs})`
         : Component && Component.displayName
         ? `styled(${Component.displayName})`
-        : `styled(Component\)`;
+        : `styled\(Component\)`;
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
