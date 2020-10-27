@@ -6,12 +6,10 @@ import {
   createCss,
   hashString,
   TBreakpoints,
-  ITokensDefinition,
   TTokens,
   TUtils,
   StitchesCSS,
 } from '@stitches/core';
-import { background, padding } from '@stitches/core/src/shorthand-parser';
 export { _ATOM, StitchesCSS } from '@stitches/core';
 import * as React from 'react';
 
@@ -187,7 +185,7 @@ export type TStyled<
   // tslint:disable-next-line: callable-types
   <TagOrComponent, BaseAndVariantStyles, Variants = TExtractVariants<BaseAndVariantStyles>>(
     tag: ComponentInfer<TagOrComponent> | IntrinsicElementsKeys,
-    baseStyles: TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
+    baseStyles: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
   ): TagOrComponent extends IStyledComponent<infer T, infer V>
     ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, BreakpointKeys, Utils, Tokens, Strict>
     : IStyledComponent<TagOrComponent, Variants, BreakpointKeys, Utils, Tokens, Strict>;
