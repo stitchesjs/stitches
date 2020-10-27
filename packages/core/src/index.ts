@@ -2,9 +2,11 @@ import { tokenTypes, isServer } from './constants';
 import {
   ATOM,
   IAtom,
-  IBreakpoints,
+  TTokens,
+  TUtils,
+  TBreakpoints,
   IComposedAtom,
-  ICssPropToToken,
+  CSSPropertiesToTokenScale,
   IKeyframesAtom,
   ISheet,
   IThemeAtom,
@@ -50,7 +52,7 @@ const createSelector = (className: string, selector: string) => {
  * Resolves a token to its css value in the context of the passed css prop:
  */
 const resolveTokens = (cssProp: string, value: any, tokens: any) => {
-  const token: any = cssPropToToken[cssProp as keyof ICssPropToToken<any>];
+  const token: any = cssPropToToken[cssProp as keyof CSSPropertiesToTokenScale];
   let tokenValue: any;
   if (token) {
     if (Array.isArray(token) && Array.isArray(value)) {
@@ -144,7 +146,7 @@ const allPossibleCases = ([first, ...rest]: string[][]): string[] => {
  */
 const processStyleObject = (
   obj: any,
-  config: IConfig<true>,
+  config: IConfig,
   valueMiddleware: (
     prop: string,
     value: string,
@@ -297,7 +299,7 @@ const toStringCompose = function (this: IComposedAtom) {
   return className;
 };
 
-const createCssRule = (breakpoints: IBreakpoints, atom: IAtom, className: string) => {
+const createCssRule = (breakpoints: TBreakpoints, atom: IAtom, className: string) => {
   let cssRule = '';
   if (atom.inlineMediaQueries && atom.inlineMediaQueries.length) {
     let allMediaQueries = '';
@@ -319,7 +321,7 @@ const createCssRule = (breakpoints: IBreakpoints, atom: IAtom, className: string
 
 const createToString = (
   sheets: { [breakpoint: string]: ISheet },
-  breakpoints: IBreakpoints = {},
+  breakpoints: TBreakpoints = {},
   cssClassnameProvider: (atom: IAtom) => string, // [className, pseudo]
   preInjectedRules: Set<string>
 ) => {
@@ -353,7 +355,7 @@ const createToString = (
 
 const createServerToString = (
   sheets: { [mediaQuery: string]: ISheet },
-  breakpoints: IBreakpoints = {},
+  breakpoints: TBreakpoints = {},
   cssClassnameProvider: (atom: IAtom) => string
 ) => {
   return function toString(this: IAtom) {
@@ -438,14 +440,29 @@ declare global {
 export const createTokens = (tokens: Partial<ITokensDefinition>) => {
   return tokens;
 };
-export const createCss = <T extends Partial<IConfig>>(
-  _config: T,
+export const createCss = <
+  A extends TBreakpoints = {},
+  B extends TTokens = {},
+  C extends boolean = false,
+  D extends boolean = false,
+  E extends string = '',
+  F extends TUtils = {}
+>(
+  _config: Partial<IConfig<A, B, C, D, E, F>>,
   // Check against Deno env explicitly #199
   env: Window | null = typeof window === 'undefined' || window?.Deno ? null : window
-): TCss<T> => {
+): TCss<A, B, C, F> => {
   // pre-checked config to avoid checking these all the time
   // tslint:disable-next-line
-  const config: IConfig<true> = Object.assign({ tokens: {}, utils: {}, breakpoints: {} }, _config);
+  const defaultConfig: IConfig = {
+    tokens: {},
+    utils: {},
+    breakpoints: {},
+    strict: false,
+    showFriendlyClassnames: false,
+    prefix: '',
+  };
+  const config: IConfig<A, B, C, D, E, F> = { ...defaultConfig, ..._config };
   // prefill with empty token groups
   tokenTypes.forEach((tokenType) => (config.tokens[tokenType] = config.tokens[tokenType] || {}));
   const { tokens, breakpoints } = config;

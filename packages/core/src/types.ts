@@ -171,7 +171,7 @@ export interface IConfig<
   strict extends boolean = false,
   showFriendlyClassnames extends boolean = false,
   prefix extends string = '',
-  Utils extends TUtils = {}
+  Utils extends TUtils = TUtils
 > {
   breakpoints: Breakpoints | TBreakpoints;
   tokens: Tokens &

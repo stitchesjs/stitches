@@ -148,26 +148,26 @@ export type TComponentStylesObject<
   Utils extends TUtils = {},
   Tokens extends TTokens = {},
   Strict extends boolean = false
-> = StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> & {
-  variants?: {
-    [a: string]: {
-      [b: string]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
-    };
-  };
-};
+> =
+  | {
+      variants?: {
+        [a: string]: {
+          [b: string]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
+        };
+      };
+    }
+  | StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
 
 /**
  * Types for styled.button, styled.div, etc..
  */
 export type TProxyStyledElements<
   BreakpointKeys extends TBreakpoints = {},
-  Utils extends TUtils = {},
+  Utils extends TUtils = TUtils,
   Tokens extends TTokens = {},
   Strict extends boolean = false
 > = {
-  [key in IntrinsicElementsKeys]: <
-    BaseAndVariantStyles extends TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
-  >(
+  [key in IntrinsicElementsKeys]: <BaseAndVariantStyles extends TComponentStylesObject>(
     a: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
   ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, BreakpointKeys, Utils, Tokens, Strict>;
 };
@@ -178,12 +178,16 @@ export type TProxyStyledElements<
  */
 export type TStyled<
   BreakpointKeys extends TBreakpoints = {},
-  Utils extends TUtils = {},
+  Utils extends TUtils = TUtils,
   Tokens extends TTokens = {},
   Strict extends boolean = false
 > = {
   // tslint:disable-next-line: callable-types
-  <TagOrComponent, BaseAndVariantStyles, Variants = TExtractVariants<BaseAndVariantStyles>>(
+  <
+    TagOrComponent,
+    BaseAndVariantStyles extends TComponentStylesObject,
+    Variants = TExtractVariants<BaseAndVariantStyles>
+  >(
     tag: ComponentInfer<TagOrComponent> | IntrinsicElementsKeys,
     baseStyles: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
   ): TagOrComponent extends IStyledComponent<infer T, infer V>
@@ -206,7 +210,7 @@ export const createStyled = <
   C extends boolean = false,
   D extends boolean = false,
   E extends string = '',
-  F extends TUtils = {}
+  F extends TUtils = TUtils
 >(
   config: Partial<IConfig<A, B, C, D, E, F>>
 ): {
