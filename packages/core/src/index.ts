@@ -435,7 +435,7 @@ declare global {
   }
 }
 
-export const createTokens = <T extends ITokensDefinition>(tokens: T) => {
+export const createTokens = (tokens: Partial<ITokensDefinition>) => {
   return tokens;
 };
 export const createCss = <T extends Partial<IConfig>>(
