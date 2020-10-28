@@ -18,6 +18,16 @@ type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 type ComponentInfer<T> = T extends IntrinsicElementsKeys | React.ComponentType<any> ? T : never;
 
 /**
+ * Makes sure that the variants object is strictly typed
+ * (see usage)
+ */
+type AssertVariantsAreTyped<A> = {
+  [x: string]: string | number;
+} extends A
+  ? {}
+  : A;
+
+/**
  * Extracts Variants from an object:
  */
 export type TExtractVariants<Styles> = Styles extends {
@@ -165,7 +175,14 @@ export type TProxyStyledElements<
     a: {
       variants?: { [a in keyof Vars]: { [b in keyof Vars[a]]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> } };
     } & StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>
-  ) => IStyledComponent<key, { [b in keyof Vars]: keyof Vars[b] }, BreakpointKeys, Utils, Tokens, Strict>;
+  ) => IStyledComponent<
+    key,
+    AssertVariantsAreTyped<{ [b in keyof Vars]: keyof Vars[b] }>,
+    BreakpointKeys,
+    Utils,
+    Tokens,
+    Strict
+  >;
 };
 
 /**
@@ -179,7 +196,7 @@ export type TStyled<
   Strict extends boolean = false
 > = {
   // tslint:disable-next-line: callable-types
-  <TagOrComponent, Vars = { [a: string]: { [b: string]: {} } }, Variants = { [b in keyof Vars]: keyof Vars[b] }>(
+  <TagOrComponent, Vars = {}, Variants = AssertVariantsAreTyped<{ [b in keyof Vars]: keyof Vars[b] }>>(
     tag: ComponentInfer<TagOrComponent> | IntrinsicElementsKeys,
     baseStyles: {
       variants?: { [a in keyof Vars]: { [b in keyof Vars[a]]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> } };
