@@ -145,18 +145,12 @@ export interface IStyledComponent<
 /** The type for the styles in a styled call */
 export type TComponentStylesObject<
   BreakpointKeys extends TBreakpoints = {},
-  Utils extends TUtils = {},
   Tokens extends TTokens = {},
+  Utils extends TUtils = {},
   Strict extends boolean = false
-> =
-  | {
-      variants?: {
-        [a: string]: {
-          [b: string]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
-        };
-      };
-    }
-  | StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
+> = {
+  variants?: { [a: string]: { [b: string]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> } };
+} & StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
 
 /**
  * Types for styled.button, styled.div, etc..
@@ -167,9 +161,9 @@ export type TProxyStyledElements<
   Tokens extends TTokens = {},
   Strict extends boolean = false
 > = {
-  [key in IntrinsicElementsKeys]: <BaseAndVariantStyles extends TComponentStylesObject>(
-    a: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
-  ) => IStyledComponent<key, TExtractVariants<BaseAndVariantStyles>, BreakpointKeys, Utils, Tokens, Strict>;
+  [key in IntrinsicElementsKeys]: <BaseAndVariants>(
+    a: BaseAndVariants & TComponentStylesObject<BreakpointKeys, Tokens, Utils, Strict>
+  ) => IStyledComponent<key, BaseAndVariants, BreakpointKeys, Utils, Tokens, Strict>;
 };
 
 /**
@@ -185,11 +179,11 @@ export type TStyled<
   // tslint:disable-next-line: callable-types
   <
     TagOrComponent,
-    BaseAndVariantStyles extends TComponentStylesObject,
+    BaseAndVariantStyles extends TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>,
     Variants = TExtractVariants<BaseAndVariantStyles>
   >(
     tag: ComponentInfer<TagOrComponent> | IntrinsicElementsKeys,
-    baseStyles: BaseAndVariantStyles | TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>
+    baseStyles: TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict> | BaseAndVariantStyles
   ): TagOrComponent extends IStyledComponent<infer T, infer V>
     ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, BreakpointKeys, Utils, Tokens, Strict>
     : IStyledComponent<TagOrComponent, Variants, BreakpointKeys, Utils, Tokens, Strict>;
@@ -411,3 +405,46 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   }
   return breakpoints;
 }
+
+const { styled } = createStyled({
+  tokens: {
+    colors: {
+      red100: 'green',
+    },
+  },
+});
+
+export const Button = styled.button({
+  background: 'red',
+  backgroundClip: 'red',
+  backfaceVisibility: 'hidden',
+  variants: {
+    variant: {
+      red: {
+        backgroundColor: 'red100',
+        backdropFilter: 'initial',
+      },
+    },
+  },
+});
+export const BButton = styled('button', {
+  background: 'AppWorkspace',
+  padding: 'inherit',
+  backgroundColor: 'ActiveCaption',
+  variants: {
+    variant: {
+      red: {
+        background: 'ActiveCaption',
+        backdropFilter: 'revert',
+      },
+    },
+  },
+});
+// const Renderer = () => {
+//   return (
+//     <div>
+//       <BButton variant="red">hello</BButton>
+//       <Button variant="red">hello</Button>
+//     </div>
+//   );
+// };

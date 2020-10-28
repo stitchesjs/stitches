@@ -54,7 +54,8 @@ export type TUtils<
 };
 
 export type CSSPropertyKeys = keyof Properties;
-export interface CSSPropertiesToTokenScale {
+type TokenStuff = { [a in CSSPropertyKeys]: TokenScales };
+export interface CSSPropertiesToTokenScale extends TokenStuff {
   gap: 'space';
   gridGap: 'space';
   columnGap: 'space';
@@ -149,7 +150,7 @@ export interface CSSPropertiesToTokenScale {
   zIndex: 'zIndices';
   transition: 'transitions';
 }
-export type TokenMappedCSSPropertyKeys = keyof CSSPropertiesToTokenScale;
+export type TokenMappedCSSPropertyKeys = Extract<CSSPropertyKeys, keyof CSSPropertiesToTokenScale>;
 export type TBreakpoints = Record<string, (value: string) => string>;
 export type TTokens = { [k in TokenScales]?: Record<string, string> };
 
@@ -160,7 +161,7 @@ export type StitchesCSS<
   Utils extends TUtils = {},
   Strict extends boolean = false,
   AllowNesting = true
-> = { [k in CSSPropertyKeys]?: k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k]; }
+> = Properties | { [k in TokenMappedCSSPropertyKeys]?:  keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never :  Properties[k] ) }
   | { [k in keyof Breakpoints]?: StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting>; }
   | { [k in keyof Utils]?: Utils[k] extends (a: infer A, b: any) => any ? A : never; }
   | { [k: string]: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> :  never}
