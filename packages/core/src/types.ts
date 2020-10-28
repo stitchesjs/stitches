@@ -152,11 +152,6 @@ export interface CSSPropertiesToTokenScale {
 export type TokenMappedCSSPropertyKeys = Extract<keyof CSSPropertiesToTokenScale, CSSPropertyKeys>;
 export type TBreakpoints = Record<string, (value: string) => string>;
 export type TTokens = { [k in TokenScales]?: Record<string, string> };
-type MappedProperties<Tokens extends TTokens = {}, Strict extends boolean = false> = {
-  [k in TokenMappedCSSPropertyKeys]:
-    | keyof Tokens[CSSPropertiesToTokenScale[k]]
-    | (Strict extends true ? never : Properties[k]);
-};
 
 // prettier-ignore
 export type StitchesCSS<
@@ -166,12 +161,10 @@ export type StitchesCSS<
   Strict extends boolean = false,
   AllowNesting = true
 
-> = 
-  | MappedProperties<Tokens, Strict>
-  | Properties
+> = { [k in keyof Properties]: k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k]}
   | { [k in keyof Breakpoints]?: StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting>; }
   | { [k in keyof Utils]?: Utils[k] extends (a: infer A, b: any) => any ? A : never; }
-  | { [k: string]: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> :  never; }
+  | { [k: string]: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> | string :  never; }
 
 export interface IConfig<
   Breakpoints extends TBreakpoints = {},
