@@ -161,9 +161,11 @@ export type TProxyStyledElements<
   Tokens extends TTokens = {},
   Strict extends boolean = false
 > = {
-  [key in IntrinsicElementsKeys]: <BaseAndVariants>(
-    a: BaseAndVariants & TComponentStylesObject<BreakpointKeys, Tokens, Utils, Strict>
-  ) => IStyledComponent<key, BaseAndVariants, BreakpointKeys, Utils, Tokens, Strict>;
+  [key in IntrinsicElementsKeys]: <Vars = { [a: string]: { [b: string]: {} } }>(
+    a: {
+      variants?: { [a in keyof Vars]: { [b in keyof Vars[a]]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> } };
+    } & StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>
+  ) => IStyledComponent<key, { [b in keyof Vars]: keyof Vars[b] }, BreakpointKeys, Utils, Tokens, Strict>;
 };
 
 /**
@@ -177,13 +179,11 @@ export type TStyled<
   Strict extends boolean = false
 > = {
   // tslint:disable-next-line: callable-types
-  <
-    TagOrComponent,
-    BaseAndVariantStyles extends TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict>,
-    Variants = TExtractVariants<BaseAndVariantStyles>
-  >(
+  <TagOrComponent, Vars = { [a: string]: { [b: string]: {} } }, Variants = { [b in keyof Vars]: keyof Vars[b] }>(
     tag: ComponentInfer<TagOrComponent> | IntrinsicElementsKeys,
-    baseStyles: TComponentStylesObject<BreakpointKeys, Utils, Tokens, Strict> | BaseAndVariantStyles
+    baseStyles: {
+      variants?: { [a in keyof Vars]: { [b in keyof Vars[a]]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> } };
+    } & StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>
   ): TagOrComponent extends IStyledComponent<infer T, infer V>
     ? IStyledComponent<T, Omit<V, keyof Variants> & Variants, BreakpointKeys, Utils, Tokens, Strict>
     : IStyledComponent<TagOrComponent, Variants, BreakpointKeys, Utils, Tokens, Strict>;
@@ -406,44 +406,61 @@ function evaluateStylesForAllBreakpoints(styleObject: any, configBreakpoints: an
   return breakpoints;
 }
 
-const { styled } = createStyled({
-  tokens: {
-    colors: {
-      red100: 'green',
-    },
-  },
-});
+// const { styled, css: _css } = createStyled({
+//   utils: {
+//     mx: (a: string) => ({})
+//   },
+//   tokens: {
+//     colors: {
+//       red100: 'green',
+//     },
+//   },
 
-export const Button = styled.button({
-  background: 'red',
-  backgroundClip: 'red',
-  backfaceVisibility: 'hidden',
-  variants: {
-    variant: {
-      red: {
-        backgroundColor: 'red100',
-        backdropFilter: 'initial',
-      },
-    },
-  },
-});
-export const BButton = styled('button', {
-  background: 'AppWorkspace',
-  padding: 'inherit',
-  backgroundColor: 'ActiveCaption',
-  variants: {
-    variant: {
-      red: {
-        background: 'ActiveCaption',
-        backdropFilter: 'revert',
-      },
-    },
-  },
-});
+// });
+// const buttonClass = _css({
+//   backgroundColor: 'red100'
+// })
+
+// export const Button = styled.button({
+//   background: 'red',
+//   backgroundClip: 'red',
+//   backgroundColor: 'red100',
+//   backdropFilter: 'inherit',
+//   backgroundPosition: '',
+//   backfaceVisibility: 'hidden',
+//   paddingBlockEnd: '',
+//   variants: {
+//     variant: {
+//       red: {
+//         backgroundColor: 'red100'
+//       }
+//     }
+//   }
+
+// });
+// export const BButton = styled('button', {
+//   paddingBottom: 'inherit',
+//   borderInline: 'ActiveCaption',
+//   backdropFilter: 'inherit',
+//   backfaceVisibility: 'inherit',
+//   paddingBlockEnd: 'initial',
+//   variants: {
+//     variant: {
+//       blue: {},
+//       red: {
+//         backgroundColor: 'red100',
+//         padding: 'inherit',
+//         backdropFilter: 'inherit',
+//         backgroundImage: 'none'
+//       },
+//     },
+//   },
+// });
+
 // const Renderer = () => {
 //   return (
 //     <div>
-//       <BButton variant="red">hello</BButton>
+//       <BButton variant="red" css={{backdropFilter: 'inherit', paddingBlock: 'initial', backgroundColor: 'red100'}}>hello</BButton>
 //       <Button variant="red">hello</Button>
 //     </div>
 //   );
