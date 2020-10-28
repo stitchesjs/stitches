@@ -68,7 +68,7 @@ export interface CSSPropertiesToTokenScale {
   insetInline: 'colors';
   insetInlineEnd: 'colors';
   insetInlineStart: 'colors';
-  margin: 'colors';
+  margin: 'space';
   marginTop: 'space';
   marginRight: 'space';
   marginBottom: 'space';
