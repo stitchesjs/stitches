@@ -1,4 +1,5 @@
 import { Properties } from './css-types';
+import { cssPropToToken } from './utils';
 
 export const ATOM = Symbol('ATOM');
 
@@ -54,102 +55,8 @@ export type TUtils<
 };
 
 export type CSSPropertyKeys = keyof Properties;
-export interface CSSPropertiesToTokenScale {
-  gap: 'space';
-  gridGap: 'space';
-  columnGap: 'space';
-  gridColumnGap: 'space';
-  rowGap: 'space';
-  gridRowGap: 'space';
-  inset: 'colors';
-  insetBlock: 'colors';
-  insetBlockEnd: 'colors';
-  insetBlockStart: 'colors';
-  insetInline: 'colors';
-  insetInlineEnd: 'colors';
-  insetInlineStart: 'colors';
-  margin: 'space';
-  marginTop: 'space';
-  marginRight: 'space';
-  marginBottom: 'space';
-  marginLeft: 'space';
-  marginInline: 'space';
-  marginInlineEnd: 'space';
-  marginInlineStart: 'space';
-  marginBlock: 'space';
-  marginBlockEnd: 'space';
-  marginBlockStart: 'space';
-  padding: 'space';
-  paddingTop: 'space';
-  paddingRight: 'space';
-  paddingBottom: 'space';
-  paddingLeft: 'space';
-  paddingInline: 'space';
-  paddingInlineEnd: 'space';
-  paddingInlineStart: 'space';
-  paddingBlock: 'space';
-  paddingBlockEnd: 'space';
-  paddingBlockStart: 'space';
-  top: 'space';
-  right: 'space';
-  bottom: 'space';
-  left: 'space';
-  fontSize: 'fontSizes';
-  backgroundColor: 'colors';
-  /** Update syntax when ts 4.1 is release */
-  // border: ''
-  borderColor: 'colors';
-  borderTopColor: 'colors';
-  borderRightColor: 'colors';
-  borderBottomColor: 'colors';
-  borderLeftColor: 'colors';
-  caretColor: 'colors';
-  color: 'colors';
-  columnRuleColor: 'colors';
-  outlineColor: 'colors';
-  fill: 'colors';
-  stroke: 'colors';
-  fontFamily: 'fonts';
-  fontWeight: 'fontWeights';
-  lineHeight: 'lineHeights';
-  letterSpacing: 'letterSpacings';
-  blockSize: 'sizes';
-  minBlockSize: 'sizes';
-  maxBlockSize: 'sizes';
-  inlineSize: 'sizes';
-  minInlineSize: 'sizes';
-  maxInlineSize: 'sizes';
-  width: 'sizes';
-  minWidth: 'sizes';
-  maxWidth: 'sizes';
-  height: 'sizes';
-  minHeight: 'sizes';
-  maxHeight: 'sizes';
-  flexBasis: 'sizes';
-  /** Update syntax when ts 4.1 is release */
-  // flex:'';
-  borderWidth: 'borderWidths';
-  borderTopWidth: 'borderWidths';
-  borderLeftWidth: 'borderWidths';
-  borderRightWidth: 'borderWidths';
-  borderBottomWidth: 'borderWidths';
-  borderStyle: 'borderStyles';
-  borderTopStyle: 'borderStyles';
-  borderRightStyle: 'borderStyles';
-  borderBottomStyle: 'borderStyles';
-  borderLeftStyle: 'borderStyles';
-  borderRadius: 'radii';
-  borderTopLeftRadius: 'radii';
-  borderTopRightRadius: 'radii';
-  borderBottomRightRadius: 'radii';
-  borderBottomLeftRadius: 'radii';
-  /** Update syntax when ts 4.1 is release */
-  boxShadow: 'shadows';
-  textShadow: 'shadows';
-  zIndex: 'zIndices';
-  transition: 'transitions';
-}
-export type TokenMappedCSSPropertyKeys = Extract<keyof CSSPropertiesToTokenScale, CSSPropertyKeys>;
+export type CSSPropertiesToTokenScale = typeof cssPropToToken;
+export type TokenMappedCSSPropertyKeys = keyof CSSPropertiesToTokenScale;
 export type TBreakpoints = Record<string, (value: string) => string>;
 export type TTokens = { [k in TokenScales]?: Record<string, string> };
 
@@ -160,11 +67,10 @@ export type StitchesCSS<
   Utils extends TUtils = {},
   Strict extends boolean = false,
   AllowNesting = true
-
-> = { [k in keyof Properties]: k extends TokenMappedCSSPropertyKeys ? keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k]}
-  | { [k in keyof Breakpoints]?: StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting>; }
-  | { [k in keyof Utils]?: Utils[k] extends (a: infer A, b: any) => any ? A : never; }
-  | { [k: string]: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> | string | number :  never; }
+> = { [k in keyof Properties]?: k extends keyof CSSPropertiesToTokenScale ? CSSPropertiesToTokenScale[k] extends keyof Tokens ?  keyof Tokens[CSSPropertiesToTokenScale[k]] | (Strict extends true ? never : Properties[k]) : Properties[k] : Properties[k]}
+  & { [k in keyof Breakpoints]?: StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting>; }
+  & { [k in keyof Utils]?: Utils[k] extends (a: infer A, b: any) => any ? A : never; }
+  & { [k in string]?: AllowNesting extends true ? StitchesCSS<Breakpoints, Tokens, Utils, Strict, AllowNesting> | string | number : {} }
 
 export interface IConfig<
   Breakpoints extends TBreakpoints = {},
@@ -193,14 +99,14 @@ export interface TCss<
   D extends boolean = false,
   C extends TUtils = {}
 > {
-  (styles: StitchesCSS<A, B, C, D>): string;
+  (...styles: (StitchesCSS<A, B, C, D> | string)[]): string;
   getStyles: (
     callback: () => any
   ) => {
     styles: string[];
     result: any;
   };
-  keyframes: (definition: Record<string, StitchesCSS<never, B, C, D, false>>) => string;
+  keyframes: (definition: Record<string, StitchesCSS<{}, B, C, D, false>>) => string;
   global: (definition: Record<string, StitchesCSS<A, B, C, D>>) => () => string;
   theme: (
     theme: Partial<

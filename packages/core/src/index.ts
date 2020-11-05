@@ -146,7 +146,7 @@ const allPossibleCases = ([first, ...rest]: string[][]): string[] => {
  */
 const processStyleObject = (
   obj: any,
-  config: IConfig,
+  config: any,
   valueMiddleware: (
     prop: string,
     value: string,
@@ -462,7 +462,7 @@ export const createCss = <
     showFriendlyClassnames: false,
     prefix: '',
   };
-  const config: IConfig<A, B, C, D, E, F> = { ...defaultConfig, ..._config };
+  const config: any /** IConfig<A, B, C, D, E, F> */ = { ...defaultConfig, ..._config };
   // prefill with empty token groups
   tokenTypes.forEach((tokenType) => (config.tokens[tokenType] = config.tokens[tokenType] || {}));
   const { tokens, breakpoints } = config;

@@ -19,12 +19,12 @@ import {
   textDecoration,
   flex,
 } from './shorthand-parser';
-import { IBreakpoints, ICssPropToToken, ISheet } from './types';
+import { TBreakpoints, ISheet } from './types';
 
 export const MAIN_BREAKPOINT_ID = 'initial';
 export type TMainBreakPoint = typeof MAIN_BREAKPOINT_ID;
 
-export const cssPropToToken: ICssPropToToken<any> = {
+export const cssPropToToken = {
   gap: 'space',
   gridGap: 'space',
   columnGap: 'space',
@@ -66,7 +66,7 @@ export const cssPropToToken: ICssPropToToken<any> = {
   left: 'space',
   fontSize: 'fontSizes',
   backgroundColor: 'colors',
-  border: ['', 'borderStyles', 'colors'],
+  // border: ['', 'borderStyles', 'colors'],
   borderColor: 'colors',
   borderTopColor: 'colors',
   borderRightColor: 'colors',
@@ -114,7 +114,7 @@ export const cssPropToToken: ICssPropToToken<any> = {
   textShadow: 'shadows',
   zIndex: 'zIndices',
   transition: 'transitions',
-};
+} as const;
 
 export const tokenTypes = [
   'sizes',
@@ -143,7 +143,7 @@ const enhanceSheet = (sheet: ISheet): ISheet => {
   };
 };
 
-export const createSheets = (env: any, screens: IBreakpoints = {}) => {
+export const createSheets = (env: any, screens: TBreakpoints = {}) => {
   const tags: HTMLStyleElement[] = [];
   if (env && env.document) {
     const head = env.document.querySelector('head');

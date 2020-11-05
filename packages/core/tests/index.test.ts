@@ -1585,6 +1585,7 @@ describe('createCss: mixed(SSR & Client)', () => {
     const css = createCss({}, null);
     expect(() => {
       css.global({
+        // @ts-expect-error
         background: 'red',
       });
     }).toThrow();
