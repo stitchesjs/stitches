@@ -152,16 +152,6 @@ export interface IStyledComponent<
   defaultProps?: never;
 }
 
-/** The type for the styles in a styled call */
-export type TComponentStylesObject<
-  BreakpointKeys extends TBreakpoints = {},
-  Tokens extends TTokens = {},
-  Utils extends TUtils = {},
-  Strict extends boolean = false
-> = {
-  variants?: { [a: string]: { [b: string]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> } };
-} & StitchesCSS<BreakpointKeys, Tokens, Utils, Strict>;
-
 /**
  * Types for styled.button, styled.div, etc..
  */
@@ -196,7 +186,11 @@ export type TStyled<
   Strict extends boolean = false
 > = {
   // tslint:disable-next-line: callable-types
-  <TagOrComponent, Vars = {}, Variants = AssertVariantsAreTyped<{ [b in keyof Vars]: keyof Vars[b] }>>(
+  <
+    TagOrComponent,
+    Vars = { [a: string]: { [b: string]: {} } },
+    Variants = AssertVariantsAreTyped<{ [b in keyof Vars]: keyof Vars[b] }>
+  >(
     tag: ComponentInfer<TagOrComponent> | IntrinsicElementsKeys,
     baseStyles: {
       variants?: { [a in keyof Vars]: { [b in keyof Vars[a]]: StitchesCSS<BreakpointKeys, Tokens, Utils, Strict> } };
