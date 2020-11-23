@@ -48,7 +48,7 @@
     "dist"
   ],
   "peerDependencies": {
-    "react": "^16.13.1"
+    "react": "^16.13.1 || ^17.x"
   },
   "dependencies": {
     "@stitches/core": "^0.0.3-canary.4"
