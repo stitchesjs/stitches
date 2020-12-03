@@ -130,8 +130,10 @@ export interface IStyledComponent<
 
   /**
    * @deprecated
+   * React's defaultProps will be deprecated for Functional Components.
+   * Keep in mind this may stop working on a future release of `@stitches/react`
    */
-  defaultProps?: never;
+  defaultProps?: VariantASProps<Config, Variants> & { [k: string]: any };
 }
 /** Typed css with tokens and breakpoints */
 export type TCssWithBreakpoints<Config extends TConfig> = TCssProp<Config> &
