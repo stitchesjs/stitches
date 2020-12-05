@@ -78,6 +78,7 @@ export const cssPropToToken: ICssPropToToken<any> = {
   outlineColor: 'colors',
   fill: 'colors',
   stroke: 'colors',
+  textDecorationColor: 'colors',
   fontFamily: 'fonts',
   fontWeight: 'fontWeights',
   lineHeight: 'lineHeights',

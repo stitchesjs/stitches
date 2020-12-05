@@ -619,6 +619,7 @@ describe('createCss: mixed(SSR & Client)', () => {
       css({ marginTop: '1' }).toString();
       css({ gap: '2' }).toString();
       css({ outlineColor: 'red500' }).toString();
+      css({ textDecorationColor: 'red500' }).toString();
       return '';
     });
 
@@ -629,6 +630,7 @@ describe('createCss: mixed(SSR & Client)', () => {
         "/* STITCHES:__keyframes__ */
       ",
         "/* STITCHES */
+      ./*X*/_gIEnvj/*X*/{text-decoration-color:var(--colors-red500);}
       ./*X*/_bKAHZJ/*X*/{outline-color:var(--colors-red500);}
       ./*X*/_gTWOjC/*X*/{row-gap:var(--space-2);}
       ./*X*/_liLbrO/*X*/{column-gap:var(--space-2);}
