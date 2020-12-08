@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "name": "Jest: Watch All",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/.bin/jest",
+      "args": ["--no-cache", "--runInBand", "--verbose", "--watch"],
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Jest: Run All",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/.bin/jest",
+      "args": ["--no-cache", "--runInBand", "--verbose"],
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Jest: Watch File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/.bin/jest",
+      "args": ["${fileBasename}", "--no-cache", "--runInBand", "--verbose", "--watchAll"],
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

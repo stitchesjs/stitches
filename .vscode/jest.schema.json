@@ -1,0 +1,513 @@
+{
+  "title": "JSON schema for Jest configurations",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "automock": {
+          "description": "Whether all imported modules in your tests should be mocked automatically.",
+          "type": "boolean",
+          "default": false
+        },
+        "bail": {
+          "description": "Stop running tests after this many failures.",
+          "type": ["number", "boolean"],
+          "default": 0
+        },
+        "cacheDirectory": {
+          "description": "Directory to store cached dependency information.",
+          "type": "string",
+          "default": "/tmp/<path>"
+        },
+        "clearMocks": {
+          "description": "Whether to automatically clear mock calls and instances before every test.",
+          "type": "boolean",
+          "default": false
+        },
+        "collectCoverage": {
+          "description": "Whether the coverage information should be collected while executing the test.",
+          "type": "boolean",
+          "default": false
+        },
+        "collectCoverageFrom": {
+          "description": "Glob patterns indicating a set of files for which coverage information should be collected.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "coverageDirectory": {
+          "description": "Directory to output coverage files.",
+          "type": "string"
+        },
+        "coveragePathIgnorePatterns": {
+          "description": "RegExp patterns that are matched against all file paths before executing the test.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["/node_modules/"]
+        },
+        "coverageProvider": {
+          "description": "Provider used to instrument code for coverage.",
+          "type": "string"
+        },
+        "coverageReporters": {
+          "description": "Reporter names that Jest uses when writing coverage reports.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "array",
+              "items": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "minItems": 2,
+              "additionalItems": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object"
+                  }
+                ]
+              }
+            }
+          ],
+          "default": ["json", "lcov", "text", "clover"]
+        },
+        "coverageThreshold": {
+          "description": "Minimum threshold enforcement for coverage results.",
+          "type": "object"
+        },
+        "dependencyExtractor": {
+          "description": "Custom dependency extractor that exports an object with an `extract` function.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "Label printed alongside a test while it is running",
+          "type": "string"
+        },
+        "errorOnDeprecated": {
+          "description": "Whether calling deprecated APIs should throw error messages.",
+          "type": "boolean",
+          "default": false
+        },
+        "extraGlobals": {
+          "description": "Test files run inside a vm, which slows calls to global context properties.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "forceCoverageMatch": {
+          "description": "Whether to include otherwise ignored files in code coverage.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [""]
+        },
+        "globals": {
+          "description": "Global variables available in all test environments.",
+          "type": "object",
+          "default": {}
+        },
+        "globalSetup": {
+          "description": "Custom global setup module exporting an async function triggered once before all test suites.",
+          "type": "string"
+        },
+        "globalTeardown": {
+          "description": "Custom global teardown module exporting an async function triggered once after all test suite.",
+          "type": "string"
+        },
+        "haste": {
+          "description": "Configuration of `jest-haste-map`.",
+          "type": "object"
+        },
+        "injectGlobals": {
+          "description": "Whether to insert Jest's globals into the global environment.",
+          "type": "boolean",
+          "default": true
+        },
+        "maxConcurrency": {
+          "description": "Limit of tests allowed to run at the same time when using `test.concurrent`.",
+          "type": "number",
+          "default": 5
+        },
+        "moduleDirectories": {
+          "description": "Directory names to be searched recursively up from the requiring module's location.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["node_modules"]
+        },
+        "moduleFileExtensions": {
+          "description": "File extensions used by modules.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["js", "json", "jsx", "ts", "tsx", "node"]
+        },
+        "moduleNameMapper": {
+          "description": "Map from regular expressions to module names or to arrays of module names that allow to stub out resources, like images or styles with a single module.",
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "default": null
+        },
+        "modulePathIgnorePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "modulePaths": {
+          "description": "Absolute paths to additional locations to search when resolving modules.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "notify": {
+          "description": "Whether to activate notifications for test results",
+          "type": "boolean",
+          "default": false
+        },
+        "notifyMode": {
+          "description": "Notification mode",
+          "type": "string",
+          "enum": ["always", "failure", "success", "change", "success-change", "failure-change"],
+          "default": "failure-change"
+        },
+        "preset": {
+          "description": "Preset used as a base configuration.",
+          "type": "string"
+        },
+        "prettierPath": {
+          "type": "string",
+          "default": "prettier"
+        },
+        "projects": {
+          "description": "Paths, glob patterns, or options used to run tests in all of the specified projects at the same time.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/config"
+              }
+            }
+          ]
+        },
+        "reporters": {
+          "description": "Custom reporters.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {},
+                    "additionalProperties": true
+                  }
+                ],
+                "minItems": 2,
+                "additionalItems": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {},
+                      "additionalProperties": true
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "resetMocks": {
+          "description": "Whether to automatically reset mock state before every test.",
+          "type": "boolean",
+          "default": false
+        },
+        "resetModules": {
+          "description": "Whether to reset the module registry before running each individual test.",
+          "type": "boolean",
+          "default": false
+        },
+        "resolver": {
+          "description": "Custom resolver.",
+          "type": "string"
+        },
+        "restoreMocks": {
+          "description": "Whether to restore mock state before every test.",
+          "type": "boolean",
+          "default": false
+        },
+        "rootDir": {
+          "description": "Root of the directory containing the Jest config file or the package.json.",
+          "type": "string"
+        },
+        "roots": {
+          "description": "Paths to directories to search for files in.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["<rootDir>"]
+        },
+        "runner": {
+          "description": "Custom runner.",
+          "type": "string",
+          "default": "jest-runner",
+          "examples": ["jest-runner-eslint", "jest-runner-mocha", "jest-runner-tsc", "jest-runner-prettier"]
+        },
+        "setupFiles": {
+          "description": "Paths to modules that run some code to configure or set up the testing environmen.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "setupFilesAfterEnv": {
+          "description": "Paths to modules that configure or set up the testing framework before each test file in the suite is executed.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "slowTestThreshold": {
+          "description": "Seconds after which a test is considered as slow and reported as such in the results.",
+          "type": "number",
+          "default": 5
+        },
+        "snapshotResolver": {
+          "description": "Path to a module that can resolve test to snapshot path.",
+          "type": "string"
+        },
+        "snapshotSerializers": {
+          "description": "Paths to snapshot serializer modules used for snapshot testing",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "testEnvironment": {
+          "description": "Environment that will be used for testing.",
+          "type": "string",
+          "examples": ["jsdom", "node"],
+          "default": "jsdom"
+        },
+        "testEnvironmentOptions": {
+          "description": "Options passed into the test environment.",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": true,
+          "default": {}
+        },
+        "testFailureExitCode": {
+          "description": "Exit code returned on test failure.",
+          "type": "number",
+          "default": 1
+        },
+        "testMatch": {
+          "description": "Glob patterns used to detect test files.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"]
+        },
+        "testPathIgnorePatterns": {
+          "description": "RegExp patterns matched against all test paths skipped before executing the test.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["/node_modules/"]
+        },
+        "testRegex": {
+          "description": "Pattern or patterns Jest uses to detect test files.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "default": "(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$"
+        },
+        "testResultsProcessor": {
+          "description": "Custom results processor.",
+          "type": "string"
+        },
+        "testRunner": {
+          "description": "Custom test runner.",
+          "type": "string",
+          "default": "jasmine2"
+        },
+        "testSequencer": {
+          "description": "Custom sequencer.",
+          "type": "string",
+          "default": "@jest/test-sequencer"
+        },
+        "testTimeout": {
+          "description": "Timeout of a test in milliseconds.",
+          "type": "number",
+          "default": 5000
+        },
+        "testURL": {
+          "description": "URL for the jsdom environment.",
+          "type": "string",
+          "default": "http://localhost"
+        },
+        "timers": {
+          "description": "Fake versions of the standard timer functions.",
+          "type": "string",
+          "default": "real"
+        },
+        "transform": {
+          "description": "Map from regular expressions to paths to transformers.",
+          "default": {
+            "\\.[jt]sx?$": "babel-jest"
+          }
+        },
+        "transformIgnorePatterns": {
+          "description": "RegExp patterns that are matched against all source file paths before transformation.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["/node_modules/", "\\.pnp\\.[^\\/]+$"]
+        },
+        "unmockedModulePathPatterns": {
+          "description": "RegExp patterns matched against all modules before the module loader automatically returns a mock for them.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "verbose": {
+          "description": "Whether each individual test should report during the run.",
+          "type": "boolean",
+          "default": false
+        },
+        "watchPathIgnorePatterns": {
+          "description": "RegExp patterns that are matched against all source file paths before re-running tests in watch mode.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "watchPlugins": {
+          "description": "Custom watch plugins.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object"
+                  }
+                ],
+                "minItems": 2,
+                "additionalItems": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "default": [],
+          "examples": [
+            ["jest-watch-master"],
+            ["jest-watch-select-projects"],
+            ["jest-watch-suspend"],
+            ["jest-watch-typeahead"],
+            ["jest-watch-yarn-workspaces"]
+          ]
+        },
+        "watchman": {
+          "description": "Whether to use watchman for file crawling.",
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true,
+      "dependencies": {
+        "collectCoverageFrom": {
+          "required": ["collectCoverage"]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/definitions/config"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@stitches/core",
+  "version": "0.1.0-canary.0",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/stitches-core.cjs.js",
+  "module": "dist/stitches-core.esm.js",
+  "typings": "dist/stitches-core.cjs.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "private": true
+}
