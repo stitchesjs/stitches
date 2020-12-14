@@ -1,18 +1,32 @@
-import { CSSScale, CSSTheme, CSSToken } from '@stitches/core/src/types/index';
-import StitchesDomSheet from './Sheet';
+import createCss from '@stitches/core'
+import define from './lib/define'
 
-function createCss<Token extends CSSToken, Scale extends CSSScale<Token>, Theme extends CSSTheme<Scale>>(
-	opts:
-		| never
-		| {}
-		| {
-				theme: Theme;
-		  },
-) {
-	const sheet = new StitchesDomSheet();
-	sheet.theme = Object(Object(opts).theme);
+/** Factory that returns a StyledSheet. */
+const createStyled: StyledSheetFactory = function createStyled(init?: StyledSheetFactoryInit) {
+	const sheet = createCss(init)
 
-	return sheet;
+	return define(sheet, {
+		styled(name: string | any, init: object) {
+			const tagName = typeof name === 'string' ? name : name instanceof HTMLElement ? name.tagName : 'div'
+			const element = document.createElement(tagName)
+			const rule = sheet.css(init)
+			const component = define(function Component(init?: any & object) {
+				const { className: classNameOverride, ...opts } = Object(init)
+				const expression = rule(opts)
+				const expressionElement = element.cloneNode() as typeof element
+				expressionElement.classList.add(...expression.classNames)
+				if (classNameOverride) expressionElement.classList.add(classNameOverride as string)
+				for (const prop in opts) {
+					if (prop in rule.variants) {
+					} else if (prop in expressionElement) {
+						expressionElement[prop] = opts[prop]
+					} else element.setAttribute(prop, opts[prop])
+				}
+				return expressionElement
+			}, rule)
+			return component
+		},
+	})
 }
 
-export default createCss;
+export default createStyled

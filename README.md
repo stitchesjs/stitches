@@ -19,13 +19,13 @@ npm install
 yarn build
 
 # yarn (watch)
-yarn build
+yarn build:watch
 
 # npm
 npm run build
 
 # npm (watch)
-npm run watch
+npm run build:watch
 ```
 
 ### Test
@@ -34,6 +34,12 @@ npm run watch
 # yarn
 yarn test
 
+# yarn (watch)
+yarn test:watch
+
 # npm
 npm test
+
+# npm (watch)
+npm run test:watch
 ```

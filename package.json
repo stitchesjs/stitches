@@ -4,10 +4,11 @@
   "license": "MIT",
   "scripts": {
     "build": "preconstruct build",
+    "build:watch": "preconstruct watch",
     "bootstrap": "lerna bootstrap --use-workspaces && preconstruct dev",
     "postinstall": "lerna bootstrap --use-workspaces && preconstruct dev",
-    "watch": "preconstruct watch",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "workspaces": [
     "packages/*"

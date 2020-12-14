@@ -82,6 +82,7 @@ declare interface StyledRule {
 	(init?: StyledRuleInit): StyledExpression
 	toString(): string
 	className: string
+	classNames: string[]
 	cssText: string
 	selector: string
 	sheet: StyledSheet
@@ -123,6 +124,7 @@ declare type GlobalExpressionConditionals = {
 declare interface StyledExpression {
 	toString(): string
 	className: string
+	classNames: string[]
 	rule: StyledRule
 	selector: string
 }
