@@ -13,6 +13,12 @@
   "dependencies": {
     "@stitches/core": "0.1.0-canary.0"
   },
+  "devDependencies": {
+    "react": "17.0.1"
+  },
+  "peerDependencies": {
+    "react": "17-18"
+  },
   "publishConfig": {
     "access": "public"
   },
