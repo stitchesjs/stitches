@@ -8,6 +8,7 @@
     "jsx": "preserve",
     "lib": ["DOM", "ES2020"],
     "module": "ESNext",
+    "moduleResolution": "node",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "paths": {

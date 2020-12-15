@@ -31,7 +31,7 @@ test('basic functionality', () => {
 	})
 
 	// create button, write css
-	const expectHML1 = `<button class="s-2j80d3">Styled Button</button>`
+	const expectHML1 = `<button class="sv6d1zq">Styled Button</button>`
 	const resultHML1 = `<button class="${buttonClass}">Styled Button</button>`
 
 	expect(resultHML1).toBe(expectHML1)
@@ -42,7 +42,7 @@ test('basic functionality', () => {
 	})
 
 	// create button, write css
-	const expectHML2 = `<button class="s-656s07">Styled Button</button>`
+	const expectHML2 = `<button class="sv6d1zq smeeixs">Styled Button</button>`
 	const resultHML2 = `<button class="${darkButtonClass}">Styled Button</button>`
 
 	expect(resultHML2).toBe(expectHML2)

@@ -2,31 +2,41 @@ import createCss from '@stitches/core'
 import define from './lib/define'
 
 /** Factory that returns a StyledSheet. */
-const createStyled: StyledSheetFactory = function createStyled(init?: StyledSheetFactoryInit) {
+const createStyled = function createStyled(init?: StyledSheetFactoryInit) {
 	const sheet = createCss(init)
 
 	return define(sheet, {
 		styled(name: string | any, init: object) {
 			const tagName = typeof name === 'string' ? name : name instanceof HTMLElement ? name.tagName : 'div'
-			const element = document.createElement(tagName)
-			const rule = sheet.css(init)
+			const createExpression = sheet.css(init)
+
 			const component = define(function Component(init?: any & object) {
 				const { className: classNameOverride, ...opts } = Object(init)
-				const expression = rule(opts)
-				const expressionElement = element.cloneNode() as typeof element
-				expressionElement.classList.add(...expression.classNames)
-				if (classNameOverride) expressionElement.classList.add(classNameOverride as string)
+				const classNameOverrides = String(classNameOverride || '')
+					.split(/\s+/)
+					.filter(Boolean)
+
+				const expression = createExpression(opts)
+				const element = document.createElement(tagName)
+				const classNames = [...expression.classNames, ...classNameOverrides]
+
+				element.classList.add(...classNames)
+
 				for (const prop in opts) {
-					if (prop in rule.variants) {
-					} else if (prop in expressionElement) {
-						expressionElement[prop] = opts[prop]
+					if (prop in createExpression.variants) {
+					} else if (prop in element) {
+						// @ts-ignore
+						element[prop] = opts[prop]
 					} else element.setAttribute(prop, opts[prop])
 				}
-				return expressionElement
-			}, rule)
+				return element
+			}, createExpression)
+
 			return component
 		},
-	})
+	}) as typeof sheet & {
+		styled(name: string | any, init: object): (init?: any & object) => HTMLElement
+	}
 }
 
 export default createStyled

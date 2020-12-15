@@ -12,8 +12,8 @@ const getResolvedSelectors = (
 					? childSelector.replace(/&/, parentSelector)
 					: childSelector.replace(/^/, parentSelector + ' '),
 			),
-		);
-		return resolvedSelectors;
-	}, [] as string[]);
+		)
+		return resolvedSelectors
+	}, [] as string[])
 
-export default getResolvedSelectors;
+export default getResolvedSelectors

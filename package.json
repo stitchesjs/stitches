@@ -40,6 +40,9 @@
     "testEnvironment": "node"
   },
   "preconstruct": {
+    "entrypoints": [
+      "packages/*/src/index.ts"
+    ],
     "packages": [
       "packages/*"
     ]

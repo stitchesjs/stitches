@@ -6,6 +6,6 @@ const matchAnyDollarSign = /\$/g
 const getResolvedProperty = (property: string) =>
 	matchTokenProperty.test(property)
 		? '--' + property.slice(1).replace(matchAnyDollarSign, '-')
-		: property.replace(matchAnyCapitalLetter, ($0) => '-' + $0.toLowerCase())
+		: property.replace(matchAnyCapitalLetter, $0 => '-' + $0.toLowerCase())
 
 export default getResolvedProperty
