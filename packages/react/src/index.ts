@@ -2,29 +2,33 @@ import createCss from '@stitches/core'
 import define from './lib/define'
 
 /** Factory that returns a StyledSheet. */
-const createStyled: StyledSheetFactory = function createStyled(init?: StyledSheetFactoryInit) {
+function createStyled(init?: StyledSheetFactoryInit & { onUpdate(sheet: StyledSheet): void }) {
 	const sheet = createCss(init)
+	const { onUpdate } = Object(init)
 
 	return define(sheet, {
-		styled(name: string | any, init: object) {
-			const type = name === Object(name).type ? name.type : name
-			const rule = sheet.css(init)
+		styled(type: string | object, init: any & object) {
+			const createExpression = sheet.css(init)
 
-			return function Component({ className, ref = null, ...props }: object & any) {
-				const classList = new Set(rule.classList)
-				if (className) classList.add(className)
-				for (const prop in props) {
-					if (prop in rule.variants) {
-						delete props[prop]
-					}
+			return function Component({ as, className: classNameOverride, ref = null, ...props }: object & any) {
+				const classNameOverrides = String(classNameOverride || '')
+					.split(/\s+/)
+					.filter(Boolean)
+
+				const expression = createExpression(props)
+
+				props.className = [...expression.classNames, ...classNameOverrides].join(' ')
+
+				if (typeof onUpdate === 'function') {
+					onUpdate(sheet)
 				}
-				props.className = Array.from(classList).join(' ')
+
 				return {
 					$$typeof: Symbol.for('react.element'),
 					key: null,
 					props,
 					ref,
-					type,
+					type: as || type,
 					_owner: null,
 				}
 			}

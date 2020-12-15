@@ -29,6 +29,7 @@ const createStyled = function createStyled(init?: StyledSheetFactoryInit) {
 						element[prop] = opts[prop]
 					} else element.setAttribute(prop, opts[prop])
 				}
+
 				return element
 			}, createExpression)
 

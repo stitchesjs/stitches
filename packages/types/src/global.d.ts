@@ -81,6 +81,11 @@ declare interface StyledRule {
 	className: string
 	classNames: string[]
 	selector: string
+	variants: {
+		[VariantName in string]: {
+			[VariantName in number | string]: string
+		}
+	}
 }
 
 declare type StyledRuleInit = Partial<StyledRuleOpts>
