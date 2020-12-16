@@ -75,17 +75,13 @@ declare interface StyledSheetOpts extends RuleStyles {
 /* StyledRule
 /* ========================================================================== */
 
-declare interface StyledRule {
+declare interface StyledRule<Variants = {}> {
 	(init?: StyledRuleInit): StyledExpression
 	toString(): string
 	className: string
 	classNames: string[]
 	selector: string
-	variants: {
-		[VariantName in string]: {
-			[VariantName in number | string]: string
-		}
-	}
+	variants: Variants
 }
 
 declare type StyledRuleInit = Partial<StyledRuleOpts>
@@ -137,11 +133,9 @@ declare type VariantStyles = {
 
 declare interface ThemeRule {
 	toString(): string
-
 	className: string
 	cssText: string
 	root: string
-	sheet: null | StyledSheet
 }
 
 declare type ThemeRuleType<T extends object> = Object<ThemeRule & T>

@@ -205,3 +205,14 @@ const createCss: StyledSheetFactory = function createCss(init?: StyledSheetFacto
 }
 
 export default createCss
+
+const { css } = createCss({
+	properties: {},
+	theme: {
+		colors: {
+			red100: 'red',
+		},
+	},
+})
+
+const button = css()
