@@ -1,0 +1,4 @@
+{
+  "packages": ["packages/core", "packages/react"],
+  "sandboxes": ["2uwsq", "7njqn"]
+}
