@@ -27,12 +27,6 @@
     "ts-jest": "26.4.4",
     "typescript": "4.1.3"
   },
-  "babel": {
-    "presets": [
-      "@babel/preset-react",
-      "@babel/preset-typescript"
-    ]
-  },
   "browserslist": [
     "last 1 chrome versions",
     "last 1 firefox versions",
