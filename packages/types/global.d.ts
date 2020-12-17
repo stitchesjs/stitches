@@ -2,7 +2,7 @@
 /* ========================================================================== */
 
 declare interface ObjectConstructor {
-	<T>(value?: T): T extends object ? T : T & object
+	<T>(value?: T): T extends anyobject ? T : T & anyobject
 }
 
 declare var Object: ObjectConstructor
@@ -110,9 +110,11 @@ declare interface GlobalRule {
 /* ========================================================================== */
 
 declare interface StyledExpression {
+	(): string
 	toString(): string
 	className: string
 	classNames: string[]
+	props: anyobject
 	selector: string
 }
 
@@ -144,4 +146,9 @@ declare interface ThemeRule {
 	sheet: null | StyledSheet
 }
 
-declare type ThemeRuleType<T extends object> = Object<ThemeRule & T>
+declare type ThemeRuleType<T extends anyobject> = Object<ThemeRule & T>
+
+/* Any Object
+/* ========================================================================== */
+
+declare type anyobject = any & object

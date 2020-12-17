@@ -1,6 +1,10 @@
-const getHashString = (value: string) => {
-	for (var i = value.length, h = 9; i; ) h = Math.imul(h ^ value.charCodeAt(--i), 9 ** 9)
-	return 's' + (h ^ (h >>> 9)).toString(36)
+/** Returns a unique and consistent hash of a stringified object. */
+const getHashString = (source: object) => {
+	for (var value = JSON.stringify(source), index = value.length, hash = 9; index; ) {
+		hash = Math.imul(hash ^ value.charCodeAt(--index), 9 ** 9)
+	}
+
+	return 's' + (hash ^ (hash >>> 9)).toString(36)
 }
 
 export default getHashString

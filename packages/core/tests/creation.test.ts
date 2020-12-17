@@ -17,13 +17,13 @@ describe('Creation', () => {
 		})
 
 		test('`createCss` function returns a `css` function', () => {
-			const instance = createCss()
-			expect(instance).toBeInstanceOf(Function)
+			const { css } = createCss()
+			expect(css).toBeInstanceOf(Function)
 		})
 	})
 
 	describe('Create a CSS Component', () => {
-		const css = createCss({
+		const { css } = createCss({
 			theme: {
 				color: {
 					lite: 'gainsboro',
@@ -53,7 +53,7 @@ describe('Creation', () => {
 				},
 			})
 
-			expect(String(buttonClass)).toBe('sv6d1zq')
+			expect(String(buttonClass)).toBe('s-2j80d3')
 		})
 
 		test('`css` function can create a CSS Component with multiple arguments', () => {
