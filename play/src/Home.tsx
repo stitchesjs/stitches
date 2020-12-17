@@ -1,18 +1,35 @@
 import React from 'react'
-import { styled } from '../stitches.config'
+import { global, styled } from '../stitches.config'
+import Button from './components/Button'
 
-const Button = styled('button', {
-	backgroundColor: 'white',
-	border: 0,
-	color: 'blue',
+const globalStyles = global({
+	'@import': 'url("https://unpkg.com/sanitize.css")',
+	body: {
+		fontFamily: '$main',
+		textAlign: 'center',
+	},
+})
+
+const Heading1 = styled('h1', {
+	padding: '0 25px',
+})
+
+const Heading2 = styled('h2', {
+	color: '#40494f',
+	padding: '0 25px',
 })
 
 export default function Home() {
+	globalStyles()
+
 	return (
 		<>
-			<h1>Stitches</h1>
+			<Heading1>The modern styling library</Heading1>
+			<Heading2>
+				Near-zero runtime, server-side rendering, multi-variant support, and a best-in-class developer experience.
+			</Heading2>
 			<p>
-				<Button>Custom Button</Button>
+				<Button>Example Button</Button>
 			</p>
 		</>
 	)

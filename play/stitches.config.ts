@@ -9,4 +9,4 @@ const sheet = createCss({
 })
 
 export default sheet
-export const { styled } = sheet
+export const { global, styled } = sheet

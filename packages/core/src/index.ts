@@ -129,17 +129,25 @@ const create = (init: StyledSheetFactoryInit) => {
 	}
 
 	sheet.global = (init: anyobject) => {
+		const importStyles = Object.create(null)
+		const globalStyles = Object.create(null)
+
 		for (const type in init) {
 			const data = init[type]
 			const hash = getHashString(data)
 
 			if (type === '@import') {
-				cssTextImport[hash] = getResolvedStyles(data, [], [type], sheet)
+				importStyles[hash] = getResolvedStyles(data, [], [type], sheet)
 			} else if (type[0] === '@') {
-				cssTextGlobal[hash] = getResolvedStyles(data, [], [type], sheet)
+				globalStyles[hash] = getResolvedStyles(data, [], [type], sheet)
 			} else {
-				cssTextGlobal[hash] = getResolvedStyles(data, [type], [], sheet)
+				globalStyles[hash] = getResolvedStyles(data, [type], [], sheet)
 			}
+		}
+
+		return () => {
+			Object.assign(cssTextImport, importStyles)
+			Object.assign(cssTextGlobal, globalStyles)
 		}
 	}
 
