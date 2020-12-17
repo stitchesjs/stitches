@@ -72,6 +72,10 @@ declare interface StyledSheetOpts extends RuleStyles {
 	variants: VariantStyles
 }
 
+declare interface ReactStyledSheet extends StyledSheet {
+	styled(type: string | object, init: anyobject): ReactStyledRule
+}
+
 /* StyledRule
 /* ========================================================================== */
 
@@ -96,6 +100,19 @@ declare type StyledRuleOpts = RuleStyles & {
 			[VariantPair in number | string]: RuleStyles
 		}
 	}
+}
+
+declare interface ReactStyledRule extends StyledRule {
+	(init?: StyledRuleInit): ReactStyledElement
+}
+
+declare interface ReactStyledElement {
+	$$typeof: symbol
+	key: null
+	props: anyobject
+	ref
+	type: string | function
+	_owner: null
 }
 
 /* GlobalRule
