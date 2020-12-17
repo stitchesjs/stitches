@@ -14,9 +14,11 @@
     "packages/*"
   ],
   "dependencies": {
+    "@babel/preset-react": "7.12.10",
     "@babel/preset-typescript": "7.12.7",
     "@preconstruct/cli": "2.0.1",
     "@types/jest": "26.0.19",
+    "@types/react": "17.0.0",
     "@types/react-test-renderer": "17.0.0",
     "jest": "26.6.3",
     "lerna": "3.22.1",
@@ -27,6 +29,7 @@
   },
   "babel": {
     "presets": [
+      "@babel/preset-react",
       "@babel/preset-typescript"
     ]
   },
@@ -38,8 +41,15 @@
   ],
   "jest": {
     "coverageProvider": "v8",
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx"
+    ],
     "preset": "ts-jest",
-    "testEnvironment": "node"
+    "testEnvironment": "jsdom",
+    "testRegex": "(\\.|/)test\\.tsx?$"
   },
   "preconstruct": {
     "entrypoints": [
