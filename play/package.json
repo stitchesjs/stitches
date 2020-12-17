@@ -1,15 +1,19 @@
 {
-  "name": "play.stitches.dev",
+  "name": "my-project",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "start": "parcel serve ./src/index.html",
+    "build": "parcel build ./src/index.html"
   },
   "dependencies": {
-    "next": "10.0.3",
+    "parcel": "next",
     "react": "17.0.1",
     "react-dom": "17.0.1"
-  }
+  },
+  "browserslist": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ]
 }
