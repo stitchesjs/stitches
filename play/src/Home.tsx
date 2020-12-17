@@ -2,7 +2,7 @@ import React from 'react'
 import { global, styled } from '../stitches.config'
 import Button from './components/Button'
 
-const globalStyles = global({
+const reset = global({
 	'@import': 'url("https://unpkg.com/sanitize.css")',
 	body: {
 		fontFamily: '$main',
@@ -20,7 +20,7 @@ const Heading2 = styled('h2', {
 })
 
 export default function Home() {
-	globalStyles()
+	reset()
 
 	return (
 		<>
