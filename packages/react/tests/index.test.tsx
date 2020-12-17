@@ -42,5 +42,9 @@ describe('Stitches React', () => {
 		})
 
 		expect(wrapper.toJSON()).toStrictEqual({ type: 'button', props: { className: 'sgadxkw' }, children: null })
+
+		expect(sheet.toString()).toEqual(
+			'.sgadxkw{background-color:gainsboro;border-radius:9999px;font-weight:500;padding:0.75em 1em;border:0;transition:all 200ms ease;}.sgadxkw:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0, 0, 0, .3);}',
+		)
 	})
 })

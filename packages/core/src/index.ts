@@ -76,15 +76,15 @@ const create = (init: StyledSheetFactoryInit) => {
 		/** Returns a StyledExpression */
 		const create = (init?: anyobject) => {
 			const expression = (() => expression.className) as StyledExpression
-			expression.classNames = [rule.className]
+			expression.classNames = [rule.toString()]
 			expression.props = {}
 			expression.toString = expression
 			Object.defineProperties(expression, {
 				className: {
-					value: () => expression.classNames.join(' '),
+					get: () => expression.classNames.join(' '),
 				},
 				selector: {
-					value: () => expression.classNames.map(className => '.' + className),
+					get: () => expression.classNames.map(className => '.' + className),
 				},
 			})
 
@@ -143,9 +143,9 @@ const create = (init: StyledSheetFactoryInit) => {
 		}
 	}
 
-	sheet.toString = () => '' + cssTextImport + themeCSS + cssTextTheme + cssTextGlobal + cssTextRules
-
 	const themeCSS = getResolvedStyles(getThemeAsCustomProperties(Object(init?.theme)), [':root'], [], sheet)
+
+	sheet.toString = () => '' + cssTextImport + themeCSS + cssTextTheme + cssTextGlobal + cssTextRules
 
 	return sheet
 }
