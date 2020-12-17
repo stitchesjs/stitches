@@ -7,6 +7,7 @@
     "build:watch": "preconstruct watch",
     "bootstrap": "lerna bootstrap --use-workspaces && preconstruct dev",
     "postinstall": "lerna bootstrap --use-workspaces && preconstruct dev",
+    "start": "cd play && yarn && yarn dev",
     "test": "jest",
     "test:watch": "jest --watch"
   },
