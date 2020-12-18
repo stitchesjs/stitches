@@ -20,6 +20,7 @@
   "dependencies": {
     "@babel/preset-react": "7.12.10",
     "@babel/preset-typescript": "7.12.7",
+    "@babel/plugin-proposal-export-default-from": "^7.12.1",
     "@preconstruct/cli": "2.0.1",
     "@types/jest": "26.0.19",
     "@types/react": "17.0.0",

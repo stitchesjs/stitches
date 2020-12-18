@@ -105,7 +105,7 @@ declare interface StyledRule {
 	selector: string
 	variants: {
 		[VariantName in string]: {
-			[VariantName in number | string]: string
+			[VariantPair in number | string]: RuleStyles
 		}
 	}
 }
@@ -168,11 +168,9 @@ declare type VariantStyles = {
 
 declare interface ThemeRule {
 	toString(): string
-
 	className: string
 	cssText: string
 	root: string
-	sheet: null | StyledSheet
 }
 
 declare type ThemeRuleType<T extends anyobject> = Object<ThemeRule & T>
