@@ -75,8 +75,10 @@ declare interface StyledSheetOpts extends RuleStyles {
 /* StyledRule
 /* ========================================================================== */
 
-declare interface StyledRule<Variants = {}> {
-	(init?: StyledRuleInit): StyledExpression
+declare interface StyledRule<Variants, Conditions> {
+	(
+		init?: { [k in keyof Variants]?: keyof Variants[k] | { [I in `when$${keyof Conditions}`]?: keyof Variants[k] } },
+	): StyledExpression
 	toString(): string
 	className: string
 	classNames: string[]

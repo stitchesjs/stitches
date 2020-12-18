@@ -1,59 +1,27 @@
 import { css } from './config.stitches'
 
+const one = css({
+	backgroundColor: 'red',
+	variants: {
+		variant: {
+			red: {
+				backgroundColor: 'red',
+				marginX: 2,
+			},
+			green: {
+				backgroundColor: 'red',
+			},
+		},
+	},
+})
+
+one.variants.variant.green
 const firstRule = css(
 	{
-		backgroundColor: 'red',
-		variants: {
-			variant: {
-				red: {
-					backgroundColor: 'red',
-				},
-			},
-		},
+		padding: '-moz-initial',
+		color: 'red',
 	},
-	{
-		backgroundColor: 'red',
-		variants: {
-			variant: {
-				red: {
-					backgroundColor: 'red',
-				},
-			},
-		},
-	},
-	{
-		backgroundOrigin: 'border-box',
-		variants: {
-			variant: {
-				reds: {
-					backgroundColor: 'blue',
-				},
-			},
-		},
-		backgroundColor: 'red1',
-	},
+	one,
 )
 
-const rule = css(
-	{
-		variants: {
-			variant: {
-				red: {
-					color: 'red',
-					backgroundClip: 'inherit',
-				},
-			},
-		},
-	},
-	{
-		variants: {
-			variant: {
-				red: {
-					backgroundColor: 'red100',
-					color: 'red',
-					backgroundClip: 'inherit',
-				},
-			},
-		},
-	},
-)
+firstRule({ variant: { when$potato: 'red' } })
