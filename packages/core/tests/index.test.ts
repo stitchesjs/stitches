@@ -3,7 +3,7 @@ import createCss from '../src/index'
 test('basic functionality', () => {
 	const { css } = createCss({
 		theme: {
-			color: {
+			colors: {
 				lite: 'gainsboro',
 			},
 			radii: {
