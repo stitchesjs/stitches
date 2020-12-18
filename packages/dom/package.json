@@ -15,6 +15,5 @@
   },
   "publishConfig": {
     "access": "restricted"
-  },
-  "private": true
+  }
 }
