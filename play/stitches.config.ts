@@ -1,4 +1,4 @@
-import createCss from '@stitches/react'
+import createCss from '@stitches/internal-react'
 
 const sheet = createCss({
 	theme: {

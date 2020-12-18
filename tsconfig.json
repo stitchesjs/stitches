@@ -12,7 +12,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "paths": {
-      "@stitches/*": ["packages/*"]
+      "@stitches/internal-*": ["packages/*"]
     },
     "skipLibCheck": true,
     "sourceMap": true,

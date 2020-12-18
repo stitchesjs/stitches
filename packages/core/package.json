@@ -1,17 +1,17 @@
 {
-  "name": "@stitches/core",
+  "name": "@stitches/internal-core",
   "version": "0.1.0-canary.1",
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/stitches-core.cjs.js",
-  "module": "dist/stitches-core.esm.js",
-  "typings": "dist/stitches-core.cjs.d.ts",
+  "main": "dist/stitches-internal-core.cjs.js",
+  "module": "dist/stitches-internal-core.esm.js",
+  "typings": "dist/stitches-internal-core.cjs.d.ts",
   "files": [
     "dist",
     "src"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "private": true
 }
