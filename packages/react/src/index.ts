@@ -3,7 +3,42 @@ import createCore from '@stitches/core'
 const reactFactory = (init?: StyledSheetFactoryInit) => create(init)
 
 const create = (init: StyledSheetFactoryInit | undefined) => {
-	const core = createCore(init)
+	let sheetHeadElement: HTMLHeadElement
+	let sheetStyleElement: HTMLStyleElement
+	let sheetGlobalTextNode: Text
+	let sheetStyledTextNode: Text
+	let sheetThemedTextNode: Text
+
+	const hasDocument = typeof document === 'object'
+
+	if (hasDocument) {
+		sheetGlobalTextNode = new Text('')
+		sheetStyledTextNode = new Text('')
+		sheetThemedTextNode = new Text('')
+		sheetStyleElement = document.createElement('style')
+		sheetHeadElement = document.head
+
+		sheetStyleElement.append(sheetGlobalTextNode)
+		sheetStyleElement.append(sheetThemedTextNode)
+		sheetStyleElement.append(sheetStyledTextNode)
+		sheetHeadElement.append(sheetStyleElement)
+	}
+
+	const core = hasDocument
+		? createCore({
+				...Object(init),
+				onGlobal(cssOfImportRules: string, cssOfGlobalRules: string) {
+					sheetGlobalTextNode.data = cssOfImportRules + cssOfGlobalRules
+				},
+				onStyled(cssOfStyledRules: string) {
+					sheetStyledTextNode.data = cssOfStyledRules
+				},
+				onThemed(cssOfTheme: string, cssOfThemedRules: string) {
+					sheetThemedTextNode.data = cssOfTheme + cssOfThemedRules
+				},
+		  })
+		: createCore((init as unknown) as any)
+
 	const $$typeof = Symbol.for('react.element')
 	const $$styled = Symbol.for('stitches.component')
 
