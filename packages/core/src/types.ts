@@ -50,7 +50,7 @@ export type StitchesCSS<
   Theme extends TTheme = {},
   Utils = {},
   AllowNesting = true
-> = { [k in keyof Properties]?: k extends keyof CSSPropertiesToTokenScale ? CSSPropertiesToTokenScale[k] extends keyof Theme ?  keyof Theme[CSSPropertiesToTokenScale[k]] | Properties[k]: Properties[k] : Properties[k]}
+> = { [k in keyof Properties]?: k extends keyof CSSPropertiesToTokenScale ? CSSPropertiesToTokenScale[k] extends keyof Theme ?  `$${Extract<keyof Theme[CSSPropertiesToTokenScale[k]], string>}` | Properties[k]: Properties[k] : Properties[k]}
   & { [k in keyof Conditions as `when$${Extract<keyof Conditions, string>}`]?: StitchesCSS<Conditions, Theme, Utils, AllowNesting>; }
   & { [k in keyof Utils]?: Utils[k] }
   & { [k in string]?: AllowNesting extends true ? StitchesCSS<Conditions, Theme, Utils, AllowNesting> | string | number : {} }
