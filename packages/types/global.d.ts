@@ -97,15 +97,17 @@ declare interface ReactStyledSheet extends StyledSheet {
 /* StyledRule
 /* ========================================================================== */
 
-declare interface StyledRule<Variants, Conditions> {
-	(
-		init?: { [k in keyof Variants]?: keyof Variants[k] | { [I in `when$${keyof Conditions}`]?: keyof Variants[k] } },
-	): StyledExpression
+declare interface StyledRule {
+	(init?: StyledRuleInit): StyledExpression
 	toString(): string
 	className: string
 	classNames: string[]
 	selector: string
-	variants: Variants
+	variants: {
+		[VariantName in string]: {
+			[VariantPair in number | string]: RuleStyles
+		}
+	}
 }
 
 declare type StyledRuleInit = Partial<StyledRuleOpts>
