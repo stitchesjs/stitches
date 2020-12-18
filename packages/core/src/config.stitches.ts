@@ -13,16 +13,23 @@ export const css = createCss({
 		},
 	},
 	conditions: {
+		/**
+		 * does cool things
+		 */
 		potato: 'hi',
 	},
 	properties: {
 		/**
 		 * This is a util with some really nice intellisense
 		 */
-		marginX: (val: number) => {
-			return {}
+		mx: (val: number) => {
+			return {
+				when$potato: {
+				}
+				backgroundColor: 'red',
+			}
 		},
-		marginY: (val: number) => {
+		my: (val: number) => {
 			return {
 				color: 'red100',
 			}

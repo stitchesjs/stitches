@@ -1,27 +1,62 @@
 import { css } from './config.stitches'
 
 const one = css({
-	backgroundColor: 'red',
+	backgroundOrigin: 'border-box',
+	mx: 213,
+	when$potato: {
+		mx: 213,
+	},
 	variants: {
 		variant: {
-			red: {
-				backgroundColor: 'red',
-				marginX: 2,
-			},
-			green: {
-				backgroundColor: 'red',
+			red: {},
+			green: {},
+		},
+	},
+})
+
+one({ variant: 'red' })
+one({ variant: 'green' })
+one({ variant: 'black' })
+
+const two = css(one, {
+	variants: {
+		variant: {
+			black: {
+				backgroundOrigin: 'border-box',
 			},
 		},
 	},
 })
 
-one.variants.variant.green
-const firstRule = css(
+two({ variant: 'red' })
+two({ variant: 'green' })
+two({ variant: 'black' })
+
+const three = css(
 	{
-		padding: '-moz-initial',
-		color: 'red',
+		variants: {
+			variant: {
+				wow22: {
+					backgroundOrigin: 'border-box',
+					mx: 23,
+					when$potato: {
+						mx: 2,
+					},
+				},
+			},
+		},
 	},
 	one,
+	two,
+	{
+		variants: {
+			variant: {
+				wow: {
+					backgroundOrigin: 'border-box',
+				},
+			},
+		},
+	},
 )
 
-firstRule({ variant: { when$potato: 'red' } })
+three({ variant: 'wowergerg22' })

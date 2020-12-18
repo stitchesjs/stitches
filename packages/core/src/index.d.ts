@@ -28,7 +28,7 @@ export type StitchesCSS<
   Utils = {},
   AllowNesting = true
 > = { [k in keyof Properties]?: CSSPropertiesToTokenScale[k] extends keyof Theme ?  keyof Theme[CSSPropertiesToTokenScale[k]] | Properties[k] : Properties[k]}
-  & { [k in `when$${keyof Conditions}`]?: StitchesCSS<Conditions, Theme, Utils, AllowNesting>; }
+  & { [k in keyof Conditions as `when$${keyof Conditions}`]?: StitchesCSS<Conditions, Theme, Utils, AllowNesting>; }
   & { [k in keyof Utils]?: Utils[k] }
   & { [k in string]?: AllowNesting extends true ? StitchesCSS<Conditions, Theme, Utils, AllowNesting> | string | number : {} }
 
@@ -47,32 +47,20 @@ type Tail<T extends any[]> = ((...t: T) => any) extends (_: any, ...tail: infer 
 type GetVariants<Variants, A, B, C> = ArgCss<Variants, A, B, C> | StyledRule<Variants, A>
 type MergePotato<T extends any[]> = MergeVariants<Head<T>>
 
-type InferVariantsFromUnknownRule<Rule, A, B, C> = Rule extends ArgCss<infer Vars, A, B, C>
-	? Vars
-	: Rule extends StyledRule<infer Vars, A>
-	? Vars
-	: never
-
-type InferRestVariants<Args extends any[], A, B, C> = MergeVariants<
-	InferVariantsFromUnknownRule<Args[0], A, B, C>,
-	HasTail<Args> extends true ? InferRestVariants<Tail<Args>, A, B, C> : {}
+type InferRestVariants<Args extends any[]> = MergeVariants<
+	Args[0],
+	HasTail<Args> extends true ? InferRestVariants<Tail<Args>> : {}
 >
 export interface TCss<A = {}, B = {}, C = {}> {
-	<FirstArgVariants, SecondArgVariants>(
-		firstRule: ArgCss<FirstArgVariants, A, B, C> | StyledRule<FirstArgVariants, A>,
-	): StyledRule<FirstArgVariants, A>
-	<FirstArgVariants, SecondArgVariants>(
-		firstRule: ArgCss<FirstArgVariants, A, B, C> | StyledRule<FirstArgVariants, A>,
-		secondRule: ArgCss<SecondArgVariants, A, B, C> | StyledRule<SecondArgVariants, A>,
-	): StyledRule<MergeVariants<FirstArgVariants, SecondArgVariants>, A>
-	// <
-	// 	All extends (
-	// 		| ArgCss<{ [k: string]: { [b: string]: {} } }, A, B, C>
-	// 		| StyledRule<{ [k: string]: { [b: string]: {} } }, A>
-	// 	)[]
-	// >(
-	// 	...styles: All
-	// ): StyledRule<InferRestVariants<All, A, B, C>, A>
+	<Vars extends any[]>(
+		...styles: {
+			[k in keyof Vars]:
+				|  ({
+						variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }
+				  } & (StitchesCSS<A, B, C>)
+				| SimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
+		}
+	): PStyledRule<InferRestVariants<Vars>, A>
 
 	global: (definition: Record<string, StitchesCSS<A, B, C, D>>) => GlobalRule
 	theme: (
@@ -92,10 +80,32 @@ interface IConfig<Conditions, Theme, Utils, Prefix> {
 	prefix?: Prefix
 }
 
-type CssFactory = <Conditions = {}, Theme = {}, Utils = {}, Prefix extends string = ''>(
+type CssFactory = <Conditions = {}, Theme = {}, Utils = {}, Prefix =''>(
 	_config: IConfig<Conditions, Theme, Utils, Prefix>,
 ) => TCss<Conditions, Theme, Utils>
 
 declare const createCss: CssFactory
+
+const ruleSymbol = Symbol('')
+interface PStyledRule<Variants, Conditions> {
+	(
+		init?: { [k in keyof Variants]?: keyof Variants[k] | { [I in `when$${keyof Conditions}`]?: keyof Variants[k] } },
+	): StyledExpression
+	[ruleSymbol]: true
+	toString(): string
+	className: string
+	classNames: string[]
+	selector: string
+	variants: Variants
+}
+
+type SimpleStyledRule<A> = {
+	[ruleSymbol]: true
+	variants: A
+}
+
+interface TCss2<A = {}, B = {}, C = {}> {}
+
+export declare const css: TCss2<>
 
 export default createCss
