@@ -2,8 +2,12 @@ import cssHash from './lib/CssHash'
 import getHashString from './lib/getHashString'
 import getResolvedStyles from './lib/getResolvedStyles'
 import getThemeAsCustomProperties from './lib/getThemeAsCustomProperties'
+import { _StyledSheetFactory, TConditions, TTheme, IConfig, _StyledSheet } from './types'
 
-const factory = (init?: StyledSheetFactoryInit) => create(Object(init))
+const factory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(
+	init?: IConfig<Conditions, Theme, Utils, Prefix>,
+): _StyledSheet<Conditions, Theme, Utils> => create(Object(init) as any) as any
+
 const { create: createObject } = Object
 
 /** Returns a new StyledSheet. */

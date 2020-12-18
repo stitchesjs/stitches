@@ -107,11 +107,6 @@ declare interface StyledRule<Variants, Conditions> {
 	selector: string
 	variants: Variants
 }
-const ruleSymbol = Symbol('')
-type SimpleStyledRule = {
-	[ruleSymbol]: true
-	variants: 
-}
 
 declare type StyledRuleInit = Partial<StyledRuleOpts>
 

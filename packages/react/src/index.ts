@@ -3,7 +3,7 @@ import createCore from '@stitches/core'
 const reactFactory = (init?: StyledSheetFactoryInit) => create(init)
 
 const create = (init: StyledSheetFactoryInit | undefined) => {
-	const core = createCore(init) as ReactStyledSheet
+	const core = createCore(init)
 	const $$typeof = Symbol.for('react.element')
 	const $$styled = Symbol.for('stitches.component')
 
