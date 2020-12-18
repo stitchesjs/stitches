@@ -1,6 +1,6 @@
 {
   "name": "@stitches/react",
-  "version": "0.1.0-canary.0",
+  "version": "0.1.0-canary.1",
   "license": "MIT",
   "source": "src/index.ts",
   "main": "dist/stitches-react.cjs.js",
@@ -11,7 +11,7 @@
     "src"
   ],
   "dependencies": {
-    "@stitches/core": "0.1.0-canary.0"
+    "@stitches/core": "0.1.0-canary.1"
   },
   "devDependencies": {
     "react": "17.0.1"

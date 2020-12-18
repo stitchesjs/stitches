@@ -1,0 +1,10 @@
+{
+  "startScript": "start",
+  "template": "node",
+  "container": {
+    "node": "14",
+    "port": 1234
+  },
+  "hardReloadOnChange": false,
+  "infiniteLoopProtection": false
+}

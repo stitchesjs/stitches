@@ -35,8 +35,8 @@ describe('Configuration', () => {
 			expect(toString()).toBe('')
 
 			const className = String(rule)
-			expect(className).toBe('fusions-cysv1f')
-			expect(toString()).toBe('.fusions-cysv1f{color:red;}')
+			expect(className).toBe('fusionsq3ye05')
+			expect(toString()).toBe('.fusionsq3ye05{color:red;}')
 		})
 	})
 
@@ -52,10 +52,8 @@ describe('Configuration', () => {
 			const rule = instance.css({ color: '$red' })
 			expect(instance.toString()).toBe(':root{--colors-brandRed:tomato;}')
 
-			expect(String(rule)).toBe('s-jwwd7g')
-			expect(instance.toString()).toBe(
-				':root{--colors-brandRed:tomato;}.s-jwwd7g{color:var(--colors-red);}:root{--colors-brandRed:tomato;}',
-			)
+			expect(String(rule)).toBe('sv61w8x')
+			expect(instance.toString()).toBe(':root{--colors-brandRed:tomato;}.sv61w8x{color:var(--colors-red);}')
 		})
 	})
 
@@ -79,8 +77,8 @@ describe('Configuration', () => {
 			})
 			expect(instance.toString()).toBe('')
 
-			expect(String(rule)).toBe('s-5hh6q0')
-			expect(instance.toString()).toBe('.s-5hh6q0{font-size:16px;}.s-5hh6q0 when mediumUp{font-size:24px;}')
+			expect(String(rule)).toBe('s-z86diz')
+			expect(instance.toString()).toBe('.s-z86diz{font-size:16px;}.s-z86diz when mediumUp{font-size:24px;}')
 		})
 	})
 
@@ -98,8 +96,8 @@ describe('Configuration', () => {
 			})
 			expect(instance.toString()).toBe('')
 
-			expect(String(rule)).toBe('s-ovku6v')
-			expect(instance.toString()).toBe('.s-ovku6v{background-color:red;}')
+			expect(String(rule)).toBe('svxl9ux')
+			expect(instance.toString()).toBe('.svxl9ux{background-color:red;}')
 		})
 	})
 

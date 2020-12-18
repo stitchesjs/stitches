@@ -17,13 +17,13 @@ describe('Creation', () => {
 		})
 
 		test('`createCss` function returns a `css` function', () => {
-			const instance = createCss()
-			expect(instance).toBeInstanceOf(Function)
+			const { css } = createCss()
+			expect(css).toBeInstanceOf(Function)
 		})
 	})
 
 	describe('Create a CSS Component', () => {
-		const css = createCss({
+		const sheet = createCss({
 			theme: {
 				color: {
 					lite: 'gainsboro',
@@ -37,6 +37,7 @@ describe('Creation', () => {
 				},
 			},
 		})
+		const { css } = sheet
 
 		test('`css` function can create a CSS Component', () => {
 			const buttonClass = css({
@@ -53,15 +54,19 @@ describe('Creation', () => {
 				},
 			})
 
-			expect(String(buttonClass)).toBe('sv6d1zq')
+			expect(String(buttonClass)).toBe('s-2j80d3')
+
+			expect(sheet.toString()).toBe(
+				':root{--color-lite:gainsboro;--radii-full:9999px;--space-full:1em;--space-tenSixteenth:calc(10em / 16);}.s-2j80d3{background-color:var(--colors-lite);border-radius:var(--radii-full);font-weight:500;padding:var(--space-tenSixteenth) var(--space-full);border:0;transition:all 200ms ease;}.s-2j80d3:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0, 0, 0, .3);}',
+			)
 		})
 
-		test('`css` function can create a CSS Component with multiple arguments', () => {
-			expect(true).toBe(true)
-		})
+		// test('`css` function can create a CSS Component with multiple arguments', () => {
+		// 	expect(true).toBe(true)
+		// })
 
-		test('`css` function can create a CSS Component from another component', () => {
-			expect(true).toBe(true)
-		})
+		// test('`css` function can create a CSS Component from another component', () => {
+		// 	expect(true).toBe(true)
+		// })
 	})
 })

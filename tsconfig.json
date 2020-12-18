@@ -18,7 +18,7 @@
     "sourceMap": true,
     "strict": true,
     "target": "ESNext",
-    "typeRoots": ["./node_modules/@types", "./packages/types/src"]
+    "typeRoots": ["./node_modules/@types", "./packages/types"]
   },
   "include": ["packages/**/*"],
   "exclude": ["node_modules/**/*"]

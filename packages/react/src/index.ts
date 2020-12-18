@@ -1,39 +1,43 @@
-import createCss from '@stitches/core'
-import define from './lib/define'
+import createCore from '@stitches/core'
 
-/** Factory that returns a StyledSheet. */
-function createStyled(init?: StyledSheetFactoryInit & { onUpdate(sheet: StyledSheet): void }) {
-	const sheet = createCss(init)
-	const { onUpdate } = Object(init)
+const reactFactory = (init?: StyledSheetFactoryInit) => create(init)
 
-	return define(sheet, {
-		styled(type: string | object, init: any & object) {
-			const createExpression = sheet.css(init)
+const create = (init: StyledSheetFactoryInit | undefined) => {
+	const core = createCore(init) as ReactStyledSheet
+	const $$typeof = Symbol.for('react.element')
+	const $$styled = Symbol.for('stitches.component')
 
-			return function Component({ as, className: classNameOverride, ref = null, ...props }: object & any) {
-				const classNameOverrides = String(classNameOverride || '')
-					.split(/\s+/)
-					.filter(Boolean)
+	core.styled = (type: string | anyobject, init: anyobject) => {
+		const component = (Object.assign((props: anyobject) => render(props), {
+			[$$styled]: true,
+			displayName: 'StitchesComponent',
+			rule: type[$$styled] ? core.css(type.rule, init) : core.css(init),
+			type: type[$$styled] ? type.type : type,
+		}) as unknown) as ReactStyledRule
 
-				const expression = createExpression(props)
+		const render = ({ as, className: classNameOverride, ref = null, ...init }: anyobject) => {
+			const classNameOverrides = String(classNameOverride || '').split(/\s+/)
+			const expression = component.rule(init)
 
-				props.className = [...expression.classNames, ...classNameOverrides].join(' ')
+			const { classNames, props } = expression
 
-				if (typeof onUpdate === 'function') {
-					onUpdate(sheet)
-				}
-
-				return {
-					$$typeof: Symbol.for('react.element'),
-					key: null,
-					props,
-					ref,
-					type: as || type,
-					_owner: null,
-				}
+			return {
+				$$typeof,
+				key: null,
+				props: {
+					...props,
+					className: classNames.concat(classNameOverrides).filter(Boolean).join(' '),
+				},
+				ref,
+				type: as || component.type,
+				_owner: null,
 			}
-		},
-	})
+		}
+
+		return component
+	}
+
+	return core
 }
 
-export default createStyled
+export default reactFactory

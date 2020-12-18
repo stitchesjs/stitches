@@ -2,7 +2,7 @@
 /* ========================================================================== */
 
 declare interface ObjectConstructor {
-	<T>(value?: T): T extends object ? T : T & object
+	<T>(value?: T): T extends anyobject ? T : T & anyobject
 }
 
 declare var Object: ObjectConstructor
@@ -55,14 +55,32 @@ declare interface StyledSheetFactoryOpts {
 
 declare interface StyledSheet {
 	(...inits: StyledSheetInit[]): StyledRule
+
+	/** Clearas all CSS rules from the sheet.  */
 	clear(): void
+
+	/** Returns a new styled rule. */
+	css(...inits: StyledRuleInit[]): StyledRule
+
+	/** Generates CSS from global rules and returns a function which applies them to the sheet.  */
 	global(init?: RuleStyles): GlobalRule
+
+	/** Generates CSS from theme scales and returns a function which applies them to the sheet.  */
 	theme(init: Theme): GlobalRule
+
+	/** Returns all of the CSS applied to the sheet.  */
 	toString(): string
+
+	/** Conditions in which CSS would be applied. */
 	conditions: Conditions
-	css: this
+
+	/** Prefix applied to all styled and themed rules. */
 	prefix: string
+
+	/** Functional properties whose values can be expanded into other properties. */
 	properties: FunctionalProperties
+
+	/** Returns a new themed rule. */
 	theme: Theme
 }
 
@@ -70,6 +88,10 @@ declare type StyledSheetInit = Partial<StyledSheetOpts> | StyledRule
 
 declare interface StyledSheetOpts extends RuleStyles {
 	variants: VariantStyles
+}
+
+declare interface ReactStyledSheet extends StyledSheet {
+	styled(type: string | anyobject, init: anyobject): ReactStyledRule
 }
 
 /* StyledRule
@@ -101,21 +123,30 @@ declare type StyledRuleOpts = RuleStyles & {
 	}
 }
 
+declare interface ReactStyledRule extends StyledRule {
+	(props: anyobject): unknown
+
+	displayName: string
+	rule: StyledRule
+	type: string | function
+}
+
 /* GlobalRule
 /* ========================================================================== */
 
 declare interface GlobalRule {
-	(): string
-	toString(): string
+	(): void
 }
 
 /* StyledExpression
 /* ========================================================================== */
 
 declare interface StyledExpression {
+	(): string
 	toString(): string
 	className: string
 	classNames: string[]
+	props: anyobject
 	selector: string
 }
 
@@ -145,4 +176,9 @@ declare interface ThemeRule {
 	root: string
 }
 
-declare type ThemeRuleType<T extends object> = Object<ThemeRule & T>
+declare type ThemeRuleType<T extends anyobject> = Object<ThemeRule & T>
+
+/* Any Object
+/* ========================================================================== */
+
+declare type anyobject = any & object
