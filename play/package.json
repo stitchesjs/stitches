@@ -6,7 +6,7 @@
     "build": "parcel build ./index.html"
   },
   "dependencies": {
-    "parcel": "next",
+    "parcel": "^2.0.0-nightly.481",
     "react": "17.0.1",
     "react-dom": "17.0.1"
   },
