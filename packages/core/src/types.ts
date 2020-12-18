@@ -3,6 +3,7 @@ import { cssPropToTokenMap } from './cssPropToTokenMap'
 
 // just using it as a unique identifier for rule types
 const ruleSymbol = Symbol('')
+const variantsSymbol = Symbol('')
 type CSSPropertiesToTokenScale = typeof cssPropToTokenMap
 
 /* Config:
@@ -123,16 +124,16 @@ export interface _StyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	prefix: string
 }
 
+export type VariantsCall<Variants, Conditions> = {
+	[k in keyof Variants]?:
+		| keyof Variants[k]
+		| { [I in keyof Conditions as `when$${Extract<keyof Conditions, string>}`]?: keyof Variants[k] }
+}
+
 /* Output Styled Rule:
 /* ========================================================================== */
 interface _StyledRule<Variants, Conditions> {
-	(
-		init?: {
-			[k in keyof Variants]?:
-				| keyof Variants[k]
-				| { [I in keyof Conditions as `when$${Extract<keyof Conditions, string>}`]?: keyof Variants[k] }
-		},
-	): StyledExpression
+	(init?: VariantsCall<Variants, Conditions>): StyledExpression
 	[ruleSymbol]: true
 	toString(): string
 	className: string
