@@ -11,12 +11,12 @@ const reset = global({
 })
 
 const Heading = styled('h1', {
+	margin: 0,
 	padding: '0 25px',
 })
 
-const SubHeading = styled('h2', {
+const SubHeading = styled(Heading, {
 	color: '#40494f',
-	padding: '0 25px',
 })
 
 export default function Home() {
@@ -25,7 +25,7 @@ export default function Home() {
 	return (
 		<>
 			<Heading>The modern styling library</Heading>
-			<SubHeading>
+			<SubHeading as="h2">
 				Near-zero runtime, server-side rendering, multi-variant support, and a best-in-class developer experience.
 			</SubHeading>
 			<p>

@@ -55,14 +55,32 @@ declare interface StyledSheetFactoryOpts {
 
 declare interface StyledSheet {
 	(...inits: StyledSheetInit[]): StyledRule
+
+	/** Clearas all CSS rules from the sheet.  */
 	clear(): void
+
+	/** Returns a new styled rule. */
+	css(...inits: StyledRuleInit[]): StyledRule
+
+	/** Generates CSS from global rules and returns a function which applies them to the sheet.  */
 	global(init?: RuleStyles): GlobalRule
+
+	/** Generates CSS from theme scales and returns a function which applies them to the sheet.  */
 	theme(init: Theme): GlobalRule
+
+	/** Returns all of the CSS applied to the sheet.  */
 	toString(): string
+
+	/** Conditions in which CSS would be applied. */
 	conditions: Conditions
-	css: this
+
+	/** Prefix applied to all styled and themed rules. */
 	prefix: string
+
+	/** Functional properties whose values can be expanded into other properties. */
 	properties: FunctionalProperties
+
+	/** Returns a new themed rule. */
 	theme: Theme
 }
 
@@ -73,7 +91,7 @@ declare interface StyledSheetOpts extends RuleStyles {
 }
 
 declare interface ReactStyledSheet extends StyledSheet {
-	styled(type: string | object, init: anyobject): ReactStyledRule
+	styled(type: string | anyobject, init: anyobject): ReactStyledRule
 }
 
 /* StyledRule
@@ -103,24 +121,18 @@ declare type StyledRuleOpts = RuleStyles & {
 }
 
 declare interface ReactStyledRule extends StyledRule {
-	(init?: StyledRuleInit): ReactStyledElement
-}
+	(props: anyobject): unknown
 
-declare interface ReactStyledElement {
-	$$typeof: symbol
-	key: null
-	props: anyobject
-	ref
+	displayName: string
+	rule: StyledRule
 	type: string | function
-	_owner: null
 }
 
 /* GlobalRule
 /* ========================================================================== */
 
 declare interface GlobalRule {
-	(): string
-	toString(): string
+	(): void
 }
 
 /* StyledExpression

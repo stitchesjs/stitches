@@ -1,39 +1,47 @@
-import CssTextHash from './lib/CssTextHash'
+import cssHash from './lib/CssHash'
 import getHashString from './lib/getHashString'
 import getResolvedStyles from './lib/getResolvedStyles'
 import getThemeAsCustomProperties from './lib/getThemeAsCustomProperties'
 
 const factory = (init?: StyledSheetFactoryInit) => create(Object(init))
+const { create: createObject } = Object
 
 /** Returns a new StyledSheet. */
 const create = (init: StyledSheetFactoryInit) => {
-	const sheet = Object.create(null)
+	const sheet: StyledSheet = createObject(null)
 
 	sheet.conditions = Object(init?.conditions)
 	sheet.prefix = init?.prefix == null ? '' : String(init.prefix)
 	sheet.properties = Object(init?.properties)
 
-	let cssTextImport = Object.create(CssTextHash)
-	let cssTextTheme = Object.create(CssTextHash)
-	let cssTextGlobal = Object.create(CssTextHash)
-	let cssTextRules = Object.create(CssTextHash)
+	/** Hash of import rules, whose values represent css imports.  */
+	let cssOfImportRules = createObject(cssHash)
 
-	/** Returns a new StyledRule. */
+	/** Hash map of global rules whose values represent globally applied CSS.  */
+	let cssOfGlobalRules = createObject(cssHash)
+
+	/** Hash map of styled rules whose values represent the styles of style components.  */
+	let cssOfStyledRules = createObject(cssHash)
+
+	/** Hash map of themed rules whose values represent the custom properties of a theme.  */
+	let cssOfThemedRules = createObject(cssHash)
+
+	/** Returns a new styled rule. */
 	sheet.css = (...inits: anyobject[]) => {
-		const rule = (...inits: anyobject[]) => create(...inits)
+		const rule = (...inits: anyobject[]) => render(...inits)
 
 		rule.toString = () => {
-			if (!cssTextRules[rule.className]) {
-				cssTextRules[rule.className] = cssTextRule
+			if (!cssOfStyledRules[rule.className]) {
+				cssOfStyledRules[rule.className] = cssTextRule
 			}
 
 			return rule.classNames.join(' ')
 		}
 
 		rule.classNames = ['']
-		rule.variants = Object.create(null)
+		rule.variants = createObject(null)
 
-		const styles = Object.create(null)
+		const styles = createObject(null)
 
 		for (const each of inits) {
 			const { classNames, variants, ...variantStyles } = Object(each)
@@ -46,11 +54,11 @@ const create = (init: StyledSheetFactoryInit) => {
 			} else {
 				if (variants) {
 					for (const name in variants) {
-						rule.variants[name] = Object.create(null)
+						rule.variants[name] = createObject(null)
 
 						for (const pair in variants[name]) {
 							const variant = () => {
-								cssTextRules[variant.className] = variant.cssText
+								cssOfStyledRules[variant.className] = variant.cssText
 								return variant.className
 							}
 
@@ -69,22 +77,24 @@ const create = (init: StyledSheetFactoryInit) => {
 		rule.className = rule.classNames[0] = sheet.prefix + getHashString(styles)
 		rule.selector = '.' + rule.className
 
-		const cssTextRule = Object.create(CssTextHash)
+		const cssTextRule = createObject(cssHash)
 
 		cssTextRule[rule.className] = getResolvedStyles(styles, [rule.selector], [], sheet)
 
 		/** Returns a StyledExpression */
-		const create = (init?: anyobject) => {
-			const expression = (() => expression.className) as StyledExpression
-			expression.classNames = [rule.toString()]
-			expression.props = {}
-			expression.toString = expression
-			Object.defineProperties(expression, {
-				className: {
-					get: () => expression.classNames.join(' '),
+		const render = (init?: anyobject) => {
+			/** Returns the space-separated class names for the expression */
+			const expression = ((() => expression.className) as unknown) as StyledExpression
+
+			Object.assign(expression, {
+				classNames: [rule.toString()],
+				props: {},
+				toString: expression,
+				get className() {
+					return expression.classNames.join(' ')
 				},
-				selector: {
-					get: () => expression.classNames.map(className => '.' + className),
+				get selector() {
+					return expression.classNames.map(className => '.' + className)
 				},
 			})
 
@@ -108,10 +118,13 @@ const create = (init: StyledSheetFactoryInit) => {
 
 	/** Returns a new StyledTheme. */
 	sheet.theme = (init: Theme) => {
-		const theme = () => {
-			cssTextTheme[theme.className] = theme.cssText
+		const theme = () => theme.render()
+
+		theme.render = () => {
+			cssOfThemedRules[theme.className] = theme.cssText
 			return theme.className
 		}
+
 		theme.className = getHashString(init)
 		theme.selector = '.' + theme.className
 		theme.cssText = getResolvedStyles(getThemeAsCustomProperties(Object(init)), [theme.className], [], sheet)
@@ -122,38 +135,40 @@ const create = (init: StyledSheetFactoryInit) => {
 
 	/** Stubbed in Production */
 	sheet.clear = () => {
-		cssTextImport = Object.create(CssTextHash)
-		cssTextTheme = Object.create(CssTextHash)
-		cssTextGlobal = Object.create(CssTextHash)
-		cssTextRules = Object.create(CssTextHash)
+		cssOfImportRules = createObject(cssHash)
+		cssOfThemedRules = createObject(cssHash)
+		cssOfGlobalRules = createObject(cssHash)
+		cssOfStyledRules = createObject(cssHash)
 	}
 
-	sheet.global = (init: anyobject) => {
-		const importStyles = Object.create(null)
-		const globalStyles = Object.create(null)
+	sheet.global = (init: RuleStyles) => {
+		const importStyles = createObject(null)
+		const globalStyles = createObject(null)
 
 		for (const type in init) {
 			const data = init[type]
 			const hash = getHashString(data)
 
-			if (type === '@import') {
-				importStyles[hash] = getResolvedStyles(data, [], [type], sheet)
-			} else if (type[0] === '@') {
-				globalStyles[hash] = getResolvedStyles(data, [], [type], sheet)
+			if (type[0] === '@') {
+				if (type === '@import') {
+					importStyles[hash] = getResolvedStyles({ [type]: data }, [], [], sheet)
+				} else {
+					globalStyles[hash] = getResolvedStyles({ [type]: data }, [], [type], sheet)
+				}
 			} else {
-				globalStyles[hash] = getResolvedStyles(data, [type], [], sheet)
+				globalStyles[hash] = getResolvedStyles(data as RuleStyles, [type], [], sheet)
 			}
 		}
 
 		return () => {
-			Object.assign(cssTextImport, importStyles)
-			Object.assign(cssTextGlobal, globalStyles)
+			Object.assign(cssOfImportRules, importStyles)
+			Object.assign(cssOfGlobalRules, globalStyles)
 		}
 	}
 
 	const themeCSS = getResolvedStyles(getThemeAsCustomProperties(Object(init?.theme)), [':root'], [], sheet)
 
-	sheet.toString = () => '' + cssTextImport + themeCSS + cssTextTheme + cssTextGlobal + cssTextRules
+	sheet.toString = () => '' + cssOfImportRules + themeCSS + cssOfThemedRules + cssOfGlobalRules + cssOfStyledRules
 
 	return sheet
 }
