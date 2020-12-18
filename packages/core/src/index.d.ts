@@ -1,7 +1,16 @@
 import { Properties } from './css-types'
 import { cssPropToTokenMap } from './cssPropToTokenMap'
 
-// prettier-ignore
+// just using it as a unique identifier for rule types
+const ruleSymbol = Symbol('')
+export type CSSPropertiesToTokenScale = typeof cssPropToTokenMap
+
+/* Config:
+/* ========================================================================== */
+
+// Just used as a keyof target for the config
+// for some weird reason, autocomplete stops working
+// if we try to pre compute the keys or use a union
 export type EmptyTheme = {
 	colors?: {}
 	space?: {}
@@ -19,8 +28,18 @@ export type EmptyTheme = {
 	transitions?: {}
 }
 
-export type CSSPropertiesToTokenScale = typeof cssPropToTokenMap
-type Expand<B, T = B> = { [k in keyof T]: T[k] }
+interface IConfig<Conditions, Theme, Utils, Prefix> {
+	conditions?: { [k in keyof Conditions]?: Conditions[k] }
+	theme?: { [k in keyof Theme]: k extends keyof EmptyTheme ? Theme[k] : never } & { [k in keyof EmptyTheme]?: Theme[k] }
+	properties?: {
+		[k in keyof Utils]: (a: Utils[k]) => StitchesCSS<Conditions, Theme, Utils>
+	}
+	prefix?: Prefix
+}
+
+/* Css typed structure:
+/* ========================================================================== */
+
 // prettier-ignore
 export type StitchesCSS<
   Conditions = {},
@@ -32,35 +51,38 @@ export type StitchesCSS<
   & { [k in keyof Utils]?: Utils[k] }
   & { [k in string]?: AllowNesting extends true ? StitchesCSS<Conditions, Theme, Utils, AllowNesting> | string | number : {} }
 
+/* Utils to type and extract variants from args args:
+/* ========================================================================== */
+
 type ArgCss<T, A = {}, B = {}, C = {}> = {
 	variants?: { [k in keyof T]: { [v in keyof T[k]]: StitchesCSS<A, B, C> } }
 } & StitchesCSS<A, B, C>
-
+type InferRestVariants<Args extends any[]> = MergeVariants<
+	Args[0],
+	HasTail<Args> extends true ? InferRestVariants<Tail<Args>> : {}
+>
+type HasTail<T extends any[]> = T extends [] | [any] ? false : true
+type Tail<T extends any[]> = ((...t: T) => any) extends (_: any, ...tail: infer _Tail) => any ? _Tail : []
+type GetVariants<Variants, A, B, C> = ArgCss<Variants, A, B, C> | StyledRule<Variants, A>
+type MergePotato<T extends any[]> = MergeVariants<Head<T>>
 type MergeVariants<A, B> = {
 	[k in keyof (A & B)]: {
 		[b in keyof (A[k] & B[k])]: any
 	}
 }
 
-type HasTail<T extends any[]> = T extends [] | [any] ? false : true
-type Tail<T extends any[]> = ((...t: T) => any) extends (_: any, ...tail: infer _Tail) => any ? _Tail : []
-type GetVariants<Variants, A, B, C> = ArgCss<Variants, A, B, C> | StyledRule<Variants, A>
-type MergePotato<T extends any[]> = MergeVariants<Head<T>>
-
-type InferRestVariants<Args extends any[]> = MergeVariants<
-	Args[0],
-	HasTail<Args> extends true ? InferRestVariants<Tail<Args>> : {}
->
+/* Css Instance Type:
+/* ========================================================================== */
 export interface TCss<A = {}, B = {}, C = {}> {
 	<Vars extends any[]>(
 		...styles: {
 			[k in keyof Vars]:
-				|  ({
+				| ({
 						variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }
-				  } & (StitchesCSS<A, B, C>)
-				| SimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
+				  } & StitchesCSS<A, B, C>)
+				| _SimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
 		}
-	): PStyledRule<InferRestVariants<Vars>, A>
+	): _StyledRule<InferRestVariants<Vars>, A>
 
 	global: (definition: Record<string, StitchesCSS<A, B, C, D>>) => GlobalRule
 	theme: (
@@ -71,23 +93,10 @@ export interface TCss<A = {}, B = {}, C = {}> {
 		>,
 	) => ThemeRule
 }
-interface IConfig<Conditions, Theme, Utils, Prefix> {
-	conditions?: { [k in keyof Conditions]?: Conditions[k] }
-	theme?: { [k in keyof Theme]: k extends keyof EmptyTheme ? Theme[k] : never } & { [k in keyof EmptyTheme]?: Theme[k] }
-	properties?: {
-		[k in keyof Utils]: (a: Utils[k]) => StitchesCSS<Conditions, Theme, Utils>
-	}
-	prefix?: Prefix
-}
 
-type CssFactory = <Conditions = {}, Theme = {}, Utils = {}, Prefix =''>(
-	_config: IConfig<Conditions, Theme, Utils, Prefix>,
-) => TCss<Conditions, Theme, Utils>
-
-declare const createCss: CssFactory
-
-const ruleSymbol = Symbol('')
-interface PStyledRule<Variants, Conditions> {
+/* Output Styled Rule:
+/* ========================================================================== */
+interface _StyledRule<Variants, Conditions> {
 	(
 		init?: { [k in keyof Variants]?: keyof Variants[k] | { [I in `when$${keyof Conditions}`]?: keyof Variants[k] } },
 	): StyledExpression
@@ -99,13 +108,19 @@ interface PStyledRule<Variants, Conditions> {
 	variants: Variants
 }
 
-type SimpleStyledRule<A> = {
+// used an an alternative to _StyledRule
+// acts as a simpler version of _StyledRule
+type _SimpleStyledRule<A> = {
 	[ruleSymbol]: true
 	variants: A
 }
 
-interface TCss2<A = {}, B = {}, C = {}> {}
+/* Create Css function type:
+/* ========================================================================== */
 
-export declare const css: TCss2<>
+type CssFactory = <Conditions = {}, Theme = {}, Utils = {}, Prefix = ''>(
+	_config: IConfig<Conditions, Theme, Utils, Prefix>,
+) => TCss<Conditions, Theme, Utils>
 
+declare const createCss: CssFactory
 export default createCss
