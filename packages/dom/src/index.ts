@@ -1,4 +1,4 @@
-import createCss from '@stitches/internal-core'
+import createCss from '@stitches/core'
 import define from './lib/define'
 
 /** Factory that returns a StyledSheet. */

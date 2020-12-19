@@ -6,6 +6,8 @@
     "bootstrap": "lerna bootstrap --use-workspaces && preconstruct dev",
     "build:watch": "preconstruct watch",
     "build": "preconstruct build",
+    "tar": "run-s build tar:pack",
+    "tar:pack": "lerna exec --ignore @stitches/play -- yarn pack",
     "postinstall": "run-s bootstrap",
     "start": "run-s start:*",
     "start:build": "preconstruct build",

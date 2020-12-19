@@ -1,4 +1,4 @@
-import createCore from '@stitches/internal-core'
+import createCore from '@stitches/core'
 
 const reactFactory = (init?: StyledSheetFactoryInit) => create(init)
 
