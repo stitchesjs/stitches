@@ -24,17 +24,17 @@ export default styled('button', {
 	variants: {
 		color: {
 			violet: {
-				backgroundColor: '$violetBack',
-				color: '$violetText',
+				backgroundColor: '$violet900',
+				color: 'white',
 				'&:hover': {
-					backgroundColor: '$violetBackHover',
+					backgroundColor: '$violet800',
 				},
 			},
 			gray: {
-				backgroundColor: '$grayBack',
-				color: '$grayText',
+				backgroundColor: '$gray500',
+				color: 'black',
 				'&:hover': {
-					backgroundColor: '$grayBackHover',
+					backgroundColor: '$gray300',
 				},
 			},
 		},

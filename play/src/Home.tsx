@@ -31,6 +31,10 @@ export default function Home() {
 			<p>
 				<Button>Example Button</Button>
 			</p>
+			<p>
+				<Button color="violet">Violet Button</Button>
+				<Button color="gray">Gray Button</Button>
+			</p>
 		</>
 	)
 }

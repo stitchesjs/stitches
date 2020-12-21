@@ -1,6 +1,5 @@
 import createCore, { TConditions, TTheme, IConfig, _StyledSheet } from '@stitches/core'
 import { StyledInstance } from './types'
-import * as React from 'react'
 
 const reactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(
 	init?: IConfig<Conditions, Theme, Utils, Prefix>,
@@ -51,7 +50,9 @@ const create = (init: StyledSheetFactoryInit | undefined) => {
 		const component = (Object.assign((props: anyobject) => render(props), {
 			[$$styled]: true,
 			displayName: 'StitchesComponent',
-			rule: type[$$styled] ? core.css(type.rule, init) : core.css(init),
+			rule: type[$$styled]
+				? core.css({ classNames: type.rule.classNames, variants: type.rule.variants }, init)
+				: core.css(init),
 			type: type[$$styled] ? type.type : type,
 		}) as unknown) as ReactStyledRule
 

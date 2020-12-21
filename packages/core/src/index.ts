@@ -71,6 +71,7 @@ const create = (init: StyledSheetFactoryInit) => {
 						for (const pair in variants[name]) {
 							const variant = () => {
 								cssOfStyledRules[variant.className] = variant.cssText
+								onStyledUpdate(cssOfStyledRules)
 								return variant.className
 							}
 
