@@ -1,6 +1,11 @@
-import createCore from '@stitches/core'
+import createCore, { TConditions, TTheme, IConfig, _StyledSheet } from '@stitches/core'
+import { StyledInstance } from './types'
+import * as React from 'react'
 
-const reactFactory = (init?: StyledSheetFactoryInit) => create(init)
+const reactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(
+	init?: IConfig<Conditions, Theme, Utils, Prefix>,
+): _StyledSheet<Conditions, Theme, Utils> & { styled: StyledInstance<Conditions, Theme, Utils> } =>
+	create(init as any) as any
 
 const create = (init: StyledSheetFactoryInit | undefined) => {
 	let sheetHeadElement: HTMLHeadElement
@@ -36,7 +41,7 @@ const create = (init: StyledSheetFactoryInit | undefined) => {
 				onThemed(cssOfTheme: string, cssOfThemedRules: string) {
 					sheetThemedTextNode.data = cssOfTheme + cssOfThemedRules
 				},
-		  })
+		  } as any)
 		: createCore((init as unknown) as any)
 
 	const $$typeof = Symbol.for('react.element')
