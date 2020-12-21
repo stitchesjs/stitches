@@ -40,7 +40,6 @@ export const cssPropToTokenMap = {
 	left: 'space',
 	fontSize: 'fontSizes',
 	backgroundColor: 'colors',
-	// border: ['', 'borderStyles', 'colors'],
 	borderColor: 'colors',
 	borderTopColor: 'colors',
 	borderRightColor: 'colors',

@@ -130,18 +130,25 @@ const create = (init: StyledSheetFactoryInit) => {
 	}
 
 	/** Returns a new StyledTheme. */
-	sheet.theme = (init: Theme) => {
-		const theme = () => theme.render()
+	sheet.theme = (
+		/** Classname for the theme or theming tokens. */
+		name: string | Theme,
 
-		theme.render = () => {
-			cssOfThemedRules[theme.className] = theme.cssText
+		/** Theming tokens. */
+		init?: Theme,
+	) => {
+		const themeInit: Theme = name == Object(name) ? (name as Theme) : Object(init)
+		const className = init === themeInit ? String(name) : getHashString(init)
+
+		const theme = () => {
+			cssOfThemedRules[className] = theme.cssText
 			onThemedUpdate(cssOfTheme, cssOfThemedRules)
-			return theme.className
+			return className
 		}
 
-		theme.className = getHashString(init)
-		theme.selector = '.' + theme.className
-		theme.cssText = getResolvedStyles(getThemeAsCustomProperties(Object(init)), [theme.className], [], sheet)
+		theme.className = className
+		theme.selector = '.' + className
+		theme.cssText = getResolvedStyles(getThemeAsCustomProperties(themeInit), [theme.selector], [], sheet)
 		theme.toString = theme
 
 		return theme

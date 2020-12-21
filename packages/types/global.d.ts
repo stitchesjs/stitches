@@ -10,6 +10,7 @@ declare var Object: ObjectConstructor
 /* Theme
 /* ========================================================================== */
 
+/** Theming tokens */
 declare type Theme = {
 	[scaleName in string]: {
 		[tokenName in number | string]: number | string
