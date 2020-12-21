@@ -40,6 +40,9 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 		[k in keyof Utils]: (a: Utils[k]) => StitchesCSS<Conditions, Theme, Utils>
 	}
 	prefix?: Prefix
+	onGlobal?: StyledSheetCallback
+	onStyled?: StyledSheetCallback
+	onThemed?: StyledSheetCallback
 }
 
 /* Css typed structure:

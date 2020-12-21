@@ -48,7 +48,12 @@ declare interface StyledSheetFactoryOpts {
 	theme: Theme
 	conditions: Conditions
 	properties: FunctionalProperties
+	onGlobal: StyledSheetCallback
+	onStyled: StyledSheetCallback
+	onThemed: StyledSheetCallback
 }
+
+declare type StyledSheetCallback = (...cssText: string[]) => void
 
 /* StyledSheet
 /* ========================================================================== */

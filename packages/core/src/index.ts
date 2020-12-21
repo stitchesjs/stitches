@@ -9,6 +9,8 @@ const factory = <Conditions extends TConditions = {}, Theme extends TTheme = {},
 	init?: IConfig<Conditions, Theme, Utils, Prefix>,
 ): _StyledSheet<Conditions, Theme, Utils> => create(Object(init) as any) as any
 
+const noop = () => {}
+
 const { create: createObject } = Object
 
 /** Returns a new StyledSheet. */
@@ -18,6 +20,10 @@ const create = (init: StyledSheetFactoryInit) => {
 	sheet.conditions = Object(init?.conditions)
 	sheet.prefix = init?.prefix == null ? '' : String(init.prefix)
 	sheet.properties = Object(init?.properties)
+
+	const onGlobalUpdate = init?.onGlobal || noop
+	const onStyledUpdate = init?.onStyled || noop
+	const onThemedUpdate = init?.onThemed || noop
 
 	/** Hash of import rules, whose values represent css imports.  */
 	let cssOfImportRules = createObject(cssHash)
@@ -38,6 +44,7 @@ const create = (init: StyledSheetFactoryInit) => {
 		rule.toString = () => {
 			if (!cssOfStyledRules[rule.className]) {
 				cssOfStyledRules[rule.className] = cssTextRule
+				onStyledUpdate(cssOfStyledRules)
 			}
 
 			return rule.classNames.join(' ')
@@ -127,6 +134,7 @@ const create = (init: StyledSheetFactoryInit) => {
 
 		theme.render = () => {
 			cssOfThemedRules[theme.className] = theme.cssText
+			onThemedUpdate(cssOfTheme, cssOfThemedRules)
 			return theme.className
 		}
 
@@ -168,12 +176,18 @@ const create = (init: StyledSheetFactoryInit) => {
 		return () => {
 			Object.assign(cssOfImportRules, importStyles)
 			Object.assign(cssOfGlobalRules, globalStyles)
+			onGlobalUpdate(cssOfImportRules, cssOfGlobalRules)
 		}
 	}
 
-	const themeCSS = getResolvedStyles(getThemeAsCustomProperties(Object(init?.theme)), [':root'], [], sheet)
+	let cssOfTheme = ''
 
-	sheet.toString = () => '' + cssOfImportRules + themeCSS + cssOfThemedRules + cssOfGlobalRules + cssOfStyledRules
+	if (init?.theme) {
+		cssOfTheme = getResolvedStyles(getThemeAsCustomProperties(Object(init.theme)), [':root'], [], sheet)
+		onThemedUpdate(cssOfTheme, cssOfThemedRules)
+	}
+
+	sheet.toString = () => '' + cssOfImportRules + cssOfGlobalRules + cssOfTheme + cssOfThemedRules + cssOfStyledRules
 
 	return sheet
 }

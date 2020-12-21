@@ -7,8 +7,43 @@ const reactFactory = <Conditions extends TConditions = {}, Theme extends TTheme 
 ): _StyledSheet<Conditions, Theme, Utils> & { styled: StyledInstance<Conditions, Theme, Utils> } =>
 	create(init as any) as any
 
-const create = (init?: StyledSheetFactoryInit | undefined) => {
-	const core = createCore(init as any)
+const create = (init: StyledSheetFactoryInit | undefined) => {
+	let sheetHeadElement: HTMLHeadElement
+	let sheetStyleElement: HTMLStyleElement
+	let sheetGlobalTextNode: Text
+	let sheetStyledTextNode: Text
+	let sheetThemedTextNode: Text
+
+	const hasDocument = typeof document === 'object'
+
+	if (hasDocument) {
+		sheetGlobalTextNode = new Text('')
+		sheetStyledTextNode = new Text('')
+		sheetThemedTextNode = new Text('')
+		sheetStyleElement = document.createElement('style')
+		sheetHeadElement = document.head
+
+		sheetStyleElement.append(sheetGlobalTextNode)
+		sheetStyleElement.append(sheetThemedTextNode)
+		sheetStyleElement.append(sheetStyledTextNode)
+		sheetHeadElement.append(sheetStyleElement)
+	}
+
+	const core = hasDocument
+		? createCore({
+				...Object(init),
+				onGlobal(cssOfImportRules: string, cssOfGlobalRules: string) {
+					sheetGlobalTextNode.data = cssOfImportRules + cssOfGlobalRules
+				},
+				onStyled(cssOfStyledRules: string) {
+					sheetStyledTextNode.data = cssOfStyledRules
+				},
+				onThemed(cssOfTheme: string, cssOfThemedRules: string) {
+					sheetThemedTextNode.data = cssOfTheme + cssOfThemedRules
+				},
+		  } as any)
+		: createCore((init as unknown) as any)
+
 	const $$typeof = Symbol.for('react.element')
 	const $$styled = Symbol.for('stitches.component')
 
