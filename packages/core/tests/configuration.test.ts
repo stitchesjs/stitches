@@ -16,7 +16,7 @@ describe('Configuration', () => {
 					lg: '@media (min-width: 960px)',
 				},
 				properties: {
-					marginX: (value: any) => ({
+					marginX: (value: number | string) => ({
 						marginLeft: value,
 						marginRight: value,
 					}),

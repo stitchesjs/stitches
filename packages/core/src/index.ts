@@ -5,17 +5,15 @@ import getThemeAsCustomProperties from './lib/getThemeAsCustomProperties'
 import { _StyledSheetFactory, TConditions, TTheme, IConfig, _StyledSheet } from './types'
 export * from './types'
 
-const factory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(
-	init?: IConfig<Conditions, Theme, Utils, Prefix>,
-): _StyledSheet<Conditions, Theme, Utils> => create(Object(init) as any) as any
-
+const { create: createObject } = Object
 const noop = () => {}
 
-const { create: createObject } = Object
-
 /** Returns a new StyledSheet. */
-const create = (init: StyledSheetFactoryInit) => {
-	const sheet: StyledSheet = createObject(null)
+const factory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(
+	/** Configuration */
+	init?: IConfig<Conditions, Theme, Utils, Prefix>,
+): _StyledSheet<Conditions, Theme, Utils> => {
+	const sheet = createObject(null)
 
 	sheet.conditions = Object(init?.conditions)
 	sheet.prefix = init?.prefix == null ? '' : String(init.prefix)

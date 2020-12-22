@@ -1,11 +1,14 @@
-const getThemeAsCustomProperties = (init: Theme) => {
+const getThemeAsCustomProperties = (init: ThemeInit) => {
+	const opts = Object(init) as Required<ThemeInit>
+
 	const styles = {} as {
 		[K in string]: number | string
 	}
 
-	for (const scaleName in init) {
-		for (const tokenName in init[scaleName]) {
-			styles['$' + scaleName + '-' + tokenName] = init[scaleName][tokenName]
+	let scaleName: keyof ThemeInit
+	for (scaleName in opts) {
+		for (const tokenName in opts[scaleName]) {
+			styles['$' + scaleName + '-' + tokenName] = opts[scaleName][tokenName]
 		}
 	}
 

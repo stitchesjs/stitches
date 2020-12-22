@@ -185,3 +185,31 @@ declare type ThemeRuleType<T extends anyobject> = Object<ThemeRule & T>
 /* ========================================================================== */
 
 declare type anyobject = any & object
+
+/* New Objects */
+/* ========================================================================== */
+
+declare type TokenIdent = number | string
+
+declare type ThemeInit = {
+	[ScaleKey in keyof DefaultTheme]?: {
+		[TokenKey in TokenIdent]: string
+	}
+}
+
+declare type DefaultTheme = {
+	colors: {}
+	space: {}
+	fontSizes: {}
+	fonts: {}
+	fontWeights: {}
+	lineHeights: {}
+	letterSpacings: {}
+	sizes: {}
+	borderWidths: {}
+	borderStyles: {}
+	radii: {}
+	shadows: {}
+	zIndices: {}
+	transitions: {}
+}

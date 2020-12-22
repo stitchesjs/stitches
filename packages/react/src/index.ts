@@ -1,12 +1,9 @@
 import createCore, { TConditions, TTheme, IConfig, _StyledSheet } from '@stitches/core'
-import { StyledInstance } from './types'
 
 const reactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(
+	/** Configuration of the Stitches instance. */
 	init?: IConfig<Conditions, Theme, Utils, Prefix>,
-): _StyledSheet<Conditions, Theme, Utils> & { styled: StyledInstance<Conditions, Theme, Utils> } =>
-	create(init as any) as any
-
-const create = (init: StyledSheetFactoryInit | undefined) => {
+) => {
 	let sheetHeadElement: HTMLHeadElement
 	let sheetStyleElement: HTMLStyleElement
 	let sheetGlobalTextNode: Text
@@ -31,17 +28,17 @@ const create = (init: StyledSheetFactoryInit | undefined) => {
 	const core = hasDocument
 		? createCore({
 				...Object(init),
-				onGlobal(cssOfImportRules: string, cssOfGlobalRules: string) {
+				onGlobal(cssOfImportRules, cssOfGlobalRules) {
 					sheetGlobalTextNode.data = cssOfImportRules + cssOfGlobalRules
 				},
-				onStyled(cssOfStyledRules: string) {
+				onStyled(cssOfStyledRules) {
 					sheetStyledTextNode.data = cssOfStyledRules
 				},
-				onThemed(cssOfTheme: string, cssOfThemedRules: string) {
+				onThemed(cssOfTheme, cssOfThemedRules) {
 					sheetThemedTextNode.data = cssOfTheme + cssOfThemedRules
 				},
-		  } as any)
-		: createCore((init as unknown) as any)
+		  })
+		: createCore(init)
 
 	const $$typeof = Symbol.for('react.element')
 	const $$styled = Symbol.for('stitches.component')
@@ -51,7 +48,13 @@ const create = (init: StyledSheetFactoryInit | undefined) => {
 			[$$styled]: true,
 			displayName: 'StitchesComponent',
 			rule: type[$$styled]
-				? core.css({ classNames: type.rule.classNames, variants: type.rule.variants }, init)
+				? core.css(
+						{
+							classNames: type.rule.classNames,
+							variants: type.rule.variants,
+						} as typeof type.rule,
+						init,
+				  )
 				: core.css(init),
 			type: type[$$styled] ? type.type : type,
 		}) as unknown) as ReactStyledRule

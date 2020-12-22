@@ -3,7 +3,7 @@ import { cssPropToTokenMap } from './cssPropToTokenMap'
 
 // just using it as a unique identifier for rule types
 const ruleSymbol = Symbol('')
-const variantsSymbol = Symbol('')
+
 type CSSPropertiesToTokenScale = typeof cssPropToTokenMap
 
 /* Config:
@@ -32,10 +32,17 @@ type EmptyTheme = {
 export type TConditions = { [k: string]: string }
 export type TTheme = { [k in keyof EmptyTheme]?: { [b: string]: string } }
 
+/** Configuration of Stitches, including a default theme, prefix, custom conditions, and functional properties. */
 export interface IConfig<Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''> {
-	conditions?: { [k in keyof Conditions]?: Conditions[k] }
-	theme?: { [k in keyof Theme]: k extends keyof EmptyTheme ? Theme[k] : never } &
-		{ [k in keyof EmptyTheme]?: k extends keyof Theme ? Theme[k] : never }
+	conditions?: {
+		[k in keyof Conditions]?: Conditions[k]
+	}
+	theme?: {
+		[k in keyof Theme]: k extends keyof EmptyTheme ? Theme[k] : never
+	} &
+		{
+			[k in keyof EmptyTheme]?: k extends keyof Theme ? Theme[k] : never
+		}
 	properties?: {
 		[k in keyof Utils]: (a: Utils[k]) => StitchesCSS<Conditions, Theme, Utils>
 	}
