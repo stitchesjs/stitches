@@ -360,4 +360,17 @@ describe('styled', () => {
     });
     expect(renderer.create(<Button size={0}>height should equal '1px'</Button>).toJSON()).toMatchSnapshot();
   });
+
+  test('It creates a debugging className with the component name', () => {
+    const { styled: _styled } = createStyled({
+      showFriendlyClassnames: true,
+    });
+
+    const Component = ({ className }: any) => {
+      expect(className).toContain('styled(Component)');
+      return <div>hello</div>;
+    };
+    const Button = _styled(Component, {});
+    renderer.create(<Button size={{ breakpointOne: 'small' }}>with responsive variant</Button>);
+  });
 });

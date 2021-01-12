@@ -8,7 +8,7 @@ exports[`styled Breakpoints work in variants 1`] = `
     "._breakpointTwo_h_hiyRrM {height: 20px;}"
   ],
   "props": {
-    "className": "_initial_c_vfarC _breakpointOne_h_KwWJf _breakpointTwo_h_hiyRrM scid-kvQUME"
+    "className": "styled(button) _initial_c_vfarC _breakpointOne_h_KwWJf _breakpointTwo_h_hiyRrM scid-kvQUME"
   },
   "children": [
     "no variant"
@@ -24,7 +24,7 @@ exports[`styled Breakpoints work in variants and when a responsive variant is pa
     "._breakpointTwo_h_dPiPAc {height: 200px;}"
   ],
   "props": {
-    "className": "_breakpointOne_h_dDcWdv _breakpointTwo_h_dPiPAc _initial_c_vfarC scid-cXpAaU"
+    "className": "styled(button) _breakpointOne_h_dDcWdv _breakpointTwo_h_dPiPAc _initial_c_vfarC scid-cXpAaU"
   },
   "children": [
     "with responsive variant"
@@ -40,7 +40,7 @@ exports[`styled Breakpoints work in variants and when the variant is passed to t
     "._breakpointTwo_h_fptqfg {height: 2000px;}"
   ],
   "props": {
-    "className": "_breakpointOne_h_kgNeVv _breakpointTwo_h_fptqfg _initial_c_vfarC scid-cXpAaU"
+    "className": "styled(button) _breakpointOne_h_kgNeVv _breakpointTwo_h_fptqfg _initial_c_vfarC scid-cXpAaU"
   },
   "children": [
     "with variant"
@@ -169,11 +169,10 @@ exports[`styled handles boolean compound variant 1`] = `
 Array [
   {
   "orderedAppliedStyles": [
-    "._oRObr {font-weight: bold;}",
-    "._kXqcij {text-decoration-line: underline;}"
+    "._oRObr {font-weight: bold;}"
   ],
   "props": {
-    "className": "_kXqcij _oRObr scid-idZRwg"
+    "className": "_oRObr scid-idZRwg"
   },
   "children": [
     "bold, underline"
@@ -181,11 +180,10 @@ Array [
 },
   {
   "orderedAppliedStyles": [
-    "._ldesWJ {text-style: italic;}",
-    "._UNaLq {text-transform: uppercase;}"
+    "._ldesWJ {text-style: italic;}"
   ],
   "props": {
-    "className": "_UNaLq _ldesWJ scid-idZRwg"
+    "className": "_ldesWJ scid-idZRwg"
   },
   "children": [
     "italic, uppercase"

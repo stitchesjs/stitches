@@ -232,6 +232,13 @@ export const createStyled = <Config extends TConfig>(
 
     const stitchesComponentId = `scid-${hashString(JSON.stringify(baseAndVariantStyles))}`;
 
+    const componentDisplayName =
+      typeof currentAs === 'string'
+        ? `styled(${currentAs})`
+        : Component && Component.displayName
+        ? `styled(${Component.displayName})`
+        : `styled(Component\)`;
+
     const StitchesComponent = React.forwardRef((props: any, ref: React.Ref<Element>) => {
       const compositions = [baseStyles];
 
@@ -286,7 +293,12 @@ export const createStyled = <Config extends TConfig>(
 
       // By default we don't stringify the classname (composition), so that
       // the children Stitches component is responsible for the final composition
-      let className = css(stitchesComponentId, ...compositions, props.className);
+      let className = css(
+        stitchesComponentId,
+        ...compositions,
+        props.className,
+        config.showFriendlyClassnames ? componentDisplayName : undefined
+      );
 
       // If we're not wrapping a Stitches component,
       // we ensure the classname is stringified
@@ -305,12 +317,7 @@ export const createStyled = <Config extends TConfig>(
 
     (StitchesComponent as any).__isStitchesComponent = true;
 
-    StitchesComponent.displayName =
-      typeof currentAs === 'string'
-        ? `styled(${currentAs})`
-        : Component && Component.displayName
-        ? `styled(${Component.displayName})`
-        : `styled(Component\)`;
+    StitchesComponent.displayName = componentDisplayName;
 
     StitchesComponent.toString = () => `.${stitchesComponentId}`;
 
