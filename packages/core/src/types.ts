@@ -57,7 +57,7 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 
 // prettier-ignore
 export type StitchesCSS<
-  Conditions extends TConditions = {},
+  Conditions = {},
   Theme extends TTheme = {},
   Utils = {},
   AllowNesting = true
@@ -168,5 +168,5 @@ export type _StyledSheetFactory = <
 	Utils = {},
 	Prefix = ''
 >(
-	_config: IConfig<Conditions, Theme, Utils, Prefix>,
+	_config?: IConfig<Conditions, Theme, Utils, Prefix>,
 ) => _StyledSheet<Conditions, Theme, Utils>
