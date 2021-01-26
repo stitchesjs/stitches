@@ -2,7 +2,7 @@
   "name": "@stitches/react",
   "version": "0.1.0-canary.1",
   "license": "MIT",
-  "source": "src/index.ts",
+  "source": "src/index.js",
   "main": "dist/stitches-react.cjs.js",
   "module": "dist/stitches-react.esm.js",
   "typings": "dist/stitches-react.cjs.d.ts",

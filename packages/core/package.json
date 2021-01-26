@@ -2,7 +2,7 @@
   "name": "@stitches/core",
   "version": "0.1.0-canary.1",
   "license": "MIT",
-  "source": "src/index.ts",
+  "source": "src/index.js",
   "main": "dist/stitches-core.cjs.js",
   "module": "dist/stitches-core.esm.js",
   "typings": "dist/stitches-core.cjs.d.ts",
