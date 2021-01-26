@@ -15,7 +15,7 @@ describe('Configuration', () => {
 					md: '@media (min-width: 640px) and (max-width: 959px)',
 					lg: '@media (min-width: 960px)',
 				},
-				properties: {
+				utils: {
 					marginX: (value: number | string) => ({
 						marginLeft: value,
 						marginRight: value,
@@ -86,7 +86,7 @@ describe('Configuration', () => {
 	describe('Properties', () => {
 		test('Users can define functional properties when creating the CSS Instance', () => {
 			const instance = createCss({
-				properties: {
+				utils: {
 					// create `bg` property
 					bg: (value: any) => ({ backgroundColor: value }),
 				},

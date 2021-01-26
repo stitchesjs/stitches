@@ -1,5 +1,5 @@
 import { Properties } from './css-types'
-import { cssPropToTokenMap } from './cssPropToTokenMap'
+import cssPropToTokenMap from './defaultThemeMap'
 
 // just using it as a unique identifier for rule types
 const ruleSymbol = Symbol('')
@@ -43,7 +43,7 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 		{
 			[k in keyof EmptyTheme]?: k extends keyof Theme ? Theme[k] : never
 		}
-	properties?: {
+	utils?: {
 		[k in keyof Utils]: (a: Utils[k]) => StitchesCSS<Conditions, Theme, Utils>
 	}
 	prefix?: Prefix
@@ -135,9 +135,7 @@ export interface _StyledSheet<A extends TConditions = {}, B extends TTheme = {},
 }
 
 export type VariantsCall<Variants, Conditions> = {
-	[k in keyof Variants]?:
-		| keyof Variants[k]
-		| { [I in keyof Conditions as `when$${Extract<keyof Conditions, string>}`]?: keyof Variants[k] }
+	[k in keyof Variants]?: keyof Variants[k] | { [I in keyof Conditions as `when$${Extract<keyof Conditions, string>}`]?: keyof Variants[k] }
 }
 
 /* Output Styled Rule:
@@ -162,11 +160,4 @@ type _SimpleStyledRule<A> = {
 /* Create Css function type:
 /* ========================================================================== */
 
-export type _StyledSheetFactory = <
-	Conditions extends TConditions = {},
-	Theme extends TTheme = {},
-	Utils = {},
-	Prefix = ''
->(
-	_config?: IConfig<Conditions, Theme, Utils, Prefix>,
-) => _StyledSheet<Conditions, Theme, Utils>
+export type _StyledSheetFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(_config?: IConfig<Conditions, Theme, Utils, Prefix>) => _StyledSheet<Conditions, Theme, Utils>
