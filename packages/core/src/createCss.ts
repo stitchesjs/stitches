@@ -3,18 +3,8 @@ import createGetComputedCss from './createGetComputedCss'
 import getCustomProperties from './getCustomProperties'
 import getHashString from './getHashString'
 
-/** @typedef {{ [condition: string]: string }} Conditions */
-/** @typedef {{ [name: string]: number | string | Styles, when: { [condition: string]: Styles } }} Styles */
-/** @typedef {{ [scale: string]: { [token: string]: number | string } }} Theme */
-/** @typedef {{ [property: string]: string }} ThemeMap */
-/** @typedef {{ [name: string]: (value: any) => number | string | Styles }} Utils */
-/** @typedef {{ [name: string]: { [value: string]: Styles } }} Variants */
-
 /** Returns a new styled sheet and accompanying API. */
-const createCss = (
-	/** @type {{ conditions?: Conditions, prefix?: string, theme?: Theme, themeMap?: ThemeMap, utils?: Utils }} Configuration */
-	init,
-) => {
+const createCss = (init: { conditions?: Conditions; prefix?: string; theme?: Theme; themeMap?: ThemeMap; utils?: Utils }) => {
 	init = Object(init)
 
 	/** Named conditions (media and support queries). */
@@ -28,33 +18,33 @@ const createCss = (
 
 	/** Prepares global CSS and returns a function that enables the styles on the styled sheet. */
 	const createThemedRule = (
-		/** @type {string} CSS Selector */
-		selector,
-		/** @type {Theme} Object of theme scales with inner token values. */
-		theme,
+		/** CSS Selector */
+		selector: string,
+		/** Object of theme scales with inner token values. */
+		theme: Theme,
 	) => getComputedCss(getCustomProperties(theme), [selector], [])
 
 	/** Returns a function that enables the styles on the styled sheet. */
 	const createGlobalRule = (
-		/** @type {Styles} Styles representing global CSS. */
-		initStyles,
+		/** Styles representing global CSS. */
+		initStyles: Styles,
 	) => {
-		/** @type {string[]} List of global import styles. */
-		let importRuleCssTexts = []
+		/** List of global import styles. */
+		let importRuleCssTexts: string[] = []
 
-		/** @type {string[]} List of global styles. */
-		let globalRuleCssTexts = []
+		/** List of global styles. */
+		let globalRuleCssTexts: string[] = []
 
 		for (const name in initStyles) {
 			/** @type {number | string | Styles} */
 			const style = initStyles[name]
 
 			if (name === '@import') {
-				importRuleCssTexts.push(getComputedCss({ [name]: style }, [], []))
+				importRuleCssTexts.push(getComputedCss({ [name as string]: style } as Styles, [], []))
 			} else if (name.charCodeAt(0) === 64) {
-				globalRuleCssTexts.push(getComputedCss(style, [], [name]))
+				globalRuleCssTexts.push(getComputedCss({ [name]: style } as Styles, [], []))
 			} else {
-				globalRuleCssTexts.push(getComputedCss(style, [name], []))
+				globalRuleCssTexts.push(getComputedCss(style as Styles, [name], []))
 			}
 		}
 
@@ -63,8 +53,8 @@ const createCss = (
 
 	/** Prepares component CSS and returns a function that enables the styles on the styled sheet. */
 	const createStyledRule = (
-		/** @type {Styles & { variants?: Variants }} Styles representing component CSS. */
-		initStyles,
+		/** Styles representing component CSS. */
+		initStyles: Styles & { variants: Variants },
 	) => {
 		// @todo implement extensions
 		let { variants: variantsStyles, ...styles } = initStyles
@@ -94,8 +84,8 @@ const createCss = (
 
 		/** Returns an expression of the current styled rule. */
 		const styledRule = (
-			/** @type {object} Props used to determine the expression of the current styled rule. */
-			initProps,
+			/** Props used to determine the expression of the current styled rule. */
+			initProps: any,
 		) => {
 			const { css: inlineStyles, ...props } = Object(initProps)
 
@@ -123,12 +113,12 @@ const createCss = (
 								const [, , conditionalVariantRules] = styledRuleVariant[innerPropValue]
 
 								if (!(condition in conditionalVariantRules)) {
-									/** @type ... */
+									/** ... */
 									const conditionalVariantStyles = {
 										[condition]: variantsStyles[propName][innerPropValue],
-									}
+									} as Styles
 
-									/** @type ... */
+									/** ... */
 									const className = styledRuleClassName + '-' + getHashString(conditionalVariantStyles)
 
 									conditionalVariantRules[condition] = [className, getComputedCss(conditionalVariantStyles, ['.' + className], [])]

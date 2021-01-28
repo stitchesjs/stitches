@@ -6,7 +6,7 @@ export { default as getCustomProperties } from './getCustomProperties'
 export { default as getHashString } from './getHashString'
 export { default as getResolvedSelectors } from './getResolvedSelectors'
 export { default as isDeclaration } from './isDeclaration'
-export { default as isUnitless } from './isUnitless'
+export { default as isUnitless } from './isPossiblyUnitless'
 export { default as Object, assign, create } from './Object'
 import _createCss from './createCss'
 

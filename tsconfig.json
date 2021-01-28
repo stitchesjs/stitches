@@ -6,20 +6,32 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "preserve",
-    "lib": ["DOM", "ES2020"],
+    "lib": [
+      "DOM",
+      "ES2020"
+    ],
     "module": "ESNext",
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "paths": {
-      "@stitches/*": ["packages/*"]
+      "@stitches/*": [
+        "packages/*"
+      ]
     },
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "ESNext",
-    "typeRoots": ["./node_modules/@types", "./packages/types"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./packages/types"
+    ]
   },
-  "include": ["packages/**/*"],
-  "exclude": ["node_modules/**/*"]
+  "include": [
+    "packages/**/*"
+  ],
+  "exclude": [
+    "node_modules/**/*"
+  ]
 }

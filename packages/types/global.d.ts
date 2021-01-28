@@ -7,209 +7,26 @@ declare interface ObjectConstructor {
 
 declare var Object: ObjectConstructor
 
-/* Theme
-/* ========================================================================== */
-
-/** Theming tokens */
-declare type Theme = {
-	[scaleName in string]: {
-		[tokenName in number | string]: number | string
-	}
-}
-
-/* Conditions
-/* ========================================================================== */
-
-declare type Conditions = {
-	[conditionName in number | string]: string
-}
-
-/* Functional Properties
-/* ========================================================================== */
-
-declare type FunctionalProperties = {
-	[property in string]: (
-		value: number | string,
-	) => {
-		[property in number | string]: number | string
-	}
-}
-
-/* StyledSheet Factory
-/* ========================================================================== */
-
-declare interface StyledSheetFactory {
-	(init?: StyledSheetFactoryInit): StyledSheet
-}
-
-declare type StyledSheetFactoryInit = Partial<StyledSheetFactoryOpts>
-
-declare interface StyledSheetFactoryOpts {
-	prefix: string
-	theme: Theme
-	conditions: Conditions
-	properties: FunctionalProperties
-	onGlobal: StyledSheetCallback
-	onStyled: StyledSheetCallback
-	onThemed: StyledSheetCallback
-}
-
-declare type StyledSheetCallback = (...cssText: string[]) => void
-
-/* StyledSheet
-/* ========================================================================== */
-
-declare interface StyledSheet {
-	(...inits: StyledSheetInit[]): StyledRule
-
-	/** Clearas all CSS rules from the sheet.  */
-	clear(): void
-
-	/** Returns a new styled rule. */
-	css(...inits: StyledRuleInit[]): StyledRule
-
-	/** Generates CSS from global rules and returns a function which applies them to the sheet.  */
-	global(init?: RuleStyles): GlobalRule
-
-	/** Generates CSS from theme scales and returns a function which applies them to the sheet.  */
-	theme(init: Theme): GlobalRule
-
-	/** Returns all of the CSS applied to the sheet.  */
-	toString(): string
-
-	/** Conditions in which CSS would be applied. */
-	conditions: Conditions
-
-	/** Prefix applied to all styled and themed rules. */
-	prefix: string
-
-	/** Functional properties whose values can be expanded into other properties. */
-	properties: FunctionalProperties
-
-	/** Returns a new themed rule. */
-	theme: Theme
-}
-
-declare type StyledSheetInit = Partial<StyledSheetOpts> | StyledRule
-
-declare interface StyledSheetOpts extends RuleStyles {
-	variants: VariantStyles
-}
-
-declare interface ReactStyledSheet extends StyledSheet {
-	styled(type: string | anyobject, init: anyobject): ReactStyledRule
-}
-
-/* StyledRule
-/* ========================================================================== */
-
-declare interface StyledRule {
-	(init?: StyledRuleInit): StyledExpression
-	toString(): string
-	className: string
-	classNames: string[]
-	selector: string
-	variants: {
-		[VariantName in string]: {
-			[VariantPair in number | string]: RuleStyles
-		}
-	}
-}
-
-declare type StyledRuleInit = Partial<StyledRuleOpts>
-
-declare type StyledRuleOpts = RuleStyles & {
-	variants: {
-		[VariantName in string]: {
-			[VariantPair in number | string]: RuleStyles
-		}
-	}
-}
-
-declare interface ReactStyledRule extends StyledRule {
-	(props: anyobject): unknown
-
-	displayName: string
-	rule: StyledRule
-	type: string | function
-}
-
-/* GlobalRule
-/* ========================================================================== */
-
-declare interface GlobalRule {
-	(): void
-}
-
-/* StyledExpression
-/* ========================================================================== */
-
-declare interface StyledExpression {
-	(): string
-	toString(): string
-	className: string
-	classNames: string[]
-	props: anyobject
-	selector: string
-}
-
-/* RuleStyles
-/* ========================================================================== */
-
-declare type RuleStyles = {
-	[propertyOrSelector in string]: string | number | RuleStyles
-}
-
-/* VariantStyles
-/* ========================================================================== */
-
-declare type VariantStyles = {
-	[variantName in number | string]: {
-		[variantPair in number | string]: RuleStyles
-	}
-}
-
-/* ThemeRule
-/* ========================================================================== */
-
-declare interface ThemeRule {
-	toString(): string
-	className: string
-	cssText: string
-	root: string
-}
-
-declare type ThemeRuleType<T extends anyobject> = Object<ThemeRule & T>
-
 /* Any Object
 /* ========================================================================== */
 
 declare type anyobject = any & object
 
-/* New Objects */
+/* Internals */
 /* ========================================================================== */
 
-declare type TokenIdent = number | string
+type Conditions = { [condition: string]: string }
 
-declare type ThemeInit = {
-	[ScaleKey in keyof DefaultTheme]?: {
-		[TokenKey in TokenIdent]: string
-	}
-}
+type Styles = { [name: string]: number | string | Styles } & { when: { [condition: string]: Styles } }
 
-declare type DefaultTheme = {
-	colors: {}
-	space: {}
-	fontSizes: {}
-	fonts: {}
-	fontWeights: {}
-	lineHeights: {}
-	letterSpacings: {}
-	sizes: {}
-	borderWidths: {}
-	borderStyles: {}
-	radii: {}
-	shadows: {}
-	zIndices: {}
-	transitions: {}
-}
+type Theme = { [scale: string]: { [token: string]: number | string } }
+
+type ThemeMap = { [property: string]: string }
+
+type Utils = { [name: string]: (value: any) => number | string | Styles }
+
+type Variants = { [name: string]: { [value: string]: Styles } }
+
+declare type StyleValue = number | string | Styles
+
+declare type Styles = { [name: string]: StyleValue } & { when?: { [condition: string]: { [name: string]: StyleValue } } }
