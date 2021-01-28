@@ -42,7 +42,7 @@ const createCss = (init: { conditions?: Conditions; prefix?: string; theme?: The
 			if (name === '@import') {
 				importRuleCssTexts.push(getComputedCss({ [name as string]: style } as Styles, [], []))
 			} else if (name.charCodeAt(0) === 64) {
-				globalRuleCssTexts.push(getComputedCss(style as Styles, [], [name]))
+				globalRuleCssTexts.push(getComputedCss({ [name]: style } as Styles, [], []))
 			} else {
 				globalRuleCssTexts.push(getComputedCss(style as Styles, [name], []))
 			}
