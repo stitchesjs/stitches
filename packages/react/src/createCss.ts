@@ -1,7 +1,7 @@
 import { createCss as createCoreCss, defaultThemeMap, assign, create, Object } from '@stitches/core'
 import reactElementPrototype from './reactElementPrototype'
 
-const createCss = (init) => {
+const createCss = (init: any) => {
 	const [createThemedRule, createGlobalRule, createStyledRule] = createCoreCss(
 		assign(
 			{
@@ -11,14 +11,11 @@ const createCss = (init) => {
 		),
 	)
 
-	/** @type {{ [key: string]: true }} */
-	let sheetSet
+	let sheetSet: { [key: string]: true }
 
-	/** @type {HTMLHeadElement | HTMLHtmlElement} */
-	let sheetParent
+	let sheetParent: HTMLHeadElement | HTMLHtmlElement
 
-	/** @type {HTMLStyleElement} */
-	let sheetTarget
+	let sheetTarget: HTMLStyleElement
 
 	let importTextNode = new Text('')
 	let globalTextNode = new Text('')
@@ -48,8 +45,12 @@ const createCss = (init) => {
 
 	clear()
 
-	const global = (styles) => {
-		const [importRuleCssTexts, globalRuleCssTexts] = createGlobalRule(styles)
+	/** Returns a function that enables the styles on the styled sheet. */
+	const global = (
+		/** Styles representing global CSS. */
+		initStyles: Styles,
+	) => {
+		const [importRuleCssTexts, globalRuleCssTexts] = createGlobalRule(initStyles)
 
 		let importCssText = ''
 		let globalCssText = ''
@@ -87,27 +88,32 @@ const createCss = (init) => {
 
 	const tokenPrototype = create(String.prototype, {
 		computedValue: {
-			get() {
+			get(): string {
 				return 'var(' + this.variable + ')'
 			},
 		},
 		variable: {
-			get() {
+			get(): string {
 				return '--' + this.scale + '-' + this.token
 			},
 		},
 		toString: {
-			value() {
+			value(): string {
 				return this.computedValue
 			},
 		},
 	})
 
-	const theme = (className, themeStyles) => {
-		/** ... */
+	const theme = (
+		/** CSS Class name. */
+		className: string,
+		/** Object of theme scales with inner token values. */
+		themeStyles: Theme,
+	) => {
+		/** CSS Selector */
 		const selector = className.replace(/^[A-Za-z-]/, '.$&')
 
-		/** ... */
+		/** CSS styles representing the current theme rule. */
 		const themedCssText = createThemedRule(selector, themeStyles)
 
 		const themeRule = () => {
@@ -142,7 +148,12 @@ const createCss = (init) => {
 	assign(theme, theme(':root', init.theme)())
 
 	const styled = new Proxy(
-		(type = 'span', styles) => {
+		(
+			/** Type of component element. */
+			type = 'span',
+			/** Styles representing component CSS. */
+			styles: Styles & { variants: Variants },
+		) => {
 			const styledRule = createStyledRule(Object(styles))
 			const source = create(reactElementPrototype, { type: { value: type } })
 			const selector = '.' + styledRule.className
