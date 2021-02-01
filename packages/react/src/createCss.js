@@ -1,9 +1,9 @@
-import Object, { assign, create } from '@stitches/core/Object'
-import createCoreCss from '@stitches/core/createCss'
-import defaultThemeMap from '@stitches/core/defaultThemeMap'
+import Object, { assign, create } from '../core/Object'
+import createCoreCss from '../core/createCss'
+import defaultThemeMap from '../core/defaultThemeMap'
 import reactElementPrototype from './reactElementPrototype'
 
-const createCss = (init: any) => {
+const createCss = (init) => {
 	const [createThemedRule, createGlobalRule, createStyledRule] = createCoreCss(
 		assign(
 			{
@@ -13,11 +13,11 @@ const createCss = (init: any) => {
 		),
 	)
 
-	let sheetSet: { [key: string]: true }
+	let sheetSet
 
-	let sheetParent: HTMLHeadElement | HTMLHtmlElement
+	let sheetParent
 
-	let sheetTarget: HTMLStyleElement
+	let sheetTarget
 
 	let importTextNode = new Text('')
 	let globalTextNode = new Text('')
@@ -26,7 +26,7 @@ const createCss = (init: any) => {
 
 	const sync = () => {
 		if (!sheetParent) sheetParent = document.head || document.documentElement
-		if (!sheetTarget) sheetTarget = <HTMLStyleElement>document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches' })
+		if (!sheetTarget) sheetTarget = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches' })
 		if (!sheetTarget.parentNode) sheetParent.prepend(sheetTarget)
 	}
 
@@ -49,7 +49,7 @@ const createCss = (init: any) => {
 	/** Returns a function that enables the styles on the styled sheet. */
 	const global = (
 		/** Styles representing global CSS. */
-		initStyles: Styles,
+		initStyles
 	) => {
 		const [importRuleCssTexts, globalRuleCssTexts] = createGlobalRule(initStyles)
 
@@ -107,9 +107,9 @@ const createCss = (init: any) => {
 
 	const theme = (
 		/** CSS Class name. */
-		className: string,
+		className,
 		/** Object of theme scales with inner token values. */
-		themeStyles: Theme,
+		themeStyles,
 	) => {
 		/** CSS Selector */
 		const selector = className.replace(/^[A-Za-z-]/, '.$&')
@@ -153,7 +153,7 @@ const createCss = (init: any) => {
 			/** Type of component element. */
 			type = 'span',
 			/** Styles representing component CSS. */
-			styles: Styles & { variants: Variants },
+			styles,
 		) => {
 			const styledRule = createStyledRule(Object(styles))
 			const source = create(reactElementPrototype, { type: { value: type } })

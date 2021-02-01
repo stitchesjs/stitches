@@ -100,6 +100,6 @@ const defaultThemeMap = {
 	textShadow: shadows,
 	zIndex: zIndices,
 	transition: transitions,
-} as const
+}
 
 export default defaultThemeMap

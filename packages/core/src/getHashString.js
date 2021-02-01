@@ -1,9 +1,9 @@
 /** Returns a unique constant hash for an object. */
 const getHashString = (
 	/** Object to be hashed. */
-	object: object,
+	object,
 ) => {
-	for (var value = JSON.stringify(object), index = value.length, hash = 9; index; ) {
+	for (var value = JSON.stringify(object), index = value.length, hash = 9; index;) {
 		hash = Math.imul(hash ^ value.charCodeAt(--index), 9 ** 9)
 	}
 
