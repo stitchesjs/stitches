@@ -89,17 +89,17 @@ const createCss = (init) => {
 
 	const tokenPrototype = create(String.prototype, {
 		computedValue: {
-			get(): string {
+			get() {
 				return 'var(' + this.variable + ')'
 			},
 		},
 		variable: {
-			get(): string {
+			get() {
 				return '--' + this.scale + '-' + this.token
 			},
 		},
 		toString: {
-			value(): string {
+			value() {
 				return this.computedValue
 			},
 		},
