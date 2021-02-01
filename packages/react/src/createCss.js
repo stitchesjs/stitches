@@ -1,7 +1,8 @@
-import Object, { assign, create } from '../core/Object'
-import createCoreCss from '../core/createCss'
-import defaultThemeMap from '../core/defaultThemeMap'
-import reactElementPrototype from './reactElementPrototype'
+import Object, { assign, create } from '../core/Object.js'
+import createCoreCss from '../core/createCss.js'
+import defaultThemeMap from '../core/defaultThemeMap.js'
+import reactElementPrototype from './reactElementPrototype.js'
+import ThemeToken from './ThemeToken.js'
 
 const createCss = (init) => {
 	const [createThemedRule, createGlobalRule, createStyledRule] = createCoreCss(
@@ -49,7 +50,7 @@ const createCss = (init) => {
 	/** Returns a function that enables the styles on the styled sheet. */
 	const global = (
 		/** Styles representing global CSS. */
-		initStyles
+		initStyles,
 	) => {
 		const [importRuleCssTexts, globalRuleCssTexts] = createGlobalRule(initStyles)
 
@@ -87,24 +88,7 @@ const createCss = (init) => {
 		return globalRule
 	}
 
-	const tokenPrototype = create(String.prototype, {
-		computedValue: {
-			get() {
-				return 'var(' + this.variable + ')'
-			},
-		},
-		variable: {
-			get() {
-				return '--' + this.scale + '-' + this.token
-			},
-		},
-		toString: {
-			value() {
-				return this.computedValue
-			},
-		},
-	})
-
+	/** Returns a function that assigns a themed rule to the styled sheet. */
 	const theme = (
 		/** CSS Class name. */
 		className,
@@ -135,10 +119,10 @@ const createCss = (init) => {
 			themeRule[scale] = create(null)
 
 			for (const token in themeStyles[scale]) {
-				themeRule[scale][token] = create(tokenPrototype, {
-					value: { value: themeStyles[scale][token] },
-					scale: { value: scale },
-					token: { value: token },
+				themeRule[scale][token] = assign(new ThemeToken(), {
+					value: themeStyles[scale][token],
+					scale: scale,
+					token: token,
 				})
 			}
 		}
@@ -147,6 +131,32 @@ const createCss = (init) => {
 	}
 
 	assign(theme, theme(':root', init.theme)())
+
+	/** Returns a function that assigns a keyframe rule to the styled sheet. */
+	const keyframes = (
+		/** Keyframe name. */
+		name,
+		/** Styles representing global CSS. */
+		initStyles,
+	) => {
+		name = String(name)
+
+		const [, [keyframeRuleCssText]] = createGlobalRule({
+			['@keyframes ' + name]: initStyles,
+		})
+
+		const keyframesRules = () => {
+			globalTextNode.before(keyframeRuleCssText)
+
+			sync()
+
+			return name
+		}
+
+		keyframesRules.toString = keyframesRules
+
+		return keyframesRules
+	}
 
 	const styled = new Proxy(
 		(
@@ -206,7 +216,7 @@ const createCss = (init) => {
 		},
 	)
 
-	return { clear, global, styled, theme }
+	return { clear, global, keyframes, styled, theme }
 }
 
 export default createCss

@@ -2,6 +2,7 @@ import Object, { assign, create } from '@stitches/core/Object'
 import createCoreCss from '@stitches/core/createCss'
 import defaultThemeMap from '@stitches/core/defaultThemeMap'
 import reactElementPrototype from './reactElementPrototype'
+import ThemeToken from './ThemeToken'
 
 const createCss = (init: any) => {
 	const [createThemedRule, createGlobalRule, createStyledRule] = createCoreCss(
@@ -87,24 +88,7 @@ const createCss = (init: any) => {
 		return globalRule
 	}
 
-	const tokenPrototype = create(String.prototype, {
-		computedValue: {
-			get(): string {
-				return 'var(' + this.variable + ')'
-			},
-		},
-		variable: {
-			get(): string {
-				return '--' + this.scale + '-' + this.token
-			},
-		},
-		toString: {
-			value(): string {
-				return this.computedValue
-			},
-		},
-	})
-
+	/** Returns a function that assigns a themed rule to the styled sheet. */
 	const theme = (
 		/** CSS Class name. */
 		className: string,
@@ -135,10 +119,10 @@ const createCss = (init: any) => {
 			themeRule[scale] = create(null)
 
 			for (const token in themeStyles[scale]) {
-				themeRule[scale][token] = create(tokenPrototype, {
-					value: { value: themeStyles[scale][token] },
-					scale: { value: scale },
-					token: { value: token },
+				themeRule[scale][token] = assign(new ThemeToken(), {
+					value: themeStyles[scale][token],
+					scale: scale,
+					token: token,
 				})
 			}
 		}
@@ -147,6 +131,32 @@ const createCss = (init: any) => {
 	}
 
 	assign(theme, theme(':root', init.theme)())
+
+	/** Returns a function that assigns a keyframe rule to the styled sheet. */
+	const keyframes = (
+		/** Keyframe name. */
+		name: string,
+		/** Styles representing global CSS. */
+		initStyles: Styles,
+	) => {
+		name = String(name)
+
+		const [, [keyframeRuleCssText]] = createGlobalRule({
+			['@keyframes ' + name]: initStyles,
+		})
+
+		const keyframesRules = () => {
+			globalTextNode.before(keyframeRuleCssText)
+
+			sync()
+
+			return name
+		}
+
+		keyframesRules.toString = keyframesRules
+
+		return keyframesRules
+	}
 
 	const styled = new Proxy(
 		(
@@ -165,7 +175,7 @@ const createCss = (init: any) => {
 
 			styledTextNode.before(styledRuleNode, varianRuleNode, inlineRuleNode)
 
-			const styledComponent = (init) => {
+			const styledComponent = (init: any) => {
 				const [props, styledRuleCssText, varianCssTexts, inlineCssText] = styledRule(init)
 
 				if (!sheetSet[styledRuleCssText]) {
@@ -206,7 +216,7 @@ const createCss = (init: any) => {
 		},
 	)
 
-	return { clear, global, styled, theme }
+	return { clear, global, keyframes, styled, theme }
 }
 
 export default createCss
