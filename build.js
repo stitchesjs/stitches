@@ -23,46 +23,41 @@ async function buildPackage(packageName) {
 	const mapText = buildEsm.outputFiles[0].text
 	const esmText = buildEsm.outputFiles[1].text
 
-	const { code, map } = await minify(esmText, { sourceMap: { content: mapText } })
+	const { code, map } = await minify(esmText, { toplevel: true, module: true, compress: { unsafe: true }, sourceMap: { content: mapText } })
+
+	const clipEnd = code.length
+	const clipStart = clipEnd - 21
+	const clipExport = packageName === 'core' ? 'S' : 'w'
 
 	// Build ESM version
-	const esmCode = new MagicString(code)
-
-	esmCode.remove(code.length - 54, code.length).append(';export{createCss as default}')
-
-	const esmMap = JSON.stringify(mergeSourceMap(JSON.parse(map), JSON.parse(esmCode.generateMap({
-		source: 'bundle.js',
-		hires: true,
-	}).toString())))
-
-	await fs.writeFile(outEsmPath, esmCode.toString())
-	await fs.writeFile(`${outEsmPath}.map`, esmMap)
+	await fs.writeFile(outEsmPath, code)
+	await fs.writeFile(`${outEsmPath}.map`, map)
 
 	// Build CJS version
 	const cjsCode = new MagicString(code)
 
-	cjsCode.remove(code.length - 54, code.length).append(';module.exports=createCss')
+	cjsCode.remove(clipStart, clipEnd).append('module.exports=' + clipExport)
 
-	const cjsMap = JSON.stringify(mergeSourceMap(JSON.parse(map), JSON.parse(cjsCode.generateMap({
+	const cjsMap = mergeSourceMap(JSON.parse(map), JSON.parse(cjsCode.generateMap({
 		source: 'bundle.js',
 		hires: true,
-	}).toString())))
+	}).toString()))
 
-	await fs.writeFile(outCjsPath, esmCode.toString())
-	await fs.writeFile(`${outCjsPath}.map`, cjsMap)
+	await fs.writeFile(outCjsPath, cjsCode.toString())
+	await fs.writeFile(`${outCjsPath}.map`, JSON.stringify(cjsMap))
 
 	// Build IIFE version
 	const ifeCode = new MagicString(code)
 
-	ifeCode.remove(code.length - 54, code.length).append(';return createCss})()').prepend('stitches=(()=>{')
+	ifeCode.remove(clipStart, clipEnd).append('return createCss})()').prepend('stitches=(()=>{')
 
-	const ifeMap = JSON.stringify(mergeSourceMap(JSON.parse(map), JSON.parse(ifeCode.generateMap({
+	const ifeMap = mergeSourceMap(JSON.parse(map), JSON.parse(ifeCode.generateMap({
 		source: 'bundle.js',
 		hires: true,
-	}).toString())))
+	}).toString()))
 
-	await fs.writeFile(outIfePath, esmCode.toString())
-	await fs.writeFile(`${outIfePath}.map`, ifeMap)
+	await fs.writeFile(outIfePath, ifeCode.toString())
+	await fs.writeFile(`${outIfePath}.map`, JSON.stringify(ifeMap))
 }
 
 async function buildPackages() {
