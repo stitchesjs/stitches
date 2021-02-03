@@ -1,4 +1,10 @@
-class ThemeToken extends String {
+class ThemeToken {
+	constructor(value, token, scale) {
+		this.value = value
+		this.token = token
+		this.scale = scale
+	}
+
 	get computedValue() {
 		return 'var(' + this.variable + ')'
 	}

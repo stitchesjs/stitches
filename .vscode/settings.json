@@ -1,6 +1,6 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "files.exclude": {
     "node_modules/": true,
     "package-lock.json": true,

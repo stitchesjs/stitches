@@ -1,5 +1,6 @@
 {
   "name": "@stitches/react",
+  "type": "module",
   "version": "0.1.0-canary.1",
   "license": "MIT",
   "source": "src/index.ts",

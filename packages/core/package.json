@@ -1,11 +1,13 @@
 {
   "name": "@stitches/core",
   "version": "0.1.0-canary.1",
+  "type": "module",
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/stitches-core.cjs.js",
-  "module": "dist/stitches-core.esm.js",
-  "typings": "dist/stitches-core.cjs.d.ts",
+  "unpkg": "dist/index.iife.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "src"

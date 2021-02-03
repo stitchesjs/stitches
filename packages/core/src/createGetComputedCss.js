@@ -1,6 +1,6 @@
-import getResolvedSelectors from './getResolvedSelectors'
-import isDeclaration from './isDeclaration'
-import isPossiblyUnitless from './isPossiblyUnitless'
+import getResolvedSelectors from './getResolvedSelectors.js'
+import isDeclaration from './isDeclaration.js'
+import isPossiblyUnitless from './isPossiblyUnitless.js'
 
 /** Symbol representing whether a selector array has been opened during stringification. */
 const isOpen = Symbol()
@@ -22,19 +22,13 @@ const createGetComputedCss = (
 	/** Returns a string of CSS from an object of CSS. */
 	const getComputedCss = (
 		/** Object representing the current CSS. */
-		style,
-
-		/** List representing open style rule selector preludes. */
-		openSelectors,
-
-		/** List representing open group rule condition preludes. */
-		openConditions
+		style
 	) => {
 		/** String of CSS being generated. */
 		let cssText = ''
 
 		/** Group rules, used to manage the nesting of conditions. */
-		const groupRules = openConditions.map(Object)
+		const groupRules = []
 
 		/** Data returned by the last utility that run, used to prevent recursion. */
 		let lastUtilityDataJson = ''
@@ -107,7 +101,7 @@ const createGetComputedCss = (
 						(typeof data === 'number' && !isPossiblyUnitless(name) && data
 							? data + 'px'
 							: String(data).replace(/\$[$-\w]+/g, (token) => 'var(-' + (!/.\$/.test(token) && name in themeMap ? '-' + themeMap[name] : '') + token.replace(/\$/g, '-') + ')')) +
-						''
+						';'
 				} else {
 					/** Process CSS from a nested object of styles. */
 					const processNestedGroup = (
@@ -165,7 +159,7 @@ const createGetComputedCss = (
 		}
 
 		// process the initial styles
-		processStyle(style, openSelectors)
+		processStyle(style, [])
 
 		return cssText
 	}
