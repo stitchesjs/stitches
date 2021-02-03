@@ -239,9 +239,9 @@ const createCss = (init) => {
 			globalRules.clear()
 			styledRules.clear()
 
-			defaultThemed()
-
 			init.onResets && init.onResets.call(this)
+
+			defaultThemed()
 
 			return this
 		},
