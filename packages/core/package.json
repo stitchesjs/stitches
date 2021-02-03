@@ -1,18 +1,63 @@
 {
   "name": "@stitches/core",
   "version": "0.1.0-canary.1",
+  "description": "The OOCSS-in-JS library",
   "type": "module",
-  "license": "MIT",
-  "source": "src/index.ts",
-  "unpkg": "dist/index.iife.js",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.iife.js",
   "files": [
     "dist",
     "src"
   ],
+  "license": "MIT",
+  "repository": "modulz/stitches",
+  "homepage": "https://github.com/modulz/stitches#readme",
+  "bugs": "https://github.com/modulz/stitches/issues",
+  "contributors": [
+    "Christian Alfoni <christianalfoni@gmail.com>",
+    "Pedro Duarte <pedro@modulz.app>",
+    "Abdulhadi Alhallak <abdulhadi@modulz.app>",
+    "Jonathan Neal <jonathan@modulz.app>"
+  ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "component",
+    "components",
+    "create",
+    "css",
+    "css-in-js",
+    "global",
+    "globals",
+    "javascript",
+    "js",
+    "nesting",
+    "object",
+    "object-oriented",
+    "oo",
+    "oocss",
+    "oriented",
+    "scope",
+    "scoped",
+    "style",
+    "styled",
+    "styles",
+    "stylesheet",
+    "stylesheets",
+    "theme",
+    "themes",
+    "theming",
+    "token",
+    "tokens",
+    "type",
+    "typed",
+    "types",
+    "transform",
+    "ts",
+    "variable",
+    "variables"
+  ]
 }

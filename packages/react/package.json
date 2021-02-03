@@ -1,19 +1,26 @@
 {
   "name": "@stitches/react",
-  "type": "module",
   "version": "0.1.0-canary.1",
-  "license": "MIT",
-  "source": "src/index.ts",
-  "main": "dist/stitches-react.cjs.js",
-  "module": "dist/stitches-react.esm.js",
-  "typings": "dist/stitches-react.cjs.d.ts",
+  "description": "The OOCSS-in-JS React library",
+  "type": "module",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.iife.js",
   "files": [
     "dist",
     "src"
   ],
-  "dependencies": {
-    "@stitches/core": "0.1.0-canary.1"
-  },
+  "license": "MIT",
+  "repository": "modulz/stitches",
+  "homepage": "https://github.com/modulz/stitches#readme",
+  "bugs": "https://github.com/modulz/stitches/issues",
+  "contributors": [
+    "Christian Alfoni <christianalfoni@gmail.com>",
+    "Pedro Duarte <pedro@modulz.app>",
+    "Abdulhadi Alhallak <abdulhadi@modulz.app>",
+    "Jonathan Neal <jonathan@modulz.app>"
+  ],
   "devDependencies": {
     "react": "17.0.1"
   },
@@ -22,5 +29,47 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "component",
+    "components",
+    "create",
+    "css",
+    "css-in-js",
+    "global",
+    "globals",
+    "javascript",
+    "js",
+    "nesting",
+    "object",
+    "object-oriented",
+    "oo",
+    "oocss",
+    "oriented",
+    "scope",
+    "scoped",
+    "style",
+    "styled",
+    "styles",
+    "stylesheet",
+    "stylesheets",
+    "theme",
+    "themes",
+    "theming",
+    "token",
+    "tokens",
+    "type",
+    "typed",
+    "types",
+    "transform",
+    "ts",
+    "variable",
+    "variables",
+    "jsx",
+    "next",
+    "nextjs",
+    "preact",
+    "react",
+    "tsx"
+  ]
 }
