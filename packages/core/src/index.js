@@ -249,4 +249,4 @@ const createCss = (init) => {
 	}
 }
 
-export default createCss
+export default assign(createCss, { defaultThemeMap })

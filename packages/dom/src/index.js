@@ -1,9 +1,7 @@
 import Object, { assign } from '../../core/src/Object.js'
 import createCoreCss from '../../core/src/index.js'
 
-const $$typeof = Symbol.for('react.element')
-
-export default (init) => {
+export default assign((init) => {
 	const hasDocument = typeof document === 'object'
 
 	const importText = hasDocument && new Text('')
@@ -16,8 +14,29 @@ export default (init) => {
 	let sheetParent
 	let sheetTarget
 
+	const assignElement = hasDocument ? (element, props, ...nodes) => {
+		const node = typeof element === 'string' ? document.createElement(element) : element;
+
+		for (const name in props) {
+			if (name in node) {
+				node[name] = props[name];
+			} else if (props[name] === null) {
+				node.removeAttribute(name);
+			} else {
+				node.setAttribute(name, props[name]);
+			}
+		}
+
+		node.append(...nodes);
+
+		return node;
+	} : () => ''
+
+	const createFragment = hasDocument ? ((...nodes) => assignElement(new DocumentFragment, null, ...nodes)) : () => ''
+
 	init = assign(
 		{
+			classProp: 'class',
 			onImport: createOnChange(importText, 'import'),
 			onGlobal: createOnChange(globalText, 'global'),
 			onThemed: createOnChange(themedText, 'themed'),
@@ -54,22 +73,29 @@ export default (init) => {
 				return Object.setPrototypeOf(assign((
 					/** Props used to determine the expression of the current styled rule. */
 					initProps,
+					...nodes
 				) => {
 					const {
-						props: { as: type = asType, ref = null, ...props },
+						props: { as: type = asType, ...props },
 						toString,
 					} = expressStyledRule(initProps)
 
 					stitches.sync()
 
-					return { constructor: undefined, $$typeof, props, ref, toString, type, __v: 0 }
-				}, expressStyledRule), Object(asType))
+					return assign(assignElement(type, props, ...nodes), { toString })
+				}, expressStyledRule, {
+					of(...nodes) {
+						return Reflect.apply(this, this, [{}, ...nodes])
+					}
+				}), Object(asType))
 			},
 			{
 				get: (target, type) => (type in target ? (typeof target[type] === 'function' ? target[type].bind(target) : target[type]) : target.bind(null, type)),
 			},
 		),
+		element: assignElement,
+		fragment: createFragment,
 	})
 
 	return stitches.reset()
-}
+}, createCoreCss)

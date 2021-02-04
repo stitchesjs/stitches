@@ -23,6 +23,9 @@ async function buildPackage(packageName) {
 	const mapText = buildEsm.outputFiles[0].text
 	const esmText = buildEsm.outputFiles[1].text
 
+	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js`, esmText)
+	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js.map`, mapText)
+
 	const { code, map } = await minify(esmText, { toplevel: true, module: true, compress: { unsafe: true }, sourceMap: { content: mapText } })
 
 	const clipEnd = code.length
@@ -62,6 +65,7 @@ async function buildPackage(packageName) {
 
 async function buildPackages() {
 	await buildPackage('core')
+	await buildPackage('dom')
 	await buildPackage('react')
 }
 
