@@ -22,10 +22,12 @@ const Button = styled('button', {
  * -----------------------------------------------------------------------------------------------*/
 
 const ExtendedButtonUsingReactUtils = React.forwardRef<React.ElementRef<typeof Button>, React.ComponentProps<typeof Button>>((props, forwardedRef) => {
-	return <Button as="a" href="fwef"  css={{ backgroundColor: 'ActiveBorder', padding: 'inherit', paddingBlock: 'inherit', paddingLeft: 'inherit'}} />
+	return <Button as="a" href="fwef" onClick={e => {
+		console.log(e)
+	}} css={{backgroundOrigin: 'content-box'}} />
 })
 
-const B = <Button as="a"  css={{ backgroundColor: 'ActiveBorder', backgroundOrigin: 'border-box'}} />
+const B = <Button as="a" href="hi"  css={{color: 'ActiveCaption', backgroundColor: 'ActiveCaption', msHyphenateLimitLines: 'initial'}} />
 
 /* -------------------------------------------------------------------------------------------------
  * Extended Button using react utilities without polymorphism and inline `as`
@@ -174,7 +176,7 @@ export function Test() {
 			{/* @ts-expect-error */}
 			<Button as={Anchor} />
 
-			<Button as={Anchor} requiredProp={true} />
+			<Button as={Anchor} css={{padding: 'inherit'}} requiredProp={true} />
 		</>
 	)
 }

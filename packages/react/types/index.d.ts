@@ -19,18 +19,17 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 			css?: StitchesCSS<Conditions, Theme, Utils>
 		} & VariantsCall<Variants, Conditions>
 	> {
-	<As extends string>(
-		props: { as?: As } & Omit<React.ComponentPropsWithRef<As extends IntrinsicElementsKeys ? As : never>, keyof Variants | 'css' | 'as'> & {
-			css?: StitchesCSS<Conditions, Theme, Utils>
-		} & VariantsCall<Variants, Conditions>,
-	): any
+	(
+		props: { as?:'a' } & Omit<React.ComponentPropsWithRef<'a'>, keyof Variants | 'css' | 'as'> & {
+				css?: StitchesCSS<Conditions, Theme, Utils>
+			} & VariantsCall<Variants, Conditions>,
+	): JSX.Element
 
-
-	<As>(
-		props: { as?: As } & Omit<React.ComponentPropsWithRef<As extends (props: any)=> any ? As : never>, keyof Variants | 'css' | 'as'> & {
-			css?: StitchesCSS<Conditions, Theme, Utils>
-		} & VariantsCall<Variants, Conditions> ,
-	): any
+	<As extends React.ComponentType>(
+		props: { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
+				css?: StitchesCSS<Conditions, Theme, Utils>
+			} & VariantsCall<Variants, Conditions>,
+	): JSX.Element
 }
 
 /* Styled instance:
