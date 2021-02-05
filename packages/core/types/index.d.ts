@@ -1,10 +1,122 @@
 import { Properties } from './css-types'
-import cssPropToTokenMap from './defaultThemeMap'
+
+type CSSPropertiesToTokenScale = {
+	gap: 'space'
+	gridGap: 'space'
+	columnGap: 'space'
+	gridColumnGap: 'space'
+	rowGap: 'space'
+	gridRowGap: 'space'
+	inset: 'space'
+	insetBlock: 'space'
+	insetBlockEnd: 'space'
+	insetBlockStart: 'space'
+	insetInline: 'space'
+	insetInlineEnd: 'space'
+	insetInlineStart: 'space'
+	margin: 'space'
+	marginTop: 'space'
+	marginRight: 'space'
+	marginBottom: 'space'
+	marginLeft: 'space'
+	marginBlock: 'space'
+	marginBlockEnd: 'space'
+	marginBlockStart: 'space'
+	marginInline: 'space'
+	marginInlineEnd: 'space'
+	marginInlineStart: 'space'
+	padding: 'space'
+	paddingTop: 'space'
+	paddingRight: 'space'
+	paddingBottom: 'space'
+	paddingLeft: 'space'
+	paddingBlock: 'space'
+	paddingBlockEnd: 'space'
+	paddingBlockStart: 'space'
+	paddingInline: 'space'
+	paddingInlineEnd: 'space'
+	paddingInlineStart: 'space'
+	top: 'space'
+	right: 'space'
+	bottom: 'space'
+	left: 'space'
+	fontSize: 'fontSizes'
+	background: 'colors'
+	backgroundColor: 'colors'
+	backgroundImage: 'colors'
+	border: 'colors'
+	borderColor: 'colors'
+	borderTopColor: 'colors'
+	borderRightColor: 'colors'
+	borderBottomColor: 'colors'
+	borderLeftColor: 'colors'
+	caretColor: 'colors'
+	color: 'colors'
+	columnRuleColor: 'colors'
+	outlineColor: 'colors'
+	fill: 'colors'
+	stroke: 'colors'
+	fontFamily: 'fonts'
+	fontWeight: 'fontWeights'
+	lineHeight: 'lineHeights'
+	letterSpacing: 'letterSpacings'
+	blockSize: 'sizes'
+	minBlockSize: 'sizes'
+	maxBlockSize: 'sizes'
+	inlineSize: 'sizes'
+	minInlineSize: 'sizes'
+	maxInlineSize: 'sizes'
+	width: 'sizes'
+	minWidth: 'sizes'
+	maxWidth: 'sizes'
+	height: 'sizes'
+	minHeight: 'sizes'
+	maxHeight: 'sizes'
+	flexBasis: 'sizes'
+	borderWidth: 'borderWidths'
+	borderTopWidth: 'borderWidths'
+	borderLeftWidth: 'borderWidths'
+	borderRightWidth: 'borderWidths'
+	borderBottomWidth: 'borderWidths'
+	borderStyle: 'borderStyles'
+	borderTopStyle: 'borderStyles'
+	borderLeftStyle: 'borderStyles'
+	borderRightStyle: 'borderStyles'
+	borderBottomStyle: 'borderStyles'
+	borderRadius: 'radii'
+	borderTopLeftRadius: 'radii'
+	borderTopRightRadius: 'radii'
+	borderBottomRightRadius: 'radii'
+	borderBottomLeftRadius: 'radii'
+	boxShadow: 'shadows'
+	textShadow: 'shadows'
+	zIndex: 'zIndices'
+	transition: 'transitions'
+}
+
+type StyledSheetCallback = (...cssText: string[]) => void
+
+interface GlobalRule {
+	(): void
+}
+
+interface ThemeRule {
+	toString(): string
+	className: string
+	cssText: string
+	root: string
+}
+interface StyledExpression {
+	(): string
+	toString(): string
+	className: string
+	classNames: string[]
+	props: anyobject
+	selector: string
+}
 
 // just using it as a unique identifier for rule types
 const ruleSymbol = Symbol('')
-
-type CSSPropertiesToTokenScale = typeof cssPropToTokenMap
 
 /* Config:
 /* ========================================================================== */
@@ -62,7 +174,7 @@ export type StitchesCSS<
   Utils = {},
   AllowNesting = true
 > = { [k in keyof Properties]?: k extends keyof CSSPropertiesToTokenScale ? CSSPropertiesToTokenScale[k] extends keyof Theme ?  `$${Extract<keyof Theme[CSSPropertiesToTokenScale[k]], string>}` | Properties[k]: Properties[k] : Properties[k]}
-  & { [k in keyof Conditions as `when$${Extract<keyof Conditions, string>}`]?: StitchesCSS<Conditions, Theme, Utils, AllowNesting>; }
+  & { when?: { [k in keyof Conditions]?: StitchesCSS<Conditions, Theme, Utils, AllowNesting>; }}
   & { [k in keyof Utils]?: Utils[k] }
   & { [k in string]?: AllowNesting extends true ? StitchesCSS<Conditions, Theme, Utils, AllowNesting> | string | number : {} }
 
@@ -80,7 +192,7 @@ type Tail<T extends any[]> = ((...t: T) => any) extends (_: any, ...tail: infer 
 
 /* Css Instance Type:
 /* ========================================================================== */
-export interface _StyledSheet<A extends TConditions = {}, B extends TTheme = {}, C = {}> {
+export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {}, C = {}> {
 	/** Returns a new styled rule. */
 	<Vars extends any[]>(
 		...styles: {
@@ -88,9 +200,9 @@ export interface _StyledSheet<A extends TConditions = {}, B extends TTheme = {},
 				| ({
 						variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }
 				  } & StitchesCSS<A, B, C>)
-				| _SimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
+				| TSimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
 		}
-	): _StyledRule<InferRestVariants<Vars>, A>
+	): IStyledRule<InferRestVariants<Vars>, A>
 
 	/** Generates CSS from global rules and returns a function which applies them to the sheet.  */
 	global: (definition: Record<string, StitchesCSS<A, B, C>>) => GlobalRule
@@ -113,9 +225,9 @@ export interface _StyledSheet<A extends TConditions = {}, B extends TTheme = {},
 					| ({
 							variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }
 					  } & StitchesCSS<A, B, C>)
-					| _SimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
+					| TSimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
 			}
-		): _StyledRule<InferRestVariants<Vars>, A>
+		): IStyledRule<InferRestVariants<Vars>, A>
 	}
 
 	/** Clears all CSS rules from the sheet.  */
@@ -140,7 +252,7 @@ export type VariantsCall<Variants, Conditions> = {
 
 /* Output Styled Rule:
 /* ========================================================================== */
-interface _StyledRule<Variants, Conditions> {
+interface IStyledRule<Variants, Conditions> {
 	(init?: VariantsCall<Variants, Conditions>): StyledExpression
 	[ruleSymbol]: true
 	toString(): string
@@ -150,9 +262,9 @@ interface _StyledRule<Variants, Conditions> {
 	variants: Variants
 }
 
-// used an an alternative to _StyledRule
-// acts as a simpler version of _StyledRule
-type _SimpleStyledRule<A> = {
+// used an an alternative to IStyledRule
+// acts as a simpler version of IStyledRule
+type TSimpleStyledRule<A> = {
 	[ruleSymbol]: true
 	variants: A
 }
@@ -160,4 +272,7 @@ type _SimpleStyledRule<A> = {
 /* Create Css function type:
 /* ========================================================================== */
 
-export type _StyledSheetFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(_config?: IConfig<Conditions, Theme, Utils, Prefix>) => _StyledSheet<Conditions, Theme, Utils>
+type TStyledSheetFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(_config?: IConfig<Conditions, Theme, Utils, Prefix>) => TStyledSheet<Conditions, Theme, Utils>
+
+declare const styled: TStyledSheetFactory
+export default styled

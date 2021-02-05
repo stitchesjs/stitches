@@ -1,5 +1,32 @@
 import Object, { assign } from '../../core/src/Object.js'
 import createCoreCss from '../../core/src/index.js'
+import styled from '@stitches/core'
+
+
+
+const css = styled({
+	conditions: {
+		how: 'hello'
+	}
+})
+const cal = css({
+	backgroundColor: 'ButtonHighlight',
+	color: 'GrayText',
+	padding: '-moz-initial',
+	variants: {
+		variant: {
+			blue: {
+				when: {
+					how: {
+						backgroundColor: 'AppWorkspace',
+						when
+					}
+				},
+				color: 'ButtonShadow'
+			}
+		}
+	}
+})
 
 const $$typeof = Symbol.for('react.element')
 

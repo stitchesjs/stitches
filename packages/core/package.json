@@ -5,11 +5,12 @@
   "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "typings": "dist/index.d.ts",
+  "typings": "types/index.d.ts",
   "unpkg": "dist/index.iife.js",
   "files": [
     "dist",
-    "src"
+    "src",
+    "types"
   ],
   "license": "MIT",
   "repository": "modulz/stitches",
