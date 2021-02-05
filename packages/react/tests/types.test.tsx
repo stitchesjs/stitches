@@ -32,7 +32,7 @@ const B = <Button as="a"  css={{ backgroundColor: 'ActiveBorder', backgroundOrig
  * -----------------------------------------------------------------------------------------------*/
 export function ExtendedButtonUsingReactUtilsWithInternalInlineAs(props: React.ComponentProps<typeof Button>) {
 	/* Should not error with inline `as` component */
-	return <Button as={(props) => <a {...props} />} {...props} />
+	return <Button as={(props:any) => <a {...props} />}  />
 }
 
 /* -------------------------------------------------------------------------------------------------

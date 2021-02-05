@@ -8,13 +8,6 @@ type IntrinsicElementsKeys = keyof JSX.IntrinsicElements
 type ComponentInfer<T> = T extends IntrinsicElementsKeys | React.ComponentType<any> ? T : never
 export type ExtractVariantsFromComponent<T> = T extends StitchesComponent<any, infer V> ? V : {}
 
-/* Base props:
- * -----------------------------------------------------------------------------------------------*/
-
-type StitchesBaseProps<Elm, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = Omit<React.ComponentPropsWithRef<ComponentInfer<Elm>>, keyof Variants | 'css' | 'as'> & {
-	css?: StitchesCSS<Conditions, Theme, Utils>
-} & VariantsCall<Variants, Conditions>
-
 /* StitchesComponent:
  * -----------------------------------------------------------------------------------------------*/
 // abuse Pick to strip the call signature from ForwardRefExoticComponent
@@ -32,8 +25,9 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 		} & VariantsCall<Variants, Conditions>,
 	): any
 
-	<As extends React.ComponentType>(
-		props: { as?: As } & Omit<React.ComponentPropsWithRef<As extends React.ComponentType<any> ? As : never>, keyof Variants | 'css' | 'as'> & {
+
+	<As>(
+		props: { as?: As } & Omit<React.ComponentPropsWithRef<As extends (props: any)=> any ? As : never>, keyof Variants | 'css' | 'as'> & {
 			css?: StitchesCSS<Conditions, Theme, Utils>
 		} & VariantsCall<Variants, Conditions> ,
 	): any
