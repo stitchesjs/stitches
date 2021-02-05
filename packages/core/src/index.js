@@ -53,7 +53,7 @@ const createCss = (init) => {
 		const cssText = getComputedCss({ [query]: getCustomProperties(theme) })
 
 		const expressThemedRule = () => {
-			themedRules.css(cssText)
+			themedRules.set(cssText)
 
 			return expressThemedRule
 		}
@@ -85,12 +85,12 @@ const createCss = (init) => {
 		for (const name in initStyles) {
 			const cssText = getComputedCss({ [name]: initStyles[name] })
 
-			;(name === '@import' ? localImportRules : localGlobalRules).push(cssText)
+				; (name === '@import' ? localImportRules : localGlobalRules).push(cssText)
 		}
 
 		return assign(() => {
-			localImportRules.forEach(importRules.css, importRules)
-			localGlobalRules.forEach(globalRules.css, globalRules)
+			localImportRules.forEach(importRules.set, importRules)
+			localGlobalRules.forEach(globalRules.set, globalRules)
 
 			return id
 		}, { toString: toCallString })
@@ -116,14 +116,11 @@ const createCss = (init) => {
 	) => {
 		const { variants: variantsStyle, ...style } = Object(extendedStyle || initStyle)
 
-		/** Extended rule or an empty object. */
-		const extendRule = Object(extendedStyle && initStyle)
+		/** Composing rule, if present, otherwise an empty object. */
+		const composer = Object(extendedStyle && initStyle)
 
 		/** Unique class name for the current component. */
 		const className = getHashString(prefix, style)
-
-		/** List of unique class names for the current component. */
-		const classNames = (extendRule.classNames || []).concat(className)
 
 		/** Unique css selector for the current component. */
 		const selector = '.' + className
@@ -139,7 +136,7 @@ const createCss = (init) => {
 		const inlinedRules = new CssSet(onChange)
 
 		/** Map of variant groups containing variant class names and styled rules. */
-		const variants = assign(create(null), extendRule.variants)
+		const variants = assign(create(null), composer.variants)
 
 		for (const name in variantsStyle) {
 			variants[name] = assign(create(null), variants[name])
@@ -152,44 +149,54 @@ const createCss = (init) => {
 
 				const conditionVariants = create(null)
 
-				variants[name][value] = (condition) => {
-					if (condition !== undefined) {
+				const compose = variants[name][value]
+
+				variants[name][value] = condition => {
+					const classNames = (compose ? compose(condition) : []).concat(variantClassName)
+
+					if (condition != null) {
 						if (!conditionVariants[condition]) {
 							const conditionalVariantClassName = (conditionVariants[condition] = variantClassName + '--' + getHashString('', condition))
 							const conditionalVariantSelector = '.' + conditionalVariantClassName
 							const conditionalVariantCssText = getComputedCss({ [condition]: { [conditionalVariantSelector]: variantStyle } })
 
-							variantRules.css(conditionalVariantCssText)
+							variantRules.set(conditionalVariantCssText)
 						}
 
 						return conditionVariants[condition]
 					} else {
-						variantRules.css(variantCssText)
+						variantRules.set(variantCssText)
 					}
 
-					return variantClassName
+					return classNames
 				}
 			}
 		}
 
-		styledRules.css(primaryRules)
-		styledRules.css(variantRules)
-		styledRules.css(inlinedRules)
+		styledRules.set(primaryRules)
+		styledRules.set(variantRules)
+		styledRules.set(inlinedRules)
+
+		function classNames() {
+			const classNames = (composer.classNames ? composer.classNames() : []).concat(className)
+
+			primaryRules.set(cssText)
+
+			return classNames
+		}
 
 		/** Returns an expression of the current styled rule. */
 		return assign(
-			(
+			function (
 				/** Props used to determine the expression of the current styled rule. */
 				initProps
-			) => {
-				primaryRules.css(cssText)
-
+			) {
 				const { css: inlineStyle, ...props } = Object(initProps)
 
-				let expressClassNames = new Set(classNames)
+				let expressClassNames = new Set(classNames())
 
 				if (classProp in props) {
-					String(props[classProp]).split(/\s+/).forEach(expressClassNames.css, expressClassNames)
+					String(props[classProp]).split(/\s+/).forEach(expressClassNames.add, expressClassNames)
 
 					delete props[classProp]
 				}
@@ -203,7 +210,7 @@ const createCss = (init) => {
 
 						// apply any matching variant
 						if (propValue in variant) {
-							expressClassNames.add(variant[propValue]())
+							variant[propValue]().forEach(expressClassNames.add, expressClassNames)
 						} else {
 							// conditionally apply any matched conditional variants
 							for (const innerName in propValue) {
@@ -211,7 +218,7 @@ const createCss = (init) => {
 								const condition = conditions[innerName] || innerName
 
 								if (innerValue in variant) {
-									expressClassNames.add(variant[innerValue](condition))
+									variant[innerValue](condition).forEach(expressClassNames.add, expressClassNames)
 								}
 							}
 						}
@@ -223,7 +230,7 @@ const createCss = (init) => {
 					const inlineRuleSelector = '.' + inlineRuleClassName
 					const inlineRuleCssText = getComputedCss({ [inlineRuleSelector]: inlineStyle })
 
-					inlinedRules.css(inlineRuleCssText)
+					inlinedRules.set(inlineRuleCssText)
 
 					expressClassNames.add(inlineRuleClassName)
 				}
@@ -234,7 +241,6 @@ const createCss = (init) => {
 					toString,
 					props,
 					className: props[classProp] = expressClassNames.join(' '),
-					classNames: expressClassNames,
 					selector: '.' + expressClassNames.join('.'),
 				}
 			},
