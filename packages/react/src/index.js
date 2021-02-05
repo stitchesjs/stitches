@@ -18,6 +18,8 @@ export default (init) => {
 
 	init = assign(
 		{
+			classProp: 'className',
+			stringProp: 'query',
 			onImport: createOnChange(importText, 'import'),
 			onGlobal: createOnChange(globalText, 'global'),
 			onThemed: createOnChange(themedText, 'themed'),

@@ -5,12 +5,14 @@ class CssSet extends Set {
 		super().onChange = onChange
 	}
 
-	add(item) {
-		const { onChange, size } = this
+	set(item) {
+		if (!this.has(item)) {
+			this.add(item)
 
-		super.add.call(this, item)
-
-		if (onChange && this.size !== size) onChange(this)
+			if (this.onChange && String(item)) {
+				this.onChange(this)
+			}
+		}
 	}
 
 	toString() {

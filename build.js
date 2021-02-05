@@ -5,6 +5,32 @@ import fs from 'fs/promises'
 import mergeSourceMap from 'merge-source-map'
 const { build } = esbuild
 
+const nameCache = {
+	vars: {
+		props: Object.assign(Object.create(null), {
+			'$from': 'f',
+			'$CssSet_default': 'C',
+			'$Object_default': 'O',
+			'$assign': 'a',
+			'$create': 'c',
+			'$ThemeToken_default': 'T',
+			'$getResolvedSelectors_default': 'r',
+			'$isDeclaration_default': 'd',
+			'$isPossiblyUnitless_default': 'u',
+			'$isOpen': 'o',
+			'$splitByComma': 't',
+			'$createGetComputedCss_default': 'g',
+			'$colors': 'l',
+			'$sizes': 's',
+			'$space': 'e',
+			'$defaultThemeMap_default': 'm',
+			'$getCustomProperties_default': 'p',
+			'$getHashString_default': 'h',
+			'$src_default': 'x'
+		})
+	}
+}
+
 async function buildPackage(packageName) {
 	const entryPoint = `./packages/${packageName}/src/index.js`
 	const outCjsPath = `./packages/${packageName}/dist/index.cjs.js`
@@ -26,7 +52,20 @@ async function buildPackage(packageName) {
 	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js`, esmText)
 	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js.map`, mapText)
 
-	const { code, map } = await minify(esmText, { toplevel: true, module: true, compress: { unsafe: true }, sourceMap: { content: mapText } })
+	const { code, map } = await minify(esmText, {
+		compress: {
+			unsafe: true
+		},
+		nameCache,
+		mangle: {
+			toplevel: true,
+		},
+		module: true,
+		sourceMap: {
+			content: mapText
+		},
+		toplevel: true,
+	})
 
 	const clipEnd = code.length
 	const clipStart = clipEnd - 21
