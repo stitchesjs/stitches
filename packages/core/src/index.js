@@ -51,12 +51,14 @@ const createCss = (init) => {
 	/** Prepares global CSS and returns a function that enables the styles on the styled sheet. */
 	const theme = (
 		/** Identifier */
-		displayName,
+		className,
 		/** Object of theme scales with inner token values. */
 		theme,
 	) => {
 		/** CSS Selector */
-		const query = (displayName || ':root').replace(/^[A-Za-z-]/, '.$&')
+		const query = (className || ':root').replace(/^[A-Za-z-]/, `.${prefix}$&`)
+
+		className = query.slice(1)
 
 		/** Computed CSS */
 		const cssText = getComputedCss({
@@ -79,7 +81,7 @@ const createCss = (init) => {
 
 		return assign(expressThemedRule, {
 			toString: toStringProp,
-			displayName,
+			className,
 			query,
 		})()
 	}
@@ -272,7 +274,7 @@ const createCss = (init) => {
 		)
 	}
 
-	const defaultThemed = theme('', init.theme)
+	const defaultThemed = theme(':root', init.theme)
 
 	assign(theme, defaultThemed)
 

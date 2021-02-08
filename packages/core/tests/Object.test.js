@@ -5,13 +5,13 @@ describe('Object()', () => {
 	const string = 'A'
 	const number = 0
 
-	test('Object() preserves an existing object', async () => {
+	test('Object() preserves an existing object', () => {
 		expect(object).toBe(object)
 		expect(Object(object)).toBe(object)
 		expect(typeof object).toBe('object')
 	})
 
-	test('Object() converts a string into a kind of object', async () => {
+	test('Object() converts a string into a kind of object', () => {
 		expect(string).toBe(string)
 		expect(typeof string).toBe('string')
 		expect(string.constructor).toBe(String)
@@ -25,7 +25,7 @@ describe('Object()', () => {
 		expect(String(Object(string))).toBe(string)
 	})
 
-	test('Object() converts a number into a kind of object', async () => {
+	test('Object() converts a number into a kind of object', () => {
 		expect(number).toBe(number)
 		expect(typeof number).toBe('number')
 		expect(number.constructor).toBe(Number)
@@ -39,7 +39,7 @@ describe('Object()', () => {
 })
 
 describe('create()', () => {
-	test('create() creates a new kind of object', async () => {
+	test('create() creates a new kind of object', () => {
 		expect(create(null).constructor).toBe(undefined)
 		expect(Object.getPrototypeOf(create(null))).toBe(null)
 
@@ -51,7 +51,7 @@ describe('create()', () => {
 describe('assign()', () => {
 	const object = {}
 
-	test('assign() adds to an object', async () => {
+	test('assign() adds to an object', () => {
 		expect(Object.keys(object).length).toBe(0)
 
 		expect(assign(object, { foo: true })).toBe(object)

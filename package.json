@@ -7,10 +7,7 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "node build.js",
     "postinstall": "run-s bootstrap",
-    "start": "run-s start:*",
-    "start:build": "node build.js",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "node test"
   },
   "workspaces": [
     "packages/*",
@@ -21,8 +18,8 @@
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
     "@types/react-test-renderer": "17.0.0",
+    "baretest": "^2.0.0",
     "esbuild": "^0.8.39",
-    "jest": "26.6.3",
     "lerna": "3.22.1",
     "magic-string": "^0.25.7",
     "merge-source-map": "^1.1.0",
