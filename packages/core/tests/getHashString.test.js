@@ -1,4 +1,4 @@
-import getHashString from '../src/getHashString'
+import getHashString from '../src/getHashString.js'
 
 describe('getHashString()', () => {
 	test('getHashString() consistently returns the same unique hash', () => {

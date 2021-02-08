@@ -26,34 +26,45 @@ const createCss = (init) => {
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
 	const getComputedCss = createGetComputedCss(Object(init.utils), Object(init.themeMap || defaultThemeMap), conditions)
 
+	/** Collection of `@import` CSS rules. */
 	const importRules = new CssSet(init.onImport)
+
+	/** Collection of global CSS rules. */
 	const globalRules = new CssSet(init.onGlobal)
+
+	/** Collection of theming CSS rules. */
 	const themedRules = new CssSet(init.onThemed)
+
+	/** Collection of component CSS rules. */
 	const styledRules = new CssSet(init.onStyled)
 
-	function toString() {
+	/** Returns the string prop of the instance. */
+	function toStringProp() {
 		return this[stringProp]
 	}
 
-	function toCallString() {
+	/** Returns the string value of the called instance. */
+	function toStringCall() {
 		return String(this())
 	}
 
 	/** Prepares global CSS and returns a function that enables the styles on the styled sheet. */
 	const theme = (
-		/** CSS Selector */
-		className,
+		/** Identifier */
+		displayName,
 		/** Object of theme scales with inner token values. */
 		theme,
 	) => {
 		/** CSS Selector */
-		const query = (className || ':root').replace(/^[A-Za-z-]/, '.$&')
+		const query = (displayName || ':root').replace(/^[A-Za-z-]/, '.$&')
 
 		/** Computed CSS */
-		const cssText = getComputedCss({ [query]: getCustomProperties(theme) })
+		const cssText = getComputedCss({
+			[query]: getCustomProperties(theme)
+		})
 
 		const expressThemedRule = () => {
-			themedRules.set(cssText)
+			themedRules.addCss(cssText)
 
 			return expressThemedRule
 		}
@@ -66,7 +77,11 @@ const createCss = (init) => {
 			}
 		}
 
-		return assign(expressThemedRule, { className, query, toString })()
+		return assign(expressThemedRule, {
+			toString: toStringProp,
+			displayName,
+			query,
+		})()
 	}
 
 	/** Returns a function that enables the styles on the styled sheet. */
@@ -74,7 +89,7 @@ const createCss = (init) => {
 		/** Styles representing global CSS. */
 		initStyles,
 		/** Value returned by toString */
-		id = '',
+		displayName = '',
 	) => {
 		/** List of global import styles. */
 		const localImportRules = []
@@ -89,11 +104,14 @@ const createCss = (init) => {
 		}
 
 		return assign(() => {
-			localImportRules.forEach(importRules.set, importRules)
-			localGlobalRules.forEach(globalRules.set, globalRules)
+			localImportRules.forEach(importRules.addCss, importRules)
+			localGlobalRules.forEach(globalRules.addCss, globalRules)
 
-			return id
-		}, { toString: toCallString })
+			return displayName
+		}, {
+			displayName,
+			toString: toStringCall
+		})
 	}
 
 	/** Returns a function that enables the keyframe styles on the styled sheet. */
@@ -160,12 +178,12 @@ const createCss = (init) => {
 							const conditionalVariantSelector = '.' + conditionalVariantClassName
 							const conditionalVariantCssText = getComputedCss({ [condition]: { [conditionalVariantSelector]: variantStyle } })
 
-							variantRules.set(conditionalVariantCssText)
+							variantRules.addCss(conditionalVariantCssText)
 						}
 
 						return conditionVariants[condition]
 					} else {
-						variantRules.set(variantCssText)
+						variantRules.addCss(variantCssText)
 					}
 
 					return classNames
@@ -173,14 +191,12 @@ const createCss = (init) => {
 			}
 		}
 
-		styledRules.set(primaryRules)
-		styledRules.set(variantRules)
-		styledRules.set(inlinedRules)
+		styledRules.addCss(primaryRules).addCss(variantRules).addCss(inlinedRules)
 
 		function classNames() {
 			const classNames = (composer.classNames ? composer.classNames() : []).concat(className)
 
-			primaryRules.set(cssText)
+			primaryRules.addCss(cssText)
 
 			return classNames
 		}
@@ -230,7 +246,7 @@ const createCss = (init) => {
 					const inlineRuleSelector = '.' + inlineRuleClassName
 					const inlineRuleCssText = getComputedCss({ [inlineRuleSelector]: inlineStyle })
 
-					inlinedRules.set(inlineRuleCssText)
+					inlinedRules.addCss(inlineRuleCssText)
 
 					expressClassNames.add(inlineRuleClassName)
 				}
@@ -238,14 +254,14 @@ const createCss = (init) => {
 				expressClassNames = from(expressClassNames)
 
 				return {
-					toString,
-					props,
+					toString: toStringProp,
 					className: props[classProp] = expressClassNames.join(' '),
 					selector: '.' + expressClassNames.join('.'),
+					props,
 				}
 			},
 			{
-				toString: toCallString,
+				toString: toStringCall,
 				className,
 				classNames,
 				cssText,
@@ -265,6 +281,7 @@ const createCss = (init) => {
 		keyframes,
 		css,
 		theme,
+		/** Clears all rules, conditionally runs any `onResets` callbacks, and then restores the initial theme. */
 		reset() {
 			importRules.clear()
 			themedRules.clear()

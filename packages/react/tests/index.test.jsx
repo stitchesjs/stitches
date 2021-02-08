@@ -1,6 +1,6 @@
 import * as react from 'react'
 import * as renderer from 'react-test-renderer'
-import createCss from '../src/index'
+import createCss from '../src/index.js'
 
 describe('Stitches React', () => {
 	let wrapper = renderer.create(react.createElement(react.Fragment))
@@ -32,7 +32,7 @@ describe('Stitches React', () => {
 		if (Button === null) return
 
 		renderer.act(() => {
-			wrapper.update(react.createElement(Button as any))
+			wrapper.update(react.createElement(Button))
 		})
 
 		expect(wrapper.toJSON()).toStrictEqual({ type: 'button', props: { className: 'sgadxkw' }, children: null })

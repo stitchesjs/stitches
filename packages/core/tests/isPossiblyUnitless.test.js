@@ -1,4 +1,4 @@
-import isPossiblyUnitless from '../src/isPossiblyUnitless'
+import isPossiblyUnitless from '../src/isPossiblyUnitless.js'
 
 describe('isPossiblyUnitless()', () => {
 	test('isPossiblyUnitless() correctly identifies some unitless properties', () => {

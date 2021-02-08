@@ -1,4 +1,4 @@
-import defaultThemeMap from '../src/defaultThemeMap'
+import defaultThemeMap from '../src/defaultThemeMap.js'
 
 describe('defaultThemeMap()', () => {
 	test('defaultThemeMap properties are as expected', () => {

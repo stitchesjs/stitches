@@ -1,4 +1,4 @@
-import createCss from '../src/index'
+import createCss from '../src/index.js'
 
 describe('Configuration', () => {
 	describe('Configuration', () => {
@@ -16,7 +16,7 @@ describe('Configuration', () => {
 					lg: '@media (min-width: 960px)',
 				},
 				utils: {
-					marginX: (value: number | string) => ({
+					marginX: (value) => ({
 						marginLeft: value,
 						marginRight: value,
 					}),
@@ -88,7 +88,7 @@ describe('Configuration', () => {
 			const instance = createCss({
 				utils: {
 					// create `bg` property
-					bg: (value: any) => ({ backgroundColor: value }),
+					bg: (value) => ({ backgroundColor: value }),
 				},
 			})
 			const rule = instance.css({

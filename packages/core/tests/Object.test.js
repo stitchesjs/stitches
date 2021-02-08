@@ -1,4 +1,4 @@
-import Object, { assign, create } from '../src/Object'
+import Object, { assign, create } from '../src/Object.js'
 
 describe('Object()', () => {
 	const object = {}
@@ -49,7 +49,7 @@ describe('create()', () => {
 })
 
 describe('assign()', () => {
-	const object = {} as { foo?: true; bar?: true }
+	const object = {}
 
 	test('assign() adds to an object', async () => {
 		expect(Object.keys(object).length).toBe(0)
