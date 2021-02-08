@@ -73,7 +73,9 @@ export function Test() {
 			<Link isPrimary />
 
 			{/* Button does not accept href prop */}
-			<Button onClick={e => {
+			<Button isDisabled="true"  onMouseDown={e => {
+				console.log(e.altKey)
+			}}  onClick={e => {
 				console.log(e)
 			}} />
 

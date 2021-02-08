@@ -19,19 +19,19 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 			css?: StitchesCSS<Conditions, Theme, Utils>
 		} & VariantsCall<Variants, Conditions>
 	> {
-	<As extends React.ComponentType>(props: InternalStitchesProps<As>): JSX.Element
-	(props: InternalStitchesProps<'div'>): JSX.Element
-	(props: InternalStitchesProps<'code'>): JSX.Element
-	(props: InternalStitchesProps<'pre'>): JSX.Element
-	(props: InternalStitchesProps<'span'>): JSX.Element
-	(props: InternalStitchesProps<'a'>): JSX.Element
-	(props: InternalStitchesProps<'p'>): JSX.Element
-	(props: InternalStitchesProps<'li'>): JSX.Element
-	(props: InternalStitchesProps<'ul'>): JSX.Element
-	(props: InternalStitchesProps<'image'>): JSX.Element
-	(props: InternalStitchesProps<'table'>): JSX.Element
-	(props: InternalStitchesProps<'td'>): JSX.Element
-	(props: InternalStitchesProps<'tr'>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'div', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'code', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'pre', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'span', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'a', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'p', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'li', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'ul', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'image', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'table', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'td', Variants, Conditions, Theme, Utils>): JSX.Element
+	(props: InternalStitchesPropsWithAs<'tr', Variants, Conditions, Theme, Utils>): JSX.Element
+	<As extends React.ComponentType>(props: InternalStitchesPropsWithAs<As, Variants, Conditions, Theme, Utils>): JSX.Element
 	(
 		props: VariantsCall<Variants, Conditions> & { as?: DefaultElement } & Omit<React.ComponentPropsWithRef<DefaultElement>, keyof Variants | 'css'> & {
 				css?: StitchesCSS<Conditions, Theme, Utils>
@@ -39,7 +39,12 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 	): JSX.Element
 }
 
-type InternalStitchesProps<Elm, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<React.ComponentPropsWithRef<Elm>, keyof Variants | 'css'> & {
+type InternalStitchesProps<Elm, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = VariantsCall<Variants, Conditions> &
+	Omit<React.ComponentPropsWithRef<Elm>, keyof Variants | 'css'> & {
+		css?: StitchesCSS<Conditions, Theme, Utils>
+	}
+
+type InternalStitchesPropsWithAs<Elm, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<React.ComponentPropsWithRef<Elm>, keyof Variants | 'css'> & {
 		css?: StitchesCSS<Conditions, Theme, Utils>
 	}
 
