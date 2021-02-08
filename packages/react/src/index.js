@@ -1,5 +1,6 @@
 import Object, { assign } from '../../core/src/Object.js'
 import createCoreCss from '../../core/src/index.js'
+import defaultThemeMap from '../../core/src/defaultThemeMap.js'
 
 const $$typeof = Symbol.for('react.element')
 
@@ -75,3 +76,5 @@ export default (init) => {
 
 	return stitches.reset()
 }
+
+export { defaultThemeMap }

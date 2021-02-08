@@ -8,7 +8,7 @@ import getCustomProperties from './getCustomProperties.js'
 import getHashString from './getHashString.js'
 
 /** Returns a new styled sheet and accompanying API. */
-const createCss = (init) => {
+export default (init) => {
 	init = Object(init)
 
 	/** Named conditions (media and support queries). */
@@ -300,4 +300,4 @@ const createCss = (init) => {
 	}
 }
 
-export default assign(createCss, { defaultThemeMap })
+export { defaultThemeMap }
