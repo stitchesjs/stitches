@@ -54,7 +54,7 @@ export default (init) => {
 				/** Styles representing component CSS. */
 				initStyles,
 			) => {
-				const expressStyledRule = sheet.css(asType, initStyles)
+				const expression = sheet.css(asType, initStyles)
 
 				return Object.setPrototypeOf(assign((
 					/** Props used to determine the expression of the current styled rule. */
@@ -62,13 +62,13 @@ export default (init) => {
 				) => {
 					const {
 						props: { as: type = asType, ref = null, ...props },
-						toString,
-					} = expressStyledRule(initProps)
+						...expressedProps
+					} = expression(initProps)
 
 					sheet.sync()
 
-					return { constructor: undefined, $$typeof, props, ref, toString, type, __v: 0 }
-				}, expressStyledRule), Object(asType))
+					return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
+				}, expression), Object(asType))
 			},
 			{
 				get: (target, type) => (type in target ? (typeof target[type] === 'function' ? target[type].bind(target) : target[type]) : target.bind(null, type)),
