@@ -52,54 +52,69 @@ async function buildPackage(packageName) {
 	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js`, esmText)
 	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js.map`, mapText)
 
-	const { code, map } = await minify(esmText, {
-		compress: {
-			unsafe: true
-		},
-		nameCache,
-		mangle: {
-			toplevel: true,
-		},
-		module: true,
-		sourceMap: {
-			content: mapText
-		},
-		toplevel: true,
+	const buildCjs = await build({
+		bundle: true,
+		entryPoints: [entryPoint],
+		format: 'cjs',
+		outfile: outEsmPath,
+		sourcemap: 'external',
+		write: false,
 	})
 
-	const clipEnd = code.length
-	const clipStart = clipEnd - 21
-	const clipExport = packageName === 'core' ? 'S' : 'w'
+	const cjsText = buildCjs.outputFiles[0].text
+	const cjsCode = buildCjs.outputFiles[1].text
 
-	// Build ESM version
-	await fs.writeFile(outEsmPath, code)
-	await fs.writeFile(`${outEsmPath}.map`, map)
+	await fs.writeFile(`./packages/${packageName}/dist/index.development.cjs.js`, cjsCode)
+	await fs.writeFile(`./packages/${packageName}/dist/index.development.cjs.js.map`, cjsText)
 
-	// Build CJS version
-	const cjsCode = new MagicString(code)
+	// const { code, map } = await minify(esmText, {
+	// 	compress: {
+	// 		unsafe: true
+	// 	},
+	// 	nameCache,
+	// 	mangle: {
+	// 		toplevel: true,
+	// 	},
+	// 	module: true,
+	// 	sourceMap: {
+	// 		content: mapText
+	// 	},
+	// 	toplevel: true,
+	// })
 
-	cjsCode.remove(clipStart, clipEnd).append('module.exports=' + clipExport)
+	// const clipEnd = code.length
+	// const clipStart = clipEnd - 21
+	// const clipExport = packageName === 'core' ? 'S' : 'w'
 
-	const cjsMap = mergeSourceMap(JSON.parse(map), JSON.parse(cjsCode.generateMap({
-		source: 'bundle.js',
-		hires: true,
-	}).toString()))
+	// // Build ESM version
+	// await fs.writeFile(outEsmPath, code)
+	// await fs.writeFile(`${outEsmPath}.map`, map)
 
-	await fs.writeFile(outCjsPath, cjsCode.toString())
-	await fs.writeFile(`${outCjsPath}.map`, JSON.stringify(cjsMap))
+	// // Build CJS version
+	// const cjsCode = new MagicString(code)
 
-	// Build IIFE version
-	const ifeCode = new MagicString(code)
+	// cjsCode.remove(clipStart, clipEnd).append('module.exports=' + clipExport)
 
-	ifeCode.remove(clipStart, clipEnd).append('return createCss})()').prepend('stitches=(()=>{')
+	// const cjsMap = mergeSourceMap(JSON.parse(map), JSON.parse(cjsCode.generateMap({
+	// 	source: 'bundle.js',
+	// 	hires: true,
+	// }).toString()))
 
-	const ifeMap = mergeSourceMap(JSON.parse(map), JSON.parse(ifeCode.generateMap({
-		source: 'bundle.js',
-		hires: true,
-	}).toString()))
+	// await fs.writeFile(outCjsPath, cjsCode.toString())
+	// await fs.writeFile(`${outCjsPath}.map`, JSON.stringify(cjsMap))
 
-	await fs.writeFile(outIfePath, ifeCode.toString())
-	await fs.writeFile(`${outIfePath}.map`, JSON.stringify(ifeMap))
+	// // Build IIFE version
+	// const ifeCode = new MagicString(code)
+
+	// ifeCode.remove(clipStart, clipEnd).append('return createCss})()').prepend('stitches=(()=>{')
+
+	// const ifeMap = mergeSourceMap(JSON.parse(map), JSON.parse(ifeCode.generateMap({
+	// 	source: 'bundle.js',
+	// 	hires: true,
+	// }).toString()))
+
+	// await fs.writeFile(outIfePath, ifeCode.toString())
+	// await fs.writeFile(`${outIfePath}.map`, JSON.stringify(ifeMap))
 }
 
 async function buildPackages() {
