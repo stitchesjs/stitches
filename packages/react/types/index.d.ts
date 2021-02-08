@@ -19,35 +19,29 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 			css?: StitchesCSS<Conditions, Theme, Utils>
 		} & VariantsCall<Variants, Conditions>
 	> {
-
-	<As extends React.ComponentType>(
-		props: { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
-				css?: StitchesCSS<Conditions, Theme, Utils>
-			} & VariantsCall<Variants, Conditions>,
-	): JSX.Element
-
+	<As extends React.ComponentType>(props: InternalStitchesProps<As>): JSX.Element
+	(props: InternalStitchesProps<'div'>): JSX.Element
+	(props: InternalStitchesProps<'code'>): JSX.Element
+	(props: InternalStitchesProps<'pre'>): JSX.Element
+	(props: InternalStitchesProps<'span'>): JSX.Element
+	(props: InternalStitchesProps<'a'>): JSX.Element
+	(props: InternalStitchesProps<'p'>): JSX.Element
+	(props: InternalStitchesProps<'li'>): JSX.Element
+	(props: InternalStitchesProps<'ul'>): JSX.Element
+	(props: InternalStitchesProps<'image'>): JSX.Element
+	(props: InternalStitchesProps<'table'>): JSX.Element
+	(props: InternalStitchesProps<'td'>): JSX.Element
+	(props: InternalStitchesProps<'tr'>): JSX.Element
 	(
-		props: { as: 'a' } & Omit<React.ComponentPropsWithRef<'a'>, keyof Variants | 'css'> & {
+		props: VariantsCall<Variants, Conditions> & { as?: DefaultElement } & Omit<React.ComponentPropsWithRef<DefaultElement>, keyof Variants | 'css'> & {
 				css?: StitchesCSS<Conditions, Theme, Utils>
-			} & VariantsCall<Variants, Conditions>,
-	): JSX.Element
-
-	(
-		props: { as: 'div' } & Omit<React.ComponentPropsWithRef<'div'>, keyof Variants | 'css'> & {
-				css?: StitchesCSS<Conditions, Theme, Utils>
-			} & VariantsCall<Variants, Conditions>,
-	): JSX.Element
-
-(
-		props: {as?: never} & Omit<React.ComponentPropsWithRef<DefaultElement>, keyof Variants | 'css'> & {
-			css?: StitchesCSS<Conditions, Theme, Utils>
-		} & VariantsCall<Variants, Conditions>,
+			},
 	): JSX.Element
 }
 
-type InternalStitchesProps<Elm, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = { as?: 'a' } & Omit<React.ComponentPropsWithRef<'a'>, keyof Variants | 'css' | 'as'> & {
+type InternalStitchesProps<Elm, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<React.ComponentPropsWithRef<Elm>, keyof Variants | 'css'> & {
 		css?: StitchesCSS<Conditions, Theme, Utils>
-	} & VariantsCall<Variants, Conditions>
+	}
 
 /* Styled instance:
  * -----------------------------------------------------------------------------------------------*/

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import type * as Polymorphic from '@radix-ui/react-polymorphic'
 import createStyled from '../types/index.d'
 import * as Stitches from '../types/index.d'
 
@@ -22,36 +21,21 @@ const Button = styled('button', {
  * -----------------------------------------------------------------------------------------------*/
 
 const ExtendedButtonUsingReactUtils = React.forwardRef<React.ElementRef<typeof Button>, React.ComponentProps<typeof Button>>((props, forwardedRef) => {
-	return <Button />
+	return <Button another={{}} />
 })
-
-const B = <Button as="a" css={{ backgroundColor: 'AppWorkspace' }} onClick={(e) => {}} />
 
 /* -------------------------------------------------------------------------------------------------
  * Extended Button using react utilities without polymorphism and inline `as`
  * -----------------------------------------------------------------------------------------------*/
 export function ExtendedButtonUsingReactUtilsWithInternalInlineAs(props: React.ComponentProps<typeof Button>) {
 	/* Should not error with inline `as` component */
-	return <Button as={(props) => <a {...props} />} />
+	return <Button as={(propss) => <a {...propss} />} />
 }
 
 /* -------------------------------------------------------------------------------------------------
  * Extended Polymorphic Button
  * -----------------------------------------------------------------------------------------------*/
 
-type ExtendedButtonProps = {
-	isExtended?: boolean
-}
-type ExtendedButtonButtonOwnProps = Omit<Polymorphic.OwnProps<typeof Button>, keyof ExtendedButtonProps | 'another' | 'as'>
-
-const ExtendedButton = React.forwardRef((props, forwardedRef) => {
-	const { isExtended, as, ...extendedButtonProps } = props
-	return <Button {...extendedButtonProps} ref={forwardedRef} />
-}) as Polymorphic.ForwardRefComponent<Stitches.IntrinsicElement<typeof Button>, ExtendedButtonProps & ExtendedButtonButtonOwnProps>
-
-type r = React.Ref<HTMLElementTagNameMap['button']>
-type f = React.ElementRef<typeof Button>
-type bla = Stitches.IntrinsicElement<typeof Button>
 /* -------------------------------------------------------------------------------------------------
  * Normal Link
  * -----------------------------------------------------------------------------------------------*/
@@ -59,7 +43,7 @@ type bla = Stitches.IntrinsicElement<typeof Button>
 type LinkProps = React.ComponentProps<'a'> & {
 	isPrimary?: boolean
 	onToggle?(open: boolean): void
-
+	isDisabled?: boolean
 }
 
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
@@ -71,22 +55,14 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
 	)
 })
 
-/* -------------------------------------------------------------------------------------------------
- * Polymorphic Anchor with required prop
- * -----------------------------------------------------------------------------------------------*/
-
-type AnchorProps = {
-	requiredProp: boolean
-}
-
-const Anchor = React.forwardRef((props, forwardedRef) => {
-	const { as: Comp = 'a', requiredProp, ...anchorProps } = props
-	/* Does not expect requiredProp */
-	return <Comp {...anchorProps} ref={forwardedRef} />
-}) as Polymorphic.ForwardRefComponent<'a', AnchorProps>
-
 /* -----------------------------------------------------------------------------------------------*/
-
+Button({
+	css: {},
+	onClick: (e) => {
+		console.log(e)
+	},
+	isDisabled: true,
+})
 export function Test() {
 	return (
 		<>
@@ -97,14 +73,15 @@ export function Test() {
 			<Link isPrimary />
 
 			{/* Button does not accept href prop */}
-			{/* @ts-expect-error */}
-			<Button href="#" />
+			<Button onClick={e => {
+				console.log(e)
+			}} />
 
 			{/* Button accepts form prop */}
-			<Button form="form" />
+			<Button form="form" onClick={(e) => {}} />
 
 			{/* Button accepts css prop */}
-			<Button css={{}} />
+			<Button as="a" href="wfefwe" css={{ backgroundColor: 'ActiveCaption', padding: 'inherit' }} />
 
 			{/* Button accepts isDisabled prop */}
 			<Button isDisabled />
@@ -127,7 +104,7 @@ export function Test() {
 
 			{/* Button as Link does not accept form prop */}
 			{/* @ts-expect-error */}
-			<Button as={Link} form="form" />
+			<Button as={Link} form="form" css={{ backgroundColor: 'ActiveCaption' }} />
 
 			{/* Button accepts onClick prop */}
 			<Button onClick={(event) => event.currentTarget.form} />
@@ -138,28 +115,6 @@ export function Test() {
 			{/* Button as Link accepts onClick prop, but it must be explicitly typed */}
 			<Button as={Link} onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => event.altKey} />
 
-			{/* ExtendedButton accepts isExtended prop */}
-			<ExtendedButton isExtended />
-
-			{/* ExtendedButton accepts isDisabled prop */}
-			<ExtendedButton isDisabled />
-
-			{/* ExtendedButton does not accept another prop */}
-			{/* @ts-expect-error */}
-			<ExtendedButton another={1} />
-
-			{/* ExtendedButton accepts onClick prop */}
-			<ExtendedButton onClick={(event) => event.currentTarget.form} />
-
-			{/* ExtendedButton as "a" accepts isExtended prop */}
-			<ExtendedButton as="a" isExtended />
-
-			{/* ExtendedButton as "a" accepts isDisabled prop */}
-			<ExtendedButton as="a" isDisabled />
-
-			{/* ExtendedButton as "a" accepts onClick prop */}
-			<ExtendedButton as="a" onClick={(event) => event.currentTarget.href} />
-
 			{/* ExtendedButtonUsingReactUtils accepts isDisabled prop */}
 			<ExtendedButtonUsingReactUtils isDisabled />
 
@@ -169,16 +124,6 @@ export function Test() {
 			{/* ExtendedButtonUsingReactUtils does not accept as prop */}
 			{/* @ts-expect-error */}
 			<ExtendedButtonUsingReactUtils as="a" isDisabled />
-
-			{/* Anchor expects requiredProp prop */}
-			{/* @ts-expect-error */}
-			<Anchor />
-
-			{/* Button as Anchor (Polymorphic.ForwardRefComponent) expects required prop */}
-			{/* @ts-expect-error */}
-			<Button as={Anchor} />
-
-			<Button as={Anchor} css={{ padding: 'inherit' }} requiredProp />
 		</>
 	)
 }
