@@ -17,9 +17,6 @@
     "play"
   ],
   "dependencies": {
-    "@babel/plugin-proposal-export-default-from": "^7.12.1",
-    "@babel/preset-react": "7.12.10",
-    "@babel/preset-typescript": "7.12.7",
     "@preconstruct/cli": "2.0.2",
     "@types/jest": "26.0.20",
     "@types/react": "17.0.0",
@@ -34,7 +31,6 @@
     "npm-run-all": "4.1.5",
     "react-test-renderer": "17.0.1",
     "terser": "^5.5.1",
-    "ts-jest": "26.4.4",
     "typescript": "^4.2.0-beta"
   },
   "browserslist": [
@@ -43,18 +39,7 @@
     "last 1 safari versions",
     "maintained node versions"
   ],
-  "jest": {
-    "coverageProvider": "v8",
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ts",
-      "tsx"
-    ],
-    "preset": "ts-jest",
-    "testEnvironment": "jsdom",
-    "testRegex": "(\\.|/)test\\.[jt]sx?$"
-  },
+
   "preconstruct": {
     "packages": [
       "packages/*"
