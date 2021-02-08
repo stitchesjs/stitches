@@ -12,7 +12,7 @@ export default (init) => {
 	const themedText = hasDocument && new Text('')
 	const styledText = hasDocument && new Text('')
 
-	const createOnChange = hasDocument ? (textNode, type) => Reflect.set.bind(Reflect, textNode, 'data') : () => undefined
+	const createOnChange = hasDocument ? textNode => Reflect.set.bind(Reflect, textNode, 'data') : () => undefined
 
 	let sheetParent
 	let sheetTarget
@@ -20,7 +20,7 @@ export default (init) => {
 	init = assign(
 		{
 			classProp: 'className',
-			stringProp: 'query',
+			stringProp: 'selector',
 			onImport: createOnChange(importText, 'import'),
 			onGlobal: createOnChange(globalText, 'global'),
 			onThemed: createOnChange(themedText, 'themed'),
@@ -37,7 +37,9 @@ export default (init) => {
 		init,
 	)
 
-	return assign(createCoreCss(init), {
+	const sheet = createCoreCss(init)
+
+	return assign(sheet, {
 		sync() {
 			if (hasDocument) {
 				if (!sheetParent) sheetParent = document.head || document.documentElement
@@ -52,7 +54,7 @@ export default (init) => {
 				/** Styles representing component CSS. */
 				initStyles,
 			) => {
-				const expressStyledRule = stitches.css(asType, initStyles)
+				const expressStyledRule = sheet.css(asType, initStyles)
 
 				return Object.setPrototypeOf(assign((
 					/** Props used to determine the expression of the current styled rule. */
@@ -63,7 +65,7 @@ export default (init) => {
 						toString,
 					} = expressStyledRule(initProps)
 
-					stitches.sync()
+					sheet.sync()
 
 					return { constructor: undefined, $$typeof, props, ref, toString, type, __v: 0 }
 				}, expressStyledRule), Object(asType))

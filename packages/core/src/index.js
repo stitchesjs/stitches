@@ -56,13 +56,13 @@ export default (init) => {
 		theme,
 	) => {
 		/** CSS Selector */
-		const query = (className || ':root').replace(/^[A-Za-z-]/, `.${prefix}$&`)
+		const selector = (className || ':root').replace(/^[A-Za-z-]/, `.${prefix}$&`)
 
-		className = query.slice(1)
+		className = selector.slice(1)
 
 		/** Computed CSS */
 		const cssText = getComputedCss({
-			[query]: getCustomProperties(theme)
+			[selector]: getCustomProperties(theme)
 		})
 
 		const expressThemedRule = () => {
@@ -82,7 +82,7 @@ export default (init) => {
 		return assign(expressThemedRule, {
 			toString: toStringProp,
 			className,
-			query,
+			selector,
 		})()
 	}
 
