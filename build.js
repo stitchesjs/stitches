@@ -49,8 +49,8 @@ async function buildPackage(packageName) {
 	const mapText = buildEsm.outputFiles[0].text
 	const esmText = buildEsm.outputFiles[1].text
 
-	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js`, esmText)
-	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js.map`, mapText)
+	await fs.writeFile(`./packages/${packageName}/dist/index.esm.js`, esmText)
+	await fs.writeFile(`./packages/${packageName}/dist/index.esm.js.map`, mapText)
 
 	const buildCjs = await build({
 		bundle: true,
@@ -64,8 +64,8 @@ async function buildPackage(packageName) {
 	const cjsText = buildCjs.outputFiles[0].text
 	const cjsCode = buildCjs.outputFiles[1].text
 
-	await fs.writeFile(`./packages/${packageName}/dist/index.development.cjs.js`, cjsCode)
-	await fs.writeFile(`./packages/${packageName}/dist/index.development.cjs.js.map`, cjsText)
+	await fs.writeFile(`./packages/${packageName}/dist/index.cjs.js`, cjsCode)
+	await fs.writeFile(`./packages/${packageName}/dist/index.cjs.js.map`, cjsText)
 
 	// const { code, map } = await minify(esmText, {
 	// 	compress: {
