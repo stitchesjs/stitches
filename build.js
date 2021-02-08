@@ -104,7 +104,6 @@ async function buildPackage(packageName) {
 
 async function buildPackages() {
 	await buildPackage('core')
-	await buildPackage('dom')
 	await buildPackage('react')
 }
 
