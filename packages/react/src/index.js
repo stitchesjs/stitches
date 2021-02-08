@@ -37,7 +37,7 @@ export default (init) => {
 		init,
 	)
 
-	const stitches = assign(createCoreCss(init), {
+	return assign(createCoreCss(init), {
 		sync() {
 			if (hasDocument) {
 				if (!sheetParent) sheetParent = document.head || document.documentElement
@@ -72,9 +72,7 @@ export default (init) => {
 				get: (target, type) => (type in target ? (typeof target[type] === 'function' ? target[type].bind(target) : target[type]) : target.bind(null, type)),
 			},
 		),
-	})
-
-	return stitches.reset()
+	}).reset()
 }
 
 export { defaultThemeMap }
