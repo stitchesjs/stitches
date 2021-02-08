@@ -1,7 +1,8 @@
-import fs from 'fs/promises'
+import { readdir } from 'fs/promises'
 import { deepStrictEqual, strictEqual, notDeepStrictEqual, notStrictEqual } from 'assert'
 
 const didFail = Symbol.for('test.failure')
+const root = new URL('.', import.meta.url)
 
 const passIcon = '\x1b[32m✔\x1b[0m'
 const failIcon = '\x1b[31m✖\x1b[0m'
@@ -10,11 +11,10 @@ const failText = '\x1b[41m\x1b[30m FAIL \x1b[0m'
 
 const info = (text) => `\x1b[2m${text}\x1b[0m`
 
-const location = new URL('./', new URL(import.meta.url))
-
-Promise.all(['packages/core/tests/', 'packages/react/tests/'].map(async dir => {
-	dir = new URL(dir, location)
-
+Promise.all([
+	new URL('./packages/core/tests/', root),
+	new URL('./packages/react/tests/', root),
+].map(async dir => {
 	global.expect = thingA => ({
 		toEqual: deepStrictEqual.bind(null, thingA),
 		toBe: strictEqual.bind(null, thingA),
@@ -26,7 +26,7 @@ Promise.all(['packages/core/tests/', 'packages/react/tests/'].map(async dir => {
 		},
 	})
 
-	await fs.readdir(dir).then(async (files) => {
+	await readdir(dir).then(async (files) => {
 		// test all files in the test directory
 		const results = Object.create(null)
 		for (let file of files) {
@@ -43,8 +43,8 @@ Promise.all(['packages/core/tests/', 'packages/react/tests/'].map(async dir => {
 						results[file][descText][testText].push(`${failIcon} ${info(testText)}`)
 						results[file][descText][testText].push(String(error.message))
 						results[file][descText][testText][didFail] = error
-						results[file][descText][didFail] = error
-						results[file][didFail] = error
+						results[file][descText][didFail] = true
+						results[file][didFail] = true
 					}
 				}
 				try {
@@ -64,17 +64,20 @@ Promise.all(['packages/core/tests/', 'packages/react/tests/'].map(async dir => {
 		for (let file in results) {
 			// space out failures
 			if (results[lastFile] && (!!results[lastFile][didFail] != !!results[file][didFail])) console.log()
-			console.group(results[file][didFail] ? failText : passText, info(new URL(file, dir).href.slice(location.href.length)))
+			console.group(results[file][didFail] ? failText : passText, info(new URL(file, dir).href.slice(root.href.length)))
 			// if tests failured, report detailed results
-			if (results[file][didFail]) for (let descText in results[file]) {
-				// report test failures
-				console.group(results[file][didFail] ? failIcon : passIcon, info(descText))
-				for (let testText in results[file][descText]) {
-					console.log(results[file][descText][testText].join('\n'))
+			if (results[file][didFail]) {
+				for (let descText in results[file]) {
+					// report test failures
+					console.group(results[file][didFail] ? failIcon : passIcon, info(descText))
+					for (let testText in results[file][descText]) {
+						console.log(results[file][descText][testText].join('\n'))
+					}
+					console.groupEnd()
 				}
-				console.groupEnd()
+				// report file errors
+				if (results[file][didFail] !== true) console.log(results[file][didFail])
 			}
-			if (results[file][didFail]) console.log(results[file][didFail])
 			console.groupEnd()
 			lastFile = file
 		}
