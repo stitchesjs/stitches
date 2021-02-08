@@ -14,23 +14,40 @@ export type ExtractVariantsFromComponent<T> = T extends StitchesComponent<any, i
 type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>
 
 export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {}, Theme = {}, Utils = {}>
-	extends React.ForwardRefExoticComponent<
+	extends ForwardRefExoticBase<
 		Omit<React.ComponentPropsWithRef<DefaultElement>, keyof Variants | 'css' | 'as'> & {
 			css?: StitchesCSS<Conditions, Theme, Utils>
 		} & VariantsCall<Variants, Conditions>
 	> {
-	(
-		props: { as?:'a' } & Omit<React.ComponentPropsWithRef<'a'>, keyof Variants | 'css' | 'as'> & {
-				css?: StitchesCSS<Conditions, Theme, Utils>
-			} & VariantsCall<Variants, Conditions>,
-	): JSX.Element
 
 	<As extends React.ComponentType>(
 		props: { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
 				css?: StitchesCSS<Conditions, Theme, Utils>
 			} & VariantsCall<Variants, Conditions>,
 	): JSX.Element
+
+	(
+		props: { as: 'a' } & Omit<React.ComponentPropsWithRef<'a'>, keyof Variants | 'css'> & {
+				css?: StitchesCSS<Conditions, Theme, Utils>
+			} & VariantsCall<Variants, Conditions>,
+	): JSX.Element
+
+	(
+		props: { as: 'div' } & Omit<React.ComponentPropsWithRef<'div'>, keyof Variants | 'css'> & {
+				css?: StitchesCSS<Conditions, Theme, Utils>
+			} & VariantsCall<Variants, Conditions>,
+	): JSX.Element
+
+(
+		props: {as?: never} & Omit<React.ComponentPropsWithRef<DefaultElement>, keyof Variants | 'css'> & {
+			css?: StitchesCSS<Conditions, Theme, Utils>
+		} & VariantsCall<Variants, Conditions>,
+	): JSX.Element
 }
+
+type InternalStitchesProps<Elm, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = { as?: 'a' } & Omit<React.ComponentPropsWithRef<'a'>, keyof Variants | 'css' | 'as'> & {
+		css?: StitchesCSS<Conditions, Theme, Utils>
+	} & VariantsCall<Variants, Conditions>
 
 /* Styled instance:
  * -----------------------------------------------------------------------------------------------*/

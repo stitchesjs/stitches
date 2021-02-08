@@ -1,7 +1,7 @@
 import * as React from 'react'
 import type * as Polymorphic from '@radix-ui/react-polymorphic'
-import createStyled from '../'
-import * as Stitches from '../'
+import createStyled from '../types/index.d'
+import * as Stitches from '../types/index.d'
 
 const { styled } = createStyled({ conditions: {} })
 
@@ -22,19 +22,17 @@ const Button = styled('button', {
  * -----------------------------------------------------------------------------------------------*/
 
 const ExtendedButtonUsingReactUtils = React.forwardRef<React.ElementRef<typeof Button>, React.ComponentProps<typeof Button>>((props, forwardedRef) => {
-	return <Button as="a" href="fwef" onClick={e => {
-		console.log(e)
-	}} css={{backgroundOrigin: 'content-box'}} />
+	return <Button />
 })
 
-const B = <Button as="a" href="hi"  css={{color: 'ActiveCaption', backgroundColor: 'ActiveCaption', msHyphenateLimitLines: 'initial'}} />
+const B = <Button as="a" css={{ backgroundColor: 'AppWorkspace' }} onClick={(e) => {}} />
 
 /* -------------------------------------------------------------------------------------------------
  * Extended Button using react utilities without polymorphism and inline `as`
  * -----------------------------------------------------------------------------------------------*/
 export function ExtendedButtonUsingReactUtilsWithInternalInlineAs(props: React.ComponentProps<typeof Button>) {
 	/* Should not error with inline `as` component */
-	return <Button as={(props:any) => <a {...props} />}  />
+	return <Button as={(props) => <a {...props} />} />
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -44,13 +42,16 @@ export function ExtendedButtonUsingReactUtilsWithInternalInlineAs(props: React.C
 type ExtendedButtonProps = {
 	isExtended?: boolean
 }
-type ExtendedButtonButtonOwnProps = Omit<Polymorphic.OwnProps<typeof Button>, keyof ExtendedButtonProps | 'another' | 'as' | 'onClick'>
+type ExtendedButtonButtonOwnProps = Omit<Polymorphic.OwnProps<typeof Button>, keyof ExtendedButtonProps | 'another' | 'as'>
 
 const ExtendedButton = React.forwardRef((props, forwardedRef) => {
-	const { isExtended, ...extendedButtonProps } = props
+	const { isExtended, as, ...extendedButtonProps } = props
 	return <Button {...extendedButtonProps} ref={forwardedRef} />
 }) as Polymorphic.ForwardRefComponent<Stitches.IntrinsicElement<typeof Button>, ExtendedButtonProps & ExtendedButtonButtonOwnProps>
 
+type r = React.Ref<HTMLElementTagNameMap['button']>
+type f = React.ElementRef<typeof Button>
+type bla = Stitches.IntrinsicElement<typeof Button>
 /* -------------------------------------------------------------------------------------------------
  * Normal Link
  * -----------------------------------------------------------------------------------------------*/
@@ -58,6 +59,7 @@ const ExtendedButton = React.forwardRef((props, forwardedRef) => {
 type LinkProps = React.ComponentProps<'a'> & {
 	isPrimary?: boolean
 	onToggle?(open: boolean): void
+
 }
 
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
@@ -121,7 +123,7 @@ export function Test() {
 			<Button as={Link} isPrimary />
 
 			{/* Button as Link accepts isDisabled prop */}
-			<Button as={Link} />
+			<Button as={Link} isDisabled />
 
 			{/* Button as Link does not accept form prop */}
 			{/* @ts-expect-error */}
@@ -176,7 +178,7 @@ export function Test() {
 			{/* @ts-expect-error */}
 			<Button as={Anchor} />
 
-			<Button as={Anchor} css={{padding: 'inherit'}} requiredProp={true} />
+			<Button as={Anchor} css={{ padding: 'inherit' }} requiredProp />
 		</>
 	)
 }
