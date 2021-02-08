@@ -1,5 +1,5 @@
 import { readdir } from 'fs/promises'
-import { deepEqual, equal, notDeepEqual, notEqual } from 'assert/strict'
+import { deepEqual, equal, notDeepEqual, notEqual, AssertionError } from 'assert/strict'
 
 const test = async root => await Promise.all([
 	// testing directories from core and react
@@ -10,11 +10,25 @@ const test = async root => await Promise.all([
 	globalThis.expect = foo => ({
 		toEqual: bar => deepEqual(foo, bar),
 		toBe: bar => equal(foo, bar),
-		toBeInstanceOf: bar => equal(foo instanceof bar, true),
+		toBeInstanceOf(bar) {
+			if (!(foo instanceof bar)) throw new AssertionError({
+				message: `Expected value to be instance:`,
+				operator: 'instanceOf',
+				actual: foo,
+				expected: bar,
+			})
+		},
 		not: {
 			toEqual: bar => notDeepEqual(foo, bar),
 			toBe: bar => notEqual(foo, bar),
-			toBeInstanceOf: bar => equal(foo instanceof bar, false),
+			toBeInstanceOf(bar) {
+				if (!(foo instanceof bar)) throw new AssertionError({
+					message: `Expected value to not be instance:`,
+					operator: 'notInstanceOf',
+					actual: foo,
+					expected: bar,
+				})
+			},
 		},
 	})
 
@@ -53,8 +67,12 @@ const test = async root => await Promise.all([
 					results[description][test].push(`${passIcon} ${info(test)}`)
 				} catch (e) {
 					// assign failure to the results
-					results[description][test].push(`${failIcon} ${info(test)}`)
-					results[description][test].push(String(e.message))
+					results[description][test].push(
+						`${failIcon} ${info(test)}`,
+						String(e.message),
+						(e.stack.match(/file:[^]*?\d+:\d+/g) || []).splice(1).join('\n'),
+						''
+					)
 					results[description][test][didFail] = e
 					results[description][didFail] = true
 					results[didFail] = true
@@ -104,5 +122,14 @@ const test = async root => await Promise.all([
 		didFailLast = results[didFail]
 	}
 }))
+
+const checkInstance = (isInstanceOf, shouldBeInstanceOf) => {
+	if (isInstanceOf !== shouldBeInstanceOf) throw new AssertionError({
+		message: `Expected value to ${shouldBeInstanceOf ? 'be' : 'not be'} instance:`,
+		operator: 'instanceof',
+		actual: true,
+		expected: false,
+	})
+}
 
 test(new URL('.', import.meta.url))
