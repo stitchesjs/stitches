@@ -125,7 +125,7 @@ export default (init) => {
 		/** Styles for the current component, when extending another component. */
 		extendedStyle,
 	) => {
-		const { variants: variantsStyle, ...style } = Object(extendedStyle || initStyle)
+		const { variants: variantsStyle, compounds = [], ...style } = Object(extendedStyle || initStyle)
 
 		/** Composing rule, if present, otherwise an empty object. */
 		const composer = Object(extendedStyle && initStyle)
@@ -208,6 +208,16 @@ export default (init) => {
 					String(props[classProp]).split(/\s+/).forEach(expressClassNames.add, expressClassNames)
 
 					delete props[classProp]
+				}
+
+				for (const [compounders, compoundStyle] of compounds) {
+					if (Object.keys(compounders).every(name => name in props && props[name] === compounders[name])) {
+						const compoundClassName = className + getHashString('', compoundStyle) + '--comp'
+						const compoundCssText = getComputedCss({ ['.' + compoundClassName]: compoundStyle })
+
+						variantRules.addCss(compoundCssText)
+						expressClassNames.add(compoundClassName)
+					}
 				}
 
 				for (const propName in props) {
