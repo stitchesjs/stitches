@@ -16,10 +16,10 @@ Remember, a bug is a _demonstrable problem_ caused by _our_ code.
 Pull requests are the greatest contributions, so be sure they are focused in
 scope and avoid unrelated commits.
 
-1. To begin; [fork this project], clone your fork, and add our upstream.
+1. To begin: [fork this project], clone your fork, and add our upstream.
    ```bash
    # Clone your fork of the repo into the current directory
-   git clone git@github.com:YOUR_USER/stitches.git
+   git clone git@github.com:$(npx github-username-cli $(git config user.email))/stitches.git
 
    # Navigate to the newly cloned directory
    cd stitches
@@ -41,7 +41,7 @@ scope and avoid unrelated commits.
    git checkout -b fix/something
    ```
 
-3. If your code follows our practices, then push your feature branch:
+3. If your code passes all the tests, then push your feature branch:
    ```bash
    # Test current code
    yarn test # or npm test
