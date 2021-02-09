@@ -3,13 +3,13 @@
   "version": "0.1.0-canary.1",
   "description": "The OOCSS-in-JS React library",
   "type": "module",
+  "typings": "types/index.d.ts",
   "main": "dist/stitches.react.cjs.js",
   "module": "dist/stitches.react.esm.js",
-  "typings": "dist/stitches.react.d.ts",
   "unpkg": "dist/stitches.react.iife.js",
   "files": [
     "dist",
-    "src"
+    "types"
   ],
   "license": "MIT",
   "repository": "modulz/stitches",
