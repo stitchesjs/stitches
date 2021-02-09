@@ -22,8 +22,7 @@
     "Jonathan Neal <jonathan@modulz.app>"
   ],
   "devDependencies": {
-    "react": "17.0.1",
-    "@radix-ui/react-polymorphic": "^0.0.4"
+    "react": "17.0.1"
   },
   "peerDependencies": {
     "react": "17-18"
