@@ -21,6 +21,9 @@
     "Abdulhadi Alhallak <abdulhadi@modulz.app>",
     "Jonathan Neal <jonathan@modulz.app>"
   ],
+  "dependencies": {
+    "@stitches/core": "0.1.0-canary.1"
+  },
   "devDependencies": {
     "react": "17.0.1"
   },
