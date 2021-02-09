@@ -78,12 +78,12 @@ async function buildPackage(release) {
 	// write variation builds
 	for (const variant in variants) {
 		const variantPath = new URL(`${rootPackageURL}/dist/stitches.${release}.${variant}.js`, pkgsURL).pathname
-		const variantCode = variants[variant](lead, exports) + `\n//# sourceMappingURL=stitches.${release}.map`
+		const variantCode = variants[variant](lead, exports)
 		const variantSize = Number((zlib.gzipSync(variantCode, { level: 9 }).length / 1000).toFixed(2))
 
 		console.log(' ', `\x1b[33m${variantSize} kB\x1b[0m`, `\x1b[2m(${variant})\x1b[0m`)
 
-		await fs.writeFile(variantPath, variantCode)
+		await fs.writeFile(variantPath, variantCode + `\n//# sourceMappingURL=stitches.${release}.map`)
 	}
 }
 
