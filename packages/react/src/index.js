@@ -46,6 +46,7 @@ export default (init) => {
 			}
 		},
 		styled: new Proxy(
+			/** Returns a React component. */
 			(
 				/** Type of component element. */
 				asType = 'span',
@@ -54,7 +55,7 @@ export default (init) => {
 			) => {
 				const expression = sheet.css(asType, initStyles)
 
-				/** Returns a react element */
+				/** Returns a React element. */
 				return Object.setPrototypeOf(
 					assign((
 						/** Props used to determine the expression of the current styled rule. */
