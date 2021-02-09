@@ -1,4 +1,4 @@
-import getCustomProperties from '../src/getCustomProperties'
+import getCustomProperties from '../src/getCustomProperties.js'
 
 describe('getCustomProperties()', () => {
 	test('getCustomProperties() generates a flat list of custom properties', () => {

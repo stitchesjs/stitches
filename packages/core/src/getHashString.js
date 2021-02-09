@@ -1,13 +1,13 @@
-/** Returns a unique constant hash for an object. */
-const getHashString = (
-	/** Object to be hashed. */
+/** Returns a unique hash for an object. */
+export default (
+	/** Hash prefix. */
+	prefix,
+	/** Hashable object. */
 	object,
 ) => {
 	for (var value = JSON.stringify(object), index = value.length, hash = 9; index;) {
 		hash = Math.imul(hash ^ value.charCodeAt(--index), 9 ** 9)
 	}
 
-	return 's' + (hash ^ (hash >>> 9)).toString(36)
+	return prefix + (hash ^ (hash >>> 9)).toString(36)
 }
-
-export default getHashString

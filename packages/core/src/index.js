@@ -8,41 +8,52 @@ import getCustomProperties from './getCustomProperties.js'
 import getHashString from './getHashString.js'
 
 /** Returns a new styled sheet and accompanying API. */
-const createCss = (init) => {
+export default (init) => {
 	init = Object(init)
 
 	/** Named conditions (media and support queries). */
 	const conditions = Object(init.conditions)
 
-	/** Prefix added before all generated classes. */
-	const prefix = init.prefix || ''
+	/** Prefix added before all generated class names. */
+	const prefix = init.prefix || 's'
 
-	/** Class attribute to apply styled rules to. */
+	/** Attribute class names are set to on props. */
 	const classProp = init.classProp || 'className'
 
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
 	const getComputedCss = createGetComputedCss(Object(init.utils), Object(init.themeMap || defaultThemeMap), conditions)
 
+	/** Collection of `@import` CSS rules. */
 	const importRules = new CssSet(init.onImport)
+
+	/** Collection of global CSS rules. */
 	const globalRules = new CssSet(init.onGlobal)
+
+	/** Collection of theming CSS rules. */
 	const themedRules = new CssSet(init.onThemed)
+
+	/** Collection of component CSS rules. */
 	const styledRules = new CssSet(init.onStyled)
 
 	/** Prepares global CSS and returns a function that enables the styles on the styled sheet. */
 	const theme = (
-		/** CSS Selector */
+		/** Identifier */
 		className,
 		/** Object of theme scales with inner token values. */
 		theme,
 	) => {
 		/** CSS Selector */
-		const query = (className || ':root').replace(/^[A-Za-z-]/, '.$&')
+		const selector = (className || ':root').replace(/^[A-Za-z-]/, `.${prefix}$&`)
+
+		className = selector.slice(1)
 
 		/** Computed CSS */
-		const cssText = getComputedCss({ [query]: getCustomProperties(theme) })
+		const cssText = getComputedCss({
+			[selector]: getCustomProperties(theme)
+		})
 
 		const expressThemedRule = () => {
-			themedRules.add(cssText)
+			themedRules.addCss(cssText)
 
 			return expressThemedRule
 		}
@@ -55,7 +66,13 @@ const createCss = (init) => {
 			}
 		}
 
-		return assign(expressThemedRule, { className, query, toString: () => className })()
+		return assign(expressThemedRule, {
+			toString() {
+				return this.className
+			},
+			className,
+			selector,
+		})()
 	}
 
 	/** Returns a function that enables the styles on the styled sheet. */
@@ -63,7 +80,7 @@ const createCss = (init) => {
 		/** Styles representing global CSS. */
 		initStyles,
 		/** Value returned by toString */
-		id = '',
+		displayName = '',
 	) => {
 		/** List of global import styles. */
 		const localImportRules = []
@@ -74,15 +91,20 @@ const createCss = (init) => {
 		for (const name in initStyles) {
 			const cssText = getComputedCss({ [name]: initStyles[name] })
 
-			;(name === '@import' ? localImportRules : localGlobalRules).push(cssText)
+				; (name === '@import' ? localImportRules : localGlobalRules).push(cssText)
 		}
 
 		return assign(() => {
-			localImportRules.forEach(importRules.add, importRules)
-			localGlobalRules.forEach(globalRules.add, globalRules)
+			localImportRules.forEach(importRules.addCss, importRules)
+			localGlobalRules.forEach(globalRules.addCss, globalRules)
 
-			return id
-		}, { toString() { return this() } })
+			return displayName
+		}, {
+			displayName,
+			toString() {
+				return String(this())
+			}
+		})
 	}
 
 	/** Returns a function that enables the keyframe styles on the styled sheet. */
@@ -91,34 +113,31 @@ const createCss = (init) => {
 		initStyles,
 	) => {
 		/** Unique name representing the current keyframes rule. */
-		const keyframeRuleName = prefix + getHashString(initStyles)
+		const keyframeRuleName = getHashString(prefix, initStyles)
 
 		return global({ ['@keyframes ' + keyframeRuleName]: initStyles }, keyframeRuleName)
 	}
 
-	/** Prepares component CSS and returns a function that enables the styles on the styled sheet. */
+	/** Prepares a component of css and returns a function that activates the css on the current styled sheet. */
 	const css = (
-		/** Styles representing component CSS, or a component to be extended. */
-		initStyles,
-		/** Styles representing component CSS, if extending a component. */
-		moreStyles,
+		/** Styles for the current component, or the component to be extended. */
+		initStyle,
+		/** Styles for the current component, when extending another component. */
+		extendedStyle,
 	) => {
-		const { variants: variantsStyles, ...styles } = Object(moreStyles || initStyles)
+		const { compounds = [], defaults = {}, variants: variantsStyle, ...style } = Object(extendedStyle || initStyle)
 
-		/** Extended rule or an empty object. */
-		const extendRule = Object(moreStyles && initStyles)
+		/** Composing rule, if present, otherwise an empty object. */
+		const composer = Object(extendedStyle && initStyle)
 
-		/** Unique classname representing the current styled rule. */
-		const className = prefix + getHashString(styles)
+		/** Unique class name for the current component. */
+		const className = getHashString(prefix, style)
 
-		/** List of unique classnames representing the current styled rule. */
-		const classNames = (extendRule.classNames || []).concat(className)
+		/** Unique css selector for the current component. */
+		const selector = '.' + className
 
-		/** Selector variation of the current unique classname. */
-		const query = '.' + className
-
-		/** CSS styles representing the current styled rule. */
-		const cssText = getComputedCss({ [query]: styles })
+		/** CSS styles representing the current component. */
+		const cssText = getComputedCss({ [selector]: style })
 
 		/** Change event registered with updates to the primary, variant, or inlined rules of the component. */
 		const onChange = styledRules.onChange && (() => styledRules.onChange(styledRules))
@@ -127,104 +146,144 @@ const createCss = (init) => {
 		const variantRules = new CssSet(onChange)
 		const inlinedRules = new CssSet(onChange)
 
-		/** Map of variant groups containing variant classnames and styled rules. */
-		const variants = assign(create(null), extendRule.variants)
+		/** Map of variant groups containing variant class names and styled rules. */
+		const variants = assign(create(null), composer.variants)
 
-		for (const name in variantsStyles) {
+		for (const name in variantsStyle) {
 			variants[name] = assign(create(null), variants[name])
 
-			for (const value in variantsStyles[name]) {
-				const variantStyles = variantsStyles[name][value]
-				const variantClassName = className + '-' + name + '-' + value
+			for (const value in variantsStyle[name]) {
+				const variantStyle = variantsStyle[name][value]
+				const variantClassName = className + getHashString('', variantStyle) + '--' + name + '-' + value
 				const variantSelector = '.' + variantClassName
-				const variantCssText = getComputedCss({ [variantSelector]: variantStyles })
+				const variantCssText = getComputedCss({ [variantSelector]: variantStyle })
 
 				const conditionVariants = create(null)
 
-				variants[name][value] = (condition) => {
-					if (condition !== undefined) {
-						if (!conditionVariants[condition]) {
-							const conditionalVariantClassName = (conditionVariants[condition] = variantClassName + '-' + getHashString(condition))
-							const conditionalVariantSelector = '.' + conditionalVariantClassName
-							const conditionalVariantCssText = getComputedCss({ [condition]: { [conditionalVariantSelector]: variantStyles } })
+				const compose = variants[name][value]
 
-							variantRules.add(conditionalVariantCssText)
+				variants[name][value] = condition => {
+					const classNames = (compose ? compose(condition) : []).concat(variantClassName)
+
+					if (condition != null) {
+						if (!conditionVariants[condition]) {
+							const conditionalVariantClassName = (conditionVariants[condition] = variantClassName + '--' + getHashString('', condition))
+							const conditionalVariantSelector = '.' + conditionalVariantClassName
+							const conditionalVariantCssText = getComputedCss({ [condition]: { [conditionalVariantSelector]: variantStyle } })
+
+							variantRules.addCss(conditionalVariantCssText)
 						}
 
 						return conditionVariants[condition]
 					} else {
-						variantRules.add(variantCssText)
+						variantRules.addCss(variantCssText)
 					}
 
-					return variantClassName
+					return classNames
 				}
 			}
 		}
 
-		const toString = () => query
+		styledRules.addCss(primaryRules).addCss(variantRules).addCss(inlinedRules)
+
+		function classNames() {
+			const classNames = (composer.classNames ? composer.classNames() : []).concat(className)
+
+			primaryRules.addCss(cssText)
+
+			return classNames
+		}
 
 		/** Returns an expression of the current styled rule. */
-		return assign((
-			/** Props used to determine the expression of the current styled rule. */
-			initProps,
-		) => {
-			styledRules.add(primaryRules)
-			styledRules.add(variantRules)
-			styledRules.add(inlinedRules)
+		return assign(
+			function (
+				/** Props used to determine the expression of the current styled rule. */
+				initProps
+			) {
+				const { css: inlineStyle, ...props } = Object(initProps)
 
-			primaryRules.add(cssText)
+				let expressClassNames = new Set(classNames())
 
-			const { css: inlineStyles, ...props } = Object(initProps)
+				for (const propName in defaults) {
+					if (propName in props) {} else props[propName] = defaults[propName]
+				}
 
-			const classList = new Set(classNames)
+				if (classProp in props) {
+					String(props[classProp]).split(/\s+/).forEach(expressClassNames.add, expressClassNames)
 
-			if (classProp in props) {
-				String(props[classProp]).split(/\s+/).forEach(classList.add, classList)
+					delete props[classProp]
+				}
 
-				delete props[classProp]
-			}
+				for (const [compounders, compoundStyle] of compounds) {
+					if (Object.keys(compounders).every(name => name in props && props[name] === compounders[name])) {
+						const compoundClassName = className + getHashString('', compoundStyle) + '--comp'
+						const compoundCssText = getComputedCss({ ['.' + compoundClassName]: compoundStyle })
 
-			for (const propName in props) {
-				if (propName in variants) {
-					const styledRuleVariant = variants[propName]
-					const propValue = props[propName]
+						variantRules.addCss(compoundCssText)
+						expressClassNames.add(compoundClassName)
+					}
+				}
 
-					delete props[propName]
+				for (const propName in props) {
+					if (propName in variants) {
+						const propValue = props[propName]
+						const variant = variants[propName]
 
-					// apply any matching variant
-					if (propValue in styledRuleVariant) {
-						classList.add(styledRuleVariant[propValue]())
-					} else {
-						// conditionally apply any matched conditional variants
-						for (const innerPropName in propValue) {
-							const condition = conditions[innerPropName] || innerPropName
-							const innerPropValue = propValue[innerPropName]
+						delete props[propName]
 
-							if (innerPropValue in styledRuleVariant) {
-								classList.add(styledRuleVariant[innerPropValue](condition))
+						// apply any matching variant
+						if (propValue in variant) {
+							variant[propValue]().forEach(expressClassNames.add, expressClassNames)
+						} else {
+							// conditionally apply any matched conditional variants
+							for (const innerName in propValue) {
+								const innerValue = propValue[innerName]
+								const condition = conditions[innerName] || innerName
+
+								if (innerValue in variant) {
+									variant[innerValue](condition).forEach(expressClassNames.add, expressClassNames)
+								}
 							}
 						}
 					}
 				}
+
+				if (inlineStyle) {
+					const inlineRuleClassName = className + getHashString('', inlineStyle) + '--css'
+					const inlineRuleSelector = '.' + inlineRuleClassName
+					const inlineRuleCssText = getComputedCss({ [inlineRuleSelector]: inlineStyle })
+
+					inlinedRules.addCss(inlineRuleCssText)
+
+					expressClassNames.add(inlineRuleClassName)
+				}
+
+				expressClassNames = from(expressClassNames)
+
+				return {
+					toString() {
+						return this.className
+					},
+					className: props[classProp] = expressClassNames.join(' '),
+					selector: '.' + expressClassNames.join('.'),
+					props,
+				}
+			},
+			{
+				toString() {
+					return String(this())
+				},
+				className,
+				classNames,
+				cssText,
+				selector,
+				style,
+				variants,
 			}
-
-			if (inlineStyles) {
-				const inlineRuleClassName = getHashString(inlineStyles)
-				const inlineRuleSelector = '.' + inlineRuleClassName
-				const inlineRuleCssText = getComputedCss({ [inlineRuleSelector]: inlineStyles })
-
-				inlinedRules.add(inlineRuleCssText)
-
-				classList.add(inlineRuleClassName)
-			}
-
-			props[classProp] = from(classList).join(' ')
-
-			return { props, toString }
-		}, { className, classNames, query, variants, toString })
+		)
 	}
 
-	const defaultThemed = theme('', init.theme)
+	const defaultThemed = theme(':root', init.theme)
 
 	assign(theme, defaultThemed)
 
@@ -233,6 +292,7 @@ const createCss = (init) => {
 		keyframes,
 		css,
 		theme,
+		/** Clears all rules, conditionally runs any `onResets` callbacks, and then restores the initial theme. */
 		reset() {
 			importRules.clear()
 			themedRules.clear()
@@ -249,4 +309,4 @@ const createCss = (init) => {
 	}
 }
 
-export default assign(createCss, { defaultThemeMap })
+export { defaultThemeMap }

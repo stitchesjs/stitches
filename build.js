@@ -1,72 +1,96 @@
-import MagicString from 'magic-string'
 import esbuild from 'esbuild'
-import { minify } from 'terser'
 import fs from 'fs/promises'
-import mergeSourceMap from 'merge-source-map'
-const { build } = esbuild
+import zlib from 'zlib'
+import { minify } from 'terser'
 
-async function buildPackage(packageName) {
-	const entryPoint = `./packages/${packageName}/src/index.js`
-	const outCjsPath = `./packages/${packageName}/dist/index.cjs.js`
-	const outEsmPath = `./packages/${packageName}/dist/index.esm.js`
-	const outIfePath = `./packages/${packageName}/dist/index.iife.js`
+async function buildPackage(release, variants) {
+	const rootPackageURL = new URL(release + '/', pkgsURL)
+	const initPackageURL = new URL('src/', rootPackageURL)
+	const distPackageURL = new URL('dist/', rootPackageURL)
 
-	const buildEsm = await build({
+	console.log()
+	console.log(`\x1b[4m\x1b[1m${JSON.parse(await fs.readFile(new URL(`package.json`, rootPackageURL))).name}\x1b[0m`)
+	console.log()
+
+	const targetPathname = new URL('index.js', initPackageURL).pathname
+	const outputPathname = new URL('stitches.js', distPackageURL).pathname
+
+	// Build ESM version
+	const { outputFiles: [cmapResult, codeResult] } = await esbuild.build({
+		entryPoints: [targetPathname],
+		outfile: outputPathname,
 		bundle: true,
-		entryPoints: [entryPoint],
 		format: 'esm',
-		outfile: outEsmPath,
 		sourcemap: 'external',
 		write: false,
 	})
 
-	const mapText = buildEsm.outputFiles[0].text
-	const esmText = buildEsm.outputFiles[1].text
+	// Minify ESM version
+	const { code, map } = await minify(codeResult.text, {
+		sourceMap: { content: cmapResult.text },
+		compress: true,
+		module: true,
+		mangle: true,
+		toplevel: true,
+	})
 
-	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js`, esmText)
-	await fs.writeFile(`./packages/${packageName}/dist/index.development.esm.js.map`, mapText)
+	// ensure empty dist directory
+	await fs.mkdir(distPackageURL, { recursive: true })
 
-	const { code, map } = await minify(esmText, { toplevel: true, module: true, compress: { unsafe: true }, sourceMap: { content: mapText } })
+	for (const distFile of await fs.readdir(distPackageURL)) {
+		await fs.unlink(new URL(distFile, distPackageURL))
+	}
 
-	const clipEnd = code.length
-	const clipStart = clipEnd - 21
-	const clipExport = packageName === 'core' ? 'S' : 'w'
+	// write map
+	fs.writeFile(new URL(`stitches.${release}.map`, distPackageURL), map)
 
-	// Build ESM version
-	await fs.writeFile(outEsmPath, code)
-	await fs.writeFile(`${outEsmPath}.map`, map)
+	// prepare variations
+	const splitByExport = (code, index = code.indexOf('export')) => [code.slice(0, index), code.slice(index)]
+	const [lead, tail] = splitByExport(code)
 
-	// Build CJS version
-	const cjsCode = new MagicString(code)
+	const exports = Array.from(tail.matchAll(/(\w+) as (\w+)/g)).reduce(
+		(exports, each) => Object.assign(exports, { [each[2]]: each[1] }),
+		Object.create(null)
+	)
 
-	cjsCode.remove(clipStart, clipEnd).append('module.exports=' + clipExport)
+	// write variation builds
+	for (const variant in variants) {
+		const variantPath = new URL(`dist/stitches.${release}.${variant}.js`, rootPackageURL).pathname
+		const variantCode = variants[variant](lead, exports)
+		const variantSize = Number((zlib.gzipSync(variantCode, { level: 9 }).length / 1000).toFixed(2))
 
-	const cjsMap = mergeSourceMap(JSON.parse(map), JSON.parse(cjsCode.generateMap({
-		source: 'bundle.js',
-		hires: true,
-	}).toString()))
+		console.log(' ', `\x1b[33m${variantSize} kB\x1b[0m`, `\x1b[2m(${variant})\x1b[0m`)
 
-	await fs.writeFile(outCjsPath, cjsCode.toString())
-	await fs.writeFile(`${outCjsPath}.map`, JSON.stringify(cjsMap))
-
-	// Build IIFE version
-	const ifeCode = new MagicString(code)
-
-	ifeCode.remove(clipStart, clipEnd).append('return createCss})()').prepend('stitches=(()=>{')
-
-	const ifeMap = mergeSourceMap(JSON.parse(map), JSON.parse(ifeCode.generateMap({
-		source: 'bundle.js',
-		hires: true,
-	}).toString()))
-
-	await fs.writeFile(outIfePath, ifeCode.toString())
-	await fs.writeFile(`${outIfePath}.map`, JSON.stringify(ifeMap))
+		await fs.writeFile(variantPath, variantCode + `\n//# sourceMappingURL=stitches.${release}.map`)
+	}
 }
 
-async function buildPackages() {
-	await buildPackage('core')
-	await buildPackage('dom')
-	await buildPackage('react')
+async function build() {
+	const variants = {
+		esm(code, exports) {
+			const esmExports = []
+			for (const name in exports) esmExports.push(`${exports[name]} as ${name}`)
+			return `${code}export{${esmExports.join(',')}}`
+		},
+		cjs(code, exports) {
+			const cjsExports = ['__esModule:!0']
+			for (const name in exports) cjsExports.push(`${name}:${exports[name]}`)
+			return `${code}module.exports={${cjsExports.join(',')}}`
+		},
+		iife(code, exports) {
+			let iifeExports = ['globalThis.stitches=' + exports.default]
+			for (let name in exports) if (name !== 'default') iifeExports.push(`stitches.${name}=${exports[name]}`)
+			return `(()=>{${code}${iifeExports.join(';')}})()`
+		}
+	}
+
+	await buildPackage('core', variants)
+	await buildPackage('react', variants)
+
+	console.log()
 }
 
-buildPackages()
+/** Packages directory. */
+const pkgsURL = new URL('./packages/', import.meta.url)
+
+build()

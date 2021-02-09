@@ -1,32 +1,6 @@
 import Object, { assign } from '../../core/src/Object.js'
 import createCoreCss from '../../core/src/index.js'
-import styled from '@stitches/core'
-
-
-
-const css = styled({
-	conditions: {
-		how: 'hello'
-	}
-})
-const cal = css({
-	backgroundColor: 'ButtonHighlight',
-	color: 'GrayText',
-	padding: '-moz-initial',
-	variants: {
-		variant: {
-			blue: {
-				when: {
-					how: {
-						backgroundColor: 'AppWorkspace',
-						when
-					}
-				},
-				color: 'ButtonShadow'
-			}
-		}
-	}
-})
+import defaultThemeMap from '../../core/src/defaultThemeMap.js'
 
 const $$typeof = Symbol.for('react.element')
 
@@ -38,7 +12,7 @@ export default (init) => {
 	const themedText = hasDocument && new Text('')
 	const styledText = hasDocument && new Text('')
 
-	const createOnChange = hasDocument ? (textNode, type) => Reflect.set.bind(Reflect, textNode, 'data') : () => undefined
+	const createOnChange = hasDocument ? textNode => Reflect.set.bind(Reflect, textNode, 'data') : () => undefined
 
 	let sheetParent
 	let sheetTarget
@@ -61,7 +35,9 @@ export default (init) => {
 		init,
 	)
 
-	const stitches = assign(createCoreCss(init), {
+	const sheet = createCoreCss(init)
+
+	return assign(sheet, {
 		sync() {
 			if (hasDocument) {
 				if (!sheetParent) sheetParent = document.head || document.documentElement
@@ -76,7 +52,7 @@ export default (init) => {
 				/** Styles representing component CSS. */
 				initStyles,
 			) => {
-				const expressStyledRule = stitches.css(asType, initStyles)
+				const expression = sheet.css(asType, initStyles)
 
 				return Object.setPrototypeOf(assign((
 					/** Props used to determine the expression of the current styled rule. */
@@ -84,19 +60,19 @@ export default (init) => {
 				) => {
 					const {
 						props: { as: type = asType, ref = null, ...props },
-						toString,
-					} = expressStyledRule(initProps)
+						...expressedProps
+					} = expression(initProps)
 
-					stitches.sync()
+					sheet.sync()
 
-					return { constructor: undefined, $$typeof, props, ref, toString, type, __v: 0 }
-				}, expressStyledRule), Object(asType))
+					return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
+				}, expression), Object(asType))
 			},
 			{
 				get: (target, type) => (type in target ? (typeof target[type] === 'function' ? target[type].bind(target) : target[type]) : target.bind(null, type)),
 			},
 		),
-	})
-
-	return stitches.reset()
+	}).reset()
 }
+
+export { defaultThemeMap }

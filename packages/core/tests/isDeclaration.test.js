@@ -1,4 +1,4 @@
-import isDeclaration from '../src/isDeclaration'
+import isDeclaration from '../src/isDeclaration.js'
 
 describe('isDeclaration()', () => {
 	test('isDeclaration() correctly identifies some declarations', () => {
