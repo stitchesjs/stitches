@@ -18,10 +18,7 @@ export default (init) => {
 	const prefix = init.prefix || 's'
 
 	/** Attribute class names are set to on props. */
-	const classProp = init.classProp || 'class'
-
-	/** Property used for stringification. */
-	const stringProp = init.stringProp || 'className'
+	const classProp = init.classProp || 'className'
 
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
 	const getComputedCss = createGetComputedCss(Object(init.utils), Object(init.themeMap || defaultThemeMap), conditions)
@@ -37,16 +34,6 @@ export default (init) => {
 
 	/** Collection of component CSS rules. */
 	const styledRules = new CssSet(init.onStyled)
-
-	/** Returns the string prop of the instance. */
-	function toStringProp() {
-		return this[stringProp]
-	}
-
-	/** Returns the string value of the called instance. */
-	function toStringCall() {
-		return String(this())
-	}
 
 	/** Prepares global CSS and returns a function that enables the styles on the styled sheet. */
 	const theme = (
@@ -80,7 +67,9 @@ export default (init) => {
 		}
 
 		return assign(expressThemedRule, {
-			toString: toStringProp,
+			toString() {
+				return this.className
+			},
 			className,
 			selector,
 		})()
@@ -112,7 +101,9 @@ export default (init) => {
 			return displayName
 		}, {
 			displayName,
-			toString: toStringCall
+			toString() {
+				return String(this())
+			}
 		})
 	}
 
@@ -256,14 +247,18 @@ export default (init) => {
 				expressClassNames = from(expressClassNames)
 
 				return {
-					toString: toStringProp,
+					toString() {
+						return this.className
+					},
 					className: props[classProp] = expressClassNames.join(' '),
 					selector: '.' + expressClassNames.join('.'),
 					props,
 				}
 			},
 			{
-				toString: toStringCall,
+				toString() {
+					return String(this())
+				},
 				className,
 				classNames,
 				cssText,

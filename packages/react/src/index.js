@@ -19,8 +19,6 @@ export default (init) => {
 
 	init = assign(
 		{
-			classProp: 'className',
-			stringProp: 'selector',
 			onImport: createOnChange(importText, 'import'),
 			onGlobal: createOnChange(globalText, 'global'),
 			onThemed: createOnChange(themedText, 'themed'),
