@@ -1,10 +1,22 @@
-<a href="https://stitches.dev" >
-  <img alt="stitches" src="https://stitches.dev/social.png">
+<a href="https://stitches.dev">
+  <img alt="stitches" src="https://stitches.dev/social.png" />
 </a>
 
 # The modern styling library.
 
 Near-zero runtime, server-side rendering, multi-variant support, and best-in-class developer experience.
+
+```sh
+npm install @stitches/core
+```
+
+[Read more](https://github.com/modulz/stitches/tree/jn.oo/packages/core)
+
+```sh
+npm install @stitches/react
+```
+
+[Read more](https://github.com/modulz/stitches/tree/jn.oo/packages/react)
 
 ---
 
@@ -13,7 +25,6 @@ Near-zero runtime, server-side rendering, multi-variant support, and best-in-cla
 For full documentation, visit [stitches.dev](https://stitches.dev).
 
 ## Contributing
-
 
 Please follow our [contributing guidelines](./CONTRIBUTING.md).
 
@@ -24,6 +35,7 @@ Please follow our [contributing guidelines](./CONTRIBUTING.md).
 - Jenna Smith ([@jjenzz](https://twitter.com/jjenzz)) - [Modulz](https://modulz.app)
 - Abdulhadi Alhallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [Modulz](https://modulz.app)
 - Fabrice Weinberg ([@fweinb](https://twitter.com/fweinb))
+- Jonathan Neal ([@jon_neal](https://twitter.com/jon_neal))
 
 ## License
 

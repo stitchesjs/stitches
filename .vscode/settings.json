@@ -1,0 +1,10 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "node_modules/": true,
+    "package-lock.json": true,
+    "yarn.lock": true
+  },
+  "typescript.tsdk": "./node_modules/typescript/lib"
+}
