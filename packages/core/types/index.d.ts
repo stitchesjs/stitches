@@ -247,7 +247,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 }
 
 export type VariantsCall<Variants, Conditions> = {
-	[k in keyof Variants]?: keyof Variants[k] | { [I in keyof Conditions as `when$${Extract<keyof Conditions, string>}`]?: keyof Variants[k] }
+	[k in keyof Variants]?: keyof Variants[k] | { [I in keyof Conditions]?: keyof Variants[k] }
 }
 
 /* Output Styled Rule:
