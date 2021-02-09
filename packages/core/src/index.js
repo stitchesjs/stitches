@@ -1,6 +1,6 @@
 import { from } from './Array.js'
-import CssSet from './CssSet.js'
 import Object, { assign, create } from './Object.js'
+import CssSet from './CssSet.js'
 import ThemeToken from './ThemeToken.js'
 import createGetComputedCss from './createGetComputedCss.js'
 import defaultThemeMap from './defaultThemeMap.js'
@@ -12,7 +12,7 @@ export default (init) => {
 	init = Object(init)
 
 	/** Named conditions (media and support queries). */
-	const conditions = Object(init.conditions)
+	const conditions = assign({ initial: '@media all' }, init.conditions)
 
 	/** Prefix added before all generated class names. */
 	const prefix = init.prefix || 's'
@@ -168,13 +168,11 @@ export default (init) => {
 					if (condition != null) {
 						if (!conditionVariants[condition]) {
 							const conditionalVariantClassName = (conditionVariants[condition] = variantClassName + '--' + getHashString('', condition))
-							const conditionalVariantSelector = '.' + conditionalVariantClassName
-							const conditionalVariantCssText = getComputedCss({ [condition]: { [conditionalVariantSelector]: variantStyle } })
+							const conditionalVariantCssText = getComputedCss({ [condition]: { ['.' + conditionalVariantClassName]: variantStyle } })
 
 							variantRules.addCss(conditionalVariantCssText)
+							classNames.push(conditionalVariantClassName)
 						}
-
-						return conditionVariants[condition]
 					} else {
 						variantRules.addCss(variantCssText)
 					}
@@ -215,9 +213,27 @@ export default (init) => {
 				}
 
 				for (const [compounders, compoundStyle] of compounds) {
-					if (Object.keys(compounders).every(name => name in props && props[name] === compounders[name])) {
+					let appliedCompoundStyle = compoundStyle
+					let appliedConditions = new Set
+					if (Object.keys(compounders).every(name => {
+						if (name in props) {
+							const propValue = props[name]
+							const compounderValue = compounders[name]
+							if (propValue === compounderValue) return true
+							if (propValue === Object(propValue)) {
+								for (const innerName in propValue) {
+									const innerValue = propValue[innerName]
+									const condition = conditions[innerName] || innerName
+									if (compounderValue === innerValue) {
+										appliedCompoundStyle = { [condition]: appliedCompoundStyle }
+									}
+								}
+								return true
+							}
+						}
+					})) {
 						const compoundClassName = className + getHashString('', compoundStyle) + '--comp'
-						const compoundCssText = getComputedCss({ ['.' + compoundClassName]: compoundStyle })
+						const compoundCssText = getComputedCss({ ['.' + compoundClassName]: appliedCompoundStyle })
 
 						variantRules.addCss(compoundCssText)
 						expressClassNames.add(compoundClassName)

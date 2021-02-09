@@ -5,7 +5,7 @@ describe('Variants', () => {
 	let component_1, component_2, component_3, component_4, component_5
 	let stylerule_1, stylerule_2, stylerule_3, stylerule_4, stylerule_5
 
-	const STITCHES = createCss({})
+	const STITCHES = createCss()
 
 	/** Component with variants and compound variants */
 	const COMPONENT = STITCHES.css({
@@ -91,7 +91,7 @@ describe('Variants with defaults', () => {
 	let component_1, component_2, component_3, component_4, component_5
 	let stylerule_1, stylerule_2, stylerule_3, stylerule_4, stylerule_5
 
-	const STITCHES = createCss({})
+	const STITCHES = createCss()
 
 	/** Component with variants and compound variants */
 	const COMPONENT = STITCHES.css({
@@ -182,5 +182,86 @@ describe('Variants with defaults', () => {
 
 		expect(component_5.className).toBe('sw03kze sw03kzeuif1wl--comp sw03kze-14wpam--color-blue sw03kze-ltmy8g--size-small')
 		expect(STITCHES.toString()).toBe(stylerule_5)
+	})
+})
+
+describe('Conditional variants', () => {
+	let component
+	let component_1, component_2, component_3
+	let classname_1, classname_2, classname_3
+	let stylerule_1, stylerule_2, stylerule_3
+
+	const STITCHES = createCss({
+		conditions: {
+			sm: '@media (max-width: 767px)',
+			lg: '@media (min-width: 768px)'
+		}
+	})
+
+	/** Component with variants and compound variants */
+	const COMPONENT = STITCHES.css({
+		variants: {
+			color: {
+				blue: {
+					backgroundColor: 'dodgerblue',
+					color: 'white',
+				},
+				red: {
+					backgroundColor: 'tomato',
+					color: 'white',
+				},
+			},
+			size: {
+				small: {
+					fontSize: '16px',
+				},
+				large: {
+					fontSize: '24px',
+				}
+			},
+			level: {
+				1: {
+					padding: '0.5em',
+				},
+				2: {
+					padding: '1em',
+				}
+			}
+		},
+		compounds: [
+			[
+				{ size: 'small', color: 'blue' },
+				{
+					transform: 'scale(1.2)',
+				}
+			]
+		],
+	})
+
+	test('Renders a component with a conditional variant applied', () => {
+		component_1 = COMPONENT({ size: { sm: 'small', lg: 'large' }})
+		classname_1 = 'sw03kze sw03kze-ltmy8g--size-small sw03kze-ltmy8g--size-small--n5m2l7 sw03kzejfhyhx--size-large sw03kzejfhyhx--size-large--f8c3r4'
+		stylerule_1 = '@media (max-width: 767px){.sw03kze-ltmy8g--size-small--n5m2l7{font-size:16px;}}@media (min-width: 768px){.sw03kzejfhyhx--size-large--f8c3r4{font-size:24px;}}'
+
+		expect(component_1.className).toBe(classname_1)
+		expect(STITCHES.toString()).toBe(stylerule_1)
+	})
+
+	test('Renders a component with a conditional variant applied', () => {
+		component_2 = COMPONENT({ level: { sm: 1, lg: 2 }})
+		classname_2 = 'sw03kze sw03kze-lhmqox--level-1 sw03kze-lhmqox--level-1--n5m2l7 sw03kze-tf87fs--level-2 sw03kze-tf87fs--level-2--f8c3r4'
+		stylerule_2 = stylerule_1 + '@media (max-width: 767px){.sw03kze-lhmqox--level-1--n5m2l7{padding:0.5em;}}@media (min-width: 768px){.sw03kze-tf87fs--level-2--f8c3r4{padding:1em;}}'
+
+		expect(component_2.className).toBe(classname_2)
+		expect(STITCHES.toString()).toBe(stylerule_2)
+	})
+
+	test('Renders a component with a conditional compund variant applied', () => {
+		component_3 = COMPONENT({ color: 'blue', size: { sm: 'small', lg: 'large' }})
+		classname_3 = 'sw03kze sw03kzeuif1wl--comp sw03kze-14wpam--color-blue sw03kze-ltmy8g--size-small sw03kzejfhyhx--size-large'
+		stylerule_3 = stylerule_2 + '@media (max-width: 767px){.sw03kzeuif1wl--comp{transform:scale(1.2);}}' + '.sw03kze-14wpam--color-blue{background-color:dodgerblue;color:white;}'
+
+		expect(component_3.className).toBe(classname_3)
+		expect(STITCHES.toString()).toBe(stylerule_3)
 	})
 })
