@@ -3,10 +3,10 @@
   "version": "0.1.0-canary.1",
   "description": "The OOCSS-in-JS library",
   "type": "module",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "typings": "dist/index.d.ts",
-  "unpkg": "dist/index.iife.js",
+  "main": "dist/stitches.core.cjs.js",
+  "module": "dist/stitches.core.esm.js",
+  "typings": "dist/stitches.core.d.ts",
+  "unpkg": "dist/stitches.core.iife.js",
   "files": [
     "dist",
     "src"
