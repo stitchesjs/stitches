@@ -106,7 +106,6 @@ const test = root => Promise.all([
 
 		if (results[didFail]) {
 			exitCode = 1
-			console.log('UPDATE ERROR CODE')
 
 			for (let description in results) {
 				// report each description
