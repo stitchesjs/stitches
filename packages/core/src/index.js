@@ -125,7 +125,7 @@ export default (init) => {
 		/** Styles for the current component, when extending another component. */
 		extendedStyle,
 	) => {
-		const { variants: variantsStyle, compounds = [], ...style } = Object(extendedStyle || initStyle)
+		const { compounds = [], defaults = {}, variants: variantsStyle, ...style } = Object(extendedStyle || initStyle)
 
 		/** Composing rule, if present, otherwise an empty object. */
 		const composer = Object(extendedStyle && initStyle)
@@ -203,6 +203,10 @@ export default (init) => {
 				const { css: inlineStyle, ...props } = Object(initProps)
 
 				let expressClassNames = new Set(classNames())
+
+				for (const propName in defaults) {
+					if (propName in props) {} else props[propName] = defaults[propName]
+				}
 
 				if (classProp in props) {
 					String(props[classProp]).split(/\s+/).forEach(expressClassNames.add, expressClassNames)
