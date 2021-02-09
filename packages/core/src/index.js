@@ -49,7 +49,7 @@ export default (init) => {
 
 		/** Computed CSS */
 		const cssText = getComputedCss({
-			[selector]: getCustomProperties(theme)
+			[selector]: getCustomProperties(theme),
 		})
 
 		const expressThemedRule = () => {
@@ -91,20 +91,23 @@ export default (init) => {
 		for (const name in initStyles) {
 			const cssText = getComputedCss({ [name]: initStyles[name] })
 
-				; (name === '@import' ? localImportRules : localGlobalRules).push(cssText)
+			;(name === '@import' ? localImportRules : localGlobalRules).push(cssText)
 		}
 
-		return assign(() => {
-			localImportRules.forEach(importRules.addCss, importRules)
-			localGlobalRules.forEach(globalRules.addCss, globalRules)
+		return assign(
+			() => {
+				localImportRules.forEach(importRules.addCss, importRules)
+				localGlobalRules.forEach(globalRules.addCss, globalRules)
 
-			return displayName
-		}, {
-			displayName,
-			toString() {
-				return String(this())
-			}
-		})
+				return displayName
+			},
+			{
+				displayName,
+				toString() {
+					return String(this())
+				},
+			},
+		)
 	}
 
 	/** Returns a function that enables the keyframe styles on the styled sheet. */
@@ -163,7 +166,7 @@ export default (init) => {
 
 				const compose = variants[name][value]
 
-				variants[name][value] = condition => {
+				variants[name][value] = (condition) => {
 					const classNames = (compose ? compose(condition) : []).concat(variantClassName)
 
 					if (condition != null) {
@@ -197,14 +200,15 @@ export default (init) => {
 		return assign(
 			function (
 				/** Props used to determine the expression of the current styled rule. */
-				initProps
+				initProps,
 			) {
 				const { css: inlineStyle, ...props } = Object(initProps)
 
 				let expressClassNames = new Set(classNames())
 
 				for (const propName in defaults) {
-					if (propName in props) {} else props[propName] = defaults[propName]
+					if (propName in props) {
+					} else props[propName] = defaults[propName]
 				}
 
 				if (classProp in props) {
@@ -215,24 +219,26 @@ export default (init) => {
 
 				for (const [compounders, compoundStyle] of compounds) {
 					let appliedCompoundStyle = compoundStyle
-					let appliedConditions = new Set
-					if (Object.keys(compounders).every(name => {
-						if (name in props) {
-							const propValue = props[name]
-							const compounderValue = compounders[name]
-							if (propValue === compounderValue) return true
-							if (propValue === Object(propValue)) {
-								for (const innerName in propValue) {
-									const innerValue = propValue[innerName]
-									const condition = conditions[innerName] || innerName
-									if (compounderValue === innerValue) {
-										appliedCompoundStyle = { [condition]: appliedCompoundStyle }
+					let appliedConditions = new Set()
+					if (
+						Object.keys(compounders).every((name) => {
+							if (name in props) {
+								const propValue = props[name]
+								const compounderValue = compounders[name]
+								if (propValue === compounderValue) return true
+								if (propValue === Object(propValue)) {
+									for (const innerName in propValue) {
+										const innerValue = propValue[innerName]
+										const condition = conditions[innerName] || innerName
+										if (compounderValue === innerValue) {
+											appliedCompoundStyle = { [condition]: appliedCompoundStyle }
+										}
 									}
+									return true
 								}
-								return true
 							}
-						}
-					})) {
+						})
+					) {
 						const compoundClassName = className + getHashString('', appliedCompoundStyle) + '--comp'
 						const compoundCssText = getComputedCss({ ['.' + compoundClassName]: appliedCompoundStyle })
 
@@ -281,7 +287,7 @@ export default (init) => {
 					toString() {
 						return this.className
 					},
-					className: props[classProp] = expressClassNames.join(' '),
+					className: (props[classProp] = expressClassNames.join(' ')),
 					selector: '.' + expressClassNames.join('.'),
 					props,
 				}
@@ -296,7 +302,7 @@ export default (init) => {
 				selector,
 				style,
 				variants,
-			}
+			},
 		)
 	}
 
@@ -322,7 +328,7 @@ export default (init) => {
 
 			return this
 		},
-		toString: () => importRules + themedRules + globalRules + styledRules
+		toString: () => importRules + themedRules + globalRules + styledRules,
 	}
 }
 

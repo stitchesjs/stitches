@@ -17,12 +17,12 @@ const createGetComputedCss = (
 	themeMap,
 
 	/** Map representing condition variable names and their corresponding condition preludes. */
-	conditions
+	conditions,
 ) => {
 	/** Returns a string of CSS from an object of CSS. */
 	const getComputedCss = (
 		/** Object representing the current CSS. */
-		style
+		style,
 	) => {
 		/** String of CSS being generated. */
 		let cssText = ''
@@ -39,7 +39,7 @@ const createGetComputedCss = (
 			currentStyle,
 
 			/** Styled rule selectors representing the current CSS. */
-			selectors
+			selectors,
 		) => {
 			for (let name in currentStyle) {
 				/** Data representing the current style declaration or group. */
@@ -110,7 +110,7 @@ const createGetComputedCss = (
 						/** Prelude of the current group. */
 						groupPrelude,
 						/** Styles of the current group. */
-						groupStyles
+						groupStyles,
 					) => {
 						/** Nesting index of the current group. */
 						const groupIndex = isConditionGroup ? groupRules.push(Object(groupPrelude)) : groupRules.length

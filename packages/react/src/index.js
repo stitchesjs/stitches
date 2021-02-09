@@ -12,7 +12,7 @@ export default (init) => {
 	const themedText = hasDocument && new Text('')
 	const styledText = hasDocument && new Text('')
 
-	const createOnChange = hasDocument ? textNode => data => (textNode.data = data) : () => undefined
+	const createOnChange = hasDocument ? (textNode) => (data) => (textNode.data = data) : () => undefined
 
 	let sheetParent
 	let sheetTarget
@@ -30,7 +30,7 @@ export default (init) => {
 					sheetTarget.textContent = importText.data = globalText.data = themedText.data = styledText.data = ''
 					sheetTarget.append(importText, globalText, themedText, styledText)
 				}
-			}
+			},
 		},
 		init,
 	)
@@ -48,20 +48,21 @@ export default (init) => {
 		styled: new Proxy(
 			/** Returns a React component. */
 			(
-				/** Type of component element. */
+				/** Type of component. */
 				asType = 'span',
-				/** Styles representing component CSS. */
+				/** Component styles. */
 				initStyles,
 			) => {
+				/** Expression used to activate the component CSS on the current styled sheet. */
 				const expression = sheet.css(asType, initStyles)
 
 				/** Returns a React element. */
 				return Object.setPrototypeOf(
 					assign((
-						/** Props used to determine the expression of the current styled rule. */
+						/** Props used to determine the expression of the current component. */
 						initProps,
 					) => {
-						// extract props, individually extracting `as` & `ref` props
+						// express the component, extracting `props`, `as` & `ref`
 						const {
 							props: { as: type = asType, ref = null, ...props },
 							...expressedProps
@@ -70,11 +71,11 @@ export default (init) => {
 						// sync the dynamic stylesheet
 						sheet.sync()
 
-						// return the react element
+						/** React element. */
 						return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
 					}, expression),
-					// extends the asType, otherwise Object
-					Object(asType)
+					// Type of component being extended, otherwise Object
+					Object(asType),
 				)
 			},
 			{

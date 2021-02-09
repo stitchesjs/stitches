@@ -10,12 +10,13 @@ class CssSet extends Set {
 	addCss(item) {
 		if (
 			// if the item has yet to be added; and,
-			!this.has(item)
+			!this.has(item) &&
 			// if an onchange event exists on the set; and,
-			&& this.add(item).onChange
+			this.add(item).onChange &&
 			// if the item contributed a meaningful string
-			&& String(item)
-		) this.onChange(this)
+			String(item)
+		)
+			this.onChange(this)
 
 		return this
 	}
