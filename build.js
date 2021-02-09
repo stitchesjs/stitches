@@ -1,31 +1,9 @@
 import esbuild from 'esbuild'
-import { minify } from 'terser'
 import fs from 'fs/promises'
 import zlib from 'zlib'
-const { build: bundle } = esbuild
+import { minify } from 'terser'
 
-const rootURL = new URL('.', import.meta.url)
-const pkgsURL = new URL('packages/', rootURL)
-
-const variants = {
-	esm(code, exports) {
-		const esmExports = []
-		for (const name in exports) esmExports.push(`${exports[name]} as ${name}`)
-		return `${code}export{${esmExports.join(',')}}`
-	},
-	cjs(code, exports) {
-		const cjsExports = ['__esModule:!0']
-		for (const name in exports) cjsExports.push(`${name}:${exports[name]}`)
-		return `${code}module.exports={${cjsExports.join(',')}}`
-	},
-	iife(code, exports) {
-		let iifeExports = ['globalThis.stitches=' + exports.default]
-		for (let name in exports) if (name !== 'default') iifeExports.push(`stitches.${name}=${exports[name]}`)
-		return `(()=>{${code}${iifeExports.join(';')}})()`
-	}
-}
-
-async function buildPackage(release) {
+async function buildPackage(release, variants) {
 	const rootPackageURL = new URL(release + '/', pkgsURL)
 	const initPackageURL = new URL('src/', rootPackageURL)
 	const distPackageURL = new URL('dist/', rootPackageURL)
@@ -77,7 +55,7 @@ async function buildPackage(release) {
 
 	// write variation builds
 	for (const variant in variants) {
-		const variantPath = new URL(`${rootPackageURL}/dist/stitches.${release}.${variant}.js`, pkgsURL).pathname
+		const variantPath = new URL(`dist/stitches.${release}.${variant}.js`, rootPackageURL).pathname
 		const variantCode = variants[variant](lead, exports)
 		const variantSize = Number((zlib.gzipSync(variantCode, { level: 9 }).length / 1000).toFixed(2))
 
@@ -88,10 +66,31 @@ async function buildPackage(release) {
 }
 
 async function build() {
-	await buildPackage('core')
-	await buildPackage('react')
+	const variants = {
+		esm(code, exports) {
+			const esmExports = []
+			for (const name in exports) esmExports.push(`${exports[name]} as ${name}`)
+			return `${code}export{${esmExports.join(',')}}`
+		},
+		cjs(code, exports) {
+			const cjsExports = ['__esModule:!0']
+			for (const name in exports) cjsExports.push(`${name}:${exports[name]}`)
+			return `${code}module.exports={${cjsExports.join(',')}}`
+		},
+		iife(code, exports) {
+			let iifeExports = ['globalThis.stitches=' + exports.default]
+			for (let name in exports) if (name !== 'default') iifeExports.push(`stitches.${name}=${exports[name]}`)
+			return `(()=>{${code}${iifeExports.join(';')}})()`
+		}
+	}
+
+	await buildPackage('core', variants)
+	await buildPackage('react', variants)
 
 	console.log()
 }
+
+/** Packages directory. */
+const pkgsURL = new URL('./packages/', import.meta.url)
 
 build()
