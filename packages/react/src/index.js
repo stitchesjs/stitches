@@ -54,19 +54,27 @@ export default (init) => {
 			) => {
 				const expression = sheet.css(asType, initStyles)
 
-				return Object.setPrototypeOf(assign((
-					/** Props used to determine the expression of the current styled rule. */
-					initProps,
-				) => {
-					const {
-						props: { as: type = asType, ref = null, ...props },
-						...expressedProps
-					} = expression(initProps)
+				/** Returns a react element */
+				return Object.setPrototypeOf(
+					assign((
+						/** Props used to determine the expression of the current styled rule. */
+						initProps,
+					) => {
+						// extract props, individually extracting `as` & `ref` props
+						const {
+							props: { as: type = asType, ref = null, ...props },
+							...expressedProps
+						} = expression(initProps)
 
-					sheet.sync()
+						// sync the dynamic stylesheet
+						sheet.sync()
 
-					return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
-				}, expression), Object(asType))
+						// return the react element
+						return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
+					}, expression),
+					// extends the asType, otherwise Object
+					Object(asType)
+				)
 			},
 			{
 				get: (target, type) => (type in target ? (typeof target[type] === 'function' ? target[type].bind(target) : target[type]) : target.bind(null, type)),
