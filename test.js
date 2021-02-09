@@ -1,7 +1,9 @@
 import { readdir } from 'fs/promises'
 import { deepEqual, equal, notDeepEqual, notEqual, AssertionError } from 'assert/strict'
 
-const test = async root => await Promise.all([
+let exitCode = 0
+
+const test = root => Promise.all([
 	// testing directories from core and react
 	new URL('./packages/core/tests/', root),
 	new URL('./packages/react/tests/', root),
@@ -39,7 +41,7 @@ const test = async root => await Promise.all([
 	const failText = '\x1b[41m\x1b[30m FAIL \x1b[0m'
 	const info = text => `\x1b[2m${text}\x1b[0m`
 	const didFail = Symbol.for('test.failure')
-	let didFailLast;
+	let didFailLast
 
 	// for each file in the testing directory
 	for (let file of await readdir(dir)) {
@@ -103,6 +105,9 @@ const test = async root => await Promise.all([
 		console.group(results[didFail] ? failText : passText, info(new URL(file, dir).href.slice(root.href.length)))
 
 		if (results[didFail]) {
+			exitCode = 1
+			console.log('UPDATE ERROR CODE')
+
 			for (let description in results) {
 				// report each description
 				console.group(results[didFail] ? failIcon : passIcon, info(description))
@@ -121,15 +126,6 @@ const test = async root => await Promise.all([
 
 		didFailLast = results[didFail]
 	}
-}))
+})).then(() => exitCode)
 
-const checkInstance = (isInstanceOf, shouldBeInstanceOf) => {
-	if (isInstanceOf !== shouldBeInstanceOf) throw new AssertionError({
-		message: `Expected value to ${shouldBeInstanceOf ? 'be' : 'not be'} instance:`,
-		operator: 'instanceof',
-		actual: true,
-		expected: false,
-	})
-}
-
-test(new URL('.', import.meta.url))
+test(new URL('.', import.meta.url)).then(process.exit)
