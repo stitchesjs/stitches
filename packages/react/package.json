@@ -9,7 +9,7 @@
   "unpkg": "dist/stitches.react.iife.js",
   "files": [
     "dist",
-    "src"
+    "types"
   ],
   "license": "MIT",
   "repository": "modulz/stitches",

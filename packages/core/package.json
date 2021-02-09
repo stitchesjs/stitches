@@ -9,7 +9,6 @@
   "unpkg": "dist/stitches.core.iife.js",
   "files": [
     "dist",
-    "src",
     "types"
   ],
   "license": "MIT",
