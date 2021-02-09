@@ -258,8 +258,8 @@ describe('Conditional variants', () => {
 
 	test('Renders a component with a conditional compund variant applied', () => {
 		component_3 = COMPONENT({ color: 'blue', size: { sm: 'small', lg: 'large' }})
-		classname_3 = 'sw03kze sw03kzeuif1wl--comp sw03kze-14wpam--color-blue sw03kze-ltmy8g--size-small sw03kzejfhyhx--size-large'
-		stylerule_3 = stylerule_2 + '@media (max-width: 767px){.sw03kzeuif1wl--comp{transform:scale(1.2);}}' + '.sw03kze-14wpam--color-blue{background-color:dodgerblue;color:white;}'
+		classname_3 = 'sw03kze sw03kzewkclug--comp sw03kze-14wpam--color-blue sw03kze-ltmy8g--size-small sw03kzejfhyhx--size-large'
+		stylerule_3 = stylerule_2 + '@media (max-width: 767px){.sw03kzewkclug--comp{transform:scale(1.2);}}' + '.sw03kze-14wpam--color-blue{background-color:dodgerblue;color:white;}'
 
 		expect(component_3.className).toBe(classname_3)
 		expect(STITCHES.toString()).toBe(stylerule_3)

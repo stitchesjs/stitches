@@ -232,7 +232,7 @@ export default (init) => {
 							}
 						}
 					})) {
-						const compoundClassName = className + getHashString('', compoundStyle) + '--comp'
+						const compoundClassName = className + getHashString('', appliedCompoundStyle) + '--comp'
 						const compoundCssText = getComputedCss({ ['.' + compoundClassName]: appliedCompoundStyle })
 
 						variantRules.addCss(compoundCssText)
