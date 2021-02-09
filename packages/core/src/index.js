@@ -144,6 +144,7 @@ export default (init) => {
 
 		const primaryRules = new CssSet(onChange)
 		const variantRules = new CssSet(onChange)
+		const combineRules = new CssSet(onChange)
 		const inlinedRules = new CssSet(onChange)
 
 		/** Map of variant groups containing variant class names and styled rules. */
@@ -182,7 +183,7 @@ export default (init) => {
 			}
 		}
 
-		styledRules.addCss(primaryRules).addCss(variantRules).addCss(inlinedRules)
+		styledRules.addCss(primaryRules).addCss(variantRules).addCss(combineRules).addCss(inlinedRules)
 
 		function classNames() {
 			const classNames = (composer.classNames ? composer.classNames() : []).concat(className)
@@ -235,7 +236,7 @@ export default (init) => {
 						const compoundClassName = className + getHashString('', appliedCompoundStyle) + '--comp'
 						const compoundCssText = getComputedCss({ ['.' + compoundClassName]: appliedCompoundStyle })
 
-						variantRules.addCss(compoundCssText)
+						combineRules.addCss(compoundCssText)
 						expressClassNames.add(compoundClassName)
 					}
 				}

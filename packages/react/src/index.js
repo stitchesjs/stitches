@@ -12,7 +12,7 @@ export default (init) => {
 	const themedText = hasDocument && new Text('')
 	const styledText = hasDocument && new Text('')
 
-	const createOnChange = hasDocument ? textNode => Reflect.set.bind(Reflect, textNode, 'data') : () => undefined
+	const createOnChange = hasDocument ? textNode => data => (textNode.data = data) : () => undefined
 
 	let sheetParent
 	let sheetTarget
