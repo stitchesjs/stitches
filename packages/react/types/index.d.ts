@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { InternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale } from '@stitches/core'
+import { InternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale, $variants, $conditions, StitchesVariants } from '@stitches/core'
 
+export type { StitchesVariants, StitchesCss } from '@stitches/core'
 /* Utils:
  * -----------------------------------------------------------------------------------------------*/
 // abuse Pick to strip the call signature from ForwardRefExoticComponent
 type IntrinsicElementsKeys = keyof JSX.IntrinsicElements
 type ComponentInfer<T> = T extends IntrinsicElementsKeys | React.ComponentType<any> ? T : never
-export type ExtractVariantsFromComponent<T> = T extends StitchesComponent<any, infer V> ? V : {}
 
 /* StitchesComponent:
  * -----------------------------------------------------------------------------------------------*/
@@ -19,6 +19,8 @@ export interface StitchesComponent<DefaultElement extends React.ElementType, Var
 			css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 		} & VariantsCall<Variants, Conditions>
 	> {
+	[$variants]: Variants
+	[$conditions]: Conditions
 	/** TODO: Decide which and how many elements we want to give their own overload */
 	(props: StitchesPropsWithAs<'div', Variants, Conditions, Theme, Utils>): JSX.Element
 	(props: StitchesPropsWithAs<'code', Variants, Conditions, Theme, Utils>): JSX.Element
@@ -64,7 +66,7 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 		styles: InternalCSS<Conditions, Theme, Utils, ThemeMap> & {
 			variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Conditions, Theme, Utils, ThemeMap> } }
 		},
-	): StitchesComponent<E, Variants & ExtractVariantsFromComponent<E>, Conditions, Theme, Utils>
+	): StitchesComponent<E, Variants & StitchesVariants<E>, Conditions, Theme, Utils>
 }
 
 type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
