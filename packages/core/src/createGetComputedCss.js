@@ -39,11 +39,14 @@ const createGetComputedCss = (
 		/** Process CSS from an object of styles. */
 		const processStyle = (
 			/** Object representing the current CSS. */
-			currentStyle,
+			{ when, ...currentStyle },
 
 			/** Styled rule selectors representing the current CSS. */
 			selectors,
 		) => {
+			// @todo: this pushes "when" to the end of props, which is good, but this implementation feels messy
+			currentStyle = when ? { ...currentStyle, when } : currentStyle
+
 			for (let name in currentStyle) {
 				/** Data representing the current style declaration or group. */
 				let data = currentStyle[name]
