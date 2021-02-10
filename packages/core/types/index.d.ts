@@ -94,6 +94,8 @@ type CSSPropertiesToTokenScale = {
 	transition: 'transitions'
 }
 
+export declare const defaultThemeMap: CSSPropertiesToTokenScale
+
 type StyledSheetCallback = (...cssText: string[]) => void
 
 interface GlobalRule {
@@ -111,12 +113,9 @@ interface StyledExpression {
 	toString(): string
 	className: string
 	classNames: string[]
-	props: anyobject
+	props: any
 	selector: string
 }
-
-// just using it as a unique identifier for rule types
-const ruleSymbol = Symbol('')
 
 /* Config:
 /* ========================================================================== */
@@ -156,7 +155,7 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 			[k in keyof EmptyTheme]?: k extends keyof Theme ? Theme[k] : never
 		}
 	utils?: {
-		[k in keyof Utils]: (a: Utils[k]) => StitchesCSS<Conditions, Theme, Utils>
+		[k in keyof Utils]: (theme: Theme) => (value: Utils[k]) => StitchesCSS<Conditions, Theme, Utils>
 	}
 	prefix?: Prefix
 	onGlobal?: StyledSheetCallback
@@ -174,7 +173,9 @@ export type StitchesCSS<
   Utils = {},
   AllowNesting = true
 > = { [k in keyof Properties]?: k extends keyof CSSPropertiesToTokenScale ? CSSPropertiesToTokenScale[k] extends keyof Theme ?  `$${Extract<keyof Theme[CSSPropertiesToTokenScale[k]], string>}` | Properties[k]: Properties[k] : Properties[k]}
-  & { when?: { [k in keyof Conditions]?: StitchesCSS<Conditions, Theme, Utils, AllowNesting>; }}
+  & { 
+		/** Responsive variants: */
+		when?: { [k in keyof Conditions]?: StitchesCSS<Conditions, Theme, Utils, AllowNesting> } & {[k in `${string}`]: never}} 
   & { [k in keyof Utils]?: Utils[k] }
   & { [k in string]?: AllowNesting extends true ? StitchesCSS<Conditions, Theme, Utils, AllowNesting> | string | number : {} }
 
@@ -196,13 +197,12 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	/** Returns a new styled rule. */
 	<Vars extends any[]>(
 		...styles: {
-			[k in keyof Vars]:
-				| ({
-						variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }
-				  } & StitchesCSS<A, B, C>)
-				| TSimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
+			[k in keyof Vars]: {
+				/** your variants */
+				variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }
+			} & { defaultVariants?: { [a in keyof Vars[k]]?: keyof Vars[k][a] } } & { compoundVariants?: { [a in keyof Vars[k]]?: keyof Vars[k][a] } & { css?: StitchesCSS<A, B, C> } } & StitchesCSS<A, B, C>
 		}
-	): IStyledRule<InferRestVariants<Vars>, A>
+	): IStyledRule<InferRestVariants<Vars>, A, B, C>
 
 	/** Generates CSS from global rules and returns a function which applies them to the sheet.  */
 	global: (definition: Record<string, StitchesCSS<A, B, C>>) => GlobalRule
@@ -216,19 +216,28 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 				}
 			>,
 		): ThemeRule
+
+		(
+			themeName: string,
+			theme: Partial<
+				{
+					[TO in keyof B]: Partial<B[TO]>
+				}
+			>,
+		): ThemeRule
 	} & B
 
 	css: {
 		<Vars extends any[]>(
 			...styles: {
-				[k in keyof Vars]:
-					| ({
-							variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }
-					  } & StitchesCSS<A, B, C>)
-					| TSimpleStyledRule<Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }>
+				[k in keyof Vars]: {
+					variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: StitchesCSS<A, B, C> } }
+				} & { defaultVariants: { [a in keyof Vars[k]]?: keyof Vars[k][a] } } & { compoundVariants?: { [a in keyof Vars[k]]?: keyof Vars[k][a] } & { css?: StitchesCSS<A, B, C> } } & StitchesCSS<A, B, C>
 			}
-		): IStyledRule<InferRestVariants<Vars>, A>
+		): IStyledRule<InferRestVariants<Vars>, A, B, C>
 	}
+
+	keyframes: (definition: Record<string, StitchesCSS<A, B, C, false>>) => GlobalRule
 
 	/** Clears all CSS rules from the sheet.  */
 	clear(): void
@@ -245,16 +254,17 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	/** Prefix applied to all styled and themed rules. */
 	prefix: string
 }
+type CastNumberToString<T> = T extends number ? `${T}` | T : T
 
 export type VariantsCall<Variants, Conditions> = {
-	[k in keyof Variants]?: keyof Variants[k] | { [I in keyof Conditions]?: keyof Variants[k] }
+	[k in keyof Variants]?: CastNumberToString<keyof Variants[k]> | { [I in keyof Conditions]?: CastNumberToString<keyof Variants[k]> }
 }
 
 /* Output Styled Rule:
 /* ========================================================================== */
-interface IStyledRule<Variants, Conditions> {
-	(init?: VariantsCall<Variants, Conditions>): StyledExpression
-	[ruleSymbol]: true
+interface IStyledRule<Variants, Conditions, Theme, Utils> {
+	//
+	(init?: VariantsCall<Variants, Conditions> & { css?: StitchesCSS<Conditions, Theme, Utils>; className?: string }): StyledExpression
 	toString(): string
 	className: string
 	classNames: string[]
@@ -262,17 +272,10 @@ interface IStyledRule<Variants, Conditions> {
 	variants: Variants
 }
 
-// used an an alternative to IStyledRule
-// acts as a simpler version of IStyledRule
-type TSimpleStyledRule<A> = {
-	[ruleSymbol]: true
-	variants: A
-}
-
 /* Create Css function type:
 /* ========================================================================== */
 
-type TStyledSheetFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(_config?: IConfig<Conditions, Theme, Utils, Prefix>) => TStyledSheet<Conditions, Theme, Utils>
+type TStyledSheetFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(_config?: IConfig<Conditions, Theme, Utils, Prefix>) => TStyledSheet<Conditions & { initial: '' }, Theme, Utils>
 
 declare const styled: TStyledSheetFactory
 export default styled

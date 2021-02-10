@@ -20,6 +20,7 @@ const Button = styled('button', {
 /** TODO: Fix extending stitches components */
 const ExtendedButton = styled('button', {
 	variants: {
+		/** change something */
 		variant: {
 			red: {},
 		},

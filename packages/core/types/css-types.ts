@@ -7727,7 +7727,7 @@ type BlendMode = 'color' | 'color-burn' | 'color-dodge' | 'darken' | 'difference
 
 type Box = 'border-box' | 'content-box' | 'padding-box'
 
-export type Color = NamedColor | DeprecatedSystemColor | 'currentcolor' | (string & {})
+export type Color = NamedColor | 'currentcolor' | (string & {})
 
 type Compat = 'button-bevel' | 'checkbox' | 'listbox' | 'menulist' | 'menulist-button' | 'meter' | 'progress-bar' | 'push-button' | 'radio' | 'searchfield' | 'slider-horizontal' | 'square-button' | 'textarea'
 
@@ -7744,36 +7744,6 @@ type ContentPosition = 'center' | 'end' | 'flex-end' | 'flex-start' | 'start'
 type CubicBezierTimingFunction = 'ease' | 'ease-in' | 'ease-in-out' | 'ease-out' | (string & {})
 
 type Dasharray<TLength> = TLength | (string & {}) | number
-
-type DeprecatedSystemColor =
-	| 'ActiveBorder'
-	| 'ActiveCaption'
-	| 'AppWorkspace'
-	| 'Background'
-	| 'ButtonFace'
-	| 'ButtonHighlight'
-	| 'ButtonShadow'
-	| 'ButtonText'
-	| 'CaptionText'
-	| 'GrayText'
-	| 'Highlight'
-	| 'HighlightText'
-	| 'InactiveBorder'
-	| 'InactiveCaption'
-	| 'InactiveCaptionText'
-	| 'InfoBackground'
-	| 'InfoText'
-	| 'Menu'
-	| 'MenuText'
-	| 'Scrollbar'
-	| 'ThreeDDarkShadow'
-	| 'ThreeDFace'
-	| 'ThreeDHighlight'
-	| 'ThreeDLightShadow'
-	| 'ThreeDShadow'
-	| 'Window'
-	| 'WindowFrame'
-	| 'WindowText'
 
 type DisplayInside = '-ms-flexbox' | '-ms-grid' | '-webkit-flex' | 'flex' | 'flow' | 'flow-root' | 'grid' | 'ruby' | 'table'
 
