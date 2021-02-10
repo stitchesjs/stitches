@@ -95,6 +95,11 @@ export type CSSPropertiesToTokenScale = {
 }
 
 export declare const defaultThemeMap: CSSPropertiesToTokenScale
+export declare const $variants: unique symbol
+export declare const $conditions: unique symbol
+
+
+export type StitchesVariants<T> = T extends { [$variants]: infer V; [$conditions]: infer C } ? VariantsCall<V, C> : {}
 
 type StyledSheetCallback = (...cssText: string[]) => void
 
@@ -186,7 +191,7 @@ export type InternalCSS<
   Utils = {},
 	ThemeMap extends { [k in keyof Properties]?: keyof Theme } = CSSPropertiesToTokenScale
 > = FlatInternalCSS<Conditions, Theme, Utils, ThemeMap> 
-  & { [k :string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string | /** drilling holes for variants ->  */{[k: string]: {[b: string]: any}} }
+  & { [k :string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string  }
 
 // prettier-ignore
 export type FlatInternalCSS<
@@ -237,7 +242,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 					[TO in keyof B]: Partial<B[TO]>
 				}
 			>,
-		): ThemeRule
+		): ThemeRule & string
 
 		(
 			themeName: string,
@@ -246,7 +251,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 					[TO in keyof B]: Partial<B[TO]>
 				}
 			>,
-		): ThemeRule
+		): ThemeRule & string
 	} & B
 	config: InternalConfig<A, B, C, D, ThemeMap>
 	css: {
@@ -295,6 +300,8 @@ interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
 	classNames: string[]
 	selector: string
 	variants: Variants
+	[$conditions]: Conditions
+	[$variants]: Variants
 }
 
 /* Create Css function type:

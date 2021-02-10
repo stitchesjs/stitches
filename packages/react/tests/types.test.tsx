@@ -1,5 +1,5 @@
 import * as React from 'react'
-import createStyled from '../types/index.d'
+import createStyled, { StitchesVariants } from '../types/index.d'
 
 const { styled } = createStyled({
 	conditions: {
@@ -28,6 +28,8 @@ const ExtendedButton = styled('button', {
 		},
 	},
 })
+
+type Variants = StitchesVariants<typeof ExtendedButton>
 
 /* -------------------------------------------------------------------------------------------------
  * Extended Button using react utilities without polymorphism

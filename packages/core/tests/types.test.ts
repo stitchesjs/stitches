@@ -1,5 +1,5 @@
 //core types.tests.ts
-import createCss, { StitchesCss } from '../types/index.d'
+import createCss, { StitchesCss, StitchesVariants } from '../types/index.d'
 const css = createCss({
 	theme: {
 		colors: {
@@ -68,7 +68,18 @@ const ExternalStyles: CSS = {
 	backgroundColor: '$1',
 }
 
-const PotatoButton = css.css({})
+const PotatoButton = css.css({
+	variants: {
+		variant: {
+			red: {},
+			blue: {},
+		},
+	},
+})
+
+type test = StitchesVariants<typeof PotatoButton>
+
+const theme = css.theme({})
 
 PotatoButton({
 	className: '',
