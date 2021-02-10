@@ -11,8 +11,16 @@ import getHashString from './getHashString.js'
 export default (init) => {
 	init = Object(init)
 
-	/** Named conditions (media and support queries). */
-	const conditions = assign({ initial: '@media all' }, init.conditions)
+	const config = {
+		/** Named conditions (media and support queries). */
+		conditions: assign({ initial: '@media all' }, init.conditions),
+
+		/** Theme tokens enabled by default on the styled sheet. */
+		theme: Object(init.theme),
+
+		/** Properties corresponding to functions that take in CSS values and return aliased CSS declarations. */
+		utils: Object(init.utils),
+	}
 
 	/** Prefix added before all generated class names. */
 	const prefix = init.prefix || 'sx'
@@ -21,7 +29,7 @@ export default (init) => {
 	const classProp = init.classProp || 'className'
 
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
-	const getComputedCss = createGetComputedCss(Object(init.utils), Object(init.themeMap || defaultThemeMap), conditions)
+	const getComputedCss = createGetComputedCss(config.utils, Object(init.themeMap || defaultThemeMap), config.conditions, config)
 
 	/** Collection of `@import` CSS rules. */
 	const importRules = new CssSet(init.onImport)
@@ -42,11 +50,11 @@ export default (init) => {
 		/** Object of theme scales with inner token values. */
 		theme,
 	) => {
-		// class name is the first argument if it is a string, otherwise an empty string
-		className = typeof className === 'string' ? className : ''
-
 		// theme is the first argument if it is an object, otherwise the second argument as an object
 		theme = className === Object(className) ? className : Object(theme)
+
+		// class name is the first argument if it is a string, otherwise an empty string
+		className = typeof className === 'string' ? className : ''
 
 		/** Custom property styles representing themed token values. */
 		const customPropertyStyles = getCustomProperties(theme)
@@ -244,7 +252,7 @@ export default (init) => {
 								if (propValue === Object(propValue)) {
 									for (const innerName in propValue) {
 										const innerValue = propValue[innerName]
-										const condition = conditions[innerName] || innerName
+										const condition = config.conditions[innerName] || innerName
 										if (compounderValue == innerValue) {
 											appliedCompoundStyle = { [condition]: appliedCompoundStyle }
 										}
@@ -276,7 +284,7 @@ export default (init) => {
 							// conditionally apply any matched conditional variants
 							for (const innerName in propValue) {
 								const innerValue = propValue[innerName]
-								const condition = conditions[innerName] || innerName
+								const condition = config.conditions[innerName] || innerName
 
 								if (innerValue in variant) {
 									variant[innerValue](condition).forEach(expressClassNames.add, expressClassNames)
@@ -320,7 +328,7 @@ export default (init) => {
 		)
 	}
 
-	assign(theme, theme(':root', init.theme)())
+	assign(theme, theme(':root', config.theme)())
 
 	return {
 		global,
