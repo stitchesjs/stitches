@@ -111,7 +111,7 @@ export default (init) => {
 		for (const name in initStyles) {
 			const cssText = getComputedCss({ [name]: initStyles[name] })
 
-				; (name === '@import' ? localImportRules : localGlobalRules).push(cssText)
+			;(name === '@import' ? localImportRules : localGlobalRules).push(cssText)
 		}
 
 		return assign(
