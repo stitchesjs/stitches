@@ -1,8 +1,6 @@
 import { readdir } from 'fs/promises'
 import { deepEqual, equal, notDeepEqual, notEqual, AssertionError } from 'assert/strict'
 
-let exitCode = 0
-
 const test = root => Promise.all([
 	// testing directories from core and react
 	new URL('./packages/core/tests/', root),
@@ -47,6 +45,9 @@ const test = root => Promise.all([
 	for (let file of await readdir(dir)) {
 		// ignore non-js files
 		if (!file.endsWith('.js')) continue
+
+		// ignore filtered files
+		if (only.length && !only.some(name => file.includes(name))) continue
 
 		// prepare file results
 		const results = Object.create(null)
@@ -127,4 +128,14 @@ const test = root => Promise.all([
 	}
 })).then(() => exitCode)
 
-test(new URL('..', import.meta.url)).then(process.exit)
+let { argv, exit, exitCode = 0 } = process
+
+const getArgs = name => {
+	const lead = argv.indexOf('--' + name) + 1
+	const tail = lead ? argv.slice(lead).findIndex(arg => arg.startsWith('--')) : 0
+	return lead ? argv.slice(lead, ~tail ? lead + tail : argv.length) : []
+}
+
+const only = getArgs('only')
+
+test(new URL('..', import.meta.url)).then(exit)
