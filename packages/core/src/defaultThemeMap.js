@@ -48,7 +48,35 @@ const defaultThemeMap = {
 	right: space,
 	bottom: space,
 	left: space,
+	scrollMargin: space,
+	scrollMarginTop: space,
+	scrollMarginRight: space,
+	scrollMarginBottom: space,
+	scrollMarginLeft: space,
+	scrollMarginX: space,
+	scrollMarginY: space,
+	scrollMarginBlock: space,
+	scrollMarginBlockEnd: space,
+	scrollMarginBlockStart: space,
+	scrollMarginInline: space,
+	scrollMarginInlineEnd: space,
+	scrollMarginInlineStart: space,
+	scrollPadding: space,
+	scrollPaddingTop: space,
+	scrollPaddingRight: space,
+	scrollPaddingBottom: space,
+	scrollPaddingLeft: space,
+	scrollPaddingX: space,
+	scrollPaddingY: space,
+	scrollPaddingBlock: space,
+	scrollPaddingBlockEnd: space,
+	scrollPaddingBlockStart: space,
+	scrollPaddingInline: space,
+	scrollPaddingInlineEnd: space,
+	scrollPaddingInlineStart: space,
+
 	fontSize: 'fontSizes',
+
 	background: colors,
 	backgroundColor: colors,
 	backgroundImage: colors,
@@ -64,10 +92,15 @@ const defaultThemeMap = {
 	outlineColor: colors,
 	fill: colors,
 	stroke: colors,
+
 	fontFamily: 'fonts',
+
 	fontWeight: 'fontWeights',
+
 	lineHeight: 'lineHeights',
+
 	letterSpacing: 'letterSpacings',
+
 	blockSize: sizes,
 	minBlockSize: sizes,
 	maxBlockSize: sizes,
@@ -81,24 +114,30 @@ const defaultThemeMap = {
 	minHeight: sizes,
 	maxHeight: sizes,
 	flexBasis: sizes,
+
 	borderWidth: borderWidths,
 	borderTopWidth: borderWidths,
 	borderLeftWidth: borderWidths,
 	borderRightWidth: borderWidths,
 	borderBottomWidth: borderWidths,
+
 	borderStyle: borderStyles,
 	borderTopStyle: borderStyles,
 	borderLeftStyle: borderStyles,
 	borderRightStyle: borderStyles,
 	borderBottomStyle: borderStyles,
+
 	borderRadius: radii,
 	borderTopLeftRadius: radii,
 	borderTopRightRadius: radii,
 	borderBottomRightRadius: radii,
 	borderBottomLeftRadius: radii,
+
 	boxShadow: shadows,
 	textShadow: shadows,
+
 	zIndex: zIndices,
+
 	transition: transitions,
 }
 
