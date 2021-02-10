@@ -19,10 +19,17 @@ const Button = styled('button', {
 
 /** TODO: Fix extending stitches components */
 const ExtendedButton = styled('button', {
+	when: {
+		large: {
+			backgroundColor: 'aliceblue',
+		},
+	},
 	variants: {
 		/** change something */
 		variant: {
-			red: {},
+			red: {
+				backgroundColor: 'antiquewhite',
+			},
 		},
 		size: {
 			large: {},
@@ -87,13 +94,18 @@ export function Test() {
 			<Button form="form" onClick={(e) => {}} />
 
 			{/* Button accepts css prop */}
-			<Button css={{ backgroundColor: 'ActiveCaption', padding: 'inherit' }} />
+			<Button
+				onClick={(e) => {
+					console.log(e.altKey)
+				}}
+				css={{ backgroundColor: 'ActiveCaption', padding: 'inherit', backgroundClip: 'content-box', paddingLeft: 'initial' }}
+			/>
 
 			{/* Button accepts isDisabled prop */}
 			<Button variant="red" />
 
 			{/* Button accepts a responsive variant */}
-			<Button variant={{ large: 'red' }} />
+			<Button variant={{ large: 'red' }} css={{ backgroundColor: 'aliceblue', padding: 'inherit' }} />
 
 			{/* Button as "a" accepts href prop */}
 			<Button as="a" href="f" />

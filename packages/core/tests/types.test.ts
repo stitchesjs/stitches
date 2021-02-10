@@ -1,72 +1,49 @@
-import createStyled from '../types/index.d'
-const cssz = createStyled({
+import createCss, { StitchesCss } from '../types/index.d'
+const css = createCss({
 	conditions: {
-		lrg: '',
+		lrg: '@potato',
 	},
-	utils: {
-		mx: (scales) => (value: keyof typeof scales['colors']) => {
-			console.log(scales.colors.red100)
-			return {}
-		},
+	themeMap: {
+		backgroundColor: 'fonts',
 	},
 	theme: {
 		colors: {
-			red100: 'red',
+			red100: '',
+		},
+		fonts: {
+			font100: '',
 		},
 	},
-})
-
-cssz.theme({
-	colors: {
-		red100: '',
-	},
-})
-cssz.theme('hello', {
-	colors: {
-		red100: 'red',
+	utils: {
+		mx: (scales) => (value: keyof typeof scales['colors']) => ({}),
 	},
 })
 
-const b = cssz({
-	backgroundColor: '$red100',
-	mx: 'red100',
+type CSS = StitchesCss<typeof css>
+
+const ExternalStyles: CSS = {
+	backgroundColor: '$font100'
+}
+
+const PotatoButton = css({
 	variants: {
-		size: {
-			1: {},
-			2: {},
-		},
-		variant: {
+		color: {
 			red: {
-				backgroundColor: 'AppWorkspace',
+				backgroundClip: 'border-box',
 			},
 		},
 	},
-
-	defaultVariants: {
-		size: 1,
-		variant: 'red',
-	},
-	compoundVariants: {
-		size: 1,
-		variant: 'red',
-		css: { backgroundColor: '$red100' },
-	},
-
-	when: {
-		lrg: {
-			backgroundColor: '-moz-initial',
-		},
-	},
 })
 
-b({
+PotatoButton({
 	className: '',
-	size: '2',
+	color: 'red',
 	css: {
 		backgroundColor: '$red100',
 		when: {
-			fwefew: {},
-			initial: {},
+			initial: {
+				backgroundColor: '-moz-initial',
+			},
 			lrg: {
 				backgroundColor: '-moz-initial',
 			},

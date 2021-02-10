@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StitchesCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig } from '@stitches/core'
+import { InternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale } from '@stitches/core'
 
 /* Utils:
  * -----------------------------------------------------------------------------------------------*/
@@ -13,10 +13,10 @@ export type ExtractVariantsFromComponent<T> = T extends StitchesComponent<any, i
 // abuse Pick to strip the call signature from ForwardRefExoticComponent
 type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>
 
-export interface StitchesComponent<DefaultElement extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}>
+export interface StitchesComponent<DefaultElement extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}>
 	extends ForwardRefExoticBase<
 		Omit<React.ComponentPropsWithRef<DefaultElement>, keyof Variants | 'css' | 'as'> & {
-			css?: StitchesCSS<Conditions, Theme, Utils>
+			css?: InternalCSS<Conditions, Theme, Utils, true, ThemeMap>
 		} & VariantsCall<Variants, Conditions>
 	> {
 	/** TODO: Decide which and how many elements we want to give their own overload */
@@ -35,39 +35,41 @@ export interface StitchesComponent<DefaultElement extends React.ElementType, Var
 	<As extends React.ComponentType>(props: StitchesPropsWithAs<As, Variants, Conditions, Theme, Utils>): JSX.Element
 	(
 		props: VariantsCall<Variants, Conditions> & { as?: DefaultElement } & React.ComponentPropsWithRef<DefaultElement> & {
-				css?: StitchesCSS<Conditions, Theme, Utils>
+				css?: InternalCSS<Conditions, Theme, Utils, true, ThemeMap>
 			},
 	): JSX.Element
 }
 
-export type StitchesProps<Elm extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = VariantsCall<Variants, Conditions> &
+export type StitchesProps<Elm extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}> = VariantsCall<Variants, Conditions> &
 	Omit<React.ComponentPropsWithRef<Elm>, keyof Variants | 'css'> & {
-		css?: StitchesCSS<Conditions, Theme, Utils>
+		css?: InternalCSS<Conditions, Theme, Utils, true, ThemeMap>
 	}
 
-type StitchesPropsWithAs<Elm extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<React.ComponentPropsWithRef<Elm>, keyof Variants | 'css'> & {
-		css?: StitchesCSS<Conditions, Theme, Utils>
+type StitchesPropsWithAs<Elm extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<
+		React.ComponentPropsWithRef<Elm>,
+		keyof Variants | 'css'
+	> & {
+		css?: InternalCSS<Conditions, Theme, Utils, true, ThemeMap>
 	}
 
 export type IntrinsicElement<T extends React.ElementType, B = React.ElementRef<T>> = { [k in keyof HTMLElementTagNameMap]: HTMLElementTagNameMap[k] extends B ? k : never }[keyof HTMLElementTagNameMap]
 
-export type NonIntrinsicElementProps<T extends React.ElementType> = IntrinsicElement<T> extends never ? React.ComponentProps<T> : Omit<React.ComponentProps<T>, keyof React.ComponentProps<IntrinsicElement<T>>>
+// export type NonIntrinsicElementProps<T extends React.ElementType> = IntrinsicElement<T> extends never ? React.ComponentProps<T> : Omit<React.ComponentProps<T>, keyof React.ComponentPropsWithoutRef<IntrinsicElement<T>>>
 
 /* Styled instance:
  * -----------------------------------------------------------------------------------------------*/
-export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {}> = {
+export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
 	<E extends React.ElementType, Variants>(
 		elm: ComponentInfer<E>,
-		styles: StitchesCSS<Conditions, Theme, Utils> & {
-			variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: StitchesCSS<Conditions, Theme, Utils> } }
+		styles: InternalCSS<Conditions, Theme, Utils, true, ThemeMap> & {
+			variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Conditions, Theme, Utils, true, ThemeMap> } }
 		},
 	): StitchesComponent<E, Variants & ExtractVariantsFromComponent<E>, Conditions, Theme, Utils>
 }
-export type NewStitchesCss<T> = T extends StyledInstance<infer Conditions, infer Theme, infer Utils> ? StitchesCSS<Conditions, Theme, Utils> : never
 
-type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = ''>(
-	_config?: IConfig<Conditions, Theme, Utils, Prefix>,
-) => TStyledSheet<Conditions, Theme, Utils> & { styled: StyledInstance<Conditions, Theme, Utils> }
+type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
+	_config?: IConfig<Conditions, Theme, Utils, Prefix, ThemeMap>,
+) => TStyledSheet<Conditions, Theme, Utils> & { styled: StyledInstance<Conditions & { initial: '' }, Theme, Utils, ThemeMap> } 
 
 declare const styled: ReactFactory
 export default styled
