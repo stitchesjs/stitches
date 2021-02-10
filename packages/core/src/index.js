@@ -43,7 +43,7 @@ export default (init) => {
 		theme,
 	) => {
 		// class name is the first argument if it is a string, otherwise an empty string
-		className = typeof className === 'string' ? className.replace(/^\w/, prefix + '$&') : ''
+		className = typeof className === 'string' ? className : ''
 
 		// theme is the first argument if it is an object, otherwise the second argument as an object
 		theme = className === Object(className) ? className : Object(theme)
