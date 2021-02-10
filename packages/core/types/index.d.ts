@@ -98,7 +98,6 @@ export declare const defaultThemeMap: CSSPropertiesToTokenScale
 export declare const $variants: unique symbol
 export declare const $conditions: unique symbol
 
-
 export type StitchesVariants<T> = T extends { [$variants]: infer V; [$conditions]: infer C } ? VariantsCall<V, C> : {}
 
 type StyledSheetCallback = (...cssText: string[]) => void
@@ -184,27 +183,39 @@ type MapUtils<T> = { [k in keyof T]: T[k] extends (theme: any) => (value: infer 
 /* Css typed structure:
 /* ========================================================================== */
 
-// prettier-ignore
 export type InternalCSS<
-  Conditions = {},
-  Theme extends TTheme = {},
-  Utils = {},
-	ThemeMap extends { [k in keyof Properties]?: keyof Theme } = CSSPropertiesToTokenScale
-> = FlatInternalCSS<Conditions, Theme, Utils, ThemeMap> 
-  & { [k :string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string  }
+	Conditions = {},
+	Theme extends TTheme = {},
+	Utils = {},
+	ThemeMap extends {
+		[k in keyof Properties]?: keyof Theme
+	} = CSSPropertiesToTokenScale
+> = FlatInternalCSS<Conditions, Theme, Utils, ThemeMap> & {
+	[k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string
+}
 
 // prettier-ignore
 export type FlatInternalCSS<
-  Conditions = {},
-  Theme extends TTheme = {},
-  Utils = {},
-	ThemeMap extends { [k in keyof Properties]?: keyof Theme } = CSSPropertiesToTokenScale
-> = 
-  & {[k in keyof Properties]? : (ThemeMap[k] extends keyof Theme ? `$${Extract<keyof Theme[ThemeMap[k]], string | number>}` : never)  | Properties[k]  }
-	& { 
-		/** Responsive variants: */
-		when?: { [k in keyof Conditions]?: FlatInternalCSS<Conditions, Theme, Utils, ThemeMap> } } 
-  & { [k in keyof Utils]?: Utils[k] }
+	Conditions = {},
+	Theme extends TTheme = {},
+	Utils = {},
+	ThemeMap extends {
+		[k in keyof Properties]?: keyof Theme
+	} = CSSPropertiesToTokenScale
+> = {
+	[k in keyof Properties]?: (
+		ThemeMap[k] extends keyof Theme
+			? `$${Extract<keyof Theme[ThemeMap[k]], string | number>}`
+			: never
+	) | Properties[k]
+} & {
+	/** Responsive variants: */
+	when?: {
+		[k in keyof Conditions]?: FlatInternalCSS<Conditions, Theme, Utils, ThemeMap>
+	}
+} & {
+	[k in keyof Utils]?: Utils[k]
+}
 
 /* Utils to type and extract variants from args args:
 /* ========================================================================== */
@@ -218,16 +229,17 @@ type HasTail<T extends any[]> = T extends [] | [any] ? false : true
 /* Return the tail of an array: */
 type Tail<T extends any[]> = ((...t: T) => any) extends (_: any, ...tail: infer _Tail) => any ? _Tail : []
 
+type OmitKey<T, U extends keyof any> = T & { [P in U]?: unknown }
+
 /* Css Instance Type:
 /* ========================================================================== */
+
 export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {}, C = {}, D = '', ThemeMap = {}> {
-	/** Returns a new styled rule. */
 	<Vars extends any[]>(
 		...styles: {
-			[k in keyof Vars]: {
-				/** your variants */
-				variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: InternalCSS<A, B, C> } }
-			} & { defaultVariants?: { [a in keyof Vars[k]]?: keyof Vars[k][a] } } & { compoundVariants?: { [a in keyof Vars[k]]?: keyof Vars[k][a] } & { css?: InternalCSS<A, B, C, ThemeMap> } } & InternalCSS<A, B, C, ThemeMap>
+			[k in keyof Vars]: OmitKey<InternalCSS<A, B, C, ThemeMap>, 'variants'> & {
+				variants?: unknown
+			}
 		}
 	): IStyledRule<InferRestVariants<Vars>, A, B, C, ThemeMap>
 
@@ -254,12 +266,29 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 		): ThemeRule & string
 	} & B
 	config: InternalConfig<A, B, C, D, ThemeMap>
+
+	/** Returns a new styled rule. */
 	css: {
 		<Vars extends any[]>(
 			...styles: {
-				[k in keyof Vars]: {
-					variants?: Vars[k] & { [a in keyof Vars[k]]: { [b in keyof Vars[k][a]]: InternalCSS<A, B, C, ThemeMap> } }
-				} & { defaultVariants?: { [a in keyof Vars[k]]?: keyof Vars[k][a] } } & { compoundVariants?: { [a in keyof Vars[k]]?: keyof Vars[k][a] } & { css?: InternalCSS<A, B, C, ThemeMap> } } & InternalCSS<A, B, C, ThemeMap>
+				[k in keyof Vars]: InternalCSS<A, B, C, ThemeMap> & {
+					variants?: Vars[k] &
+						{
+							[a in keyof Vars[k]]: {
+								[b in keyof Vars[k][a]]: InternalCSS<A, B, C, ThemeMap>
+							}
+						}
+				} & {
+					defaultVariants?: {
+						[a in keyof Vars[k]]?: keyof Vars[k][a]
+					}
+				} & {
+					compoundVariants?: {
+						[a in keyof Vars[k]]?: keyof Vars[k][a]
+					} & {
+						css?: InternalCSS<A, B, C, ThemeMap>
+					}
+				}
 			}
 		): IStyledRule<InferRestVariants<Vars>, A, B, C, ThemeMap>
 	}
@@ -294,7 +323,12 @@ export type StitchesCss<T> = T extends { config: { conditions: infer Conditions;
 /* ========================================================================== */
 interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
 	//
-	(init?: VariantsCall<Variants, Conditions> & { css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>; className?: string }): StyledExpression & string
+	(
+		init?: VariantsCall<Variants, Conditions> & {
+			css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+			className?: string
+		},
+	): StyledExpression & string
 	toString(): string
 	className: string
 	classNames: string[]
