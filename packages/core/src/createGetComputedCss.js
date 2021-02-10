@@ -18,6 +18,9 @@ const createGetComputedCss = (
 
 	/** Map representing condition variable names and their corresponding condition preludes. */
 	conditions,
+
+	/** Config (WIP). */
+	config,
 ) => {
 	/** Returns a string of CSS from an object of CSS. */
 	const getComputedCss = (
@@ -47,7 +50,7 @@ const createGetComputedCss = (
 
 				if (name in utils) {
 					/** Data returned by the utility. */
-					let utilityData = utils[name](data)
+					let utilityData = utils[name](config)(data)
 
 					utilityData = isDeclaration(utilityData) ? String(utilityData) : utilityData
 

@@ -6,7 +6,7 @@ describe('Utils', () => {
 	test('Authors can define utilties applied to components', () => {
 		stitches = createCss({
 			utils: {
-				bg: (value) => ({ backgroundColor: value }),
+				bg: () => (value) => ({ backgroundColor: value }),
 			},
 		})
 
