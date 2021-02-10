@@ -194,6 +194,16 @@ export type InternalCSS<
 	[k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string
 }
 
+// @todo: this is a messy work-around to prevent variants with the same name as a css property from erroring out
+export type LessInternalCSS<
+	Conditions = {},
+	Theme extends TTheme = {},
+	Utils = {},
+	ThemeMap extends {
+		[k in keyof Properties]?: keyof Theme
+	} = CSSPropertiesToTokenScale
+> = FlatInternalCSS<Conditions, Theme, Utils, ThemeMap>
+
 // prettier-ignore
 export type FlatInternalCSS<
 	Conditions = {},
@@ -271,7 +281,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	css: {
 		<Vars extends any[]>(
 			...styles: {
-				[k in keyof Vars]: InternalCSS<A, B, C, ThemeMap> & {
+				[k in keyof Vars]: LessInternalCSS<A, B, C, ThemeMap> & {
 					variants?: Vars[k] &
 						{
 							[a in keyof Vars[k]]: {
