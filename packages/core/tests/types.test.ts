@@ -1,6 +1,11 @@
 //core types.tests.ts
 import createCss, { StitchesCss, StitchesVariants } from '../types/index.d'
 const css = createCss({
+	utils: {
+		mx: (config) => (value) => ({
+			backgroundColor: 'red',
+		}),
+	},
 	theme: {
 		colors: {
 			hiContrast: 'hsl(200, 12%, 5%)',
@@ -70,7 +75,7 @@ const ExternalStyles: CSS = {
 
 const PotatoButton = css.css({
 	variants: {
-		variant: {
+		color: {
 			red: {},
 			blue: {},
 		},
