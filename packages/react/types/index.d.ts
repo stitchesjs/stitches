@@ -34,7 +34,7 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 	<M extends string>(props: NativeStitchesPropsWithAs<M, Variants, Conditions, Theme, Utils>): JSX.Element
 	<As extends React.ComponentType>(props: StitchesPropsWithAs<As, Variants, Conditions, Theme, Utils>): JSX.Element
 	(
-		props: VariantsCall<Variants, Conditions> & { as?: DefaultElement } & React.ComponentPropsWithRef<ComponentInfer<DefaultElement>> & {
+		props: VariantsCall<Variants, Conditions> & { as?: DefaultElement } & Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
 				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
@@ -42,19 +42,15 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 	[$conditions]: Conditions
 }
 
-export type StitchesProps<Elm extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}> = VariantsCall<Variants, Conditions> &
-	Omit<React.ComponentPropsWithRef<Elm>, keyof Variants | 'css'> & {
-		css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
-	}
 type NativeStitchesPropsWithAs<Elm extends string, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<
 		JSX.IntrinsicElements[Elm extends IntrinsicElementsKeys ? Elm : never],
-		keyof Variants | 'css'
+		keyof Variants | 'css' | 'as'
 	> & {
 		css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 	}
 type StitchesPropsWithAs<Elm extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<
 		React.ComponentPropsWithRef<Elm>,
-		keyof Variants | 'css'
+		keyof Variants | 'css' | 'as'
 	> & {
 		css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 	}
