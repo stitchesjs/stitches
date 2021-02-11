@@ -3,6 +3,7 @@ import createCoreCss from '../../core/src/index.js'
 import defaultThemeMap from '../../core/src/defaultThemeMap.js'
 
 const $$typeof = Symbol.for('react.element')
+const $$typeofForward = Symbol.for('react.forward_ref')
 
 export default (init) => {
 	const hasDocument = typeof document === 'object'
@@ -58,23 +59,27 @@ export default (init) => {
 
 				/** Returns a React element. */
 				return Object.setPrototypeOf(
-					assign((
-						/** Props used to determine the expression of the current component. */
-						initProps,
-					) => {
-						// express the component, extracting `props`, `as` & `ref`
-						const {
-							props: { as: type = asType, ref = null, ...props },
-							...expressedProps
-						} = expression(initProps)
+					{
+						...expression,
+						$$typeof: $$typeofForward,
+						render(
+							/** Props used to determine the expression of the current component. */
+							initProps,
+							ref,
+						) {
+							// express the component, extracting `props`, `as` & `ref`
+							const {
+								props: { as: type = asType, ...props },
+								...expressedProps
+							} = expression(initProps)
 
-						// sync the dynamic stylesheet
-						sheet.sync()
+							// sync the dynamic stylesheet
+							sheet.sync()
 
-						/** React element. */
-						return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
-					}, expression),
-					// Type of component being extended, otherwise Object
+							/** React element. */
+							return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
+						},
+					},
 					Object(asType),
 				)
 			},
