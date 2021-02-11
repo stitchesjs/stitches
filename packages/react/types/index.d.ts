@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { InternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale, $variants, $conditions, StitchesExtractVariantsStyles, InferRestVariants } from '@stitches/core'
+import { InternalCSS, LessInternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale, $variants, $conditions, StitchesExtractVariantsStyles } from '@stitches/core'
 
 export type { StitchesVariants, StitchesCss, StitchesExtractVariantsStyles } from '@stitches/core'
 
@@ -62,7 +62,7 @@ type StitchesPropsWithAs<Elm extends React.ElementType, Variants = {}, Condition
 export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
 	<E extends React.ElementType, Variants>(
 		elm: ComponentInfer<E>,
-		styles: InternalCSS<Conditions, Theme, Utils, ThemeMap> & {
+		styles: LessInternalCSS<Conditions, Theme, Utils, ThemeMap> & {
 			variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Conditions, Theme, Utils, ThemeMap> } }
 		},
 	): StitchesComponent<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
