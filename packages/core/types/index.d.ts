@@ -282,24 +282,37 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	css: {
 		<Vars extends any[]>(
 			...styles: {
-				[k in keyof Vars]: LessInternalCSS<A, B, C, ThemeMap> & {
-					variants?: Vars[k] &
-						{
-							[a in keyof Vars[k]]: {
-								[b in keyof Vars[k][a]]: InternalCSS<A, B, C, ThemeMap>
+				// prettier-ignore
+				[k in keyof Vars]: (
+					(
+						(
+							LessInternalCSS<A, B, C, ThemeMap>
+							& {
+								variants?: Vars[k] & {
+									[a in keyof Vars[k]]: {
+										[b in keyof Vars[k][a]]: InternalCSS<A, B, C, ThemeMap>
+									}
+								}
 							}
+						)
+						| Record<string, InternalCSS<A, B, C, ThemeMap>>
+					)
+					& {
+						defaultVariants?: {
+							[a in keyof Vars[k]]?: keyof Vars[k][a]
 						}
-				} & {
-					defaultVariants?: {
-						[a in keyof Vars[k]]?: keyof Vars[k][a]
 					}
-				} & {
-					compoundVariants?: {
-						[a in keyof Vars[k]]?: keyof Vars[k][a]
-					} & {
-						css?: InternalCSS<A, B, C, ThemeMap>
+					& {
+						compoundVariants?: (
+							{
+								[a in keyof Vars[k]]?: keyof Vars[k][a]
+							}
+							& {
+								css?: InternalCSS<A, B, C, ThemeMap>
+							}
+						)
 					}
-				}
+				)
 			}
 		): IStyledRule<InferRestVariants<Vars>, A, B, C, ThemeMap>
 	}
