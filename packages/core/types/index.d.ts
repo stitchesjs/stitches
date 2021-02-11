@@ -99,6 +99,7 @@ export declare const $variants: unique symbol
 export declare const $conditions: unique symbol
 
 export type StitchesVariants<T> = T extends { [$variants]: infer V; [$conditions]: infer C } ? VariantsCall<V, C> : {}
+export type StitchesExtractVariantsStyles<T> = T extends { [$variants]: infer V } ? V : {}
 
 type StyledSheetCallback = (...cssText: string[]) => void
 
@@ -231,7 +232,7 @@ export type FlatInternalCSS<
 /* ========================================================================== */
 
 /** Combines rest parameter variants into one: */
-type InferRestVariants<Args extends any[]> = Args[0] & (HasTail<Args> extends true ? InferRestVariants<Tail<Args>> : {})
+export type InferRestVariants<Args extends any[]> = Args[0] & (HasTail<Args> extends true ? InferRestVariants<Tail<Args>> : {})
 
 /* Check if current array has a tail: */
 type HasTail<T extends any[]> = T extends [] | [any] ? false : true
@@ -320,10 +321,11 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	/** Prefix applied to all styled and themed rules. */
 	prefix: string
 }
-type CastNumberToString<T> = T extends number ? `${T}` | T : T
+type MorphVariants<T> = T extends number ? `${T}` | T : T extends "true" ? "true" | true : T extends "false" ? "false" | false : T
+
 
 export type VariantsCall<Variants, Conditions> = {
-	[k in keyof Variants]?: CastNumberToString<keyof Variants[k]> | { [I in keyof Conditions]?: CastNumberToString<keyof Variants[k]> }
+	[k in keyof Variants]?: MorphVariants<keyof Variants[k]> | { [I in keyof Conditions]?: MorphVariants<keyof Variants[k]> }
 }
 
 /** Extracts the css type from the  */

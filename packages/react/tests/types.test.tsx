@@ -1,7 +1,10 @@
 import * as React from 'react'
-import createStyled, { StitchesVariants } from '../types/index.d'
+import createStyled from '../types/index.d'
 
 const { styled } = createStyled({
+	theme: {
+		colors: {},
+	},
 	conditions: {
 		large: '',
 	},
@@ -9,6 +12,10 @@ const { styled } = createStyled({
 
 const Button = styled('button', {
 	variants: {
+		isDisabled: {
+			true: {},
+			false: {},
+		},
 		variant: {
 			red: {
 				backgroundOrigin: '',
@@ -17,19 +24,26 @@ const Button = styled('button', {
 	},
 })
 
-/** TODO: Fix extending stitches components */
-const ExtendedButton = styled('button', {
+const ExtendedButton = styled(Button, {
 	variants: {
 		variant: {
-			red: {},
-		},
-		size: {
-			large: {},
+			blue: {
+				color: 'ActiveBorder',
+				backgroundColor: 'ActiveCaption',
+			},
 		},
 	},
 })
 
-type Variants = StitchesVariants<typeof ExtendedButton>
+const ReactComponent: React.FC = (props) => <div></div>
+
+const StitchesExtendingReactComponent = styled(ReactComponent, {
+	backgroundColor: 'red',
+	backgroundOrigin: 'border-box',
+	backdropFilter: 'inherit',
+})
+
+type Props = React.ComponentProps<typeof StitchesExtendingReactComponent>
 
 /* -------------------------------------------------------------------------------------------------
  * Extended Button using react utilities without polymorphism
@@ -82,16 +96,16 @@ export function Test() {
 
 			{/* Button does not accept href prop */}
 			{/* @ts-expect-error */}
-			<Button href="" />
+			<Button as="div" href="" />
 
-			{/* Button accepts form prop */}
+			{/* Button accepts form  prop */}
 			<Button form="form" onClick={(e) => {}} />
 
 			{/* Button accepts css prop */}
 			<Button css={{ backgroundColor: 'ActiveCaption', padding: 'inherit' }} />
 
 			{/* Button accepts isDisabled prop */}
-			<Button variant="red" />
+			<Button isDisabled />
 
 			{/* Button accepts a responsive variant */}
 			<Button variant={{ large: 'red' }} />
@@ -120,7 +134,7 @@ export function Test() {
 			<Button onClick={(event) => event.currentTarget.form} />
 
 			{/* Button as "a" accepts onClick prop */}
-			<Button as="a" onClick={(event) => event.currentTarget.href} />
+			<Button as="svg" onClick={(event) => event.currentTarget} css={{ backgroundColor: 'ActiveBorder' }} />
 
 			{/* Button as Link accepts onClick prop, but it must be explicitly typed */}
 			<Button as={Link} onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => event.altKey} />
@@ -128,8 +142,8 @@ export function Test() {
 			{/* ExtendedButton accepts variant prop */}
 			<ExtendedButton variant="red" />
 
-			{/* ExtendedButton accepts size prop */}
-			<ExtendedButton size="large" />
+			{/* ExtendedButton accepts isDisabled prop */}
+			<ExtendedButton isDisabled />
 
 			{/* ExtendedButton is typed as a button */}
 			<ExtendedButton
@@ -155,6 +169,18 @@ export function Test() {
 			{/* ExtendedButtonUsingReactUtils does not accept as prop */}
 			{/* @ts-expect-error */}
 			<ExtendedButtonUsingReactUtils as="a" isDisabled />
+
+			{/** As works on extended element */}
+			<StitchesExtendingReactComponent
+				as="a"
+				href="fwef"
+				onClick={(e) => {
+					console.log(e)
+				}}
+			/>
+			{/** As errors on extended element when passed a wrong prop */}
+			{/* @ts-expect-error */}
+			<StitchesExtendingReactComponent href="fwef" />
 		</>
 	)
 }
