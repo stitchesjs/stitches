@@ -6184,6 +6184,19 @@ export interface SvgProperties<TLength = (string & {}) | 0> {
 	writingMode: WritingModeProperty
 }
 
+export type DeclarationListWithImportRule = {
+	/**
+	 * The **`@import`** CSS at-rule import style rules from other style sheets.
+	 *
+	 * | Chrome | Firefox | Safari |  Edge  |  IE   |
+	 * | :----: | :-----: | :----: | :----: | :---: |
+	 * | **1**  |  **1**  | **1**  | **12** | **3** |
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@import
+	 */
+	'@import'?: `"./"` | `"https://"` | `url("")` | (string & {})
+}
+
 export interface Properties<TLength = (string & {}) | 0> extends StandardProperties<TLength>, VendorProperties<TLength>, SvgProperties<TLength> {}
 
 export interface FontFace {
@@ -6508,7 +6521,7 @@ export type ColumnsProperty<TLength> = Globals | TLength | 'auto' | (string & {}
 
 export type ContainProperty = Globals | 'content' | 'layout' | 'none' | 'paint' | 'size' | 'strict' | 'style' | (string & {})
 
-export type ContentProperty = Globals | ContentList | 'none' | 'normal' | (string & {})
+export type ContentProperty = Globals | ContentList | `""` | 'none' | 'normal' | (string & {})
 
 export type CounterIncrementProperty = Globals | 'none' | (string & {})
 

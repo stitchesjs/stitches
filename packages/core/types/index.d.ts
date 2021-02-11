@@ -1,4 +1,4 @@
-import { Properties } from './css-types'
+import { DeclarationListWithImportRule, Properties } from './css-types'
 
 export type CSSPropertiesToTokenScale = {
 	gap: 'space'
@@ -255,7 +255,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	): IStyledRule<InferRestVariants<Vars>, A, B, C, ThemeMap>
 
 	/** Generates CSS from global rules and returns a function which applies them to the sheet.  */
-	global: (definition: Record<string, InternalCSS<A, B, C, ThemeMap>>) => GlobalRule
+	global: (definition: Record<string, InternalCSS<A, B, C, ThemeMap>> | DeclarationListWithImportRule) => GlobalRule
 
 	/** Generates CSS from theme scales and returns a function which applies them to the sheet.  */
 	theme: {
@@ -321,8 +321,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	/** Prefix applied to all styled and themed rules. */
 	prefix: string
 }
-type MorphVariants<T> = T extends number ? `${T}` | T : T extends "true" ? "true" | true : T extends "false" ? "false" | false : T
-
+type MorphVariants<T> = T extends number ? `${T}` | T : T extends 'true' ? 'true' | true : T extends 'false' ? 'false' | false : T
 
 export type VariantsCall<Variants, Conditions> = {
 	[k in keyof Variants]?: MorphVariants<keyof Variants[k]> | { [I in keyof Conditions]?: MorphVariants<keyof Variants[k]> }
