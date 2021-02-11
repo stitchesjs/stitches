@@ -25,7 +25,7 @@ describe('React', () => {
 	})
 
 	test('styled function returns a component function', () => {
-		expect(typeof Button).toBe('function')
+		expect(typeof Button).toBe('object')
 	})
 
 	test('component renders', () => {
