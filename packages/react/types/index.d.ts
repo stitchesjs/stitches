@@ -65,7 +65,13 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 		// prettier-ignore
 		styles: (
 			(
-				LessInternalCSS<Conditions, Theme, Utils, ThemeMap>
+				(
+					LessInternalCSS<Conditions, Theme, Utils, ThemeMap>
+					& {
+						/** Unknown property. */
+						[k in string]: unknown
+					}
+				)
 				| Record<string, InternalCSS<Conditions, Theme, Utils, ThemeMap>>
 			)
 			& {

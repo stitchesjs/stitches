@@ -286,7 +286,13 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 				[k in keyof Vars]: (
 					(
 						(
-							LessInternalCSS<A, B, C, ThemeMap>
+							(
+								LessInternalCSS<A, B, C, ThemeMap>
+								& {
+									/** Unknown property. */
+									[k in string]: unknown
+								}
+							)
 							& {
 								variants?: Vars[k] & {
 									[a in keyof Vars[k]]: {
