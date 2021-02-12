@@ -1,5 +1,7 @@
 import * as React from 'react'
-import createStyled, { StitchesCss } from '../types/index.d'
+import createStyled, { StitchesCss, StitchesVariants } from '../types/index.d'
+import * as SeparatorPrimitive from '@radix-ui/react-separator'
+import type * as Polymorphic from '@radix-ui/react-polymorphic'
 
 const factory = createStyled({
 	theme: {
@@ -59,6 +61,63 @@ type CSS = StitchesCss<typeof factory>
 
 export const { styled, toString, theme, css, keyframes, global, config } = factory
 
+const RComponent: React.FC<{ hola?: 'hi' | 'hello' }> = () => {
+	return null
+}
+
+const StyledSeparator = styled(SeparatorPrimitive.Root, {
+	border: 'none',
+	margin: 0,
+	flexShrink: 0,
+	backgroundColor: '$gray500',
+	cursor: 'default',
+	variants: {
+		size: {
+			'1': {
+				'&[data-orientation="horizontal"]': {
+					height: '1px',
+					width: '$3',
+				},
+				'&[data-orientation="vertical"]': {
+					width: '1px',
+					height: '$3',
+				},
+			},
+			'2': {
+				'&[data-orientation="horizontal"]': {
+					height: '1px',
+					width: '$7',
+				},
+				'&[data-orientation="vertical"]': {
+					width: '1px',
+					height: '$7',
+				},
+			},
+		},
+	},
+})
+
+type SeparatorVariants = StitchesVariants<typeof StyledSeparator>
+type SeparatorOwnProps = Polymorphic.OwnProps<typeof SeparatorPrimitive.Root> & { css?: CSS } & SeparatorVariants
+type SeparatorComponent = Polymorphic.ForwardRefComponent<Polymorphic.IntrinsicElement<typeof SeparatorPrimitive.Root>, SeparatorOwnProps>
+
+export const Separator = React.forwardRef((props, forwardedRef) => {
+	return <StyledSeparator {...props} ref={forwardedRef} />
+}) as SeparatorComponent
+
+const Test0 = (
+	<StyledSeparator
+		as="a"
+		href=""
+		onMouseDown={(e) => {}}
+		onClick={(e) => {
+			console.log(e)
+		}}
+		css={{ backdropFilter: 'inherit', background: 'ActiveCaption' }}
+	>
+		hello
+	</StyledSeparator>
+)
 // token:
 theme.colors.gray100.scale
 theme.colors.gray100.value
@@ -151,7 +210,7 @@ export function ExtendedButtonUsingReactUtilsWithInternalInlineAs(props: React.C
 	return <Button as={(_props) => <a {..._props} />} />
 }
 
-/* -------------------------------------------------------------------------------------------------
+/* --------------------------------------------------now it's not likeikng -----------------------------------------------
  * Extended Polymorphic Button
  * -----------------------------------------------------------------------------------------------*/
 
