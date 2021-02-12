@@ -1,5 +1,5 @@
 {
   "node": "14",
   "packages": ["packages/core", "packages/react"],
-  "sandboxes": ["6d808"]
+  "sandboxes": ["7njqn", "2uwsq"]
 }
