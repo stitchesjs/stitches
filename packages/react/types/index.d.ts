@@ -47,7 +47,6 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 	 * const Button = styled("button", { color: "DarkSlateGray" })
 	 *
 	 * <div className={Button.className} />
-	 *
 	 * ```
 	 * <br />
 	 */
@@ -62,7 +61,6 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 	 * const Card = styled("article", {
 	 *   [Button.query]: { boxShadow: "0 0 0 5px" }
 	 * })
-	 *
 	 * ```
 	 * <br />
 	 */

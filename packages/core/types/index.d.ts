@@ -368,7 +368,6 @@ export interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
 	 * const Button = css({ color: "DarkSlateGray" })
 	 *
 	 * <div className={Button.className} />
-	 *
 	 * ```
 	 * <br />
 	 */
@@ -383,7 +382,6 @@ export interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
 	 * const Card = styled("article", {
 	 *   [Button.query]: { boxShadow: "0 0 0 5px" }
 	 * })
-	 *
 	 * ```
 	 * <br />
 	 */
