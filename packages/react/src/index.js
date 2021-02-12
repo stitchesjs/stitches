@@ -37,15 +37,6 @@ export default (init) => {
 	)
 
 	const sheet = createCoreCss(init)
-	const { theme } = sheet
-
-	function toString() {
-		return this.render().selector
-	}
-
-	function toCallString() {
-		return this().selector
-	}
 
 	return assign(sheet, {
 		sync() {
@@ -55,11 +46,6 @@ export default (init) => {
 				if (!sheetTarget.parentNode) sheetParent.prepend(sheetTarget)
 			}
 		},
-		theme: (...args) =>
-			assign(theme(...args), {
-				[Symbol.toPrimitive]: toCallString,
-				toString: toCallString,
-			}),
 		styled: new Proxy(
 			/** Returns a React component. */
 			(
@@ -74,9 +60,6 @@ export default (init) => {
 				/** Returns a React element. */
 				return Object.setPrototypeOf(
 					{
-						...expression,
-						[Symbol.toPrimitive]: toString,
-						toString,
 						$$typeof: $$typeofForward,
 						render(
 							/** Props used to determine the expression of the current component. */
@@ -95,6 +78,20 @@ export default (init) => {
 							/** React element. */
 							return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
 						},
+						[Symbol.toPrimitive]() {
+							return expression.selector
+						},
+						toString() {
+							return expression.selector
+						},
+						get className() {
+							return expression.className
+						},
+						get selector() {
+							return expression.selector
+						},
+						classNames: expression.classNames,
+						variants: expression.variants,
 					},
 					Object(asType),
 				)

@@ -17,7 +17,8 @@ describe('Serialization', () => {
 			blue: 'dodgerblue',
 		},
 	})
-	const myThemeSelector = '.sx7guyg'
+	const myThemeClass = 'sx7guyg'
+	const myThemeSelector = `.${myThemeClass}`
 
 	test('Components implicitly return their selector', () => {
 		expect(String(myComponent)).toBe(myComponentSelector)
@@ -25,20 +26,24 @@ describe('Serialization', () => {
 		expect(`${myComponent}`).toBe(myComponentSelector)
 	})
 
-	test('Themes implicitly return their selector', () => {
-		expect(String(myTheme)).toBe(myThemeSelector)
-		expect('' + myTheme).toBe(myThemeSelector)
-		expect(`${myTheme}`).toBe(myThemeSelector)
-	})
-
 	test('Components can explicitly return their selector', () => {
 		expect(myComponent.selector).toBe(myComponentSelector)
 		expect(myComponent.toString()).toBe(myComponentSelector)
 	})
 
+	test('Themes implicitly return their className', () => {
+		expect(String(myTheme)).toBe(myThemeClass)
+		expect('' + myTheme).toBe(myThemeClass)
+		expect(`${myTheme}`).toBe(myThemeClass)
+	})
+
+	test('Themes can explicitly return their className', () => {
+		expect(myTheme.className).toBe(myThemeClass)
+		expect(myTheme.toString()).toBe(myThemeClass)
+	})
+
 	test('Themes can explicitly return their selector', () => {
 		expect(myTheme.selector).toBe(myThemeSelector)
-		expect(myTheme.toString()).toBe(myThemeSelector)
 	})
 
 	const sheetCssText = `${myThemeSelector}{--colors-blue:dodgerblue;}${myComponentSelector}{all:unset;font:inherit;margin:0;padding:0.5em 1em;}`

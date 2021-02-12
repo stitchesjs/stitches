@@ -1,5 +1,5 @@
 import { from } from './Array.js'
-import Object, { assign, create } from './Object.js'
+import Object, { assign, create, define } from './Object.js'
 import CssSet from './CssSet.js'
 import ThemeToken from './ThemeToken.js'
 import createGetComputedCss from './createGetComputedCss.js'
@@ -69,20 +69,24 @@ export default (init) => {
 		const cssText = getComputedCss({ [selector]: customPropertyStyles })
 
 		/** Themed Rule that activates styles on the styled sheet. */
-		const expressThemedRule = assign(
-			() => {
-				themedRules.addCss(cssText)
+		const expressThemedRule = define(() => {
+			themedRules.addCss(cssText)
 
-				return expressThemedRule
+			return expressThemedRule
+		}, {
+			toString() {
+				expressThemedRule()
+				return className
 			},
-			{
-				toString() {
-					return expressThemedRule().className
-				},
-				className,
-				selector,
+			get className() {
+				expressThemedRule()
+				return className
 			},
-		)
+			get selector() {
+				expressThemedRule()
+				return selector
+			},
+		})
 
 		for (const scale in theme) {
 			expressThemedRule[scale] = create(null)
@@ -114,20 +118,19 @@ export default (init) => {
 			;(name === '@import' ? localImportRules : localGlobalRules).push(cssText)
 		}
 
-		return assign(
-			() => {
-				localImportRules.forEach(importRules.addCss, importRules)
-				localGlobalRules.forEach(globalRules.addCss, globalRules)
+		const express = () => {
+			localImportRules.forEach(importRules.addCss, importRules)
+			localGlobalRules.forEach(globalRules.addCss, globalRules)
 
-				return displayName
+			return displayName
+		}
+
+		return assign(express, {
+			displayName,
+			toString() {
+				return String(express())
 			},
-			{
-				displayName,
-				toString() {
-					return String(this())
-				},
-			},
-		)
+		})
 	}
 
 	/** Returns a function that enables the keyframe styles on the styled sheet. */
@@ -217,118 +220,122 @@ export default (init) => {
 		}
 
 		/** Returns an expression of the current styled rule. */
-		return assign(
-			function (
-				/** Props used to determine the expression of the current styled rule. */
-				initProps,
-			) {
-				const { css: inlineStyle, ...props } = Object(initProps)
+		const express = function (
+			/** Props used to determine the expression of the current styled rule. */
+			initProps,
+		) {
+			const { css: inlineStyle, ...props } = Object(initProps)
 
-				let expressClassNames = new Set(classNames())
+			let expressClassNames = new Set(classNames())
 
-				for (const propName in defaultVariants)
-					if (!(propName in props) && propName in variants) {
-						props[propName] = defaultVariants[propName]
-					}
-
-				if (classProp in props) {
-					String(props[classProp]).split(/\s+/).forEach(expressClassNames.add, expressClassNames)
-
-					delete props[classProp]
+			for (const propName in defaultVariants)
+				if (!(propName in props) && propName in variants) {
+					props[propName] = defaultVariants[propName]
 				}
 
-				for (const compound of [].concat(compoundVariants || [])) {
-					const { css: compoundStyle, ...compounders } = Object(compound)
+			if (classProp in props) {
+				String(props[classProp]).split(/\s+/).forEach(expressClassNames.add, expressClassNames)
 
-					let appliedCompoundStyle = compoundStyle
-					let appliedConditions = new Set()
+				delete props[classProp]
+			}
 
-					if (
-						Object.keys(compounders).every((name) => {
-							if (name in props) {
-								const propValue = props[name]
-								const compounderValue = compounders[name]
-								if (propValue == compounderValue) return true
-								if (propValue === Object(propValue)) {
-									for (const innerName in propValue) {
-										const innerValue = propValue[innerName]
-										const condition = config.conditions[innerName] || innerName
-										if (compounderValue == innerValue) {
-											appliedCompoundStyle = { [condition]: appliedCompoundStyle }
-										}
+			for (const compound of [].concat(compoundVariants || [])) {
+				const { css: compoundStyle, ...compounders } = Object(compound)
+
+				let appliedCompoundStyle = compoundStyle
+				let appliedConditions = new Set()
+
+				if (
+					Object.keys(compounders).every((name) => {
+						if (name in props) {
+							const propValue = props[name]
+							const compounderValue = compounders[name]
+							if (propValue == compounderValue) return true
+							if (propValue === Object(propValue)) {
+								for (const innerName in propValue) {
+									const innerValue = propValue[innerName]
+									const condition = config.conditions[innerName] || innerName
+									if (compounderValue == innerValue) {
+										appliedCompoundStyle = { [condition]: appliedCompoundStyle }
 									}
-									return true
 								}
+								return true
 							}
-						})
-					) {
-						const compoundClassName = className + getHashString('', appliedCompoundStyle) + '--comp'
-						const compoundCssText = getComputedCss({ ['.' + compoundClassName]: appliedCompoundStyle })
+						}
+					})
+				) {
+					const compoundClassName = className + getHashString('', appliedCompoundStyle) + '--comp'
+					const compoundCssText = getComputedCss({ ['.' + compoundClassName]: appliedCompoundStyle })
 
-						combineRules.addCss(compoundCssText)
-						expressClassNames.add(compoundClassName)
-					}
+					combineRules.addCss(compoundCssText)
+					expressClassNames.add(compoundClassName)
 				}
+			}
 
-				for (const propName in props) {
-					if (propName in variants) {
-						const propValue = props[propName]
-						const variant = variants[propName]
+			for (const propName in props) {
+				if (propName in variants) {
+					const propValue = props[propName]
+					const variant = variants[propName]
 
-						delete props[propName]
+					delete props[propName]
 
-						// apply any matching variant
-						if (propValue in variant) {
-							variant[propValue]().forEach(expressClassNames.add, expressClassNames)
-						} else {
-							// conditionally apply any matched conditional variants
-							for (const innerName in propValue) {
-								const innerValue = propValue[innerName]
-								const condition = config.conditions[innerName] || innerName
+					// apply any matching variant
+					if (propValue in variant) {
+						variant[propValue]().forEach(expressClassNames.add, expressClassNames)
+					} else {
+						// conditionally apply any matched conditional variants
+						for (const innerName in propValue) {
+							const innerValue = propValue[innerName]
+							const condition = config.conditions[innerName] || innerName
 
-								if (innerValue in variant) {
-									variant[innerValue](condition).forEach(expressClassNames.add, expressClassNames)
-								}
+							if (innerValue in variant) {
+								variant[innerValue](condition).forEach(expressClassNames.add, expressClassNames)
 							}
 						}
 					}
 				}
+			}
 
-				if (inlineStyle) {
-					const inlineRuleClassName = className + getHashString('', inlineStyle) + '--css'
-					const inlineRuleSelector = '.' + inlineRuleClassName
-					const inlineRuleCssText = getComputedCss({ [inlineRuleSelector]: inlineStyle })
+			if (inlineStyle) {
+				const inlineRuleClassName = className + getHashString('', inlineStyle) + '--css'
+				const inlineRuleSelector = '.' + inlineRuleClassName
+				const inlineRuleCssText = getComputedCss({ [inlineRuleSelector]: inlineStyle })
 
-					inlinedRules.addCss(inlineRuleCssText)
+				inlinedRules.addCss(inlineRuleCssText)
 
-					expressClassNames.add(inlineRuleClassName)
-				}
+				expressClassNames.add(inlineRuleClassName)
+			}
 
-				expressClassNames = from(expressClassNames)
+			expressClassNames = from(expressClassNames)
 
-				return {
-					toString() {
-						return this.className
-					},
-					className: (props[classProp] = expressClassNames.join(' ')),
-					selector: '.' + expressClassNames.join('.'),
-					props,
-				}
-			},
-			{
+			const expressClassName = (props[classProp] = expressClassNames.join(' '))
+
+			return {
 				toString() {
-					return String(this())
+					return expressClassName
 				},
-				className,
-				classNames,
-				cssText,
-				selector,
-				variants,
+				className: expressClassName,
+				selector: '.' + expressClassNames.join('.'),
+				props,
+			}
+		}
+
+		return define(express, {
+			toString() {
+				return express().className
 			},
-		)
+			get className() {
+				return express().className
+			},
+			get selector() {
+				return express().selector
+			},
+			classNames,
+			variants,
+		})
 	}
 
-	assign(theme, theme(':root', config.theme)())
+	assign(theme, theme(':root', config.theme)).toString()
 
 	const getCssString = () => importRules + themedRules + globalRules + styledRules
 
