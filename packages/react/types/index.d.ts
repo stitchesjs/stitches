@@ -111,7 +111,32 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 
 type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
 	_config?: IConfig<Conditions, Theme, Utils, Prefix, ThemeMap>,
-) => TStyledSheet<Conditions, Theme, Utils> & { styled: StyledInstance<Conditions & { initial: '' }, Theme, Utils, ThemeMap> }
+) => TStyledSheet<Conditions, Theme, Utils> & {
+	styled: StyledInstance<Conditions & { initial: '' }, Theme, Utils, ThemeMap>
+
+	/**
+	 * Returns all CSS applied to the stylesheet.
+	 *
+	 * ```
+	 *
+	 * <style>{toString()}</style>
+	 * ```
+	 * <br />
+	 */
+	getCssString(): string
+
+	/**
+	 * Returns all CSS applied to the stylesheet.
+	 *
+	 * ```
+	 *
+	 * <style>{toString()}</style>
+	 * ```
+	 * <br />
+	 */
+	toString(): string
+}
 
 declare const styled: ReactFactory
+
 export default styled

@@ -359,7 +359,26 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	/** Clears all CSS rules from the sheet.  */
 	clear(): void
 
-	/** Returns all of the CSS applied to the sheet.  */
+	/**
+	 * Returns all CSS applied to the stylesheet.
+	 *
+	 * ```
+	 *
+	 * <style>{toString()}</style>
+	 * ```
+	 * <br />
+	 */
+	getCssString(): string
+
+	/**
+	 * Returns all CSS applied to the stylesheet.
+	 *
+	 * ```
+	 *
+	 * <style>{toString()}</style>
+	 * ```
+	 * <br />
+	 */
 	toString(): string
 
 	/** Conditions in which CSS would be applied. */
