@@ -398,7 +398,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	/** Prefix applied to all styled and themed rules. */
 	prefix: string
 }
-type MorphVariants<T> = T extends number ? `${T}` | T : T extends 'true' ? 'true' | true : T extends 'false' ? 'false' | false : T
+type MorphVariants<T> = T extends number ? `${T}` | T : T extends 'true' ? 'true' | boolean : T extends 'false' ? 'false' | boolean : T
 
 export type VariantsCall<Variants, Conditions> = {
 	[k in keyof Variants]?: MorphVariants<keyof Variants[k]> | { [I in keyof Conditions]?: MorphVariants<keyof Variants[k]> }
