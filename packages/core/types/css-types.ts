@@ -1177,27 +1177,17 @@ export interface StandardLonghandProperties<TLength = (string & {}) | 0> {
 	 *
 	 * _Supported in Flex Layout_
 	 *
-	 * | Chrome | Firefox |   Safari    | Edge | IE  |
-	 * | :----: | :-----: | :---------: | :--: | :-: |
-	 * |   No   | **63**  | **3** _-x-_ |  No  | No  |
+	 * | Chrome | Firefox | Safari | Edge | IE  |
+	 * | :----: | :-----: | :----: | :--: | :-: |
+	 * |   84   |    63   |   No   |  84  | No  |
 	 *
 	 * ---
 	 *
 	 * _Supported in Grid Layout_
 	 *
-	 * |     Chrome      |     Firefox     |        Safari         |  Edge  | IE  |
-	 * | :-------------: | :-------------: | :-------------------: | :----: | :-: |
-	 * |     **66**      |     **61**      | **10.1** _(grid-gap)_ | **16** | No  |
-	 * | 57 _(grid-gap)_ | 52 _(grid-gap)_ |                       |        |     |
-	 *
-	 * ---
-	 *
-	 * _Supported in Multi-column Layout_
-	 *
-	 * | Chrome  |  Firefox  | Safari  |  Edge  |   IE   |
-	 * | :-----: | :-------: | :-----: | :----: | :----: |
-	 * | **50**  |  **52**   | **10**  | **12** | **10** |
-	 * | 1 _-x-_ | 1.5 _-x-_ | 3 _-x-_ |        |        |
+	 * | Chrome | Firefox | Safari | Edge | IE  |
+	 * | :----: | :-----: | :----: | :--: | :-: |
+	 * |   66   |    61   |  12.1  |  16  | No  |
 	 *
 	 * ---
 	 *
@@ -3178,7 +3168,7 @@ export interface StandardLonghandProperties<TLength = (string & {}) | 0> {
 	 */
 	rotate: RotateProperty
 	/**
-	 * The **`row-gap`** CSS property sets the size of the gap (gutter) between an element's grid rows.
+	 * The **`row-gap`** CSS property sets the size of the gap (gutter) between an element's rows.
 	 *
 	 * **Initial value**: `normal`
 	 *
@@ -3188,16 +3178,15 @@ export interface StandardLonghandProperties<TLength = (string & {}) | 0> {
 	 *
 	 * | Chrome | Firefox | Safari | Edge | IE  |
 	 * | :----: | :-----: | :----: | :--: | :-: |
-	 * |   No   | **63**  |   No   |  No  | No  |
+	 * |   84   |    63   |   No   |  84  | No  |
 	 *
 	 * ---
 	 *
 	 * _Supported in Grid Layout_
 	 *
-	 * |       Chrome        |       Firefox       |          Safari           |  Edge  | IE  |
-	 * | :-----------------: | :-----------------: | :-----------------------: | :----: | :-: |
-	 * |       **66**        |       **61**        | **10.1** _(grid-row-gap)_ | **16** | No  |
-	 * | 57 _(grid-row-gap)_ | 52 _(grid-row-gap)_ |                           |        |     |
+	 * | Chrome | Firefox | Safari | Edge | IE  |
+	 * | :----: | :-----: | :----: | :--: | :-: |
+	 * |   66   |    61   |  12.1  |  16  | No  |
 	 *
 	 * ---
 	 *
@@ -4498,16 +4487,15 @@ export interface StandardShorthandProperties<TLength = (string & {}) | 0> {
 	 *
 	 * | Chrome | Firefox | Safari | Edge | IE  |
 	 * | :----: | :-----: | :----: | :--: | :-: |
-	 * |   No   | **63**  |   No   |  No  | No  |
+	 * |   84   |   63    |   No   |  84  | No  |
 	 *
 	 * ---
 	 *
 	 * _Supported in Grid Layout_
 	 *
-	 * |     Chrome      |     Firefox     |        Safari         |  Edge  | IE  |
-	 * | :-------------: | :-------------: | :-------------------: | :----: | :-: |
-	 * |     **66**      |     **61**      | **10.1** _(grid-gap)_ | **16** | No  |
-	 * | 57 _(grid-gap)_ | 52 _(grid-gap)_ |                       |        |     |
+	 * | Chrome | Firefox | Safari | Edge | IE  |
+	 * | :----: | :-----: | :----: | :--: | :-: |
+	 * |   66   |   61    |  10.1  |  16  | No  |
 	 *
 	 * ---
 	 *
@@ -4515,7 +4503,7 @@ export interface StandardShorthandProperties<TLength = (string & {}) | 0> {
 	 *
 	 * | Chrome | Firefox | Safari |  Edge  | IE  |
 	 * | :----: | :-----: | :----: | :----: | :-: |
-	 * | **66** | **61**  |   No   | **16** | No  |
+	 * |   66   |   61    |   No   |   16   | No  |
 	 *
 	 * ---
 	 *
@@ -4553,6 +4541,20 @@ export interface StandardShorthandProperties<TLength = (string & {}) | 0> {
 	 */
 	gridColumn: GridColumnProperty
 	/**
+	 * The **`grid-column-gap`** CSS property is a _legacy_ property that sets the size of the gap (gutter) between an element's grid columns.
+	 *
+	 * **Initial value**: `normal`
+	 *
+	 * | Chrome | Firefox |  Safari  |  Edge  | IE  |
+	 * | :----: | :-----: | :------: | :----: | :-: |
+	 * | **57** | **52**  | **10.1** | **16** | No  |
+	 *
+	 * ---
+	 *
+	 * @see https://developer.mozilla.org/docs/Web/CSS/row-gap
+	 */
+	gridColumnGap: ColumnGapProperty<TLength>
+	/**
 	 * The **`grid-row`** CSS property is a shorthand property for `grid-row-start` and `grid-row-end` specifying a grid item’s size and location within the grid row by contributing a line, a span, or nothing (automatic) to its grid placement, thereby specifying the inline-start and inline-end edge of its grid area.
 	 *
 	 * | Chrome | Firefox |  Safari  |  Edge  | IE  |
@@ -4562,6 +4564,20 @@ export interface StandardShorthandProperties<TLength = (string & {}) | 0> {
 	 * @see https://developer.mozilla.org/docs/Web/CSS/grid-row
 	 */
 	gridRow: GridRowProperty
+	/**
+	 * The **`grid-row-gap`** CSS property is a _legacy_ property that sets the size of the gap (gutter) between an element's grid rows.
+	 *
+	 * **Initial value**: `normal`
+	 *
+	 * | Chrome | Firefox |  Safari  |  Edge  | IE  |
+	 * | :----: | :-----: | :------: | :----: | :-: |
+	 * | **57** | **52**  | **10.1** | **16** | No  |
+	 *
+	 * ---
+	 *
+	 * @see https://developer.mozilla.org/docs/Web/CSS/row-gap
+	 */
+	gridRowGap: RowGapProperty<TLength>
 	/**
 	 * The **`grid-template`** CSS property is a shorthand property for defining grid columns, rows, and areas.
 	 *
