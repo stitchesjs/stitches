@@ -37,8 +37,8 @@ describe('Serialization', () => {
 		expect(myTheme.className).toBe(myThemeClassName)
 	})
 
-	test('Components and themes can explicitly return their query selector', () => {
-		expect(myComponent.query).toBe(`.${myComponentClassName}`)
-		expect(myTheme.query).toBe(`.${myThemeClassName}`)
+	test('Components and themes can explicitly return their selector', () => {
+		expect(myComponent.selector).toBe(`.${myComponentClassName}`)
+		expect(myTheme.selector).toBe(`.${myThemeClassName}`)
 	})
 })

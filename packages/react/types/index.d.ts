@@ -59,12 +59,12 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 	 * const Button = styled("button", { color: "DarkSlateGray" })
 	 *
 	 * const Card = styled("article", {
-	 *   [Button.query]: { boxShadow: "0 0 0 5px" }
+	 *   [Button.selector]: { boxShadow: "0 0 0 5px" }
 	 * })
 	 * ```
 	 * <br />
 	 */
-	query: string
+	selector: string
 	variants: Variants
 	[$conditions]: Conditions
 	[$variants]: Variants

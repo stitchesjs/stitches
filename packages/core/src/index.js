@@ -63,10 +63,10 @@ export default (init) => {
 		className = className || getHashString(prefix, customPropertyStyles)
 
 		/** CSS Selector */
-		const query = className.replace(/^\w/, '.$&')
+		const selector = className.replace(/^\w/, '.$&')
 
 		/** Computed CSS */
-		const cssText = getComputedCss({ [query]: customPropertyStyles })
+		const cssText = getComputedCss({ [selector]: customPropertyStyles })
 
 		/** Themed Rule that activates styles on the styled sheet. */
 		const expressThemedRule = assign(
@@ -80,7 +80,7 @@ export default (init) => {
 					return expressThemedRule().className
 				},
 				className,
-				query,
+				selector,
 			},
 		)
 
@@ -157,10 +157,10 @@ export default (init) => {
 		const className = getHashString(prefix, style)
 
 		/** Unique css selector for the current component. */
-		const query = '.' + className
+		const selector = '.' + className
 
 		/** CSS styles representing the current component. */
-		const cssText = getComputedCss({ [query]: style })
+		const cssText = getComputedCss({ [selector]: style })
 
 		/** Change event registered with updates to the primary, variant, or inlined rules of the component. */
 		const onChange = styledRules.onChange && (() => styledRules.onChange(styledRules))
@@ -311,7 +311,7 @@ export default (init) => {
 						return this.className
 					},
 					className: (props[classProp] = expressClassNames.join(' ')),
-					query: '.' + expressClassNames.join('.'),
+					selector: '.' + expressClassNames.join('.'),
 					props,
 				}
 			},
@@ -322,7 +322,7 @@ export default (init) => {
 				className,
 				classNames,
 				cssText,
-				query,
+				selector,
 				variants,
 			},
 		)
