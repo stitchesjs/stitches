@@ -39,7 +39,7 @@ const factory = createStyled({
 		bp1: '@media (min-width: 620px)',
 	},
 	utils: {
-		marginX: (config) => (value: number | `$${keyof typeof config.space}`) => ({
+		marginX: (config) => (value: number | `$${keyof typeof config.theme.colors}`) => ({
 			marginLeft: value,
 			marginRight: value,
 		}),
