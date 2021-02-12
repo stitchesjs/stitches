@@ -331,6 +331,7 @@ export default (init) => {
 	assign(theme, theme(':root', config.theme)())
 
 	return {
+		config: init,
 		global,
 		keyframes,
 		css,
