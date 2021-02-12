@@ -101,19 +101,19 @@ export declare const $conditions: unique symbol
 export type StitchesVariants<T> = T extends { [$variants]: infer V; [$conditions]: infer C } ? VariantsCall<V, C> : {}
 export type StitchesExtractVariantsStyles<T> = T extends { [$variants]: infer V } ? V : {}
 
-type StyledSheetCallback = (...cssText: string[]) => void
+export type StyledSheetCallback = (...cssText: string[]) => void
 
-interface GlobalRule {
+export interface GlobalRule {
 	(): void
 }
 
-interface ThemeRule {
+export interface ThemeRule {
 	toString(): string
 	className: string
 	cssText: string
 	root: string
 }
-interface StyledExpression {
+export interface StyledExpression {
 	(): string
 	toString(): string
 	className: string
@@ -128,7 +128,7 @@ interface StyledExpression {
 // Just used as a keyof target for the config
 // for some weird reason, autocomplete stops working
 // if we try to pre compute the keys or use a union
-type EmptyTheme = {
+export type EmptyTheme = {
 	colors?: {}
 	space?: {}
 	fontSizes?: {}
@@ -169,7 +169,7 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 	onThemed?: StyledSheetCallback
 }
 
-interface InternalConfig<Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
+export interface InternalConfig<Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
 	conditions: Conditions
 	theme: Theme
 	utils: {
@@ -179,7 +179,7 @@ interface InternalConfig<Conditions extends TConditions = {}, Theme extends TThe
 	prefix: Prefix
 }
 
-type MapUtils<T> = { [k in keyof T]: T[k] extends (theme: any) => (value: infer V) => any ? V : never }
+export type MapUtils<T> = { [k in keyof T]: T[k] extends (theme: any) => (value: infer V) => any ? V : never }
 
 /* Css typed structure:
 /* ========================================================================== */
@@ -351,7 +351,7 @@ export type StitchesCss<T> = T extends { config: { conditions: infer Conditions;
 
 /* Output Styled Rule:
 /* ========================================================================== */
-interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
+export interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
 	//
 	(
 		init?: VariantsCall<Variants, Conditions> & {
