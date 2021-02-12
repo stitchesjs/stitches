@@ -88,7 +88,7 @@ type StitchesPropsWithAs<Elm extends React.ElementType, Variants = {}, Condition
 /* Styled instance:
  * -----------------------------------------------------------------------------------------------*/
 export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
-	<E extends React.ElementType, Variants>(
+	<E extends React.ElementType, Variants, CloneVariants extends Variants>(
 		elm: ComponentInfer<E>,
 		// prettier-ignore
 		styles: (
@@ -105,6 +105,21 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 			& {
 				variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Conditions, Theme, Utils, ThemeMap> } }
 			}
+			& {
+						defaultVariants?: {
+							[k in keyof CloneVariants]?: keyof CloneVariants[k]
+						}
+					}
+					& {
+						compoundVariants?: (
+							{
+								[k in keyof CloneVariants]?: keyof CloneVariants[k] 
+							}
+							& {
+								css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+							}
+						)
+					}
 		),
 	): StitchesComponent<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
 }

@@ -248,11 +248,11 @@ type Tail<T extends any[]> = ((...t: T) => any) extends (_: any, ...tail: infer 
 type OmitKey<T, U extends keyof any> = T & { [P in U]?: unknown }
 
 export type ThemeToken = {
-	value:string
+	value: string
 	token: string
-	scale: string;
-	computedValue: string;
-	variable: string;
+	scale: string
+	computedValue: string
+	variable: string
 } & string
 /* Css Instance Type:
 /* ========================================================================== */
@@ -313,8 +313,8 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 			>,
 		): ThemeRule & string
 	} & {
-					[TO in keyof B]: {[k in keyof B[TO]]: ThemeToken}
-				}
+		[TO in keyof B]: { [k in keyof B[TO]]: ThemeToken }
+	}
 	config: InternalConfig<A, B, C, D, ThemeMap>
 
 	/** Returns a new styled rule. */
