@@ -330,8 +330,11 @@ export default (init) => {
 
 	assign(theme, theme(':root', config.theme)())
 
+	const getCssString = () => importRules + themedRules + globalRules + styledRules
+
 	return {
 		config: init,
+		getCssString,
 		global,
 		keyframes,
 		css,
@@ -349,7 +352,7 @@ export default (init) => {
 
 			return this
 		},
-		toString: () => importRules + themedRules + globalRules + styledRules,
+		toString: getCssString,
 	}
 }
 
