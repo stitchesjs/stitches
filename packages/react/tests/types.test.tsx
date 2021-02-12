@@ -59,6 +59,7 @@ const sharedColor: CSS = {
 			},
 		},
 		backgroundClip: 'content-box',
+		marginX: '$gray200',
 	},
 	when: {
 		bp1: {
