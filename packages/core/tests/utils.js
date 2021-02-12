@@ -1,16 +1,14 @@
 import createCss from '../src/index.js'
 
 describe('Utils', () => {
-	let stitches, component
-
 	test('Authors can define utilties applied to components', () => {
-		stitches = createCss({
+		const stitches = createCss({
 			utils: {
 				bg: () => (value) => ({ backgroundColor: value }),
 			},
 		})
 
-		component = stitches.css({
+		const component = stitches.css({
 			bg: 'red',
 		})
 
