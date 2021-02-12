@@ -75,9 +75,10 @@ const ExternalStyles: CSS = {
 
 const PotatoButton = css.css({
 	variants: {
-		color: {
-			red: {},
-			blue: {},
+		red: {
+			fwe: {
+				backgroundColor: '$gray100',
+			},
 		},
 	},
 })

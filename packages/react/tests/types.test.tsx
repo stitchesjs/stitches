@@ -39,16 +39,25 @@ const factory = createStyled({
 		bp1: '@media (min-width: 620px)',
 	},
 	utils: {
-		marginX: (config) => (value: number | `$${keyof typeof config.theme.colors}`) => ({
+		marginX: (config) => (value: number | `wefwef`) => ({
 			marginLeft: value,
 			marginRight: value,
 		}),
 	},
 })
 
+const utils = {
+	mt: () => (value: string) => ({ marginTop: value }),
+}
+
+const stitchesConfig = createStyled({
+	utils,
+})
+export const { config: Config } = stitchesConfig
+
 type CSS = StitchesCss<typeof factory>
 
-export const { styled, toString, theme, css, keyframes, global } = factory
+export const { styled, toString, theme, css, keyframes, global, config } = factory
 
 // token:
 theme.colors.gray100.scale
@@ -67,8 +76,6 @@ const sharedColor: CSS = {
 				backgroundColor: 'ActiveCaption',
 			},
 		},
-		backgroundClip: 'content-box',
-		marginX: '$gray200',
 	},
 	when: {
 		bp1: {
@@ -78,7 +85,6 @@ const sharedColor: CSS = {
 }
 
 const Button = styled('button', {
-	...sharedColor,
 	variants: {
 		isDisabled: {
 			true: {},
@@ -86,8 +92,20 @@ const Button = styled('button', {
 		},
 		variant: {
 			red: {
-				backgroundOrigin: '',
+				color: '$gray200',
 			},
+			blue: {
+				color: '$gray200',
+			},
+		},
+	},
+	defaultVariants: {
+		isDisabled: 'false',
+	},
+	compoundVariants: {
+		variant: 'blue',
+		css: {
+			backgroundColor: '$gray200',
 		},
 	},
 })
