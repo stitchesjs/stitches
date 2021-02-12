@@ -260,10 +260,35 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 		}
 	): IStyledRule<InferRestVariants<Vars>, A, B, C, ThemeMap>
 
-	/** Generates CSS from global rules and returns a function which applies them to the sheet.  */
+	/**
+	 * Generates CSS from global rules and returns a function that renders them to the stylesheet.
+	 *
+	 * ```
+	 *
+	 * const myGlobal = global({
+	 *   "*, ::before, ::after": { boxSizing: "border-box" }
+	 *   "body": { margin: 0 }
+	 * })
+	 *
+	 * myGlobal()
+	 * ```
+	 * <br />
+	 */
 	global: (definition: Record<string, InternalCSS<A, B, C, ThemeMap>> | DeclarationListWithImportRule) => GlobalRule
 
-	/** Generates CSS from theme scales and returns a function which applies them to the sheet.  */
+	/**
+	 * Generates CSS from theme scales and returns a function that renders them to the stylesheet.
+	 *
+	 * ```
+	 *
+	 * const myTheme = theme({
+	 *   colors: { blue: "DodgerBlue" }
+	 * })
+	 *
+	 * <article className={myTheme.className} />
+	 * ```
+	 * <br />
+	 */
 	theme: {
 		(
 			theme: Partial<
