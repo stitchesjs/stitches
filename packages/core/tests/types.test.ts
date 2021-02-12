@@ -75,12 +75,25 @@ const ExternalStyles: CSS = {
 
 const PotatoButton = css.css({
 	variants: {
-		red: {
-			fwe: {
+		variant: {
+			blue: {
+				backgroundColor: '$gray100',
+			},
+			red: {
 				backgroundColor: '$gray100',
 			},
 		},
 	},
+	compoundVariants: [
+		{
+			//cool
+
+			variant: 'blue',
+			css: {
+				backgroundColor: '$gray200',
+			},
+		},
+	],
 })
 
 type test = StitchesVariants<typeof PotatoButton>

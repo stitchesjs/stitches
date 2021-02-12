@@ -355,7 +355,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 							& {
 								css?: InternalCSS<A, B, C, ThemeMap>
 							}
-						)
+						)[]
 					}
 				)
 			}

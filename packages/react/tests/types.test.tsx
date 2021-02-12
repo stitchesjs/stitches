@@ -102,12 +102,16 @@ const Button = styled('button', {
 	defaultVariants: {
 		isDisabled: 'false',
 	},
-	compoundVariants: {
-		variant: 'blue',
-		css: {
-			backgroundColor: '$gray200',
+	compoundVariants: [
+		{
+			//cool
+
+			variant: 'blue',
+			css: {
+				backgroundColor: '$gray200',
+			},
 		},
-	},
+	],
 })
 
 const ExtendedButton = styled(Button, {

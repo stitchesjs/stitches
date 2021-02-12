@@ -118,7 +118,7 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 							& {
 								css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 							}
-						)
+						)[]
 					}
 		),
 	): StitchesComponent<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
