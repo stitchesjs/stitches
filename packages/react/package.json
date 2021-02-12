@@ -22,7 +22,7 @@
     "Jonathan Neal <jonathan@modulz.app>"
   ],
   "dependencies": {
-    "@stitches/core": "0.1.0-canary.0"
+    "@stitches/core": "^0.1.0-canary.0"
   },
   "devDependencies": {
     "react": "17.0.1"
