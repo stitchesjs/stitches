@@ -38,8 +38,38 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
-	[$variants]: Variants
+	toString(): string
+	/**
+	 * CSS Class associated with the current component.
+	 *
+	 * ```
+	 *
+	 * const Button = styled("button", { color: "DarkSlateGray" })
+	 *
+	 * <div className={Button.className} />
+	 *
+	 * ```
+	 * <br />
+	 */
+	className: string
+	/**
+	 * CSS Selector associated with the current component.
+	 *
+	 * ```
+	 *
+	 * const Button = styled("button", { color: "DarkSlateGray" })
+	 *
+	 * const Card = styled("article", {
+	 *   [Button.query]: { boxShadow: "0 0 0 5px" }
+	 * })
+	 *
+	 * ```
+	 * <br />
+	 */
+	query: string
+	variants: Variants
 	[$conditions]: Conditions
+	[$variants]: Variants
 }
 
 type NativeStitchesPropsWithAs<Elm extends string, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<

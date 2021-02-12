@@ -192,7 +192,7 @@ export type InternalCSS<
 		[k in keyof Properties]?: keyof Theme
 	} = CSSPropertiesToTokenScale
 > = FlatInternalCSS<Conditions, Theme, Utils, ThemeMap> & {
-	[k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string | {[k: string]:  InternalCSS<Conditions, Theme, Utils, ThemeMap>}
+	[k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string | { [k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> }
 }
 
 // @todo: this is a messy work-around to prevent variants with the same name as a css property from erroring out
@@ -360,9 +360,34 @@ export interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
 		},
 	): StyledExpression & string
 	toString(): string
+	/**
+	 * CSS Class associated with the current component.
+	 *
+	 * ```
+	 *
+	 * const Button = css({ color: "DarkSlateGray" })
+	 *
+	 * <div className={Button.className} />
+	 *
+	 * ```
+	 * <br />
+	 */
 	className: string
-	classNames: string[]
-	selector: string
+	/**
+	 * CSS Selector associated with the current component.
+	 *
+	 * ```
+	 *
+	 * const Button = css({ color: "DarkSlateGray" })
+	 *
+	 * const Card = styled("article", {
+	 *   [Button.query]: { boxShadow: "0 0 0 5px" }
+	 * })
+	 *
+	 * ```
+	 * <br />
+	 */
+	query: string
 	variants: Variants
 	[$conditions]: Conditions
 	[$variants]: Variants
