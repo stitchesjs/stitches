@@ -49,6 +49,15 @@ const factory = createStyled({
 type CSS = StitchesCss<typeof factory>
 
 export const { styled, toString, theme, css, keyframes, global } = factory
+
+// token:
+theme.colors.gray100.scale
+theme.colors.gray100.value
+theme.colors.gray100.token
+theme.colors.gray100.computedValue
+theme.colors.gray100.variable
+theme.colors.gray100
+
 const themeClass = theme('dark', {})
 const sharedColor: CSS = {
 	backgroundColor: 'red',
