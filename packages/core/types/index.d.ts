@@ -160,7 +160,7 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 			[k in keyof EmptyTheme]?: k extends keyof Theme ? Theme[k] : never
 		}
 	utils?: {
-		[k in keyof Utils]: (config: UtilConfig<Conditions, Theme, Utils, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		[k in keyof Utils]: (config: UtilConfig<Conditions, Theme, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Conditions, Theme, Utils, ThemeMap>
 	}
 	themeMap?: { [k in keyof ThemeMap]?: ThemeMap[k] }
 	prefix?: Prefix
@@ -168,10 +168,9 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 	onStyled?: StyledSheetCallback
 	onThemed?: StyledSheetCallback
 }
-type UtilConfig<Conditions, Theme, Utils, Prefix, ThemeMap> = {
+type UtilConfig<Conditions, Theme, Prefix, ThemeMap> = {
 	conditions: Conditions
 	theme: Theme
-	utils: unknown
 	themeMap: ThemeMap
 	prefix: Prefix
 }
@@ -179,7 +178,7 @@ export interface InternalConfig<Conditions extends TConditions = {}, Theme exten
 	conditions: Conditions
 	theme: Theme
 	utils: {
-		[k in keyof Utils]: (config: UtilConfig<Conditions, Theme, Utils, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		[k in keyof Utils]: (config: UtilConfig<Conditions, Theme, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Conditions, Theme, Utils, ThemeMap>
 	}
 	themeMap: ThemeMap
 	prefix: Prefix
