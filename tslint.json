@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "tslint:recommended",
-    "tslint-config-prettier",
-    "tslint-plugin-prettier"
-  ],
+  "extends": ["tslint:recommended", "tslint-config-prettier", "tslint-plugin-prettier"],
   "rules": {
     "arrow-return-shorthand": [true],
     "class-name": true,
@@ -38,12 +34,6 @@
     "prefer-template": true,
     "prettier": true,
     "switch-default": true,
-    "variable-name": [
-      true,
-      "allow-leading-underscore",
-      "ban-keywords",
-      "check-format",
-      "allow-pascal-case"
-    ]
+    "variable-name": [true, "allow-leading-underscore", "ban-keywords", "check-format", "allow-pascal-case"]
   }
 }
