@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { InternalCSS, LessInternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale, $variants, $conditions, StitchesExtractVariantsStyles } from '@stitches/core'
 
-export type { StitchesVariants, StitchesCss, StitchesExtractVariantsStyles } from '@stitches/core'
+export * from '@stitches/core'
 
 export interface PolymorphicForwardRef<DefaultElement, Props> extends ForwardRefExoticBase<IntrinsicElementPolymorphicPropsWithAs<DefaultElement, Props>> {
 	<JSXElm extends string>(props: IntrinsicElementPolymorphicPropsWithAs<JSXElm, Props>): JSX.Element
