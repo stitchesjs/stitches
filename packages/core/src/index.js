@@ -190,7 +190,7 @@ const createCss = (init) => {
 				const compose = variants[name][value]
 
 				variants[name][value] = (condition) => {
-					const classNames = (compose ? compose(condition) : []).concat(variantClassName)
+					const classNames = (compose ? compose(condition) : []).concat(condition ? [] : variantClassName)
 
 					if (condition != null) {
 						if (!conditionVariants[condition]) {
