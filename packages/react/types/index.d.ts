@@ -126,7 +126,7 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 					& {
 						compoundVariants?: (
 							{
-								[k in keyof CloneVariants]?: keyof CloneVariants[k] 
+								[k in keyof CloneVariants]?: keyof CloneVariants[k]
 							}
 							& {
 								css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
@@ -167,4 +167,4 @@ type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme =
 
 declare const styled: ReactFactory
 
-export default styled
+export { styled as default, styled as createCss }

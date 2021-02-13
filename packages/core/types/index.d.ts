@@ -457,4 +457,5 @@ type TStyledSheetFactory = <Conditions extends TConditions = {}, Theme extends T
 ) => TStyledSheet<Conditions & { initial: '' }, Theme, Utils, Prefix, ThemeMap>
 
 declare const styled: TStyledSheetFactory
-export default styled
+
+export { styled as default, styled as createCss }

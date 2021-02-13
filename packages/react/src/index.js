@@ -5,7 +5,7 @@ import defaultThemeMap from '../../core/src/defaultThemeMap.js'
 const $$typeof = Symbol.for('react.element')
 const $$typeofForward = Symbol.for('react.forward_ref')
 
-export default (init) => {
+const createCss = (init) => {
 	const hasDocument = typeof document === 'object'
 
 	const importText = hasDocument && new Text('')
@@ -103,4 +103,4 @@ export default (init) => {
 	}).reset()
 }
 
-export { defaultThemeMap }
+export { createCss as default, createCss, defaultThemeMap }

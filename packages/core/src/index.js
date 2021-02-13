@@ -8,7 +8,7 @@ import getCustomProperties from './getCustomProperties.js'
 import getHashString from './getHashString.js'
 
 /** Returns a new styled sheet and accompanying API. */
-export default (init) => {
+const createCss = (init) => {
 	init = Object(init)
 
 	const config = {
@@ -363,4 +363,4 @@ export default (init) => {
 	}
 }
 
-export { defaultThemeMap }
+export { createCss as default, createCss, defaultThemeMap }
