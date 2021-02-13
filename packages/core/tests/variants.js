@@ -186,19 +186,15 @@ describe('Variants with defaults', () => {
 })
 
 describe('Conditional variants', () => {
-	let component_1, component_2, component_3
-	let classname_1, classname_2, classname_3
-	let stylerule_1, stylerule_2, stylerule_3
-
-	const { css, toString } = createCss({
+	const config = {
 		conditions: {
-			sm: '@media (max-width: 767px)',
-			lg: '@media (min-width: 768px)',
+			bp1: '@media (max-width: 767px)',
+			bp2: '@media (min-width: 768px)',
 		},
-	})
+	}
 
 	/** Component with variants and compound variants */
-	const COMPONENT = css({
+	const componentConfig = {
 		variants: {
 			color: {
 				blue: {
@@ -236,32 +232,49 @@ describe('Conditional variants', () => {
 				},
 			},
 		],
+	}
+
+	test('Renders a component with no variant applied', () => {
+		const { css, toString } = createCss(config)
+		const component = css(componentConfig)
+		const componentClassName = 'sx03kze'
+
+		expect(component().className).toBe(componentClassName)
+		expect(toString()).toBe('')
 	})
 
-	test('Renders a component with a conditional variant applied', () => {
-		component_1 = COMPONENT({ size: { sm: 'small', lg: 'large' } })
-		classname_1 = 'sx03kze sx03kzetmy8g--size-small sx03kzetmy8g--size-small--5m2l7 sx03kzefhyhx--size-large sx03kzefhyhx--size-large--8c3r4'
-		stylerule_1 = '@media (max-width: 767px){.sx03kzetmy8g--size-small--5m2l7{font-size:16px;}}@media (min-width: 768px){.sx03kzefhyhx--size-large--8c3r4{font-size:24px;}}'
+	test('Renders a component with one variant applied', () => {
+		const { css, toString } = createCss(config)
+		const component = css(componentConfig)
+		const componentClassName = `sx03kze`
+		const componentSmallClassName = `${componentClassName}tmy8g--size-small`
+		const componentSmallCssText = `.${componentSmallClassName}{font-size:16px;}`
 
-		expect(component_1.className).toBe(classname_1)
-		expect(toString()).toBe(stylerule_1)
+		expect(component({ size: 'small' }).className).toBe([componentClassName, componentSmallClassName].join(' '))
+		expect(toString()).toBe(componentSmallCssText)
 	})
 
-	test('Renders a component with a conditional variant applied', () => {
-		component_2 = COMPONENT({ level: { sm: 1, lg: 2 } })
-		classname_2 = 'sx03kze sx03kzehmqox--level-1 sx03kzehmqox--level-1--5m2l7 sx03kzef87fs--level-2 sx03kzef87fs--level-2--8c3r4'
-		stylerule_2 = stylerule_1 + '@media (max-width: 767px){.sx03kzehmqox--level-1--5m2l7{padding:0.5em;}}@media (min-width: 768px){.sx03kzef87fs--level-2--8c3r4{padding:1em;}}'
+	test('Renders a component with one conditional variant on one breakpoint applied', () => {
+		const { css, toString } = createCss(config)
+		const component = css(componentConfig)
+		const componentClassName = `sx03kze`
+		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
+		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
 
-		expect(component_2.className).toBe(classname_2)
-		expect(toString()).toBe(stylerule_2)
+		expect(component({ size: { bp1: 'small' } }).className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
+		expect(toString()).toBe(componentSmallBp1CssText)
 	})
 
-	test('Renders a component with a conditional compund variant applied', () => {
-		component_3 = COMPONENT({ color: 'blue', size: { sm: 'small', lg: 'large' } })
-		classname_3 = 'sx03kze sx03kzekclug--comp sx03kze4wpam--color-blue sx03kzetmy8g--size-small sx03kzefhyhx--size-large'
-		stylerule_3 = stylerule_2 + '.sx03kze4wpam--color-blue{background-color:dodgerblue;color:white;}@media (max-width: 767px){.sx03kzekclug--comp{transform:scale(1.2);}}'
+	test('Renders a component with one conditional variant on two breakpoints applied', () => {
+		const { css, toString } = createCss(config)
+		const component = css(componentConfig)
+		const componentClassName = `sx03kze`
+		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
+		const componentLargeBp2ClassName = `${componentClassName}fhyhx--size-large--8c3r4`
+		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
+		const componentLargeBp2CssText = `@media (min-width: 768px){.sx03kzefhyhx--size-large--8c3r4{font-size:24px;}}`
 
-		expect(component_3.className).toBe(classname_3)
-		expect(toString()).toBe(stylerule_3)
+		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 	})
 })
