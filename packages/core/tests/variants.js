@@ -277,4 +277,23 @@ describe('Conditional variants', () => {
 		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 	})
+
+	test('Renders a component with a conditional variant repeatedly', () => {
+		const { css, toString } = createCss(config)
+		const component = css(componentConfig)
+		const componentClassName = `sx03kze`
+		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
+		const componentLargeBp2ClassName = `${componentClassName}fhyhx--size-large--8c3r4`
+		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
+		const componentLargeBp2CssText = `@media (min-width: 768px){.sx03kzefhyhx--size-large--8c3r4{font-size:24px;}}`
+
+		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
+
+		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
+
+		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
+	})
 })

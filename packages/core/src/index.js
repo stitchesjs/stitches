@@ -194,12 +194,14 @@ const createCss = (init) => {
 
 					if (condition != null) {
 						if (!conditionVariants[condition]) {
-							const conditionalVariantClassName = (conditionVariants[condition] = variantClassName + '--' + getHashString('', condition))
+							const conditionalVariantClassName = variantClassName + '--' + getHashString('', condition)
 							const conditionalVariantCssText = getComputedCss({ [condition]: { ['.' + conditionalVariantClassName]: variantStyle } })
 
-							variantRules.addCss(conditionalVariantCssText)
-							classNames.push(conditionalVariantClassName)
+							conditionVariants[condition] = [conditionalVariantCssText, conditionalVariantClassName]
 						}
+
+						variantRules.addCss(conditionVariants[condition][0])
+						classNames.push(conditionVariants[condition][1])
 					} else {
 						variantRules.addCss(variantCssText)
 					}
@@ -228,10 +230,11 @@ const createCss = (init) => {
 
 			let expressClassNames = new Set(classNames())
 
-			for (const propName in defaultVariants)
+			for (const propName in defaultVariants) {
 				if (!(propName in props) && propName in variants) {
 					props[propName] = defaultVariants[propName]
 				}
+			}
 
 			if (classProp in props) {
 				String(props[classProp]).split(/\s+/).forEach(expressClassNames.add, expressClassNames)
