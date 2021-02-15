@@ -40,7 +40,9 @@ export type CSSPropertiesToTokenScale = {
 	right: 'space'
 	bottom: 'space'
 	left: 'space'
+
 	fontSize: 'fontSizes'
+
 	background: 'colors'
 	backgroundColor: 'colors'
 	backgroundImage: 'colors'
@@ -66,10 +68,15 @@ export type CSSPropertiesToTokenScale = {
 	outlineColor: 'colors'
 	fill: 'colors'
 	stroke: 'colors'
+	textDecorationColor: 'colors'
+
 	fontFamily: 'fonts'
+
 	fontWeight: 'fontWeights'
 	lineHeight: 'lineHeights'
+
 	letterSpacing: 'letterSpacings'
+
 	blockSize: 'sizes'
 	minBlockSize: 'sizes'
 	maxBlockSize: 'sizes'
@@ -83,25 +90,31 @@ export type CSSPropertiesToTokenScale = {
 	minHeight: 'sizes'
 	maxHeight: 'sizes'
 	flexBasis: 'sizes'
+
 	borderWidth: 'borderWidths'
 	borderTopWidth: 'borderWidths'
 	borderLeftWidth: 'borderWidths'
 	borderRightWidth: 'borderWidths'
 	borderBottomWidth: 'borderWidths'
+
 	borderStyle: 'borderStyles'
 	borderTopStyle: 'borderStyles'
 	borderLeftStyle: 'borderStyles'
 	borderRightStyle: 'borderStyles'
 	borderBottomStyle: 'borderStyles'
+
 	borderRadius: 'radii'
 	borderTopLeftRadius: 'radii'
 	borderTopRightRadius: 'radii'
 	borderBottomRightRadius: 'radii'
 	borderBottomLeftRadius: 'radii'
+
 	boxShadow: 'shadows'
 	textShadow: 'shadows'
-	zIndex: 'zIndices'
+
 	transition: 'transitions'
+
+	zIndex: 'zIndices'
 }
 
 export declare const defaultThemeMap: CSSPropertiesToTokenScale

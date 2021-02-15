@@ -101,8 +101,8 @@ const defaultThemeMap = {
 	columnRuleColor: colors,
 	fill: colors,
 	outlineColor: colors,
-	textDecorationColor: colors,
 	stroke: colors,
+	textDecorationColor: colors,
 
 	fontFamily: 'fonts',
 
@@ -128,15 +128,15 @@ const defaultThemeMap = {
 
 	borderWidth: borderWidths,
 	borderTopWidth: borderWidths,
-	borderLeftWidth: borderWidths,
 	borderRightWidth: borderWidths,
 	borderBottomWidth: borderWidths,
+	borderLeftWidth: borderWidths,
 
 	borderStyle: borderStyles,
 	borderTopStyle: borderStyles,
-	borderLeftStyle: borderStyles,
 	borderRightStyle: borderStyles,
 	borderBottomStyle: borderStyles,
+	borderLeftStyle: borderStyles,
 
 	borderRadius: radii,
 	borderTopLeftRadius: radii,
@@ -147,9 +147,9 @@ const defaultThemeMap = {
 	boxShadow: shadows,
 	textShadow: shadows,
 
-	zIndex: zIndices,
-
 	transition: transitions,
+
+	zIndex: zIndices,
 }
 
 export default defaultThemeMap
