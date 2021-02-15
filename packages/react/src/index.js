@@ -50,12 +50,16 @@ const createCss = (init) => {
 			/** Returns a React component. */
 			(
 				/** Type of component. */
-				asType = 'span',
+				asType,
 				/** Component styles. */
 				initStyles,
 			) => {
+				const isComposition = 'composes' in Object(asType)
+
 				/** Expression used to activate the component CSS on the current styled sheet. */
-				const expression = sheet.css(asType, initStyles)
+				const composition = isComposition ? sheet.css(asType.composes, initStyles) : sheet.css(initStyles)
+
+				const defaultType = (asType === Object(asType) ? asType.type : asType) || 'span'
 
 				/** Returns a React element. */
 				return Object.setPrototypeOf(
@@ -68,30 +72,32 @@ const createCss = (init) => {
 						) {
 							// express the component, extracting `props`, `as` & `ref`
 							const {
-								props: { as: type = asType, ...props },
+								props: { as: type = defaultType, ...props },
 								...expressedProps
-							} = expression(initProps)
+							} = composition(initProps)
 
 							// sync the dynamic stylesheet
 							sheet.sync()
 
 							/** React element. */
-							return { ...expressedProps, constructor: undefined, $$typeof, props, ref, type, __v: 0 }
+							return { constructor: undefined, $$typeof, props, ref, type, __v: 0 }
 						},
 						[Symbol.toPrimitive]() {
-							return expression.selector
+							return composition.selector
 						},
 						toString() {
-							return expression.selector
+							return composition.selector
 						},
 						get className() {
-							return expression.className
+							return composition.className
 						},
 						get selector() {
-							return expression.selector
+							return composition.selector
 						},
-						classNames: expression.classNames,
-						variants: expression.variants,
+						composes: composition,
+						classNames: composition.classNames,
+						variants: composition.variants,
+						type: defaultType,
 					},
 					Object(asType),
 				)

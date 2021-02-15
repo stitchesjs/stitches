@@ -19,7 +19,7 @@ const createCss = (init) => {
 		theme: Object(init.theme),
 
 		/** Properties corresponding to functions that take in CSS values and return aliased CSS declarations. */
-		utils: Object(init.utils),
+		utils: assign(create(null), init.utils),
 	}
 
 	/** Prefix added before all generated class names. */
@@ -246,7 +246,6 @@ const createCss = (init) => {
 				const { css: compoundStyle, ...compounders } = Object(compound)
 
 				let appliedCompoundStyle = compoundStyle
-				let appliedConditions = new Set()
 
 				if (
 					Object.keys(compounders).every((name) => {
