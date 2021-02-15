@@ -7670,12 +7670,6 @@ export type TextAnchorProperty = Globals | 'end' | 'middle' | 'start'
 
 export type VectorEffectProperty = Globals | 'non-scaling-stroke' | 'none'
 
-type CounterStyleRangeProperty = 'auto' | 'infinite' | (string & {}) | number
-
-type CounterStyleSpeakAsProperty = 'auto' | 'bullets' | 'numbers' | 'spell-out' | 'words' | (string & {})
-
-type CounterStyleSystemProperty = 'additive' | 'alphabetic' | 'cyclic' | 'fixed' | 'numeric' | 'symbolic' | (string & {})
-
 type FontFaceFontFeatureSettingsProperty = 'normal' | (string & {})
 
 type FontFaceFontDisplayProperty = 'auto' | 'block' | 'fallback' | 'optional' | 'swap'
