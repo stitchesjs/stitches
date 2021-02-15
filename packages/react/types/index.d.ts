@@ -139,7 +139,7 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 
 type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
 	_config?: IConfig<Conditions, Theme, Utils, Prefix, ThemeMap>,
-) => TStyledSheet<Conditions, Theme, Utils> & {
+) => TStyledSheet<Conditions, Theme, Utils, Prefix, ThemeMap> & {
 	styled: StyledInstance<Conditions & { initial: '' }, Theme, Utils, ThemeMap>
 
 	/**
