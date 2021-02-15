@@ -101,6 +101,7 @@ const defaultThemeMap = {
 	columnRuleColor: colors,
 	fill: colors,
 	outlineColor: colors,
+	textDecorationColor: colors,
 	stroke: colors,
 
 	fontFamily: 'fonts',
