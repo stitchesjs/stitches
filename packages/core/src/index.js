@@ -280,7 +280,7 @@ const createCss = (init) => {
 					const propValue = props[propName]
 					const variant = variants[propName]
 
-					delete props[propName]
+					if (propName !== 'as') delete props[propName]
 
 					// apply any matching variant
 					if (propValue in variant) {
