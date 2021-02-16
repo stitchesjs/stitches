@@ -59,7 +59,7 @@ const createCss = (init) => {
 				/** Expression used to activate the component CSS on the current styled sheet. */
 				const composition = isComposition ? sheet.css(asType.composes, initStyles) : sheet.css(initStyles)
 
-				const defaultType = (asType === Object(asType) ? asType.type : asType) || 'span'
+				const defaultType = (isComposition ? asType.type : asType) || 'span'
 
 				/** Returns a React element. */
 				return Object.setPrototypeOf(
