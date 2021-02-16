@@ -1,4 +1,4 @@
-import { DeclarationListWithImportRule, Properties } from './css-types'
+import { DeclarationListWithRootAtRules, Properties } from './css-types'
 
 export type CSSPropertiesToTokenScale = {
 	gap: 'space'
@@ -307,7 +307,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	 * ```
 	 * <br />
 	 */
-	global: (definition: Record<string, InternalCSS<A, B, C, ThemeMap>> | DeclarationListWithImportRule) => GlobalRule
+	global: (definition: OmitKey<Record<string, InternalCSS<A, B, C, ThemeMap>>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
 
 	/**
 	 * Generates CSS from theme scales and returns a function that renders them to the stylesheet.

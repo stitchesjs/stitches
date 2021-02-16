@@ -6200,17 +6200,95 @@ export interface SvgProperties<TLength = (string & {}) | 0> {
 	writingMode: WritingModeProperty
 }
 
-export type DeclarationListWithImportRule = {
+type FontFaceSrcValues = `url(FontFamily.woff2)` | `url(FontFamily.woff2) format("woff2")` | `url(FontFamily.woff) format("woff")`
+
+export interface FontFaceProperties {
 	/**
-	 * The **`@import`** CSS at-rule import style rules from other style sheets.
+	 * The **`font-display`** CSS property defines how a font face is displayed based on whether and when it is downloaded and ready to use.
 	 *
-	 * | Chrome | Firefox | Safari |  Edge  |  IE   |
-	 * | :----: | :-----: | :----: | :----: | :---: |
-	 * | **1**  |  **1**  | **1**  | **12** | **3** |
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display
+	 */
+	fontDisplay?: (string & {})
+
+	/**
+	 * The **`font-family`** CSS property specifies a name identifying the font name.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-family
+	 */
+	fontFamily?: (string & {})
+
+	/**
+	 * The **`font-stretch`** CSS property defines the weight of a font face.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-stretch
+	 */
+	fontStretch?: (string & {})
+
+	/**
+	 * The **`font-style`** CSS property defines the slant of a font face.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-style
+	 */
+	fontStyle?: 'normal' | 'italic' | 'oblique' | 'oblique 30deg' | 'oblique 30deg 50deg' | (string & {})
+
+	/**
+	 * The **`font-weight`** CSS property defines the weight of a font face.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
+	 */
+	fontWeight?: (string & {})
+
+	/**
+	 * The **`font-variant`** CSS property defines the variants of a font face.
+	 * A font-variant value.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-variant
+	 */
+	fontVariant?: (string & {})
+
+	/**
+	 * The **`font-feature-settings`** CSS property defines the allowed control over advanced typographic features in OpenType fonts.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-feature-settings
+	 */
+	fontFeatureSettings?: (string & {})
+
+	/**
+	 * The **`font-variation-settings`** CSS property defines the allowed control over OpenType or TrueType font variations, by specifying the four letter axis names of the features to vary, along with their variation values.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-variation-settings
+	 */
+	fontVariationSettings?: (string & {})
+
+	/**
+	 * The **`src`** CSS property defines the resource containing the font data of a font face. This can be one or more URLs to a remote font file location or names of fonts on the user's computer.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src
+	 */
+	src?: FontFaceSrcValues | (string & {}) | (FontFaceSrcValues | (string & {}))[]
+
+	/**
+	 * The **`unicode-range`** CSS property determines the unicode code points to be used from the font.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/unicode-range
+	 */
+	unicodeRange?: (string & {})
+}
+
+export interface DeclarationListWithRootAtRules {
+	/**
+	 * The **`@font-face`** CSS at-rule imports custom fonts used to display text.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face
+	 */
+	'@font-face'?: FontFaceProperties | FontFaceProperties[]
+
+	/**
+	 * The **`@import`** CSS at-rule imports style rules from other style sheets.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@import
 	 */
-	'@import'?: `"./"` | `"https://"` | `url("")` | (string & {})
+	'@import'?: `"style.css"` | `url("style.css")` | (string & {}) | (`"style.css"` | `url("style.css")` | (string & {}))[]
 }
 
 export interface Properties<TLength = (string & {}) | 0> extends StandardProperties<TLength>, VendorProperties<TLength>, SvgProperties<TLength> {}

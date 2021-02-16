@@ -1,3 +1,4 @@
+import { isArray } from './Array.js'
 import getResolvedSelectors from './getResolvedSelectors.js'
 import isDeclaration from './isDeclaration.js'
 import isPossiblyUnitless from './isPossiblyUnitless.js'
@@ -49,16 +50,16 @@ const createGetComputedCss = (
 
 			for (let name in currentStyle) {
 				/** Data representing the current style declaration or group. */
-				let data = currentStyle[name]
+				let each = currentStyle[name]
 
 				if (name in utils) {
 					/** Data returned by the utility. */
-					let utilityData = utils[name](config)(data)
+					let utilityData = utils[name](config)(each)
 
 					utilityData = isDeclaration(utilityData) ? String(utilityData) : utilityData
 
 					if (isDeclaration(utilityData)) {
-						data = utilityData
+						each = utilityData
 					} else {
 						/** String representing the unique return value of the utility. */
 						const utilityDataJson = JSON.stringify(utilityData)
@@ -70,7 +71,7 @@ const createGetComputedCss = (
 
 							lastUtilityDataJson = ''
 
-							data = {}
+							each = {}
 						}
 					}
 				}
@@ -78,80 +79,84 @@ const createGetComputedCss = (
 				/** Whether the current style is a condition (i.e. media or supports query). */
 				const isCondition = name.charCodeAt(0) === 64
 
-				// process either a declaration or a nested object of styles
-				if (isDeclaration(data)) {
-					// conditionally open any unopened group rules
-					for (const groupRule of groupRules) {
-						if (!groupRule[isOpen]) {
-							cssText += groupRule
+				each = isCondition && isArray(each) ? each : [each]
+
+				for (const data of each) {
+					// process either a declaration or a nested object of styles
+					if (isDeclaration(data)) {
+						// conditionally open any unopened group rules
+						for (const groupRule of groupRules) {
+							if (!groupRule[isOpen]) {
+								cssText += groupRule
+								cssText += '{'
+
+								groupRule[isOpen] = true
+							}
+						}
+
+						// conditionally open an unopened styled rule
+						if (selectors.length && !selectors[isOpen]) {
+							cssText += selectors.join(', ')
 							cssText += '{'
 
-							groupRule[isOpen] = true
-						}
-					}
-
-					// conditionally open an unopened styled rule
-					if (selectors.length && !selectors[isOpen]) {
-						cssText += selectors.join(', ')
-						cssText += '{'
-
-						selectors[isOpen] = true
-					}
-
-					// write the current declaration
-					cssText +=
-						// write the condition name, or write the property as a custom property from a token, or as a kebab-cased property from a camel-cased property
-						(isCondition ? name : /^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : name.replace(/[A-Z]/g, ($0) => '-' + $0.toLowerCase())) +
-						(isCondition ? ' ' : ':') +
-						// write the value as string, conditionally converted as a number into a px, or as a token resolved into a custom property
-						(typeof data === 'number' && !isPossiblyUnitless(name) && data
-							? data + 'px'
-							: String(data).replace(/\$[$-\w]+/g, (token) => 'var(-' + (!/.\$/.test(token) && name in themeMap ? '-' + themeMap[name] : '') + token.replace(/\$/g, '-') + ')')) +
-						';'
-				} else {
-					/** Process CSS from a nested object of styles. */
-					const processNestedGroup = (
-						/** Whether the current group is a condition (i.e. media or supports query). */
-						isConditionGroup,
-						/** Prelude of the current group. */
-						groupPrelude,
-						/** Styles of the current group. */
-						groupStyles,
-					) => {
-						/** Nesting index of the current group. */
-						const groupIndex = isConditionGroup ? groupRules.push(Object(groupPrelude)) : groupRules.length
-
-						// conditionally close a styled rule
-						if (selectors.length && selectors[isOpen]) {
-							cssText += '}'
-
-							selectors[isOpen] = false
+							selectors[isOpen] = true
 						}
 
-						processStyle(groupStyles, isConditionGroup ? selectors : selectors.length ? getResolvedSelectors(selectors, groupPrelude.split(splitByComma)) : groupPrelude.split(splitByComma))
+						// write the current declaration
+						cssText +=
+							// write the condition name, or write the property as a custom property from a token, or as a kebab-cased property from a camel-cased property
+							(isCondition ? name : /^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : name.replace(/[A-Z]/g, ($0) => '-' + $0.toLowerCase())) +
+							(isCondition ? ' ' : ':') +
+							// write the value as string, conditionally converted as a number into a px, or as a token resolved into a custom property
+							(typeof data === 'number' && !isPossiblyUnitless(name) && data
+								? data + 'px'
+								: String(data).replace(/\$[$-\w]+/g, (token) => 'var(-' + (!/.\$/.test(token) && name in themeMap ? '-' + themeMap[name] : '') + token.replace(/\$/g, '-') + ')')) +
+							';'
+					} else {
+						/** Process CSS from a nested object of styles. */
+						const processNestedGroup = (
+							/** Whether the current group is a condition (i.e. media or supports query). */
+							isConditionGroup,
+							/** Prelude of the current group. */
+							groupPrelude,
+							/** Styles of the current group. */
+							groupStyles,
+						) => {
+							/** Nesting index of the current group. */
+							const groupIndex = isConditionGroup ? groupRules.push(Object(groupPrelude)) : groupRules.length
 
-						// close any deeper groups
-						if (isConditionGroup && groupIndex) {
-							for (const deeperGroupRules of groupRules.splice(groupIndex - 1)) {
+							// conditionally close a styled rule
+							if (selectors.length && selectors[isOpen]) {
 								cssText += '}'
 
-								deeperGroupRules[isOpen] = false
+								selectors[isOpen] = false
 							}
-						}
-					}
 
-					// process either conditional styles or nested rules
-					if (name === 'when') {
-						for (const conditionName in data) {
-							// process either named conditions or inlined conditions
-							if (conditionName in conditions) {
-								processNestedGroup(true, conditions[conditionName], data[conditionName])
-							} else {
-								processNestedGroup(true, conditionName, data[conditionName])
+							processStyle(groupStyles, isConditionGroup ? selectors : selectors.length ? getResolvedSelectors(selectors, groupPrelude.split(splitByComma)) : groupPrelude.split(splitByComma))
+
+							// close any deeper groups
+							if (isConditionGroup && groupIndex) {
+								for (const deeperGroupRules of groupRules.splice(groupIndex - 1)) {
+									cssText += '}'
+
+									deeperGroupRules[isOpen] = false
+								}
 							}
 						}
-					} else {
-						processNestedGroup(isCondition, name, data)
+
+						// process either conditional styles or nested rules
+						if (name === 'when') {
+							for (const conditionName in data) {
+								// process either named conditions or inlined conditions
+								if (conditionName in conditions) {
+									processNestedGroup(true, conditions[conditionName], data[conditionName])
+								} else {
+									processNestedGroup(true, conditionName, data[conditionName])
+								}
+							}
+						} else {
+							processNestedGroup(isCondition, name, data)
+						}
 					}
 				}
 			}

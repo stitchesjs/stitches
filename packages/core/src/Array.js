@@ -1,1 +1,1 @@
-export const { from } = Array
+export const { from, isArray } = Array
