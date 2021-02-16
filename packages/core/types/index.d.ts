@@ -168,7 +168,11 @@ export type EmptyTheme = {
 	transitions?: {}
 }
 
-export type TConditions = { [k: string]: string }
+export type TConditions = {
+	/** This condition will always apply. */
+	initial: string
+	[k: string]: string
+}
 export type TTheme = { [k in keyof EmptyTheme]?: { [b: string]: string } }
 export type TThemeMap = { [k in keyof Properties]?: keyof EmptyTheme }
 /** Configuration of Stitches, including a default theme, prefix, custom conditions, and functional properties. */
