@@ -276,8 +276,8 @@ const createCss = (init) => {
 
 			for (const propName in props) {
 				if (propName in variants) {
-					const propValue = props[propName]
 					const variant = variants[propName]
+					const propValue = props[propName] === undefined && !(undefined in variant) ? defaultVariants[propName] : props[propName]
 
 					if (propName !== 'as') delete props[propName]
 
