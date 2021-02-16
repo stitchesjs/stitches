@@ -6200,7 +6200,7 @@ export interface SvgProperties<TLength = (string & {}) | 0> {
 	writingMode: WritingModeProperty
 }
 
-type FontFaceSrcValues = `url(FontFamily.woff2)` | `url(FontFamily.woff2) format("woff2")` | `url(FontFamily.woff) format("woff")`
+type FontFaceSrcValues = `url(FontFamily.woff2)` | `url(FontFamily.woff2) format("woff2")` | `url(FontFamily.woff) format("woff")` | (string & {})
 
 export interface FontFaceProperties {
 	/**
@@ -6208,35 +6208,35 @@ export interface FontFaceProperties {
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display
 	 */
-	fontDisplay?: (string & {})
+	fontDisplay?: FontFaceFontDisplayProperty
 
 	/**
 	 * The **`font-family`** CSS property specifies a name identifying the font name.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-family
 	 */
-	fontFamily?: (string & {})
+	fontFamily?: string
 
 	/**
 	 * The **`font-stretch`** CSS property defines the weight of a font face.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-stretch
 	 */
-	fontStretch?: (string & {})
+	fontStretch?: FontFaceFontStretchProperty
 
 	/**
 	 * The **`font-style`** CSS property defines the slant of a font face.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-style
 	 */
-	fontStyle?: 'normal' | 'italic' | 'oblique' | 'oblique 30deg' | 'oblique 30deg 50deg' | (string & {})
+	fontStyle?: FontFaceFontStyleProperty
 
 	/**
 	 * The **`font-weight`** CSS property defines the weight of a font face.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight
 	 */
-	fontWeight?: (string & {})
+	fontWeight?: FontWeightProperty
 
 	/**
 	 * The **`font-variant`** CSS property defines the variants of a font face.
@@ -6244,35 +6244,35 @@ export interface FontFaceProperties {
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-variant
 	 */
-	fontVariant?: (string & {})
+	fontVariant?: FontFaceFontVariantProperty
 
 	/**
 	 * The **`font-feature-settings`** CSS property defines the allowed control over advanced typographic features in OpenType fonts.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-feature-settings
 	 */
-	fontFeatureSettings?: (string & {})
+	fontFeatureSettings?: FontFaceFontFeatureSettingsProperty
 
 	/**
 	 * The **`font-variation-settings`** CSS property defines the allowed control over OpenType or TrueType font variations, by specifying the four letter axis names of the features to vary, along with their variation values.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-variation-settings
 	 */
-	fontVariationSettings?: (string & {})
+	fontVariationSettings?: FontFaceFontVariationSettingsProperty
 
 	/**
 	 * The **`src`** CSS property defines the resource containing the font data of a font face. This can be one or more URLs to a remote font file location or names of fonts on the user's computer.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src
 	 */
-	src?: FontFaceSrcValues | (string & {}) | (FontFaceSrcValues | (string & {}))[]
+	src?: FontFaceSrcValues | FontFaceSrcValues[]
 
 	/**
 	 * The **`unicode-range`** CSS property determines the unicode code points to be used from the font.
 	 *
 	 * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/unicode-range
 	 */
-	unicodeRange?: (string & {})
+	unicodeRange?: string | string[]
 }
 
 export interface DeclarationListWithRootAtRules {
@@ -7754,7 +7754,7 @@ type FontFaceFontDisplayProperty = 'auto' | 'block' | 'fallback' | 'optional' | 
 
 type FontFaceFontStretchProperty = FontStretchAbsolute | (string & {})
 
-type FontFaceFontStyleProperty = 'italic' | 'normal' | 'oblique' | (string & {})
+type FontFaceFontStyleProperty = 'italic' | 'normal' | 'oblique' | 'oblique 30deg' | 'oblique 30deg 50deg' | (string & {})
 
 type FontFaceFontVariantProperty =
 	| EastAsianVariantValues
