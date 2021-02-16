@@ -3,14 +3,8 @@ import { InternalCSS, LessInternalCSS, TConditions, TTheme, TStyledSheet, Varian
 
 export * from '@stitches/core'
 
-export interface PolymorphicForwardRef<DefaultElement, Props> extends ForwardRefExoticBase<IntrinsicElementPolymorphicPropsWithAs<DefaultElement, Props>> {
-	<JSXElm extends string>(props: IntrinsicElementPolymorphicPropsWithAs<JSXElm, Props>): JSX.Element
-	<Component extends React.ComponentType>(props: ReactComponentPolymorphicPropsWithAs<Component, Props>): JSX.Element
-	(props: IntrinsicElementPolymorphicPropsWithAs<DefaultElement, Props>): JSX.Element
-}
-
-type IntrinsicElementPolymorphicPropsWithAs<Elm, Props> = { as: Elm } & Omit<JSX.IntrinsicElements[Elm extends keyof JSX.IntrinsicElements ? Elm : never], keyof Props> & Props
-type ReactComponentPolymorphicPropsWithAs<Elm, Props> = { as: Elm } & Omit<React.ComponentPropsWithRef<Elm extends React.ComponentType ? Elm : never>, keyof Props> & Props
+/** Private way to store the type without causing a TS panic: */
+declare const $elm: unique symbol
 
 /* Utils:
  * -----------------------------------------------------------------------------------------------*/
@@ -25,32 +19,79 @@ type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof Re
 
 export type IntrinsicElement<T extends React.ElementType, B = React.ElementRef<T>> = { [k in keyof HTMLElementTagNameMap]: HTMLElementTagNameMap[k] extends B ? k : never }[keyof HTMLElementTagNameMap]
 
-export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}>
-	extends ForwardRefExoticBase<
+export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement extends string, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}>
+	extends React.ForwardRefExoticComponent<
 		Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
 			css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 		} & VariantsCall<Variants, Conditions>
 	> {
-	<Elm extends string>(
-		props: VariantsCall<Variants, Conditions> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm extends IntrinsicElementsKeys ? Elm : never], keyof Variants | 'css' | 'as'> & {
+	// JSX elements have higher priority here when it comes to autocomplete
+	<Elm extends IntrinsicElementsKeys = DefaultElement extends IntrinsicElementsKeys ? DefaultElement : never>(
+		props: VariantsCall<Variants, Conditions> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm], keyof Variants | 'css' | 'as'> & {
 				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
-	<As extends React.ComponentType>(
-		props: VariantsCall<Variants, Conditions> & { as?: As } & Omit<React.ComponentPropsWithRef<ComponentInfer<As>>, keyof Variants | 'css' | 'as'> & {
+
+	// React component
+	<As extends React.ComponentType = DefaultElement extends React.ComponentType ? DefaultElement : never>(
+		props: VariantsCall<Variants, Conditions> & { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
 				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
-	<As>(
-		props: VariantsCall<Variants, Conditions> & { as?: As } & Omit<React.ComponentPropsWithRef<ComponentInfer<As>>, keyof Variants | 'css' | 'as'> & {
+
+	toString(): string
+	/**
+	 * CSS Class associated with the current component.
+	 *
+	 * ```
+	 *
+	 * const Button = styled("button", { color: "DarkSlateGray" })
+	 *
+	 * <div className={Button.className} />
+	 * ```
+	 * <br />
+	 */
+	className: string
+	/**
+	 * CSS Selector associated with the current component.
+	 *
+	 * ```
+	 *
+	 * const Button = styled("button", { color: "DarkSlateGray" })
+	 *
+	 * const Card = styled("article", {
+	 *   [Button.selector]: { boxShadow: "0 0 0 5px" }
+	 * })
+	 * ```
+	 * <br />
+	 */
+	selector: string
+	variants: Variants
+	[$conditions]: Conditions
+	[$elm]: DefaultElement
+	[$variants]: Variants
+}
+
+export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElement, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}>
+	extends React.ForwardRefExoticComponent<
+		Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
+			css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		} & VariantsCall<Variants, Conditions>
+	> {
+	// React components have higher priority here for autocomplete
+	<As extends React.ComponentType = DefaultElement extends React.ComponentType ? DefaultElement : never>(
+		props: VariantsCall<Variants, Conditions> & { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
 				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
-	(
-		props: VariantsCall<Variants, Conditions> & { as?: DefaultElement } & Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
+
+	// JSX elements
+	<Elm extends IntrinsicElementsKeys = DefaultElement extends IntrinsicElementsKeys ? DefaultElement : never>(
+		props: VariantsCall<Variants, Conditions> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm], keyof Variants | 'css' | 'as'> & {
 				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
+
 	toString(): string
 	/**
 	 * CSS Class associated with the current component.
@@ -83,26 +124,13 @@ export interface StitchesComponent<DefaultElement, Variants = {}, Conditions = {
 	[$variants]: Variants
 }
 
-type NativeStitchesPropsWithAs<Elm extends string, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<
-		JSX.IntrinsicElements[Elm extends IntrinsicElementsKeys ? Elm : never],
-		keyof Variants | 'css' | 'as'
-	> & {
-		css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
-	}
-type StitchesPropsWithAs<Elm extends React.ElementType, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}> = VariantsCall<Variants, Conditions> & { as: Elm } & Omit<
-		React.ComponentPropsWithRef<Elm>,
-		keyof Variants | 'css' | 'as'
-	> & {
-		css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
-	}
-
 // export type NonIntrinsicElementProps<T extends React.ElementType> = IntrinsicElement<T> extends never ? React.ComponentProps<T> : Omit<React.ComponentProps<T>, keyof React.ComponentPropsWithoutRef<IntrinsicElement<T>>>
 
 /* Styled instance:
  * -----------------------------------------------------------------------------------------------*/
 export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
 	<E extends React.ElementType, Variants, CloneVariants extends Variants>(
-		elm: ComponentInfer<E>,
+		elm: E,
 		// prettier-ignore
 		styles: (
 			(
@@ -134,7 +162,14 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 						)[]
 					}
 		),
-	): StitchesComponent<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+	): E extends string
+		? // jsx elements
+		  StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		: // if it's a stitches component we reach in and pull its type to provide better types
+		E extends { [$elm]: infer DeepStitchesComponentType }
+		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		: // normal react component
+		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
 }
 
 type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(

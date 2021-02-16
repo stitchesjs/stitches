@@ -1,5 +1,5 @@
 import * as React from 'react'
-import createStyled, { StitchesCss, StitchesVariants } from '../types/index.d'
+import createStyled, { StitchesCss, StitchesVariants, StitchesComponentWithAutoCompleteForReactComponents, StitchesComponentWithAutoCompleteForJSXElements } from '../types/index.d'
 import * as SeparatorPrimitive from '@radix-ui/react-separator'
 import type * as Polymorphic from '@radix-ui/react-polymorphic'
 
@@ -176,7 +176,7 @@ const Button = styled('button', {
 const ExtendedButton = styled(Button, {
 	variants: {
 		variant: {
-			blue: {
+			green: {
 				color: 'ActiveBorder',
 				backgroundColor: 'ActiveCaption',
 			},
@@ -251,7 +251,7 @@ export function Test() {
 			<Button form="form" onClick={(e) => {}} />
 
 			{/* Button accepts css prop */}
-			<Button css={{ backgroundColor: 'ActiveCaption', padding: 'inherit' }} />
+			<Button css={{ backgroundColor: 'ActiveCaption', padding: 'inherit', paddingBlock: 'inherit', color: 'ActiveCaption' }} />
 
 			{/* Button accepts isDisabled prop */}
 			<Button isDisabled />
@@ -289,7 +289,7 @@ export function Test() {
 			<Button as={Link} onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => event.altKey} />
 
 			{/* ExtendedButton accepts variant prop */}
-			<ExtendedButton variant="red" />
+			<ExtendedButton variant="green" />
 
 			{/* ExtendedButton accepts isDisabled prop */}
 			<ExtendedButton isDisabled />
