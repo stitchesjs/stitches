@@ -6,7 +6,15 @@ const getResolvedSelectors = (
 	nestedSelectors,
 ) =>
 	parentSelectors.reduce((resolvedSelectors, parentSelector) => {
-		resolvedSelectors.push(...nestedSelectors.map((selector) => (/&/.test(selector) ? selector.replace(/&/, parentSelector) : selector.replace(/^/, parentSelector + ' '))))
+		resolvedSelectors.push(...nestedSelectors.map(
+			(selector) => (
+				/[ +>|~]/.test(parentSelector) && /&[^]*&/.test(selector)
+					? selector.replace(/&/g, `:is(${parentSelector})`)
+				: /&/.test(selector)
+					? selector.replace(/&/g, parentSelector)
+					: selector.replace(/^/, parentSelector + ' ')
+			)
+		))
 		return resolvedSelectors
 	}, [])
 
