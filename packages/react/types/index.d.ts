@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { InternalCSS, LessInternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale, $variants, $conditions, StitchesExtractVariantsStyles } from '@stitches/core'
+import { InternalCSS, LessInternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale, $variants, $conditions, StitchesExtractVariantsStyles, StrictMorphVariant } from '@stitches/core'
 
 export * from '@stitches/core'
 
@@ -148,13 +148,13 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 			}
 			& {
 						defaultVariants?: {
-							[k in keyof CloneVariants]?: keyof CloneVariants[k]
+							[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
 						}
 					}
 					& {
 						compoundVariants?: (
 							{
-								[k in keyof CloneVariants]?: keyof CloneVariants[k]
+								[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
 							}
 							& {
 								css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
