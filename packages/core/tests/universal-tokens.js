@@ -81,6 +81,26 @@ describe('Tokens', () => {
 		{
 			const { global, toString } = createCss({
 				theme: {
+					space: {
+						sp1: '100px',
+						sp2: '200px',
+					},
+				},
+			})
+
+			global({
+				article: {
+					marginLeft: '-$sp1',
+					marginTop: '-$sp2',
+				},
+			})()
+
+			expect(toString()).toBe(`:root{--space-sp1:100px;--space-sp2:200px;}` + `article{margin-left:calc(var(--space-sp1)*-1);margin-top:calc(var(--space-sp2)*-1);}`)
+		}
+
+		{
+			const { global, toString } = createCss({
+				theme: {
 					sizes: {
 						sp1: '10px',
 						sp2: '20px',
