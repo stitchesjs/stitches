@@ -170,6 +170,49 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
 		: // normal react component
 		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+} & ProxyStyledElements
+
+export type ProxyStyledElements = {
+	[ElKey in keyof JSX.IntrinsicElements]: <E extends React.ElementType = ElKey, Variants, CloneVariants extends Variants>(
+		// prettier-ignore
+		styled: (
+			(
+				(
+					LessInternalCSS<Conditions, Theme, Utils, ThemeMap>
+					& {
+						/** Unknown property. */
+						[k in string]: unknown
+					}
+				)
+				| Record<string, InternalCSS<Conditions, Theme, Utils, ThemeMap>>
+			)
+			& {
+				variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Conditions, Theme, Utils, ThemeMap> } }
+			}
+			& {
+						defaultVariants?: {
+							[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
+						}
+					}
+					& {
+						compoundVariants?: (
+							{
+								[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
+							}
+							& {
+								css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+							}
+						)[]
+					}
+		),
+	) => E extends string
+		? // jsx elements
+		  StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		: // if it's a stitches component we reach in and pull its type to provide better types
+		E extends { [$elm]: infer DeepStitchesComponentType }
+		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		: // normal react component
+		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
 }
 
 type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
