@@ -1,5 +1,5 @@
 import * as React from 'react'
-import createStyled, { StitchesCss, StitchesVariants } from '../types/index.d'
+import createStyled, { StitchesCss, StitchesVariants, StitchesComponentWithAutoCompleteForReactComponents, StitchesComponentWithAutoCompleteForJSXElements } from '../types/index.d'
 import * as SeparatorPrimitive from '@radix-ui/react-separator'
 import type * as Polymorphic from '@radix-ui/react-polymorphic'
 
@@ -60,10 +60,6 @@ export const { config: Config } = stitchesConfig
 type CSS = StitchesCss<typeof factory>
 
 export const { styled, toString, theme, css, keyframes, global, config } = factory
-
-const RComponent: React.FC<{ hola?: 'hi' | 'hello' }> = () => {
-	return null
-}
 
 const StyledSeparator = styled(SeparatorPrimitive.Root, {
 	border: 'none',
@@ -176,7 +172,7 @@ const Button = styled('button', {
 const ExtendedButton = styled(Button, {
 	variants: {
 		variant: {
-			blue: {
+			green: {
 				color: 'ActiveBorder',
 				backgroundColor: 'ActiveCaption',
 			},
@@ -184,12 +180,20 @@ const ExtendedButton = styled(Button, {
 	},
 })
 
-const ReactComponent: React.FC = (props) => <div></div>
+const Box = styled('div', {})
+
+const ReactComponent: React.FC<{ fromReact?: boolean }> = (props) => <div></div>
 
 const StitchesExtendingReactComponent = styled(ReactComponent, {
 	backgroundColor: 'red',
 	backgroundOrigin: 'border-box',
 	backdropFilter: 'inherit',
+	variants: {
+		fromStitches: {
+			true: {},
+			false: {},
+		},
+	},
 })
 
 type Props = React.ComponentProps<typeof StitchesExtendingReactComponent>
@@ -201,22 +205,6 @@ type Props = React.ComponentProps<typeof StitchesExtendingReactComponent>
 const ExtendedButtonUsingReactUtils = React.forwardRef<React.ElementRef<typeof Button>, React.ComponentProps<typeof Button>>((props, forwardedRef) => {
 	return <Button />
 })
-
-/* -------------------------------------------------------------------------------------------------
- * Extended Button using react utilities without polymorphism and inline `as`
- * -----------------------------------------------------------------------------------------------*/
-export function ExtendedButtonUsingReactUtilsWithInternalInlineAs(props: React.ComponentProps<typeof Button>) {
-	/* Should not error with inline `as` component */
-	return <Button as={(_props) => <a {..._props} />} />
-}
-
-/* --------------------------------------------------now it's not likeikng -----------------------------------------------
- * Extended Polymorphic Button
- * -----------------------------------------------------------------------------------------------*/
-
-/* -------------------------------------------------------------------------------------------------
- * Normal Link
- * -----------------------------------------------------------------------------------------------*/
 
 type LinkProps = React.ComponentProps<'a'> & {
 	isPrimary?: boolean
@@ -243,6 +231,10 @@ export function Test() {
 			{/* Link accepts isPrimary prop */}
 			<Link isPrimary />
 
+			<Box as={Button} form="">
+				hello
+			</Box>
+
 			{/* Button does not accept href prop */}
 			{/* @ts-expect-error */}
 			<Button as="div" href="" />
@@ -251,16 +243,16 @@ export function Test() {
 			<Button form="form" onClick={(e) => {}} />
 
 			{/* Button accepts css prop */}
-			<Button css={{ backgroundColor: 'ActiveCaption', padding: 'inherit' }} />
+			<Button css={{ backgroundColor: 'ActiveCaption', padding: 'inherit', paddingBlock: 'inherit', color: 'ActiveCaption' }} />
 
 			{/* Button accepts isDisabled prop */}
 			<Button isDisabled />
 
 			{/* Button accepts a responsive variant */}
-			<Button variant={{ bp1: 'red' }} />
+			<Button variant={{ bp1: 'red' }} css={{ backdropFilter: 'initial', backgroundColor: 'AppWorkspace' }} />
 
 			{/* Button as "a" accepts href prop */}
-			<Button as="a" href="f" />
+			<Button as="a" href="" />
 
 			{/* Button as "a" does not accept form prop */}
 			{/* @ts-expect-error */}
@@ -288,7 +280,8 @@ export function Test() {
 			{/* Button as Link accepts onClick prop, but it must be explicitly typed */}
 			<Button as={Link} onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => event.altKey} />
 
-			{/* ExtendedButton accepts variant prop */}
+			{/* ExtendedButton combines variants */}
+			<ExtendedButton variant="green" />
 			<ExtendedButton variant="red" />
 
 			{/* ExtendedButton accepts isDisabled prop */}
@@ -327,6 +320,8 @@ export function Test() {
 					console.log(e)
 				}}
 			/>
+
+			<StitchesExtendingReactComponent fromReact fromStitches />
 			{/** As errors on extended element when passed a wrong prop */}
 			{/* @ts-expect-error */}
 			<StitchesExtendingReactComponent href="fwef" />
