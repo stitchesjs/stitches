@@ -69,7 +69,7 @@ describe('Tokens', () => {
 
 			global({
 				article: {
-					boxShadow: '0 0 0 1px $colors.red',
+					boxShadow: '0 0 0 1px $colors$red',
 				},
 			})()
 
@@ -91,7 +91,7 @@ describe('Tokens', () => {
 
 			global({
 				article: {
-					marginLeft: '-$sizes.sp1',
+					marginLeft: '-$sizes$sp1',
 					width: '$sp1',
 				},
 			})()

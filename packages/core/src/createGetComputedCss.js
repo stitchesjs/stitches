@@ -111,8 +111,8 @@ const createGetComputedCss = (
 							(typeof data === 'number' && !isPossiblyUnitless(name) && data
 								? data + 'px'
 								: String(data).replace(
-										/(-)?(\$[$-.\w]+)/g,
-										($0, negative, token) => (negative ? 'calc(' : '') + 'var(-' + (!/.[$.]/.test(token) && name in themeMap ? '-' + themeMap[name] : '') + token.replace(/[$.]/g, '-') + ')' + (negative ? '*-1)' : ''),
+										/(-)?(\$[$-\w]+)/g,
+										($0, negative, token) => (negative ? 'calc(' : '') + 'var(-' + (!/.[$]/.test(token) && name in themeMap ? '-' + themeMap[name] : '') + token.replace(/[$]/g, '-') + ')' + (negative ? '*-1)' : ''),
 								  )) +
 							';'
 					} else {
