@@ -173,7 +173,7 @@ export type TConditions = {
 	initial: string
 	[k: string]: string
 }
-export type TTheme = { [k in keyof EmptyTheme]?: { [b: string]: string } }
+export type TTheme = { [k in keyof EmptyTheme]?: { [b: string]: number | string } }
 export type TThemeMap = { [k in keyof Properties]?: keyof EmptyTheme }
 /** Configuration of Stitches, including a default theme, prefix, custom conditions, and functional properties. */
 export interface IConfig<Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
