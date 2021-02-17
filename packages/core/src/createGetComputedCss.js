@@ -110,7 +110,10 @@ const createGetComputedCss = (
 							// write the value as string, conditionally converted as a number into a px, or as a token resolved into a custom property
 							(typeof data === 'number' && !isPossiblyUnitless(name) && data
 								? data + 'px'
-								: String(data).replace(/\$[$-\w]+/g, (token) => 'var(-' + (!/.\$/.test(token) && name in themeMap ? '-' + themeMap[name] : '') + token.replace(/\$/g, '-') + ')')) +
+								: String(data).replace(
+										/(-)?(\$[$-.\w]+)/g,
+										($0, negative, token) => (negative ? 'calc(' : '') + 'var(-' + (!/.[$.]/.test(token) && name in themeMap ? '-' + themeMap[name] : '') + token.replace(/[$.]/g, '-') + ')' + (negative ? '*-1)' : ''),
+								  )) +
 							';'
 					} else {
 						/** Process CSS from a nested object of styles. */
