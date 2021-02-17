@@ -9,8 +9,8 @@ const createCss = (init) => {
 	const hasDocument = typeof document === 'object'
 
 	const importText = hasDocument && new Text('')
-	const globalText = hasDocument && new Text('')
 	const themedText = hasDocument && new Text('')
+	const globalText = hasDocument && new Text('')
 	const styledText = hasDocument && new Text('')
 
 	const createOnChange = hasDocument ? (textNode) => (data) => (textNode.data = data) : () => undefined
@@ -21,15 +21,15 @@ const createCss = (init) => {
 	init = assign(
 		{
 			onImport: createOnChange(importText, 'import'),
-			onGlobal: createOnChange(globalText, 'global'),
 			onThemed: createOnChange(themedText, 'themed'),
+			onGlobal: createOnChange(globalText, 'global'),
 			onStyled: createOnChange(styledText, 'styled'),
 			onResets() {
 				if (hasDocument) {
 					this.sync()
 
-					sheetTarget.textContent = importText.data = globalText.data = themedText.data = styledText.data = ''
-					sheetTarget.append(importText, globalText, themedText, styledText)
+					sheetTarget.textContent = importText.data = themedText.data = globalText.data = styledText.data = ''
+					sheetTarget.append(importText, themedText, globalText, styledText)
 				}
 			},
 		},
