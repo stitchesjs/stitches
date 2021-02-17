@@ -427,7 +427,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 }
 
 export type StrictMorphVariant<T> = T extends number ? `${T}` | T : T extends 'true' ? 'true' | true : T extends 'false' ? 'false' | false : T
-export type MorphVariant<T> = T extends number ? `${T}` | T : T extends 'true' ? 'true' | boolean : T extends 'false' ? 'false' | boolean : T
+export type MorphVariant<T> = T extends number ? `${T}` | T : T extends 'true' ? 'true' | boolean : T extends 'false' ? 'false' | boolean : T extends `${number}` ? number : T
 
 export type VariantsCall<Variants, Conditions> = {
 	[k in keyof Variants]?: MorphVariant<keyof Variants[k]> | { [I in keyof Conditions]?: MorphVariant<keyof Variants[k]> }
