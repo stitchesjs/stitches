@@ -2,7 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.1.0-canary.7",
+  "version": "0.1.0-canary.8",
   "npmClient": "yarn",
   "useWorkspaces": true
 }

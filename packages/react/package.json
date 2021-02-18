@@ -1,6 +1,6 @@
 {
   "name": "@stitches/react",
-  "version": "0.1.0-canary.7",
+  "version": "0.1.0-canary.8",
   "description": "The modern CSS-in-JS library",
   "type": "module",
   "typings": "types/index.d.ts",
@@ -22,7 +22,7 @@
     "Jonathan Neal <jonathan@modulz.app>"
   ],
   "dependencies": {
-    "@stitches/core": "^0.1.0-canary.7"
+    "@stitches/core": "^0.1.0-canary.8"
   },
   "devDependencies": {
     "react": "17.0.1"
