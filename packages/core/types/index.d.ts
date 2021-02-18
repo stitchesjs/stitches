@@ -254,7 +254,13 @@ export type FlatInternalCSS<
 } & {
 	/** Responsive variants: */
 	when?: {
-		[k in keyof Conditions]?: FlatInternalCSS<Conditions, Theme, Utils, ThemeMap>
+		[k in keyof Conditions]?: (
+			FlatInternalCSS<Conditions, Theme, Utils, ThemeMap>
+			& {
+				/** Unknown property. */
+				[k in string]: unknown
+			}
+		)
 	}
 } & {
 	[k in keyof Utils]?: Utils[k]
