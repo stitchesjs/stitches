@@ -109,7 +109,7 @@ const Test0 = (
 		onClick={(e) => {
 			console.log(e)
 		}}
-		css={{ backdropFilter: 'inherit', background: 'ActiveCaption' }}
+		css={{ backdropFilter: 'inherit', backgroundColor: '', color: '$gray900' }}
 	>
 		hello
 	</StyledSeparator>
