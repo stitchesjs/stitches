@@ -164,12 +164,12 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 		),
 	): E extends string
 		? // jsx elements
-		  StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		  StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
 		: // if it's a stitches component we reach in and pull its type to provide better types
 		E extends { [$elm]: infer DeepStitchesComponentType }
-		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
 		: // normal react component
-		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
 } & ProxyStyledElements
 
 export type ProxyStyledElements = {
@@ -207,10 +207,10 @@ export type ProxyStyledElements = {
 		),
 	) => E extends string
 		? // jsx elements
-		  StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		  StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
 		: // if it's a stitches component we reach in and pull its type to provide better types
 		E extends { [$elm]: infer DeepStitchesComponentType }
-		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
 		: // normal react component
 		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
 }
