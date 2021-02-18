@@ -170,9 +170,9 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
 		: // normal react component
 		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
-} & ProxyStyledElements
+} & ProxyStyledElements<Conditions, Theme, Utils, ThemeMap>
 
-export type ProxyStyledElements = {
+export type ProxyStyledElements<Conditions = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
 	[ElKey in keyof JSX.IntrinsicElements]: <E extends React.ElementType = ElKey, Variants, CloneVariants extends Variants>(
 		// prettier-ignore
 		styled: (
