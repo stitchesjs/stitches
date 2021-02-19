@@ -50,7 +50,7 @@ async function buildPackage(release, variants) {
 	const splitByExport = (code, index = code.indexOf('export')) => [code.slice(0, index), code.slice(index)]
 	const [lead, tail] = splitByExport(code)
 
-	const exports = Array.from(tail.matchAll(/(\w+) as (\w+)/g)).reduce((exports, each) => Object.assign(exports, { [each[2]]: each[1] }), Object.create(null))
+	const exports = Array.from(tail.matchAll(/([$\w]+) as (\w+)/g)).reduce((exports, each) => Object.assign(exports, { [each[2]]: each[1] }), Object.create(null))
 
 	// write variation builds
 	for (const variant in variants) {

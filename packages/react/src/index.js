@@ -110,9 +110,10 @@ const createCss = (init) => {
 }
 
 const getReusableSheet = () => getReusableSheet.config || (getReusableSheet.config = createCss())
+
 const css = (...args) => getReusableSheet().css(...args)
 const global = (...args) => getReusableSheet().global(...args)
 const keyframes = (...args) => getReusableSheet().keyframes(...args)
-const styled = (...args) => getReusableSheet().global(...args)
+const styled = (...args) => getReusableSheet().styled(...args)
 
 export { createCss as default, createCss, defaultThemeMap, css, global, keyframes, styled }
