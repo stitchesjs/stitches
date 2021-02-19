@@ -360,10 +360,6 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 						(
 							(
 								LessInternalCSS<A, B, C, ThemeMap>
-								& {
-									/** Unknown property. */
-									[k in string]: unknown
-								}
 							)
 							& {
 								variants?: Vars[k] & {
@@ -373,7 +369,7 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 								}
 							}
 						)
-						| Record<string, InternalCSS<A, B, C, ThemeMap>>
+						| Record<string, InternalCSS<A, B, C, ThemeMap> | string | number>
 					)
 					& {
 						defaultVariants?: {
