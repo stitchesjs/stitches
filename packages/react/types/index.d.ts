@@ -1,5 +1,23 @@
 import * as React from 'react'
-import { InternalCSS, LessInternalCSS, TConditions, TTheme, TStyledSheet, VariantsCall, IConfig, TThemeMap, CSSPropertiesToTokenScale, $variants, $conditions, StitchesExtractVariantsStyles, StrictMorphVariant } from '@stitches/core'
+import {
+	$conditions,
+	$variants,
+	CSSPropertiesToTokenScale,
+	DeclarationListWithRootAtRules,
+	FlatInternalCSS,
+	GlobalRule,
+	IConfig,
+	InternalCSS,
+	LessInternalCSS,
+	OmitKey,
+	StitchesExtractVariantsStyles,
+	StrictMorphVariant,
+	TConditions,
+	TStyledSheet,
+	TTheme,
+	TThemeMap,
+	VariantsCall,
+} from '@stitches/core'
 
 export * from '@stitches/core'
 
@@ -243,6 +261,10 @@ type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme =
 	toString(): string
 }
 
-declare const styled: ReactFactory
+export declare const createCss: ReactFactory
+export declare const css: TStyledSheet<{ initial: '' }, {}, {}, '', CSSPropertiesToTokenScale>
+export declare const global: (definition: OmitKey<Record<string, InternalCSS<{}, {}, {}, CSSPropertiesToTokenScale>>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
+export declare const keyframes: (definition: { [k: string]: FlatInternalCSS<{}, {}, {}, CSSPropertiesToTokenScale> }) => GlobalRule
+export declare const styled: StyledInstance<{ initial: '' }, {}, {}, CSSPropertiesToTokenScale>
 
-export { styled as default, styled as createCss }
+export default createCss

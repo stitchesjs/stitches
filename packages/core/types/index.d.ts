@@ -1,5 +1,7 @@
 import { DeclarationListWithRootAtRules, Properties } from './css-types'
 
+export { DeclarationListWithRootAtRules }
+
 export type CSSPropertiesToTokenScale = {
 	gap: 'space'
 	gridGap: 'space'
@@ -224,7 +226,7 @@ export type InternalCSS<
 		[k in keyof Properties]?: keyof Theme
 	} = CSSPropertiesToTokenScale
 > = FlatInternalCSS<Conditions, Theme, Utils, ThemeMap> & {
-	[k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string | { [k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> }
+	[k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string | undefined | { [k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> }
 }
 
 // @todo: this is a messy work-around to prevent variants with the same name as a css property from erroring out
@@ -278,7 +280,7 @@ type HasTail<T extends any[]> = T extends [] | [any] ? false : true
 /* Return the tail of an array: */
 type Tail<T extends any[]> = ((...t: T) => any) extends (_: any, ...tail: infer _Tail) => any ? _Tail : []
 
-type OmitKey<T, U extends keyof any> = T & { [P in U]?: unknown }
+export type OmitKey<T, U extends keyof any> = T & { [P in U]?: unknown }
 
 export type ThemeToken = {
 	value: string
@@ -487,6 +489,11 @@ type TStyledSheetFactory = <Conditions extends TConditions = {}, Theme extends T
 	_config?: IConfig<Conditions, Theme, Utils, Prefix, ThemeMap>,
 ) => TStyledSheet<Conditions & { initial: '' }, Theme, Utils, Prefix, ThemeMap>
 
-declare const styled: TStyledSheetFactory
+type TStyledSheetGlobal = (definition: OmitKey<Record<string, {}>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
 
-export { styled as default, styled as createCss }
+export declare const createCss: TStyledSheetFactory
+export declare const css: TStyledSheet<{ initial: '' }, {}, {}, '', CSSPropertiesToTokenScale>
+export declare const global: (definition: OmitKey<Record<string, InternalCSS<{}, {}, {}, CSSPropertiesToTokenScale>>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
+export declare const keyframes: (definition: { [k: string]: FlatInternalCSS<{}, {}, {}, CSSPropertiesToTokenScale> }) => GlobalRule
+
+export default createCss
