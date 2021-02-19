@@ -251,11 +251,11 @@ const createCss = (init) => {
 					Object.keys(compounders).every((name) => {
 						if (name in props) {
 							const propValue = props[name]
-							const compounderValue = compounders[name]
-							if (propValue == compounderValue) return true
+							const compounderValue = String(compounders[name])
+							if (compounderValue == String(propValue)) return true
 							if (propValue === Object(propValue)) {
 								for (const innerName in propValue) {
-									const innerValue = propValue[innerName]
+									const innerValue = String(propValue[innerName])
 									const condition = config.conditions[innerName] || innerName
 									if (compounderValue == innerValue) {
 										appliedCompoundStyle = { [condition]: appliedCompoundStyle }
