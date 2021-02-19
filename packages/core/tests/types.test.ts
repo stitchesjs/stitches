@@ -86,8 +86,6 @@ const PotatoButton = css.css({
 	},
 	compoundVariants: [
 		{
-			//cool
-
 			variant: 'blue',
 			css: {
 				backgroundColor: '$gray200',
@@ -95,6 +93,39 @@ const PotatoButton = css.css({
 		},
 	],
 })
+
+const two = css.css(PotatoButton, {
+	$$max: '2px',
+	width: '$$max',
+	variants: {
+		variant: {
+			green: {
+				width: '$$max',
+				backgroundColor: '$gray100',
+			},
+			red: {
+				backgroundColor: '$gray100',
+			},
+		},
+	},
+	defaultVariants: {
+		variant: 'red',
+	},
+	compoundVariants: [
+		{
+			//cool
+
+			variant: 'green',
+			css: {
+				backgroundColor: '$gray200',
+			},
+		},
+	],
+})
+
+two({ variant: 'green' })
+two({ variant: 'red' })
+two({ variant: 'blue' })
 
 type test = StitchesVariants<typeof PotatoButton>
 
