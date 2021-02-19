@@ -199,6 +199,20 @@ describe('Variants with defaults', () => {
 			].join(''),
 		)
 	})
+
+	test('Returns a component class without the default variant applied when toString is used', () => {
+		const { css, toString } = createCss()
+		const component = css(componentConfig)
+		const className = component.toString()
+
+		expect(className).toBe('sx03kze')
+		expect(toString()).toBe(
+			[
+				// implicit size:small
+				'.sx03kzetmy8g--size-small{font-size:16px;}',
+			].join(''),
+		)
+	})
 })
 
 describe('Conditional variants', () => {
