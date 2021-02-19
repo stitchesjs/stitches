@@ -324,13 +324,16 @@ const createCss = (init) => {
 
 		return define(express, {
 			toString() {
-				return express().className
+				express()
+				return className
 			},
 			get className() {
-				return express().className
+				express()
+				return className
 			},
 			get selector() {
-				return express().selector
+				express()
+				return selector
 			},
 			classNames,
 			variants,
