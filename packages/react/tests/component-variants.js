@@ -203,9 +203,9 @@ describe('Variants with defaults', () => {
 	test('Returns a component selector without the default variant applied when toString is used', () => {
 		const { styled, toString } = createCss()
 		const component = styled('div', componentConfig)
-		const className = component.toString()
+		const selector = component.toString()
 
-		expect(className).toBe('.sx03kze')
+		expect(selector).toBe('.sx03kze')
 		expect(toString()).toBe(
 			[
 				// implicit size:small
