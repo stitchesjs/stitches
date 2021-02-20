@@ -1,6 +1,6 @@
 {
   "name": "@stitches/core",
-  "version": "0.1.0-canary.11",
+  "version": "0.1.0-canary.12",
   "description": "The modern CSS-in-JS library",
   "type": "module",
   "typings": "types/index.d.ts",
