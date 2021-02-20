@@ -42,38 +42,38 @@ describe('Variants', () => {
 	}
 
 	test('Renders a component without any initial styles', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression = component()
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression = component.render()
 
-		expect(expression.className).toBe('sx03kze')
+		expect(expression.props.className).toBe('sx03kze')
 		expect(toString()).toBe('')
 	})
 
 	test('Renders a component with 1 matching variant', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression1 = component({ size: 'small' })
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression1 = component.render({ size: 'small' })
 
 		const expression1CssText = '.sx03kzetmy8g--size-small{font-size:16px;}'
 
-		expect(expression1.className).toBe('sx03kze sx03kzetmy8g--size-small')
+		expect(expression1.props.className).toBe('sx03kze sx03kzetmy8g--size-small')
 		expect(toString()).toBe(expression1CssText)
 
-		const expression2 = component({ color: 'blue' })
+		const expression2 = component.render({ color: 'blue' })
 
 		const expression2CssText = '.sx03kze4wpam--color-blue{background-color:dodgerblue;color:white;}'
 
-		expect(expression2.className).toBe('sx03kze sx03kze4wpam--color-blue')
+		expect(expression2.props.className).toBe('sx03kze sx03kze4wpam--color-blue')
 		expect(toString()).toBe(expression1CssText + expression2CssText)
 	})
 
 	test('Renders a component with 2 matching variants', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression = component({ size: 'small', level: 1 })
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression = component.render({ size: 'small', level: 1 })
 
-		expect(expression.className).toBe('sx03kze sx03kzetmy8g--size-small sx03kzehmqox--level-1')
+		expect(expression.props.className).toBe('sx03kze sx03kzetmy8g--size-small sx03kzehmqox--level-1')
 
 		const expressionSizeSmallCssText = '.sx03kzetmy8g--size-small{font-size:16px;}'
 		const expressionLevel1CssText = '.sx03kzehmqox--level-1{padding:0.5em;}'
@@ -82,15 +82,15 @@ describe('Variants', () => {
 	})
 
 	test('Renders a component with a 2 matching variants and 1 matching compound', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression = component({ size: 'small', color: 'blue' })
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression = component.render({ size: 'small', color: 'blue' })
 
 		const expressionSizeSmallCssText = '.sx03kzetmy8g--size-small{font-size:16px;}'
 		const expressionColorBlueCssText = '.sx03kze4wpam--color-blue{background-color:dodgerblue;color:white;}'
 		const expressionCompoundCssText = '.sx03kzeif1wl--comp{transform:scale(1.2);}'
 
-		expect(expression.className).toBe('sx03kze sx03kzeif1wl--comp sx03kzetmy8g--size-small sx03kze4wpam--color-blue')
+		expect(expression.props.className).toBe('sx03kze sx03kzeif1wl--comp sx03kzetmy8g--size-small sx03kze4wpam--color-blue')
 		expect(toString()).toBe(expressionSizeSmallCssText + expressionColorBlueCssText + expressionCompoundCssText)
 	})
 })
@@ -140,38 +140,38 @@ describe('Variants with defaults', () => {
 	}
 
 	test('Renders a component with the default variant applied', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression = component()
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression = component.render()
 
-		expect(expression.className).toBe('sx03kze sx03kzetmy8g--size-small')
+		expect(expression.props.className).toBe('sx03kze sx03kzetmy8g--size-small')
 		expect(toString()).toBe('.sx03kzetmy8g--size-small{font-size:16px;}')
 	})
 
 	test('Renders a component with the default variant explicitly applied', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression = component({ size: 'small' })
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression = component.render({ size: 'small' })
 
-		expect(expression.className).toBe('sx03kze sx03kzetmy8g--size-small')
+		expect(expression.props.className).toBe('sx03kze sx03kzetmy8g--size-small')
 		expect(toString()).toBe('.sx03kzetmy8g--size-small{font-size:16px;}')
 	})
 
 	test('Renders a component with the non-default variant explicitly applied', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression = component({ size: 'large' })
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression = component.render({ size: 'large' })
 
-		expect(expression.className).toBe('sx03kze sx03kzefhyhx--size-large')
+		expect(expression.props.className).toBe('sx03kze sx03kzefhyhx--size-large')
 		expect(toString()).toBe('.sx03kzefhyhx--size-large{font-size:24px;}')
 	})
 
 	test('Renders a component with the default variant applied and a different variant explicitly applied', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression = component({ level: 1 })
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression = component.render({ level: 1 })
 
-		expect(expression.className).toBe('sx03kze sx03kzehmqox--level-1 sx03kzetmy8g--size-small')
+		expect(expression.props.className).toBe('sx03kze sx03kzehmqox--level-1 sx03kzetmy8g--size-small')
 		expect(toString()).toBe(
 			[
 				// explicit level:1
@@ -183,11 +183,11 @@ describe('Variants with defaults', () => {
 	})
 
 	test('Renders a component with the default variant applied, a different variant explicitly applied, and a compound applied', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
-		const expression = component({ color: 'blue' })
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
+		const expression = component.render({ color: 'blue' })
 
-		expect(expression.className).toBe('sx03kze sx03kzeif1wl--comp sx03kze4wpam--color-blue sx03kzetmy8g--size-small')
+		expect(expression.props.className).toBe('sx03kze sx03kzeif1wl--comp sx03kze4wpam--color-blue sx03kzetmy8g--size-small')
 		expect(toString()).toBe(
 			[
 				// explicit color:blue
@@ -200,12 +200,12 @@ describe('Variants with defaults', () => {
 		)
 	})
 
-	test('Returns a component class without the default variant applied when toString is used', () => {
-		const { css, toString } = createCss()
-		const component = css(componentConfig)
+	test('Returns a component selector without the default variant applied when toString is used', () => {
+		const { styled, toString } = createCss()
+		const component = styled('div', componentConfig)
 		const className = component.toString()
 
-		expect(className).toBe('sx03kze')
+		expect(className).toBe('.sx03kze')
 		expect(toString()).toBe(
 			[
 				// implicit size:small
@@ -265,65 +265,65 @@ describe('Conditional variants', () => {
 	}
 
 	test('Renders a component with no variant applied', () => {
-		const { css, toString } = createCss(config)
-		const component = css(componentConfig)
+		const { styled, toString } = createCss(config)
+		const component = styled('div', componentConfig)
 		const componentClassName = 'sx03kze'
 
-		expect(component().className).toBe(componentClassName)
+		expect(component.render().props.className).toBe(componentClassName)
 		expect(toString()).toBe('')
 	})
 
 	test('Renders a component with one variant applied', () => {
-		const { css, toString } = createCss(config)
-		const component = css(componentConfig)
+		const { styled, toString } = createCss(config)
+		const component = styled('div', componentConfig)
 		const componentClassName = `sx03kze`
 		const componentSmallClassName = `${componentClassName}tmy8g--size-small`
 		const componentSmallCssText = `.${componentSmallClassName}{font-size:16px;}`
 
-		expect(component({ size: 'small' }).className).toBe([componentClassName, componentSmallClassName].join(' '))
+		expect(component.render({ size: 'small' }).props.className).toBe([componentClassName, componentSmallClassName].join(' '))
 		expect(toString()).toBe(componentSmallCssText)
 	})
 
 	test('Renders a component with one conditional variant on one breakpoint applied', () => {
-		const { css, toString } = createCss(config)
-		const component = css(componentConfig)
+		const { styled, toString } = createCss(config)
+		const component = styled('div', componentConfig)
 		const componentClassName = `sx03kze`
 		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
 
-		expect(component({ size: { bp1: 'small' } }).className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
+		expect(component.render({ size: { bp1: 'small' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
 		expect(toString()).toBe(componentSmallBp1CssText)
 	})
 
 	test('Renders a component with one conditional variant on two breakpoints applied', () => {
-		const { css, toString } = createCss(config)
-		const component = css(componentConfig)
+		const { styled, toString } = createCss(config)
+		const component = styled('div', componentConfig)
 		const componentClassName = `sx03kze`
 		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
 		const componentLargeBp2ClassName = `${componentClassName}fhyhx--size-large--8c3r4`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
 		const componentLargeBp2CssText = `@media (min-width: 768px){.sx03kzefhyhx--size-large--8c3r4{font-size:24px;}}`
 
-		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(component.render({ size: { bp1: 'small', bp2: 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 	})
 
 	test('Renders a component with a conditional variant repeatedly', () => {
-		const { css, toString } = createCss(config)
-		const component = css(componentConfig)
+		const { styled, toString } = createCss(config)
+		const component = styled('div', componentConfig)
 		const componentClassName = `sx03kze`
 		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
 		const componentLargeBp2ClassName = `${componentClassName}fhyhx--size-large--8c3r4`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
 		const componentLargeBp2CssText = `@media (min-width: 768px){.sx03kzefhyhx--size-large--8c3r4{font-size:24px;}}`
 
-		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(component.render({ size: { bp1: 'small', bp2: 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 
-		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(component.render({ size: { bp1: 'small', bp2: 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 
-		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(component.render({ size: { bp1: 'small', bp2: 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 	})
 })
