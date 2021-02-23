@@ -14,6 +14,7 @@
     "release:pack": "npm run prerelease && lerna exec -- npm pack",
     "postinstall": "run-s bootstrap",
     "test": "node .bin/test",
+    "test:coverage": "node .bin/coverage .bin/test",
     "test:lint": "node .bin/test-lint",
     "test:watch": "node .bin/test-watch"
   },
