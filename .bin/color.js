@@ -1,32 +1,25 @@
-const color = new Proxy(
-	Object.entries({
-		reset: 0,
-		bold: 1,
-		dim: 2,
-		underline: 4,
-		blink: 5,
-		invert: 7,
-		hidden: 8,
-		black: 30,
-		red: 31,
-		green: 32,
-		yellow: 33,
-		blue: 34,
-		magenta: 35,
-		cyan: 36,
-		white: 37,
-		bgBlack: 40,
-		bgRed: 41,
-		bgGreen: 42,
-		bgYellow: 43,
-		bgBlue: 44,
-		bgMagenta: 45,
-		bgCyan: 46,
-		bgWhite: 47,
-	}).reduce((color, [name, id]) => ({ ...color, [name]: `\x1b[${id}m` }), {}),
-	{
-		get: (colors, name) => (string) => colors[name] + string.replaceAll(colors.reset, colors.reset + colors[name]) + colors.reset,
-	},
-)
+export const set = (id) => `\x1b[${id}m`
+export const color = (string, id) => set(id) + string.replaceAll(set(0), set(0) + set(id)) + set(0)
 
-export default color
+export const bold = (string) => color(string, 1)
+export const dim = (string) => color(string, 2)
+export const underline = (string) => color(string, 4)
+export const invert = (string) => color(string, 7)
+
+export const black = (string) => color(string, 30)
+export const red = (string) => color(string, 31)
+export const green = (string) => color(string, 32)
+export const yellow = (string) => color(string, 33)
+export const blue = (string) => color(string, 34)
+export const magenta = (string) => color(string, 35)
+export const cyan = (string) => color(string, 36)
+export const white = (string) => color(string, 37)
+
+export const bgBlack = (string) => color(string, 40)
+export const bgRed = (string) => color(string, 41)
+export const bgGreen = (string) => color(string, 42)
+export const bgYellow = (string) => color(string, 43)
+export const bgBlue = (string) => color(string, 44)
+export const bgMagenta = (string) => color(string, 45)
+export const bgCyan = (string) => color(string, 46)
+export const bgWhite = (string) => color(string, 47)

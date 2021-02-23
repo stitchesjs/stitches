@@ -2,7 +2,7 @@ import cp from 'child_process'
 import fp from 'path'
 import fs from 'fs/promises'
 import os from 'os'
-import cc from './color.js'
+import { bold, dim, green, red } from './color.js'
 
 // Creates a unique temporary directory
 !(async () => {
@@ -155,17 +155,17 @@ import cc from './color.js'
 		const sol = Math.trunc(per / 10)
 		const haf = per % 10 >= 5 ? 1 : 0
 		const emt = 10 - sol - haf
-		return [`▰`.repeat(sol), `▱`.repeat(haf), cc.dim(`▱`.repeat(emt))].join('')
+		return [`▰`.repeat(sol), `▱`.repeat(haf), dim(`▱`.repeat(emt))].join('')
 	}
 
 	/** Returns the ratio of 2 fields in LCOV data. */
-	const ratio = (lcov, l, r) => `${lcov[l]}${cc.dim('/')}${lcov[r]}`.padStart(17)
+	const ratio = (lcov, l, r) => `${lcov[l]}${dim('/')}${lcov[r]}`.padStart(17)
 
 	/** Based on the given LCOV data, returns the given data in a shade of green or red. */
-	const shade = (lcov, data) => (lcov.FNH / lcov.FNF > 0.6 ? cc.green : cc.red)(data)
+	const shade = (lcov, data) => (lcov.FNH / lcov.FNF > 0.6 ? green : red)(data)
 
 	const trtd = (lcov) =>
-		cc.dim('│ ') +
+		dim('│ ') +
 		shade(
 			lcov,
 			lcov.SF[0]
@@ -175,17 +175,19 @@ import cc from './color.js'
 		) +
 		' ' +
 		shade(lcov, meter(lcov)) +
-		cc.dim(' │ ') +
+		dim(' │ ') +
 		shade(lcov, ratio(lcov, 'FNH', 'FNF')) +
-		cc.dim(' │ ') +
+		dim(' │ ') +
 		shade(lcov, ratio(lcov, 'LH', 'LF')) +
-		cc.dim(' │')
+		dim(' │')
+
+	lcovList.sort((a, b) => a.SF[0] - b.SF[0])
 
 	console.log(
 		[
-			[cc.dim('╭'), cc.dim('─'.repeat(44)), cc.dim('┬'), cc.dim('─'.repeat(11)), cc.dim('┬'), cc.dim('─'.repeat(11)), cc.dim('╮')].join(''),
-			[cc.dim('│'), cc.bold('Coverage') + ' '.repeat(34), cc.dim('│'), cc.bold('Functions'), cc.dim('│'), ' '.repeat(4) + cc.bold('Lines'), cc.dim('│')].join(' '),
-			[cc.dim('├'), cc.dim('─'.repeat(44)), cc.dim('┼'), cc.dim('─'.repeat(11)), cc.dim('┼'), cc.dim('─'.repeat(11)), cc.dim('┤')].join(''),
+			[dim('╭'), dim('─'.repeat(44)), dim('┬'), dim('─'.repeat(11)), dim('┬'), dim('─'.repeat(11)), dim('╮')].join(''),
+			[dim('│'), bold('Coverage') + ' '.repeat(34), dim('│'), bold('Functions'), dim('│'), ' '.repeat(4) + bold('Lines'), dim('│')].join(' '),
+			[dim('├'), dim('─'.repeat(44)), dim('┼'), dim('─'.repeat(11)), dim('┼'), dim('─'.repeat(11)), dim('┤')].join(''),
 			trtd(
 				lcovList.reduce(
 					(all, lcov) => {
@@ -198,9 +200,9 @@ import cc from './color.js'
 					{ TN: [''], SF: ['All files'], FN: [], FNDA: [], FNF: [0], FNH: [0], DA: [], LH: [0], LF: [0] },
 				),
 			),
-			[cc.dim('╞'), ' '.repeat(42), cc.dim('╪'), ' '.repeat(9), cc.dim('╪'), ' '.repeat(9), cc.dim('╡')].join(' '),
+			[dim('╞'), ' '.repeat(42), dim('╪'), ' '.repeat(9), dim('╪'), ' '.repeat(9), dim('╡')].join(' '),
 			...lcovList.map((lcov) => trtd(lcov)),
-			[cc.dim('╰'), cc.dim('─'.repeat(44)), cc.dim('┴'), cc.dim('─'.repeat(11)), cc.dim('┴'), cc.dim('─'.repeat(11)), cc.dim('╯')].join(''),
+			[dim('╰'), dim('─'.repeat(44)), dim('┴'), dim('─'.repeat(11)), dim('┴'), dim('─'.repeat(11)), dim('╯')].join(''),
 		].join('\n'),
 	)
 })()
