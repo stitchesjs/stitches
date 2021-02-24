@@ -53,6 +53,8 @@ scope and avoid unrelated commits.
    # Build current code
    yarn build # or npm run build
    ```
+   
+   > Note: ensure your version of Node is 14 or higher to run scripts
 
    ```bash
    # Push the branch for your new feature
