@@ -6,17 +6,17 @@
   "license": "MIT",
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "build": "node .bin/build",
-    "build:watch": "node .bin/build-watch",
+    "build": "node .bin/build.mjs",
+    "build:watch": "node .bin/build-watch.mjs",
     "prerelease": "npm run build && npm run test",
     "release": "lerna publish",
     "release:canary": "npm run prerelease && lerna publish --dist-tag canary",
     "release:pack": "npm run prerelease && lerna exec -- npm pack",
     "postinstall": "run-s bootstrap",
-    "test": "node .bin/test",
-    "test:coverage": "node .bin/coverage .bin/test",
-    "test:lint": "node .bin/test-lint",
-    "test:watch": "node .bin/test-watch"
+    "test": "node .bin/test.mjs",
+    "test:coverage": "node .bin/test-coverage.mjs .bin/test.mjs",
+    "test:lint": "node .bin/test-lint.mjs",
+    "test:watch": "node .bin/test-watch.mjs"
   },
   "workspaces": [
     "packages/*",

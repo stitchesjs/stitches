@@ -8,7 +8,7 @@ const getCustomProperties = (
 
 	for (const scaleName in theme) {
 		for (const tokenName in theme[scaleName]) {
-			styles['$' + scaleName + '-' + tokenName] = String(theme[scaleName][tokenName]).replace(/\$[$-\w]+/g, ($1) => (/[^]\$/.test($1) ? $1 : '$' + scaleName + $1))
+			styles['$' + scaleName + '-' + tokenName] = String(theme[scaleName][tokenName]).replace(/\$[$\w-]+/g, ($1) => (/[^]\$/.test($1) ? $1 : '$' + scaleName + $1))
 		}
 	}
 

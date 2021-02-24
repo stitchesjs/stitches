@@ -18,6 +18,8 @@ const createCss = (init) => {
 		/** Theme tokens enabled by default on the styled sheet. */
 		theme: Object(init.theme),
 
+		themeMap: Object(init.themeMap || defaultThemeMap),
+
 		/** Properties corresponding to functions that take in CSS values and return aliased CSS declarations. */
 		utils: assign(create(null), init.utils),
 	}
@@ -29,7 +31,7 @@ const createCss = (init) => {
 	const classProp = init.classProp || 'className'
 
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
-	const getComputedCss = createGetComputedCss(config.utils, Object(init.themeMap || defaultThemeMap), config.conditions, config)
+	const getComputedCss = createGetComputedCss(config)
 
 	/** Collection of `@import` CSS rules. */
 	const importRules = new CssSet(init.onImport)

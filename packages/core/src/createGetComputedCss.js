@@ -1,96 +1,107 @@
 import { isArray } from './Array.js'
 import getResolvedSelectors from './getResolvedSelectors.js'
 import isDeclaration from './isDeclaration.js'
-import isPossiblyUnitless from './isPossiblyUnitless.js'
 
-/** Symbol representing whether a selector array has been opened during stringification. */
-const isOpen = Symbol()
+/** Token matcher. */
+const captureTokens = /([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g
 
-/** Comma matcher outside rounded brackets. */
-const splitByComma = /\s*,\s*(?![^()]*\))/
+/** Unit-ed property name matcher. */
+const captureUnited = /(art|dth|End|[Gg]ap|eft|[Hh]eight|op|[Rr]ight|[^b]Size|^size|us)$/
 
-/** Returns a function that returns a string of CSS from an object of CSS. */
-const createGetComputedCss = (
-	/** Map of properties corresponding to functions that return aliased declarations. */
-	utils,
+/** Returns the name of a property with tokens & camel-casing transformed. */
+const transformPropertyName = (name) => (/^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : name.replace(/[A-Z]/g, (capital) => '-' + capital.toLowerCase()))
 
-	/** Map representing property names and their corresponding theme scales. */
-	themeMap,
+/** Returns the data of a property with tokens & numerics transformed. */
+const transformPropertyData = (name, data, themeMap) =>
+	// prettier-ignore
+	captureUnited.test(name) && Number(data)
+		? String(data) + 'px'
+	: String(data).replace(
+		captureTokens,
+		($0, direction, multiplier, separator, token) => (
+			separator == "$" == !!multiplier
+				? $0
+			: (
+				direction || separator == '--'
+					? 'calc('
+				: ''
+			) + (
+				'var(' + (
+					separator === '$'
+						? '--' + (
+							!/\$/.test(token) && name in themeMap
+								? themeMap[name] + '-'
+							: ''
+						) + token.replace(/\$/g, '-')
+					: separator + token
+				) + ')' + (
+					direction || separator == '--'
+						? '*' + (
+							direction || ''
+						) + (
+							multiplier || '1'
+						) + ')'
+					: ''
+				)
+			)
+		),
+	)
 
-	/** Map representing condition variable names and their corresponding condition preludes. */
-	conditions,
+const createGetComputedCss = (config) => {
+	const { conditions, themeMap, utils } = config
 
-	/** Config (WIP). */
-	config,
-) => {
+	/** Symbol for an open can. */
+	const isOpen = Symbol.for('sxs.isOpen')
+
+	/** Comma matcher outside rounded brackets. */
+	const splitByComma = /\s*,\s*(?![^()]*\))/
+
 	/** Returns a string of CSS from an object of CSS. */
 	const getComputedCss = (
 		/** Object representing the current CSS. */
-		style,
+		initStyle,
 	) => {
 		/** String of CSS being generated. */
 		let cssText = ''
 
-		/** Group rules, used to manage the nesting of conditions. */
-		const groupRules = []
+		/** Array of nesting conditions. */
+		const conditionz = []
 
-		/** Data returned by the last utility that run, used to prevent recursion. */
-		let lastUtilityDataJson = ''
+		let visitedStyle
+		let visitedName
 
 		/** Process CSS from an object of styles. */
 		const processStyle = (
 			/** Object representing the current CSS. */
-			{ when, ...currentStyle },
+			rawStyle,
 
 			/** Styled rule selectors representing the current CSS. */
 			selectors,
 		) => {
 			// @todo: this pushes "when" to the end of props, which is good, but this implementation feels messy
-			currentStyle = when ? { ...currentStyle, when } : currentStyle
+			const { when, ...style } = rawStyle
 
-			for (let name in currentStyle) {
-				/** Data representing the current style declaration or group. */
-				let each = currentStyle[name]
+			if (when) style.when = when
 
-				if (name in utils) {
-					/** Data returned by the utility. */
-					let utilityData = utils[name](config)(each)
-
-					utilityData = isDeclaration(utilityData) ? String(utilityData) : utilityData
-
-					if (isDeclaration(utilityData)) {
-						each = utilityData
-					} else {
-						/** String representing the unique return value of the utility. */
-						const utilityDataJson = JSON.stringify(utilityData)
-
-						if (lastUtilityDataJson !== utilityDataJson) {
-							lastUtilityDataJson = utilityDataJson
-
-							processStyle(utilityData, selectors)
-
-							lastUtilityDataJson = ''
-
-							each = {}
-						}
-					}
-				}
+			for (let name of Reflect.ownKeys(style)) {
+				/** Data representing the current style declaration or condition. */
+				let dataList = style[name]
 
 				/** Whether the current style is a condition (i.e. media or supports query). */
-				const isCondition = name.charCodeAt(0) === 64
+				const isCondition = name.charCodeAt(0) == 64
 
-				each = isCondition && isArray(each) ? each : [each]
+				dataList = isCondition && isArray(dataList) ? dataList : [dataList]
 
-				for (const data of each) {
+				loop: for (let data of dataList) {
 					// process either a declaration or a nested object of styles
 					if (isDeclaration(data)) {
-						// conditionally open any unopened group rules
-						for (const groupRule of groupRules) {
-							if (!groupRule[isOpen]) {
-								cssText += groupRule
+						// conditionally open any unopened condition rules
+						for (const conditionRule of conditionz) {
+							if (!conditionRule[isOpen]) {
+								cssText += conditionRule
 								cssText += '{'
 
-								groupRule[isOpen] = true
+								conditionRule[isOpen] = true
 							}
 						}
 
@@ -102,31 +113,36 @@ const createGetComputedCss = (
 							selectors[isOpen] = true
 						}
 
+						if (name in utils && !(name == visitedName && rawStyle == visitedStyle)) {
+							const transformedStyle = utils[name](config)(data)
+
+							if (transformedStyle !== undefined) {
+								if (transformedStyle === Object(transformedStyle)) {
+									visitedName = name
+									processStyle((visitedStyle = transformedStyle), selectors)
+								}
+
+								continue loop
+							}
+						}
+
 						// write the current declaration
-						cssText +=
-							// write the condition name, or write the property as a custom property from a token, or as a kebab-cased property from a camel-cased property
-							(isCondition ? name : /^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : name.replace(/[A-Z]/g, ($0) => '-' + $0.toLowerCase())) +
-							(isCondition ? ' ' : ':') +
-							// write the value as string, conditionally converted as a number into a px, or as a token resolved into a custom property
-							(typeof data === 'number' && !isPossiblyUnitless(name) && data
-								? data + 'px'
-								: String(data).replace(
-										/(-)?(\$[$-\w]+)/g,
-										($0, negative, token) => (negative ? 'calc(' : '') + 'var(-' + (!/.[$]/.test(token) && name in themeMap ? '-' + themeMap[name] : '') + token.replace(/[$]/g, '-') + ')' + (negative ? '*-1)' : ''),
-								  )) +
-							';'
+						const declarationName = isCondition ? name : transformPropertyName(name)
+						const declarationData = isCondition ? data : transformPropertyData(name, data, themeMap)
+
+						cssText += declarationName + (isCondition ? ' ' : ':') + declarationData + ';'
 					} else {
 						/** Process CSS from a nested object of styles. */
-						const processNestedGroup = (
-							/** Whether the current group is a condition (i.e. media or supports query). */
-							isConditionGroup,
-							/** Prelude of the current group. */
-							groupPrelude,
-							/** Styles of the current group. */
-							groupStyles,
+						const processNestedCondition = (
+							/** Whether the rule is a condition (e.g `@media` or `@supports` query). */
+							isCondition,
+							/** Nested rule prelude. */
+							prelude,
+							/** Nested rule styles. */
+							innerStyles,
 						) => {
-							/** Nesting index of the current group. */
-							const groupIndex = isConditionGroup ? groupRules.push(Object(groupPrelude)) : groupRules.length
+							/** Nesting index of the current condition. */
+							const conditionIndex = isCondition ? conditionz.push(Object(prelude)) : conditionz.length
 
 							// conditionally close a styled rule
 							if (selectors.length && selectors[isOpen]) {
@@ -135,14 +151,14 @@ const createGetComputedCss = (
 								selectors[isOpen] = false
 							}
 
-							processStyle(groupStyles, isConditionGroup ? selectors : selectors.length ? getResolvedSelectors(selectors, groupPrelude.split(splitByComma)) : groupPrelude.split(splitByComma))
+							processStyle(innerStyles, isCondition ? selectors : selectors.length ? getResolvedSelectors(selectors, prelude.split(splitByComma)) : prelude.split(splitByComma))
 
-							// close any deeper groups
-							if (isConditionGroup && groupIndex) {
-								for (const deeperGroupRules of groupRules.splice(groupIndex - 1)) {
+							// close any deeper conditions
+							if (isCondition && conditionIndex) {
+								for (const deeperConditionRules of conditionz.splice(conditionIndex - 1)) {
 									cssText += '}'
 
-									deeperGroupRules[isOpen] = false
+									deeperConditionRules[isOpen] = false
 								}
 							}
 						}
@@ -152,13 +168,13 @@ const createGetComputedCss = (
 							for (const conditionName in data) {
 								// process either named conditions or inlined conditions
 								if (conditionName in conditions) {
-									processNestedGroup(true, conditions[conditionName], data[conditionName])
+									processNestedCondition(true, conditions[conditionName], data[conditionName])
 								} else {
-									processNestedGroup(true, conditionName, data[conditionName])
+									processNestedCondition(true, conditionName, data[conditionName])
 								}
 							}
 						} else {
-							processNestedGroup(isCondition, name, data)
+							processNestedCondition(isCondition, name, data)
 						}
 					}
 				}
@@ -173,7 +189,7 @@ const createGetComputedCss = (
 		}
 
 		// process the initial styles
-		processStyle(style, [])
+		processStyle(Object(initStyle), [])
 
 		return cssText
 	}
