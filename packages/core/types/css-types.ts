@@ -4749,221 +4749,17 @@ export interface StandardProperties<TLength = (string & {}) | 0> extends Standar
 
 export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	/**
-	 * The **`animation-delay`** CSS property sets when an animation starts. The animation can start later, immediately from its beginning, or immediately and partway through the animation.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	MozAnimationDelay: GlobalsString
-	/**
-	 * The **`animation-direction`** CSS property sets whether an animation should play forwards, backwards, or alternating back and forth.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	MozAnimationDirection: AnimationDirectionProperty
-	/**
-	 * The **`animation-duration`** CSS property sets the length of time that an animation takes to complete one cycle.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	MozAnimationDuration: GlobalsString
-	/**
-	 * The **`animation-fill-mode`** CSS property sets how a CSS animation applies styles to its target before and after its execution.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozAnimationFillMode: AnimationFillModeProperty
-	/**
-	 * The **`animation-iteration-count`** CSS property sets the number of times an animation cycle should be played before stopping.
-	 *
-	 * **Initial value**: `1`
-	 */
-	MozAnimationIterationCount: AnimationIterationCountProperty
-	/**
-	 * The **`animation-name`** CSS property sets one or more animations to apply to an element. Each name is an `@keyframes` at-rule that sets the property values for the animation sequence.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozAnimationName: AnimationNameProperty
-	/**
-	 * The **`animation-play-state`** CSS property sets whether an animation is running or paused.
-	 *
-	 * **Initial value**: `running`
-	 */
-	MozAnimationPlayState: AnimationPlayStateProperty
-	/**
-	 * The `**animation-timing-function**` CSS property sets how an animation progresses through the duration of each cycle.
-	 *
-	 * **Initial value**: `ease`
-	 */
-	MozAnimationTimingFunction: AnimationTimingFunctionProperty
-	/**
-	 * The **`-moz-appearance`** CSS property is used in Gecko (Firefox) to display an element using platform-native styling based on the operating system's theme.
-	 *
-	 * **Initial value**: `none` (but this value is overridden in the user agent CSS)
-	 */
-	MozAppearance: MozAppearanceProperty
-	/**
-	 * The **`backface-visibility`** CSS property sets whether the back face of an element is visible when turned towards the user.
-	 *
-	 * **Initial value**: `visible`
-	 */
-	MozBackfaceVisibility: BackfaceVisibilityProperty
-	/**
-	 * In Mozilla applications like Firefox, the **`-moz-border-bottom-colors`** CSS property sets a list of colors for the bottom border.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozBorderBottomColors: MozBorderBottomColorsProperty
-	/**
-	 * The **`border-inline-end-color`** CSS property defines the color of the logical inline-end border of an element, which maps to a physical border color depending on the element's writing mode, directionality, and text orientation. It corresponds to the `border-top-color`, `border-right-color`, `border-bottom-color`, or `border-left-color` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `currentcolor`
-	 */
-	MozBorderEndColor: BorderInlineEndColorProperty
-	/**
-	 * The **`border-inline-end-style`** CSS property defines the style of the logical inline end border of an element, which maps to a physical border style depending on the element's writing mode, directionality, and text orientation. It corresponds to the `border-top-style`, `border-right-style`, `border-bottom-style`, or `border-left-style` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozBorderEndStyle: BorderInlineEndStyleProperty
-	/**
-	 * The **`border-inline-end-width`** CSS property defines the width of the logical inline-end border of an element, which maps to a physical border width depending on the element's writing mode, directionality, and text orientation. It corresponds to the `border-top-width`, `border-right-width`, `border-bottom-width`, or `border-left-width` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `medium`
-	 */
-	MozBorderEndWidth: BorderInlineEndWidthProperty<TLength>
-	/**
-	 * In Mozilla applications like Firefox, the **`-moz-border-left-colors`** CSS property sets a list of colors for the left border.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozBorderLeftColors: MozBorderLeftColorsProperty
-	/**
-	 * In Mozilla applications like Firefox, the **`-moz-border-right-colors`** CSS property sets a list of colors for the right border.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozBorderRightColors: MozBorderRightColorsProperty
-	/**
-	 * The **`border-inline-start-color`** CSS property defines the color of the logical inline start border of an element, which maps to a physical border color depending on the element's writing mode, directionality, and text orientation. It corresponds to the `border-top-color`, `border-right-color`, `border-bottom-color`, or `border-left-color` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `currentcolor`
-	 */
-	MozBorderStartColor: BorderInlineStartColorProperty
-	/**
-	 * The **`border-inline-start-style`** CSS property defines the style of the logical inline start border of an element, which maps to a physical border style depending on the element's writing mode, directionality, and text orientation. It corresponds to the `border-top-style`, `border-right-style`, `border-bottom-style`, or `border-left-style` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozBorderStartStyle: BorderInlineStartStyleProperty
-	/**
-	 * In Mozilla applications like Firefox, the **`-moz-border-top-colors`** CSS property sets a list of colors for the top border.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozBorderTopColors: MozBorderTopColorsProperty
-	/**
-	 * The **`box-sizing`** CSS property defines how the user agent should calculate the total width and height of an element.
-	 *
-	 * **Initial value**: `content-box`
-	 */
-	MozBoxSizing: BoxSizingProperty
-	/**
-	 * The **`column-count`** CSS property breaks an element's content into the specified number of columns.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	MozColumnCount: ColumnCountProperty
-	/**
-	 * The **`column-fill`** CSS property controls how an element's contents are balanced when broken into columns.
-	 *
-	 * **Initial value**: `balance`
-	 */
-	MozColumnFill: ColumnFillProperty
-	/**
-	 * The **`column-gap`** CSS property sets the size of the gap (gutter) between an element's columns.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	MozColumnGap: ColumnGapProperty<TLength>
-	/**
-	 * The **`column-rule-color`** CSS property sets the color of the rule (line) drawn between columns in a multi-column layout.
-	 *
-	 * **Initial value**: `currentcolor`
-	 */
-	MozColumnRuleColor: ColumnRuleColorProperty
-	/**
-	 * The **`column-rule-style`** CSS property sets the style of the line drawn between columns in a multi-column layout.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozColumnRuleStyle: ColumnRuleStyleProperty
-	/**
-	 * The **`column-rule-width`** CSS property sets the width of the rule (line) drawn between columns in a multi-column layout.
-	 *
-	 * **Initial value**: `medium`
-	 */
-	MozColumnRuleWidth: ColumnRuleWidthProperty<TLength>
-	/**
-	 * The **`column-width`** CSS property specifies the ideal column width in a multi-column layout. The container will have as many columns as can fit without any of them having a width less than the `column-width` value. If the width of the container is narrower than the specified value, the single column's width will be smaller than the declared column width.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	MozColumnWidth: ColumnWidthProperty<TLength>
-	/**
-	 * If you reference an SVG image in a webpage (such as with the `<img>` element or as a background image), the SVG image can coordinate with the embedding element (its context) to have the image adopt property values set on the embedding element. To do this the embedding element needs to list the properties that are to be made available to the image by listing them as values of the **`-moz-context-properties`** property, and the image needs to opt in to using those properties by using values such as the `context-fill` value.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozContextProperties: MozContextPropertiesProperty
-	/**
 	 * The non-standard **`-moz-float-edge`** CSS property specifies whether the height and width properties of the element include the margin, border, or padding thickness.
 	 *
 	 * **Initial value**: `content-box`
 	 */
 	MozFloatEdge: MozFloatEdgeProperty
 	/**
-	 * The **`font-feature-settings`** CSS property controls advanced typographic features in OpenType fonts.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	MozFontFeatureSettings: FontFeatureSettingsProperty
-	/**
 	 * The **`font-language-override`** CSS property controls the use of language-specific glyphs in a typeface.
 	 *
 	 * **Initial value**: `normal`
 	 */
 	MozFontLanguageOverride: FontLanguageOverrideProperty
-	/**
-	 * The **`-moz-force-broken-image-icon`** extended CSS property can be used to force the broken image icon to be shown even when a broken image has an `alt` attribute.
-	 *
-	 * **Initial value**: `0`
-	 */
-	MozForceBrokenImageIcon: GlobalsNumber
-	/**
-	 * The **`hyphens`** CSS property specifies how words should be hyphenated when text wraps across multiple lines. You can prevent hyphenation entirely, use hyphenation in manually-specified points within the text, or let the browser automatically insert hyphens where appropriate.
-	 *
-	 * **Initial value**: `manual`
-	 */
-	MozHyphens: HyphensProperty
-	/**
-	 * For certain XUL elements and pseudo-elements that use an image from the `list-style-image` property, this property specifies a region of the image that is used in place of the whole image. This allows elements to use different pieces of the same image to improve performance.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	MozImageRegion: MozImageRegionProperty
-	/**
-	 * The **`margin-inline-end`** CSS property defines the logical inline end margin of an element, which maps to a physical margin depending on the element's writing mode, directionality, and text orientation. In other words, it corresponds to the `margin-top`, `margin-right`, `margin-bottom` or `margin-left` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	MozMarginEnd: MarginInlineEndProperty<TLength>
-	/**
-	 * The **`margin-inline-start`** CSS property defines the logical inline start margin of an element, which maps to a physical margin depending on the element's writing mode, directionality, and text orientation. It corresponds to the `margin-top`, `margin-right`, `margin-bottom`, or `margin-left` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	MozMarginStart: MarginInlineStartProperty<TLength>
 	/**
 	 * The **`-moz-orient`** CSS property specifies the orientation of the element to which it's applied.
 	 *
@@ -4995,83 +4791,11 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 */
 	MozOutlineRadiusTopright: MozOutlineRadiusToprightProperty<TLength>
 	/**
-	 * The **`padding-inline-end`** CSS property defines the logical inline end padding of an element, which maps to a physical padding depending on the element's writing mode, directionality, and text orientation. It corresponds to the `padding-top`, `padding-right`, `padding-bottom`, or `padding-left` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	MozPaddingEnd: PaddingInlineEndProperty<TLength>
-	/**
-	 * The **`padding-inline-start`** CSS property defines the logical inline start padding of an element, which maps to a physical padding depending on the element's writing mode, directionality, and text orientation. It corresponds to the `padding-top`, `padding-right`, `padding-bottom`, or `padding-left` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	MozPaddingStart: PaddingInlineStartProperty<TLength>
-	/**
-	 * The **`perspective`** CSS property determines the distance between the z=0 plane and the user in order to give a 3D-positioned element some perspective. Each 3D element with z>0 becomes larger; each 3D-element with z<0 becomes smaller. The strength of the effect is determined by the value of this property.
-	 *
-	 * **Initial value**: `none`
-	 */
-	MozPerspective: PerspectiveProperty<TLength>
-	/**
-	 * The **`perspective-origin`** CSS property determines the position at which the viewer is looking. It is used as the _vanishing point_ by the `perspective` property.
-	 *
-	 * **Initial value**: `50% 50%`
-	 */
-	MozPerspectiveOrigin: PerspectiveOriginProperty<TLength>
-	/**
-	 * **`-moz-stack-sizing`** is an extended CSS property. Normally, a `stack` will change its size so that all of its child elements are completely visible. For example, moving a child of the stack far to the right will widen the stack so the child remains visible.
-	 *
-	 * **Initial value**: `stretch-to-fit`
-	 */
-	MozStackSizing: MozStackSizingProperty
-	/**
 	 * The **`tab-size`** CSS property is used to customize the width of a tab (`U+0009`) character.
 	 *
 	 * **Initial value**: `8`
 	 */
 	MozTabSize: TabSizeProperty<TLength>
-	/**
-	 * The **`text-size-adjust`** CSS property controls the text inflation algorithm used on some smartphones and tablets. Other browsers will ignore this property.
-	 *
-	 * **Initial value**: `auto` for smartphone browsers supporting inflation, `none` in other cases (and then not modifiable).
-	 */
-	MozTextSizeAdjust: TextSizeAdjustProperty
-	/**
-	 * The **`transform-origin`** CSS property sets the origin for an element's transformations.
-	 *
-	 * **Initial value**: `50% 50% 0`
-	 */
-	MozTransformOrigin: TransformOriginProperty<TLength>
-	/**
-	 * The **`transform-style`** CSS property sets whether children of an element are positioned in the 3D space or are flattened in the plane of the element.
-	 *
-	 * **Initial value**: `flat`
-	 */
-	MozTransformStyle: TransformStyleProperty
-	/**
-	 * The **`transition-delay`** CSS property specifies the duration to wait before starting a property's transition effect when its value changes.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	MozTransitionDelay: GlobalsString
-	/**
-	 * The **`transition-duration`** CSS property sets the length of time a transition animation should take to complete. By default, the value is `0s`, meaning that no animation will occur.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	MozTransitionDuration: GlobalsString
-	/**
-	 * The **`transition-property`** CSS property sets the CSS properties to which a transition effect should be applied.
-	 *
-	 * **Initial value**: all
-	 */
-	MozTransitionProperty: TransitionPropertyProperty
-	/**
-	 * The **`transition-timing-function`** CSS property sets how intermediate values are calculated for CSS properties being affected by a transition effect.
-	 *
-	 * **Initial value**: `ease`
-	 */
-	MozTransitionTimingFunction: TransitionTimingFunctionProperty
 	/**
 	 * The **`-moz-user-focus`** CSS property is used to indicate whether an element can have the focus.
 	 *
@@ -5085,489 +4809,15 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 */
 	MozUserModify: MozUserModifyProperty
 	/**
-	 * The `**user-select**` CSS property controls whether the user can select text. This doesn't have any effect on content loaded as chrome, except in textboxes.
+	 * The **`appearance`** CSS property is used in Gecko (Firefox) to display an element using platform-native styling based on the operating system's theme.
 	 *
 	 * **Initial value**: `auto`
-	 */
-	MozUserSelect: UserSelectProperty
-	/**
-	 * The **`-moz-window-dragging`** CSS property specifies whether a window is draggable or not. It only works in Chrome code, and only on Mac OS X.
 	 *
-	 * **Initial value**: `drag`
-	 */
-	MozWindowDragging: MozWindowDraggingProperty
-	/**
-	 * The **`-ms-accelerator`** CSS property is a Microsoft extension that sets or retrieves a string indicating whether the object represents a keyboard shortcut.
+	 * |   Chrome    |   Firefox   |   Safari    |     Edge     | IE  |
+	 * | :---------: | :---------: | :---------: | :----------: | :-: |
+	 * | **1** _-x-_ | **1** _-x-_ | **3** _-x-_ | **12** _-x-_ | No  |
 	 *
-	 * **Initial value**: `false`
-	 */
-	msAccelerator: MsAcceleratorProperty
-	/**
-	 * The **`align-self`** CSS property aligns flex items of the current flex line overriding the `align-items` value. If any of the item's cross-axis margin is set to `auto`, then `align-self` is ignored. In Grid layout `align-self` aligns the item inside the grid area.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msAlignSelf: AlignSelfProperty
-	/**
-	 * The **`-ms-block-progression`** CSS property is a Microsoft extension that specifies the block progression and layout orientation.
-	 *
-	 * **Initial value**: `tb`
-	 */
-	msBlockProgression: MsBlockProgressionProperty
-	/**
-	 * The **`-ms-content-zoom-chaining`** CSS property is a Microsoft extension specifying the zoom behavior that occurs when a user hits the zoom limit during page manipulation.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msContentZoomChaining: MsContentZoomChainingProperty
-	/**
-	 * The **`-ms-content-zoom-limit-max`** CSS property is a Microsoft extension that specifies the selected elements' maximum zoom factor.
-	 *
-	 * **Initial value**: `400%`
-	 */
-	msContentZoomLimitMax: GlobalsString
-	/**
-	 * The **`-ms-content-zoom-limit-min`** CSS property is a Microsoft extension that specifies the minimum zoom factor.
-	 *
-	 * **Initial value**: `100%`
-	 */
-	msContentZoomLimitMin: GlobalsString
-	/**
-	 * The **`-ms-content-zoom-snap-points`** CSS property is a Microsoft extension that specifies where zoom snap-points are located.
-	 *
-	 * **Initial value**: `snapInterval(0%, 100%)`
-	 */
-	msContentZoomSnapPoints: GlobalsString
-	/**
-	 * The **`-ms-content-zoom-snap-type`** CSS property is a Microsoft extension that specifies how zooming is affected by defined snap-points.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msContentZoomSnapType: MsContentZoomSnapTypeProperty
-	/**
-	 * The **`-ms-content-zooming`** CSS property is a Microsoft extension that specifies whether zooming is enabled.
-	 *
-	 * **Initial value**: zoom for the top level element, none for all other elements
-	 */
-	msContentZooming: MsContentZoomingProperty
-	/**
-	 * The `-ms-filter` CSS property is a Microsoft extension that sets or retrieves the filter or collection of filters applied to an object.
-	 *
-	 * **Initial value**: "" (the empty string)
-	 */
-	msFilter: GlobalsString
-	/**
-	 * The **`flex-direction`** CSS property sets how flex items are placed in the flex container defining the main axis and the direction (normal or reversed).
-	 *
-	 * **Initial value**: `row`
-	 */
-	msFlexDirection: FlexDirectionProperty
-	/**
-	 * The **`flex-grow`** CSS property sets how much of the available space in the flex container should be assigned to that item (the flex grow factor). If all sibling items have the same flex grow factor, then all items will receive the same share of available space, otherwise it is distributed according to the ratio defined by the different flex grow factors.
-	 *
-	 * **Initial value**: `0`
-	 */
-	msFlexPositive: GlobalsNumber
-	/**
-	 * The **`-ms-flow-from`** CSS property is a Microsoft extension that gets or sets a value identifying a region container in the document that accepts the content flow from the data source.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msFlowFrom: MsFlowFromProperty
-	/**
-	 * The **`-ms-flow-into`** CSS property is a Microsoft extension that gets or sets a value identifying an iframe container in the document that serves as the region's data source.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msFlowInto: MsFlowIntoProperty
-	/**
-	 * The **`grid-auto-columns`** CSS property specifies the size of an implicitly-created grid column track.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msGridColumns: GridAutoColumnsProperty<TLength>
-	/**
-	 * The **`grid-auto-rows`** CSS property specifies the size of an implicitly-created grid row track.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msGridRows: GridAutoRowsProperty<TLength>
-	/**
-	 * The **`-ms-high-contrast-adjust`** CSS property is a Microsoft extension that gets or sets a value indicating whether to override any CSS properties that would have been set in high contrast mode.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msHighContrastAdjust: MsHighContrastAdjustProperty
-	/**
-	 * The **`-ms-hyphenate-limit-chars`** CSS property is a Microsoft extension that specifies one to three values indicating the minimum number of characters in a hyphenated word. If the word does not meet the required minimum number of characters in the word, before the hyphen, or after the hyphen, then the word is not hyphenated.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msHyphenateLimitChars: MsHyphenateLimitCharsProperty
-	/**
-	 * The **`-ms-hyphenate-limit-lines`** CSS property is a Microsoft extension specifying the maximum number of consecutive lines in an element that may be ended with a hyphenated word.
-	 *
-	 * **Initial value**: `no-limit`
-	 */
-	msHyphenateLimitLines: MsHyphenateLimitLinesProperty
-	/**
-	 * The `**-ms-hyphenate-limit-zone**` CSS property is a Microsoft extension specifying the width of the hyphenation zone.
-	 *
-	 * **Initial value**: `0`
-	 */
-	msHyphenateLimitZone: MsHyphenateLimitZoneProperty<TLength>
-	/**
-	 * The **`hyphens`** CSS property specifies how words should be hyphenated when text wraps across multiple lines. You can prevent hyphenation entirely, use hyphenation in manually-specified points within the text, or let the browser automatically insert hyphens where appropriate.
-	 *
-	 * **Initial value**: `manual`
-	 */
-	msHyphens: HyphensProperty
-	/**
-	 * The **`-ms-ime-align`** CSS property is a Microsoft extension aligning the Input Method Editor (IME) candidate window box relative to the element on which the IME composition is active. The extension is implemented in Microsoft Edge and Internet Explorer 11.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msImeAlign: MsImeAlignProperty
-	/**
-	 * The **`line-break`** CSS property sets how to break lines of Chinese, Japanese, or Korean (CJK) text when working with punctuation and symbols.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msLineBreak: LineBreakProperty
-	/**
-	 * The **`order`** CSS property sets the order to lay out an item in a flex or grid container. Items in a container are sorted by ascending `order` value and then by their source code order.
-	 *
-	 * **Initial value**: `0`
-	 */
-	msOrder: GlobalsNumber
-	/**
-	 * The **`-ms-overflow-style`** CSS property is a Microsoft extension controlling the behavior of scrollbars when the content of an element overflows.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msOverflowStyle: MsOverflowStyleProperty
-	/**
-	 * The **`overflow-x`** CSS property sets what shows when content overflows a block-level element's left and right edges. This may be nothing, a scroll bar, or the overflow content.
-	 *
-	 * **Initial value**: `visible`
-	 */
-	msOverflowX: OverflowXProperty
-	/**
-	 * The **`overflow-y`** CSS property sets what shows when content overflows a block-level element's top and bottom edges. This may be nothing, a scroll bar, or the overflow content.
-	 *
-	 * **Initial value**: `visible`
-	 */
-	msOverflowY: OverflowYProperty
-	/**
-	 * The `**-ms-scroll-chaining**` CSS property is a Microsoft extension that specifies the scrolling behavior that occurs when a user hits the scroll limit during a manipulation.
-	 *
-	 * **Initial value**: `chained`
-	 */
-	msScrollChaining: MsScrollChainingProperty
-	/**
-	 * The `**-ms-scroll-limit-x-max**` CSS property is a Microsoft extension that specifies the maximum value for the `Element.scrollLeft` property.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msScrollLimitXMax: MsScrollLimitXMaxProperty<TLength>
-	/**
-	 * The **`-ms-scroll-limit-x-min`** CSS property is a Microsoft extension that specifies the minimum value for the `Element.scrollLeft` property.
-	 *
-	 * **Initial value**: `0`
-	 */
-	msScrollLimitXMin: MsScrollLimitXMinProperty<TLength>
-	/**
-	 * The **`-ms-scroll-limit-y-max`** CSS property is a Microsoft extension that specifies the maximum value for the `Element.scrollTop` property.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msScrollLimitYMax: MsScrollLimitYMaxProperty<TLength>
-	/**
-	 * The **`-ms-scroll-limit-y-min`** CSS property is a Microsoft extension that specifies the minimum value for the `Element.scrollTop` property.
-	 *
-	 * **Initial value**: `0`
-	 */
-	msScrollLimitYMin: MsScrollLimitYMinProperty<TLength>
-	/**
-	 * The **`-ms-scroll-rails`** CSS property is a Microsoft extension that specifies whether scrolling locks to the primary axis of motion.
-	 *
-	 * **Initial value**: `railed`
-	 */
-	msScrollRails: MsScrollRailsProperty
-	/**
-	 * The **`-ms-scroll-snap-points-x`** CSS property is a Microsoft extension that specifies where snap-points will be located along the x-axis.
-	 *
-	 * **Initial value**: `snapInterval(0px, 100%)`
-	 */
-	msScrollSnapPointsX: GlobalsString
-	/**
-	 * The **`-ms-scroll-snap-points-y`** CSS property is a Microsoft extension that specifies where snap-points will be located along the y-axis.
-	 *
-	 * **Initial value**: `snapInterval(0px, 100%)`
-	 */
-	msScrollSnapPointsY: GlobalsString
-	/**
-	 * The **`scroll-snap-type`** CSS property sets how strictly snap points are enforced on the scroll container in case there is one.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msScrollSnapType: MsScrollSnapTypeProperty
-	/**
-	 * The **`-ms-scroll-translation`** CSS property is a Microsoft extension that specifies whether vertical-to-horizontal scroll wheel translation occurs on the specified element.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msScrollTranslation: MsScrollTranslationProperty
-	/**
-	 * The **`-ms-scrollbar-3dlight-color`** CSS property is a Microsoft extension specifying the color of the top and left edges of the scroll box and scroll arrows of a scroll bar.
-	 *
-	 * **Initial value**: depends on user agent
-	 */
-	msScrollbar3dlightColor: MsScrollbar3dlightColorProperty
-	/**
-	 * The **`-ms-scrollbar-arrow-color`** CSS property is a Microsoft extension that specifies the color of the arrow elements of a scroll arrow.
-	 *
-	 * **Initial value**: `ButtonText`
-	 */
-	msScrollbarArrowColor: MsScrollbarArrowColorProperty
-	/**
-	 * The `**-ms-scrollbar-base-color**` CSS property is a Microsoft extension that specifies the base color of the main elements of a scroll bar.
-	 *
-	 * **Initial value**: depends on user agent
-	 */
-	msScrollbarBaseColor: MsScrollbarBaseColorProperty
-	/**
-	 * The **`-ms-scrollbar-darkshadow-color`** CSS property is a Microsoft extension that specifies the color of a scroll bar's gutter.
-	 *
-	 * **Initial value**: `ThreeDDarkShadow`
-	 */
-	msScrollbarDarkshadowColor: MsScrollbarDarkshadowColorProperty
-	/**
-	 * The `**-ms-scrollbar-face-color**` CSS property is a Microsoft extension that specifies the color of the scroll box and scroll arrows of a scroll bar.
-	 *
-	 * **Initial value**: `ThreeDFace`
-	 */
-	msScrollbarFaceColor: MsScrollbarFaceColorProperty
-	/**
-	 * The `**-ms-scrollbar-highlight-color**` CSS property is a Microsoft extension that specifies the color of the slider tray, the top and left edges of the scroll box, and the scroll arrows of a scroll bar.
-	 *
-	 * **Initial value**: `ThreeDHighlight`
-	 */
-	msScrollbarHighlightColor: MsScrollbarHighlightColorProperty
-	/**
-	 * The **`-ms-scrollbar-shadow-color`** CSS property is a Microsoft extension that specifies the color of the bottom and right edges of the scroll box and scroll arrows of a scroll bar.
-	 *
-	 * **Initial value**: `ThreeDDarkShadow`
-	 */
-	msScrollbarShadowColor: MsScrollbarShadowColorProperty
-	/**
-	 * The **`-ms-scrollbar-track-color`** CSS property is a Microsoft extension that specifies the color of the track element of a scrollbar.
-	 *
-	 * **Initial value**: `Scrollbar`
-	 */
-	msScrollbarTrackColor: MsScrollbarTrackColorProperty
-	/**
-	 * The **`-ms-text-autospace`** CSS property is a Microsoft extension that specifies the autospacing and narrow space width adjustment of text.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msTextAutospace: MsTextAutospaceProperty
-	/**
-	 * The **`text-combine-upright`** CSS property sets the combination of characters into the space of a single character. If the combined text is wider than 1em, the user agent must fit the contents within 1em. The resulting composition is treated as a single upright glyph for layout and decoration. This property only has an effect in vertical writing modes.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msTextCombineHorizontal: TextCombineUprightProperty
-	/**
-	 * The **`text-overflow`** CSS property sets how hidden overflow content is signaled to users. It can be clipped, display an ellipsis ('`…`'), or display a custom string.
-	 *
-	 * **Initial value**: `clip`
-	 */
-	msTextOverflow: TextOverflowProperty
-	/**
-	 * The **`touch-action`** CSS property sets how a region can be manipulated by a touchscreen user (for example, by zooming features built into the browser).
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msTouchAction: TouchActionProperty
-	/**
-	 * The **`-ms-touch-select`** CSS property is a Microsoft extension that toggles the gripper visual elements that enable touch text selection.
-	 *
-	 * **Initial value**: `grippers`
-	 */
-	msTouchSelect: MsTouchSelectProperty
-	/**
-	 * The **`transform`** CSS property lets you rotate, scale, skew, or translate an element. It modifies the coordinate space of the CSS visual formatting model.
-	 *
-	 * **Initial value**: `none`
-	 */
-	msTransform: TransformProperty
-	/**
-	 * The **`transform-origin`** CSS property sets the origin for an element's transformations.
-	 *
-	 * **Initial value**: `50% 50% 0`
-	 */
-	msTransformOrigin: TransformOriginProperty<TLength>
-	/**
-	 * The **`transition-delay`** CSS property specifies the duration to wait before starting a property's transition effect when its value changes.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	msTransitionDelay: GlobalsString
-	/**
-	 * The **`transition-duration`** CSS property sets the length of time a transition animation should take to complete. By default, the value is `0s`, meaning that no animation will occur.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	msTransitionDuration: GlobalsString
-	/**
-	 * The **`transition-property`** CSS property sets the CSS properties to which a transition effect should be applied.
-	 *
-	 * **Initial value**: all
-	 */
-	msTransitionProperty: TransitionPropertyProperty
-	/**
-	 * The **`transition-timing-function`** CSS property sets how intermediate values are calculated for CSS properties being affected by a transition effect.
-	 *
-	 * **Initial value**: `ease`
-	 */
-	msTransitionTimingFunction: TransitionTimingFunctionProperty
-	/**
-	 * The `**user-select**` CSS property controls whether the user can select text. This doesn't have any effect on content loaded as chrome, except in textboxes.
-	 *
-	 * **Initial value**: `text`
-	 */
-	msUserSelect: MsUserSelectProperty
-	/**
-	 * The **`word-break`** CSS property sets whether line breaks appear wherever the text would otherwise overflow its content box.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	msWordBreak: WordBreakProperty
-	/**
-	 * The **`-ms-wrap-flow`** CSS property is a Microsoft extension that specifies how exclusions impact inline content within block-level elements.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	msWrapFlow: MsWrapFlowProperty
-	/**
-	 * The **`-ms-wrap-margin`** CSS property is a Microsoft extension that specifies a margin that offsets the inner wrap shape from other shapes.
-	 *
-	 * **Initial value**: `0`
-	 */
-	msWrapMargin: MsWrapMarginProperty<TLength>
-	/**
-	 * The **`-ms-wrap-through`** CSS property is a Microsoft extension that specifies how content should wrap around an exclusion element.
-	 *
-	 * **Initial value**: `wrap`
-	 */
-	msWrapThrough: MsWrapThroughProperty
-	/**
-	 * The **`writing-mode`** CSS property sets whether lines of text are laid out horizontally or vertically, as well as the direction in which blocks progress.
-	 *
-	 * **Initial value**: `horizontal-tb`
-	 */
-	msWritingMode: WritingModeProperty
-	/**
-	 * The **`object-fit`** CSS property sets how the content of a replaced element, such as an `<img>` or `<video>`, should be resized to fit its container.
-	 *
-	 * **Initial value**: `fill`
-	 */
-	OObjectFit: ObjectFitProperty
-	/**
-	 * The **`object-position`** CSS property specifies the alignment of the selected replaced element's contents within the element's box. Areas of the box which aren't covered by the replaced element's object will show the element's background.
-	 *
-	 * **Initial value**: `50% 50%`
-	 */
-	OObjectPosition: ObjectPositionProperty<TLength>
-	/**
-	 * The **`tab-size`** CSS property is used to customize the width of a tab (`U+0009`) character.
-	 *
-	 * **Initial value**: `8`
-	 */
-	OTabSize: TabSizeProperty<TLength>
-	/**
-	 * The **`text-overflow`** CSS property sets how hidden overflow content is signaled to users. It can be clipped, display an ellipsis ('`…`'), or display a custom string.
-	 *
-	 * **Initial value**: `clip`
-	 */
-	OTextOverflow: TextOverflowProperty
-	/**
-	 * The **`transform-origin`** CSS property sets the origin for an element's transformations.
-	 *
-	 * **Initial value**: `50% 50% 0`
-	 */
-	OTransformOrigin: TransformOriginProperty<TLength>
-	/**
-	 * The CSS **`align-content`** property sets how the browser distributes space between and around content items along the cross-axis of a flexbox container, and the main-axis of a grid container.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	WebkitAlignContent: AlignContentProperty
-	/**
-	 * The CSS **`align-items`** property sets the `align-self` value on all direct children as a group. The align-self property sets the alignment of an item within its containing block. In Flexbox it controls the alignment of items on the Cross Axis, in Grid Layout it controls the alignment of items on the Block Axis within their grid area.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	WebkitAlignItems: AlignItemsProperty
-	/**
-	 * The **`align-self`** CSS property aligns flex items of the current flex line overriding the `align-items` value. If any of the item's cross-axis margin is set to `auto`, then `align-self` is ignored. In Grid layout `align-self` aligns the item inside the grid area.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	WebkitAlignSelf: AlignSelfProperty
-	/**
-	 * The **`animation-delay`** CSS property sets when an animation starts. The animation can start later, immediately from its beginning, or immediately and partway through the animation.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	WebkitAnimationDelay: GlobalsString
-	/**
-	 * The **`animation-direction`** CSS property sets whether an animation should play forwards, backwards, or alternating back and forth.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	WebkitAnimationDirection: AnimationDirectionProperty
-	/**
-	 * The **`animation-duration`** CSS property sets the length of time that an animation takes to complete one cycle.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	WebkitAnimationDuration: GlobalsString
-	/**
-	 * The **`animation-fill-mode`** CSS property sets how a CSS animation applies styles to its target before and after its execution.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitAnimationFillMode: AnimationFillModeProperty
-	/**
-	 * The **`animation-iteration-count`** CSS property sets the number of times an animation cycle should be played before stopping.
-	 *
-	 * **Initial value**: `1`
-	 */
-	WebkitAnimationIterationCount: AnimationIterationCountProperty
-	/**
-	 * The **`animation-name`** CSS property sets one or more animations to apply to an element. Each name is an `@keyframes` at-rule that sets the property values for the animation sequence.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitAnimationName: AnimationNameProperty
-	/**
-	 * The **`animation-play-state`** CSS property sets whether an animation is running or paused.
-	 *
-	 * **Initial value**: `running`
-	 */
-	WebkitAnimationPlayState: AnimationPlayStateProperty
-	/**
-	 * The `**animation-timing-function**` CSS property sets how an animation progresses through the duration of each cycle.
-	 *
-	 * **Initial value**: `ease`
-	 */
-	WebkitAnimationTimingFunction: AnimationTimingFunctionProperty
-	/**
-	 * The **`-moz-appearance`** CSS property is used in Gecko (Firefox) to display an element using platform-native styling based on the operating system's theme.
-	 *
-	 * **Initial value**: `none` (but this value is overridden in the user agent CSS)
+	 * @see https://developer.mozilla.org/docs/Web/CSS/appearance
 	 */
 	WebkitAppearance: WebkitAppearanceProperty
 	/**
@@ -5589,54 +4839,6 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 */
 	WebkitBackgroundClip: BackgroundClipProperty
 	/**
-	 * The **`background-origin`** CSS property sets the _background positioning area_. In other words, it sets the origin position of an image set with the `background-image` property.
-	 *
-	 * **Initial value**: `padding-box`
-	 */
-	WebkitBackgroundOrigin: BackgroundOriginProperty
-	/**
-	 * The **`background-size`** CSS property sets the size of the element's background image. The image can be left to its natural size, stretched, or constrained to fit the available space.
-	 *
-	 * **Initial value**: `auto auto`
-	 */
-	WebkitBackgroundSize: BackgroundSizeProperty<TLength>
-	/** **Initial value**: `currentcolor` */
-	WebkitBorderBeforeColor: WebkitBorderBeforeColorProperty
-	/** **Initial value**: `none` */
-	WebkitBorderBeforeStyle: WebkitBorderBeforeStyleProperty
-	/** **Initial value**: `medium` */
-	WebkitBorderBeforeWidth: WebkitBorderBeforeWidthProperty<TLength>
-	/**
-	 * The **`border-bottom-left-radius`** CSS property rounds the bottom-left corner of an element.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitBorderBottomLeftRadius: BorderBottomLeftRadiusProperty<TLength>
-	/**
-	 * The **`border-bottom-right-radius`** CSS property rounds the bottom-right corner of an element.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitBorderBottomRightRadius: BorderBottomRightRadiusProperty<TLength>
-	/**
-	 * The **`border-image-slice`** CSS property divides the image specified by `border-image-source` into regions. These regions form the components of an element's border image.
-	 *
-	 * **Initial value**: `100%`
-	 */
-	WebkitBorderImageSlice: BorderImageSliceProperty
-	/**
-	 * The **`border-top-left-radius`** CSS property rounds the top-left corner of an element.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitBorderTopLeftRadius: BorderTopLeftRadiusProperty<TLength>
-	/**
-	 * The **`border-top-right-radius`** CSS property rounds the top-right corner of an element.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitBorderTopRightRadius: BorderTopRightRadiusProperty<TLength>
-	/**
 	 * The **`box-decoration-break`** CSS property specifies how an element's fragments should be rendered when broken across multiple lines, columns, or pages.
 	 *
 	 * **Initial value**: `slice`
@@ -5648,18 +4850,6 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 * **Initial value**: `none`
 	 */
 	WebkitBoxReflect: WebkitBoxReflectProperty<TLength>
-	/**
-	 * The **`box-shadow`** CSS property adds shadow effects around an element's frame. You can set multiple effects separated by commas. A box shadow is described by X and Y offsets relative to the element, blur and spread radii, and color.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitBoxShadow: BoxShadowProperty
-	/**
-	 * The **`box-sizing`** CSS property defines how the user agent should calculate the total width and height of an element.
-	 *
-	 * **Initial value**: `content-box`
-	 */
-	WebkitBoxSizing: BoxSizingProperty
 	/**
 	 * The `**clip-path**` CSS property creates a clipping region that sets what part of an element should be shown. Parts that are inside the region are shown, while those outside are hidden.
 	 *
@@ -5673,107 +4863,11 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 */
 	WebkitColorAdjust: ColorAdjustProperty
 	/**
-	 * The **`column-count`** CSS property breaks an element's content into the specified number of columns.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	WebkitColumnCount: ColumnCountProperty
-	/**
-	 * The **`column-fill`** CSS property controls how an element's contents are balanced when broken into columns.
-	 *
-	 * **Initial value**: `balance`
-	 */
-	WebkitColumnFill: ColumnFillProperty
-	/**
-	 * The **`column-gap`** CSS property sets the size of the gap (gutter) between an element's columns.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	WebkitColumnGap: ColumnGapProperty<TLength>
-	/**
-	 * The **`column-rule-color`** CSS property sets the color of the rule (line) drawn between columns in a multi-column layout.
-	 *
-	 * **Initial value**: `currentcolor`
-	 */
-	WebkitColumnRuleColor: ColumnRuleColorProperty
-	/**
-	 * The **`column-rule-style`** CSS property sets the style of the line drawn between columns in a multi-column layout.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitColumnRuleStyle: ColumnRuleStyleProperty
-	/**
-	 * The **`column-rule-width`** CSS property sets the width of the rule (line) drawn between columns in a multi-column layout.
-	 *
-	 * **Initial value**: `medium`
-	 */
-	WebkitColumnRuleWidth: ColumnRuleWidthProperty<TLength>
-	/**
-	 * The **`column-span`** CSS property makes it possible for an element to span across all columns when its value is set to `all`.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitColumnSpan: ColumnSpanProperty
-	/**
-	 * The **`column-width`** CSS property specifies the ideal column width in a multi-column layout. The container will have as many columns as can fit without any of them having a width less than the `column-width` value. If the width of the container is narrower than the specified value, the single column's width will be smaller than the declared column width.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	WebkitColumnWidth: ColumnWidthProperty<TLength>
-	/**
-	 * The **`filter`** CSS property applies graphical effects like blur or color shift to an element. Filters are commonly used to adjust the rendering of images, backgrounds, and borders.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitFilter: FilterProperty
-	/**
-	 * The **`flex-basis`** CSS property sets the initial main size of a flex item. It sets the size of the content box unless otherwise set with `box-sizing`.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	WebkitFlexBasis: FlexBasisProperty<TLength>
-	/**
-	 * The **`flex-direction`** CSS property sets how flex items are placed in the flex container defining the main axis and the direction (normal or reversed).
-	 *
-	 * **Initial value**: `row`
-	 */
-	WebkitFlexDirection: FlexDirectionProperty
-	/**
-	 * The **`flex-grow`** CSS property sets how much of the available space in the flex container should be assigned to that item (the flex grow factor). If all sibling items have the same flex grow factor, then all items will receive the same share of available space, otherwise it is distributed according to the ratio defined by the different flex grow factors.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitFlexGrow: GlobalsNumber
-	/**
-	 * The **`flex-shrink`** CSS property sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex container, items shrink to fit according to `flex-shrink`.
-	 *
-	 * **Initial value**: `1`
-	 */
-	WebkitFlexShrink: GlobalsNumber
-	/**
-	 * The **`flex-wrap`** CSS property sets whether flex items are forced onto one line or can wrap onto multiple lines. If wrapping is allowed, it sets the direction that lines are stacked.
-	 *
-	 * **Initial value**: `nowrap`
-	 */
-	WebkitFlexWrap: FlexWrapProperty
-	/**
-	 * The **`font-feature-settings`** CSS property controls advanced typographic features in OpenType fonts.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	WebkitFontFeatureSettings: FontFeatureSettingsProperty
-	/**
 	 * The **`font-kerning`** CSS property sets the use of the kerning information stored in a font.
 	 *
 	 * **Initial value**: `auto`
 	 */
 	WebkitFontKerning: FontKerningProperty
-	/**
-	 * The **`font-variant-ligatures`** CSS property controls which ligatures and contextual forms are used in textual content of the elements it applies to. This leads to more harmonized forms in the resulting text.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	WebkitFontVariantLigatures: FontVariantLigaturesProperty
 	/**
 	 * The **`hyphens`** CSS property specifies how words should be hyphenated when text wraps across multiple lines. You can prevent hyphenation entirely, use hyphenation in manually-specified points within the text, or let the browser automatically insert hyphens where appropriate.
 	 *
@@ -5781,35 +4875,11 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 */
 	WebkitHyphens: HyphensProperty
 	/**
-	 * The CSS **`justify-content`** property defines how the browser distributes space between and around content items along the main-axis of a flex container, and the inline axis of a grid container.
-	 *
-	 * **Initial value**: `normal`
-	 */
-	WebkitJustifyContent: JustifyContentProperty
-	/**
-	 * The **`line-break`** CSS property sets how to break lines of Chinese, Japanese, or Korean (CJK) text when working with punctuation and symbols.
-	 *
-	 * **Initial value**: `auto`
-	 */
-	WebkitLineBreak: LineBreakProperty
-	/**
 	 * The **`-webkit-line-clamp`** CSS property allows limiting of the contents of a block container to the specified number of lines.
 	 *
 	 * **Initial value**: `none`
 	 */
 	WebkitLineClamp: WebkitLineClampProperty
-	/**
-	 * The **`margin-inline-end`** CSS property defines the logical inline end margin of an element, which maps to a physical margin depending on the element's writing mode, directionality, and text orientation. In other words, it corresponds to the `margin-top`, `margin-right`, `margin-bottom` or `margin-left` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitMarginEnd: MarginInlineEndProperty<TLength>
-	/**
-	 * The **`margin-inline-start`** CSS property defines the logical inline start margin of an element, which maps to a physical margin depending on the element's writing mode, directionality, and text orientation. It corresponds to the `margin-top`, `margin-right`, `margin-bottom`, or `margin-left` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitMarginStart: MarginInlineStartProperty<TLength>
 	/**
 	 * If a `-webkit-mask-image` is specified, `-webkit-mask-attachment` determines whether the mask image's position is fixed within the viewport, or scrolls along with its containing block.
 	 *
@@ -5883,59 +4953,11 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 */
 	WebkitMaskSize: WebkitMaskSizeProperty<TLength>
 	/**
-	 * The **`max-inline-size`** CSS property defines the horizontal or vertical maximum size of an element's block depending on its writing mode. It corresponds to the `max-width` or the `max-height` property depending on the value defined for `writing-mode`. If the writing mode is vertically oriented, the value of `max-inline-size` relates to the maximal height of the element, otherwise it relates to the maximal width of the element. It relates to `max-block-size`, which defines the other dimension of the element.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitMaxInlineSize: MaxInlineSizeProperty<TLength>
-	/**
-	 * The **`order`** CSS property sets the order to lay out an item in a flex or grid container. Items in a container are sorted by ascending `order` value and then by their source code order.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitOrder: GlobalsNumber
-	/**
 	 * The `-webkit-overflow-scrolling` CSS property controls whether or not touch devices use momentum-based scrolling for a given element.
 	 *
 	 * **Initial value**: `auto`
 	 */
 	WebkitOverflowScrolling: WebkitOverflowScrollingProperty
-	/**
-	 * The **`padding-inline-end`** CSS property defines the logical inline end padding of an element, which maps to a physical padding depending on the element's writing mode, directionality, and text orientation. It corresponds to the `padding-top`, `padding-right`, `padding-bottom`, or `padding-left` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitPaddingEnd: PaddingInlineEndProperty<TLength>
-	/**
-	 * The **`padding-inline-start`** CSS property defines the logical inline start padding of an element, which maps to a physical padding depending on the element's writing mode, directionality, and text orientation. It corresponds to the `padding-top`, `padding-right`, `padding-bottom`, or `padding-left` property depending on the values defined for `writing-mode`, `direction`, and `text-orientation`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitPaddingStart: PaddingInlineStartProperty<TLength>
-	/**
-	 * The **`perspective`** CSS property determines the distance between the z=0 plane and the user in order to give a 3D-positioned element some perspective. Each 3D element with z>0 becomes larger; each 3D-element with z<0 becomes smaller. The strength of the effect is determined by the value of this property.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitPerspective: PerspectiveProperty<TLength>
-	/**
-	 * The **`perspective-origin`** CSS property determines the position at which the viewer is looking. It is used as the _vanishing point_ by the `perspective` property.
-	 *
-	 * **Initial value**: `50% 50%`
-	 */
-	WebkitPerspectiveOrigin: PerspectiveOriginProperty<TLength>
-	/**
-	 * The **`scroll-snap-type`** CSS property sets how strictly snap points are enforced on the scroll container in case there is one.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitScrollSnapType: ScrollSnapTypeProperty
-	/**
-	 * The **`shape-margin`** CSS property sets a margin for a CSS shape created using `shape-outside`.
-	 *
-	 * **Initial value**: `0`
-	 */
-	WebkitShapeMargin: ShapeMarginProperty<TLength>
 	/**
 	 * **`-webkit-tap-highlight-color`** is a non-standard CSS property that sets the color of the highlight that appears over a link while it's being tapped. The highlighting indicates to the user that their tap is being successfully recognized, and indicates which element they're tapping on.
 	 *
@@ -6026,48 +5048,6 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 * **Initial value**: `default`
 	 */
 	WebkitTouchCallout: WebkitTouchCalloutProperty
-	/**
-	 * The **`transform`** CSS property lets you rotate, scale, skew, or translate an element. It modifies the coordinate space of the CSS visual formatting model.
-	 *
-	 * **Initial value**: `none`
-	 */
-	WebkitTransform: TransformProperty
-	/**
-	 * The **`transform-origin`** CSS property sets the origin for an element's transformations.
-	 *
-	 * **Initial value**: `50% 50% 0`
-	 */
-	WebkitTransformOrigin: TransformOriginProperty<TLength>
-	/**
-	 * The **`transform-style`** CSS property sets whether children of an element are positioned in the 3D space or are flattened in the plane of the element.
-	 *
-	 * **Initial value**: `flat`
-	 */
-	WebkitTransformStyle: TransformStyleProperty
-	/**
-	 * The **`transition-delay`** CSS property specifies the duration to wait before starting a property's transition effect when its value changes.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	WebkitTransitionDelay: GlobalsString
-	/**
-	 * The **`transition-duration`** CSS property sets the length of time a transition animation should take to complete. By default, the value is `0s`, meaning that no animation will occur.
-	 *
-	 * **Initial value**: `0s`
-	 */
-	WebkitTransitionDuration: GlobalsString
-	/**
-	 * The **`transition-property`** CSS property sets the CSS properties to which a transition effect should be applied.
-	 *
-	 * **Initial value**: all
-	 */
-	WebkitTransitionProperty: TransitionPropertyProperty
-	/**
-	 * The **`transition-timing-function`** CSS property sets how intermediate values are calculated for CSS properties being affected by a transition effect.
-	 *
-	 * **Initial value**: `ease`
-	 */
-	WebkitTransitionTimingFunction: TransitionTimingFunctionProperty
 	/** **Initial value**: `read-only` */
 	WebkitUserModify: WebkitUserModifyProperty
 	/**
@@ -6076,63 +5056,15 @@ export interface VendorLonghandProperties<TLength = (string & {}) | 0> {
 	 * **Initial value**: `auto`
 	 */
 	WebkitUserSelect: UserSelectProperty
-	/**
-	 * The **`writing-mode`** CSS property sets whether lines of text are laid out horizontally or vertically, as well as the direction in which blocks progress.
-	 *
-	 * **Initial value**: `horizontal-tb`
-	 */
-	WebkitWritingMode: WritingModeProperty
 }
 
 export interface VendorShorthandProperties<TLength = (string & {}) | 0> {
-	/** The **`animation`** shorthand CSS property sets an animated transition between styles. It is a shorthand for `animation-name`, `animation-duration`, `animation-timing-function`, `animation-delay`, `animation-iteration-count`, `animation-direction`, `animation-fill-mode`, and `animation-play-state`. */
-	MozAnimation: AnimationProperty
-	/** The **`border-image`** CSS property draws an image in place of an element's `border-style`. */
-	MozBorderImage: BorderImageProperty
-	/** The **`column-rule`** CSS property sets the width, style, and color of the rule (line) drawn between columns in a multi-column layout. */
-	MozColumnRule: ColumnRuleProperty<TLength>
-	/** The **`columns`** CSS property sets the column width and column count of an element. */
-	MozColumns: ColumnsProperty<TLength>
-	/** The **`transition`** CSS property is a shorthand property for `transition-property`, `transition-duration`, `transition-timing-function`, and `transition-delay`. */
-	MozTransition: TransitionProperty
-	/** The **`-ms-content-zoom-limit`** CSS shorthand property is a Microsoft extension that specifies values for the `-ms-content-zoom-limit-min` and `-ms-content-zoom-limit-max` properties. */
-	msContentZoomLimit: GlobalsString
-	/** The **`-ms-content-zoom-snap`** CSS shorthand property is a Microsoft extension that specifies values for the `-ms-content-zoom-snap-type` and `-ms-content-zoom-snap-points` properties. */
-	msContentZoomSnap: MsContentZoomSnapProperty
-	/** The **`flex`** CSS property sets how a flex item will grow or shrink to fit the space available in its flex container. It is a shorthand for `flex-grow`, `flex-shrink`, and `flex-basis`. */
-	msFlex: FlexProperty<TLength>
-	/** The **\-ms-scroll-limit** CSS property is a Microsoft extension that specifies values for the `-ms-scroll-limit-x-min`, `-ms-scroll-limit-y-min`, `-ms-scroll-limit-x-max`, and `-ms-scroll-limit-y-max` properties. */
-	msScrollLimit: GlobalsString
-	/** The **`-ms-scroll-snap-x`** CSS shorthand property is a Microsoft extension that specifies values for the `-ms-scroll-snap-type` and `-ms-scroll-snap-points-x` properties. */
-	msScrollSnapX: GlobalsString
-	/** The **`-ms-scroll-snap-x`** CSS shorthand property is a Microsoft extension that specifies values for the `-ms-scroll-snap-type` and `-ms-scroll-snap-points-y` properties. */
-	msScrollSnapY: GlobalsString
-	/** The **`transition`** CSS property is a shorthand property for `transition-property`, `transition-duration`, `transition-timing-function`, and `transition-delay`. */
-	msTransition: TransitionProperty
-	/** The **`animation`** shorthand CSS property sets an animated transition between styles. It is a shorthand for `animation-name`, `animation-duration`, `animation-timing-function`, `animation-delay`, `animation-iteration-count`, `animation-direction`, `animation-fill-mode`, and `animation-play-state`. */
-	WebkitAnimation: AnimationProperty
-	/** The **`-webkit-border-before`** CSS property is a shorthand property for setting the individual logical block start border property values in a single place in the style sheet. */
-	WebkitBorderBefore: WebkitBorderBeforeProperty<TLength>
-	/** The **`border-image`** CSS property draws an image in place of an element's `border-style`. */
-	WebkitBorderImage: BorderImageProperty
-	/** The **`border-radius`** CSS property rounds the corners of an element's outer border edge. You can set a single radius to make circular corners, or two radii to make elliptical corners. */
-	WebkitBorderRadius: BorderRadiusProperty<TLength>
-	/** The **`column-rule`** CSS property sets the width, style, and color of the rule (line) drawn between columns in a multi-column layout. */
-	WebkitColumnRule: ColumnRuleProperty<TLength>
-	/** The **`columns`** CSS property sets the column width and column count of an element. */
-	WebkitColumns: ColumnsProperty<TLength>
-	/** The **`flex`** CSS property sets how a flex item will grow or shrink to fit the space available in its flex container. It is a shorthand for `flex-grow`, `flex-shrink`, and `flex-basis`. */
-	WebkitFlex: FlexProperty<TLength>
-	/** The **`flex-flow`** CSS property is a shorthand property for `flex-direction` and `flex-wrap` properties. */
-	WebkitFlexFlow: FlexFlowProperty
 	/** The **`mask`** CSS property hides an element (partially or fully) by masking or clipping the image at specific points. */
 	WebkitMask: WebkitMaskProperty<TLength>
 	/** The **`text-emphasis`** CSS property applies emphasis marks to text (except spaces and control characters). It is a shorthand for `text-emphasis-style` and `text-emphasis-color`. */
 	WebkitTextEmphasis: TextEmphasisProperty
 	/** The **`-webkit-text-stroke`** CSS property specifies the width and color of strokes for text characters. This is a shorthand property for the longhand properties `-webkit-text-stroke-width` and `-webkit-text-stroke-color`. */
 	WebkitTextStroke: WebkitTextStrokeProperty<TLength>
-	/** The **`transition`** CSS property is a shorthand property for `transition-property`, `transition-duration`, `transition-timing-function`, and `transition-delay`. */
-	WebkitTransition: TransitionProperty
 }
 
 export interface VendorProperties<TLength = (string & {}) | 0> extends VendorLonghandProperties<TLength>, VendorShorthandProperties<TLength> {}
@@ -6294,7 +5226,6 @@ export interface DeclarationListWithRootAtRules {
 export interface Properties<TLength = (string & {}) | 0> extends StandardProperties<TLength>, VendorProperties<TLength>, SvgProperties<TLength> {}
 
 export interface FontFace {
-	MozFontFeatureSettings: FontFaceFontFeatureSettingsProperty
 	fontDisplay: FontFaceFontDisplayProperty
 	fontFamily: string
 	fontFeatureSettings: FontFaceFontFeatureSettingsProperty
@@ -6308,7 +5239,6 @@ export interface FontFace {
 }
 
 export interface FontFaceFallback {
-	MozFontFeatureSettings: FontFaceFontFeatureSettingsProperty | FontFaceFontFeatureSettingsProperty[]
 	fontDisplay: FontFaceFontDisplayProperty | FontFaceFontDisplayProperty[]
 	fontFamily: string | string[]
 	fontFeatureSettings: FontFaceFontFeatureSettingsProperty | FontFaceFontFeatureSettingsProperty[]
@@ -6431,7 +5361,7 @@ export type BackgroundSizeProperty<TLength> = Globals | BgSize<TLength> | (strin
 
 export type BlockOverflowProperty = Globals | 'clip' | 'ellipsis' | (string & {})
 
-export type BlockSizeProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-moz-max-content' | '-moz-min-content' | '-webkit-fill-available' | 'auto' | 'available' | 'fit-content' | 'max-content' | 'min-content' | (string & {})
+export type BlockSizeProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'auto' | 'available' | 'fit-content' | 'max-content' | 'min-content' | (string & {})
 
 export type BorderProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {}) | [LineWidth<TLength>, LineStyle, Color]
 
@@ -6625,8 +5555,6 @@ export type CounterSetProperty = Globals | 'none' | (string & {})
 
 export type CursorProperty =
 	| Globals
-	| '-moz-grab'
-	| '-webkit-grab'
 	| 'alias'
 	| 'all-scroll'
 	| 'auto'
@@ -6675,7 +5603,7 @@ export type FilterProperty = Globals | 'none' | (string & {})
 
 export type FlexProperty<TLength> = Globals | TLength | 'auto' | 'available' | 'content' | 'fit-content' | 'max-content' | 'min-content' | 'none' | (string & {}) | number | [number, number | (string & {})] | [number, number, string & {}]
 
-export type FlexBasisProperty<TLength> = Globals | TLength | '-moz-max-content' | '-moz-min-content' | '-webkit-auto' | 'auto' | 'available' | 'content' | 'fit-content' | 'max-content' | 'min-content' | number | (string & {})
+export type FlexBasisProperty<TLength> = Globals | TLength | 'auto' | 'available' | 'content' | 'fit-content' | 'max-content' | 'min-content' | number | (string & {})
 
 export type FlexDirectionProperty = Globals | 'column' | 'column-reverse' | 'row' | 'row-reverse'
 
@@ -6808,13 +5736,13 @@ export type GridTemplateRowsProperty<TLength> = Globals | TrackBreadth<TLength> 
 
 export type HangingPunctuationProperty = Globals | 'allow-end' | 'first' | 'force-end' | 'last' | 'none' | (string & {})
 
-export type HeightProperty<TLength> = Globals | TLength | '-moz-max-content' | '-moz-min-content' | '-webkit-fit-content' | 'auto' | 'available' | 'fit-content' | 'max-content' | 'min-content' | number | (string & {})
+export type HeightProperty<TLength> = Globals | TLength | 'auto' | 'available' | 'fit-content' | 'max-content' | 'min-content' | number | (string & {})
 
 export type HyphensProperty = Globals | 'auto' | 'manual' | 'none'
 
 export type ImageOrientationProperty = Globals | 'flip' | 'from-image' | (string & {})
 
-export type ImageRenderingProperty = Globals | '-moz-crisp-edges' | '-o-crisp-edges' | '-webkit-optimize-contrast' | 'auto' | 'crisp-edges' | 'pixelated'
+export type ImageRenderingProperty = Globals | '-moz-crisp-edges' | '-webkit-optimize-contrast' | 'auto' | 'crisp-edges' | 'pixelated'
 
 export type ImageResolutionProperty = Globals | 'from-image' | (string & {})
 
@@ -6822,7 +5750,7 @@ export type ImeModeProperty = Globals | 'active' | 'auto' | 'disabled' | 'inacti
 
 export type InitialLetterProperty = Globals | 'normal' | (string & {}) | number
 
-export type InlineSizeProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-moz-max-content' | '-moz-min-content' | '-webkit-fill-available' | 'auto' | 'available' | 'fit-content' | 'max-content' | 'min-content' | (string & {})
+export type InlineSizeProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'auto' | 'available' | 'fit-content' | 'max-content' | 'min-content' | (string & {})
 
 export type InsetProperty<TLength> = Globals | TLength | 'auto' | (string & {})
 
@@ -6930,115 +5858,23 @@ export type MaskSizeProperty<TLength> = Globals | BgSize<TLength> | (string & {}
 
 export type MaskTypeProperty = Globals | 'alpha' | 'luminance'
 
-export type MaxBlockSizeProperty<TLength> = Globals | TLength | '-moz-max-content' | '-moz-min-content' | '-webkit-fill-available' | 'fill-available' | 'fit-content' | 'max-content' | 'min-content' | 'none' | number | (string & {})
+export type MaxBlockSizeProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'fill-available' | 'fit-content' | 'max-content' | 'min-content' | 'none' | number | (string & {})
 
-export type MaxHeightProperty<TLength> =
-	| Globals
-	| TLength
-	| '-moz-fit-content'
-	| '-moz-max-content'
-	| '-moz-min-content'
-	| '-webkit-fit-content'
-	| '-webkit-max-content'
-	| '-webkit-min-content'
-	| 'fill-available'
-	| 'fit-content'
-	| 'intrinsic'
-	| 'max-content'
-	| 'min-content'
-	| 'none'
-	| number
-	| (string & {})
+export type MaxHeightProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'fill-available' | 'fit-content' | 'intrinsic' | 'max-content' | 'min-content' | 'none' | number | (string & {})
 
-export type MaxInlineSizeProperty<TLength> =
-	| Globals
-	| TLength
-	| '-moz-fit-content'
-	| '-moz-max-content'
-	| '-moz-min-content'
-	| '-webkit-fill-available'
-	| 'fill-available'
-	| 'fit-content'
-	| 'max-content'
-	| 'min-content'
-	| 'none'
-	| number
-	| (string & {})
+export type MaxInlineSizeProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'fill-available' | 'fit-content' | 'max-content' | 'min-content' | 'none' | number | (string & {})
 
 export type MaxLinesProperty = Globals | 'none' | number
 
-export type MaxWidthProperty<TLength> =
-	| Globals
-	| TLength
-	| '-moz-fit-content'
-	| '-moz-max-content'
-	| '-moz-min-content'
-	| '-webkit-fit-content'
-	| '-webkit-max-content'
-	| '-webkit-min-content'
-	| 'fill-available'
-	| 'fit-content'
-	| 'intrinsic'
-	| 'max-content'
-	| 'min-content'
-	| 'none'
-	| number
-	| (string & {})
+export type MaxWidthProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'fill-available' | 'fit-content' | 'intrinsic' | 'max-content' | 'min-content' | 'none' | number | (string & {})
 
-export type MinBlockSizeProperty<TLength> = Globals | TLength | '-moz-max-content' | '-moz-min-content' | '-webkit-fill-available' | 'auto' | 'fill-available' | 'fit-content' | 'max-content' | 'min-content' | number | (string & {})
+export type MinBlockSizeProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'auto' | 'fill-available' | 'fit-content' | 'max-content' | 'min-content' | number | (string & {})
 
-export type MinHeightProperty<TLength> =
-	| Globals
-	| TLength
-	| '-moz-fit-content'
-	| '-moz-max-content'
-	| '-moz-min-content'
-	| '-webkit-fit-content'
-	| '-webkit-max-content'
-	| '-webkit-min-content'
-	| 'auto'
-	| 'fill-available'
-	| 'fit-content'
-	| 'intrinsic'
-	| 'max-content'
-	| 'min-content'
-	| number
-	| (string & {})
+export type MinHeightProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'auto' | 'fill-available' | 'fit-content' | 'intrinsic' | 'max-content' | 'min-content' | number | (string & {})
 
-export type MinInlineSizeProperty<TLength> =
-	| Globals
-	| TLength
-	| '-moz-fit-content'
-	| '-moz-max-content'
-	| '-moz-min-content'
-	| '-webkit-fill-available'
-	| 'auto'
-	| 'fill-available'
-	| 'fit-content'
-	| 'max-content'
-	| 'min-content'
-	| number
-	| (string & {})
+export type MinInlineSizeProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'auto' | 'fill-available' | 'fit-content' | 'max-content' | 'min-content' | number | (string & {})
 
-export type MinWidthProperty<TLength> =
-	| Globals
-	| TLength
-	| '-moz-fit-content'
-	| '-moz-max-content'
-	| '-moz-min-content'
-	| '-webkit-fill-available'
-	| '-webkit-fit-content'
-	| '-webkit-max-content'
-	| '-webkit-min-content'
-	| 'auto'
-	| 'fill-available'
-	| 'fit-content'
-	| 'intrinsic'
-	| 'max-content'
-	| 'min-content'
-	| 'min-intrinsic'
-	| number
-	| (string & {})
+export type MinWidthProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'auto' | 'fill-available' | 'fit-content' | 'intrinsic' | 'max-content' | 'min-content' | 'min-intrinsic' | number | (string & {})
 
 export type MixBlendModeProperty = Globals | BlendMode
 
@@ -7141,7 +5977,7 @@ export type PlaceSelfProperty = Globals | SelfPosition | 'auto' | 'baseline' | '
 
 export type PointerEventsProperty = Globals | 'all' | 'auto' | 'fill' | 'inherit' | 'none' | 'painted' | 'stroke' | 'visible' | 'visibleFill' | 'visiblePainted' | 'visibleStroke'
 
-export type PositionProperty = Globals | '-webkit-sticky' | 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
+export type PositionProperty = Globals | 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
 
 export type QuotesProperty = Globals | 'auto' | 'none' | (string & {})
 
@@ -7325,32 +6161,15 @@ export type TranslateProperty<TLength> = Globals | TLength | 'none' | (string & 
 
 export type UnicodeBidiProperty = Globals | '-moz-isolate' | '-moz-isolate-override' | '-moz-plaintext' | '-webkit-isolate' | 'bidi-override' | 'embed' | 'isolate' | 'isolate-override' | 'normal' | 'plaintext'
 
-export type UserSelectProperty = Globals | '-moz-none' | 'all' | 'auto' | 'contain' | 'element' | 'none' | 'text'
+export type UserSelectProperty = Globals | 'all' | 'auto' | 'contain' | 'element' | 'none' | 'text'
 
 export type VerticalAlignProperty<TLength> = Globals | TLength | 'baseline' | 'bottom' | 'middle' | 'sub' | 'super' | 'text-bottom' | 'text-top' | 'top' | (string & {})
 
 export type VisibilityProperty = Globals | 'collapse' | 'hidden' | 'visible'
 
-export type WhiteSpaceProperty = Globals | '-moz-pre-wrap' | 'break-spaces' | 'normal' | 'nowrap' | 'pre' | 'pre-line' | 'pre-wrap'
+export type WhiteSpaceProperty = Globals | 'break-spaces' | 'normal' | 'nowrap' | 'pre' | 'pre-line' | 'pre-wrap'
 
-export type WidthProperty<TLength> =
-	| Globals
-	| TLength
-	| '-moz-fit-content'
-	| '-moz-max-content'
-	| '-moz-min-content'
-	| '-webkit-fill-available'
-	| '-webkit-fit-content'
-	| '-webkit-max-content'
-	| 'auto'
-	| 'available'
-	| 'fit-content'
-	| 'intrinsic'
-	| 'max-content'
-	| 'min-content'
-	| 'min-intrinsic'
-	| number
-	| (string & {})
+export type WidthProperty<TLength> = Globals | TLength | '-moz-fit-content' | '-webkit-fill-available' | 'auto' | 'available' | 'fit-content' | 'intrinsic' | 'max-content' | 'min-content' | 'min-intrinsic' | number | (string & {})
 
 export type WillChangeProperty = Globals | AnimateableFeature | 'auto' | (string & {})
 
@@ -7366,138 +6185,9 @@ export type ZIndexProperty = Globals | 'auto' | number | string
 
 export type ZoomProperty = Globals | 'normal' | 'reset' | (string & {}) | number
 
-export type MozAppearanceProperty =
-	| Globals
-	| '-moz-mac-unified-toolbar'
-	| '-moz-win-borderless-glass'
-	| '-moz-win-browsertabbar-toolbox'
-	| '-moz-win-communications-toolbox'
-	| '-moz-win-communicationstext'
-	| '-moz-win-exclude-glass'
-	| '-moz-win-glass'
-	| '-moz-win-media-toolbox'
-	| '-moz-win-mediatext'
-	| '-moz-window-button-box'
-	| '-moz-window-button-box-maximized'
-	| '-moz-window-button-close'
-	| '-moz-window-button-maximize'
-	| '-moz-window-button-minimize'
-	| '-moz-window-button-restore'
-	| '-moz-window-frame-bottom'
-	| '-moz-window-frame-left'
-	| '-moz-window-frame-right'
-	| '-moz-window-titlebar'
-	| '-moz-window-titlebar-maximized'
-	| 'button'
-	| 'button-arrow-down'
-	| 'button-arrow-next'
-	| 'button-arrow-previous'
-	| 'button-arrow-up'
-	| 'button-bevel'
-	| 'button-focus'
-	| 'caret'
-	| 'checkbox'
-	| 'checkbox-container'
-	| 'checkbox-label'
-	| 'checkmenuitem'
-	| 'dualbutton'
-	| 'groupbox'
-	| 'listbox'
-	| 'listitem'
-	| 'menuarrow'
-	| 'menubar'
-	| 'menucheckbox'
-	| 'menuimage'
-	| 'menuitem'
-	| 'menuitemtext'
-	| 'menulist'
-	| 'menulist-button'
-	| 'menulist-text'
-	| 'menulist-textfield'
-	| 'menupopup'
-	| 'menuradio'
-	| 'menuseparator'
-	| 'meterbar'
-	| 'meterchunk'
-	| 'none'
-	| 'progressbar'
-	| 'progressbar-vertical'
-	| 'progresschunk'
-	| 'progresschunk-vertical'
-	| 'radio'
-	| 'radio-container'
-	| 'radio-label'
-	| 'radiomenuitem'
-	| 'range'
-	| 'range-thumb'
-	| 'resizer'
-	| 'resizerpanel'
-	| 'scale-horizontal'
-	| 'scale-vertical'
-	| 'scalethumb-horizontal'
-	| 'scalethumb-vertical'
-	| 'scalethumbend'
-	| 'scalethumbstart'
-	| 'scalethumbtick'
-	| 'scrollbarbutton-down'
-	| 'scrollbarbutton-left'
-	| 'scrollbarbutton-right'
-	| 'scrollbarbutton-up'
-	| 'scrollbarthumb-horizontal'
-	| 'scrollbarthumb-vertical'
-	| 'scrollbartrack-horizontal'
-	| 'scrollbartrack-vertical'
-	| 'searchfield'
-	| 'separator'
-	| 'sheet'
-	| 'spinner'
-	| 'spinner-downbutton'
-	| 'spinner-textfield'
-	| 'spinner-upbutton'
-	| 'splitter'
-	| 'statusbar'
-	| 'statusbarpanel'
-	| 'tab'
-	| 'tab-scroll-arrow-back'
-	| 'tab-scroll-arrow-forward'
-	| 'tabpanel'
-	| 'tabpanels'
-	| 'textfield'
-	| 'textfield-multiline'
-	| 'toolbar'
-	| 'toolbarbutton'
-	| 'toolbarbutton-dropdown'
-	| 'toolbargripper'
-	| 'toolbox'
-	| 'tooltip'
-	| 'treeheader'
-	| 'treeheadercell'
-	| 'treeheadersortarrow'
-	| 'treeitem'
-	| 'treeline'
-	| 'treetwisty'
-	| 'treetwistyopen'
-	| 'treeview'
-
-export type MozBindingProperty = Globals | 'none' | (string & {})
-
-export type MozBorderBottomColorsProperty = Globals | Color | 'none' | (string & {})
-
-export type MozBorderLeftColorsProperty = Globals | Color | 'none' | (string & {})
-
-export type MozBorderRightColorsProperty = Globals | Color | 'none' | (string & {})
-
-export type MozBorderTopColorsProperty = Globals | Color | 'none' | (string & {})
-
-export type MozContextPropertiesProperty = Globals | 'fill' | 'fill-opacity' | 'none' | 'stroke' | 'stroke-opacity' | (string & {})
-
 export type MozFloatEdgeProperty = Globals | 'border-box' | 'content-box' | 'margin-box' | 'padding-box'
 
-export type MozImageRegionProperty = Globals | 'auto' | (string & {})
-
 export type MozOrientProperty = Globals | 'block' | 'horizontal' | 'inline' | 'vertical'
-
-export type MozOutlineRadiusProperty<TLength> = Globals | TLength | (string & {})
 
 export type MozOutlineRadiusBottomleftProperty<TLength> = Globals | TLength | (string & {})
 
@@ -7507,91 +6197,9 @@ export type MozOutlineRadiusTopleftProperty<TLength> = Globals | TLength | (stri
 
 export type MozOutlineRadiusToprightProperty<TLength> = Globals | TLength | (string & {})
 
-export type MozStackSizingProperty = Globals | 'ignore' | 'stretch-to-fit'
-
-export type MozTextBlinkProperty = Globals | 'blink' | 'none'
-
 export type MozUserFocusProperty = Globals | 'ignore' | 'none' | 'normal' | 'select-after' | 'select-all' | 'select-before' | 'select-menu' | 'select-same'
 
-export type MozUserInputProperty = Globals | 'auto' | 'disabled' | 'enabled' | 'none'
-
 export type MozUserModifyProperty = Globals | 'read-only' | 'read-write' | 'write-only'
-
-export type MozWindowDraggingProperty = Globals | 'drag' | 'no-drag'
-
-export type MozWindowShadowProperty = Globals | 'default' | 'menu' | 'none' | 'sheet' | 'tooltip'
-
-export type MsAcceleratorProperty = Globals | 'false' | 'true'
-
-export type MsBlockProgressionProperty = Globals | 'bt' | 'lr' | 'rl' | 'tb'
-
-export type MsContentZoomChainingProperty = Globals | 'chained' | 'none'
-
-export type MsContentZoomSnapProperty = Globals | 'mandatory' | 'none' | 'proximity' | (string & {})
-
-export type MsContentZoomSnapTypeProperty = Globals | 'mandatory' | 'none' | 'proximity'
-
-export type MsContentZoomingProperty = Globals | 'none' | 'zoom'
-
-export type MsFlowFromProperty = Globals | 'none' | (string & {})
-
-export type MsFlowIntoProperty = Globals | 'none' | (string & {})
-
-export type MsHighContrastAdjustProperty = Globals | 'auto' | 'none'
-
-export type MsHyphenateLimitCharsProperty = Globals | 'auto' | (string & {}) | number
-
-export type MsHyphenateLimitLinesProperty = Globals | 'no-limit' | number
-
-export type MsHyphenateLimitZoneProperty<TLength> = Globals | TLength | (string & {})
-
-export type MsImeAlignProperty = Globals | 'after' | 'auto'
-
-export type MsOverflowStyleProperty = Globals | '-ms-autohiding-scrollbar' | 'auto' | 'none' | 'scrollbar'
-
-export type MsScrollChainingProperty = Globals | 'chained' | 'none'
-
-export type MsScrollLimitXMaxProperty<TLength> = Globals | TLength | 'auto'
-
-export type MsScrollLimitXMinProperty<TLength> = Globals | TLength
-
-export type MsScrollLimitYMaxProperty<TLength> = Globals | TLength | 'auto'
-
-export type MsScrollLimitYMinProperty<TLength> = Globals | TLength
-
-export type MsScrollRailsProperty = Globals | 'none' | 'railed'
-
-export type MsScrollSnapTypeProperty = Globals | 'mandatory' | 'none' | 'proximity'
-
-export type MsScrollTranslationProperty = Globals | 'none' | 'vertical-to-horizontal'
-
-export type MsScrollbar3dlightColorProperty = Globals | Color
-
-export type MsScrollbarArrowColorProperty = Globals | Color
-
-export type MsScrollbarBaseColorProperty = Globals | Color
-
-export type MsScrollbarDarkshadowColorProperty = Globals | Color
-
-export type MsScrollbarFaceColorProperty = Globals | Color
-
-export type MsScrollbarHighlightColorProperty = Globals | Color
-
-export type MsScrollbarShadowColorProperty = Globals | Color
-
-export type MsScrollbarTrackColorProperty = Globals | Color
-
-export type MsTextAutospaceProperty = Globals | 'ideograph-alpha' | 'ideograph-numeric' | 'ideograph-parenthesis' | 'ideograph-space' | 'none'
-
-export type MsTouchSelectProperty = Globals | 'grippers' | 'none'
-
-export type MsUserSelectProperty = Globals | 'element' | 'none' | 'text'
-
-export type MsWrapFlowProperty = Globals | 'auto' | 'both' | 'clear' | 'end' | 'maximum' | 'start'
-
-export type MsWrapMarginProperty<TLength> = Globals | TLength
-
-export type MsWrapThroughProperty = Globals | 'none' | 'wrap'
 
 export type WebkitAppearanceProperty =
 	| Globals
@@ -7643,14 +6251,6 @@ export type WebkitAppearanceProperty =
 	| 'square-button'
 	| 'textarea'
 	| 'textfield'
-
-export type WebkitBorderBeforeProperty<TLength> = Globals | LineWidth<TLength> | LineStyle | Color | (string & {})
-
-export type WebkitBorderBeforeColorProperty = Globals | Color
-
-export type WebkitBorderBeforeStyleProperty = Globals | LineStyle | (string & {})
-
-export type WebkitBorderBeforeWidthProperty<TLength> = Globals | LineWidth<TLength> | (string & {})
 
 export type WebkitBoxReflectProperty<TLength> = Globals | TLength | 'above' | 'below' | 'left' | 'right' | (string & {})
 
@@ -7876,7 +6476,7 @@ type DeprecatedSystemColor =
 	| 'WindowFrame'
 	| 'WindowText'
 
-type DisplayInside = '-ms-flexbox' | '-ms-grid' | '-webkit-flex' | 'flex' | 'flow' | 'flow-root' | 'grid' | 'ruby' | 'table'
+type DisplayInside = 'flex' | 'flow' | 'flow-root' | 'grid' | 'ruby' | 'table'
 
 type DisplayInternal =
 	| 'ruby-base'
@@ -7892,7 +6492,7 @@ type DisplayInternal =
 	| 'table-row'
 	| 'table-row-group'
 
-type DisplayLegacy = '-ms-inline-flexbox' | '-ms-inline-grid' | '-webkit-inline-flex' | 'inline-block' | 'inline-flex' | 'inline-grid' | 'inline-list-item' | 'inline-table'
+type DisplayLegacy = 'inline-block' | 'inline-flex' | 'inline-grid' | 'inline-list-item' | 'inline-table'
 
 type DisplayOutside = 'block' | 'inline' | 'run-in'
 

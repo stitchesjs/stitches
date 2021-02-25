@@ -1,8 +1,8 @@
 import cp from 'child_process'
 import fp from 'path'
-import fs from 'fs/promises'
+import fs from './fs.mjs'
 import os from 'os'
-import { bold, dim, green, red } from './color.js'
+import { bold, dim, green, red } from './color.mjs'
 
 // Creates a unique temporary directory
 !(async () => {

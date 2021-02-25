@@ -3,14 +3,17 @@
   "version": "0.1.0-canary.12",
   "description": "The modern CSS-in-JS library",
   "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "typings": "types/index.d.ts",
-  "main": "dist/stitches.core.cjs.cjs",
-  "module": "dist/stitches.core.esm.mjs",
-  "unpkg": "dist/stitches.core.iife.js",
+  "jsdelivr": "dist/index.iife.js",
+  "unpkg": "dist/index.iife.js",
   "files": [
     "dist",
-    "types"
+    "types",
+    "utils"
   ],
+  "sideEffects": false,
   "license": "MIT",
   "repository": "modulz/stitches",
   "homepage": "https://github.com/modulz/stitches#readme",
