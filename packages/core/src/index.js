@@ -151,7 +151,7 @@ const createCss = (init) => {
 		/** Styles for the current component, when extending another component. */
 		extendedStyle,
 	) => {
-		const { variants: variantsStyle, compoundVariants, defaultVariants, ...style } = Object(extendedStyle || initStyle)
+		const { variants: variantsStyle, defaultVariants, ...style } = Object(extendedStyle || initStyle)
 
 		/** Composing rule, if present, otherwise an empty object. */
 		const composer = Object(extendedStyle && initStyle)
@@ -211,6 +211,30 @@ const createCss = (init) => {
 			}
 		}
 
+		/* Array of compound variant rules to be extended */
+		const compoundVariants = (Object(initStyle).compoundVariants || [])
+
+		if (extendedStyle) {
+			for (const extendedCompound of (Object(extendedStyle).compoundVariants || [])) {
+				let index;
+
+				if (
+					(index = compoundVariants.findIndex((compound) => {
+						const { css: compoundStyle, ...compounders } = Object(compound)
+
+						return Object.keys(compounders).every((compounder) => (
+							compound[compounder] === extendedCompound[compounder]
+						))
+					})) > -1
+				) {
+					const mergedCompoundVariant = assign(create(null), compoundVariants[index], { css: assign(compoundVariants[index].css, extendedCompound.css) })
+					compoundVariants.slice(index, 1, mergedCompoundVariant)
+				} else {
+					compoundVariants.push(extendedCompound)
+				}
+			}
+		}
+
 		styledRules.addCss(primaryRules).addCss(variantRules).addCss(combineRules).addCss(inlinedRules)
 
 		function classNames() {
@@ -242,7 +266,7 @@ const createCss = (init) => {
 				delete props[classProp]
 			}
 
-			for (const compound of [].concat(compoundVariants || [])) {
+			for (const compound of compoundVariants) {
 				const { css: compoundStyle, ...compounders } = Object(compound)
 
 				let appliedCompoundStyle = compoundStyle
@@ -337,6 +361,7 @@ const createCss = (init) => {
 			},
 			classNames,
 			variants,
+			compoundVariants,
 		})
 	}
 
