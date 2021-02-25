@@ -85,7 +85,7 @@ describe('Composition', () => {
 				}
 			}
 		}
-    const component = css(composed, extendedStyles)
+		const component = css(composed, extendedStyles)
 		const expression = component({ size: 'small', color: 'red', level: 3 })
 
 		const className = getHashString('sx', componentStyles)
@@ -124,7 +124,7 @@ describe('Composition', () => {
 				}
 			}]
 		}
-    const component = css(composed, extendedStyles)
+		const component = css(composed, extendedStyles)
 		const expression = component({ size: 'small', color: 'blue', level: 2 })
 
 		const className = getHashString('sx', componentStyles)
