@@ -151,7 +151,7 @@ const createCss = (init) => {
 		/** Styles for the current component, when extending another component. */
 		extendedStyle,
 	) => {
-		const { variants: variantsStyle, defaultVariants, ...style } = Object(extendedStyle || initStyle)
+		const { variants: variantsStyle, compoundVariants: compoundVariantsStyle, defaultVariants, ...style } = Object(extendedStyle || initStyle)
 
 		/** Composing rule, if present, otherwise an empty object. */
 		const composer = Object(extendedStyle && initStyle)
