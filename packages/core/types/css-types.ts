@@ -5780,7 +5780,7 @@ export type LetterSpacingProperty<TLength> = Globals | TLength | 'normal' | numb
 
 export type LineBreakProperty = Globals | 'anywhere' | 'auto' | 'loose' | 'normal' | 'strict'
 
-export type LineClampProperty = Globals | 'none' | number
+export type LineClampProperty = Globals | 'none' | number | (string & {})
 
 export type LineHeightProperty<TLength> = Globals | TLength | 'normal' | number | (string & {})
 
@@ -6254,7 +6254,7 @@ export type WebkitAppearanceProperty =
 
 export type WebkitBoxReflectProperty<TLength> = Globals | TLength | 'above' | 'below' | 'left' | 'right' | (string & {})
 
-export type WebkitLineClampProperty = Globals | 'none' | number
+export type WebkitLineClampProperty = Globals | 'none' | number | (string & {})
 
 export type WebkitMaskProperty<TLength> = Globals | Position<TLength> | RepeatStyle | Box | 'border' | 'content' | 'none' | 'padding' | 'text' | (string & {})
 
