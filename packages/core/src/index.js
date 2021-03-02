@@ -72,6 +72,8 @@ const createCss = (init) => {
 				if (!currentCssHead) currentCssHead = document.head || document.documentElement
 				if (!currentCssNode) currentCssNode = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches' })
 				if (!currentCssNode.parentNode) currentCssHead.prepend(currentCssNode)
+
+				currentCssNode.textContent = nextUpdate
 			}
 		}
 	}
