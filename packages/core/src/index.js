@@ -402,6 +402,8 @@ const createCss = (init) => {
 		)
 	}
 
+	const defaultTheme = theme(':root', themeInit)()
+
 	const sheet = createComponent(
 		{
 			css,
@@ -416,7 +418,7 @@ const createCss = (init) => {
 				styledCss.clear()
 				return sheet
 			},
-			theme: defineProperties(theme, getOwnPropertyDescriptors(theme(':root', themeInit)())),
+			theme: defineProperties(theme, getOwnPropertyDescriptors(defaultTheme)),
 			get cssText() {
 				return currentCssText
 			},
