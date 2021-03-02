@@ -1,7 +1,7 @@
-import buildPackage from './build-package.mjs'
-import buildShared from './build-shared.mjs'
-import fs from './fs.mjs'
-import { corePackageUrl, reactPackageUrl } from './internal/dirs.mjs'
+import buildPackage from './build-package.js'
+import buildShared from './build-shared.js'
+import fs from './fs.js'
+import { corePackageUrl, reactPackageUrl } from './internal/dirs.js'
 
 async function build() {
 	console.log()

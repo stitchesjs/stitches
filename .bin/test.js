@@ -1,5 +1,5 @@
-import fs from './fs.mjs'
-import expect from './internal/expect.mjs'
+import fs from './fs.js'
+import expect from './internal/expect.js'
 
 const test = (root) =>
 	Promise.all(

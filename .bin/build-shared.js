@@ -1,6 +1,6 @@
-import fs from './fs.mjs'
-import { corePackageUrl, reactPackageUrl, rootUrl } from './internal/dirs.mjs'
-import { bold, dim, underline } from './color.mjs'
+import fs from './fs.js'
+import { corePackageUrl, reactPackageUrl, rootUrl } from './internal/dirs.js'
+import { bold, dim, underline } from './color.js'
 
 async function buildShared(packageUrl) {
 	const sharedUrl = new URL('shared/', rootUrl)
