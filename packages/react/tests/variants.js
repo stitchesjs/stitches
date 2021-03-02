@@ -29,7 +29,7 @@ describe('Variants', () => {
 		expect(expression3.props.className).toBe('sx03kze sx03kze11nwi--color-blue')
 	})
 
-	test('Variant with an explicit undefined will work', () => {
+	test('Variant with an explicit undefined will not use default variant', () => {
 		const { styled } = createCss()
 		const component = styled('div', {
 			variants: {
@@ -51,7 +51,7 @@ describe('Variants', () => {
 		})
 
 		const expression1 = component.render()
-		expect(expression1.props.className).toBe('sx03kze sx03kze11nwi--color-blue')
+		expect(expression1.props.className).toBe('sx03kze sx03kzer02wp--color-undefined')
 
 		const expression2 = component.render({ color: 'red' })
 		expect(expression2.props.className).toBe('sx03kze sx03kze3ye05--color-red')

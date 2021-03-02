@@ -86,12 +86,12 @@ describe('Variants', () => {
 		const component = css(componentConfig)
 		const expression = component({ size: 'small', color: 'blue' })
 
-		const expressionSizeSmallCssText = '.sx03kzetmy8g--size-small{font-size:16px;}'
 		const expressionColorBlueCssText = '.sx03kze4wpam--color-blue{background-color:dodgerblue;color:white;}'
-		const expressionCompoundCssText = '.sx03kzeif1wl--comp{transform:scale(1.2);}'
+		const expressionSizeSmallCssText = '.sx03kzetmy8g--size-small{font-size:16px;}'
+		const expressionCompoundCssText = '.sx03kzeif1wl--c2{transform:scale(1.2);}'
 
-		expect(expression.className).toBe('sx03kze sx03kzeif1wl--comp sx03kzetmy8g--size-small sx03kze4wpam--color-blue')
-		expect(toString()).toBe(expressionSizeSmallCssText + expressionColorBlueCssText + expressionCompoundCssText)
+		expect(expression.className).toBe('sx03kze sx03kze4wpam--color-blue sx03kzetmy8g--size-small sx03kzeif1wl--c2')
+		expect(toString()).toBe(expressionColorBlueCssText + expressionSizeSmallCssText + expressionCompoundCssText)
 	})
 })
 
@@ -171,13 +171,13 @@ describe('Variants with defaults', () => {
 		const component = css(componentConfig)
 		const expression = component({ level: 1 })
 
-		expect(expression.className).toBe('sx03kze sx03kzehmqox--level-1 sx03kzetmy8g--size-small')
+		expect(expression.className).toBe('sx03kze sx03kzetmy8g--size-small sx03kzehmqox--level-1')
 		expect(toString()).toBe(
 			[
-				// explicit level:1
-				'.sx03kzehmqox--level-1{padding:0.5em;}',
 				// implicit size:small
 				'.sx03kzetmy8g--size-small{font-size:16px;}',
+				// explicit level:1
+				'.sx03kzehmqox--level-1{padding:0.5em;}',
 			].join(''),
 		)
 	})
@@ -187,7 +187,7 @@ describe('Variants with defaults', () => {
 		const component = css(componentConfig)
 		const expression = component({ color: 'blue' })
 
-		expect(expression.className).toBe('sx03kze sx03kzeif1wl--comp sx03kze4wpam--color-blue sx03kzetmy8g--size-small')
+		expect(expression.className).toBe('sx03kze sx03kze4wpam--color-blue sx03kzetmy8g--size-small sx03kzeif1wl--c2')
 		expect(toString()).toBe(
 			[
 				// explicit color:blue
@@ -195,7 +195,7 @@ describe('Variants with defaults', () => {
 				// implicit size:small
 				'.sx03kzetmy8g--size-small{font-size:16px;}',
 				// compound color:blue + size:small
-				'.sx03kzeif1wl--comp{transform:scale(1.2);}',
+				'.sx03kzeif1wl--c2{transform:scale(1.2);}',
 			].join(''),
 		)
 	})
@@ -206,12 +206,7 @@ describe('Variants with defaults', () => {
 		const className = component.toString()
 
 		expect(className).toBe('sx03kze')
-		expect(toString()).toBe(
-			[
-				// implicit size:small
-				'.sx03kzetmy8g--size-small{font-size:16px;}',
-			].join(''),
-		)
+		expect(toString()).toBe('')
 	})
 })
 
@@ -288,7 +283,7 @@ describe('Conditional variants', () => {
 		const { css, toString } = createCss(config)
 		const component = css(componentConfig)
 		const componentClassName = `sx03kze`
-		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
+		const componentSmallBp1ClassName = `${componentClassName}iopr7--size-small`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
 
 		expect(component({ size: { bp1: 'small' } }).className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
@@ -299,10 +294,10 @@ describe('Conditional variants', () => {
 		const { css, toString } = createCss(config)
 		const component = css(componentConfig)
 		const componentClassName = `sx03kze`
-		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
-		const componentLargeBp2ClassName = `${componentClassName}fhyhx--size-large--8c3r4`
+		const componentSmallBp1ClassName = `${componentClassName}iopr7--size-small`
+		const componentLargeBp2ClassName = `${componentClassName}o7z8r--size-large`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
-		const componentLargeBp2CssText = `@media (min-width: 768px){.sx03kzefhyhx--size-large--8c3r4{font-size:24px;}}`
+		const componentLargeBp2CssText = `@media (min-width: 768px){.sx03kzeo7z8r--size-large{font-size:24px;}}`
 
 		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
@@ -312,10 +307,10 @@ describe('Conditional variants', () => {
 		const { css, toString } = createCss(config)
 		const component = css(componentConfig)
 		const componentClassName = `sx03kze`
-		const componentSmallBp1ClassName = `${componentClassName}tmy8g--size-small--5m2l7`
-		const componentLargeBp2ClassName = `${componentClassName}fhyhx--size-large--8c3r4`
+		const componentSmallBp1ClassName = `${componentClassName}iopr7--size-small`
+		const componentLargeBp2ClassName = `${componentClassName}o7z8r--size-large`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
-		const componentLargeBp2CssText = `@media (min-width: 768px){.sx03kzefhyhx--size-large--8c3r4{font-size:24px;}}`
+		const componentLargeBp2CssText = `@media (min-width: 768px){.sx03kzeo7z8r--size-large{font-size:24px;}}`
 
 		expect(component({ size: { bp1: 'small', bp2: 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))

@@ -1,5 +1,5 @@
 import fs from './fs.mjs'
-import { corePackageUrl, reactPackageUrl, rootUrl } from './build-dirs.mjs'
+import { corePackageUrl, reactPackageUrl, rootUrl } from './internal/dirs.mjs'
 import { bold, dim, underline } from './color.mjs'
 
 async function buildShared(packageUrl) {

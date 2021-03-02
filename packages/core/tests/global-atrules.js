@@ -7,7 +7,7 @@ describe('Support @import', () => {
 		const importURL = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 
 		global({
-			'@import': `"${importURL}"`
+			'@import': `"${importURL}"`,
 		})()
 
 		expect(toString()).toBe(`@import "${importURL}";`)
@@ -20,7 +20,7 @@ describe('Support @import', () => {
 		const importURL2 = `https://unpkg.com/sanitize.css@12.0.1/typography.css`
 
 		global({
-			'@import': [`"${importURL1}"`, `"${importURL2}"`]
+			'@import': [`"${importURL1}"`, `"${importURL2}"`],
 		})()
 
 		expect(toString()).toBe(`@import "${importURL1}";@import "${importURL2}";`)
@@ -45,12 +45,14 @@ describe('Support @font-face', () => {
 					`local("Ubuntu")`,
 					`local("Roboto-Regular")`,
 					`local("DroidSans")`,
-					`local("Tahoma")`
-				]
-			}
+					`local("Tahoma")`,
+				],
+			},
 		})()
 
-		expect(toString()).toBe(`@font-face{font-family:system-ui;font-style:normal;font-weight:400;src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma");}`)
+		expect(toString()).toBe(
+			`@font-face{font-family:system-ui;font-style:normal;font-weight:400;src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma");}`,
+		)
 	})
 	test('Authors can define multiple @font-face rules', () => {
 		const { global, toString } = createCss({})
@@ -70,8 +72,8 @@ describe('Support @font-face', () => {
 						`local("Ubuntu")`,
 						`local("Roboto-Regular")`,
 						`local("DroidSans")`,
-						`local("Tahoma")`
-					]
+						`local("Tahoma")`,
+					],
 				},
 				{
 					fontFamily: 'system-ui',
@@ -86,10 +88,10 @@ describe('Support @font-face', () => {
 						`local("Ubuntu Italic")`,
 						`local("Roboto-Italic")`,
 						`local("DroidSans")`,
-						`local("Tahoma")`
-					]
-				}
-			]
+						`local("Tahoma")`,
+					],
+				},
+			],
 		})()
 
 		const cssFontFaceRule1 = `@font-face{font-family:system-ui;font-style:normal;font-weight:400;src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma");}`
