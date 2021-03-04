@@ -1,5 +1,5 @@
 import esbuild from 'esbuild'
-import fs from './fs.js'
+import fs from './internal/fs.js'
 import zlib from 'zlib'
 import { minify } from 'terser'
 import { bold, underline } from './color.js'

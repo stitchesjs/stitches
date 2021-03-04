@@ -1,6 +1,6 @@
 import buildPackage from './build-package.js'
 import buildShared from './build-shared.js'
-import fs from './fs.js'
+import fs from './internal/fs.js'
 import { corePackageUrl, reactPackageUrl } from './internal/dirs.js'
 
 async function build() {

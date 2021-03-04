@@ -1,4 +1,4 @@
-import fs from './fs.js'
+import fs from './internal/fs.js'
 import { corePackageUrl, reactPackageUrl, rootUrl } from './internal/dirs.js'
 import { bold, dim, underline } from './color.js'
 
