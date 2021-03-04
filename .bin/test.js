@@ -1,4 +1,4 @@
-import fs from './fs.js'
+import fs from './internal/fs.js'
 import expect from './internal/expect.js'
 
 const test = (root) =>

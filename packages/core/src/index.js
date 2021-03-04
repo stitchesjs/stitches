@@ -199,9 +199,11 @@ const createCss = (init) => {
 
 		for (const init of inits) {
 			if (init === Object(init)) {
-				if (isArray(init[$$composers])) {
+				const nextComposers = init[$$composers]
+
+				if (nextComposers) {
 					// copy composers
-					composers.push(...init[$$composers])
+					composers.push(...nextComposers)
 				} else if (Object === (init.constructor || Object)) {
 					// merge styles
 					deepMerge(initStyle, init)
@@ -230,6 +232,7 @@ const createCss = (init) => {
 				},
 			}),
 		)
+
 		const inlineCss = new StringSet()
 		const unitedCss = new StringSet([primalCss, variedCss, inlineCss])
 
@@ -280,6 +283,7 @@ const createCss = (init) => {
 				}
 
 				const variantConditions = new Set()
+
 				if (
 					variantConfigKeys.length &&
 					variantConfigKeys.every((key) => {
@@ -316,25 +320,40 @@ const createCss = (init) => {
 			variants.push(applyVariant)
 		}
 
+		const composer = (props, classNames) => {
+			classNames.add(className)
+
+			const hasPrimalChanged = primalCss.hasChanged
+			const hasVariedChanged = variedCss.hasChanged
+
+			primalCss.add(cssText)
+
+			for (const variant of variants) {
+				const variantClassName = variant(props)
+
+				if (variantClassName) {
+					classNames.add(variantClassName)
+				}
+			}
+
+			return hasPrimalChanged() || hasVariedChanged()
+		}
+
+		composers.push(composer)
+
 		return createComponent(
 			(initProps) => {
 				const { css, ...props } = Object(initProps)
 
-				const hasPrimalChanged = primalCss.hasChanged
-				const hasVariedChanged = variedCss.hasChanged
-				const hasInlineChanged = inlineCss.hasChanged
+				const classNames = new Set()
 
-				const classNames = new Set([className])
+				let hasComposerChanged = false
 
-				primalCss.add(cssText)
-
-				for (const variant of variants) {
-					const variantClassName = variant(props)
-
-					if (variantClassName) {
-						classNames.add(variantClassName)
-					}
+				for (const composer of composers) {
+					hasComposerChanged = composer(props, classNames) || hasComposerChanged
 				}
+
+				const hasInlineChanged = inlineCss.hasChanged
 
 				if (css === Object(css)) {
 					const inlineSuffix = getHashString('-', css)
@@ -348,7 +367,7 @@ const createCss = (init) => {
 					}
 				}
 
-				if (hasPrimalChanged() || hasVariedChanged() || hasInlineChanged()) {
+				if (hasComposerChanged || hasInlineChanged()) {
 					styledCss.add(unitedCss)
 
 					update()
@@ -374,7 +393,7 @@ const createCss = (init) => {
 					},
 					className: props.className,
 					props,
-					selector: '.' + classNameSetArray.join('.'),
+					selector,
 				})
 			},
 			'className',

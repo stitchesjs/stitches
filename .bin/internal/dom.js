@@ -137,39 +137,36 @@ class Screen {
 
 const parseGlobal = parseHTML('<!doctype html><html><head></head><body></body></html>')
 
-const window = ownKeys.reduce(
+const window = Object.create(Window.prototype)
+
+ownKeys.reduce(
 	(window, key) => {
 		Reflect.set(window, key, parseGlobal[key])
 
 		return window
 	},
-	Object.assign(
-		Object.setPrototypeOf(globalThis, Window.prototype),
-		Object.create(Window.prototype),
-		{
-			PerformanceObserver,
-			Screen,
-			Window,
-			alert(message) {
-				void String(message)
-			},
-			atob(data) {
-				return Buffer.from(data, 'base64').toString('binary')
-			},
-			btoa(data) {
-				return Buffer.from(b).toString('base64')
-			},
-			performance,
-			screen: new Screen(),
-			screenLeft: 0,
-			screenTop: 0,
-			screenX: 0,
-			screenY: 0,
-			scrollX: 0,
-			scrollY: 0,
-			status: '',
-			window: globalThis,
+	Object.assign(window, globalThis, {
+		PerformanceObserver,
+		Screen,
+		Window,
+		alert(message) {
+			void String(message)
 		},
-		globalThis,
-	),
+		atob(data) {
+			return Buffer.from(data, 'base64').toString('binary')
+		},
+		btoa(data) {
+			return Buffer.from(b).toString('base64')
+		},
+		performance,
+		screen: new Screen(),
+		screenLeft: 0,
+		screenTop: 0,
+		screenX: 0,
+		screenY: 0,
+		scrollX: 0,
+		scrollY: 0,
+		status: '',
+		window: window,
+	}),
 )

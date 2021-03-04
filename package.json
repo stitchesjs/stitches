@@ -49,6 +49,14 @@
     "maintained node versions"
   ],
   "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    },
+    "extends": [
+      "plugin:@typescript-eslint/recommended"
+    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
       "ecmaVersion": 2020,
@@ -62,9 +70,6 @@
         "version": "detect"
       }
     },
-    "extends": [
-      "plugin:@typescript-eslint/recommended"
-    ],
     "rules": {
       "@typescript-eslint/ban-types": [
         "error",
