@@ -1,6 +1,6 @@
 import { deepEqual as toEqual, equal as toBe, notDeepEqual as toNotEqual, notEqual as toNotBe } from 'node:assert/strict'
 
-module.exports = function expect(actual) {
+export default function expect(actual) {
 	return {
 		/** Tests for strict equality between the actual and expected parameters. */
 		toBe: toBe.bind(this, actual),
