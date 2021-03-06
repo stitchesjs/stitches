@@ -330,17 +330,18 @@ const createCss = (init) => {
 	}
 
 	const css = (...inits) => {
-		let type = 'span'
+		let type
 		let composers = []
 		let composer
 
 		for (const init of inits) {
 			if ($$composers in Object(init)) {
+				type = init.type || type
 				composers.push(...init[$$composers])
 			} else if (init && typeof init === 'object' && !('type' in init)) {
 				composers.push((composer = createComposer(init)))
 			} else {
-				type = init
+				type = ('type' in Object(init) ? init.type : init) || type
 			}
 		}
 
