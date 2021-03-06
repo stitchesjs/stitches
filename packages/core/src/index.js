@@ -1,14 +1,14 @@
 import { assign, create, createComponent, defineProperties, getOwnPropertyDescriptors } from './Object.js'
-import { from, isArray } from './Array.js'
+import { from } from './Array.js'
 import { ownKeys } from './Reflect.js'
 import StringSet from './StringSet.js'
 import createGetComputedCss from './createGetComputedCss.js'
-import deepMerge from './deepMerge.js'
 import defaultThemeMap from './defaultThemeMap.js'
 import getCustomProperties from './getCustomProperties.js'
 import getHashString from './getHashString.js'
 import ThemeToken from './ThemeToken.js'
-import { $$composers, toPrimitive } from './Symbol.js'
+import { $$composers } from './Symbol.js'
+import StringArray from './StringArray.js'
 
 /** Returns a new styled sheet and accompanying API. */
 const createCss = (init) => {
@@ -192,48 +192,11 @@ const createCss = (init) => {
 		return assign(global({ ['@keyframes ' + displayName]: style }), { displayName })
 	}
 
-	const css = (...inits) => {
-		let composers = []
-		let initStyle = {}
-		let type = 'span'
-
-		for (const init of inits) {
-			if (init === Object(init)) {
-				const nextComposers = init[$$composers]
-
-				if (nextComposers) {
-					// copy composers
-					composers.push(...nextComposers)
-				} else if (Object === (init.constructor || Object)) {
-					// merge styles
-					deepMerge(initStyle, init)
-				}
-				// ignore any other object and continue
-			} else {
-				// set type
-				type = String(init)
-			}
-		}
-
+	const createComposer = (initStyle) => {
 		const primalCss = new StringSet()
-		const variedCss = defineProperties(
-			[],
-			getOwnPropertyDescriptors({
-				get hasChanged() {
-					const cssText = String(this)
-
-					return () => cssText !== String(this)
-				},
-				[toPrimitive]() {
-					return this.join('')
-				},
-				toString() {
-					return this.join('')
-				},
-			}),
-		)
-
+		const variedCss = new StringArray()
 		const inlineCss = new StringSet()
+
 		const unitedCss = new StringSet([primalCss, variedCss, inlineCss])
 
 		const { variants: singularVariants, compoundVariants, defaultVariants, ...style } = initStyle
@@ -320,26 +283,68 @@ const createCss = (init) => {
 			variants.push(applyVariant)
 		}
 
-		const composer = (props, classNames) => {
-			classNames.add(className)
+		return {
+			apply(props, classNames) {
+				const hasPrimalChanged = primalCss.hasChanged
+				const hasVariedChanged = variedCss.hasChanged
 
-			const hasPrimalChanged = primalCss.hasChanged
-			const hasVariedChanged = variedCss.hasChanged
+				primalCss.add(cssText)
 
-			primalCss.add(cssText)
+				if (props) {
+					classNames.add(className)
 
-			for (const variant of variants) {
-				const variantClassName = variant(props)
+					for (const variant of variants) {
+						const variantClassName = variant(props)
 
-				if (variantClassName) {
-					classNames.add(variantClassName)
+						if (variantClassName) {
+							classNames.add(variantClassName)
+						}
+					}
 				}
-			}
 
-			return hasPrimalChanged() || hasVariedChanged()
+				if (hasPrimalChanged() || hasVariedChanged()) {
+					styledCss.add(unitedCss)
+
+					return true
+				}
+			},
+			inline(css) {
+				const inlineSuffix = getHashString('-', css)
+				const inlineSelector = selector + inlineSuffix
+				const inlineCssText = className === '-' + inlineSuffix ? '' : getComputedCss({ [inlineSelector]: css })
+
+				classNames.add(className + inlineSuffix)
+
+				const { hasChanged } = inlineCss
+
+				if (inlineCssText) {
+					inlineCss.add(inlineCssText)
+				}
+
+				return hasChanged()
+			},
+			className,
+			selector,
+			variantProps,
+		}
+	}
+
+	const css = (...inits) => {
+		let type = 'span'
+		let composers = []
+		let composer
+
+		for (const init of inits) {
+			if ($$composers in Object(init)) {
+				composers.push(...init[$$composers])
+			} else if (init && typeof init === 'object' && !('type' in init)) {
+				composers.push((composer = createComposer(init)))
+			} else {
+				type = init
+			}
 		}
 
-		composers.push(composer)
+		composer = composer || createComposer({})
 
 		return createComponent(
 			(initProps) => {
@@ -350,30 +355,18 @@ const createCss = (init) => {
 				let hasComposerChanged = false
 
 				for (const composer of composers) {
-					hasComposerChanged = composer(props, classNames) || hasComposerChanged
+					hasComposerChanged = composer.apply(props, classNames) || hasComposerChanged
 				}
 
-				const hasInlineChanged = inlineCss.hasChanged
+				let hasInlineChanged
 
-				if (css === Object(css)) {
-					const inlineSuffix = getHashString('-', css)
-					const inlineSelector = selector + inlineSuffix
-					const inlineCssText = className === '-' + inlineSuffix ? '' : getComputedCss({ [inlineSelector]: css })
+				if (css === Object(css)) hasInlineChanged = inline(css)
 
-					classNames.add(className + inlineSuffix)
-
-					if (inlineCssText) {
-						inlineCss.add(inlineCssText)
-					}
-				}
-
-				if (hasComposerChanged || hasInlineChanged()) {
-					styledCss.add(unitedCss)
-
+				if (hasComposerChanged || hasInlineChanged) {
 					update()
 				}
 
-				for (const variantName in variantProps) {
+				for (const variantName in composer.variantProps) {
 					if (!passThru.has(variantName)) {
 						delete props[variantName]
 					}
@@ -393,7 +386,7 @@ const createCss = (init) => {
 					},
 					className: props.className,
 					props,
-					selector,
+					selector: composer.selector,
 				})
 			},
 			'className',
@@ -403,19 +396,13 @@ const createCss = (init) => {
 				},
 				/** Applies the primary composer and returns the class name. */
 				get className() {
-					const hasPrimalChanged = primalCss.hasChanged
-
-					primalCss.add(cssText)
-
-					if (hasPrimalChanged()) {
-						styledCss.add(unitedCss)
-
+					if (composer.apply()) {
 						update()
 					}
 
-					return className
+					return composer.className
 				},
-				selector,
+				selector: composer.selector,
 				type,
 			},
 		)
