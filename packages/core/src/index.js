@@ -360,7 +360,7 @@ const createCss = (init) => {
 
 				let hasInlineChanged
 
-				if (css === Object(css)) hasInlineChanged = inline(css)
+				if (css === Object(css)) hasInlineChanged = composer.inline(css)
 
 				if (hasComposerChanged || hasInlineChanged) {
 					update()
