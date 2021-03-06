@@ -308,7 +308,7 @@ const createCss = (init) => {
 					return true
 				}
 			},
-			inline(css) {
+			inline(css, classNames) {
 				const inlineSuffix = getHashString('-', css)
 				const inlineSelector = selector + inlineSuffix
 				const inlineCssText = className === '-' + inlineSuffix ? '' : getComputedCss({ [inlineSelector]: css })
@@ -360,7 +360,7 @@ const createCss = (init) => {
 
 				let hasInlineChanged
 
-				if (css === Object(css)) hasInlineChanged = composer.inline(css)
+				if (css === Object(css)) hasInlineChanged = composer.inline(css, classNames)
 
 				if (hasComposerChanged || hasInlineChanged) {
 					update()
