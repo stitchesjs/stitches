@@ -17,7 +17,7 @@ const createCss = (init) => {
 				...args
 			) => {
 				const composition = sheet.css(...args)
-				const defaultType = composition.type || composition || 'span'
+				const defaultType = composition.type || 'span'
 
 				/** Returns a React element. */
 				return Object.setPrototypeOf(
