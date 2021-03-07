@@ -58,18 +58,30 @@ describe('Issue #416', () => {
 			return Rendered.toJSON()
 		}
 
+		const classOfAppearancePrimary = 'sx7vw5z03kze--appearance-primary'
+		const classOfAppearanceSecondary = 'sx7vw5z8kgjb--appearance-secondary'
+		const classOfColorLightBlue = 'sx7vw5z2xt05--color-lightBlue'
+		const classOfColorRed = `sx7vw5z03kze--color-red`
+		const classOfCompound = 'sx7vw5zt2yhf--c2'
+
 		/* Normal variants */
-		expect(RenderOf(Tile, null, 'Red').props.className).toBe('sx7vw5z sx7vw5z03kze--appearance-primary sx7vw5z03kze--color-red')
-		expect(RenderOf(Tile, { color: 'lightBlue' }, 'Blue').props.className).toBe('sx7vw5z sx7vw5z03kze--appearance-primary sx7vw5z2xt05--color-lightBlue')
+		// appearance: primary, color: red
+		expect(RenderOf(Tile, null, 'Red').props.className).toBe(`sx7vw5z ${classOfAppearancePrimary} ${classOfColorRed}`)
+		// appearance: primary, color: lightblue
+		expect(RenderOf(Tile, { color: 'lightBlue' }, 'Blue').props.className).toBe(`sx7vw5z ${classOfAppearancePrimary} ${classOfColorLightBlue}`)
 
 		/* Compound variants */
-		expect(RenderOf(Tile, { appearance: 'secondary' }, 'Red').props.className).toBe('sx7vw5z sx7vw5z8kgjb--appearance-secondary sx7vw5z03kze--color-red')
-		expect(RenderOf(Tile, { appearance: 'secondary', color: 'lightBlue' }, 'Red').props.className).toBe('sx7vw5z sx7vw5z8kgjb--appearance-secondary sx7vw5z2xt05--color-lightBlue sx7vw5zt2yhf--c2')
+		// appearance: primary, color: lightblue
+		expect(RenderOf(Tile, { appearance: 'secondary' }, 'Red').props.className).toBe(`sx7vw5z ${classOfAppearanceSecondary} ${classOfColorRed}`)
+		// appearance: secondary, compound*2
+		expect(RenderOf(Tile, { appearance: 'secondary', color: 'lightBlue' }, 'Red').props.className).toBe(`sx7vw5z ${classOfAppearanceSecondary} ${classOfColorLightBlue} ${classOfCompound}`)
 
 		/* ❌ Restyled compound variants (default) */
-		expect(RenderOf(RoundedTile, null, 'Blue').props.className).toBe('sx7vw5z sx7vw5z03kze--appearance-primary sx7vw5z03kze--color-red sxrtsyk')
+		// appearance: primary, color: red, +
+		expect(RenderOf(RoundedTile, null, 'Blue').props.className).toBe(`sx7vw5z ${classOfAppearanceSecondary} ${classOfColorLightBlue} ${classOfCompound} sxrtsyk`)
 
 		/* ❌ Restyled compound variants (explicit) */
-		expect(RenderOf(RoundedTile, { appearance: 'secondary', color: 'lightBlue' }, 'Blue').props.className).toBe('sx7vw5z sx7vw5z8kgjb--appearance-secondary sx7vw5z2xt05--color-lightBlue sx7vw5zt2yhf--c2 sxrtsyk')
+		// appearance: secondary, compound * 2, +
+		expect(RenderOf(RoundedTile, { appearance: 'secondary', color: 'lightBlue' }, 'Blue').props.className).toBe(`sx7vw5z ${classOfAppearanceSecondary} ${classOfColorLightBlue} ${classOfCompound} sxrtsyk`)
 	})
 })

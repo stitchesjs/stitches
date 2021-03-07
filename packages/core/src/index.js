@@ -199,7 +199,9 @@ const createCss = (init) => {
 
 		const unitedCss = new StringSet([primalCss, variedCss, inlineCss])
 
-		const { variants: singularVariants, compoundVariants, defaultVariants, ...style } = initStyle
+		let { variants: singularVariants, compoundVariants, defaultVariants, ...style } = initStyle
+
+		defaultVariants = Object(defaultVariants)
 
 		const className = getHashString(prefix, style)
 		const selector = '.' + className
@@ -236,10 +238,10 @@ const createCss = (init) => {
 				variantProps[variantKey][variantConfig[variantKey]] = true
 			}
 
-			const applyVariant = (variantInput) => {
+			const applyVariant = (variantInput, defaultVariants) => {
 				variantInput = { ...variantInput }
 
-				for (const defaultVariantName in Object(defaultVariants)) {
+				for (const defaultVariantName in defaultVariants) {
 					if (variantInput[defaultVariantName] === undefined && !variantProps[defaultVariantName][variantInput[defaultVariantName]]) {
 						variantInput[defaultVariantName] = defaultVariants[defaultVariantName]
 					}
@@ -284,7 +286,7 @@ const createCss = (init) => {
 		}
 
 		return {
-			apply(props, classNames) {
+			apply(props, classNames, defaultVariants) {
 				const hasPrimalChanged = primalCss.hasChanged
 				const hasVariedChanged = variedCss.hasChanged
 
@@ -294,7 +296,7 @@ const createCss = (init) => {
 					classNames.add(className)
 
 					for (const variant of variants) {
-						const variantClassName = variant(props)
+						const variantClassName = variant(props, defaultVariants)
 
 						if (variantClassName) {
 							classNames.add(variantClassName)
@@ -324,6 +326,7 @@ const createCss = (init) => {
 				return hasChanged()
 			},
 			className,
+			defaultVariants,
 			selector,
 			variantProps,
 		}
@@ -333,13 +336,18 @@ const createCss = (init) => {
 		let type
 		let composers = []
 		let composer
+		let defaultVariants = create(null)
 
 		for (const init of inits) {
 			if ($$composers in Object(init)) {
 				type = init.type || type
-				composers.push(...init[$$composers])
+				for (const composer of init[$$composers]) {
+					composers.push(composer)
+					assign(defaultVariants, composer.defaultVariants)
+				}
 			} else if (init && typeof init === 'object' && !('type' in init)) {
 				composers.push((composer = createComposer(init)))
+				assign(defaultVariants, composer.defaultVariants)
 			} else {
 				type = ('type' in Object(init) ? init.type : init) || type
 			}
@@ -356,13 +364,12 @@ const createCss = (init) => {
 				let hasComposerChanged = false
 
 				for (const composer of composers) {
-					hasComposerChanged = composer.apply(props, classNames) || hasComposerChanged
+					hasComposerChanged = composer.apply(props, classNames, defaultVariants) || hasComposerChanged
 				}
 
 				let hasInlineChanged
 
 				if (css === Object(css)) {
-					console.log({ composer })
 					hasInlineChanged = composer.inline(css, classNames)
 				}
 
