@@ -116,22 +116,20 @@ const createCss = (init) => {
 			}
 		}
 
-		return createComponent(
-			assign(() => {
-				if (!themedCss.has(cssText)) {
-					themedCss.add(cssText)
+		return createComponent(expression, 'className', {
+			get className() {
+				const { hasChanged } = themedCss
+
+				themedCss.add(cssText)
+
+				if (hasChanged()) {
 					update()
 				}
-				return expression
-			}, expression),
-			'className',
-			{
-				get className() {
-					return this().className
-				},
-				selector,
+
+				return className
 			},
-		)
+			selector,
+		})
 	}
 
 	/** Returns a function that enables the styles on the styled sheet. */
@@ -433,10 +431,10 @@ const createCss = (init) => {
 				themedCss.clear()
 				globalCss.clear()
 				styledCss.clear()
-				defaultTheme()
+				defaultTheme.className
 				return sheet
 			},
-			theme: defineProperties(theme, getOwnPropertyDescriptors(defaultTheme())),
+			theme: assign(theme, defaultTheme),
 			get cssText() {
 				return currentCssText
 			},
