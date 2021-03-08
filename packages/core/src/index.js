@@ -9,6 +9,7 @@ import getHashString from './getHashString.js'
 import ThemeToken from './ThemeToken.js'
 import { $$composers } from './Symbol.js'
 import StringArray from './StringArray.js'
+import defaultInsertMethod from './defaultInsertMethod.js'
 
 /** Returns a new styled sheet and accompanying API. */
 const createCss = (init) => {
@@ -30,6 +31,8 @@ const createCss = (init) => {
 
 	/** Prefix added before all generated class names. */
 	const prefix = init.prefix || 'sx'
+
+	const insertMethod = (typeof init.insertMethod === 'function' ? init.insertMethod : defaultInsertMethod)(init.insertMethod === 'append')
 
 	const emptyClassName = '03kze'
 
@@ -59,22 +62,12 @@ const createCss = (init) => {
 	const unitedCss = new StringSet([importCss, themedCss, globalCss, styledCss])
 
 	let currentCssText = ''
-	let currentCssHead = null
-	let currentCssNode = null
 
 	const update = () => {
 		const nextUpdate = from(unitedCss).join('')
 
 		if (currentCssText !== nextUpdate) {
-			currentCssText = nextUpdate
-
-			if (typeof document === 'object') {
-				if (!currentCssHead) currentCssHead = document.head || document.documentElement
-				if (!currentCssNode) currentCssNode = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches' })
-				if (!currentCssNode.parentNode) currentCssHead.prepend(currentCssNode)
-
-				currentCssNode.textContent = nextUpdate
-			}
+			insertMethod((currentCssText = nextUpdate))
 		}
 	}
 
