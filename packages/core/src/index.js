@@ -5,7 +5,7 @@ import StringSet from './StringSet.js'
 import createGetComputedCss from './createGetComputedCss.js'
 import defaultThemeMap from './defaultThemeMap.js'
 import getCustomProperties from './getCustomProperties.js'
-import getHashString from './getHashString.js'
+import createGetHashString from './createGetHashString.js'
 import ThemeToken from './ThemeToken.js'
 import { $$composers } from './Symbol.js'
 import StringArray from './StringArray.js'
@@ -30,6 +30,8 @@ const createCss = (init) => {
 
 	/** Prefix added before all generated class names. */
 	const prefix = init.prefix || 'sx'
+
+	const getHashString = createGetHashString()
 
 	const emptyClassName = getHashString('', {})
 

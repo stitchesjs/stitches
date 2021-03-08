@@ -60,26 +60,20 @@ describe('Issue #416', () => {
 
 		const [boxA, boxB, genY, boxZ] = wrapper.toJSON().children
 
-		const boxAClass = 'sx03kze sx03kze9ao8r--foo-bar'
-		const boxBClass = 'sx03kze8d9vp--foo-bar'
-		const boxZClass = 'sx03kze sx03kze4qa6j--foo-bar'
-
 		// Box A has an active variant
-		expect(boxA.props.className).toBe(boxAClass)
+		expect(boxA.props.className).toBe(`sx03kz9 sx03kz99ao8r--foo-bar`)
 
 		// Box B has an active variant, plus the active variant of Box A
-		expect(boxB.props.className).toBe(boxAClass + ' ' + boxBClass)
+		expect(boxB.props.className).toBe(`sx03kz9 sx03kz99ao8s--foo-bar sx03kz8 sx03kz88d9vp--foo-bar`)
 
 		// Gen Y has no variant, but activates the variants of Box A and Box B
-		expect(genY.props.className).toBe(boxAClass + ' ' + boxBClass)
+		expect(genY.props.className).toBe(`sx03kz9 sx03kz99ao8l--foo-bar sx03kz8 sx03kz88d9vs--foo-bar`)
 
 		// Box Z has an active variant, but does not activate the variants of Box A or Box B
-		expect(boxZ.props.className).toBe(boxZClass)
+		expect(boxZ.props.className).toBe(`sx03kz9 sx03kz8 sx03kzb sx03kzb4qa6j--foo-bar`)
 
-		const boxACss = `.sx03kze9ao8r--foo-bar{--box-a:foo-bar;}`
-		const boxBCss = `.sx03kze8d9vp--foo-bar{--box-b:foo-bar;}`
-		const boxZCss = `.sx03kze4qa6j--foo-bar{--box-z:foo-bar;}`
-
-		expect(toString()).toBe(boxACss + boxBCss + boxZCss)
+		expect(toString()).toBe(
+			`.sx03kz99ao8r--foo-bar{--box-a:foo-bar;}.sx03kz99ao8s--foo-bar{--box-a:foo-bar;}.sx03kz99ao8l--foo-bar{--box-a:foo-bar;}.sx03kz88d9vp--foo-bar{--box-b:foo-bar;}.sx03kz88d9vs--foo-bar{--box-b:foo-bar;}.sx03kzb4qa6j--foo-bar{--box-z:foo-bar;}`,
+		)
 	})
 })

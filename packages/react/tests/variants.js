@@ -20,13 +20,13 @@ describe('Variants', () => {
 		})
 
 		const expression1 = component.render()
-		expect(expression1.props.className).toBe('sx03kze sx03kze11nwi--color-blue')
+		expect(expression1.props.className).toBe('sx03kz9 sx03kz911nwi--color-blue')
 
 		const expression2 = component.render({ color: 'red' })
-		expect(expression2.props.className).toBe('sx03kze sx03kze3ye05--color-red')
+		expect(expression2.props.className).toBe('sx03kz9 sx03kz93ye05--color-red')
 
 		const expression3 = component.render({ color: undefined })
-		expect(expression3.props.className).toBe('sx03kze sx03kze11nwi--color-blue')
+		expect(expression3.props.className).toBe('sx03kz9 sx03kz911nwj--color-blue')
 	})
 
 	test('Variant with an explicit undefined will not use default variant', () => {
@@ -51,12 +51,12 @@ describe('Variants', () => {
 		})
 
 		const expression1 = component.render()
-		expect(expression1.props.className).toBe('sx03kze sx03kzer02wp--color-undefined')
+		expect(expression1.props.className).toBe('sx03kz9 sx03kz9r02wp--color-undefined')
 
 		const expression2 = component.render({ color: 'red' })
-		expect(expression2.props.className).toBe('sx03kze sx03kze3ye05--color-red')
+		expect(expression2.props.className).toBe('sx03kz9 sx03kz93ye05--color-red')
 
 		const expression3 = component.render({ color: undefined })
-		expect(expression3.props.className).toBe('sx03kze sx03kzer02wp--color-undefined')
+		expect(expression3.props.className).toBe('sx03kz9 sx03kz9r02wo--color-undefined')
 	})
 })
