@@ -1,4 +1,6 @@
-export default (/** @type {boolean} */ isAppend) => {
+export default (init) => {
+	const isAppend = init.insertMethod === 'append'
+
 	let currentCssHead = null
 	let currentCssNode = null
 

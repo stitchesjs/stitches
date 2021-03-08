@@ -32,7 +32,7 @@ const createCss = (init) => {
 	/** Prefix added before all generated class names. */
 	const prefix = init.prefix || 'sx'
 
-	const insertMethod = (typeof init.insertMethod === 'function' ? init.insertMethod : defaultInsertMethod)(init.insertMethod === 'append')
+	const insertMethod = (typeof init.insertMethod === 'function' ? init.insertMethod : defaultInsertMethod)(init)
 
 	const emptyClassName = '03kze'
 
