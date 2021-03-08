@@ -233,7 +233,7 @@ const createCss = (init) => {
 				variantInput = { ...variantInput }
 
 				for (const defaultVariantName in defaultVariants) {
-					if (variantInput[defaultVariantName] === undefined && !variantProps[defaultVariantName][variantInput[defaultVariantName]]) {
+					if (variantInput[defaultVariantName] === undefined && !Object(variantProps[defaultVariantName])[variantInput[defaultVariantName]]) {
 						variantInput[defaultVariantName] = defaultVariants[defaultVariantName]
 					}
 				}
@@ -286,8 +286,8 @@ const createCss = (init) => {
 				if (props) {
 					classNames.add(className)
 
-					for (const variant of variants) {
-						const variantClassName = variant(props, defaultVariants)
+					for (const applyVariant of variants) {
+						const variantClassName = applyVariant(props, defaultVariants)
 
 						if (variantClassName) {
 							classNames.add(variantClassName)
