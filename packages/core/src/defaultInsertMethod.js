@@ -1,3 +1,5 @@
+import { assign } from './Object.js'
+
 export default (init) => {
 	const isAppend = init.insertMethod === 'append'
 
