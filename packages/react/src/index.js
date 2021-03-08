@@ -1,70 +1,27 @@
-import Object, { assign } from '../../core/src/Object.js'
+import { assign } from '../../core/src/Object.js'
 import createCoreCss from '../../core/src/index.js'
 import defaultThemeMap from '../../core/src/defaultThemeMap.js'
+import { $$composers } from '../../core/src/Symbol.js'
 
-const $$typeof = Symbol.for('react.element')
+const $$typeofElement = Symbol.for('react.element')
 const $$typeofForward = Symbol.for('react.forward_ref')
 
 const createCss = (init) => {
-	const hasDocument = typeof document === 'object'
-
-	const importText = hasDocument && new Text('')
-	const themedText = hasDocument && new Text('')
-	const globalText = hasDocument && new Text('')
-	const styledText = hasDocument && new Text('')
-
-	const createOnChange = hasDocument ? (textNode) => (data) => (textNode.data = data) : () => undefined
-
-	let sheetParent
-	let sheetTarget
-
-	init = assign(
-		{
-			onImport: createOnChange(importText, 'import'),
-			onThemed: createOnChange(themedText, 'themed'),
-			onGlobal: createOnChange(globalText, 'global'),
-			onStyled: createOnChange(styledText, 'styled'),
-			onResets() {
-				if (hasDocument) {
-					this.sync()
-
-					sheetTarget.textContent = importText.data = themedText.data = globalText.data = styledText.data = ''
-					sheetTarget.append(importText, themedText, globalText, styledText)
-				}
-			},
-		},
-		init,
-	)
-
 	const sheet = createCoreCss(init)
 
 	return assign(sheet, {
-		sync() {
-			if (hasDocument) {
-				if (!sheetParent) sheetParent = document.head || document.documentElement
-				if (!sheetTarget) sheetTarget = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches' })
-				if (!sheetTarget.parentNode) sheetParent.prepend(sheetTarget)
-			}
-		},
 		styled: new Proxy(
 			/** Returns a React component. */
 			(
 				/** Type of component. */
-				asType,
-				/** Component styles. */
-				initStyles,
+				...args
 			) => {
-				const isComposition = 'composes' in Object(asType)
-
-				/** Expression used to activate the component CSS on the current styled sheet. */
-				const composition = isComposition ? sheet.css(asType.composes, initStyles) : sheet.css(initStyles)
-
-				const defaultType = (isComposition ? asType.type : asType) || 'span'
+				const composition = sheet.css(...args)
+				const defaultType = composition.type || 'span'
 
 				/** Returns a React element. */
 				return Object.setPrototypeOf(
 					{
-						$$typeof: $$typeofForward,
 						render(
 							/** Props used to determine the expression of the current component. */
 							initProps,
@@ -76,12 +33,11 @@ const createCss = (init) => {
 								...expressedProps
 							} = composition(initProps)
 
-							// sync the dynamic stylesheet
-							sheet.sync()
-
 							/** React element. */
-							return { constructor: undefined, $$typeof, props, ref, type, __v: 0 }
+							return { constructor: undefined, $$typeof: $$typeofElement, props, ref, type, __v: 0 }
 						},
+						$$typeof: $$typeofForward,
+						[$$composers]: composition[$$composers],
 						[Symbol.toPrimitive]() {
 							return composition.selector
 						},
@@ -94,12 +50,9 @@ const createCss = (init) => {
 						get selector() {
 							return composition.selector
 						},
-						composes: composition,
-						classNames: composition.classNames,
-						variants: composition.variants,
 						type: defaultType,
 					},
-					Object(asType),
+					Object(defaultType),
 				)
 			},
 			{

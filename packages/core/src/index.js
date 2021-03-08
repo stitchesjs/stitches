@@ -1,49 +1,82 @@
+import { assign, create, createComponent, defineProperties, getOwnPropertyDescriptors } from './Object.js'
 import { from } from './Array.js'
-import Object, { assign, create, define } from './Object.js'
-import CssSet from './CssSet.js'
-import ThemeToken from './ThemeToken.js'
+import { ownKeys } from './Reflect.js'
+import StringSet from './StringSet.js'
 import createGetComputedCss from './createGetComputedCss.js'
 import defaultThemeMap from './defaultThemeMap.js'
 import getCustomProperties from './getCustomProperties.js'
 import getHashString from './getHashString.js'
+import ThemeToken from './ThemeToken.js'
+import { $$composers } from './Symbol.js'
+import StringArray from './StringArray.js'
 
 /** Returns a new styled sheet and accompanying API. */
 const createCss = (init) => {
 	init = Object(init)
 
-	const config = {
-		/** Named conditions (media and support queries). */
-		conditions: assign({ initial: '@media all' }, init.conditions),
+	/** Named conditions (media and support queries). */
+	const conditions = assign({ initial: '@media all' }, init.conditions)
 
-		/** Theme tokens enabled by default on the styled sheet. */
-		theme: Object(init.theme),
+	/** Theme tokens enabled by default on the styled sheet. */
+	const themeInit = Object(init.theme)
 
-		themeMap: Object(init.themeMap || defaultThemeMap),
+	const themeMap = Object(init.themeMap || defaultThemeMap)
 
-		/** Properties corresponding to functions that take in CSS values and return aliased CSS declarations. */
-		utils: assign(create(null), init.utils),
-	}
+	/** Properties corresponding to functions that take in CSS values and return aliased CSS declarations. */
+	const utils = Object(init.utils)
+
+	/** Names of variants passed through to props. */
+	const passThru = new Set([].concat(init.passthru || ['as', 'className']))
 
 	/** Prefix added before all generated class names. */
 	const prefix = init.prefix || 'sx'
 
-	/** Attribute class names are set to on props. */
-	const classProp = init.classProp || 'className'
+	const emptyClassName = '03kze'
+
+	const config = {
+		theme: themeInit,
+		conditions,
+		prefix,
+		themeMap,
+		utils,
+	}
 
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
 	const getComputedCss = createGetComputedCss(config)
 
 	/** Collection of `@import` CSS rules. */
-	const importRules = new CssSet(init.onImport)
-
-	/** Collection of global CSS rules. */
-	const globalRules = new CssSet(init.onGlobal)
+	const importCss = new StringSet()
 
 	/** Collection of theming CSS rules. */
-	const themedRules = new CssSet(init.onThemed)
+	const themedCss = new StringSet()
+
+	/** Collection of global CSS rules. */
+	const globalCss = new StringSet()
 
 	/** Collection of component CSS rules. */
-	const styledRules = new CssSet(init.onStyled)
+	const styledCss = new StringSet()
+
+	const unitedCss = new StringSet([importCss, themedCss, globalCss, styledCss])
+
+	let currentCssText = ''
+	let currentCssHead = null
+	let currentCssNode = null
+
+	const update = () => {
+		const nextUpdate = from(unitedCss).join('')
+
+		if (currentCssText !== nextUpdate) {
+			currentCssText = nextUpdate
+
+			if (typeof document === 'object') {
+				if (!currentCssHead) currentCssHead = document.head || document.documentElement
+				if (!currentCssNode) currentCssNode = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches' })
+				if (!currentCssNode.parentNode) currentCssHead.prepend(currentCssNode)
+
+				currentCssNode.textContent = nextUpdate
+			}
+		}
+	}
 
 	/** Prepares global CSS and returns a function that enables the styles on the styled sheet. */
 	const theme = (
@@ -68,306 +101,352 @@ const createCss = (init) => {
 		const selector = className.replace(/^\w/, '.$&')
 
 		/** Computed CSS */
-		const cssText = getComputedCss({ [selector]: customPropertyStyles })
+		const cssText = className === prefix + emptyClassName ? '' : getComputedCss({ [selector]: customPropertyStyles })
 
-		/** Themed Rule that activates styles on the styled sheet. */
-		const expressThemedRule = define(() => {
-			themedRules.addCss(cssText)
-
-			return expressThemedRule
-		}, {
-			toString() {
-				expressThemedRule()
-				return className
-			},
-			get className() {
-				expressThemedRule()
-				return className
-			},
-			get selector() {
-				expressThemedRule()
-				return selector
-			},
+		const expression = createComponent(create(null), 'className', {
+			className,
+			selector,
 		})
 
 		for (const scale in theme) {
-			expressThemedRule[scale] = create(null)
+			expression[scale] = create(null)
 
 			for (const token in theme[scale]) {
-				expressThemedRule[scale][token] = new ThemeToken(theme[scale][token], token, scale)
+				expression[scale][token] = new ThemeToken(theme[scale][token], token, scale)
 			}
 		}
 
-		return expressThemedRule
+		return createComponent(expression, 'className', {
+			get className() {
+				const { hasChanged } = themedCss
+
+				themedCss.add(cssText)
+
+				if (hasChanged()) {
+					update()
+				}
+
+				return className
+			},
+			selector,
+		})
 	}
 
 	/** Returns a function that enables the styles on the styled sheet. */
 	const global = (
 		/** Styles representing global CSS. */
-		initStyles,
-		/** Value returned by toString */
-		displayName = '',
+		style,
 	) => {
 		/** List of global import styles. */
-		const localImportRules = []
+		const localImportCss = new StringSet()
 
 		/** List of global styles. */
-		const localGlobalRules = []
+		const localGlobalCss = new StringSet()
 
-		for (const name in initStyles) {
-			const cssText = getComputedCss({ [name]: initStyles[name] })
+		for (const name in style) {
+			if (style[name] !== Object(style[name]) || ownKeys(style[name]).length) {
+				const cssText = getComputedCss({ [name]: style[name] })
 
-			;(name === '@import' ? localImportRules : localGlobalRules).push(cssText)
+				;(name === '@import' ? localImportCss : localGlobalCss).add(cssText)
+			}
 		}
 
-		const express = () => {
-			localImportRules.forEach(importRules.addCss, importRules)
-			localGlobalRules.forEach(globalRules.addCss, globalRules)
-
-			return displayName
-		}
-
-		return assign(express, {
-			displayName,
-			toString() {
-				return String(express())
-			},
+		const expression = createComponent(create(null), 'displayName', {
+			displayName: '',
 		})
+
+		return createComponent(
+			() => {
+				let hasImportChanged = importCss.hasChanged
+				let hasGlobalChanged = globalCss.hasChanged
+
+				localImportCss.forEach((localImportCss) => {
+					importCss.add(localImportCss)
+				})
+
+				localGlobalCss.forEach((localGlobalCss) => {
+					globalCss.add(localGlobalCss)
+				})
+
+				if (hasImportChanged() || hasGlobalChanged()) {
+					update()
+				}
+
+				return expression
+			},
+			'displayName',
+			expression,
+		)
 	}
 
 	/** Returns a function that enables the keyframe styles on the styled sheet. */
 	const keyframes = (
 		/** Styles representing global CSS. */
-		initStyles,
+		style,
 	) => {
 		/** Unique name representing the current keyframes rule. */
-		const keyframeRuleName = getHashString(prefix, initStyles)
+		const displayName = getHashString(prefix, style)
 
-		return global({ ['@keyframes ' + keyframeRuleName]: initStyles }, keyframeRuleName)
+		return assign(global({ ['@keyframes ' + displayName]: style }), { displayName })
 	}
 
-	/** Prepares a component of css and returns a function that activates the css on the current styled sheet. */
-	const css = (
-		/** Styles for the current component, or the component to be extended. */
-		initStyle,
-		/** Styles for the current component, when extending another component. */
-		extendedStyle,
-	) => {
-		const { variants: variantsStyle, compoundVariants, defaultVariants, ...style } = Object(extendedStyle || initStyle)
+	const createComposer = (initStyle) => {
+		const primalCss = new StringSet()
+		const variedCss = new StringArray()
+		const inlineCss = new StringSet()
 
-		/** Composing rule, if present, otherwise an empty object. */
-		const composer = Object(extendedStyle && initStyle)
+		const unitedCss = new StringSet([primalCss, variedCss, inlineCss])
 
-		/** Unique class name for the current component. */
-		const className = getHashString(prefix, style)
+		let { variants: singularVariants, compoundVariants, defaultVariants, ...style } = initStyle
 
-		/** Unique css selector for the current component. */
+		defaultVariants = Object(defaultVariants)
+
+		const className = getHashString(prefix, initStyle)
 		const selector = '.' + className
+		const cssText = className === prefix + emptyClassName ? '' : getComputedCss({ [selector]: style })
 
-		/** CSS styles representing the current component. */
-		const cssText = getComputedCss({ [selector]: style })
+		styledCss.add(unitedCss)
 
-		/** Change event registered with updates to the primary, variant, or inlined rules of the component. */
-		const onChange = styledRules.onChange && (() => styledRules.onChange(styledRules))
+		const variantProps = create(null)
+		const variants = []
+		const compounds = []
 
-		const primaryRules = new CssSet(onChange)
-		const variantRules = new CssSet(onChange)
-		const combineRules = new CssSet(onChange)
-		const inlinedRules = new CssSet(onChange)
+		for (const key in singularVariants) {
+			for (const value in singularVariants[key]) {
+				const css = singularVariants[key][value]
 
-		/** Map of variant groups containing variant class names and styled rules. */
-		const variants = assign(create(null), composer.variants)
+				compounds.push({
+					[key]: value,
+					css,
+				})
+			}
+		}
 
-		for (const name in variantsStyle) {
-			variants[name] = assign(create(null), variants[name])
+		compounds.push(...(compoundVariants || []))
 
-			for (const value in variantsStyle[name]) {
-				const variantStyle = variantsStyle[name][value]
-				const variantClassName = className + getHashString('', variantStyle) + '--' + name + '-' + value
-				const variantSelector = '.' + variantClassName
-				const variantCssText = getComputedCss({ [variantSelector]: variantStyle })
+		for (const index in compounds) {
+			const { css, ...variantConfig } = compounds[index]
 
-				const conditionVariants = create(null)
+			const variantConfigKeys = ownKeys(variantConfig)
+			const variantConfigIndex = variantConfigKeys.length
 
-				const compose = variants[name][value]
+			for (const variantKey of variantConfigKeys) {
+				variantProps[variantKey] = variantProps[variantKey] || create(null)
 
-				variants[name][value] = (condition) => {
-					const classNames = (compose ? compose(condition) : []).concat(condition ? [] : variantClassName)
+				variantProps[variantKey][variantConfig[variantKey]] = true
+			}
 
-					if (condition != null) {
-						if (!conditionVariants[condition]) {
-							const conditionalVariantClassName = variantClassName + '--' + getHashString('', condition)
-							const conditionalVariantCssText = getComputedCss({ [condition]: { ['.' + conditionalVariantClassName]: variantStyle } })
+			const applyVariant = (variantInput, defaultVariants) => {
+				variantInput = { ...variantInput }
 
-							conditionVariants[condition] = [conditionalVariantCssText, conditionalVariantClassName]
-						}
-
-						variantRules.addCss(conditionVariants[condition][0])
-						classNames.push(conditionVariants[condition][1])
-					} else {
-						variantRules.addCss(variantCssText)
+				for (const defaultVariantName in defaultVariants) {
+					if (variantInput[defaultVariantName] === undefined && !variantProps[defaultVariantName][variantInput[defaultVariantName]]) {
+						variantInput[defaultVariantName] = defaultVariants[defaultVariantName]
 					}
-
-					return classNames
 				}
-			}
-		}
 
-		styledRules.addCss(primaryRules).addCss(variantRules).addCss(combineRules).addCss(inlinedRules)
-
-		function classNames() {
-			const classNames = (composer.classNames ? composer.classNames() : []).concat(className)
-
-			primaryRules.addCss(cssText)
-
-			return classNames
-		}
-
-		/** Returns an expression of the current styled rule. */
-		const express = function (
-			/** Props used to determine the expression of the current styled rule. */
-			initProps,
-		) {
-			const { css: inlineStyle, ...props } = Object(initProps)
-
-			let expressClassNames = new Set(classNames())
-
-			for (const propName in defaultVariants) {
-				if (!(propName in props) && propName in variants) {
-					props[propName] = defaultVariants[propName]
-				}
-			}
-
-			if (classProp in props) {
-				String(props[classProp]).split(/\s+/).forEach(expressClassNames.add, expressClassNames)
-
-				delete props[classProp]
-			}
-
-			for (const compound of [].concat(compoundVariants || [])) {
-				const { css: compoundStyle, ...compounders } = Object(compound)
-
-				let appliedCompoundStyle = compoundStyle
+				const variantConditions = new Set()
 
 				if (
-					Object.keys(compounders).every((name) => {
-						if (name in props) {
-							const propValue = props[name]
-							const compounderValue = String(compounders[name])
-							if (compounderValue == String(propValue)) return true
-							if (propValue === Object(propValue)) {
-								for (const innerName in propValue) {
-									const innerValue = String(propValue[innerName])
-									const condition = config.conditions[innerName] || innerName
-									if (compounderValue == innerValue) {
-										appliedCompoundStyle = { [condition]: appliedCompoundStyle }
-									}
+					variantConfigKeys.length &&
+					variantConfigKeys.every((key) => {
+						const value = variantInput[key]
+						const compareValue = String(variantConfig[key])
+						if (compareValue === String(value)) return true
+						if (value === Object(value)) {
+							for (const condition in value) {
+								if (compareValue == String(value[condition])) {
+									variantConditions.add(condition)
+									return true
 								}
-								return true
 							}
 						}
 					})
 				) {
-					const compoundClassName = className + getHashString('', appliedCompoundStyle) + '--comp'
-					const compoundCssText = getComputedCss({ ['.' + compoundClassName]: appliedCompoundStyle })
+					let conditionedCss = Object(css)
 
-					combineRules.addCss(compoundCssText)
-					expressClassNames.add(compoundClassName)
+					for (const variantCondition of variantConditions) {
+						conditionedCss = { [variantCondition in conditions ? conditions[variantCondition] : variantCondition]: conditionedCss }
+					}
+
+					const variantClassName = className + getHashString('', conditionedCss) + '--' + (variantConfigIndex === 1 ? variantConfigKeys[0] + '-' + variantConfig[variantConfigKeys[0]] : 'c' + variantConfigIndex)
+					const variantSelector = '.' + variantClassName
+					const variantCssText = getComputedCss({ [variantSelector]: conditionedCss })
+					const variantCssByIndex = variedCss[variantConfigIndex - 1] || (variedCss[variantConfigIndex - 1] = new StringSet())
+
+					variantCssByIndex.add(variantCssText)
+
+					return variantClassName
 				}
 			}
 
-			for (const propName in props) {
-				if (propName in variants) {
-					const variant = variants[propName]
-					const propValue = props[propName] === undefined && !(undefined in variant) ? Object(defaultVariants)[propName] : props[propName]
+			variants.push(applyVariant)
+		}
 
-					if (propName !== 'as') delete props[propName]
+		return {
+			apply(props, classNames, defaultVariants) {
+				const hasPrimalChanged = primalCss.hasChanged
+				const hasVariedChanged = variedCss.hasChanged
 
-					// apply any matching variant
-					if (propValue in variant) {
-						variant[propValue]().forEach(expressClassNames.add, expressClassNames)
-					} else {
-						// conditionally apply any matched conditional variants
-						for (const innerName in propValue) {
-							const innerValue = propValue[innerName]
-							const condition = config.conditions[innerName] || innerName
+				primalCss.add(cssText)
 
-							if (innerValue in variant) {
-								variant[innerValue](condition).forEach(expressClassNames.add, expressClassNames)
-							}
+				if (props) {
+					classNames.add(className)
+
+					for (const variant of variants) {
+						const variantClassName = variant(props, defaultVariants)
+
+						if (variantClassName) {
+							classNames.add(variantClassName)
 						}
 					}
 				}
-			}
 
-			if (inlineStyle) {
-				const inlineRuleClassName = className + getHashString('', inlineStyle) + '--css'
-				const inlineRuleSelector = '.' + inlineRuleClassName
-				const inlineRuleCssText = getComputedCss({ [inlineRuleSelector]: inlineStyle })
+				if (hasPrimalChanged() || hasVariedChanged()) {
+					styledCss.add(unitedCss)
 
-				inlinedRules.addCss(inlineRuleCssText)
+					return true
+				}
+			},
+			inline(css, classNames) {
+				const inlineSuffix = getHashString('-', css)
+				const inlineSelector = selector + inlineSuffix
+				const inlineCssText = className === '-' + inlineSuffix ? '' : getComputedCss({ [inlineSelector]: css })
 
-				expressClassNames.add(inlineRuleClassName)
-			}
+				classNames.add(className + inlineSuffix)
 
-			expressClassNames = from(expressClassNames)
+				const { hasChanged } = inlineCss
 
-			const expressClassName = (props[classProp] = expressClassNames.join(' '))
+				if (inlineCssText) {
+					inlineCss.add(inlineCssText)
+				}
 
-			return {
-				toString() {
-					return expressClassName
-				},
-				className: expressClassName,
-				selector: '.' + expressClassNames.join('.'),
-				props,
+				return hasChanged()
+			},
+			className,
+			defaultVariants,
+			selector,
+			variantProps,
+		}
+	}
+
+	const css = (...inits) => {
+		let type
+		let composers = []
+		let composer
+		let defaultVariants = create(null)
+
+		for (const init of inits) {
+			if ($$composers in Object(init)) {
+				type = init.type || type
+				for (const composer of init[$$composers]) {
+					composers.push(composer)
+					assign(defaultVariants, composer.defaultVariants)
+				}
+			} else if (init && typeof init === 'object' && !('type' in init)) {
+				composers.push((composer = createComposer(init)))
+				assign(defaultVariants, composer.defaultVariants)
+			} else {
+				type = ('type' in Object(init) ? init.type : init) || type
 			}
 		}
 
-		return define(express, {
-			toString() {
-				express()
-				return className
+		composer = composer || createComposer({})
+
+		return createComponent(
+			(initProps) => {
+				const { css, ...props } = Object(initProps)
+
+				const classNames = new Set()
+
+				let hasComposerChanged = false
+
+				for (const composer of composers) {
+					hasComposerChanged = composer.apply(props, classNames, defaultVariants) || hasComposerChanged
+				}
+
+				let hasInlineChanged
+
+				if (css === Object(css)) {
+					hasInlineChanged = composer.inline(css, classNames)
+				}
+
+				if (hasComposerChanged || hasInlineChanged) {
+					update()
+				}
+
+				for (const variantName in composer.variantProps) {
+					if (!passThru.has(variantName)) {
+						delete props[variantName]
+					}
+				}
+
+				if ('className' in props) {
+					String(props.className).split(/\s+/).forEach(classNames.add, classNames)
+				}
+
+				const classNameSetArray = from(classNames)
+
+				props.className = classNameSetArray.join(' ')
+
+				return createComponent(create(null), 'className', {
+					get [$$composers]() {
+						return composers
+					},
+					className: props.className,
+					props,
+					selector: composer.selector,
+				})
 			},
-			get className() {
-				express()
-				return className
+			'className',
+			{
+				get [$$composers]() {
+					return composers
+				},
+				/** Applies the primary composer and returns the class name. */
+				get className() {
+					if (composer.apply()) {
+						update()
+					}
+
+					return composer.className
+				},
+				selector: composer.selector,
+				type,
 			},
-			get selector() {
-				express()
-				return selector
-			},
-			classNames,
-			variants,
-		})
+		)
 	}
 
-	assign(theme, theme(':root', config.theme)).toString()
+	const defaultTheme = theme(':root', themeInit)
 
-	const getCssString = () => importRules + themedRules + globalRules + styledRules
-
-	return {
-		config: init,
-		getCssString,
-		global,
-		keyframes,
-		css,
-		theme,
-		/** Clears all rules, conditionally runs any `onResets` callbacks, and then restores the initial theme. */
-		reset() {
-			importRules.clear()
-			themedRules.clear()
-			globalRules.clear()
-			styledRules.clear()
-
-			init.onResets && init.onResets.call(this)
-
-			theme.toString()
-
-			return this
+	const sheet = createComponent(
+		{
+			css,
+			config,
+			global,
+			keyframes,
+			prefix,
+			reset() {
+				importCss.clear()
+				themedCss.clear()
+				globalCss.clear()
+				styledCss.clear()
+				defaultTheme.className
+				return sheet
+			},
+			theme: assign(theme, defaultTheme),
+			get cssText() {
+				return currentCssText
+			},
+			getCssString() {
+				return currentCssText
+			},
 		},
-		toString: getCssString,
-	}
+		'cssText',
+		{},
+	)
+
+	return sheet
 }
 
 const getReusableSheet = () => getReusableSheet.config || (getReusableSheet.config = createCss())

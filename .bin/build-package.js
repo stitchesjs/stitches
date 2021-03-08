@@ -1,8 +1,8 @@
 import esbuild from 'esbuild'
-import fs from './fs.mjs'
+import fs from './internal/fs.js'
 import zlib from 'zlib'
 import { minify } from 'terser'
-import { bold, underline } from './color.mjs'
+import { bold, underline } from './color.js'
 
 const variants = {
 	esm: {

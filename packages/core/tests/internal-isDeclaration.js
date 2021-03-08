@@ -4,8 +4,8 @@ describe('isDeclaration()', () => {
 	test('isDeclaration() correctly identifies some declarations', () => {
 		expect(isDeclaration('1')).toBe(true)
 		expect(isDeclaration(1)).toBe(true)
-		expect(isDeclaration(Object.assign(() => {}, { toString: () => '1' }))).toBe(true)
-		expect(isDeclaration(Object.assign(() => {}, { toString: () => 1 }))).toBe(true)
+		expect(isDeclaration(Object.assign(() => undefined, { toString: () => '1' }))).toBe(true)
+		expect(isDeclaration(Object.assign(() => undefined, { toString: () => 1 }))).toBe(true)
 		expect(isDeclaration(Object('1'))).toBe(true)
 		expect(isDeclaration(Object(1))).toBe(true)
 	})

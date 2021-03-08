@@ -1,4 +1,4 @@
-import Object, { assign, create } from '../src/Object.js'
+import { assign, create } from '../src/Object.js'
 
 describe('Object()', () => {
 	const object = {}
@@ -17,7 +17,7 @@ describe('Object()', () => {
 		expect(string.constructor).toBe(String)
 		expect(string[0]).toBe('A')
 
-		expect(Object(string)).not.toBe(string)
+		expect(Object(string)).toNotBe(string)
 		expect(typeof Object(string)).toBe('object')
 		expect(Object(string).constructor).toBe(String)
 		expect(Object(string)[0]).toBe('A')
@@ -30,7 +30,7 @@ describe('Object()', () => {
 		expect(typeof number).toBe('number')
 		expect(number.constructor).toBe(Number)
 
-		expect(Object(number)).not.toBe(number)
+		expect(Object(number)).toNotBe(number)
 		expect(typeof Object(number)).toBe('object')
 		expect(Object(number).constructor).toBe(Number)
 

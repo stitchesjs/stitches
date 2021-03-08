@@ -6,42 +6,41 @@
   "license": "MIT",
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "build": "node .bin/build.mjs",
-    "build:watch": "node .bin/build-watch.mjs",
+    "build": "node .bin/build.js",
+    "build:watch": "node .bin/build-watch.js",
     "prerelease": "npm run build && npm run test",
     "release": "lerna publish",
     "release:canary": "npm run prerelease && lerna publish --dist-tag canary",
     "release:pack": "npm run prerelease && lerna exec -- npm pack",
     "postinstall": "run-s bootstrap",
-    "test": "node .bin/test.mjs",
-    "test:coverage": "node .bin/test-coverage.mjs .bin/test.mjs",
-    "test:lint": "node .bin/test-lint.mjs",
-    "test:watch": "node .bin/test-watch.mjs"
+    "test": "node .bin/test.js",
+    "test:coverage": "node .bin/test-coverage.js .bin/test.js",
+    "test:lint": "node .bin/test-lint.js",
+    "test:watch": "node .bin/test-watch.js"
   },
   "workspaces": [
     "packages/*",
     "play"
   ],
   "dependencies": {
-    "@types/react": "17.0.2",
+    "@types/react": "17.0.3",
     "@types/react-dom": "17.0.1",
     "@types/react-test-renderer": "17.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.15.1",
-    "@typescript-eslint/parser": "^4.15.1",
-    "baretest": "2.0.0",
-    "esbuild": "0.8.46",
-    "eslint": "^7.20.0",
-    "lerna": "3.22.1",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "esbuild": "0.8.57",
+    "eslint": "^7.21.0",
+    "lerna": "4.0.0",
+    "linkedom": "^0.5.5",
     "magic-string": "0.25.7",
     "merge-source-map": "1.1.0",
-    "microbundle": "0.13.0",
     "nodemon": "2.0.7",
     "npm-run-all": "4.1.5",
     "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-test-renderer": "17.0.1",
     "terser": "5.6.0",
-    "typescript": "4.1.5"
+    "typescript": "4.2.3"
   },
   "browserslist": [
     "last 1 chrome versions",
@@ -50,6 +49,14 @@
     "maintained node versions"
   ],
   "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    },
+    "extends": [
+      "plugin:@typescript-eslint/recommended"
+    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
       "ecmaVersion": 2020,
@@ -63,9 +70,6 @@
         "version": "detect"
       }
     },
-    "extends": [
-      "plugin:@typescript-eslint/recommended"
-    ],
     "rules": {
       "@typescript-eslint/ban-types": [
         "error",

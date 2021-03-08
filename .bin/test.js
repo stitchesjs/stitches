@@ -1,5 +1,5 @@
-import fs from './fs.mjs'
-import { deepEqual, equal, notDeepEqual, notEqual, AssertionError } from 'assert/strict'
+import fs from './internal/fs.js'
+import expect from './internal/expect.js'
 
 const test = (root) =>
 	Promise.all(
@@ -9,32 +9,7 @@ const test = (root) =>
 			new URL('./packages/react/tests/', root),
 		].map(async (dir) => {
 			// bootstrap the expect api
-			globalThis.expect = (foo) => ({
-				toEqual: (bar) => deepEqual(foo, bar),
-				toBe: (bar) => equal(foo, bar),
-				toBeInstanceOf(bar) {
-					if (!(foo instanceof bar))
-						throw new AssertionError({
-							message: `Expected value to be instance:`,
-							operator: 'instanceOf',
-							actual: foo,
-							expected: bar,
-						})
-				},
-				not: {
-					toEqual: (bar) => notDeepEqual(foo, bar),
-					toBe: (bar) => notEqual(foo, bar),
-					toBeInstanceOf(bar) {
-						if (!(foo instanceof bar))
-							throw new AssertionError({
-								message: `Expected value to not be instance:`,
-								operator: 'notInstanceOf',
-								actual: foo,
-								expected: bar,
-							})
-					},
-				},
-			})
+			globalThis.expect = expect
 
 			// internal strings and symbols used for reporting
 			const passIcon = '\x1b[32m✔\x1b[0m'

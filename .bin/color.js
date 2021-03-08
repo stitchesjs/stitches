@@ -1,5 +1,5 @@
 export const set = (id) => `\x1b[${id}m`
-export const color = (string, id) => set(id) + string.replaceAll(set(0), set(0) + set(id)) + set(0)
+export const color = (string, id) => set(id) + string.replace(RegExp(set(0).replace(/[\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), set(0) + set(id)) + set(0)
 
 export const bold = (string) => color(string, 1)
 export const dim = (string) => color(string, 2)
