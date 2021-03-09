@@ -156,9 +156,11 @@ const createGetComputedCss = (config) => {
 							// close any deeper conditions
 							if (isCondition && conditionIndex) {
 								for (const deeperConditionRules of conditionz.splice(conditionIndex - 1)) {
-									cssText += '}'
+									if (deeperConditionRules[isOpen]) {
+										cssText += '}'
 
-									deeperConditionRules[isOpen] = false
+										deeperConditionRules[isOpen] = false
+									}
 								}
 							}
 						}
