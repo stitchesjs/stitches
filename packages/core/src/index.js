@@ -1,4 +1,4 @@
-import { assign, create, createComponent, defineProperties, getOwnPropertyDescriptors } from './Object.js'
+import { assign, create, createComponent } from './Object.js'
 import { from } from './Array.js'
 import { ownKeys } from './Reflect.js'
 import StringSet from './StringSet.js'

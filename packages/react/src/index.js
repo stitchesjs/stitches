@@ -30,7 +30,7 @@ const createCss = (init) => {
 							// express the component, extracting `props`, `as` & `ref`
 							const {
 								props: { as: type = defaultType, ...props },
-								...expressedProps
+								...expressedProps // eslint-disable-line no-unused-vars
 							} = composition(initProps)
 
 							/** React element. */
