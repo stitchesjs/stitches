@@ -194,7 +194,7 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 	themeMap?: { [k in keyof ThemeMap]?: ThemeMap[k] }
 	prefix?: Prefix
 	/** Determines how the CSS file is inserted to a document. */
-	insertMethod: 'append' | 'prepend' | (() => (cssText: string) => void)
+	insertMethod?: 'append' | 'prepend' | (() => (cssText: string) => void)
 }
 type UtilConfig<Conditions, Theme, Prefix, ThemeMap> = {
 	conditions: Conditions
