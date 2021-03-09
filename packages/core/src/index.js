@@ -335,14 +335,18 @@ const createCss = (init) => {
 		let defaultVariants = create(null)
 
 		for (const init of inits) {
-			if ($$composers in Object(init)) {
-				for (const composer of init[$$composers]) {
-					composers.push(composer)
+			if (init === Object(init)) {
+				if ($$composers in init) {
+					for (const composer of init[$$composers]) {
+						composers.push(composer)
+
+						assign(defaultVariants, composer.defaultVariants)
+					}
+				} else {
+					composers.push((composer = createComposer(init)))
+
 					assign(defaultVariants, composer.defaultVariants)
 				}
-			} else if (init && typeof init === 'object') {
-				composers.push((composer = createComposer(init)))
-				assign(defaultVariants, composer.defaultVariants)
 			}
 		}
 
