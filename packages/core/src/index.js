@@ -330,23 +330,19 @@ const createCss = (init) => {
 	}
 
 	const css = (...inits) => {
-		let type
 		let composers = []
 		let composer
 		let defaultVariants = create(null)
 
 		for (const init of inits) {
 			if ($$composers in Object(init)) {
-				type = init.type || type
 				for (const composer of init[$$composers]) {
 					composers.push(composer)
 					assign(defaultVariants, composer.defaultVariants)
 				}
-			} else if (init && typeof init === 'object' && !('type' in init)) {
+			} else if (init && typeof init === 'object') {
 				composers.push((composer = createComposer(init)))
 				assign(defaultVariants, composer.defaultVariants)
-			} else {
-				type = ('type' in Object(init) ? init.type : init) || type
 			}
 		}
 
@@ -411,7 +407,6 @@ const createCss = (init) => {
 					return composer.className
 				},
 				selector: composer.selector,
-				type,
 			},
 		)
 	}

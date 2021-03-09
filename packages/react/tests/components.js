@@ -28,4 +28,17 @@ describe('Components', () => {
 		expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
 		expect(component.type).toBe(TextComponent)
 	})
+
+	test('The `styled` function can return an explicit forwarded React component', () => {
+		const ForwardedComponent = {
+			$$typeof: Symbol.for('react.forward_ref'),
+			render: () => 'text'
+		}
+
+		const { styled } = createCss()
+		const component = styled(ForwardedComponent)
+
+		expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
+		expect(component.type).toBe(ForwardedComponent)
+	})
 })
