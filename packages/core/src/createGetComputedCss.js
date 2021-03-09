@@ -6,7 +6,7 @@ import isDeclaration from './isDeclaration.js'
 const captureTokens = /([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g
 
 /** Unit-ed property name matcher. */
-const captureUnited = /(art|dth|End|[Gg]ap|eft|[^e]Height|^height|op|[Rr]ight|[^b]Size|^size|us)$/
+const captureUnited = /(art|ding|dth|End|[Gg]ap|eft|[^e]Height|^height|op|[Rr]ight|rgin|[^b]Size|^size|tom|us)$/
 
 /** Returns the name of a property with tokens & camel-casing transformed. */
 const transformPropertyName = (name) => (/^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : name.replace(/[A-Z]/g, (capital) => '-' + capital.toLowerCase()))
