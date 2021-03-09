@@ -35,7 +35,9 @@ type ComponentInfer<T> = T extends IntrinsicElementsKeys | React.ComponentType<a
 // abuse Pick to strip the call signature from ForwardRefExoticComponent
 type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>
 
-export type IntrinsicElement<T extends React.ElementType, B = React.ElementRef<T>> = { [k in keyof HTMLElementTagNameMap]: HTMLElementTagNameMap[k] extends B ? k : never }[keyof HTMLElementTagNameMap]
+export type IntrinsicElement<T extends React.ElementType, B = React.ElementRef<T>> = {
+	[k in keyof HTMLElementTagNameMap]: HTMLElementTagNameMap[k] extends B ? k : never
+}[keyof HTMLElementTagNameMap]
 
 export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement extends string, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}>
 	extends React.ForwardRefExoticComponent<
@@ -180,14 +182,18 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 						)[]
 					}
 		),
-	): E extends string
-		? // jsx elements
-		  StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
-		: // if it's a stitches component we reach in and pull its type to provide better types
-		E extends { [$elm]: infer DeepStitchesComponentType }
+	): // prettier-ignore
+	E extends string
+		// jsx elements
+		? StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
+	// if it's a stitches component...
+	: E extends {
+		[$elm]: infer DeepStitchesComponentType
+	}
+		// reach in and pull its type to provide better types
 		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
-		: // normal react component
-		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
+	// normal react component
+	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
 } & ProxyStyledElements<Conditions, Theme, Utils, ThemeMap>
 
 export type ProxyStyledElements<Conditions = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
@@ -223,14 +229,18 @@ export type ProxyStyledElements<Conditions = {}, Theme extends TTheme = {}, Util
 						)[]
 					}
 		),
-	) => E extends string
-		? // jsx elements
-		  StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
-		: // if it's a stitches component we reach in and pull its type to provide better types
-		E extends { [$elm]: infer DeepStitchesComponentType }
+	) => // prettier-ignore
+	E extends string
+		// jsx elements
+		? StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
+	// if it's a stitches component...
+	: E extends {
+		[$elm]: infer DeepStitchesComponentType
+	}
+		// reach in and pull its type to provide better types
 		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
-		: // normal react component
-		  StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+	// normal react component
+	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
 }
 
 type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(

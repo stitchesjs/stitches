@@ -54,34 +54,63 @@
       "es6": true,
       "node": true
     },
-    "extends": [
-      "plugin:@typescript-eslint/recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
+    "extends": "eslint:recommended",
+    "globals": {
+      "describe": false,
+      "expect": false,
+      "test": false
+    },
     "parserOptions": {
-      "ecmaVersion": 2020,
+      "ecmaVersion": 12,
       "sourceType": "module",
       "ecmaFeatures": {
-        "jsx": true
-      }
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
+        "modules": true
       }
     },
     "rules": {
-      "@typescript-eslint/ban-types": [
+      "semi": [
         "error",
-        {
-          "extendDefaults": true,
-          "types": {
-            "{}": false
+        "never"
+      ]
+    },
+    "overrides": [
+      {
+        "files": "*.ts",
+        "env": {
+          "browser": true,
+          "es6": true,
+          "node": true
+        },
+        "extends": [
+          "plugin:@typescript-eslint/recommended"
+        ],
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+          "ecmaVersion": 2020,
+          "sourceType": "module",
+          "ecmaFeatures": {
+            "jsx": true
           }
+        },
+        "settings": {
+          "react": {
+            "version": "detect"
+          }
+        },
+        "rules": {
+          "@typescript-eslint/ban-types": [
+            "error",
+            {
+              "extendDefaults": true,
+              "types": {
+                "{}": false
+              }
+            }
+          ],
+          "@typescript-eslint/no-explicit-any": "off"
         }
-      ],
-      "@typescript-eslint/no-explicit-any": "off"
-    }
+      }
+    ]
   },
   "prettier": {
     "arrowParens": "always",

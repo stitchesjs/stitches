@@ -14,11 +14,10 @@ const createCss = (init) => {
 			/** Returns a React component. */
 			(
 				/** Type of component. */
-				...args
+				...inits
 			) => {
-				const composition = sheet.css(...args)
-				const lastComposer = args.length > 1 ? args[args.length - 2] : args[args.length - 1]
-				const defaultType = Object(lastComposer).type || lastComposer || 'span'
+				const defaultType = inits.map((init) => (Object(init).type ? init.type : init)).find((init) => init) || 'span'
+				const composition = sheet.css(...inits.filter((init) => $$composers in Object(init) || (init && typeof init === 'object' && !init.$$typeof)))
 
 				/** Returns a React element. */
 				return Object.setPrototypeOf(
@@ -31,7 +30,7 @@ const createCss = (init) => {
 							// express the component, extracting `props`, `as` & `ref`
 							const {
 								props: { as: type = defaultType, ...props },
-								...expressedProps
+								...expressedProps // eslint-disable-line no-unused-vars
 							} = composition(initProps)
 
 							/** React element. */
