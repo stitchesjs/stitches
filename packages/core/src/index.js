@@ -129,6 +129,8 @@ const createCss = (init) => {
 	const global = (
 		/** Styles representing global CSS. */
 		style,
+		/** Optional name */
+		name = '',
 	) => {
 		/** List of global import styles. */
 		const localImportCss = new StringSet()
@@ -144,11 +146,9 @@ const createCss = (init) => {
 			}
 		}
 
-		const expression = createComponent(create(null), 'displayName', {
-			displayName: '',
-		})
+		const expression = createComponent(create(null), 'name', { name })
 
-		return createComponent(
+		const express = createComponent(
 			() => {
 				let hasImportChanged = importCss.hasChanged
 				let hasGlobalChanged = globalCss.hasChanged
@@ -167,9 +167,15 @@ const createCss = (init) => {
 
 				return expression
 			},
-			'displayName',
-			expression,
+			'name',
+			{
+				get name() {
+					return String(express())
+				},
+			},
 		)
+
+		return express
 	}
 
 	/** Returns a function that enables the keyframe styles on the styled sheet. */
@@ -178,9 +184,9 @@ const createCss = (init) => {
 		style,
 	) => {
 		/** Unique name representing the current keyframes rule. */
-		const displayName = getHashString(prefix, style)
+		const name = getHashString(prefix, style)
 
-		return assign(global({ ['@keyframes ' + displayName]: style }), { displayName })
+		return global({ ['@keyframes ' + name]: style }, name)
 	}
 
 	const createComposer = (initStyle) => {
