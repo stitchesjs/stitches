@@ -90,4 +90,21 @@ describe('Nesting', () => {
 
 		expect(toString()).toBe(parentCssRule + nestingCssRule)
 	})
+
+	test('Authors can define utilities and nesting rules', () => {
+		const { css, toString } = createCss({
+			utils: {
+				article: (config) => ({ color }) => ({
+					color
+				})
+			}
+		})
+
+		css({
+			article: { color: 'red' },
+			'& article': { fontWeight: 'bold' }
+		})()
+
+		expect(toString()).toBe('.sxjls6p{color:red;}.sxjls6p article{font-weight:bold;}')
+	})
 })

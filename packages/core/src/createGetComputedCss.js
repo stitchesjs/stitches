@@ -8,6 +8,9 @@ const captureTokens = /([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)
 /** Unit-ed property name matcher. */
 const captureUnited = /(art|ding|dth|End|[Gg]ap|eft|[^e]Height|^height|op|[Rr]ight|rgin|[^b]Size|^size|tom|us)$/
 
+/** Nested selector name matcher */
+const captureSelector = /[@&#\.]/
+
 /** Returns the name of a property with tokens & camel-casing transformed. */
 const transformPropertyName = (name) => (/^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : name.replace(/[A-Z]/g, (capital) => '-' + capital.toLowerCase()))
 
@@ -90,11 +93,17 @@ const createGetComputedCss = (config) => {
 				/** Whether the current style is a condition (i.e. media or supports query). */
 				const isCondition = name.charCodeAt(0) == 64
 
+				/** Whether the current style is a CSS selector */
+				const isSelector = !selectors.length || captureSelector.test(name)
+
 				dataList = isCondition && isArray(dataList) ? dataList : [dataList]
 
 				loop: for (let data of dataList) {
+					/** Whether the data is a declaration, or a styles object */
+					const isStyleDeclaration = name !== 'when' && (!isSelector || isDeclaration(data))
+
 					// process either a declaration or a nested object of styles
-					if (isDeclaration(data)) {
+					if (isStyleDeclaration) {
 						// conditionally open any unopened condition rules
 						for (const conditionRule of conditionz) {
 							if (!conditionRule[isOpen]) {
