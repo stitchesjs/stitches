@@ -1,12 +1,10 @@
 import { isArray } from './Array.js'
 import getResolvedSelectors from './getResolvedSelectors.js'
 import isDeclaration from './isDeclaration.js'
+import unitOnlyProps from './unitOnlyProps.js'
 
 /** Token matcher. */
 const captureTokens = /([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g
-
-/** Unit-ed property name matcher. */
-const captureUnited = /(art|ding|dth|End|[Gg]ap|eft|[^e]Height|^height|op|[Rr]ight|rgin|[^b]Size|^size|tom|us)$/
 
 /** Returns the name of a property with tokens & camel-casing transformed. */
 const transformPropertyName = (name) => (/^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : name.replace(/[A-Z]/g, (capital) => '-' + capital.toLowerCase()))
@@ -14,7 +12,7 @@ const transformPropertyName = (name) => (/^\$/.test(name) ? '-' + name.replace(/
 /** Returns the data of a property with tokens & numerics transformed. */
 const transformPropertyData = (name, data, themeMap) =>
 	// prettier-ignore
-	captureUnited.test(name) && Number(data)
+	unitOnlyProps.test(name) && Number(data)
 		? String(data) + 'px'
 	: String(data).replace(
 		captureTokens,
