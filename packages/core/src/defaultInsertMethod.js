@@ -5,6 +5,7 @@ export default (init) => {
 
 	let currentCssHead = null
 	let currentCssNode = null
+	let currentCssText = ''
 
 	return (/** @type {string} */ cssText) => {
 		if (typeof document === 'object') {
@@ -12,7 +13,11 @@ export default (init) => {
 			if (!currentCssNode) currentCssNode = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches' })
 			if (!currentCssNode.parentNode) currentCssHead[isAppend ? 'append' : 'prepend'](currentCssNode)
 
-			currentCssNode.textContent = cssText
+			currentCssText = currentCssText || currentCssNode.textContent
+
+			if (!cssText.split('}').every((rule) => currentCssText.includes(rule))) {
+				currentCssNode.textContent = currentCssText = cssText
+			}
 		}
 	}
 }
