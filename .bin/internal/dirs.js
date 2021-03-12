@@ -18,5 +18,11 @@ export const reactPackageUrl = new URL('react/', packagesUrl)
 /** React tests directory. */
 export const reactTestsUrl = new URL('tests/', reactPackageUrl)
 
+/** Stringify package directory */
+export const stringifyPackageUrl = new URL('stringify/', packagesUrl)
+
+/** React tests directory. */
+export const stringifyTestsUrl = new URL('tests/', stringifyPackageUrl)
+
 /** Current file href. */
 export const argv1Url = new URL(process.argv[1], 'file:').href

@@ -7,6 +7,8 @@ nodemon(
 		`--watch packages/core/tests`,
 		`--watch packages/react/src`,
 		`--watch packages/react/tests`,
+		`--watch packages/stringify/src`,
+		`--watch packages/stringify/tests`,
 		`--exec "clear; ${['node', '.bin/test.js'].concat(process.argv.slice(2)).join(' ')}"`,
 	].join(' '),
 )

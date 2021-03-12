@@ -1,0 +1,58 @@
+{
+  "name": "@stitches/stringify",
+  "version": "0.1.0-canary.18",
+  "description": "Converts an object into CSS",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "typings": "types/index.d.ts",
+  "jsdelivr": "dist/index.iife.js",
+  "unpkg": "dist/index.iife.js",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": "modulz/stitches",
+  "homepage": "https://github.com/modulz/stitches#readme",
+  "bugs": "https://github.com/modulz/stitches/issues",
+  "contributors": [
+    "Christian Alfoni <christianalfoni@gmail.com>",
+    "Pedro Duarte <pedro@modulz.app>",
+    "Abdulhadi Alhallak <abdulhadi@modulz.app>",
+    "Jonathan Neal <jonathan@modulz.app>"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "create",
+    "css",
+    "css-in-js",
+    "global",
+    "globals",
+    "javascript",
+    "js",
+    "nesting",
+    "object",
+    "object-oriented",
+    "oo",
+    "oocss",
+    "oriented",
+    "scope",
+    "scoped",
+    "string",
+    "stringifier",
+    "stringify",
+    "style",
+    "styled",
+    "styles",
+    "stylesheet",
+    "stylesheets",
+    "type",
+    "typed",
+    "types",
+    "transform",
+    "ts"
+  ]
+}

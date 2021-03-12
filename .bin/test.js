@@ -7,6 +7,7 @@ const test = (root) =>
 			// testing directories from core and react
 			new URL('./packages/core/tests/', root),
 			new URL('./packages/react/tests/', root),
+			new URL('./packages/stringify/tests/', root),
 		].map(async (dir) => {
 			// bootstrap the expect api
 			globalThis.expect = expect
