@@ -6,13 +6,15 @@ import unitOnlyProps from './unitOnlyProps.js'
 /** Token matcher. */
 const captureTokens = /([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g
 
+const toKebab = (value) => value.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase())
+
 /** Returns the name of a property with tokens & camel-casing transformed. */
-const transformPropertyName = (name) => (/^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : name.replace(/[A-Z]/g, (capital) => '-' + capital.toLowerCase()))
+const transformPropertyName = (name) => (/^\$/.test(name) ? '-' + name.replace(/\$/g, '-') : toKebab(name))
 
 /** Returns the data of a property with tokens & numerics transformed. */
 const transformPropertyData = (name, data, themeMap) =>
 	// prettier-ignore
-	unitOnlyProps.test(name) && Number(data)
+	unitOnlyProps.test(toKebab(name)) && Number(data)
 		? String(data) + 'px'
 	: String(data).replace(
 		captureTokens,
