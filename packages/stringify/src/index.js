@@ -33,7 +33,7 @@ export const stringify = (
 		for (let name in style) {
 			/** Whether the current style is a condition (i.e. media or supports query). */
 			const isCondition = name.charCodeAt(0) == 64
-			const isRule = isCondition ? name.startsWith('@charset') || name.startsWith('@import') || name.startsWith('@namespace') : name.includes('&') || !selectors.length
+			const isRule = isCondition ? !(name.startsWith('@charset') || name.startsWith('@import') || name.startsWith('@namespace')) : name.includes('&') || !selectors.length
 
 			process: for (let data of [].concat(style[name])) {
 				// process either a declaration or a nested object of styles
