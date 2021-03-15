@@ -125,6 +125,8 @@ const defaultThemeMap = {
 	minHeight: sizes,
 	maxHeight: sizes,
 	flexBasis: sizes,
+	gridTemplateColumns: sizes,
+	gridTemplateRows: sizes,
 
 	borderWidth: borderWidths,
 	borderTopWidth: borderWidths,
