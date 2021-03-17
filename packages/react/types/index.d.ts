@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {
-	$conditions,
+	$medias,
 	$variants,
 	CSSPropertiesToTokenScale,
 	DeclarationListWithRootAtRules,
@@ -12,7 +12,7 @@ import {
 	OmitKey,
 	StitchesExtractVariantsStyles,
 	StrictMorphVariant,
-	TConditions,
+	TMedias,
 	TStyledSheet,
 	TTheme,
 	TThemeMap,
@@ -39,23 +39,23 @@ export type IntrinsicElement<T extends React.ElementType, B = React.ElementRef<T
 	[k in keyof HTMLElementTagNameMap]: HTMLElementTagNameMap[k] extends B ? k : never
 }[keyof HTMLElementTagNameMap]
 
-export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement extends string, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}>
+export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement extends string, Variants = {}, Medias = {}, Theme = {}, Utils = {}, ThemeMap = {}>
 	extends React.ForwardRefExoticComponent<
 		Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
-			css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
-		} & VariantsCall<Variants, Conditions>
+			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
+		} & VariantsCall<Variants, Medias>
 	> {
 	// JSX elements have higher priority here when it comes to autocomplete
 	<Elm extends IntrinsicElementsKeys = DefaultElement extends IntrinsicElementsKeys ? DefaultElement : never>(
-		props: VariantsCall<Variants, Conditions> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm], keyof Variants | 'css' | 'as'> & {
-				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		props: VariantsCall<Variants, Medias> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm], keyof Variants | 'css' | 'as'> & {
+				css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
 
 	// React component
 	<As extends React.ComponentType = DefaultElement extends React.ComponentType ? DefaultElement : never>(
-		props: VariantsCall<Variants, Conditions> & { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
-				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		props: VariantsCall<Variants, Medias> & { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
+				css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
 
@@ -87,28 +87,28 @@ export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement 
 	 */
 	selector: string
 	variants: Variants
-	[$conditions]: Conditions
+	[$medias]: Medias
 	[$elm]: DefaultElement
 	[$variants]: Variants
 }
 
-export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElement, Variants = {}, Conditions = {}, Theme = {}, Utils = {}, ThemeMap = {}>
+export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElement, Variants = {}, Medias = {}, Theme = {}, Utils = {}, ThemeMap = {}>
 	extends React.ForwardRefExoticComponent<
 		Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
-			css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
-		} & VariantsCall<Variants, Conditions>
+			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
+		} & VariantsCall<Variants, Medias>
 	> {
 	// React components have higher priority here for autocomplete
 	<As extends React.ComponentType = DefaultElement extends React.ComponentType ? DefaultElement : never>(
-		props: VariantsCall<Variants, Conditions> & { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
-				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		props: VariantsCall<Variants, Medias> & { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
+				css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
 
 	// JSX elements
 	<Elm extends IntrinsicElementsKeys = DefaultElement extends IntrinsicElementsKeys ? DefaultElement : never>(
-		props: VariantsCall<Variants, Conditions> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm], keyof Variants | 'css' | 'as'> & {
-				css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		props: VariantsCall<Variants, Medias> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm], keyof Variants | 'css' | 'as'> & {
+				css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
 			},
 	): JSX.Element
 
@@ -140,7 +140,7 @@ export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElem
 	 */
 	selector: string
 	variants: Variants
-	[$conditions]: Conditions
+	[$medias]: Medias
 	[$variants]: Variants
 }
 
@@ -148,23 +148,23 @@ export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElem
 
 /* Styled instance:
  * -----------------------------------------------------------------------------------------------*/
-export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
+export type StyledInstance<Medias = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
 	<E extends React.ElementType, Variants, CloneVariants extends Variants>(
 		elm: E,
 		// prettier-ignore
 		styles: (
 			(
 				(
-					LessInternalCSS<Conditions, Theme, Utils, ThemeMap>
+					LessInternalCSS<Medias, Theme, Utils, ThemeMap>
 					& {
 						/** Unknown property. */
 						[k in string]: unknown
 					}
 				)
-				| Record<string, InternalCSS<Conditions, Theme, Utils, ThemeMap>>
+				| Record<string, InternalCSS<Medias, Theme, Utils, ThemeMap>>
 			)
 			& {
-				variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Conditions, Theme, Utils, ThemeMap> } }
+				variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Medias, Theme, Utils, ThemeMap> } }
 			}
 			& {
 						defaultVariants?: {
@@ -177,7 +177,7 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 								[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
 							}
 							& {
-								css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+								css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
 							}
 						)[]
 					}
@@ -185,33 +185,33 @@ export type StyledInstance<Conditions = {}, Theme extends TTheme = {}, Utils = {
 	): // prettier-ignore
 	E extends string
 		// jsx elements
-		? StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
+		? StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
 	// if it's a stitches component...
 	: E extends {
 		[$elm]: infer DeepStitchesComponentType
 	}
 		// reach in and pull its type to provide better types
-		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
+		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
 	// normal react component
-	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
-} & ProxyStyledElements<Conditions, Theme, Utils, ThemeMap>
+	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
+} & ProxyStyledElements<Medias, Theme, Utils, ThemeMap>
 
-export type ProxyStyledElements<Conditions = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
+export type ProxyStyledElements<Medias = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
 	[ElKey in keyof JSX.IntrinsicElements]: <E extends React.ElementType = ElKey, Variants, CloneVariants extends Variants>(
 		// prettier-ignore
 		styled: (
 			(
 				(
-					LessInternalCSS<Conditions, Theme, Utils, ThemeMap>
+					LessInternalCSS<Medias, Theme, Utils, ThemeMap>
 					& {
 						/** Unknown property. */
 						[k in string]: unknown
 					}
 				)
-				| Record<string, InternalCSS<Conditions, Theme, Utils, ThemeMap>>
+				| Record<string, InternalCSS<Medias, Theme, Utils, ThemeMap>>
 			)
 			& {
-				variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Conditions, Theme, Utils, ThemeMap> } }
+				variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Medias, Theme, Utils, ThemeMap> } }
 			}
 			& {
 						defaultVariants?: {
@@ -224,7 +224,7 @@ export type ProxyStyledElements<Conditions = {}, Theme extends TTheme = {}, Util
 								[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
 							}
 							& {
-								css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+								css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
 							}
 						)[]
 					}
@@ -232,21 +232,21 @@ export type ProxyStyledElements<Conditions = {}, Theme extends TTheme = {}, Util
 	) => // prettier-ignore
 	E extends string
 		// jsx elements
-		? StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
+		? StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
 	// if it's a stitches component...
 	: E extends {
 		[$elm]: infer DeepStitchesComponentType
 	}
 		// reach in and pull its type to provide better types
-		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils, ThemeMap>
+		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
 	// normal react component
-	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Conditions, Theme, Utils>
+	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils>
 }
 
-type ReactFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
-	_config?: IConfig<Conditions, Theme, Utils, Prefix, ThemeMap>,
-) => TStyledSheet<Conditions, Theme, Utils, Prefix, ThemeMap> & {
-	styled: StyledInstance<Conditions & { initial: '' }, Theme, Utils, ThemeMap>
+type ReactFactory = <Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
+	_config?: IConfig<Medias, Theme, Utils, Prefix, ThemeMap>,
+) => TStyledSheet<Medias, Theme, Utils, Prefix, ThemeMap> & {
+	styled: StyledInstance<Medias & { initial: '' }, Theme, Utils, ThemeMap>
 
 	/**
 	 * Returns all CSS applied to the stylesheet.

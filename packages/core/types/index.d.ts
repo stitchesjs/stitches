@@ -92,8 +92,8 @@ export type CSSPropertiesToTokenScale = {
 	minHeight: 'sizes'
 	maxHeight: 'sizes'
 	flexBasis: 'sizes'
-	gridTemplateColumns: 'sizes',
-	gridTemplateRows: 'sizes',
+	gridTemplateColumns: 'sizes'
+	gridTemplateRows: 'sizes'
 
 	borderWidth: 'borderWidths'
 	borderTopWidth: 'borderWidths'
@@ -123,9 +123,9 @@ export type CSSPropertiesToTokenScale = {
 
 export declare const defaultThemeMap: CSSPropertiesToTokenScale
 export declare const $variants: unique symbol
-export declare const $conditions: unique symbol
+export declare const $media: unique symbol
 
-export type StitchesVariants<T> = T extends { [$variants]: infer V; [$conditions]: infer C } ? VariantsCall<V, C> : {}
+export type StitchesVariants<T> = T extends { [$variants]: infer V; [$media]: infer C } ? VariantsCall<V, C> : {}
 export type StitchesExtractVariantsStyles<T> = T extends { [$variants]: infer V } ? V : {}
 
 export type StyledSheetCallback = (...cssText: string[]) => void
@@ -172,17 +172,17 @@ export type EmptyTheme = {
 	transitions?: {}
 }
 
-export type TConditions = {
-	/** This condition will always apply. */
+export type TMedias = {
+	/** This media will always apply. */
 	initial: string
 	[k: string]: string
 }
 export type TTheme = { [k in keyof EmptyTheme]?: { [b: string]: number | string } }
 export type TThemeMap = { [k in keyof Properties]?: keyof EmptyTheme }
-/** Configuration of Stitches, including a default theme, prefix, custom conditions, and functional properties. */
-export interface IConfig<Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
-	conditions?: {
-		[k in keyof Conditions]?: Conditions[k]
+/** Configuration of Stitches, including a default theme, prefix, custom medias, and functional properties. */
+export interface IConfig<Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
+	media?: {
+		[k in keyof Medias]?: Medias[k]
 	}
 	theme?: {
 		[k in keyof Theme]: k extends keyof EmptyTheme ? Theme[k] : never
@@ -191,24 +191,24 @@ export interface IConfig<Conditions extends TConditions = {}, Theme extends TThe
 			[k in keyof EmptyTheme]?: k extends keyof Theme ? Theme[k] : never
 		}
 	utils?: {
-		[k in keyof Utils]: (config: UtilConfig<Conditions, Theme, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		[k in keyof Utils]: (config: UtilConfig<Medias, Theme, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Medias, Theme, Utils, ThemeMap>
 	}
 	themeMap?: { [k in keyof ThemeMap]?: ThemeMap[k] }
 	prefix?: Prefix
 	/** Determines how the CSS file is inserted to a document. */
 	insertMethod?: 'append' | 'prepend' | (() => (cssText: string) => void)
 }
-type UtilConfig<Conditions, Theme, Prefix, ThemeMap> = {
-	conditions: Conditions
+type UtilConfig<Medias, Theme, Prefix, ThemeMap> = {
+	media: Medias
 	theme: Theme
 	themeMap: ThemeMap
 	prefix: Prefix
 }
-export interface InternalConfig<Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
-	conditions: Conditions
+export interface InternalConfig<Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
+	media: Medias
 	theme: Theme
 	utils: {
-		[k in keyof Utils]: (config: UtilConfig<Conditions, Theme, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		[k in keyof Utils]: (config: UtilConfig<Medias, Theme, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Medias, Theme, Utils, ThemeMap>
 	}
 	themeMap: ThemeMap
 	prefix: Prefix
@@ -220,29 +220,29 @@ export type MapUtils<T> = { [k in keyof T]: T[k] extends (theme: any) => (value:
 /* ========================================================================== */
 
 export type InternalCSS<
-	Conditions = {},
+	Medias = {},
 	Theme extends TTheme = {},
 	Utils = {},
 	ThemeMap extends {
 		[k in keyof Properties]?: keyof Theme
 	} = CSSPropertiesToTokenScale
-> = FlatInternalCSS<Conditions, Theme, Utils, ThemeMap> & {
-	[k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> | number | string | undefined | { [k: string]: InternalCSS<Conditions, Theme, Utils, ThemeMap> }
+> = FlatInternalCSS<Medias, Theme, Utils, ThemeMap> & {
+	[k: string]: InternalCSS<Medias, Theme, Utils, ThemeMap> | number | string | undefined | { [k: string]: InternalCSS<Medias, Theme, Utils, ThemeMap> }
 }
 
 // @todo: this is a messy work-around to prevent variants with the same name as a css property from erroring out
 export type LessInternalCSS<
-	Conditions = {},
+	Medias = {},
 	Theme extends TTheme = {},
 	Utils = {},
 	ThemeMap extends {
 		[k in keyof Properties]?: keyof Theme
 	} = CSSPropertiesToTokenScale
-> = FlatInternalCSS<Conditions, Theme, Utils, ThemeMap>
+> = FlatInternalCSS<Medias, Theme, Utils, ThemeMap>
 
 // prettier-ignore
 export type FlatInternalCSS<
-	Conditions = {},
+	Medias = {},
 	Theme extends TTheme = {},
 	Utils = {},
 	ThemeMap extends {
@@ -257,8 +257,8 @@ export type FlatInternalCSS<
 } & {
 	/** Responsive variants: */
 	when?: {
-		[k in keyof Conditions]?: (
-			FlatInternalCSS<Conditions, Theme, Utils, ThemeMap>
+		[k in keyof Medias]?: (
+			FlatInternalCSS<Medias, Theme, Utils, ThemeMap>
 			& {
 				/** Unknown property. */
 				[k in string]: unknown
@@ -293,7 +293,7 @@ export type ThemeToken = {
 /* Css Instance Type:
 /* ========================================================================== */
 
-export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {}, C = {}, D = '', ThemeMap = {}> {
+export interface TStyledSheet<A extends TMedias = {}, B extends TTheme = {}, C = {}, D = '', ThemeMap = {}> {
 	<Vars extends any[]>(
 		...styles: {
 			[k in keyof Vars]: OmitKey<InternalCSS<A, B, C, ThemeMap>, 'variants'> & {
@@ -421,8 +421,8 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 	 */
 	toString(): string
 
-	/** Conditions in which CSS would be applied. */
-	conditions: A
+	/** Medias in which CSS would be applied. */
+	media: A
 
 	/** Functional properties whose values can be expanded into other properties. */
 	properties: C
@@ -434,20 +434,20 @@ export interface TStyledSheet<A extends TConditions = {}, B extends TTheme = {},
 export type StrictMorphVariant<T> = T extends number ? `${T}` | T : T extends 'true' ? true | T : T extends 'false' ? false | T : T
 export type MorphVariant<T> = T extends number ? `${T}` | T : T extends 'true' ? boolean | T : T extends 'false' ? boolean | T : T extends `${number}` ? number | T : T
 
-export type VariantsCall<Variants, Conditions> = {
-	[k in keyof Variants]?: MorphVariant<keyof Variants[k]> | { [I in keyof Conditions]?: MorphVariant<keyof Variants[k]> }
+export type VariantsCall<Variants, Medias> = {
+	[k in keyof Variants]?: MorphVariant<keyof Variants[k]> | { [I in keyof Medias]?: MorphVariant<keyof Variants[k]> }
 }
 
 /** Extracts the css type from the  */
-export type StitchesCss<T> = T extends { config: { conditions: infer Conditions; theme: infer Theme; utils: infer Utils; themeMap: infer ThemeMap } } ? InternalCSS<Conditions, Theme, MapUtils<Utils>, ThemeMap> : never
+export type StitchesCss<T> = T extends { config: { media: infer Medias; theme: infer Theme; utils: infer Utils; themeMap: infer ThemeMap } } ? InternalCSS<Medias, Theme, MapUtils<Utils>, ThemeMap> : never
 
 /* Output Styled Rule:
 /* ========================================================================== */
-export interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
+export interface IStyledRule<Variants, Medias, Theme, Utils, ThemeMap> {
 	//
 	(
-		init?: VariantsCall<Variants, Conditions> & {
-			css?: InternalCSS<Conditions, Theme, Utils, ThemeMap>
+		init?: VariantsCall<Variants, Medias> & {
+			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
 			className?: string
 		},
 	): StyledExpression & string
@@ -479,16 +479,16 @@ export interface IStyledRule<Variants, Conditions, Theme, Utils, ThemeMap> {
 	 */
 	selector: string
 	variants: Variants
-	[$conditions]: Conditions
+	[$media]: Medias
 	[$variants]: Variants
 }
 
 /* Create Css function type:
 /* ========================================================================== */
 
-type TStyledSheetFactory = <Conditions extends TConditions = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
-	_config?: IConfig<Conditions, Theme, Utils, Prefix, ThemeMap>,
-) => TStyledSheet<Conditions & { initial: '' }, Theme, Utils, Prefix, ThemeMap>
+type TStyledSheetFactory = <Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
+	_config?: IConfig<Medias, Theme, Utils, Prefix, ThemeMap>,
+) => TStyledSheet<Medias & { initial: '' }, Theme, Utils, Prefix, ThemeMap>
 
 type TStyledSheetGlobal = (definition: OmitKey<Record<string, {}>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
 

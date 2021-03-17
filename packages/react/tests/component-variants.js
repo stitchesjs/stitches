@@ -212,9 +212,9 @@ describe('Variants with defaults', () => {
 
 describe('Conditional variants', () => {
 	const config = {
-		conditions: {
-			bp1: '@media (max-width: 767px)',
-			bp2: '@media (min-width: 768px)',
+		media: {
+			bp1: '(max-width: 767px)',
+			bp2: '(min-width: 768px)',
 		},
 	}
 

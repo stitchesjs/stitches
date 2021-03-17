@@ -56,8 +56,8 @@ export const { css } = createCss({
   },
 
   // creates breakpoints with media queries
-  conditions: {
-    tablet: '@media (min-width: 700px)',
+  media: {
+    tablet: '(min-width: 700px)',
   },
 
   // creates or configures css properties

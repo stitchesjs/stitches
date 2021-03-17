@@ -37,8 +37,8 @@ const css = createCss({
 			'9': '59px',
 		},
 	},
-	conditions: {
-		bp1: '@media (min-width: 620px)',
+	media: {
+		bp1: '(min-width: 620px)',
 	},
 })
 

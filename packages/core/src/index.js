@@ -2,7 +2,7 @@ import { assign, create, createComponent } from './Object.js'
 import { from } from './Array.js'
 import { ownKeys } from './Reflect.js'
 import StringSet from './StringSet.js'
-import createGetComputedCss from './createGetComputedCss.js'
+import createStringify from './createStringify.js'
 import defaultThemeMap from './defaultThemeMap.js'
 import getCustomProperties from './getCustomProperties.js'
 import getHashString from './getHashString.js'
@@ -15,8 +15,8 @@ import defaultInsertMethod from './defaultInsertMethod.js'
 const createCss = (init) => {
 	init = Object(init)
 
-	/** Named conditions (media and support queries). */
-	const conditions = assign({ initial: '@media all' }, init.conditions)
+	/** Named media queries. */
+	const media = assign({ initial: 'all' }, init.media)
 
 	/** Theme tokens enabled by default on the styled sheet. */
 	const themeInit = Object(init.theme)
@@ -38,14 +38,14 @@ const createCss = (init) => {
 
 	const config = {
 		theme: themeInit,
-		conditions,
+		media,
 		prefix,
 		themeMap,
 		utils,
 	}
 
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
-	const getComputedCss = createGetComputedCss(config)
+	const stringify = createStringify(config)
 
 	/** Collection of `@import` CSS rules. */
 	const importCss = new StringSet()
@@ -94,7 +94,7 @@ const createCss = (init) => {
 		const selector = className.replace(/^\w/, '.$&')
 
 		/** Computed CSS */
-		const cssText = className === prefix + emptyClassName ? '' : getComputedCss({ [selector]: customPropertyStyles })
+		const cssText = className === prefix + emptyClassName ? '' : stringify({ [selector]: customPropertyStyles })
 
 		const expression = createComponent(create(null), 'className', {
 			className,
@@ -140,7 +140,7 @@ const createCss = (init) => {
 
 		for (const name in style) {
 			if (style[name] !== Object(style[name]) || ownKeys(style[name]).length) {
-				const cssText = getComputedCss({ [name]: style[name] })
+				const cssText = stringify({ [name]: style[name] })
 
 				;(name === '@import' ? localImportCss : localGlobalCss).add(cssText)
 			}
@@ -202,7 +202,7 @@ const createCss = (init) => {
 
 		const className = getHashString(prefix, initStyle)
 		const selector = '.' + className
-		const cssText = className === prefix + emptyClassName ? '' : getComputedCss({ [selector]: style })
+		const cssText = className === prefix + emptyClassName ? '' : stringify({ [selector]: style })
 
 		styledCss.add(unitedCss)
 
@@ -244,18 +244,20 @@ const createCss = (init) => {
 					}
 				}
 
-				const variantConditions = new Set()
+				const variantMedia = new Set()
 
 				if (
 					variantConfigKeys.length &&
 					variantConfigKeys.every((key) => {
 						const value = variantInput[key]
 						const compareValue = String(variantConfig[key])
+
 						if (compareValue === String(value)) return true
+
 						if (value === Object(value)) {
 							for (const condition in value) {
 								if (compareValue == String(value[condition])) {
-									variantConditions.add(condition)
+									variantMedia.add(condition)
 									return true
 								}
 							}
@@ -264,13 +266,15 @@ const createCss = (init) => {
 				) {
 					let conditionedCss = Object(css)
 
-					for (const variantCondition of variantConditions) {
-						conditionedCss = { [variantCondition in conditions ? conditions[variantCondition] : variantCondition]: conditionedCss }
+					for (const variantCondition of variantMedia) {
+						conditionedCss = {
+							['@media ' + (variantCondition in media ? media[variantCondition] : variantCondition)]: conditionedCss,
+						}
 					}
 
 					const variantClassName = className + getHashString('', conditionedCss) + '--' + (variantConfigIndex === 1 ? variantConfigKeys[0] + '-' + variantConfig[variantConfigKeys[0]] : 'c' + variantConfigIndex)
 					const variantSelector = '.' + variantClassName
-					const variantCssText = getComputedCss({ [variantSelector]: conditionedCss })
+					const variantCssText = stringify({ [variantSelector]: conditionedCss })
 					const variantCssByIndex = variedCss[variantConfigIndex - 1] || (variedCss[variantConfigIndex - 1] = new StringSet())
 
 					variantCssByIndex.add(variantCssText)
@@ -310,7 +314,7 @@ const createCss = (init) => {
 			inline(css, classNames) {
 				const inlineSuffix = getHashString('-', css)
 				const inlineSelector = selector + inlineSuffix
-				const inlineCssText = className === '-' + inlineSuffix ? '' : getComputedCss({ [inlineSelector]: css })
+				const inlineCssText = className === '-' + inlineSuffix ? '' : stringify({ [inlineSelector]: css })
 
 				classNames.add(className + inlineSuffix)
 

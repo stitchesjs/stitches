@@ -1,11 +1,10 @@
 import { toKebabCase } from './toKebabCase.js'
 import { getResolvedSelectors } from './getResolvedSelectors.js'
 
-/** Set used to manage the opened and closed state of rules. */
-const state = new WeakSet()
-
 /** Comma matcher outside rounded brackets. */
 const comma = /\s*,\s*(?![^()]*\))/
+
+const mqunit = /([\d.]+)([^]*)/
 
 /** Returns a string of CSS from an object of CSS. */
 export const stringify = (
@@ -14,121 +13,103 @@ export const stringify = (
 	/** ... */
 	replacer = undefined,
 ) => {
-	/** String of CSS being generated. */
-	let cssText = ''
+	/** Set used to manage the opened and closed state of rules. */
+	const used = new WeakSet()
 
-	/** Array of nesting conditions. */
-	const conditions = []
+	let prevName, prevData
 
-	let lastName, lastData
+	const parse = (style, selectors, conditions) => {
+		let cssText = ''
 
-	/** Process CSS from an object of styles. */
-	const processStyle = (
-		/** Object representing the current CSS. */
-		style,
+		each: for (let name in style) {
+			const isAtRuleLike = name.charCodeAt(0) === 64
 
-		/** Styled rule selectors representing the current CSS. */
-		selectors,
-	) => {
-		for (let name in style) {
-			/** Whether the current style is a condition (i.e. media or supports query). */
-			const isCondition = name.charCodeAt(0) == 64
-			const isRule = isCondition ? !(name.startsWith('@charset') || name.startsWith('@import') || name.startsWith('@namespace')) : name.includes('&') || !selectors.length
+			for (const data of isAtRuleLike ? [].concat(style[name]) : [style[name]]) {
+				if (typeof replacer === 'function' && !(name === prevName && data === prevData)) {
+					const next = replacer(name, data, style)
 
-			process: for (let data of [].concat(style[name])) {
-				// process either a declaration or a nested object of styles
-				if (isRule) {
-					/** Process CSS from a nested object of styles. */
-					const processNestedCondition = (
-						/** Whether the rule is a condition (e.g `@media` or `@supports` query). */
-						isCondition,
-						/** Nested rule prelude. */
-						prelude,
-						/** Nested rule styles. */
-						innerStyles,
-					) => {
-						/** Nesting index of the current condition. */
-						const conditionIndex = isCondition ? conditions.push(Object(prelude)) : conditions.length
+					if (next !== null) {
+						prevName = name
+						prevData = data
 
-						// conditionally close a styled rule
-						if (selectors.length && state.has(selectors)) {
-							cssText += '}'
+						cssText += next === Object(next) ? parse(next, selectors, conditions) : next == null ? '' : next
 
-							state.delete(selectors)
-						}
+						continue each
+					}
+				}
 
-						processStyle(innerStyles, isCondition ? selectors : selectors.length ? getResolvedSelectors(selectors, prelude.split(comma)) : prelude.split(comma))
+				const isAtRuleLike = name.charCodeAt(0) === 64
+				const isObjectLike = data === Object(data) && !('length' in data)
 
-						// close any deeper conditions
-						if (isCondition && conditionIndex) {
-							for (const deeperConditionRules of conditions.splice(conditionIndex - 1)) {
-								if (state.has(deeperConditionRules)) {
-									cssText += '}'
+				if (isObjectLike) {
+					if (used.has(selectors)) {
+						used.delete(selectors)
 
-									state.delete(deeperConditionRules)
-								}
-							}
-						}
+						cssText += '}'
 					}
 
-					processNestedCondition(isCondition, name, data)
+					const usedName = Object(name)
+
+					const nextSelectors = isAtRuleLike ? selectors : selectors.length ? getResolvedSelectors(selectors, name.split(comma)) : name.split(comma)
+
+					cssText += parse(data, nextSelectors, isAtRuleLike ? conditions.concat(usedName) : conditions)
+
+					if (used.has(usedName)) {
+						used.delete(usedName)
+						cssText += '}'
+					}
+
+					if (used.has(nextSelectors)) {
+						used.delete(nextSelectors)
+						cssText += '}'
+					}
 				} else {
-					// conditionally open any unopened condition rules
-					for (const conditionRule of conditions) {
-						if (!state.has(conditionRule)) {
-							cssText += conditionRule
-							cssText += '{'
+					for (let i = 0; i < conditions.length; ++i) {
+						if (!used.has(conditions[i])) {
+							used.add(conditions[i])
 
-							state.add(conditionRule)
+							cssText +=
+								conditions[i].replace(/\(\s*([\w-]+)\s*(=|<|<=|>|>=)\s*([\w-]+)\s*(?:(<|<=|>|>=)\s*([\w-]+)\s*)?\)/g, (_, a, l, b, r, c) => {
+									const isValueFirst = mqunit.test(a)
+									const shift = 0.0625 * (isValueFirst ? -1 : 1)
+									const [name, value] = isValueFirst ? [b, a] : [a, b]
+
+									return (
+										// prettier-ignore
+										'(' +
+									(
+										l[0] === '=' ? '' : (l[0] === '>' === isValueFirst ? 'max-' : 'min-')
+									) + name + ':' +
+									(l[0] !== '=' && l.length === 1 ? value.replace(mqunit, (_, v, u) => Number(v) + shift * (l === '>' ? 1 : -1) + u) : value) +
+									(
+										r
+											? ') and (' + (
+												(r[0] === '>' ? 'min-' : 'max-') + name + ':' +
+												(r.length === 1 ? c.replace(mqunit, (_, v, u) => Number(v) + shift * (r === '>' ? -1 : 1) + u) : c)
+											)
+										: ''
+									) +
+								')'
+									)
+								}) + '{'
 						}
 					}
 
-					// conditionally open an unopened styled rule
-					if (selectors.length && !state.has(selectors)) {
-						cssText += selectors.join(',')
-						cssText += '{'
+					if (selectors.length && !used.has(selectors)) {
+						used.add(selectors)
 
-						state.add(selectors)
+						cssText += selectors + '{'
 					}
 
-					if (isCondition) {
-						cssText += name + ' ' + data + ';'
-					} else {
-						name = toKebabCase(name)
-						data = name === 'content' && !/^([^]*["'][^]*|[A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(data) ? '"' + data + '"' : data
-
-						const replaced = typeof replacer === 'function' && name !== lastName && data !== lastData && replacer(name, data)
-
-						if (replaced && typeof replaced === 'object') {
-							lastName = name
-							lastData = data
-
-							processStyle(replaced, selectors)
-
-							continue process
-						}
-
-						if (name != null && data != null) {
-							cssText += name + ':' + data + ';'
-						}
+					for (const each of /^@import/i.test(name) ? [].concat(data) : [data]) {
+						cssText += (isAtRuleLike ? name + ' ' : toKebabCase(name) + ':') + String(name === 'content' && !/^([^]*["'][^]*|[A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(each) ? '"' + each + '"' : each) + ';'
 					}
 				}
 			}
 		}
 
-		// close an open styled rule
-		if (selectors.length && state.has(selectors)) {
-			cssText += '}'
-
-			state.delete(selectors)
-		}
-
-		lastName = undefined
-		lastData = undefined
+		return cssText
 	}
 
-	// process the initial styles
-	processStyle(Object(value), [])
-
-	return cssText
+	return parse(value, [], [])
 }
