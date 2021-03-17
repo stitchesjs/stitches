@@ -8,6 +8,7 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "node .bin/build.js",
     "build:watch": "node .bin/build-watch.js",
+    "lint": "node .bin/test-lint.js",
     "prerelease": "npm run build && npm run test",
     "release": "lerna publish",
     "release:canary": "npm run prerelease && lerna publish --dist-tag canary",
@@ -15,7 +16,6 @@
     "postinstall": "run-s bootstrap",
     "test": "node .bin/test.js",
     "test:coverage": "node .bin/test-coverage.js .bin/test.js",
-    "test:lint": "node .bin/test-lint.js",
     "test:watch": "node .bin/test-watch.js"
   },
   "workspaces": [
