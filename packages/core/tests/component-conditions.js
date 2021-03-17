@@ -10,11 +10,17 @@ describe('Component Medias', () => {
 
 		css({
 			fontSize: '16px',
-			'@when mediumUp': {
+			'@mediumUp': {
 				fontSize: '24px',
 			},
 		})()
 
-		expect(toString()).toBe(`.sx6dwap{font-size:16px;}@media (min-width:768px){.sx6dwap{font-size:24px;}}`)
+		expect(toString()).toBe(
+			// prettier-ignore
+			`.sxhhsxo{font-size:16px;}` +
+			`@media (min-width:768px){` +
+				`.sxhhsxo{font-size:24px;}` +
+			`}`,
+		)
 	})
 })

@@ -9,61 +9,72 @@ const createStringify = (config) => {
 	const { media, themeMap, utils } = config
 
 	return (css) =>
-		stringify(css, (property, value) => {
-			if (typeof utils[property] === 'function') return utils[property](config)(value)
+		stringify(css, (name, data) => {
+			// run utilities that match the raw left-hand of the CSS rule or declaration
+			if (typeof utils[name] === 'function') return utils[name](config)(data)
 
-			const kebabProperty = toKebabCase(property)
+			const kebabProperty = toKebabCase(name)
 
-			if (typeof utils[kebabProperty] === 'function') return utils[kebabProperty](config)(value)
+			// run utilities that match the kebab-case left-hand of the CSS rule or declaration
+			if (typeof utils[kebabProperty] === 'function') return utils[kebabProperty](config)(data)
 
-			const nextProperty = /^\$/.test(property) ? '-' + property.replace(/\$/g, '-') : property
+			const firstChar = name.charCodeAt(0)
 
-			const nextValue =
+			/** CSS property name, which may be a specially-formatted custom property. */
+			const customName = firstChar === 36 ? '-' + name.replace(/\$/g, '-') : name
+
+			const customData =
 				// prettier-ignore
-				typeof value === 'number' || typeof value === 'string'
-					? unitOnlyProps.test(kebabProperty) && Number(value)
-						? String(value) + 'px'
-					: String(value).replace(
-						captureTokens,
-						($0, direction, multiplier, separator, token) => (
-							separator == "$" == !!multiplier
-								? $0
-							: (
+
+				// preserve object-like data
+				data === Object(data)
+					? data
+				// replace specially-marked numeric property values with pixel versions
+				: data && typeof data === 'number' && unitOnlyProps.test(kebabProperty)
+						? String(data) + 'px'
+				// replace tokens with stringified primitive values
+				: String(data).replace(
+					captureTokens,
+					($0, direction, multiplier, separator, token) => (
+						separator == "$" == !!multiplier
+							? $0
+						: (
+							direction || separator == '--'
+								? 'calc('
+							: ''
+						) + (
+							'var(' + (
+								separator === '$'
+									? '--' + (
+										!/\$/.test(token) && name in themeMap
+											? themeMap[name] + '-'
+										: ''
+									) + token.replace(/\$/g, '-')
+								: separator + token
+							) + ')' + (
 								direction || separator == '--'
-									? 'calc('
+									? '*' + (
+										direction || ''
+									) + (
+										multiplier || '1'
+									) + ')'
 								: ''
-							) + (
-								'var(' + (
-									separator === '$'
-										? '--' + (
-											!/\$/.test(token) && property in themeMap
-												? themeMap[property] + '-'
-											: ''
-										) + token.replace(/\$/g, '-')
-									: separator + token
-								) + ')' + (
-									direction || separator == '--'
-										? '*' + (
-											direction || ''
-										) + (
-											multiplier || '1'
-										) + ')'
-									: ''
-								)
 							)
-						),
-					)
-				: value
+						)
+					),
+				)
 
-			if (value !== nextValue || property !== nextProperty) return { [nextProperty]: nextValue }
-
-			if (property.startsWith('@when '))
+			if (data !== customData || name !== customName) {
 				return {
-					['@media' +
-					property.slice(5).replace(/(^|\s)([\w-]+)(\s|$)/, ($0, b, v, a) => {
-						return b + (v in media ? media[v] : v) + a
-					})]: value,
+					[customName]: customData,
 				}
+			}
+
+			if (firstChar === 64 && name.slice(1) in media) {
+				return {
+					['@media ' + media[name.slice(1)]]: data,
+				}
+			}
 
 			return null
 		})
