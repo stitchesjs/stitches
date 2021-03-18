@@ -1,24 +1,15 @@
 import createCss from '../types'
 
 const { css, toString } = createCss({
-	theme: {
-		colors: {
-			red: 'tomato',
-		},
+	media: {
+		bp1: '(min-width: 640px)',
 	},
 })
 
 css({
-	color: '$red',
+	color: 'red',
 	'@bp1': {
-		color: '$red',
-	},
-	variants: {
-		color: {
-			red: {
-				color: '$red',
-			},
-		},
+		color: 'red',
 	},
 })
 
