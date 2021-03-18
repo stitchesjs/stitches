@@ -12,12 +12,12 @@ export const getResolvedSelectors = (
 			resolvedSelectors.push(
 				...nestedSelectors.map(
 					(selector) => (
-						selector.replace(
+						selector.includes('&') ? selector.replace(
 							/&/g,
 							/[ +>|~]/.test(parentSelector) && /&[^]*&/.test(selector)
 								? `:is(${parentSelector})`
 							: parentSelector
-						)
+						) : parentSelector + ' ' + selector
 					)
 				)
 			)
