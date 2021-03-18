@@ -175,24 +175,36 @@ export interface TMedias {
 	initial: string
 	[k: string]: string
 }
+
 export type TTheme = { [k in keyof EmptyTheme]?: { [b: string]: number | string } }
+
 export type TThemeMap = { [k in keyof Properties]?: keyof EmptyTheme }
+
 /** Configuration of Stitches, including a default theme, prefix, custom medias, and functional properties. */
 export interface IConfig<Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
+	/** Named CSS media queries. */
 	media?: {
 		[k in keyof Medias]?: Medias[k]
 	}
+
+	/** Named theme scales containing theme tokens. */
 	theme?: {
 		[k in keyof Theme]: k extends keyof EmptyTheme ? Theme[k] : never
 	} &
 		{
 			[k in keyof EmptyTheme]?: k extends keyof Theme ? Theme[k] : never
 		}
+
+	/** CSS properties corresponding to functions that accept CSS values and return new CSS object fragments. */
 	utils?: {
 		[k in keyof Utils]: (config: UtilConfig<Medias, Theme, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Medias, Theme, Utils, ThemeMap>
 	}
+
 	themeMap?: { [k in keyof ThemeMap]?: ThemeMap[k] }
+
+	/** Prefix added before all generated class names. */
 	prefix?: Prefix
+
 	/** Determines how the CSS file is inserted to a document. */
 	insertMethod?: 'append' | 'prepend' | (() => (cssText: string) => void)
 }
@@ -231,7 +243,7 @@ export type InternalCSS<
 
 // @todo: this is a messy work-around to prevent variants with the same name as a css property from erroring out
 export type LessInternalCSS<
-	Medias = {},
+	Medias extends { [k: string & keyof Medias]: string } = { [key: string]: string },
 	Theme extends TTheme = {},
 	Utils = {},
 	ThemeMap extends {
@@ -241,7 +253,7 @@ export type LessInternalCSS<
 
 // prettier-ignore
 export type FlatInternalCSS<
-	Medias = {},
+	Medias extends { [k: string & keyof Medias]: string } = { [key: string]: string },
 	Theme extends TTheme = {},
 	Utils = {},
 	ThemeMap extends {
@@ -255,7 +267,7 @@ export type FlatInternalCSS<
 	) | Properties[k]
 } & {
 	/** Responsive variants: */
-	[k in `@${keyof Medias}`]?: (
+	[k in `@${string & keyof Medias}`]?: (
 		FlatInternalCSS<Medias, Theme, Utils, ThemeMap>
 		& {
 			/** Unknown property. */
@@ -290,7 +302,15 @@ export type ThemeToken = {
 /* Css Instance Type:
 /* ========================================================================== */
 
-export interface TStyledSheet<A extends TMedias = {}, B extends TTheme = {}, C = {}, D = '', ThemeMap = {}> {
+export interface TStyledSheet<
+	/** Named CSS media queries. */
+	A extends TMedias = {},
+	/** Named theme scales containing theme tokens. */
+	B extends TTheme = {},
+	C = {},
+	D = '',
+	ThemeMap = {}
+> {
 	<Vars extends any[]>(
 		...styles: {
 			[k in keyof Vars]: OmitKey<InternalCSS<A, B, C, ThemeMap>, 'variants'> & {
@@ -350,7 +370,9 @@ export interface TStyledSheet<A extends TMedias = {}, B extends TTheme = {}, C =
 	}
 	config: InternalConfig<A, B, C, D, ThemeMap>
 
-	/** Returns a new styled rule. */
+	/**
+	 * Returns a new styled rule.
+	 */
 	css: {
 		<Vars extends any[]>(
 			...styles: {
@@ -418,14 +440,14 @@ export interface TStyledSheet<A extends TMedias = {}, B extends TTheme = {}, C =
 	 */
 	toString(): string
 
-	/** Medias in which CSS would be applied. */
+	/** Named CSS media queries. */
 	media: A
-
-	/** Functional properties whose values can be expanded into other properties. */
-	properties: C
 
 	/** Prefix applied to all styled and themed rules. */
 	prefix: string
+
+	/** Functional properties whose values can be expanded into other properties. */
+	utils: C
 }
 
 export type StrictMorphVariant<T> = T extends number ? `${T}` | T : T extends 'true' ? true | T : T extends 'false' ? false | T : T

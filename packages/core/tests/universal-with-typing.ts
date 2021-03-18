@@ -6,11 +6,11 @@ const { css, toString } = createCss({
 	},
 })
 
-css({
+const xyz = css({
 	color: 'red',
 	'@bp1': {
 		color: 'red',
 	},
 })
 
-console.log(toString())
+console.log(xyz(), toString())

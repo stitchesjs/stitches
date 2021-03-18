@@ -23,7 +23,7 @@ const createCss = (init) => {
 
 	const themeMap = Object(init.themeMap || defaultThemeMap)
 
-	/** Properties corresponding to functions that take in CSS values and return aliased CSS declarations. */
+	/** CSS properties corresponding to functions that accept CSS values and return new CSS object fragments. */
 	const utils = Object(init.utils)
 
 	/** Names of variants passed through to props. */
