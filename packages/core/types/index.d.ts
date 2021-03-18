@@ -210,19 +210,32 @@ export interface IConfig<Medias extends TMedias = {}, Theme extends TTheme = {},
 }
 
 interface UtilConfig<Medias, Theme, Prefix, ThemeMap> {
+	/** Named CSS media queries. */
 	media: Medias
+
+	/** Named theme scales containing theme tokens. */
 	theme: Theme
 	themeMap: ThemeMap
+
+	/** Prefix applied to all styled and themed rules. */
 	prefix: Prefix
 }
+
 export interface InternalConfig<Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
+	/** Named CSS media queries. */
 	media: Medias
+
+	/** Named theme scales containing theme tokens. */
 	theme: Theme
+	themeMap: ThemeMap
+
+	/** Prefix applied to all styled and themed rules. */
+	prefix: Prefix
+
+	/** Functional properties whose values can be expanded into other properties. */
 	utils: {
 		[k in keyof Utils]: (config: UtilConfig<Medias, Theme, Prefix, ThemeMap>) => (value: Utils[k]) => InternalCSS<Medias, Theme, Utils, ThemeMap>
 	}
-	themeMap: ThemeMap
-	prefix: Prefix
 }
 
 export type MapUtils<T> = { [k in keyof T]: T[k] extends (theme: any) => (value: infer V) => any ? V : never }
@@ -350,6 +363,7 @@ export interface TStyledSheet<
 	 */
 	theme: {
 		(
+			/** Named theme scales containing theme tokens. */
 			theme: Partial<
 				{
 					[TO in keyof B]: Partial<B[TO]>
@@ -359,6 +373,7 @@ export interface TStyledSheet<
 
 		(
 			themeName: string,
+			/** Named theme scales containing theme tokens. */
 			theme: Partial<
 				{
 					[TO in keyof B]: Partial<B[TO]>
@@ -458,18 +473,27 @@ export type VariantsCall<Variants, Medias> = {
 }
 
 /** Extracts the css type from the  */
-export type StitchesCss<T> = T extends { config: { media: infer Medias; theme: infer Theme; utils: infer Utils; themeMap: infer ThemeMap } } ? InternalCSS<Medias, Theme, MapUtils<Utils>, ThemeMap> : never
+export type StitchesCss<T> = T extends {
+	config: {
+		media: infer Medias
+		theme: infer Theme
+		utils: infer Utils
+		themeMap: infer ThemeMap
+	}
+}
+	? InternalCSS<Medias, Theme, MapUtils<Utils>, ThemeMap>
+	: never
 
 /* Output Styled Rule:
 /* ========================================================================== */
 export interface IStyledRule<Variants, Medias, Theme, Utils, ThemeMap> {
-	//
 	(
 		init?: VariantsCall<Variants, Medias> & {
 			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
 			className?: string
 		},
 	): StyledExpression & string
+
 	toString(): string
 	/**
 	 * CSS Class associated with the current component.
@@ -482,6 +506,7 @@ export interface IStyledRule<Variants, Medias, Theme, Utils, ThemeMap> {
 	 * ```
 	 * <br />
 	 */
+
 	className: string
 	/**
 	 * CSS Selector associated with the current component.
@@ -497,7 +522,9 @@ export interface IStyledRule<Variants, Medias, Theme, Utils, ThemeMap> {
 	 * <br />
 	 */
 	selector: string
+
 	variants: Variants
+
 	[$media]: Medias
 	[$variants]: Variants
 }
