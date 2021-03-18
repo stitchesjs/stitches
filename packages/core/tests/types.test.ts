@@ -53,10 +53,8 @@ css.keyframes({
 
 css.global({
 	hello: {
-		when: {
-			bp1: {
-				backgroundColor: '$1',
-			},
+		'@bp1': {
+			backgroundColor: '$1',
 		},
 		backgroundColor: '$font100',
 	},
@@ -65,10 +63,8 @@ css.global({
 type CSS = StitchesCss<typeof css>
 
 const ExternalStyles: CSS = {
-	when: {
-		bp1: {
-			backgroundColor: '$1',
-		},
+	'@bp1': {
+		backgroundColor: '$1',
 	},
 	backgroundColor: '$1',
 }
@@ -135,13 +131,12 @@ PotatoButton({
 	className: '',
 	css: {
 		backgroundColor: '$red100',
-		when: {
-			initial: {
-				backgroundColor: '-moz-initial',
-			},
-			bp1: {
-				backgroundColor: '-moz-initial',
-			},
+
+		'@initial': {
+			backgroundColor: '-moz-initial',
+		},
+		'@bp1': {
+			backgroundColor: '-moz-initial',
 		},
 	},
 })

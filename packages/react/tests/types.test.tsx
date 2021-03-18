@@ -105,37 +105,36 @@ const Test0 = (
 	<StyledSeparator
 		as="a"
 		href=""
-		onMouseDown={(e) => {}}
+		onMouseDown={(e) => {
+			return e
+		}}
 		onClick={(e) => {
-			console.log(e)
+			return e
 		}}
 		css={{ backdropFilter: 'inherit', backgroundColor: '', color: '$gray900' }}
 	>
 		hello
 	</StyledSeparator>
 )
+
 // token:
-theme.colors.gray100.scale
-theme.colors.gray100.value
-theme.colors.gray100.token
-theme.colors.gray100.computedValue
-theme.colors.gray100.variable
-theme.colors.gray100
+void theme.colors.gray100.scale
+void theme.colors.gray100.value
+void theme.colors.gray100.token
+void theme.colors.gray100.computedValue
+void theme.colors.gray100.variable
+void theme.colors.gray100
 
 const themeClass = theme('dark', {})
 const sharedColor: CSS = {
 	backgroundColor: 'red',
 	fwefwe: {
-		when: {
-			bp1: {
-				backgroundColor: 'ActiveCaption',
-			},
+		'@bp1': {
+			backgroundColor: 'ActiveCaption',
 		},
 	},
-	when: {
-		bp1: {
-			backgroundColor: 'purple',
-		},
+	'@bp1': {
+		backgroundColor: 'purple',
 	},
 }
 
@@ -159,8 +158,6 @@ const Button = styled('button', {
 	},
 	compoundVariants: [
 		{
-			//cool
-
 			variant: 'blue',
 			css: {
 				backgroundColor: '$gray200',
@@ -226,7 +223,11 @@ export function Test() {
 	return (
 		<>
 			{/* Link accepts onToggle prop */}
-			<Link onToggle={(open) => console.log(open)} />
+			<Link
+				onToggle={(open) => {
+					void open
+				}}
+			/>
 
 			{/* Link accepts isPrimary prop */}
 			<Link isPrimary />
@@ -240,7 +241,12 @@ export function Test() {
 			<Button as="div" href="" />
 
 			{/* Button accepts form  prop */}
-			<Button form="form" onClick={(e) => {}} />
+			<Button
+				form="form"
+				onClick={(e) => {
+					void e
+				}}
+			/>
 
 			{/* Button accepts css prop */}
 			<Button css={{ backgroundColor: 'ActiveCaption', padding: 'inherit', paddingBlock: 'inherit', color: 'ActiveCaption' }} />
@@ -290,7 +296,7 @@ export function Test() {
 			{/* ExtendedButton is typed as a button */}
 			<ExtendedButton
 				onClick={(e) => {
-					console.log(e.currentTarget.form)
+					void e.currentTarget.form
 				}}
 			/>
 
@@ -298,7 +304,7 @@ export function Test() {
 			<ExtendedButton
 				as="a"
 				onClick={(e) => {
-					console.log(e.currentTarget.href)
+					void e.currentTarget.href
 				}}
 			/>
 
@@ -317,7 +323,7 @@ export function Test() {
 				as="a"
 				href="fwef"
 				onClick={(e) => {
-					console.log(e)
+					void e
 				}}
 			/>
 
