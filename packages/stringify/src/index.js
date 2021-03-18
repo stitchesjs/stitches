@@ -25,7 +25,7 @@ export const stringify = (
 			const isAtRuleLike = name.charCodeAt(0) === 64
 
 			for (const data of isAtRuleLike ? [].concat(style[name]) : [style[name]]) {
-				if (typeof replacer === 'function' && !(name === prevName && data === prevData)) {
+				if (typeof replacer === 'function' && (name !== prevName || data !== prevData)) {
 					const next = replacer(name, data, style)
 
 					if (next !== null) {
