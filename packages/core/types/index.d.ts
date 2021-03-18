@@ -2,7 +2,7 @@ import { DeclarationListWithRootAtRules, Properties } from './css-types'
 
 export { DeclarationListWithRootAtRules }
 
-export type CSSPropertiesToTokenScale = {
+export interface CSSPropertiesToTokenScale {
 	gap: 'space'
 	gridGap: 'space'
 	columnGap: 'space'
@@ -130,9 +130,7 @@ export type StitchesExtractVariantsStyles<T> = T extends { [$variants]: infer V 
 
 export type StyledSheetCallback = (...cssText: string[]) => void
 
-export interface GlobalRule {
-	(): void
-}
+type GlobalRule = () => void
 
 export interface ThemeRule {
 	toString(): string
@@ -155,7 +153,7 @@ export interface StyledExpression {
 // Just used as a keyof target for the config
 // for some weird reason, autocomplete stops working
 // if we try to pre compute the keys or use a union
-export type EmptyTheme = {
+export interface EmptyTheme {
 	colors?: {}
 	space?: {}
 	fontSizes?: {}
@@ -172,7 +170,7 @@ export type EmptyTheme = {
 	transitions?: {}
 }
 
-export type TMedias = {
+export interface TMedias {
 	/** This media will always apply. */
 	initial: string
 	[k: string]: string
@@ -198,7 +196,8 @@ export interface IConfig<Medias extends TMedias = {}, Theme extends TTheme = {},
 	/** Determines how the CSS file is inserted to a document. */
 	insertMethod?: 'append' | 'prepend' | (() => (cssText: string) => void)
 }
-type UtilConfig<Medias, Theme, Prefix, ThemeMap> = {
+
+interface UtilConfig<Medias, Theme, Prefix, ThemeMap> {
 	media: Medias
 	theme: Theme
 	themeMap: ThemeMap
@@ -256,15 +255,13 @@ export type FlatInternalCSS<
 	) | Properties[k]
 } & {
 	/** Responsive variants: */
-	when?: {
-		[k in keyof Medias]?: (
-			FlatInternalCSS<Medias, Theme, Utils, ThemeMap>
-			& {
-				/** Unknown property. */
-				[k in string]: unknown
-			}
-		)
-	}
+	[k in `@${keyof Medias}`]?: (
+		FlatInternalCSS<Medias, Theme, Utils, ThemeMap>
+		& {
+			/** Unknown property. */
+			[k in string]: unknown
+		}
+	)
 } & {
 	[k in keyof Utils]?: Utils[k]
 }

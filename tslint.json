@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:recommended", "tslint-config-prettier", "tslint-plugin-prettier"],
+  "extends": ["tslint:recommended"],
   "rules": {
     "arrow-return-shorthand": [true],
     "class-name": true,
