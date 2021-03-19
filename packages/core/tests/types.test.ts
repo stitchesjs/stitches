@@ -1,4 +1,4 @@
-//core types.tests.ts
+// core types.tests.ts
 import createCss, { StitchesCss, StitchesVariants } from '../types/index.d'
 const css = createCss({
 	utils: {
@@ -56,7 +56,7 @@ css.global({
 		'@bp1': {
 			backgroundColor: '$1',
 		},
-		backgroundColor: '$font100',
+		'backgroundColor': '$font100',
 	},
 })
 
@@ -66,7 +66,7 @@ const ExternalStyles: CSS = {
 	'@bp1': {
 		backgroundColor: '$1',
 	},
-	backgroundColor: '$1',
+	'backgroundColor': '$1',
 }
 
 const PotatoButton = css.css({
@@ -109,7 +109,7 @@ const two = css.css(PotatoButton, {
 	},
 	compoundVariants: [
 		{
-			//cool
+			// cool
 
 			variant: 'green',
 			css: {
@@ -130,7 +130,7 @@ const theme = css.theme({})
 PotatoButton({
 	className: '',
 	css: {
-		backgroundColor: '$red100',
+		'backgroundColor': '$red100',
 
 		'@initial': {
 			backgroundColor: '-moz-initial',

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {
-	$medias,
+	$media,
 	$variants,
 	CSSPropertiesToTokenScale,
 	DeclarationListWithRootAtRules,
@@ -39,7 +39,7 @@ export type IntrinsicElement<T extends React.ElementType, B = React.ElementRef<T
 	[k in keyof HTMLElementTagNameMap]: HTMLElementTagNameMap[k] extends B ? k : never
 }[keyof HTMLElementTagNameMap]
 
-export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement extends string, Variants = {}, Medias = {}, Theme = {}, Utils = {}, ThemeMap = {}>
+export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement extends string, Variants = {}, Medias extends TMedias = TMedias, Theme = {}, Utils = {}, ThemeMap = {}>
 	extends React.ForwardRefExoticComponent<
 		Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
 			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
@@ -87,12 +87,12 @@ export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement 
 	 */
 	selector: string
 	variants: Variants
-	[$medias]: Medias
+	[$media]: Medias
 	[$elm]: DefaultElement
 	[$variants]: Variants
 }
 
-export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElement, Variants = {}, Medias = {}, Theme = {}, Utils = {}, ThemeMap = {}>
+export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElement, Variants = {}, Medias extends TMedias = TMedias, Theme = {}, Utils = {}, ThemeMap = {}>
 	extends React.ForwardRefExoticComponent<
 		Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
 			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
@@ -140,7 +140,7 @@ export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElem
 	 */
 	selector: string
 	variants: Variants
-	[$medias]: Medias
+	[$media]: Medias
 	[$variants]: Variants
 }
 
@@ -148,7 +148,7 @@ export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElem
 
 /* Styled instance:
  * -----------------------------------------------------------------------------------------------*/
-export type StyledInstance<Medias = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
+export type StyledInstance<Medias extends TMedias = TMedias, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
 	<E extends React.ElementType, Variants, CloneVariants extends Variants>(
 		elm: E,
 		// prettier-ignore
@@ -191,13 +191,13 @@ export type StyledInstance<Medias = {}, Theme extends TTheme = {}, Utils = {}, T
 		[$elm]: infer DeepStitchesComponentType
 	}
 		// reach in and pull its type to provide better types
-		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
+		? StitchesComponentWithAutoCompleteForJSXElements<string & DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
 	// normal react component
 	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
 } & ProxyStyledElements<Medias, Theme, Utils, ThemeMap>
 
-export type ProxyStyledElements<Medias = {}, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
-	[ElKey in keyof JSX.IntrinsicElements]: <E extends React.ElementType = ElKey, Variants, CloneVariants extends Variants>(
+export type ProxyStyledElements<Medias extends TMedias = TMedias, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
+	[ElKey in keyof JSX.IntrinsicElements]: <E extends React.ElementType = ElKey, Variants = {}, CloneVariants extends Variants = {}>(
 		// prettier-ignore
 		styled: (
 			(
@@ -243,7 +243,7 @@ export type ProxyStyledElements<Medias = {}, Theme extends TTheme = {}, Utils = 
 	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils>
 }
 
-type ReactFactory = <Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
+type ReactFactory = <Medias extends TMedias = TMedias, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
 	_config?: IConfig<Medias, Theme, Utils, Prefix, ThemeMap>,
 ) => TStyledSheet<Medias, Theme, Utils, Prefix, ThemeMap> & {
 	styled: StyledInstance<Medias & { initial: '' }, Theme, Utils, ThemeMap>
@@ -273,8 +273,8 @@ type ReactFactory = <Medias extends TMedias = {}, Theme extends TTheme = {}, Uti
 
 export declare const createCss: ReactFactory
 export declare const css: TStyledSheet<{ initial: '' }, {}, {}, '', CSSPropertiesToTokenScale>
-export declare const global: (definition: OmitKey<Record<string, InternalCSS<{}, {}, {}, CSSPropertiesToTokenScale>>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
-export declare const keyframes: (definition: { [k: string]: FlatInternalCSS<{}, {}, {}, CSSPropertiesToTokenScale> }) => GlobalRule
+export declare const global: (definition: OmitKey<Record<string, InternalCSS<{} & TMedias, {}, {}, CSSPropertiesToTokenScale>>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
+export declare const keyframes: (definition: { [k: string]: FlatInternalCSS<{} & TMedias, {}, {}, CSSPropertiesToTokenScale> }) => GlobalRule
 export declare const styled: StyledInstance<{ initial: '' }, {}, {}, CSSPropertiesToTokenScale>
 
 export default createCss

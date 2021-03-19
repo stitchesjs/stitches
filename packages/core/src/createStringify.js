@@ -14,6 +14,7 @@ const patches = {
 	'backface-visibility': (d) => ({ WebkitBackfaceVisibility: d, backfaceVisibility: d }),
 	'background-clip': (d) => ({ WebkitBackgroundClip: d, backgroundClip: d }),
 	'clip-path': (d) => ({ WebkitClipPath: d, clipPath: d }),
+	'content': (d) => ({ content: !/^([^]*["'][^]*|[A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(d) ? `"${d}"` : d }),
 	'hyphens': (d) => ({ WebkitHyphens: d, hyphens: d }),
 	'mask-image': (d) => ({ WebkitMaskImage: d, maskImage: d }),
 	'tab-size': (d) => ({ MozTabSize: d, tabSize: d }),
@@ -28,7 +29,7 @@ const patches = {
 	'padding-inline': split((s, e) => ({ paddingInlineStart: s, paddingInlineEnd: e || s })),
 }
 
-const createStringify = (config) => {
+export const createStringify = (config) => {
 	const { media, themeMap, utils } = config
 
 	let lastUtil
@@ -113,5 +114,3 @@ const createStringify = (config) => {
 			return null
 		})
 }
-
-export default createStringify

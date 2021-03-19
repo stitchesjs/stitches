@@ -102,7 +102,7 @@ export const stringify = (
 					}
 
 					for (const each of /^@import/i.test(name) ? [].concat(data) : [data]) {
-						cssText += (isAtRuleLike ? name + ' ' : toKebabCase(name) + ':') + String(name === 'content' && !/^([^]*["'][^]*|[A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(each) ? '"' + each + '"' : each) + ';'
+						cssText += (isAtRuleLike ? name + ' ' : toKebabCase(name) + ':') + String(each) + ';'
 					}
 				}
 			}

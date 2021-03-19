@@ -8,9 +8,7 @@ const { css, toString } = createCss({
 
 const xyz = css({
 	color: 'red',
-	'@bp1': {
-		color: 'red',
-	},
 })
 
-console.log(xyz(), toString())
+void xyz()
+void toString()

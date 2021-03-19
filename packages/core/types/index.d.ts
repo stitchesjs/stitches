@@ -130,7 +130,7 @@ export type StitchesExtractVariantsStyles<T> = T extends { [$variants]: infer V 
 
 export type StyledSheetCallback = (...cssText: string[]) => void
 
-type GlobalRule = () => void
+export type GlobalRule = () => void
 
 export interface ThemeRule {
 	toString(): string
@@ -181,7 +181,7 @@ export type TTheme = { [k in keyof EmptyTheme]?: { [b: string]: number | string 
 export type TThemeMap = { [k in keyof Properties]?: keyof EmptyTheme }
 
 /** Configuration of Stitches, including a default theme, prefix, custom medias, and functional properties. */
-export interface IConfig<Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
+export interface IConfig<Medias extends TMedias = TMedias, Theme extends TTheme = TTheme, Utils = {}, Prefix = '', ThemeMap = {}> {
 	/** Named CSS media queries. */
 	media?: {
 		[k in keyof Medias]?: Medias[k]
@@ -221,7 +221,7 @@ interface UtilConfig<Medias, Theme, Prefix, ThemeMap> {
 	prefix: Prefix
 }
 
-export interface InternalConfig<Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap = {}> {
+export interface InternalConfig<Medias extends TMedias = TMedias, Theme extends TTheme = TTheme, Utils = {}, Prefix = '', ThemeMap = {}> {
 	/** Named CSS media queries. */
 	media: Medias
 
@@ -244,8 +244,8 @@ export type MapUtils<T> = { [k in keyof T]: T[k] extends (theme: any) => (value:
 /* ========================================================================== */
 
 export type InternalCSS<
-	Medias = {},
-	Theme extends TTheme = {},
+	Medias extends TMedias = TMedias,
+	Theme extends TTheme = TTheme,
 	Utils = {},
 	ThemeMap extends {
 		[k in keyof Properties]?: keyof Theme
@@ -256,8 +256,8 @@ export type InternalCSS<
 
 // @todo: this is a messy work-around to prevent variants with the same name as a css property from erroring out
 export type LessInternalCSS<
-	Medias extends { [k: string & keyof Medias]: string } = { [key: string]: string },
-	Theme extends TTheme = {},
+	Medias extends TMedias = TMedias,
+	Theme extends TTheme = TTheme,
 	Utils = {},
 	ThemeMap extends {
 		[k in keyof Properties]?: keyof Theme
@@ -266,8 +266,8 @@ export type LessInternalCSS<
 
 // prettier-ignore
 export type FlatInternalCSS<
-	Medias extends { [k: string & keyof Medias]: string } = { [key: string]: string },
-	Theme extends TTheme = {},
+	Medias extends TMedias = TMedias,
+	Theme extends TTheme = TTheme,
 	Utils = {},
 	ThemeMap extends {
 		[k in keyof Properties]?: keyof Theme
@@ -317,9 +317,9 @@ export type ThemeToken = {
 
 export interface TStyledSheet<
 	/** Named CSS media queries. */
-	A extends TMedias = {},
+	A extends TMedias = TMedias,
 	/** Named theme scales containing theme tokens. */
-	B extends TTheme = {},
+	B extends TTheme = TTheme,
 	C = {},
 	D = '',
 	ThemeMap = {}
@@ -428,7 +428,7 @@ export interface TStyledSheet<
 		): IStyledRule<InferRestVariants<Vars>, A, B, C, ThemeMap>
 	}
 
-	keyframes: (definition: { [k: string]: FlatInternalCSS<{}, B, C, ThemeMap> }) => GlobalRule
+	keyframes: (definition: { [k: string]: FlatInternalCSS<A, B, C, ThemeMap> }) => GlobalRule
 
 	/** Clears all CSS rules from the sheet.  */
 	clear(): void
@@ -481,12 +481,12 @@ export type StitchesCss<T> = T extends {
 		themeMap: infer ThemeMap
 	}
 }
-	? InternalCSS<Medias, Theme, MapUtils<Utils>, ThemeMap>
+	? InternalCSS<Medias extends TMedias ? Medias : never, Theme extends TTheme ? Theme : never, MapUtils<Utils>, ThemeMap>
 	: never
 
 /* Output Styled Rule:
 /* ========================================================================== */
-export interface IStyledRule<Variants, Medias, Theme, Utils, ThemeMap> {
+export interface IStyledRule<Variants, Medias extends TMedias = TMedias, Theme extends TTheme = TTheme, Utils = {}, ThemeMap = {}> {
 	(
 		init?: VariantsCall<Variants, Medias> & {
 			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
@@ -532,7 +532,7 @@ export interface IStyledRule<Variants, Medias, Theme, Utils, ThemeMap> {
 /* Create Css function type:
 /* ========================================================================== */
 
-type TStyledSheetFactory = <Medias extends TMedias = {}, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
+type TStyledSheetFactory = <Medias extends TMedias = TMedias, Theme extends TTheme = TTheme, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
 	_config?: IConfig<Medias, Theme, Utils, Prefix, ThemeMap>,
 ) => TStyledSheet<Medias & { initial: '' }, Theme, Utils, Prefix, ThemeMap>
 
@@ -540,7 +540,7 @@ type TStyledSheetGlobal = (definition: OmitKey<Record<string, {}>, '@font-face' 
 
 export declare const createCss: TStyledSheetFactory
 export declare const css: TStyledSheet<{ initial: '' }, {}, {}, '', CSSPropertiesToTokenScale>
-export declare const global: (definition: OmitKey<Record<string, InternalCSS<{}, {}, {}, CSSPropertiesToTokenScale>>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
-export declare const keyframes: (definition: { [k: string]: FlatInternalCSS<{}, {}, {}, CSSPropertiesToTokenScale> }) => GlobalRule
+export declare const global: (definition: OmitKey<Record<string, InternalCSS<{} & TMedias, {}, {}, CSSPropertiesToTokenScale>>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
+export declare const keyframes: (definition: { [k: string]: FlatInternalCSS<{} & TMedias, {}, {}, CSSPropertiesToTokenScale> }) => GlobalRule
 
 export default createCss
