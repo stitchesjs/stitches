@@ -206,7 +206,7 @@ export interface IConfig<Medias extends TMedias = TMedias, Theme extends TTheme 
 	prefix?: Prefix
 
 	/** Determines how the CSS file is inserted to a document. */
-	insertMethod?: 'append' | 'prepend' | (() => (cssText: string) => void)
+	insertionMethod?: 'append' | 'prepend' | (() => (cssText: string) => void)
 }
 
 interface UtilConfig<Medias, Theme, Prefix, ThemeMap> {
