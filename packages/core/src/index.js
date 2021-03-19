@@ -456,4 +456,4 @@ const css = (...args) => getReusableSheet().css(...args)
 const global = (...args) => getReusableSheet().global(...args)
 const keyframes = (...args) => getReusableSheet().keyframes(...args)
 
-export { createCss as default, createCss, defaultThemeMap, css, global, keyframes }
+export { createCss, defaultThemeMap, css, global, keyframes }

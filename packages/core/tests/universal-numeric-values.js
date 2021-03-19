@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Numeric Values', () => {
 	// test('Authors can use numeric values to assign px values', () => {

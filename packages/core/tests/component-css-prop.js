@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Component with CSS prop', () => {
 	test('Authors can create a component and pass it a css prop of overrides', () => {

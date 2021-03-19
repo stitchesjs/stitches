@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Component Medias', () => {
 	test('Authors can define medias applied to components', () => {

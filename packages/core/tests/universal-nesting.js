@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Nesting', () => {
 	test('Authors can define global nesting rules', () => {
@@ -32,7 +32,7 @@ describe('Nesting', () => {
 
 		global({
 			p: {
-				margin: 0,
+				'margin': 0,
 				'& ~ &': {
 					marginTop: 0,
 				},
@@ -46,7 +46,7 @@ describe('Nesting', () => {
 		const { css, toString } = createCss({})
 
 		css({
-			margin: 0,
+			'margin': 0,
 			'& ~ &': {
 				marginTop: 0,
 			},
@@ -60,7 +60,7 @@ describe('Nesting', () => {
 
 		global({
 			'body > p, body > ul': {
-				margin: 0,
+				'margin': 0,
 				'& ~ &': {
 					marginTop: 0,
 				},
@@ -78,7 +78,7 @@ describe('Nesting', () => {
 
 		css({
 			'& > p, & > ul': {
-				margin: 0,
+				'margin': 0,
 				'& ~ &': {
 					marginTop: 0,
 				},

@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Empty Variants', () => {
 	test('Empty Variants', () => {
