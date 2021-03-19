@@ -1,4 +1,4 @@
-import { toKebabCase } from '../../stringify/src/toCase.js'
+import { toCamelCase, toKebabCase } from '../../stringify/src/toCase.js'
 import { stringify } from '../../stringify/src/index.js'
 import unitOnlyProps from './unitOnlyProps.js'
 
@@ -12,23 +12,23 @@ const mqunit = /([\d.]+)([^]*)/
 
 const patches = {
 	// prefixed properties
-	'appearance': (d) => ({ WebkitAppearance: d, appearance: d }),
-	'backface-visibility': (d) => ({ WebkitBackfaceVisibility: d, backfaceVisibility: d }),
-	'background-clip': (d) => ({ WebkitBackgroundClip: d, backgroundClip: d }),
-	'clip-path': (d) => ({ WebkitClipPath: d, clipPath: d }),
-	'content': (d) => ({ content: !/^([^]*["'][^]*|[A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(d) ? `"${d}"` : d }),
-	'hyphens': (d) => ({ WebkitHyphens: d, hyphens: d }),
-	'mask-image': (d) => ({ WebkitMaskImage: d, maskImage: d }),
-	'tab-size': (d) => ({ MozTabSize: d, tabSize: d }),
-	'user-select': (d) => ({ WebkitUserSelect: d, userSelect: d }),
+	appearance: (d) => ({ WebkitAppearance: d, appearance: d }),
+	backfaceVisibility: (d) => ({ WebkitBackfaceVisibility: d, backfaceVisibility: d }),
+	backgroundClip: (d) => ({ WebkitBackgroundClip: d, backgroundClip: d }),
+	clipPath: (d) => ({ WebkitClipPath: d, clipPath: d }),
+	content: (d) => ({ content: !/^([^]*["'][^]*|[A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(d) ? `"${d}"` : d }),
+	hyphens: (d) => ({ WebkitHyphens: d, hyphens: d }),
+	maskImage: (d) => ({ WebkitMaskImage: d, maskImage: d }),
+	tabSize: (d) => ({ MozTabSize: d, tabSize: d }),
+	userSelect: (d) => ({ WebkitUserSelect: d, userSelect: d }),
 
 	// logical properties
-	'margin-block': split((s, e) => ({ marginBlockStart: s, marginBlockEnd: e || s })),
-	'margin-inline': split((s, e) => ({ marginInlineStart: s, marginInlineEnd: e || s })),
-	'max-size': split((b, i) => ({ maxBlockSize: b, maxInlineSize: i || b })),
-	'min-size': split((b, i) => ({ minBlockSize: b, minInlineSize: i || b })),
-	'padding-block': split((s, e) => ({ paddingBlockStart: s, paddingBlockEnd: e || s })),
-	'padding-inline': split((s, e) => ({ paddingInlineStart: s, paddingInlineEnd: e || s })),
+	marginBlock: split((s, e) => ({ marginBlockStart: s, marginBlockEnd: e || s })),
+	marginInline: split((s, e) => ({ marginInlineStart: s, marginInlineEnd: e || s })),
+	maxSize: split((b, i) => ({ maxBlockSize: b, maxInlineSize: i || b })),
+	minSize: split((b, i) => ({ minBlockSize: b, minInlineSize: i || b })),
+	paddingBlock: split((s, e) => ({ paddingBlockStart: s, paddingBlockEnd: e || s })),
+	paddingInline: split((s, e) => ({ paddingInlineStart: s, paddingInlineEnd: e || s })),
 }
 
 export const createStringify = (config) => {
@@ -39,23 +39,23 @@ export const createStringify = (config) => {
 
 	return (css) =>
 		stringify(css, (name, data) => {
-			// run utilities that match the raw left-hand of the CSS rule or declaration
-			if (typeof utils[name] === 'function' && (data !== lastData || utils[name] !== lastUtil)) {
-				return (lastUtil = utils[name])(config)((lastData = data))
-			}
+			const firstChar = name.charCodeAt(0)
+			const camelName = firstChar === 64 ? name : toCamelCase(name)
+			const kebabName = firstChar === 64 ? name : toKebabCase(name)
 
-			const kebabName = toKebabCase(name)
+			// run utilities that match the raw left-hand of the CSS rule or declaration
+			if (typeof utils[camelName] === 'function' && (data !== lastData || utils[camelName] !== lastUtil)) {
+				return (lastUtil = utils[camelName])(config)((lastData = data))
+			}
 
 			// run utilities that match the kebab-case left-hand of the CSS rule or declaration
 			if (typeof utils[kebabName] === 'function' && (data !== lastData || utils[kebabName] !== lastUtil)) {
 				return (lastUtil = utils[kebabName])(config)((lastData = data))
 			}
 
-			if (kebabName in patches && (data !== lastData || patches[kebabName] !== lastUtil)) {
-				return (lastUtil = patches[kebabName])((lastData = data))
+			if (camelName in patches && (data !== lastData || patches[camelName] !== lastUtil)) {
+				return (lastUtil = patches[camelName])((lastData = data))
 			}
-
-			const firstChar = name.charCodeAt(0)
 
 			/** CSS property name, which may be a specially-formatted custom property. */
 			let customName =
@@ -115,8 +115,12 @@ export const createStringify = (config) => {
 							'var(' + (
 								separator === '$'
 									? '--' + (
-										!/\$/.test(token) && name in themeMap
-											? themeMap[name] + '-'
+										!token.includes('$')
+											? camelName in themeMap
+												? themeMap[camelName] + '-'
+											: kebabName in themeMap
+												? themeMap[kebabName] + '-'
+											: ''
 										: ''
 									) + token.replace(/\$/g, '-')
 								: separator + token
@@ -133,7 +137,7 @@ export const createStringify = (config) => {
 					),
 				)
 
-			if (data !== customData || name !== customName) {
+			if (data !== customData || kebabName !== customName) {
 				return {
 					[customName]: customData,
 				}
