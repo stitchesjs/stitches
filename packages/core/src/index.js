@@ -256,7 +256,7 @@ const createCss = (init) => {
 
 						if (value === Object(value)) {
 							for (const condition in value) {
-								if (compareValue == String(value[condition])) {
+								if (compareValue == String(value[condition]) && condition.charCodeAt(0) === 64) {
 									variantMedia.add(condition)
 									return true
 								}
@@ -268,7 +268,7 @@ const createCss = (init) => {
 
 					for (const variantCondition of variantMedia) {
 						conditionedCss = {
-							['@media ' + (variantCondition in media ? media[variantCondition] : variantCondition)]: conditionedCss,
+							[variantCondition]: conditionedCss,
 						}
 					}
 
