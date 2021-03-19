@@ -1,6 +1,8 @@
-import { stringify } from '../src/index.js'
+import { createStringify } from '../src/createStringify.js'
 
-describe('media query ranges', () => {
+describe('stringify() media query ranges', () => {
+	const stringify = createStringify({ media: {}, themeMap: {}, utils: {} })
+
 	test('stringify() media query range (feature range value)', () => {
 		expect(
 			stringify({

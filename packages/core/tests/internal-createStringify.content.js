@@ -1,6 +1,6 @@
 import { createStringify } from '../src/createStringify.js'
 
-describe('content declaration', () => {
+describe('stringify() content declaration', () => {
 	const stringify = createStringify({ media: {}, themeMap: {}, utils: {} })
 
 	test('stringify() generates CSS with a quoted `content` attribute', () => {

@@ -13,7 +13,7 @@ describe('stringify()', () => {
 							foreground: 'white',
 							background: 'black',
 						},
-						margin: 0,
+						'margin': 0,
 					},
 				},
 				replacer,
@@ -35,11 +35,11 @@ describe('stringify()', () => {
 			stringify(
 				{
 					a: {
-						color: 'white',
+						'color': 'white',
 						'@within': {
 							margin: 0,
 						},
-						backgroundColor: 'black',
+						'backgroundColor': 'black',
 					},
 				},
 				replacer,
@@ -73,8 +73,8 @@ describe('stringify()', () => {
 		expect(
 			stringify(
 				{
-					'@custom-media --foo': '(width > 640px)',
-					a: {
+					'@custom-media --foo': '(min-width: 640px)',
+					'a': {
 						'@media (--foo)': {
 							margin: 0,
 						},
@@ -84,7 +84,7 @@ describe('stringify()', () => {
 			),
 		).toEqual(
 			// prettier-ignore
-			'@media (min-width:640.0625px){' +
+			'@media (min-width: 640px){' +
 				'a{' +
 					'margin:0;' +
 				'}' +
@@ -105,7 +105,7 @@ describe('stringify()', () => {
 			stringify(
 				{
 					a: {
-						'@when (width >= 640px)': {
+						'@when (min-width: 640px)': {
 							margin: 0,
 						},
 					},
@@ -114,7 +114,7 @@ describe('stringify()', () => {
 			),
 		).toEqual(
 			// prettier-ignore
-			'@media (min-width:640px){' +
+			'@media (min-width: 640px){' +
 				'a{' +
 					'margin:0;' +
 				'}' +

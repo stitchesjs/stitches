@@ -4,8 +4,6 @@ import { getResolvedSelectors } from './getResolvedSelectors.js'
 /** Comma matcher outside rounded brackets. */
 const comma = /\s*,\s*(?![^()]*\))/
 
-const mqunit = /([\d.]+)([^]*)/
-
 /** Returns a string of CSS from an object of CSS. */
 export const stringify = (
 	/** Object representing the current CSS. */
@@ -68,30 +66,7 @@ export const stringify = (
 						if (!used.has(conditions[i])) {
 							used.add(conditions[i])
 
-							cssText +=
-								conditions[i].replace(/\(\s*([\w-]+)\s*(=|<|<=|>|>=)\s*([\w-]+)\s*(?:(<|<=|>|>=)\s*([\w-]+)\s*)?\)/g, (_, a, l, b, r, c) => {
-									const isValueFirst = mqunit.test(a)
-									const shift = 0.0625 * (isValueFirst ? -1 : 1)
-									const [name, value] = isValueFirst ? [b, a] : [a, b]
-
-									return (
-										// prettier-ignore
-										'(' +
-									(
-										l[0] === '=' ? '' : (l[0] === '>' === isValueFirst ? 'max-' : 'min-')
-									) + name + ':' +
-									(l[0] !== '=' && l.length === 1 ? value.replace(mqunit, (_, v, u) => Number(v) + shift * (l === '>' ? 1 : -1) + u) : value) +
-									(
-										r
-											? ') and (' + (
-												(r[0] === '>' ? 'min-' : 'max-') + name + ':' +
-												(r.length === 1 ? c.replace(mqunit, (_, v, u) => Number(v) + shift * (r === '>' ? -1 : 1) + u) : c)
-											)
-										: ''
-									) +
-								')'
-									)
-								}) + '{'
+							cssText += conditions[i] + '{'
 						}
 					}
 

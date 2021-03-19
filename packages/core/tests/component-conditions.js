@@ -9,7 +9,7 @@ describe('Component Medias', () => {
 		})
 
 		css({
-			fontSize: '16px',
+			'fontSize': '16px',
 			'@mediumUp': {
 				fontSize: '24px',
 			},
