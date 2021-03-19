@@ -9,7 +9,7 @@ import getHashString from './getHashString.js'
 import ThemeToken from './ThemeToken.js'
 import { $$composers } from './Symbol.js'
 import StringArray from './StringArray.js'
-import defaultInsertMethod from './defaultInsertMethod.js'
+import defaultInsertionMethod from './defaultInsertionMethod.js'
 
 /** Returns a new styled sheet and accompanying API. */
 const createCss = (init) => {
@@ -32,7 +32,7 @@ const createCss = (init) => {
 	/** Prefix added before all generated class names. */
 	const prefix = init.prefix || 'sx'
 
-	const insertMethod = (typeof init.insertMethod === 'function' ? init.insertMethod : defaultInsertMethod)(init)
+	const insertionMethod = (typeof init.insertionMethod === 'function' ? init.insertionMethod : defaultInsertionMethod)(init)
 
 	const emptyClassName = '03kze'
 
@@ -67,7 +67,7 @@ const createCss = (init) => {
 		const nextUpdate = from(unitedCss).join('')
 
 		if (currentCssText !== nextUpdate) {
-			insertMethod((currentCssText = nextUpdate))
+			insertionMethod((currentCssText = nextUpdate))
 		}
 	}
 

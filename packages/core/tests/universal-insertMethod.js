@@ -13,9 +13,9 @@ describe('Insert Method', () => {
 		expect(toString()).toBe('body{margin:0;}')
 	})
 
-	test('insertMethod: "prepend", explicit', () => {
+	test('insertionMethod: "prepend", explicit', () => {
 		const { global, toString } = createCss({
-			insertMethod: 'prepend',
+			insertionMethod: 'prepend',
 		})
 
 		global({
@@ -27,9 +27,9 @@ describe('Insert Method', () => {
 		expect(toString()).toBe('body{margin:0;}')
 	})
 
-	test('insertMethod: "append", explicit', () => {
+	test('insertionMethod: "append", explicit', () => {
 		const { global, toString } = createCss({
-			insertMethod: 'append',
+			insertionMethod: 'append',
 		})
 
 		global({
@@ -41,14 +41,14 @@ describe('Insert Method', () => {
 		expect(toString()).toBe('body{margin:0;}')
 	})
 
-	test('insertMethod: function, explicit', () => {
+	test('insertionMethod: function, explicit', () => {
 		let didInitialize = false
 		let didInsertNode = false
 		let resultCss = ''
 		let expectCss = 'body{margin:0;}'
 
 		const { global, toString } = createCss({
-			insertMethod() {
+			insertionMethod() {
 				didInitialize = true
 
 				return (updatedCssText) => {
