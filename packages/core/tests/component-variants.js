@@ -322,34 +322,67 @@ describe('Conditional variants', () => {
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 	})
 
-	test('Renders a component with a conditional variant repeatedly', () => {
-		const { css, toString } = createCss(config)
-		const component = css({
-			variants: {
-				size: {
-					small: {
-						fontSize: '16px',
-					},
-					large: {
-						fontSize: '24px',
+	test('Renders a component with a conditional inline variant repeatedly', () => {
+		{
+			const { css, toString } = createCss(config)
+			const component = css({
+				variants: {
+					size: {
+						small: {
+							fontSize: '16px',
+						},
+						large: {
+							fontSize: '24px',
+						},
 					},
 				},
-			},
-		})
+			})
 
-		expect(
-			component({
-				size: {
-					'@media (width < 768px)': 'small',
-					'@media (width >= 768px)': 'large',
+			expect(
+				component({
+					size: {
+						'@media (width < 768px)': 'small',
+						'@media (width >= 768px)': 'large',
+					},
+				}).className,
+			).toBe('sxq43t5 sxq43t5mph99--size-small sxq43t5ws88k--size-large')
+
+			expect(toString()).toBe(
+				// prettier-ignore
+				'@media (max-width:767.9375px){.sxq43t5mph99--size-small{font-size:16px;}}' +
+				'@media (min-width:768px){.sxq43t5ws88k--size-large{font-size:24px;}}',
+			)
+		}
+
+		{
+			const { css, toString } = createCss(config)
+			const component = css({
+				variants: {
+					size: {
+						large: {
+							fontSize: '24px',
+						},
+						small: {
+							fontSize: '16px',
+						},
+					},
 				},
-			}).className,
-		).toBe('sxq43t5 sxq43t5mph99--size-small sxq43t5ws88k--size-large')
+			})
 
-		expect(toString()).toBe(
-			// prettier-ignore
-			'@media (max-width:767.9375px){.sxq43t5mph99--size-small{font-size:16px;}}' +
-			'@media (min-width:768px){.sxq43t5ws88k--size-large{font-size:24px;}}',
-		)
+			expect(
+				component({
+					size: {
+						'@media (width < 768px)': 'small',
+						'@media (width >= 768px)': 'large',
+					},
+				}).className,
+			).toBe('sxvih1e sxvih1ews88k--size-large sxvih1emph99--size-small')
+
+			expect(toString()).toBe(
+				// prettier-ignore
+				'@media (min-width:768px){.sxvih1ews88k--size-large{font-size:24px;}}' +
+				'@media (max-width:767.9375px){.sxvih1emph99--size-small{font-size:16px;}}',
+			)
+		}
 	})
 })
