@@ -10,7 +10,7 @@ const split = (fn) => (data) => fn(...(typeof data === 'string' ? String(data).s
 
 const mqunit = /([\d.]+)([^]*)/
 
-const patches = {
+const polys = {
 	// prefixed properties
 	appearance: (d) => ({ WebkitAppearance: d, appearance: d }),
 	backfaceVisibility: (d) => ({ WebkitBackfaceVisibility: d, backfaceVisibility: d }),
@@ -34,8 +34,10 @@ const patches = {
 export const createStringify = (config) => {
 	const { media, themeMap, utils } = config
 
-	let lastUtil
-	let lastData
+	let lastPolyFunc
+	let lastPolyData
+	let lastUtilFunc
+	let lastUtilData
 
 	return (css) =>
 		stringify(css, (name, data) => {
@@ -44,21 +46,27 @@ export const createStringify = (config) => {
 			const kebabName = firstChar === 64 ? name : toKebabCase(name)
 
 			// run utilities that match the raw left-hand of the CSS rule or declaration
-			if (typeof utils[camelName] === 'function' && (data !== lastData || utils[camelName] !== lastUtil)) {
-				return (lastUtil = utils[camelName])(config)((lastData = data))
+			if (typeof utils[name] === 'function' && (utils[name] != lastUtilFunc || data != lastUtilData)) {
+				lastUtilFunc = utils[name]
+				lastUtilData = data
+
+				return lastUtilFunc(config)(lastUtilData)
 			}
 
-			// run utilities that match the kebab-case left-hand of the CSS rule or declaration
-			if (typeof utils[kebabName] === 'function' && (data !== lastData || utils[kebabName] !== lastUtil)) {
-				return (lastUtil = utils[kebabName])(config)((lastData = data))
+			lastUtilData = data
+
+			// run polyfills that match the camel-case-left hand of the CSS declaration
+			if (typeof polys[camelName] === 'function' && (polys[camelName] != lastPolyFunc || data != lastPolyData)) {
+				lastPolyFunc = polys[camelName]
+				lastPolyData = data
+
+				return lastPolyFunc(lastPolyData)
 			}
 
-			if (camelName in patches && (data !== lastData || patches[camelName] !== lastUtil)) {
-				return (lastUtil = patches[camelName])((lastData = data))
-			}
+			// prettier-ignore
 
-			/** CSS property name, which may be a specially-formatted custom property. */
-			let customName =
+			/** CSS left-hand side value, which may be a specially-formatted custom property. */
+			let customName = (
 				// prettier-ignore
 				firstChar === 64
 					? (
@@ -90,17 +98,19 @@ export const createStringify = (config) => {
 					})
 				: firstChar === 36
 					? '-' + name.replace(/\$/g, '-')
-				: kebabName
+				: name
+			)
 
-			const customData =
-				// prettier-ignore
+			// prettier-ignore
 
+			/** CSS right-hand side value, which may be a specially-formatted custom property. */
+			const customData = (
 				// preserve object-like data
 				data === Object(data)
 					? data
 				// replace specially-marked numeric property values with pixel versions
 				: data && typeof data === 'number' && unitOnlyProps.test(kebabName)
-						? String(data) + 'px'
+					? String(data) + 'px'
 				// replace tokens with stringified primitive values
 				: String(data).replace(
 					captureTokens,
@@ -118,8 +128,6 @@ export const createStringify = (config) => {
 										!token.includes('$')
 											? camelName in themeMap
 												? themeMap[camelName] + '-'
-											: kebabName in themeMap
-												? themeMap[kebabName] + '-'
 											: ''
 										: ''
 									) + token.replace(/\$/g, '-')
@@ -136,8 +144,9 @@ export const createStringify = (config) => {
 						)
 					),
 				)
+			)
 
-			if (data !== customData || kebabName !== customName) {
+			if (data != customData || kebabName != customName) {
 				return {
 					[customName]: customData,
 				}

@@ -16,7 +16,7 @@ const variants = {
 	cjs: {
 		extension: 'cjs',
 		transform(code, exports) {
-			const cjsExports = ['__esModule:!0']
+			const cjsExports = []
 			for (const name in exports) cjsExports.push(`${name}:${exports[name]}`)
 			return `${code}module.exports={${cjsExports.join(',')}}`
 		},
@@ -24,9 +24,9 @@ const variants = {
 	iife: {
 		extension: 'iife.js',
 		transform(code, exports) {
-			let iifeExports = ['globalThis.stitches=' + exports.default]
-			for (let name in exports) if (name !== 'default') iifeExports.push(`stitches.${name}=${exports[name]}`)
-			return `(()=>{${code}${iifeExports.join(';')}})()`
+			const iifeExports = []
+			for (const name in exports) iifeExports.push(`${name}:${exports[name]}`)
+			return `${code}globalThis.stitches={${iifeExports.join(',')}}`
 		},
 	},
 }

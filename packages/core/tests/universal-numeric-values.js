@@ -118,7 +118,6 @@ describe('Numeric Values', () => {
 					'order:' + i + ';' +
 					'orphans:' + i + ';' +
 					'-moz-tab-size:' + i + ';' +
-					'-moz-tab-size:' + i + ';' +
 					'tab-size:' + i + ';' +
 					'widows:' + i + ';' +
 					'z-index:' + i + ';' +
