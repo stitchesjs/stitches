@@ -1,4 +1,4 @@
-import { toKebabCase } from './toKebabCase.js'
+import { toKebabCase } from './toCase.js'
 import { getResolvedSelectors } from './getResolvedSelectors.js'
 
 /** Comma matcher outside rounded brackets. */

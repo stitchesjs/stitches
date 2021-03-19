@@ -1,4 +1,4 @@
-import { toKebabCase } from '../../stringify/src/toKebabCase.js'
+import { toKebabCase } from '../../stringify/src/toCase.js'
 import { stringify } from '../../stringify/src/index.js'
 import unitOnlyProps from './unitOnlyProps.js'
 
@@ -90,7 +90,7 @@ export const createStringify = (config) => {
 					})
 				: firstChar === 36
 					? '-' + name.replace(/\$/g, '-')
-				: name
+				: kebabName
 
 			const customData =
 				// prettier-ignore
