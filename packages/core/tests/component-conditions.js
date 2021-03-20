@@ -1,24 +1,26 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
-describe('Component Conditions', () => {
-	test('Authors can define conditions applied to components', () => {
-		const mediumUpQuery = '@media (min-width: 768px)'
-
+describe('Component Medias', () => {
+	test('Authors can define medias applied to components', () => {
 		const { css, toString } = createCss({
-			conditions: {
-				mediumUpQuery,
+			media: {
+				mediumUp: '(width >= 768px)',
 			},
 		})
 
 		css({
-			fontSize: '16px',
-			when: {
-				mediumUpQuery: {
-					fontSize: '24px',
-				},
+			'fontSize': '16px',
+			'@mediumUp': {
+				fontSize: '24px',
 			},
 		})()
 
-		expect(toString()).toBe(`.sxfk9h5{font-size:16px;}${mediumUpQuery}{.sxfk9h5{font-size:24px;}}`)
+		expect(toString()).toBe(
+			// prettier-ignore
+			`.sxhhsxo{font-size:16px;}` +
+			`@media (min-width:768px){` +
+				`.sxhhsxo{font-size:24px;}` +
+			`}`,
+		)
 	})
 })

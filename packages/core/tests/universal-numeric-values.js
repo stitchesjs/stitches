@@ -1,51 +1,51 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Numeric Values', () => {
-	test('Authors can use numeric values to assign px values', () => {
-		const { global, toString } = createCss()
+	// test('Authors can use numeric values to assign px values', () => {
+	// 	const { global, toString } = createCss()
 
-		expect(toString()).toBe('')
+	// 	expect(toString()).toBe('')
 
-		global({
-			body: {
-				margin: 0,
-			},
-		})()
+	// 	global({
+	// 		body: {
+	// 			margin: 0,
+	// 		},
+	// 	})()
 
-		expect(toString()).toBe('body{margin:0;}')
+	// 	expect(toString()).toBe('body{margin:0;}')
 
-		global({
-			body: {
-				margin: 10,
-			},
-		})()
+	// 	global({
+	// 		body: {
+	// 			margin: 10,
+	// 		},
+	// 	})()
 
-		expect(toString()).toBe('body{margin:0;}body{margin:10px;}')
-	})
+	// 	expect(toString()).toBe('body{margin:0;}body{margin:10px;}')
+	// })
 
-	test('Authors can use numeric values to assign numeric values', () => {
-		const { global, toString } = createCss()
+	// test('Authors can use numeric values to assign numeric values', () => {
+	// 	const { global, toString } = createCss()
 
-		expect(toString()).toBe('')
+	// 	expect(toString()).toBe('')
 
-		global({
-			body: {
-				lineHeight: 0,
-				width: 0,
-			},
-		})()
+	// 	global({
+	// 		body: {
+	// 			lineHeight: 0,
+	// 			width: 0,
+	// 		},
+	// 	})()
 
-		expect(toString()).toBe('body{line-height:0;width:0;}')
+	// 	expect(toString()).toBe('body{line-height:0;width:0;}')
 
-		global({
-			body: {
-				lineHeight: 10,
-				width: 10,
-			},
-		})()
+	// 	global({
+	// 		body: {
+	// 			lineHeight: 10,
+	// 			width: 10,
+	// 		},
+	// 	})()
 
-		expect(toString()).toBe('body{line-height:0;width:0;}body{line-height:10;width:10px;}')
-	})
+	// 	expect(toString()).toBe('body{line-height:0;width:0;}body{line-height:10;width:10px;}')
+	// })
 
 	test('Authors can use unit-less properties as known to React', () => {
 		for (let i = 0; i <= 33; i += 11) {
@@ -117,6 +117,7 @@ describe('Numeric Values', () => {
 					'opacity:' + i + ';' +
 					'order:' + i + ';' +
 					'orphans:' + i + ';' +
+					'-moz-tab-size:' + i + ';' +
 					'tab-size:' + i + ';' +
 					'widows:' + i + ';' +
 					'z-index:' + i + ';' +
@@ -126,28 +127,28 @@ describe('Numeric Values', () => {
 		}
 	})
 
-	const commonProps = 'fontSize margin marginTop marginRight marginBottom marginLeft padding paddingTop paddingRight paddingBottom paddingLeft'.split(' ')
+	// const commonProps = 'fontSize margin marginTop marginRight marginBottom marginLeft padding paddingTop paddingRight paddingBottom paddingLeft'.split(' ')
 
-	for (const prop of commonProps) {
-		const kebabProp = prop.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase())
+	// for (const prop of commonProps) {
+	// 	const kebabProp = prop.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase())
 
-		test(`Author can use the unit-only ${kebabProp} property`, () => {
-			for (let i = 0; i <= 33; i += 11) {
-				const { global, toString } = createCss()
+	// 	test(`Author can use the unit-only ${kebabProp} property`, () => {
+	// 		for (let i = 0; i <= 33; i += 11) {
+	// 			const { global, toString } = createCss()
 
-				global({
-					div: {
-						[prop]: i,
-					},
-				})()
+	// 			global({
+	// 				div: {
+	// 					[prop]: i,
+	// 				},
+	// 			})()
 
-				expect(toString()).toBe(
-					// prettier-ignore
-					'div' + '{' +
-						kebabProp + ':' + i + (i ? 'px' : '') + ';' +
-					'}',
-				)
-			}
-		})
-	}
+	// 			expect(toString()).toBe(
+	// 				// prettier-ignore
+	// 				'div' + '{' +
+	// 					kebabProp + ':' + i + (i ? 'px' : '') + ';' +
+	// 				'}',
+	// 			)
+	// 		}
+	// 	})
+	// }
 })

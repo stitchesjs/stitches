@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Composition', () => {
 	test('Renders a component as the final composition by default', () => {

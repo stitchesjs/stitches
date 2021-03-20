@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Tokens', () => {
 	test('Authors can define and use a relative token', () => {

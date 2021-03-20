@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Nesting', () => {
 	test('Authors can define global nesting rules', () => {
@@ -8,8 +8,8 @@ describe('Nesting', () => {
 			'body > a': {
 				'&:not(:hover)': {
 					textDecoration: 'none',
-				}
-			}
+				},
+			},
 		})()
 
 		expect(toString()).toBe(`body > a:not(:hover){text-decoration:none;}`)
@@ -21,7 +21,7 @@ describe('Nesting', () => {
 		css({
 			'&:not(:hover)': {
 				textDecoration: 'none',
-			}
+			},
 		})()
 
 		expect(toString()).toBe(`.sxnz0bq:not(:hover){text-decoration:none;}`)
@@ -31,12 +31,12 @@ describe('Nesting', () => {
 		const { global, toString } = createCss({})
 
 		global({
-			'p': {
-				margin: 0,
+			p: {
+				'margin': 0,
 				'& ~ &': {
 					marginTop: 0,
-				}
-			}
+				},
+			},
 		})()
 
 		expect(toString()).toBe(`p{margin:0;}p ~ p{margin-top:0;}`)
@@ -46,10 +46,10 @@ describe('Nesting', () => {
 		const { css, toString } = createCss({})
 
 		css({
-			margin: 0,
+			'margin': 0,
 			'& ~ &': {
 				marginTop: 0,
-			}
+			},
 		})()
 
 		expect(toString()).toBe(`.sxxgatx{margin:0;}.sxxgatx ~ .sxxgatx{margin-top:0;}`)
@@ -60,15 +60,15 @@ describe('Nesting', () => {
 
 		global({
 			'body > p, body > ul': {
-				margin: 0,
+				'margin': 0,
 				'& ~ &': {
 					marginTop: 0,
-				}
-			}
+				},
+			},
 		})()
 
-		const parentCssRule = `body > p, body > ul{margin:0;}`
-		const nestingCssRule = `:is(body > p) ~ :is(body > p), :is(body > ul) ~ :is(body > ul){margin-top:0;}`
+		const parentCssRule = `body > p,body > ul{margin:0;}`
+		const nestingCssRule = `:is(body > p) ~ :is(body > p),:is(body > ul) ~ :is(body > ul){margin-top:0;}`
 
 		expect(toString()).toBe(parentCssRule + nestingCssRule)
 	})
@@ -78,15 +78,15 @@ describe('Nesting', () => {
 
 		css({
 			'& > p, & > ul': {
-				margin: 0,
+				'margin': 0,
 				'& ~ &': {
 					marginTop: 0,
-				}
-			}
+				},
+			},
 		})()
 
-		const parentCssRule = `.sxp5b35 > p, .sxp5b35 > ul{margin:0;}`
-		const nestingCssRule = `:is(.sxp5b35 > p) ~ :is(.sxp5b35 > p), :is(.sxp5b35 > ul) ~ :is(.sxp5b35 > ul){margin-top:0;}`
+		const parentCssRule = `.sxp5b35 > p,.sxp5b35 > ul{margin:0;}`
+		const nestingCssRule = `:is(.sxp5b35 > p) ~ :is(.sxp5b35 > p),:is(.sxp5b35 > ul) ~ :is(.sxp5b35 > ul){margin-top:0;}`
 
 		expect(toString()).toBe(parentCssRule + nestingCssRule)
 	})

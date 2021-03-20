@@ -1,7 +1,7 @@
 import { assign } from './Object.js'
 
 export default (init) => {
-	const isAppend = init.insertMethod === 'append'
+	const isAppend = init.insertionMethod === 'append'
 
 	let currentCssHead = null
 	let currentCssNode = null

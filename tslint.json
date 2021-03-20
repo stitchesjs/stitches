@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:recommended", "tslint-config-prettier", "tslint-plugin-prettier"],
+  "extends": ["tslint:recommended"],
   "rules": {
     "arrow-return-shorthand": [true],
     "class-name": true,
@@ -9,14 +9,14 @@
     "max-classes-per-file": false,
     "member-access": [true, "no-public"],
     "no-bitwise": false,
-    "no-boolean-literal-compare": true,
     "no-duplicate-imports": true,
     "no-empty-interface": false,
-    "no-for-in-array": true,
     "no-inferrable-types": true,
     "no-invalid-template-strings": true,
     "no-return-await": true,
+    "no-shadowed-variable": false,
     "no-string-throw": true,
+    "no-unused-expression": false,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "ordered-imports": [
@@ -30,9 +30,7 @@
     "prefer-for-of": false,
     "prefer-function-over-method": true,
     "prefer-object-spread": true,
-    "prefer-readonly": true,
     "prefer-template": true,
-    "prettier": true,
     "switch-default": true,
     "variable-name": [true, "allow-leading-underscore", "ban-keywords", "check-format", "allow-pascal-case"]
   }

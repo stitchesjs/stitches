@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Empty Variants', () => {
 	test('Empty Variants', () => {
@@ -21,7 +21,7 @@ describe('Empty Variants', () => {
 			],
 		})({
 			tone: 'primary',
-			size: { initial: 'xl' },
+			size: { '@initial': 'xl' },
 		})
 
 		expect(toString()).toBe('')
@@ -48,9 +48,9 @@ describe('Empty Variants', () => {
 			],
 		})({
 			tone: 'primary',
-			size: { initial: 'xl' },
+			size: { '@initial': 'xl' },
 		})
 
-		expect(toString()).toBe('@media all{.sxwklokr8fj7--c2{font-size:24px;color:black;}}')
+		expect(toString()).toBe('@media all{.sxwklokppy7e--c2{font-size:24px;color:black;}}')
 	})
 })

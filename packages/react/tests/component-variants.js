@@ -212,9 +212,9 @@ describe('Variants with defaults', () => {
 
 describe('Conditional variants', () => {
 	const config = {
-		conditions: {
-			bp1: '@media (max-width: 767px)',
-			bp2: '@media (min-width: 768px)',
+		media: {
+			bp1: '(max-width: 767px)',
+			bp2: '(min-width: 768px)',
 		},
 	}
 
@@ -283,10 +283,10 @@ describe('Conditional variants', () => {
 		const { styled, toString } = createCss(config)
 		const component = styled('div', componentConfig)
 		const componentClassName = `sx1alao`
-		const componentSmallBp1ClassName = `${componentClassName}iopr7--size-small`
+		const componentSmallBp1ClassName = `${componentClassName}y0yjf--size-small`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
 
-		expect(component.render({ size: { bp1: 'small' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
+		expect(component.render({ size: { '@bp1': 'small' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
 		expect(toString()).toBe(componentSmallBp1CssText)
 	})
 
@@ -294,12 +294,12 @@ describe('Conditional variants', () => {
 		const { styled, toString } = createCss(config)
 		const component = styled('div', componentConfig)
 		const componentClassName = `sx1alao`
-		const componentSmallBp1ClassName = `${componentClassName}iopr7--size-small`
-		const componentLargeBp2ClassName = `${componentClassName}o7z8r--size-large`
+		const componentSmallBp1ClassName = `${componentClassName}y0yjf--size-small`
+		const componentLargeBp2ClassName = `${componentClassName}1jf5y--size-large`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
 		const componentLargeBp2CssText = `@media (min-width: 768px){.${componentLargeBp2ClassName}{font-size:24px;}}`
 
-		expect(component.render({ size: { bp1: 'small', bp2: 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 	})
 
@@ -307,18 +307,18 @@ describe('Conditional variants', () => {
 		const { styled, toString } = createCss(config)
 		const component = styled('div', componentConfig)
 		const componentClassName = `sx1alao`
-		const componentSmallBp1ClassName = `${componentClassName}iopr7--size-small`
-		const componentLargeBp2ClassName = `${componentClassName}o7z8r--size-large`
+		const componentSmallBp1ClassName = `${componentClassName}y0yjf--size-small`
+		const componentLargeBp2ClassName = `${componentClassName}1jf5y--size-large`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px;}}`
-		const componentLargeBp2CssText = `@media (min-width: 768px){.sx1alaoo7z8r--size-large{font-size:24px;}}`
+		const componentLargeBp2CssText = `@media (min-width: 768px){.sx1alao1jf5y--size-large{font-size:24px;}}`
 
-		expect(component.render({ size: { bp1: 'small', bp2: 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe([componentSmallBp1CssText, componentLargeBp2CssText].join(''))
 
-		expect(component.render({ size: { bp1: 'small', bp2: 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
-		expect(toString()).toBe(`@media (max-width: 767px){.sx1alaoiopr7--size-small{font-size:16px;}}@media (min-width: 768px){.sx1alaoo7z8r--size-large{font-size:24px;}}`)
+		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(toString()).toBe(`@media (max-width: 767px){.sx1alaoy0yjf--size-small{font-size:16px;}}@media (min-width: 768px){.sx1alao1jf5y--size-large{font-size:24px;}}`)
 
-		expect(component.render({ size: { bp1: 'small', bp2: 'large' } }).props.className).toBe(`sx1alao sx1alaoiopr7--size-small sx1alaoo7z8r--size-large`)
-		expect(toString()).toBe(`@media (max-width: 767px){.sx1alaoiopr7--size-small{font-size:16px;}}@media (min-width: 768px){.sx1alaoo7z8r--size-large{font-size:24px;}}`)
+		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe(`sx1alao sx1alaoy0yjf--size-small sx1alao1jf5y--size-large`)
+		expect(toString()).toBe(`@media (max-width: 767px){.sx1alaoy0yjf--size-small{font-size:16px;}}@media (min-width: 768px){.sx1alao1jf5y--size-large{font-size:24px;}}`)
 	})
 })

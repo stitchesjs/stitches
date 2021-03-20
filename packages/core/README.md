@@ -55,12 +55,12 @@ export const { css } = createCss({
     },
   },
 
-  // creates breakpoints with media queries
-  conditions: {
-    tablet: '@media (min-width: 700px)',
+  // creates named media queries
+  media: {
+    tablet: '(min-width: 700px)',
   },
 
-  // creates or configures css properties
+  // creates css properties
   utils: {
     mX: (value) => ({
       marginLeft: value,
@@ -73,7 +73,7 @@ export const { css } = createCss({
   },
 })
 
-css({
+const colorful = css({
   // assigns a custom property that resolves `tomato`
   color: '$red',
 
@@ -81,12 +81,12 @@ css({
   marginX: 0,
 
   // assign "blue" when the breakpoint is matched
-  when: {
-    tablet: {
-      color: 'blue',
-    },
+  '@tablet': {
+    color: 'blue',
   },
 })
+
+document.querySelectorAll('section').forEach((el) => el.classList.add(colorful))
 ```
 
 ## Themes
@@ -96,7 +96,7 @@ Create themes to override defaults:
 ```js
 import createCss from '@stitches/core'
 
-export const { css } = createCss({
+export const { theme } = createCss({
   theme: {
     colors: {
       primary: 'tomato',
@@ -104,9 +104,11 @@ export const { css } = createCss({
   },
 })
 
-export const curiousTheme = css.theme({
+export const curiousTheme = theme({
   colors: {
     primary: 'pink',
   },
 })
+
+document.querySelectorAll('.curious').forEach((el) => el.classList.add(curiousTheme))
 ```

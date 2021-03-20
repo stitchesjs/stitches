@@ -1,4 +1,4 @@
-//core types.tests.ts
+// core types.tests.ts
 import createCss, { StitchesCss, StitchesVariants } from '../types/index.d'
 const css = createCss({
 	utils: {
@@ -37,8 +37,8 @@ const css = createCss({
 			'9': '59px',
 		},
 	},
-	conditions: {
-		bp1: '@media (min-width: 620px)',
+	media: {
+		bp1: '(min-width: 620px)',
 	},
 })
 
@@ -53,24 +53,20 @@ css.keyframes({
 
 css.global({
 	hello: {
-		when: {
-			bp1: {
-				backgroundColor: '$1',
-			},
+		'@bp1': {
+			backgroundColor: '$1',
 		},
-		backgroundColor: '$font100',
+		'backgroundColor': '$font100',
 	},
 })
 
 type CSS = StitchesCss<typeof css>
 
 const ExternalStyles: CSS = {
-	when: {
-		bp1: {
-			backgroundColor: '$1',
-		},
+	'@bp1': {
+		backgroundColor: '$1',
 	},
-	backgroundColor: '$1',
+	'backgroundColor': '$1',
 }
 
 const PotatoButton = css.css({
@@ -113,7 +109,7 @@ const two = css.css(PotatoButton, {
 	},
 	compoundVariants: [
 		{
-			//cool
+			// cool
 
 			variant: 'green',
 			css: {
@@ -134,14 +130,13 @@ const theme = css.theme({})
 PotatoButton({
 	className: '',
 	css: {
-		backgroundColor: '$red100',
-		when: {
-			initial: {
-				backgroundColor: '-moz-initial',
-			},
-			bp1: {
-				backgroundColor: '-moz-initial',
-			},
+		'backgroundColor': '$red100',
+
+		'@initial': {
+			backgroundColor: '-moz-initial',
+		},
+		'@bp1': {
+			backgroundColor: '-moz-initial',
 		},
 	},
 })
