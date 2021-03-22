@@ -4,6 +4,11 @@
   "version": "0.1.0-canary.0",
   "type": "module",
   "license": "MIT",
+  "contributors": [
+    "Pedro Duarte <pedro@modulz.app>",
+    "Abdulhadi Alhallak <abdulhadi@modulz.app>",
+    "Jonathan Neal <jonathan@modulz.app>"
+  ],
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "node .bin/build.js",

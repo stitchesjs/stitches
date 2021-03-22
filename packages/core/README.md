@@ -1,114 +1,29 @@
 # Stitches Core
 
-Near-zero runtime, server-side rendering, multi-variant support, and best-in-class developer experience.
-
-## Get started
+Framework-agnostic implementation.
 
 ```sh
 npm install @stitches/core
 ```
 
-```js
-import createCss from '@stitches/core'
+---
 
-const sheet = createCss({
-  theme: {
-    colors: {
-      black: '#2f2f2f',
-      white: '#f3f3f3',
-    },
-  },
-})
+## Documentation
 
-const button = sheet.css({
-  all: 'unset',
-  boxShadow: '0 0 0 1px $black',
-  backgroundColor: '$black',
-  color: '$white',
-  padding: '.5em 1em',
-})
+For full documentation, visit [stitches.dev](https://stitches.dev).
 
-const alertButton = sheet.css(button, {
-  boxShadow: '0 0 0 1px red',
-})
+## Contributing
 
-console.log(`<button class="${button}">`) // html will include a unique class name for the button component
-console.log(`<style>${sheet}</style>`) // css will include a unique rule for the button component
-```
+Please follow our [contributing guidelines](./CONTRIBUTING.md).
 
-## Configure an instance
+## Authors
 
-```js
-import createCss from '@stitches/core'
+- Pedro Duarte ([@peduarte](https://twitter.com/peduarte)) - [Modulz](https://modulz.app)
+- Jonathan Neal ([@jon_neal](https://twitter.com/jon_neal)) - [Modulz](https://modulz.app)
+- Abdulhadi Alhallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [Modulz](https://modulz.app)
 
-export const { css } = createCss({
-  // adds a prefix to all classnames to avoid clashes
-  prefix: 'my-lib',
+## License
 
-  // maps tokens to properties
-  theme: {
-    colors: {
-      red: 'tomato',
-    },
-    space: {
-      0: '1rem',
-    },
-  },
+Licensed under the MIT License, Copyright © 2021-present Modulz.
 
-  // creates named media queries
-  media: {
-    tablet: '(min-width: 700px)',
-  },
-
-  // creates css properties
-  utils: {
-    mX: (value) => ({
-      marginLeft: value,
-      marginRight: value,
-    }),
-    mY: (value) => ({
-      marginTop: value,
-      marginBottom: value,
-    }),
-  },
-})
-
-const colorful = css({
-  // assigns a custom property that resolves `tomato`
-  color: '$red',
-
-  // assigns `0` to `margin-left` and `margin-right`
-  marginX: 0,
-
-  // assign "blue" when the breakpoint is matched
-  '@tablet': {
-    color: 'blue',
-  },
-})
-
-document.querySelectorAll('section').forEach((el) => el.classList.add(colorful))
-```
-
-## Themes
-
-Create themes to override defaults:
-
-```js
-import createCss from '@stitches/core'
-
-export const { theme } = createCss({
-  theme: {
-    colors: {
-      primary: 'tomato',
-    },
-  },
-})
-
-export const curiousTheme = theme({
-  colors: {
-    primary: 'pink',
-  },
-})
-
-document.querySelectorAll('.curious').forEach((el) => el.classList.add(curiousTheme))
-```
+See [LICENSE](./LICENSE.md) for more information.

@@ -1,22 +1,32 @@
 <a href="https://stitches.dev">
-  <img alt="stitches" src="https://stitches.dev/social.png" />
+  <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112011920-03e21400-8b29-11eb-9c9a-4e14d5a1f575.png" />
 </a>
 
-# The modern styling library.
+# Stitches
 
-Near-zero runtime, server-side rendering, multi-variant support, and best-in-class developer experience.
+## Style your components with confidence
+
+CSS-in-JS with near-zero runtime, SSR, multi-variant support, and a best-in-class developer experience.
+
+#### Stitches Core
+
+Framework-agnostic implementation.
 
 ```sh
 npm install @stitches/core
 ```
 
-[Read more](https://github.com/modulz/stitches/tree/jn.oo/packages/core)
+[Read more](https://github.com/modulz/stitches/tree/main/packages/core)
+
+#### Stitches React
+
+React wrapper including the `styled` API.
 
 ```sh
 npm install @stitches/react
 ```
 
-[Read more](https://github.com/modulz/stitches/tree/jn.oo/packages/react)
+[Read more](https://github.com/modulz/stitches/tree/main/packages/react)
 
 ---
 
@@ -30,15 +40,12 @@ Please follow our [contributing guidelines](./CONTRIBUTING.md).
 
 ## Authors
 
-- Christian Alfoni ([@christianalfoni](https://twitter.com/christianalfoni)) - Codesandbox, Cerebral
 - Pedro Duarte ([@peduarte](https://twitter.com/peduarte)) - [Modulz](https://modulz.app)
-- Jenna Smith ([@jjenzz](https://twitter.com/jjenzz)) - [Modulz](https://modulz.app)
+- Jonathan Neal ([@jon_neal](https://twitter.com/jon_neal)) - [Modulz](https://modulz.app)
 - Abdulhadi Alhallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [Modulz](https://modulz.app)
-- Fabrice Weinberg ([@fweinb](https://twitter.com/fweinb))
-- Jonathan Neal ([@jon_neal](https://twitter.com/jon_neal))
 
 ## License
 
-Licensed under the MIT License, Copyright © 2020-present Modulz.
+Licensed under the MIT License, Copyright © 2021-present Modulz.
 
 See [LICENSE](./LICENSE.md) for more information.
