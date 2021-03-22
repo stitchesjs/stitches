@@ -2,6 +2,12 @@
   <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112011920-03e21400-8b29-11eb-9c9a-4e14d5a1f575.png" />
 </a>
 
+<style>
+.Box-body {
+  padding: 0!important
+}
+</style>
+
 # Stitches
 
 ## Style your components with confidence
