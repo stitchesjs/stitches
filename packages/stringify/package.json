@@ -17,42 +17,14 @@
   "homepage": "https://github.com/modulz/stitches#readme",
   "bugs": "https://github.com/modulz/stitches/issues",
   "contributors": [
-    "Christian Alfoni <christianalfoni@gmail.com>",
+    "Jonathan Neal <jonathan@modulz.app>",
     "Pedro Duarte <pedro@modulz.app>",
-    "Abdulhadi Alhallak <abdulhadi@modulz.app>",
-    "Jonathan Neal <jonathan@modulz.app>"
+    "Abdulhadi Alhallak <abdulhadi@modulz.app>"
   ],
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
-    "create",
-    "css",
-    "css-in-js",
-    "global",
-    "globals",
-    "javascript",
-    "js",
-    "nesting",
-    "object",
-    "object-oriented",
-    "oo",
-    "oocss",
-    "oriented",
-    "scope",
-    "scoped",
-    "string",
-    "stringifier",
-    "stringify",
-    "style",
-    "styled",
-    "styles",
-    "stylesheet",
-    "stylesheets",
-    "type",
-    "typed",
-    "types",
-    "transform",
-    "ts"
+    "css-in-js"
   ]
 }
