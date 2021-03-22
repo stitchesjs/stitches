@@ -26,7 +26,7 @@ const variants = {
 		transform(code, exports) {
 			const iifeExports = []
 			for (const name in exports) iifeExports.push(`${name}:${exports[name]}`)
-			return `${code}globalThis.stitches={${iifeExports.join(',')}}`
+			return `(()=>{${code}globalThis.stitches={${iifeExports.join(',')}}})()`
 		},
 	},
 }
