@@ -33,7 +33,7 @@
     "@types/react-test-renderer": "17.0.1",
     "@typescript-eslint/eslint-plugin": "4.18.0",
     "@typescript-eslint/parser": "4.18.0",
-    "esbuild": "0.9.5",
+    "esbuild": "0.9.6",
     "eslint": "7.22.0",
     "lerna": "4.0.0",
     "linkedom": "0.5.6",
