@@ -2,7 +2,9 @@
   <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112010241-6d612300-8b27-11eb-931f-0590fb10db87.png" />
 </a>
 
-# Style your components with confidence
+## Stitches
+
+## Style your components with confidence
 
 CSS-in-JS with near-zero runtime, SSR, multi-variant support, and a best-in-class developer experience.
 
