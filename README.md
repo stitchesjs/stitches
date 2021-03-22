@@ -2,7 +2,7 @@
   <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112010241-6d612300-8b27-11eb-931f-0590fb10db87.png" />
 </a>
 
-## Stitches
+# Stitches
 
 ## Style your components with confidence
 
