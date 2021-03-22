@@ -1,7 +1,5 @@
-<div style="margin: -32px">
-
 <a href="https://stitches.dev">
-  <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112011920-03e21400-8b29-11eb-9c9a-4e14d5a1f575.png" />
+  <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112011903-ff1d6000-8b28-11eb-92de-8060436106fc.png">" />
 </a>
 
 # Stitches
@@ -51,5 +49,3 @@ Please follow our [contributing guidelines](./CONTRIBUTING.md).
 Licensed under the MIT License, Copyright © 2021-present Modulz.
 
 See [LICENSE](./LICENSE.md) for more information.
-
-</div>
