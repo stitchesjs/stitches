@@ -100,6 +100,7 @@ const defaultThemeMap = {
 	color: colors,
 	columnRuleColor: colors,
 	fill: colors,
+	outline: colors,
 	outlineColor: colors,
 	stroke: colors,
 	textDecorationColor: colors,
