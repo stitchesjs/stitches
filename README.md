@@ -1,5 +1,5 @@
 <a href="https://stitches.dev">
-  <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112010241-6d612300-8b27-11eb-931f-0590fb10db87.png" />
+  <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112011920-03e21400-8b29-11eb-9c9a-4e14d5a1f575.png" />
 </a>
 
 # Stitches
