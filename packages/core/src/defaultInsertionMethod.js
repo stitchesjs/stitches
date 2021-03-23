@@ -1,23 +1,28 @@
 import { assign } from './Object.js'
 
 export default (init) => {
-	const isAppend = init.insertionMethod === 'append'
-
 	let currentCssHead = null
 	let currentCssNode = null
-	let currentCssText = ''
+	let currentCssWait = null
+
+	const isAppend = init.insertionMethod === 'append'
+
+	const getText = (cssText) => {
+		if (!currentCssHead) currentCssHead = document.head || document.documentElement
+		if (!currentCssNode) currentCssNode = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches', textContent: cssText })
+		if (!currentCssNode.parentNode) currentCssHead[isAppend ? 'append' : 'prepend'](currentCssNode)
+		return currentCssNode.textContent
+	}
 
 	return (/** @type {string} */ cssText) => {
+		// only update if the document is available
 		if (typeof document === 'object') {
-			if (!currentCssHead) currentCssHead = document.head || document.documentElement
-			if (!currentCssNode) currentCssNode = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches' })
-			if (!currentCssNode.parentNode) currentCssHead[isAppend ? 'append' : 'prepend'](currentCssNode)
+			cancelAnimationFrame(currentCssWait)
 
-			currentCssText = currentCssText || currentCssNode.textContent
+			const oldText = getText()
 
-			if (!cssText.split('}').every((rule) => currentCssText.includes(rule))) {
-				currentCssNode.textContent = currentCssText = cssText
-			}
+			if (!oldText) currentCssNode.textContent = cssText
+			else if (oldText !== cssText && document.readyState == 'complete') currentCssWait = requestAnimationFrame(() => (currentCssNode.textContent = cssText))
 		}
 	}
 }
