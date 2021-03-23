@@ -36,6 +36,8 @@ export const createStringify = (config) => {
 
 	let lastPolyFunc
 	let lastPolyData
+	let lastRegxName
+	let lastRegxData
 	let lastUtilFunc
 	let lastUtilData
 
@@ -61,6 +63,30 @@ export const createStringify = (config) => {
 				lastPolyData = data
 
 				return lastPolyFunc(lastPolyData)
+			}
+
+			// run polyfills that match the camel-case-left hand of the CSS declaration
+			if (typeof polys[camelName] === 'function' && (polys[camelName] != lastPolyFunc || data != lastPolyData)) {
+				lastPolyFunc = polys[camelName]
+				lastPolyData = data
+
+				return lastPolyFunc(lastPolyData)
+			}
+
+			if (lastRegxName != camelName && lastRegxData != data && /^((min|max)?((Block|Inline)Size|Height|Width)|height|width)$/.test(camelName)) {
+				lastRegxName = camelName
+				lastRegxData = data
+
+				const redata = lastRegxData.replace(
+					/^((?:[^]*[^\w-])?)(fit-content|stretch)((?:[^\w-][^]*)?)$/,
+					(data, lead, main, tail) => lead + (main === 'stretch' ? `-moz-available${tail};${kebabName}:${lead}-webkit-fill-available` : `-moz-fit-content${tail};${kebabName}:${lead}fit-content`) + tail,
+				)
+
+				if (redata != data) {
+					return {
+						[name]: redata,
+					}
+				}
 			}
 
 			// prettier-ignore
