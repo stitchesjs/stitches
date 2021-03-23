@@ -69,7 +69,7 @@ export const createStringify = (config) => {
 				lastRegxName = camelName
 				lastRegxData = data
 
-				const redata = lastRegxData.replace(
+				const redata = String(lastRegxData).replace(
 					/^((?:[^]*[^\w-])?)(fit-content|stretch)((?:[^\w-][^]*)?)$/,
 					(data, lead, main, tail) => lead + (main === 'stretch' ? `-moz-available${tail};${kebabName}:${lead}-webkit-fill-available` : `-moz-fit-content${tail};${kebabName}:${lead}fit-content`) + tail,
 				)
