@@ -34,8 +34,6 @@ const polys = {
 export const createStringify = (config) => {
 	const { media, themeMap, utils } = config
 
-	let lastPolyFunc
-	let lastPolyData
 	let lastRegxName
 	let lastRegxData
 	let lastUtilFunc
@@ -47,31 +45,25 @@ export const createStringify = (config) => {
 			const camelName = firstChar === 64 ? name : toCamelCase(name)
 			const kebabName = firstChar === 64 ? name : toKebabCase(name)
 
-			// run utilities that match the raw left-hand of the CSS rule or declaration
-			if (typeof utils[name] === 'function' && (utils[name] != lastUtilFunc || data != lastUtilData)) {
-				lastUtilFunc = utils[name]
-				lastUtilData = data
+			if (typeof utils[name] === 'function') {
+				// run utilities that match the raw left-hand of the CSS rule or declaration
+				if (utils[name] != lastUtilFunc || data != lastUtilData) {
+					lastUtilFunc = utils[name]
+					lastUtilData = data
 
-				return lastUtilFunc(config)(lastUtilData)
+					return lastUtilFunc(config)(lastUtilData)
+				}
+			} else if (typeof polys[camelName] === 'function') {
+				// run polyfills that match the camel-case-left hand of the CSS declaration
+				if (polys[camelName] != lastUtilFunc || data != lastUtilData) {
+					lastUtilFunc = polys[camelName]
+					lastUtilData = data
+
+					return lastUtilFunc(lastUtilData)
+				}
 			}
 
 			lastUtilData = data
-
-			// run polyfills that match the camel-case-left hand of the CSS declaration
-			if (typeof polys[camelName] === 'function' && (polys[camelName] != lastPolyFunc || data != lastPolyData)) {
-				lastPolyFunc = polys[camelName]
-				lastPolyData = data
-
-				return lastPolyFunc(lastPolyData)
-			}
-
-			// run polyfills that match the camel-case-left hand of the CSS declaration
-			if (typeof polys[camelName] === 'function' && (polys[camelName] != lastPolyFunc || data != lastPolyData)) {
-				lastPolyFunc = polys[camelName]
-				lastPolyData = data
-
-				return lastPolyFunc(lastPolyData)
-			}
 
 			if (lastRegxName != camelName && lastRegxData != data && /^((min|max)?((Block|Inline)Size|Height|Width)|height|width)$/.test(camelName)) {
 				lastRegxName = camelName
