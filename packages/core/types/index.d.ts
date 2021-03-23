@@ -67,6 +67,7 @@ export interface CSSPropertiesToTokenScale {
 	caretColor: 'colors'
 	color: 'colors'
 	columnRuleColor: 'colors'
+	outline: 'colors'
 	outlineColor: 'colors'
 	fill: 'colors'
 	stroke: 'colors'
