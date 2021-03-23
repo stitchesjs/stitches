@@ -1,6 +1,6 @@
 {
   "name": "@stitches/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The modern CSS-in-JS library",
   "type": "module",
   "main": "dist/index.cjs",
@@ -24,7 +24,7 @@
     "Jonathan Neal <jonathan@modulz.app>"
   ],
   "dependencies": {
-    "@stitches/core": "^0.1.0"
+    "@stitches/core": "^0.1.1"
   },
   "devDependencies": {
     "react": "17.0.1"
