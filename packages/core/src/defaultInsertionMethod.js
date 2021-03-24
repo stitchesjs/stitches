@@ -3,7 +3,6 @@ import { assign } from './Object.js'
 export default (init) => {
 	let currentCssHead = null
 	let currentCssNode = null
-	let currentCssWait = null
 	let hasExistingCss = false
 
 	const isAppend = init.insertionMethod === 'append'
@@ -20,12 +19,23 @@ export default (init) => {
 	return (/** @type {string} */ cssText) => {
 		// only update if the document is available
 		if (typeof document === 'object') {
-			cancelAnimationFrame(currentCssWait)
-
 			const oldText = getText()
 
-			if (!oldText) currentCssNode.textContent = cssText
-			else if (oldText !== cssText && (!hasExistingCss || document.readyState == 'complete')) currentCssWait = requestAnimationFrame(() => (currentCssNode.textContent = cssText))
+			// prettier-ignore
+			if (
+				// update when there is no existing css
+				!oldText
+				|| (
+					// or when the css has changed, and
+					oldText !== cssText
+					&& (
+						// there was no existing css, or
+						!hasExistingCss
+						// was existing css and the document is loaded
+						|| document.readyState == 'complete'
+					)
+				)
+			) currentCssNode.textContent = cssText
 		}
 	}
 }
