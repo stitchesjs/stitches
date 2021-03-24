@@ -1,41 +1,52 @@
 import { assign } from './Object.js'
 
 export default (init) => {
-	let currentCssHead = null
-	let currentCssNode = null
-	let hasExistingCss = false
+	let isSsrCssRemoved = false
 
-	const isAppend = init.insertionMethod === 'append'
+	let currentCssHead
+	let currentCssNode
+	let currentSsrText
+	let currentHotText
+	let visibilityWait
 
-	const getText = (cssText) => {
-		if (!currentCssHead) currentCssHead = document.head || document.documentElement
-		if (!currentCssNode) currentCssNode = (hasExistingCss = document.getElementById('stitches')) || assign(document.createElement('style'), { id: 'stitches', textContent: cssText })
-		if (!currentCssNode.parentNode) currentCssHead[isAppend ? 'append' : 'prepend'](currentCssNode)
-		const returnValue = currentCssNode.textContent
-		if (typeof hasExistingCss === 'object') hasExistingCss = returnValue
-		return returnValue
-	}
+	const insertionMethod = init.insertionMethod === 'append' ? 'append' : 'prepend'
 
-	return (/** @type {string} */ cssText) => {
+	const apply = (/** @type {string} */ cssText) => {
 		// only update if the document is available
 		if (typeof document === 'object') {
-			const oldText = getText()
+			// use the document head or the document root
+			if (!currentCssHead) currentCssHead = document.head || document.documentElement
 
-			// prettier-ignore
-			if (
-				// update when there is no existing css
-				!oldText
-				|| (
-					// or when the css has changed, and
-					oldText !== cssText
-					&& (
-						// there was no existing css, or
-						!hasExistingCss
-						// was existing css and the document is loaded
-						|| document.readyState == 'complete'
-					)
-				)
-			) currentCssNode.textContent = cssText
+			// use the existing stitches style element, otherwise create one
+			if (!currentCssNode) currentCssNode = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches', textContent: cssText })
+
+			// use the prerendered stitches style text, otherwise create one outside of the document
+			if (!currentSsrText) {
+				currentSsrText = currentCssNode.firstChild || new Text()
+
+				isSsrCssRemoved = !currentSsrText.data
+			}
+
+			// use a new stitches style text for hot-loaded styles
+			if (!currentHotText) currentHotText = currentCssNode.insertBefore(new Text(), currentSsrText)
+
+			// attach the stitches style element to the document if it not already connected
+			if (!currentCssNode.isConnected) currentCssHead[insertionMethod](currentCssNode)
+
+			currentHotText.data = cssText
+
+			// remove the prerendered stiches style text once the document is visible
+			if (!isSsrCssRemoved && cssText) {
+				clearTimeout(visibilityWait)
+
+				visibilityWait = setTimeout(() => {
+					currentSsrText.remove()
+
+					isSsrCssRemoved = true
+				}, 250)
+			}
 		}
 	}
+
+	return apply
 }
