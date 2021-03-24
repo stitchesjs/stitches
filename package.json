@@ -1,7 +1,6 @@
 {
   "$schema": "./.vscode/package.schema.json",
   "name": "stitches",
-  "version": "0.1.0-canary.0",
   "type": "module",
   "license": "MIT",
   "contributors": [
