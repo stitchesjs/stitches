@@ -51,9 +51,9 @@ describe('React Component with CSS prop', () => {
 				...props,
 				ref: forwardedRef,
 				css: {
-					fontWeight: 500,
-					fontVariantNumeric: 'proportional-nums',
-					lineHeight: '35px',
+					'fontWeight': 500,
+					'fontVariantNumeric': 'proportional-nums',
+					'lineHeight': '35px',
 					...props.css,
 					'@bp2': {
 						lineHeight: '55px',
@@ -68,8 +68,8 @@ describe('React Component with CSS prop', () => {
 				Title,
 				{
 					css: {
-						textAlign: 'center',
-						marginBottom: '$3',
+						'textAlign': 'center',
+						'marginBottom': '$3',
 						'@bp2': {
 							color: 'red',
 						},
@@ -80,7 +80,7 @@ describe('React Component with CSS prop', () => {
 		).toEqual({
 			type: 'span',
 			props: {
-				className: 'sxongxf sxongxf-9eqdh',
+				className: 'sxongxf sxongxf-9hhw1',
 			},
 			children: ['Radix UI test suite'],
 		})
@@ -88,9 +88,9 @@ describe('React Component with CSS prop', () => {
 		// prettier-ignore
 		expect(toString()).toBe(
 			'.sxongxf{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block;}' +
-			'.sxongxf-9eqdh{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3);}' +
+			'.sxongxf-9hhw1{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3);}' +
 			'@media (min-width: 900px){' +
-				'.sxongxf-9eqdh{line-height:55px;color:red;}' +
+				'.sxongxf-9hhw1{line-height:55px;color:red;}' +
 			'}',
 		)
 
@@ -112,9 +112,9 @@ describe('React Component with CSS prop', () => {
 		// prettier-ignore
 		expect(toString()).toBe(
 			'.sxongxf{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block;}' +
-			'.sxongxf-9eqdh{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3);}' +
+			'.sxongxf-9hhw1{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3);}' +
 			'@media (min-width: 900px){' +
-				'.sxongxf-9eqdh{line-height:55px;color:red;}' +
+				'.sxongxf-9hhw1{line-height:55px;color:red;}' +
 			'}' +
 			'.sxibtj5 .sxongxf{color:inherit;}',
 		)

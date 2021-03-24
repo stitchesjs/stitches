@@ -1,5 +1,6 @@
 import { assign, create, createComponent } from './Object.js'
 import { createStringify } from './createStringify.js'
+import { getStackTail } from './getStackTail.js'
 import { from } from './Array.js'
 import { ownKeys } from './Reflect.js'
 import StringSet from './StringSet.js'
@@ -312,7 +313,7 @@ const createCss = (init) => {
 				}
 			},
 			inline(css, classNames) {
-				const inlineSuffix = getHashString('-', css)
+				const inlineSuffix = getHashString('-', getStackTail())
 				const inlineSelector = selector + inlineSuffix
 				const inlineCssText = className === '-' + inlineSuffix ? '' : stringify({ [inlineSelector]: css })
 

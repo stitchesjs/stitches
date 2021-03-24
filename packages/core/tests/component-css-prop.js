@@ -20,7 +20,7 @@ describe('Component with CSS prop', () => {
 
 		expect(toString()).toBe(
 			// prettier-ignore
-			'.sxjq6z2{order:1;}.sxjq6z2-yg8rb{order:2;}',
+			'.sxjq6z2{order:1;}.sxjq6z2-77a2r{order:2;}',
 		)
 	})
 })

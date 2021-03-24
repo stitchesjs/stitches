@@ -15,7 +15,7 @@ describe('React Component with CSS prop', () => {
 		expect(toString()).toBe(
 			// prettier-ignore
 			'.sxjq6z2{order:1;}' +
-			'.sxjq6z2-yg8rb{order:2;}',
+			'.sxjq6z2-a6pza{order:2;}',
 		)
 	})
 
@@ -30,9 +30,9 @@ describe('React Component with CSS prop', () => {
 			color: 'inherit',
 		}).render({
 			css: {
-				fontWeight: 500,
-				fontVariantNumeric: 'proportional-nums',
-				lineHeight: '35px',
+				'fontWeight': 500,
+				'fontVariantNumeric': 'proportional-nums',
+				'lineHeight': '35px',
 				'@bp2': {
 					lineHeight: '55px',
 					color: 'red',
@@ -41,15 +41,15 @@ describe('React Component with CSS prop', () => {
 		})
 
 		expect(expression.props).toEqual({
-			className: 'sx2obmh sx2obmh-nl6rn',
+			className: 'sx2obmh sx2obmh-szbq2',
 		})
 
 		// prettier-ignore
 		expect(toString()).toBe(
 			'.sx2obmh{color:inherit;}' +
-			'.sx2obmh-nl6rn{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;}' +
+			'.sx2obmh-szbq2{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;}' +
 			'@media (min-width: 900px){' +
-				'.sx2obmh-nl6rn{line-height:55px;color:red;}' +
+				'.sx2obmh-szbq2{line-height:55px;color:red;}' +
 			'}',
 		)
 	})
