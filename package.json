@@ -11,7 +11,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "node .bin/build.js",
-    "build:watch": "node .bin/build-watch.js",
+    "build:watch": "node .bin/build.js --watch",
     "lint": "node .bin/lint.js",
     "lint:esm": "node .bin/lint-esm.js",
     "lint:pkg": "node .bin/lint-pkg.js",
@@ -36,7 +36,7 @@
     "@types/react-test-renderer": "17.0.1",
     "@typescript-eslint/eslint-plugin": "4.19.0",
     "@typescript-eslint/parser": "4.19.0",
-    "esbuild": "0.9.6",
+    "esbuild": "0.9.7",
     "eslint": "7.22.0",
     "lerna": "4.0.0",
     "linkedom": "0.6.1",
