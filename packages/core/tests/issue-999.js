@@ -38,7 +38,7 @@ describe('Issue #519', () => {
 		expect(toString()).toBe(
 			'.sxyrd68{---syntax:red;}' +
 			'.sxyrd68 h1{color:var(---syntax);}' +
-			'.sxyrd68 h2{color:$$syntax;}'
+			'.sxyrd68 h2{color:var(---syntax);}'
 		)
 	})
 
@@ -65,8 +65,8 @@ describe('Issue #519', () => {
 		expect(toString()).toBe(
 			'.sx4gdx9{---syntax:red;}' +
 			'.sx4gdx9 h1{color:var(---syntax);}' +
-			'.sx4gdx9 h2{color:$$syntax;}' +
-			'.sx4gdx9 h3{color:$$syntax;}'
+			'.sx4gdx9 h2{color:var(---syntax);}' +
+			'.sx4gdx9 h3{color:var(---syntax);}'
 		)
 	})
 })
