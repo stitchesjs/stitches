@@ -8,8 +8,14 @@
   "typings": "types/index.d.ts",
   "jsdelivr": "dist/index.iife.js",
   "unpkg": "dist/index.iife.js",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "import": "./dist/index.mjs",
+    "default": "./dist/index.mjs"
+  },
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "sideEffects": false,
   "license": "MIT",
