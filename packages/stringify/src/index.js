@@ -14,9 +14,7 @@ export const stringify = (
 	/** Set used to manage the opened and closed state of rules. */
 	const used = new WeakSet()
 
-	let prevName, prevData
-
-	const parse = (style, selectors, conditions) => {
+	const parse = (style, selectors, conditions, prevName, prevData) => {
 		let cssText = ''
 
 		each: for (let name in style) {
@@ -27,10 +25,7 @@ export const stringify = (
 					const next = replacer(name, data, style)
 
 					if (next !== null) {
-						prevName = name
-						prevData = data
-
-						cssText += next === Object(next) ? parse(next, selectors, conditions) : next == null ? '' : next
+						cssText += next === Object(next) ? parse(next, selectors, conditions, name, data) : next == null ? '' : next
 
 						continue each
 					}
