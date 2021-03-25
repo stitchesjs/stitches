@@ -11,7 +11,7 @@ export default (init) => {
 
 	const insertionMethod = init.insertionMethod === 'append' ? 'append' : 'prepend'
 
-	const apply = (/** @type {string} */ cssText) => {
+	return (/** @type {string} */ cssText) => {
 		// only update if the document is available
 		if (typeof document === 'object') {
 			// use the document head or the document root
@@ -47,6 +47,4 @@ export default (init) => {
 			}
 		}
 	}
-
-	return apply
 }
