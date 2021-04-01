@@ -32,6 +32,9 @@ const createCss = (init) => {
 	/** Prefix added before all generated class names. */
 	const prefix = init.prefix || 'sx'
 
+	/** Optional hash to be appended to the style element containing styles and generated class names and custom properties. */
+	const commonHash = init.commonHash || ''
+
 	const insertionMethod = (typeof init.insertionMethod === 'function' ? init.insertionMethod : defaultInsertionMethod)(init)
 
 	const emptyClassName = '03kze'
@@ -40,6 +43,7 @@ const createCss = (init) => {
 		theme: themeInit,
 		media,
 		prefix,
+		commonHash,
 		themeMap,
 		utils,
 	}
@@ -85,16 +89,16 @@ const createCss = (init) => {
 		className = typeof className === 'string' ? className : ''
 
 		/** Custom property styles representing themed token values. */
-		const customPropertyStyles = getCustomProperties(theme)
+		const customPropertyStyles = getCustomProperties(theme, commonHash)
 
 		// class name is either itself or the unique hash representing its styles
-		className = className || getHashString(prefix, customPropertyStyles)
+		className = className || getHashString(prefix, customPropertyStyles, commonHash)
 
 		/** CSS Selector */
 		const selector = className.replace(/^\w/, '.$&')
 
 		/** Computed CSS */
-		const cssText = className === prefix + emptyClassName ? '' : stringify({ [selector]: customPropertyStyles })
+		const cssText = className === prefix + emptyClassName + commonHash ? '' : stringify({ [selector]: customPropertyStyles })
 
 		const expression = createComponent(create(null), 'className', {
 			className,
@@ -105,7 +109,7 @@ const createCss = (init) => {
 			expression[scale] = create(null)
 
 			for (const token in theme[scale]) {
-				expression[scale][token] = new ThemeToken(theme[scale][token], token, scale)
+				expression[scale][token] = new ThemeToken(theme[scale][token], token, scale, commonHash)
 			}
 		}
 
@@ -184,7 +188,7 @@ const createCss = (init) => {
 		style,
 	) => {
 		/** Unique name representing the current keyframes rule. */
-		const name = getHashString(prefix, style)
+		const name = getHashString(prefix, style, commonHash)
 
 		return global({ ['@keyframes ' + name]: style }, name)
 	}
@@ -200,9 +204,9 @@ const createCss = (init) => {
 
 		defaultVariants = Object(defaultVariants)
 
-		const className = getHashString(prefix, initStyle)
+		const className = getHashString(prefix, initStyle, commonHash)
 		const selector = '.' + className
-		const cssText = className === prefix + emptyClassName ? '' : stringify({ [selector]: style })
+		const cssText = className === prefix + emptyClassName + commonHash ? '' : stringify({ [selector]: style })
 
 		styledCss.add(unitedCss)
 
@@ -272,7 +276,7 @@ const createCss = (init) => {
 						}
 					}
 
-					const variantClassName = className + getHashString('', conditionedCss) + '--' + (variantConfigIndex === 1 ? variantConfigKeys[0] + '-' + variantConfig[variantConfigKeys[0]] : 'c' + variantConfigIndex)
+					const variantClassName = className + getHashString('', conditionedCss, '') + '--' + (variantConfigIndex === 1 ? variantConfigKeys[0] + '-' + variantConfig[variantConfigKeys[0]] : 'c' + variantConfigIndex)
 					const variantSelector = '.' + variantClassName
 					const variantCssText = stringify({ [variantSelector]: conditionedCss })
 					const variantCssByIndex = variedCss[variantConfigIndex - 1] || (variedCss[variantConfigIndex - 1] = new StringSet())
@@ -312,7 +316,7 @@ const createCss = (init) => {
 				}
 			},
 			inline(css, classNames) {
-				const inlineSuffix = getHashString('-', css)
+				const inlineSuffix = getHashString('-', css, commonHash)
 				const inlineSelector = selector + inlineSuffix
 				const inlineCssText = className === '-' + inlineSuffix ? '' : stringify({ [inlineSelector]: css })
 
@@ -428,6 +432,7 @@ const createCss = (init) => {
 			global,
 			keyframes,
 			prefix,
+			commonHash,
 			reset() {
 				importCss.clear()
 				themedCss.clear()

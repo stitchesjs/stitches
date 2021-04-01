@@ -1,9 +1,10 @@
 /** CSS token value, name, and scale. */
 class ThemeToken {
-	constructor(value, token, scale) {
+	constructor(value, token, scale, commonHash) {
 		this.value = value
 		this.token = token
 		this.scale = scale
+		this.commonHash = commonHash
 	}
 
 	/** Returns a serialized CSS var() representing the token. */
@@ -13,7 +14,7 @@ class ThemeToken {
 
 	/** Returns a serialized name representing the token. */
 	get variable() {
-		return '--' + this.scale + '-' + this.token
+		return '--' + this.scale + '-' + this.token + this.commonHash
 	}
 
 	/** Returns a serialized CSS var() representing the token. */

@@ -39,6 +39,25 @@ describe('Tokens', () => {
 		}
 	})
 
+	test('Authors can use a token with a commonHash', () => {
+		const { global, toString } = createCss({
+			commonHash: 'bar',
+			theme: {
+				colors: {
+					red: 'tomato',
+				},
+			},
+		})
+
+		global({
+			article: {
+				boxShadow: '0 0 0 1px $red',
+			},
+		})()
+
+		expect(toString()).toBe(`:root{--colors-redbar:tomato;}` + `article{box-shadow:0 0 0 1px var(--shadows-redbar);}`)
+	})
+
 	test('Authors can use an absolute token', () => {
 		{
 			const { global, toString } = createCss({

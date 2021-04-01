@@ -9,6 +9,7 @@ export default (init) => {
 	let currentHotText
 	let visibilityWait
 
+	const styleElementId = 'stitches' + (init.commonHash || '')
 	const insertionMethod = init.insertionMethod === 'append' ? 'append' : 'prepend'
 
 	return (/** @type {string} */ cssText) => {
@@ -18,7 +19,7 @@ export default (init) => {
 			if (!currentCssHead) currentCssHead = document.head || document.documentElement
 
 			// use the existing stitches style element, otherwise create one
-			if (!currentCssNode) currentCssNode = document.getElementById('stitches') || assign(document.createElement('style'), { id: 'stitches', textContent: cssText })
+			if (!currentCssNode) currentCssNode = document.getElementById(styleElementId) || assign(document.createElement('style'), { id: styleElementId, textContent: cssText })
 
 			// use the prerendered stitches style text, otherwise create one outside of the document
 			if (!currentSsrText) {

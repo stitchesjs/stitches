@@ -33,7 +33,7 @@ const polys = {
 }
 
 export const createStringify = (config) => {
-	const { media, themeMap, utils } = config
+	const { media, themeMap, utils, commonHash = '' } = config
 
 	let lastRegxName
 	let lastRegxData
@@ -149,7 +149,7 @@ export const createStringify = (config) => {
 												? themeMap[camelName] + '-'
 											: ''
 										: ''
-									) + token.replace(/\$/g, '-')
+									) + token.replace(/\$/g, '-') + commonHash
 								: separator + token
 							) + ')' + (
 								direction || separator == '--'
