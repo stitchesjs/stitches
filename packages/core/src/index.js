@@ -384,7 +384,7 @@ const createCss = (init) => {
 					}
 				}
 
-				if ('className' in props) {
+				if ('className' in props && props.className) {
 					String(props.className).split(/\s+/).forEach(classNames.add, classNames)
 				}
 
