@@ -53,4 +53,16 @@ describe('React Component with CSS prop', () => {
 			'}',
 		)
 	})
+
+	test('Authors can create a component witout CSS prop', () => {
+		const { styled, toString } = createCss()
+
+		const expression = styled('button').render()
+
+		expect(expression.props).toEqual({
+			className: 'sx03kze'
+		})
+	
+		expect(toString()).toBe('')
+	})
 })
