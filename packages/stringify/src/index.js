@@ -32,7 +32,8 @@ export const stringify = (
 				}
 
 				const isAtRuleLike = name.charCodeAt(0) === 64
-				const isObjectLike = data === Object(data) && !('length' in data)
+				const isThemeToken = data.constructor.name === 'ThemeToken'
+				const isObjectLike = data === Object(data) && !('length' in data) && !isThemeToken
 
 				if (isObjectLike) {
 					if (used.has(selectors)) {

@@ -121,4 +121,23 @@ describe('stringify()', () => {
 			'}',
 		)
 	})
+
+	test('stringify() generates CSS with direct use of ThemeToken instances', () => {
+		class ThemeToken {
+			toString() {
+				return 'var(--some-token)'
+			}
+		}
+
+		const redToken = new ThemeToken()
+
+		expect(
+			stringify({
+				color: redToken,
+			}),
+		).toEqual(
+			// prettier-ignore
+			'color:var(--some-token);',
+		)
+	})
 })
