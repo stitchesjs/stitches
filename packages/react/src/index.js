@@ -16,7 +16,9 @@ const createCss = (init) => {
 			...inits
 		) => {
 			const defaultType = inits.map((init) => (Object(init).type ? init.type : init)).find((init) => init) || 'span'
-			const composition = sheet.css(...inits.filter((init) => $$composers in Object(init) || (init && typeof init === 'object' && !init.$$typeof)))
+			const initsFiltered = inits.filter((init) => $$composers in Object(init) || (init && typeof init === 'object' && !init.$$typeof));
+			const initWithoutStyles = String(defaultType) === defaultType && !initsFiltered.length
+			const composition = sheet.css(...initsFiltered, initWithoutStyles && {})
 
 			/** Returns a React element. */
 			return Object.setPrototypeOf(
