@@ -18,8 +18,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--colors-red:tomato;}` +
-				`article{color:var(--colors-red);}`
+				`:root{--sx-colors-red:tomato;}` +
+				`article{color:var(--sx-colors-red);}`
 			)
 		}
 
@@ -39,8 +39,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--shadows-red:tomato;}` +
-				`article{box-shadow:0 0 0 1px var(--shadows-red);}`
+				`:root{--sx-shadows-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--sx-shadows-red);}`
 			)
 		}
 	})
@@ -62,8 +62,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--colors-red:tomato;}` +
-				`article{box-shadow:0 0 0 1px var(--colors-red);}`
+				`:root{--sx-colors-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--sx-colors-red);}`
 			)
 		}
 
@@ -83,8 +83,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--colors-red:tomato;}` +
-				`article{box-shadow:0 0 0 1px var(--colors-red);}`
+				`:root{--sx-colors-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--sx-colors-red);}`
 			)
 		}
 	})
@@ -108,8 +108,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--space-sp1:100px;--space-sp2:200px;}` +
-				`article{margin-left:calc(var(--space-sp1)*-1);margin-top:calc(var(--space-sp2)*-1);}`
+				`:root{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+				`article{margin-left:calc(var(--sx-space-sp1)*-1);margin-top:calc(var(--sx-space-sp2)*-1);}`
 			)
 		}
 
@@ -132,8 +132,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sizes-sp1:10px;--sizes-sp2:20px;--sizes-sp3:30px;}` +
-				`article{margin-left:calc(var(--sizes-sp1)*-1);width:var(--sizes-sp1);}`
+				`:root{--sx-sizes-sp1:10px;--sx-sizes-sp2:20px;--sx-sizes-sp3:30px;}` +
+				`article{margin-left:calc(var(--sx-sizes-sp1)*-1);width:var(--sx-sizes-sp1);}`
 			)
 		}
 	})
@@ -156,8 +156,8 @@ describe('Tokens', () => {
 		})()
 
 		expect(toString()).toBe(
-			`:root{--space-sp1:100px;--space-sp2:200px;}` +
-			`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2);}`,
+			`:root{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
 		)
 	})
 
@@ -179,14 +179,14 @@ describe('Tokens', () => {
 		})()
 
 		expect(toString()).toBe(
-			`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2);}`,
+			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
 		)
 
 		mytheme.className
 
 		expect(toString()).toBe(
-			`.my-theme{--space-sp1:100px;--space-sp2:200px;}` +
-			`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2);}`,
+			`.my-theme{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
 		)
 	})
 }) // prettier-ignore

@@ -12,7 +12,7 @@ describe('Theme', () => {
 
 		expect(toString()).toBe('')
 		expect(`<div class="${myTheme}">`).toBe('<div class="my">')
-		expect(toString()).toBe('.my{--colors-blue:dodgerblue;}')
+		expect(toString()).toBe('.my{--sx-colors-blue:dodgerblue;}')
 		expect(myTheme.className).toBe('my')
 		expect(myTheme.selector).toBe('.my')
 	})

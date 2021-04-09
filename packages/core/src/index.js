@@ -101,6 +101,7 @@ const createCss = (initConfig) => {
 					String(theme[scale][token]),
 					token,
 					scale,
+					prefix,
 				)
 
 				styles[value.variable] = value.value
