@@ -1,5 +1,8 @@
 import { toKebabCase } from './toCase.js'
 import { getResolvedSelectors } from './getResolvedSelectors.js'
+import { isArray } from './Array.js'
+
+const { prototype: { toString } } = Object // prettier-ignore
 
 /** Comma matcher outside rounded brackets. */
 const comma = /\s*,\s*(?![^()]*\))/
@@ -8,7 +11,7 @@ const comma = /\s*,\s*(?![^()]*\))/
 export const stringify = (
 	/** Object representing the current CSS. */
 	value,
-	/** ... */
+	/** Replacer function. */
 	replacer = undefined,
 ) => {
 	/** Set used to manage the opened and closed state of rules. */
@@ -17,22 +20,21 @@ export const stringify = (
 	const parse = (style, selectors, conditions, prevName, prevData) => {
 		let cssText = ''
 
-		each: for (let name in style) {
+		each: for (const name in style) {
 			const isAtRuleLike = name.charCodeAt(0) === 64
 
-			for (const data of isAtRuleLike ? [].concat(style[name]) : [style[name]]) {
-				if (typeof replacer === 'function' && (name !== prevName || data !== prevData)) {
+			for (const data of isAtRuleLike && isArray(style[name]) ? style[name] : [style[name]]) {
+				if (replacer && (name !== prevName || data !== prevData)) {
 					const next = replacer(name, data, style)
 
 					if (next !== null) {
-						cssText += next === Object(next) ? parse(next, selectors, conditions, name, data) : next == null ? '' : next
+						cssText += typeof next === 'object' && next ? parse(next, selectors, conditions, name, data) : next == null ? '' : next
 
 						continue each
 					}
 				}
 
-				const isAtRuleLike = name.charCodeAt(0) === 64
-				const isObjectLike = data === Object(data) && !('length' in data)
+				const isObjectLike = typeof data === 'object' && data && data.toString === toString
 
 				if (isObjectLike) {
 					if (used.has(selectors)) {
@@ -71,9 +73,7 @@ export const stringify = (
 						cssText += selectors + '{'
 					}
 
-					for (const each of /^@import/i.test(name) ? [].concat(data) : [data]) {
-						cssText += (isAtRuleLike ? name + ' ' : toKebabCase(name) + ':') + String(each) + ';'
-					}
+					cssText += (isAtRuleLike ? name + ' ' : toKebabCase(name) + ':') + String(data) + ';'
 				}
 			}
 		}

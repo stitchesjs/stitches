@@ -51,9 +51,15 @@ describe('Support @font-face', () => {
 		})()
 
 		expect(toString()).toBe(
-			`@font-face{font-family:system-ui;font-style:normal;font-weight:400;src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma");}`,
+			`@font-face{` +
+				`font-family:system-ui;` +
+				`font-style:normal;` +
+				`font-weight:400;` +
+				`src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma");` +
+			`}`,
 		)
 	})
+
 	test('Authors can define multiple @font-face rules', () => {
 		const { global, toString } = createCss({})
 
@@ -94,9 +100,21 @@ describe('Support @font-face', () => {
 			],
 		})()
 
-		const cssFontFaceRule1 = `@font-face{font-family:system-ui;font-style:normal;font-weight:400;src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma");}`
-		const cssFontFaceRule2 = `@font-face{font-family:system-ui;font-style:normal;font-weight:400;src:local(".SFNS-Italic"),local(".SFNSText-Italic"),local(".HelveticaNeueDeskInterface-Italic"),local(".LucidaGrandeUI"),local("Segoe UI Italic"),local("Ubuntu Italic"),local("Roboto-Italic"),local("DroidSans"),local("Tahoma");}`
 
-		expect(toString()).toBe(cssFontFaceRule1 + cssFontFaceRule2)
+		expect(toString()).toBe(
+			`@font-face{` +
+				`font-family:system-ui;` +
+				`font-style:normal;` +
+				`font-weight:400;` +
+				`src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma");` +
+			`}` +
+
+			`@font-face{` +
+				`font-family:system-ui;` +
+				`font-style:normal;` +
+				`font-weight:400;` +
+				`src:local(".SFNS-Italic"),local(".SFNSText-Italic"),local(".HelveticaNeueDeskInterface-Italic"),local(".LucidaGrandeUI"),local("Segoe UI Italic"),local("Ubuntu Italic"),local("Roboto-Italic"),local("DroidSans"),local("Tahoma");` +
+			`}`
+		)
 	})
-})
+}) // prettier-ignore
