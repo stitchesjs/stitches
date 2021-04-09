@@ -14,13 +14,14 @@ export const getResolvedSelectors = (
 					(selector) => (
 						selector.includes('&') ? selector.replace(
 							/&/g,
-							/[ +>|~]/.test(parentSelector) && /&[^]*&/.test(selector)
+							/[ +>|~]/.test(parentSelector) && /&.*&/.test(selector)
 								? `:is(${parentSelector})`
 							: parentSelector
 						) : parentSelector + ' ' + selector
 					)
 				)
 			)
+
 			return resolvedSelectors
 		},
 		[]

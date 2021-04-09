@@ -13,7 +13,7 @@ var space = 'space'
 var transitions = 'transitions'
 var zIndices = 'zIndices'
 
-export var defaultThemeMap = {
+export default {
 	gap: space,
 	gridGap: space,
 	columnGap: space,
