@@ -1,6 +1,14 @@
 import { createCss } from '../src/index.js'
 
 describe('Composition', () => {
+	test('Renders an empty component', () => {
+		const { css, toString } = createCss()
+		const generic = css()
+
+		expect(generic().props).toEqual({ className: 'sx03kze' })
+		expect(toString()).toBe('')
+	})
+
 	test('Renders a component as the final composition by default', () => {
 		const { css, toString } = createCss()
 		const red = css({ color: 'red' })

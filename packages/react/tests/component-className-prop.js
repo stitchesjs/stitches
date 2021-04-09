@@ -5,27 +5,27 @@ describe('className prop', () => {
 		const { styled } = createCss()
 
 		const component = styled('div')
-		const className = 'myClassName';
+		const className = 'myClassName'
 		const expression = component.render({ className })
 
-		expect(expression.props.className).toBe(className)
+		expect(expression.props.className).toBe('sx03kze ' + className)
 	})
 
 	test('Renders a DOM Element with multiple classes passed as className', () => {
 		const { styled } = createCss()
 
 		const component = styled('div')
-		const className = 'myClassName1 myClassName2 myClassName3';
+		const className = 'myClassName1 myClassName2 myClassName3'
 		const expression = component.render({ className })
 
-		expect(expression.props.className).toBe(className)
+		expect(expression.props.className).toBe('sx03kze ' + className)
 	})
 
 	test('Renders a DOM Element withoup adding an undefined class', () => {
 		const { styled } = createCss()
 
 		const component = styled('div')
-		const className = undefined;
+		const className = undefined
 		const expression = component.render({ className })
 
 		expect(expression.props.className).toNotBe('undefined')
