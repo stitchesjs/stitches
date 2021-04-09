@@ -15,11 +15,11 @@ describe('getCustomProperties()', () => {
 				},
 			}),
 		).toEqual({
-			'$colors-blue': 'dodgerblue',
-			'$colors-red': 'tomato',
-			'$sizes-sm': '480px',
-			'$sizes-md': '960px',
-			'$sizes-lg': '1200px',
+			'--colors-blue': 'dodgerblue',
+			'--colors-red': 'tomato',
+			'--sizes-sm': '480px',
+			'--sizes-md': '960px',
+			'--sizes-lg': '1200px',
 		})
 	})
 })
