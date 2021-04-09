@@ -1,6 +1,6 @@
 import { assign, create, createComponent } from './Object.js'
 import { createStringify } from './createStringify.js'
-import { from } from './Array.js'
+import { from } from '../../stringify/src/Array.js'
 import { ownKeys } from './Reflect.js'
 import StringSet from './StringSet.js'
 import defaultThemeMap from './defaultThemeMap.js'

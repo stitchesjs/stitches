@@ -1,5 +1,5 @@
 import { toPrimitive } from './Symbol.js'
-import { from } from './Array.js'
+import { from } from '../../stringify/src/Array.js'
 
 export default class StringSet extends Set {
 	toString() {
