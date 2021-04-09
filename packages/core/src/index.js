@@ -334,8 +334,8 @@ const createCss = (init) => {
 	}
 
 	const css = (...inits) => {
-		let composers = []
 		let composer
+		let composers = []
 		let defaultVariants = create(null)
 
 		for (const init of inits) {
@@ -354,7 +354,9 @@ const createCss = (init) => {
 			}
 		}
 
-		composer = composer || createComposer({})
+		if (!composer) {
+			composers.push((composer = createComposer({})))
+		}
 
 		return createComponent(
 			(initProps) => {
