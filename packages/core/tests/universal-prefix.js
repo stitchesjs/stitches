@@ -8,9 +8,11 @@ describe('Prefix', () => {
 
 		expect(toString()).toBe('')
 
-		expect(theme({ colors: { red: 'tomato' } }).toString()).toBe(`${prefix}8wd2c`)
+		const hash = 'rrtg8'
 
-		expect(toString()).toBe(`.${prefix}8wd2c{--colors-red:tomato;}`)
+		expect(theme({ colors: { red: 'tomato' } }).toString()).toBe(`${prefix}${hash}`)
+
+		expect(toString()).toBe(`.${prefix}${hash}{--colors-red:tomato;}`)
 	})
 
 	test('Authors can define a prefix not applied to named themes', () => {

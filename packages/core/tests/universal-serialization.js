@@ -17,7 +17,7 @@ describe('Serialization', () => {
 			blue: 'dodgerblue',
 		},
 	})
-	const myThemeClassName = 'sxvj6oe'
+	const myThemeClassName = 'sxfy0qk'
 
 	test('Components implicitly return their class name', () => {
 		expect(String(myComponent)).toBe(myComponentClassName)

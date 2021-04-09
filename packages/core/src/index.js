@@ -4,7 +4,6 @@ import { from } from '../../stringify/src/Array.js'
 import { ownKeys } from './Reflect.js'
 import StringSet from './StringSet.js'
 import defaultThemeMap from './defaultThemeMap.js'
-import getCustomProperties from './getCustomProperties.js'
 import getHashString from './getHashString.js'
 import ThemeToken from './ThemeToken.js'
 import { $$composers } from './Symbol.js'
@@ -12,37 +11,32 @@ import StringArray from './StringArray.js'
 import defaultInsertionMethod from './defaultInsertionMethod.js'
 
 /** Returns a new styled sheet and accompanying API. */
-const createCss = (init) => {
-	init = Object(init)
+const createCss = (initConfig) => {
+	const config = {}
+
+	initConfig = config.config = typeof initConfig === 'object' && initConfig || {}
 
 	/** Named media queries. */
-	const media = assign({ initial: 'all' }, init.media)
+	config.media = assign({ initial: 'all' }, initConfig.media)
 
 	/** Theme tokens enabled by default on the styled sheet. */
-	const themeInit = Object(init.theme)
+	config.theme = typeof initConfig.theme === 'object' && initConfig.theme || {}
 
-	const themeMap = Object(init.themeMap || defaultThemeMap)
+	/** Mapping of css properties to theme scales. */
+	config.themeMap = typeof initConfig.themeMap === 'object' && initConfig.themeMap || defaultThemeMap
 
 	/** CSS properties corresponding to functions that accept CSS values and return new CSS object fragments. */
-	const utils = Object(init.utils)
+	config.utils = typeof initConfig.utils === 'object' && initConfig.utils || {}
 
 	/** Names of variants passed through to props. */
-	const passThru = new Set([].concat(init.passthru || ['as', 'className']))
+	const passThru = new Set([].concat(initConfig.passthru || ['as', 'className']))
 
 	/** Prefix added before all generated class names. */
-	const prefix = init.prefix || 'sx'
+	const prefix = config.prefix = initConfig.prefix || 'sx'
 
-	const insertionMethod = (typeof init.insertionMethod === 'function' ? init.insertionMethod : defaultInsertionMethod)(init)
+	const insertionMethod = (typeof initConfig.insertionMethod === 'function' ? initConfig.insertionMethod : defaultInsertionMethod)(config)
 
 	const emptyClassName = '03kze'
-
-	const config = {
-		theme: themeInit,
-		media,
-		prefix,
-		themeMap,
-		utils,
-	}
 
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
 	const stringify = createStringify(config)
@@ -79,35 +73,42 @@ const createCss = (init) => {
 		theme,
 	) => {
 		// theme is the first argument if it is an object, otherwise the second argument as an object
-		theme = className === Object(className) ? className : Object(theme)
+		theme = typeof className === 'object' && className || Object(theme)
 
 		// class name is the first argument if it is a string, otherwise an empty string
 		className = typeof className === 'string' ? className : ''
 
-		/** Custom property styles representing themed token values. */
-		const customPropertyStyles = getCustomProperties(theme)
-
 		// class name is either itself or the unique hash representing its styles
-		className = className || getHashString(prefix, customPropertyStyles)
+		className = className || getHashString(prefix, theme)
 
 		/** CSS Selector */
 		const selector = className.replace(/^\w/, '.$&')
-
-		/** Computed CSS */
-		const cssText = className === prefix + emptyClassName ? '' : stringify({ [selector]: customPropertyStyles })
 
 		const expression = createComponent(create(null), 'className', {
 			className,
 			selector,
 		})
 
+		const rootStyles = {}
+
+		const styles = rootStyles[selector] = {}
+
 		for (const scale in theme) {
 			expression[scale] = create(null)
 
 			for (const token in theme[scale]) {
-				expression[scale][token] = new ThemeToken(theme[scale][token], token, scale)
+				const value = expression[scale][token] = new ThemeToken(
+					String(theme[scale][token]),
+					token,
+					scale,
+				)
+
+				styles[value.variable] = value.value
 			}
 		}
+
+		/** Computed CSS of custom property styles representing themed token values. */
+		const cssText = className === prefix + emptyClassName ? '' : stringify(rootStyles)
 
 		return createComponent(expression, 'className', {
 			get className() {
@@ -421,7 +422,7 @@ const createCss = (init) => {
 		)
 	}
 
-	const defaultTheme = theme(':root', themeInit)
+	const defaultTheme = theme(':root', config.theme)
 
 	const sheet = createComponent(
 		{
@@ -451,7 +452,7 @@ const createCss = (init) => {
 	)
 
 	return sheet
-}
+} // prettier-ignore
 
 const getReusableSheet = () => getReusableSheet.config || (getReusableSheet.config = createCss())
 const css = (...args) => getReusableSheet().css(...args)

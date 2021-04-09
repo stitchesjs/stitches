@@ -17,7 +17,7 @@ describe('Serialization', () => {
 			blue: 'dodgerblue',
 		},
 	})
-	const myThemeClass = 'sxvj6oe'
+	const myThemeClass = 'sxfy0qk'
 	const myThemeSelector = `.${myThemeClass}`
 
 	test('Components implicitly return their selector', () => {
