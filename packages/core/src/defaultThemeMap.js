@@ -1,14 +1,19 @@
-const borderStyles = 'borderStyles'
-const borderWidths = 'borderWidths'
-const colors = 'colors'
-const radii = 'radii'
-const shadows = 'shadows'
-const sizes = 'sizes'
-const space = 'space'
-const transitions = 'transitions'
-const zIndices = 'zIndices'
+var borderStyles = 'borderStyles'
+var borderWidths = 'borderWidths'
+var colors = 'colors'
+var fonts = 'fonts'
+var fontSizes = 'fontSizes'
+var fontWeights = 'fontWeights'
+var letterSpacings = 'letterSpacings'
+var lineHeights = 'lineHeights'
+var radii = 'radii'
+var shadows = 'shadows'
+var sizes = 'sizes'
+var space = 'space'
+var transitions = 'transitions'
+var zIndices = 'zIndices'
 
-const defaultThemeMap = {
+export var defaultThemeMap = {
 	gap: space,
 	gridGap: space,
 	columnGap: space,
@@ -75,7 +80,7 @@ const defaultThemeMap = {
 	scrollPaddingInlineEnd: space,
 	scrollPaddingInlineStart: space,
 
-	fontSize: 'fontSizes',
+	fontSize: fontSizes,
 
 	background: colors,
 	backgroundColor: colors,
@@ -105,13 +110,13 @@ const defaultThemeMap = {
 	stroke: colors,
 	textDecorationColor: colors,
 
-	fontFamily: 'fonts',
+	fontFamily: fonts,
 
-	fontWeight: 'fontWeights',
+	fontWeight: fontWeights,
 
-	lineHeight: 'lineHeights',
+	lineHeight: lineHeights,
 
-	letterSpacing: 'letterSpacings',
+	letterSpacing: letterSpacings,
 
 	blockSize: sizes,
 	minBlockSize: sizes,
@@ -154,5 +159,3 @@ const defaultThemeMap = {
 
 	zIndex: zIndices,
 }
-
-export default defaultThemeMap
