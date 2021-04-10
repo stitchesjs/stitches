@@ -33,7 +33,7 @@ const polys = {
 }
 
 export const createStringify = (config) => {
-	const { media, themeMap, utils } = config
+	const { media, prefix, themeMap, utils } = config
 
 	let lastRegxName
 	let lastRegxData
@@ -116,7 +116,7 @@ export const createStringify = (config) => {
 						)
 					})
 				: firstChar === 36
-					? '-' + name.replace(/\$/g, '-')
+					? '--' + prefix + name.replace(/\$/g, '-')
 				: name
 			)
 
@@ -125,7 +125,7 @@ export const createStringify = (config) => {
 			/** CSS right-hand side value, which may be a specially-formatted custom property. */
 			const customData = (
 				// preserve object-like data
-				data === Object(data)
+				typeof data === 'object' && data
 					? data
 				// replace specially-marked numeric property values with pixel versions
 				: data && typeof data === 'number' && unitOnlyProps.test(kebabName)
@@ -143,7 +143,7 @@ export const createStringify = (config) => {
 						) + (
 							'var(' + (
 								separator === '$'
-									? '--' + (
+									? '--' + prefix + '-' + (
 										!token.includes('$')
 											? camelName in themeMap
 												? themeMap[camelName] + '-'

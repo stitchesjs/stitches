@@ -17,7 +17,7 @@ describe('Serialization', () => {
 			blue: 'dodgerblue',
 		},
 	})
-	const myThemeClassName = 'sx7guyg'
+	const myThemeClassName = 'sxfy0qk'
 
 	test('Components implicitly return their class name', () => {
 		expect(String(myComponent)).toBe(myComponentClassName)
@@ -46,7 +46,7 @@ describe('Serialization', () => {
 		expect(myTheme.selector).toBe(`.${myThemeClassName}`)
 	})
 
-	const sheetCssText = `.${myThemeClassName}{--colors-blue:dodgerblue;}.${myComponentClassName}{all:unset;font:inherit;margin:0;padding:0.5em 1em;}`
+	const sheetCssText = `.${myThemeClassName}{--sx-colors-blue:dodgerblue;}.${myComponentClassName}{all:unset;font:inherit;margin:0;padding:0.5em 1em;}`
 
 	test('Sheets implicitly return their cssText', () => {
 		expect(String(sheet)).toBe(sheetCssText)
