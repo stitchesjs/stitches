@@ -112,7 +112,6 @@ if (isProcessMeta(import.meta)) {
 
 		nodemon(
 			[
-				// prettier-ignore
 				'-q',
 				`--watch packages/core/src`,
 				`--watch packages/core/tests`,
@@ -127,12 +126,10 @@ if (isProcessMeta(import.meta)) {
 				// exec
 				`--exec "${['node', './.bin/build.js', ...onlyArgs].join(' ')}"`,
 			].join(' '),
-		)
-			.on('start', () => {
-				process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
-				console.clear()
-			})
-			.on('quit', () => process.exit())
+		).on('start', () => {
+			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
+			console.clear()
+		}).on('quit', () => process.exit()) // prettier-ignore
 	} else {
 		buildAll({
 			only: getProcessArgOf('only'),

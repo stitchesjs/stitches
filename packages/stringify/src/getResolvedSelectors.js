@@ -1,5 +1,3 @@
-// prettier-ignore
-
 /** Returns selectors resolved from parent selectors and nested selectors. */
 export const getResolvedSelectors = (
 	/** @type {string[]} Parent selectors (e.g. `["a", "button"]`). */
@@ -26,4 +24,4 @@ export const getResolvedSelectors = (
 		},
 		[]
 	)
-)
+) // prettier-ignore

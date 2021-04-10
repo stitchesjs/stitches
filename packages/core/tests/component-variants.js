@@ -348,10 +348,9 @@ describe('Conditional variants', () => {
 			).toBe('sxq43t5 sxq43t5mph99--size-small sxq43t5ws88k--size-large')
 
 			expect(toString()).toBe(
-				// prettier-ignore
 				'@media (max-width:767.9375px){.sxq43t5mph99--size-small{font-size:16px;}}' +
 				'@media (min-width:768px){.sxq43t5ws88k--size-large{font-size:24px;}}',
-			)
+			) // prettier-ignore
 		}
 
 		{
@@ -379,10 +378,9 @@ describe('Conditional variants', () => {
 			).toBe('sxvih1e sxvih1ews88k--size-large sxvih1emph99--size-small')
 
 			expect(toString()).toBe(
-				// prettier-ignore
 				'@media (min-width:768px){.sxvih1ews88k--size-large{font-size:24px;}}' +
 				'@media (max-width:767.9375px){.sxvih1emph99--size-small{font-size:16px;}}',
-			)
+			) // prettier-ignore
 		}
 	})
 })

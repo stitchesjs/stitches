@@ -5,21 +5,6 @@ import expect from './internal/expect.js'
 import fs from './internal/fs.js'
 import nodemon from 'nodemon'
 
-const didFail = Symbol.for('test.failure')
-
-const getErrorStack = (error) => error.stack.split(/\n/g).filter(
-	(line) => !line.includes(import.meta.url) && !line.includes('node:')
-).map(
-	(line) => line.replace(
-		/(.*?)\(?(file:[^:]+)(.*?)\)?$/,
-		($0, before, file, after) => (
-			before.replace(/(at) ([^\s]+)?(.*)/, `${dim('$1')} ${green('$2')}$3`) +
-			file.slice(rootUrl.href.length) +
-			dim(after)
-		)
-	)
-).join('\n') // prettier-ignore
-
 const test = async (packageUrl, opts) => {
 	/** testing directory */
 	const packageTestsUrl = new URL('./tests/', packageUrl)
@@ -128,6 +113,21 @@ const test = async (packageUrl, opts) => {
 	}
 } // prettier-ignore
 
+const didFail = Symbol.for('test.failure')
+
+const getErrorStack = (error) => error.stack.split(/\n/g).filter(
+	(line) => !line.includes(import.meta.url) && !line.includes('node:')
+).map(
+	(line) => line.replace(
+		/(.*?)\(?(file:[^:]+)(.*?)\)?$/,
+		($0, before, file, after) => (
+			before.replace(/(at) ([^\s]+)?(.*)/, `${dim('$1')} ${green('$2')}$3`) +
+			file.slice(rootUrl.href.length) +
+			dim(after)
+		)
+	)
+).join('\n') // prettier-ignore
+
 export const testAll = async (opts) => {
 	await test(stringifyPackageUrl, opts)
 	await test(corePackageUrl, opts)
@@ -156,15 +156,17 @@ if (isProcessMeta(import.meta)) {
 				// exec
 				`--exec "${['node', './.bin/test.js', ...onlyArgs].join(' ')}"`,
 			].join(' '),
-		)
-			.on('start', () => {
-				process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
-				console.clear()
-			})
-			.on('quit', () => process.exit())
+		).on('start', () => {
+			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
+			console.clear()
+		}).on('quit', () => process.exit()) // prettier-ignore
 	} else {
 		testAll({
 			only: getProcessArgOf('only'),
+		}).catch((error) => {
+			console.error(error)
+
+			process.exitCode = 1
 		})
 	}
 }

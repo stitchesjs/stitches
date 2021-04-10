@@ -16,11 +16,10 @@ describe('Component Medias', () => {
 		})()
 
 		expect(toString()).toBe(
-			// prettier-ignore
 			`.sxhhsxo{font-size:16px;}` +
 			`@media (min-width:768px){` +
 				`.sxhhsxo{font-size:24px;}` +
 			`}`,
-		)
+		) // prettier-ignore
 	})
 })

@@ -14,7 +14,6 @@ describe('at-rule (font-face)', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'@keyframes{' +
 				'0%{' +
 					'opacity:0;' +
@@ -23,6 +22,6 @@ describe('at-rule (font-face)', () => {
 					'opacity:1;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 })

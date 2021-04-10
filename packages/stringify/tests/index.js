@@ -19,13 +19,12 @@ describe('stringify()', () => {
 				replacer,
 			),
 		).toEqual(
-			// prettier-ignore
 			'a{' +
 				'color:white;' +
 				'background-color:black;' +
 				'margin:0;' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() generates CSS with the replacer function for a nested rule', () => {
@@ -45,7 +44,6 @@ describe('stringify()', () => {
 				replacer,
 			),
 		).toEqual(
-			// prettier-ignore
 			'a{' +
 				'color:white;' +
 			'}' +
@@ -55,7 +53,7 @@ describe('stringify()', () => {
 			'a{' +
 				'background-color:black;' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() generates CSS with the replacer function for a @custom-media at-rule', () => {
@@ -83,13 +81,12 @@ describe('stringify()', () => {
 				replacer,
 			),
 		).toEqual(
-			// prettier-ignore
 			'@media (min-width: 640px){' +
 				'a{' +
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() generates CSS with the replacer function for a @when at-rule', () => {
@@ -113,12 +110,11 @@ describe('stringify()', () => {
 				replacer,
 			),
 		).toEqual(
-			// prettier-ignore
 			'@media (min-width: 640px){' +
 				'a{' +
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 })

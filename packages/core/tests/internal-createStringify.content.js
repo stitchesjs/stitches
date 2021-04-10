@@ -16,7 +16,6 @@ describe('stringify() content declaration', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'q::before{' +
 				'content:"«";' +
 			'}' +
@@ -24,6 +23,6 @@ describe('stringify() content declaration', () => {
 			'q::after{' +
 				'content:"»";' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 })

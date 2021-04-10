@@ -82,11 +82,8 @@ export const createStringify = (config) => {
 				}
 			}
 
-			// prettier-ignore
-
 			/** CSS left-hand side value, which may be a specially-formatted custom property. */
 			let customName = (
-				// prettier-ignore
 				firstChar === 64
 					? (
 						name.slice(1) in media
@@ -98,7 +95,6 @@ export const createStringify = (config) => {
 						const [name, value] = isValueFirst ? [b, a] : [a, b]
 
 						return (
-							// prettier-ignore
 							'(' +
 								(
 									l[0] === '=' ? '' : (l[0] === '>' === isValueFirst ? 'max-' : 'min-')
@@ -113,14 +109,12 @@ export const createStringify = (config) => {
 									: ''
 								) +
 							')'
-						)
+						) // prettier-ignore
 					})
 				: firstChar === 36
 					? '--' + prefix + name.replace(/\$/g, '-')
 				: name
-			)
-
-			// prettier-ignore
+			) // prettier-ignore
 
 			/** CSS right-hand side value, which may be a specially-formatted custom property. */
 			const customData = (
@@ -163,7 +157,7 @@ export const createStringify = (config) => {
 						)
 					),
 				)
-			)
+			) // prettier-ignore
 
 			if (data != customData || kebabName != customName) {
 				return {

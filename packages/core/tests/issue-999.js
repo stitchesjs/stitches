@@ -12,11 +12,10 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		// prettier-ignore
 		expect(toString()).toBe(
 			'.sxuuu2e{--sx--syntax:red;}' +
 			'.sxuuu2e h1{color:var(--sx--syntax);}'
-		)
+		) // prettier-ignore
 	})
 
 	test('locally scoped token works 2 times', () => {
@@ -34,12 +33,11 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		// prettier-ignore
 		expect(toString()).toBe(
 			'.sxyrd68{--sx--syntax:red;}' +
 			'.sxyrd68 h1{color:var(--sx--syntax);}' +
 			'.sxyrd68 h2{color:var(--sx--syntax);}'
-		)
+		) // prettier-ignore
 	})
 
 	test('locally scoped token works 3 times', () => {
@@ -61,12 +59,11 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		// prettier-ignore
 		expect(toString()).toBe(
 			'.sx4gdx9{--sx--syntax:red;}' +
 			'.sx4gdx9 h1{color:var(--sx--syntax);}' +
 			'.sx4gdx9 h2{color:var(--sx--syntax);}' +
 			'.sx4gdx9 h3{color:var(--sx--syntax);}'
-		)
+		) // prettier-ignore
 	})
 })
