@@ -23,3 +23,10 @@ export const bgBlue = (string) => color(string, 44)
 export const bgMagenta = (string) => color(string, 45)
 export const bgCyan = (string) => color(string, 46)
 export const bgWhite = (string) => color(string, 47)
+
+export const passIcon = green('✔')
+export const failIcon = red('✖')
+
+export const passText = (text = 'PASS') => invert(green(bold(` ${text} `)))
+export const failText = (text = 'FAIL') => invert(red(bold(` ${text} `)))
+export const infoText = (text = 'INFO') => dim(text)

@@ -23,7 +23,7 @@
     "postinstall": "run-s bootstrap",
     "test": "node .bin/test.js",
     "test:coverage": "node .bin/test-coverage.js .bin/test.js",
-    "test:watch": "node .bin/test-watch.js"
+    "test:watch": "node .bin/test.js --watch"
   },
   "workspaces": [
     "packages/*",
