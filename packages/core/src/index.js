@@ -97,14 +97,18 @@ const createCss = (initConfig) => {
 			expression[scale] = create(null)
 
 			for (const token in theme[scale]) {
-				const value = expression[scale][token] = new ThemeToken(
-					String(theme[scale][token]),
+				let value = String(theme[scale][token])
+
+				if (value.includes('$')) value = value.replace(/\$([$\w-]+)/g, ($0, $1) => ($1.includes('$') ? $0 : '$' + scale + $0))
+
+				const themeToken = expression[scale][token] = new ThemeToken(
+					value,
 					token,
 					scale,
 					prefix,
 				)
 
-				styles[value.variable] = value.value
+				styles[themeToken.variable] = themeToken.value
 			}
 		}
 

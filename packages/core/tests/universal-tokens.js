@@ -1,7 +1,7 @@
 import { createCss } from '../src/index.js'
 
 describe('Tokens', () => {
-	test('Authors can define and use a relative token', () => {
+	test('Authors can use a regular token', () => {
 		{
 			const { global, toString } = createCss({
 				theme: {
@@ -41,6 +41,53 @@ describe('Tokens', () => {
 			expect(toString()).toBe(
 				`:root{--sx-shadows-red:tomato;}` +
 				`article{box-shadow:0 0 0 1px var(--sx-shadows-red);}`
+			)
+		}
+	})
+
+	test('Authors can use a relative token', () => {
+		{
+			const { global, toString } = createCss({
+				theme: {
+					colors: {
+						red: 'tomato',
+						red500: '$red',
+					},
+				},
+			})
+
+			global({
+				article: {
+					color: '$red500',
+				},
+			})()
+
+			expect(toString()).toBe(
+				`:root{--sx-colors-red:tomato;--sx-colors-red500:var(--sx-colors-red);}` +
+				`article{color:var(--sx-colors-red500);}`
+			)
+		}
+
+		{
+			const { global, toString } = createCss({
+				theme: {
+					shadows: {
+						red: 'tomato',
+						red500: '$red',
+						redUnique: '$$red'
+					},
+				},
+			})
+
+			global({
+				article: {
+					boxShadow: '0 0 0 1px $red500',
+				},
+			})()
+
+			expect(toString()).toBe(
+				`:root{--sx-shadows-red:tomato;--sx-shadows-red500:var(--sx-shadows-red);--sx-shadows-redUnique:var(--sx--red);}` +
+				`article{box-shadow:0 0 0 1px var(--sx-shadows-red500);}`
 			)
 		}
 	})
