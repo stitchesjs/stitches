@@ -22,7 +22,6 @@ describe('stringify() media query ranges', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'@media (max-width:639.9375px){' +
 				'body{' +
 					'margin:0;' +
@@ -43,7 +42,7 @@ describe('stringify() media query ranges', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() media query range (value range feature)', () => {
@@ -65,7 +64,6 @@ describe('stringify() media query ranges', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'@media (min-width:640.0625px){' +
 				'body{' +
 					'margin:0;' +
@@ -86,7 +84,7 @@ describe('stringify() media query ranges', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() media query range (value range feature range value)', () => {
@@ -108,7 +106,6 @@ describe('stringify() media query ranges', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'@media (min-width:640.0625px) and (max-width:1023.9375px){' +
 				'body{' +
 					'margin:0;' +
@@ -129,7 +126,7 @@ describe('stringify() media query ranges', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() media query range (mixed value range feature range value)', () => {
@@ -151,7 +148,6 @@ describe('stringify() media query ranges', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'@media (min-width:640.0625px) and (max-width:1024px){' +
 				'body{' +
 					'margin:0;' +
@@ -172,7 +168,7 @@ describe('stringify() media query ranges', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() media query range (feature = value) / (value = feature)', () => {
@@ -188,7 +184,6 @@ describe('stringify() media query ranges', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'@media (width:640px){' +
 				'body{' +
 					'margin:0;' +
@@ -199,6 +194,6 @@ describe('stringify() media query ranges', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 })

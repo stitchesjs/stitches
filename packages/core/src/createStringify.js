@@ -33,7 +33,7 @@ const polys = {
 }
 
 export const createStringify = (config) => {
-	const { media, themeMap, utils } = config
+	const { media, prefix, themeMap, utils } = config
 
 	let lastRegxName
 	let lastRegxData
@@ -82,11 +82,8 @@ export const createStringify = (config) => {
 				}
 			}
 
-			// prettier-ignore
-
 			/** CSS left-hand side value, which may be a specially-formatted custom property. */
 			let customName = (
-				// prettier-ignore
 				firstChar === 64
 					? (
 						name.slice(1) in media
@@ -98,7 +95,6 @@ export const createStringify = (config) => {
 						const [name, value] = isValueFirst ? [b, a] : [a, b]
 
 						return (
-							// prettier-ignore
 							'(' +
 								(
 									l[0] === '=' ? '' : (l[0] === '>' === isValueFirst ? 'max-' : 'min-')
@@ -113,19 +109,17 @@ export const createStringify = (config) => {
 									: ''
 								) +
 							')'
-						)
+						) // prettier-ignore
 					})
 				: firstChar === 36
-					? '-' + name.replace(/\$/g, '-')
+					? '--' + prefix + name.replace(/\$/g, '-')
 				: name
-			)
-
-			// prettier-ignore
+			) // prettier-ignore
 
 			/** CSS right-hand side value, which may be a specially-formatted custom property. */
 			const customData = (
 				// preserve object-like data
-				data === Object(data)
+				typeof data === 'object' && data
 					? data
 				// replace specially-marked numeric property values with pixel versions
 				: data && typeof data === 'number' && unitOnlyProps.test(kebabName)
@@ -143,7 +137,7 @@ export const createStringify = (config) => {
 						) + (
 							'var(' + (
 								separator === '$'
-									? '--' + (
+									? '--' + prefix + '-' + (
 										!token.includes('$')
 											? camelName in themeMap
 												? themeMap[camelName] + '-'
@@ -163,7 +157,7 @@ export const createStringify = (config) => {
 						)
 					),
 				)
-			)
+			) // prettier-ignore
 
 			if (data != customData || kebabName != customName) {
 				return {

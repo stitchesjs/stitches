@@ -1,5 +1,3 @@
-// prettier-ignore
-
 /** Returns selectors resolved from parent selectors and nested selectors. */
 export const getResolvedSelectors = (
 	/** @type {string[]} Parent selectors (e.g. `["a", "button"]`). */
@@ -14,15 +12,16 @@ export const getResolvedSelectors = (
 					(selector) => (
 						selector.includes('&') ? selector.replace(
 							/&/g,
-							/[ +>|~]/.test(parentSelector) && /&[^]*&/.test(selector)
+							/[ +>|~]/.test(parentSelector) && /&.*&/.test(selector)
 								? `:is(${parentSelector})`
 							: parentSelector
 						) : parentSelector + ' ' + selector
 					)
 				)
 			)
+
 			return resolvedSelectors
 		},
 		[]
 	)
-)
+) // prettier-ignore

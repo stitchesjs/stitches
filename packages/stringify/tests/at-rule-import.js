@@ -7,9 +7,8 @@ describe('at-rule (import)', () => {
 				'@import': ['"https://unpkg.com/sanitize.css"', '"https://unpkg.com/sanitize.css/typography.css"'],
 			}),
 		).toEqual(
-			// prettier-ignore
 			'@import "https://unpkg.com/sanitize.css";' +
 			'@import "https://unpkg.com/sanitize.css/typography.css";',
-		)
+		) // prettier-ignore
 	})
 })

@@ -16,7 +16,6 @@ describe('nesting rules', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'body{' +
 				'background-color:white;' +
 				'color:black;' +
@@ -27,7 +26,7 @@ describe('nesting rules', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() generates string of reverse-nested CSS', () => {
@@ -42,21 +41,20 @@ describe('nesting rules', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'@media (min-width: 640px){' +
 				'body > nav > ul{' +
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() generates a string of implicitly nested CSS', () => {
 		expect(
 			stringify({
 				body: {
-					backgroundColor: 'white',
-					color: 'black',
+					'backgroundColor': 'white',
+					'color': 'black',
 
 					'nav > ul': {
 						'@media (min-width: 640px)': {
@@ -66,7 +64,6 @@ describe('nesting rules', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'body{' +
 				'background-color:white;' +
 				'color:black;' +
@@ -77,7 +74,7 @@ describe('nesting rules', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 
 	test('stringify() generates a string of pseudo-expectedly implicitly nested CSS', () => {
@@ -95,7 +92,6 @@ describe('nesting rules', () => {
 				},
 			}),
 		).toEqual(
-			// prettier-ignore
 			'body{' +
 				'background-color:white;' +
 				'color:black;' +
@@ -106,6 +102,6 @@ describe('nesting rules', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 })

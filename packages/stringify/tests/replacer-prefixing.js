@@ -25,7 +25,6 @@ describe('replacer (prefixing)', () => {
 				replacer,
 			),
 		).toEqual(
-			// prettier-ignore
 			'button{' +
 				'-webkit-appearance:none;' +
 				'appearance:none;' +
@@ -35,6 +34,6 @@ describe('replacer (prefixing)', () => {
 				'-moz-tab-size:2;' +
 				'tab-size:2;' +
 			'}',
-		)
+		) // prettier-ignore
 	})
 })

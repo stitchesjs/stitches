@@ -1,7 +1,7 @@
 import { createCss } from '../src/index.js'
 
 describe('Tokens', () => {
-	test('Authors can define and use a relative token', () => {
+	test('Authors can use a regular token', () => {
 		{
 			const { global, toString } = createCss({
 				theme: {
@@ -17,7 +17,10 @@ describe('Tokens', () => {
 				},
 			})()
 
-			expect(toString()).toBe(`:root{--colors-red:tomato;}` + `article{color:var(--colors-red);}`)
+			expect(toString()).toBe(
+				`:root{--sx-colors-red:tomato;}` +
+				`article{color:var(--sx-colors-red);}`
+			)
 		}
 
 		{
@@ -35,7 +38,57 @@ describe('Tokens', () => {
 				},
 			})()
 
-			expect(toString()).toBe(`:root{--shadows-red:tomato;}` + `article{box-shadow:0 0 0 1px var(--shadows-red);}`)
+			expect(toString()).toBe(
+				`:root{--sx-shadows-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--sx-shadows-red);}`
+			)
+		}
+	})
+
+	test('Authors can use a relative token', () => {
+		{
+			const { global, toString } = createCss({
+				theme: {
+					colors: {
+						red: 'tomato',
+						red500: '$red',
+					},
+				},
+			})
+
+			global({
+				article: {
+					color: '$red500',
+				},
+			})()
+
+			expect(toString()).toBe(
+				`:root{--sx-colors-red:tomato;--sx-colors-red500:var(--sx-colors-red);}` +
+				`article{color:var(--sx-colors-red500);}`
+			)
+		}
+
+		{
+			const { global, toString } = createCss({
+				theme: {
+					shadows: {
+						red: 'tomato',
+						red500: '$red',
+						redUnique: '$$red'
+					},
+				},
+			})
+
+			global({
+				article: {
+					boxShadow: '0 0 0 1px $red500',
+				},
+			})()
+
+			expect(toString()).toBe(
+				`:root{--sx-shadows-red:tomato;--sx-shadows-red500:var(--sx-shadows-red);--sx-shadows-redUnique:var(--sx--red);}` +
+				`article{box-shadow:0 0 0 1px var(--sx-shadows-red500);}`
+			)
 		}
 	})
 
@@ -55,7 +108,10 @@ describe('Tokens', () => {
 				},
 			})()
 
-			expect(toString()).toBe(`:root{--colors-red:tomato;}` + `article{box-shadow:0 0 0 1px var(--colors-red);}`)
+			expect(toString()).toBe(
+				`:root{--sx-colors-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--sx-colors-red);}`
+			)
 		}
 
 		{
@@ -73,7 +129,10 @@ describe('Tokens', () => {
 				},
 			})()
 
-			expect(toString()).toBe(`:root{--colors-red:tomato;}` + `article{box-shadow:0 0 0 1px var(--colors-red);}`)
+			expect(toString()).toBe(
+				`:root{--sx-colors-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--sx-colors-red);}`
+			)
 		}
 	})
 
@@ -95,7 +154,10 @@ describe('Tokens', () => {
 				},
 			})()
 
-			expect(toString()).toBe(`:root{--space-sp1:100px;--space-sp2:200px;}` + `article{margin-left:calc(var(--space-sp1)*-1);margin-top:calc(var(--space-sp2)*-1);}`)
+			expect(toString()).toBe(
+				`:root{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+				`article{margin-left:calc(var(--sx-space-sp1)*-1);margin-top:calc(var(--sx-space-sp2)*-1);}`
+			)
 		}
 
 		{
@@ -116,7 +178,62 @@ describe('Tokens', () => {
 				},
 			})()
 
-			expect(toString()).toBe(`:root{--sizes-sp1:10px;--sizes-sp2:20px;--sizes-sp3:30px;}` + `article{margin-left:calc(var(--sizes-sp1)*-1);width:var(--sizes-sp1);}`)
+			expect(toString()).toBe(
+				`:root{--sx-sizes-sp1:10px;--sx-sizes-sp2:20px;--sx-sizes-sp3:30px;}` +
+				`article{margin-left:calc(var(--sx-sizes-sp1)*-1);width:var(--sx-sizes-sp1);}`
+			)
 		}
 	})
-})
+
+	test('Authors can use tokens from the global theme object', () => {
+		const { global, theme, toString } = createCss({
+			theme: {
+				space: {
+					sp1: '100px',
+					sp2: '200px',
+				},
+			},
+		})
+
+		global({
+			article: {
+				marginLeft: theme.space.sp1,
+				marginTop: theme.space.sp2,
+			},
+		})()
+
+		expect(toString()).toBe(
+			`:root{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+		)
+	})
+
+	test('Authors can use tokens from a new theme object', () => {
+		const { global, theme, toString } = createCss()
+
+		const mytheme = theme('my-theme', {
+			space: {
+				sp1: '100px',
+				sp2: '200px',
+			},
+		})
+
+		global({
+			article: {
+				marginLeft: mytheme.space.sp1,
+				marginTop: mytheme.space.sp2,
+			},
+		})()
+
+		expect(toString()).toBe(
+			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+		)
+
+		mytheme.className
+
+		expect(toString()).toBe(
+			`.my-theme{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+		)
+	})
+}) // prettier-ignore

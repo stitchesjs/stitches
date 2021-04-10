@@ -1,6 +1,6 @@
 import { bold, underline } from './internal/color.js'
 import { corePackageUrl, reactPackageUrl, stringifyPackageUrl } from './internal/dirs.js'
-import { argv, isProcessMeta, getProcessArgOf } from './internal/process.js'
+import { isProcessMeta, getProcessArgOf } from './internal/process.js'
 import esbuild from 'esbuild'
 import fs from './internal/fs.js'
 import nodemon from 'nodemon'
@@ -112,7 +112,6 @@ if (isProcessMeta(import.meta)) {
 
 		nodemon(
 			[
-				// prettier-ignore
 				'-q',
 				`--watch packages/core/src`,
 				`--watch packages/core/tests`,
@@ -120,16 +119,17 @@ if (isProcessMeta(import.meta)) {
 				`--watch packages/react/src`,
 				`--watch packages/react/tests`,
 				`--watch packages/react/types`,
+				`--watch packages/stringify/src`,
+				`--watch packages/stringify/tests`,
+				`--watch packages/stringify/types`,
 
 				// exec
 				`--exec "${['node', './.bin/build.js', ...onlyArgs].join(' ')}"`,
 			].join(' '),
-		)
-			.on('start', () => {
-				process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
-				console.clear()
-			})
-			.on('quit', () => process.exit())
+		).on('start', () => {
+			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
+			console.clear()
+		}).on('quit', () => process.exit()) // prettier-ignore
 	} else {
 		buildAll({
 			only: getProcessArgOf('only'),
