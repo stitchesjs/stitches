@@ -1,6 +1,6 @@
 {
   "name": "@stitches/core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "The modern CSS-in-JS library",
   "type": "module",
   "main": "dist/index.cjs",
