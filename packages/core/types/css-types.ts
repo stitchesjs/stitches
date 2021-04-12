@@ -6181,7 +6181,7 @@ export type WordWrapProperty = Globals | 'break-word' | 'normal'
 
 export type WritingModeProperty = Globals | 'horizontal-tb' | 'sideways-lr' | 'sideways-rl' | 'vertical-lr' | 'vertical-rl'
 
-export type ZIndexProperty = Globals | 'auto' | number | string
+export type ZIndexProperty = Globals | 'auto' | number | (string & {})
 
 export type ZoomProperty = Globals | 'normal' | 'reset' | (string & {}) | number
 
