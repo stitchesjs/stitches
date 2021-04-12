@@ -1,6 +1,6 @@
 import { createCss } from '../src/index.js'
 
-describe('Insert Method', () => {
+describe('Insertion Method', () => {
 	test('default', () => {
 		const { global, toString } = createCss()
 
@@ -14,7 +14,7 @@ describe('Insert Method', () => {
 	})
 
 	test('insertionMethod: "prepend", explicit', () => {
-		const { global, toString } = createCss({
+		const { config, global, toString } = createCss({
 			insertionMethod: 'prepend',
 		})
 
@@ -25,10 +25,12 @@ describe('Insert Method', () => {
 		})()
 
 		expect(toString()).toBe('body{margin:0;}')
+
+		expect(config.insertionMethod).toBe('prepend')
 	})
 
 	test('insertionMethod: "append", explicit', () => {
-		const { global, toString } = createCss({
+		const { config, global, toString } = createCss({
 			insertionMethod: 'append',
 		})
 
@@ -39,6 +41,8 @@ describe('Insert Method', () => {
 		})()
 
 		expect(toString()).toBe('body{margin:0;}')
+
+		expect(config.insertionMethod).toBe('append')
 	})
 
 	test('insertionMethod: function, explicit', () => {
@@ -47,17 +51,17 @@ describe('Insert Method', () => {
 		let resultCss = ''
 		let expectCss = 'body{margin:0;}'
 
-		const { global, toString } = createCss({
-			insertionMethod() {
-				didInitialize = true
+		const insertionMethod = () => {
+			didInitialize = true
 
-				return (updatedCssText) => {
-					didInsertNode = true
+			return (updatedCssText) => {
+				didInsertNode = true
 
-					resultCss = updatedCssText
-				}
-			},
-		})
+				resultCss = updatedCssText
+			}
+		}
+
+		const { config, global, toString } = createCss({ insertionMethod })
 
 		expect(didInitialize).toBe(true)
 		expect(didInsertNode).toBe(false)
@@ -72,5 +76,7 @@ describe('Insert Method', () => {
 		expect(didInsertNode).toBe(true)
 		expect(toString()).toBe(expectCss)
 		expect(resultCss).toBe(expectCss)
+
+		expect(config.insertionMethod).toBe(insertionMethod)
 	})
 })
