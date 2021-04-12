@@ -12,9 +12,9 @@ import defaultInsertionMethod from './defaultInsertionMethod.js'
 
 /** Returns a new styled sheet and accompanying API. */
 const createCss = (initConfig) => {
-	const config = {}
+	initConfig = typeof initConfig === 'object' && initConfig || {}
 
-	initConfig = config.config = typeof initConfig === 'object' && initConfig || {}
+	const config = {}
 
 	/** Named media queries. */
 	config.media = assign({ initial: 'all' }, initConfig.media)
@@ -29,13 +29,18 @@ const createCss = (initConfig) => {
 	config.utils = typeof initConfig.utils === 'object' && initConfig.utils || {}
 
 	/** Names of variants passed through to props. */
-	const passThru = new Set([].concat(initConfig.passthru || ['as', 'className']))
+	const passThru = new Set(initConfig.passthru ? [ ...initConfig.passthru, 'as', 'className' ] : ['as', 'className'])
 
 	/** Prefix added before all generated class names. */
 	const prefix = config.prefix = initConfig.prefix || 'sx'
 
-	const insertionMethod = (typeof initConfig.insertionMethod === 'function' ? initConfig.insertionMethod : defaultInsertionMethod)(config)
+	/** Keyword or function used to determine how DOM styles are updated. */
+	config.insertionMethod = initConfig.insertionMethod || 'prepend'
 
+	/** Function used to update DOM styles. */
+	const insertionMethod = (typeof config.insertionMethod === 'function' ? config.insertionMethod : defaultInsertionMethod)(config)
+
+	/** Class name for compositions without any style. */
 	const emptyClassName = '03kze'
 
 	/** Returns a string of unnested CSS from an object of nestable CSS. */
