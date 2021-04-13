@@ -399,8 +399,8 @@ const createCss = (initConfig) => {
 					}
 				}
 
-				if (typeof props.className === 'string') {
-					props.className.split(/\s+/).forEach(classNames.add, classNames)
+				if (props.className !== undefined) {
+					String(props.className).split(/\s+/).forEach(classNames.add, classNames)
 				}
 
 				const classNameSetArray = from(classNames)
