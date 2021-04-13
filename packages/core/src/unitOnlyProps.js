@@ -1,1 +1,0 @@
-export default /(-columns|(^|[^e]-)padding|[^t]-spacing|l-align|rows|(^|(^border|[dkmnptx]|le|ne)-)width|^border|tom|[ek]-start|(o|[^e]-du)ration|us|(^|[^tv]-)left|(^|-)top|tance|rgin|e-offset|(er|g|n|t)-block|(^|[^tv]-)right|basis|[gnt]-inline|gap|(^|[^e]-)height|ness|(^|[^p]-)inset|[ek]-end|elay|tline|ve|dent|-rotate|n-rule|(c|ck|d|ne|t)-size)$/
