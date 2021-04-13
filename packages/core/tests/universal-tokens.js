@@ -18,7 +18,7 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sx-colors-red:tomato;}` +
+				`:root,.sxrrtg8{--sx-colors-red:tomato;}` +
 				`article{color:var(--sx-colors-red);}`
 			)
 		}
@@ -39,7 +39,7 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sx-shadows-red:tomato;}` +
+				`:root,.sxkoahg{--sx-shadows-red:tomato;}` +
 				`article{box-shadow:0 0 0 1px var(--sx-shadows-red);}`
 			)
 		}
@@ -63,7 +63,7 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sx-colors-red:tomato;--sx-colors-red500:var(--sx-colors-red);}` +
+				`:root,.sxg0xb8{--sx-colors-red:tomato;--sx-colors-red500:var(--sx-colors-red);}` +
 				`article{color:var(--sx-colors-red500);}`
 			)
 		}
@@ -86,7 +86,7 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sx-shadows-red:tomato;--sx-shadows-red500:var(--sx-shadows-red);--sx-shadows-redUnique:var(--sx--red);}` +
+				`:root,.sxukjub{--sx-shadows-red:tomato;--sx-shadows-red500:var(--sx-shadows-red);--sx-shadows-redUnique:var(--sx--red);}` +
 				`article{box-shadow:0 0 0 1px var(--sx-shadows-red500);}`
 			)
 		}
@@ -109,7 +109,7 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sx-colors-red:tomato;}` +
+				`:root,.sxrrtg8{--sx-colors-red:tomato;}` +
 				`article{box-shadow:0 0 0 1px var(--sx-colors-red);}`
 			)
 		}
@@ -130,7 +130,7 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sx-colors-red:tomato;}` +
+				`:root,.sxrrtg8{--sx-colors-red:tomato;}` +
 				`article{box-shadow:0 0 0 1px var(--sx-colors-red);}`
 			)
 		}
@@ -155,7 +155,7 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+				`:root,.sx5wzk8{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
 				`article{margin-left:calc(var(--sx-space-sp1)*-1);margin-top:calc(var(--sx-space-sp2)*-1);}`
 			)
 		}
@@ -179,7 +179,7 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root{--sx-sizes-sp1:10px;--sx-sizes-sp2:20px;--sx-sizes-sp3:30px;}` +
+				`:root,.sxpobec{--sx-sizes-sp1:10px;--sx-sizes-sp2:20px;--sx-sizes-sp3:30px;}` +
 				`article{margin-left:calc(var(--sx-sizes-sp1)*-1);width:var(--sx-sizes-sp1);}`
 			)
 		}
@@ -203,7 +203,7 @@ describe('Tokens', () => {
 		})()
 
 		expect(toString()).toBe(
-			`:root{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+			`:root,.sx5wzk8{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
 			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
 		)
 	})
@@ -234,6 +234,46 @@ describe('Tokens', () => {
 		expect(toString()).toBe(
 			`.my-theme{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
 			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+		)
+	})
+
+	test('Authors can use tokens from the global theme object', () => {
+		const { global, theme, toString } = createCss({
+			theme: {
+				space: {
+					sp1: '100px',
+					sp2: '200px',
+				},
+			},
+		})
+
+		global({
+			article: {
+				marginLeft: theme.space.sp1,
+				marginTop: theme.space.sp2,
+			},
+		})()
+
+		expect(toString()).toBe(
+			`:root,.sx5wzk8{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
+			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+		)
+	})
+
+	test('Authors can use the class from the root theme object', () => {
+		const { theme, toString } = createCss({
+			prefix: 'pedro',
+			theme: {
+				colors: {
+					blue: 'dodgerblue',
+				},
+			}
+		})
+
+		expect(`<div class="${theme}"></div>`).toBe(`<div class="pedrofy0qk"></div>`)
+
+		expect(toString()).toBe(
+			`:root,.pedrofy0qk{--pedro-colors-blue:dodgerblue;}`,
 		)
 	})
 }) // prettier-ignore

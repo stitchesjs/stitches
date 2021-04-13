@@ -1,14 +1,14 @@
 import { toCamelCase, toKebabCase } from '../../stringify/src/toCase.js'
 import { stringify } from '../../stringify/src/index.js'
-import unitOnlyProps from './unitOnlyProps.js'
-
-/** Token matcher. */
-const captureTokens = /([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g
+import transformDeclarationSizingValue from './stringify/transformDeclarationSizingValue.js'
+import transformDeclarationValueTokens from './stringify/transformDeclarationValueTokens.js'
+import transformMediaQueryRanges from './stringify/transformMediaQueryRanges.js'
+import sizeProps from './stringify/sizeProps.js'
+import unitProps from './stringify/unitProps.js'
 
 const splitBySpace = /\s+(?![^()]*\))/
 const split = (fn) => (data) => fn(...(typeof data === 'string' ? String(data).split(splitBySpace) : [data]))
-
-const mqunit = /([\d.]+)([^]*)/
+const toJson = JSON.stringify
 
 const polys = {
 	// prefixed properties
@@ -17,7 +17,7 @@ const polys = {
 	backgroundClip: (d) => ({ WebkitBackgroundClip: d, backgroundClip: d }),
 	boxDecorationBreak: (d) => ({ WebkitBoxDecorationBreak: d, boxDecorationBreak: d }),
 	clipPath: (d) => ({ WebkitClipPath: d, clipPath: d }),
-	content: (d) => ({ content: !/^([^]*["'][^]*|[A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(d) ? `"${d}"` : d }),
+	content: (d) => ({ content: d.includes('"') || d.includes("'") || /^([A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(d) ? d : `"${d}"` }),
 	hyphens: (d) => ({ WebkitHyphens: d, hyphens: d }),
 	maskImage: (d) => ({ WebkitMaskImage: d, maskImage: d }),
 	tabSize: (d) => ({ MozTabSize: d, tabSize: d }),
@@ -33,138 +33,93 @@ const polys = {
 }
 
 export const createStringify = (config) => {
-	const { media, prefix, themeMap, utils } = config
-
 	let lastRegxName
 	let lastRegxData
 	let lastUtilFunc
 	let lastUtilData
 
-	return (css) =>
-		stringify(css, (name, data) => {
-			const firstChar = name.charCodeAt(0)
-			const camelName = firstChar === 64 ? name : toCamelCase(name)
-			const kebabName = firstChar === 64 ? name : toKebabCase(name)
+	const memo = {}
 
-			if (typeof utils[name] === 'function') {
-				// run utilities that match the raw left-hand of the CSS rule or declaration
-				if (utils[name] != lastUtilFunc || data != lastUtilData) {
-					lastUtilFunc = utils[name]
-					lastUtilData = data
+	return (css) => {
+		const jss = toJson(css)
 
-					return lastUtilFunc(config)(lastUtilData)
-				}
-			} else if (typeof polys[camelName] === 'function') {
-				// run polyfills that match the camel-case-left hand of the CSS declaration
-				if (polys[camelName] != lastUtilFunc || data != lastUtilData) {
-					lastUtilFunc = polys[camelName]
-					lastUtilData = data
+		if (jss in memo) return memo[jss]
 
-					return lastUtilFunc(lastUtilData)
-				}
-			}
+		return memo[jss] = stringify(
+			css,
+			(name, data) => {
+				const firstChar = name.charCodeAt(0)
+				const camelName = firstChar === 64 ? name : toCamelCase(name)
+				const kebabName = firstChar === 64 ? name : toKebabCase(name)
 
-			lastUtilData = data
+				if (typeof config.utils[name] === 'function') {
+					// run utilities that match the raw left-hand of the CSS rule or declaration
+					if (config.utils[name] != lastUtilFunc || data != lastUtilData) {
+						lastUtilFunc = config.utils[name]
+						lastUtilData = data
 
-			if (lastRegxName != camelName && lastRegxData != data && /^((min|max)?((Block|Inline)Size|Height|Width)|height|width)$/.test(camelName)) {
-				lastRegxName = camelName
-				lastRegxData = data
+						return lastUtilFunc(config)(lastUtilData)
+					}
+				} else if (typeof polys[camelName] === 'function') {
+					// run polyfills that match the camel-case-left hand of the CSS declaration
+					if (polys[camelName] != lastUtilFunc || data != lastUtilData) {
+						lastUtilFunc = polys[camelName]
+						lastUtilData = data
 
-				const redata = String(lastRegxData).replace(
-					/^((?:[^]*[^\w-])?)(fit-content|stretch)((?:[^\w-][^]*)?)$/,
-					(data, lead, main, tail) => lead + (main === 'stretch' ? `-moz-available${tail};${kebabName}:${lead}-webkit-fill-available` : `-moz-fit-content${tail};${kebabName}:${lead}fit-content`) + tail,
-				)
-
-				if (redata != data) {
-					return {
-						[name]: redata,
+						return lastUtilFunc(lastUtilData)
 					}
 				}
-			}
 
-			/** CSS left-hand side value, which may be a specially-formatted custom property. */
-			let customName = (
-				firstChar === 64
-					? (
-						name.slice(1) in media
-							? '@media ' + media[name.slice(1)]
-						: name
-					).replace(/\(\s*([\w-]+)\s*(=|<|<=|>|>=)\s*([\w-]+)\s*(?:(<|<=|>|>=)\s*([\w-]+)\s*)?\)/g, (_, a, l, b, r, c) => {
-						const isValueFirst = mqunit.test(a)
-						const shift = 0.0625 * (isValueFirst ? -1 : 1)
-						const [name, value] = isValueFirst ? [b, a] : [a, b]
+				lastUtilData = data
 
-						return (
-							'(' +
-								(
-									l[0] === '=' ? '' : (l[0] === '>' === isValueFirst ? 'max-' : 'min-')
-								) + name + ':' +
-								(l[0] !== '=' && l.length === 1 ? value.replace(mqunit, (_, v, u) => Number(v) + shift * (l === '>' ? 1 : -1) + u) : value) +
-								(
-									r
-										? ') and (' + (
-											(r[0] === '>' ? 'min-' : 'max-') + name + ':' +
-											(r.length === 1 ? c.replace(mqunit, (_, v, u) => Number(v) + shift * (r === '>' ? -1 : 1) + u) : c)
-										)
-									: ''
-								) +
-							')'
-						) // prettier-ignore
-					})
-				: firstChar === 36
-					? '--' + prefix + name.replace(/\$/g, '-')
-				: name
-			) // prettier-ignore
+				if (lastRegxName != camelName && lastRegxData != data && kebabName in sizeProps) {
+					lastRegxName = camelName
+					lastRegxData = data
 
-			/** CSS right-hand side value, which may be a specially-formatted custom property. */
-			const customData = (
-				// preserve object-like data
-				typeof data === 'object' && data
-					? data
-				// replace specially-marked numeric property values with pixel versions
-				: data && typeof data === 'number' && unitOnlyProps.test(kebabName)
-					? String(data) + 'px'
-				// replace tokens with stringified primitive values
-				: String(data).replace(
-					captureTokens,
-					($0, direction, multiplier, separator, token) => (
-						separator == "$" == !!multiplier
-							? $0
-						: (
-							direction || separator == '--'
-								? 'calc('
-							: ''
-						) + (
-							'var(' + (
-								separator === '$'
-									? '--' + prefix + '-' + (
-										!token.includes('$')
-											? camelName in themeMap
-												? themeMap[camelName] + '-'
-											: ''
-										: ''
-									) + token.replace(/\$/g, '-')
-								: separator + token
-							) + ')' + (
-								direction || separator == '--'
-									? '*' + (
-										direction || ''
-									) + (
-										multiplier || '1'
-									) + ')'
-								: ''
-							)
-						)
-					),
-				)
-			) // prettier-ignore
+					const redata = transformDeclarationSizingValue(kebabName, String(lastRegxData))
 
-			if (data != customData || kebabName != customName) {
-				return {
-					[customName]: customData,
+					if (redata != data) {
+						return {
+							[name]: redata,
+						}
+					}
 				}
-			}
 
-			return null
-		})
-}
+				/** CSS left-hand side value, which may be a specially-formatted custom property. */
+				let customName = (
+					// whether the first character is a "@"
+					firstChar === 64
+						? transformMediaQueryRanges(
+							name.slice(1) in config.media
+								? '@media ' + config.media[name.slice(1)]
+							: name
+						)
+					// whether the first character is a "$"
+					: firstChar === 36
+						? '--' + config.prefix + name.replace(/\$/g, '-')
+					: name
+				)
+
+				/** CSS right-hand side value, which may be a specially-formatted custom property. */
+				const customData = (
+					// preserve object-like data
+					typeof data === 'object' && data
+						? data
+					// replace specially-marked numeric property values with pixel versions
+					: typeof data === 'number' && data && camelName in unitProps
+						? String(data) + 'px'
+					// replace tokens with stringified primitive values
+					: transformDeclarationValueTokens(camelName, String(data), config)
+				)
+
+				if (data != customData || kebabName != customName) {
+					return {
+						[customName]: customData,
+					}
+				}
+
+				return null
+			}
+		)
+	}
+} // prettier-ignore

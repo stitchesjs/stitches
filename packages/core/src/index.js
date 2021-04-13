@@ -75,19 +75,21 @@ const createCss = (initConfig) => {
 		/** Class name */
 		className,
 		/** Object of theme scales with inner token values. */
-		theme,
+		themeVals,
 	) => {
 		// theme is the first argument if it is an object, otherwise the second argument as an object
-		theme = typeof className === 'object' && className || Object(theme)
+		themeVals = typeof className === 'object' && className || Object(themeVals)
 
 		// class name is the first argument if it is a string, otherwise an empty string
 		className = typeof className === 'string' ? className : ''
 
+		const isNotRoot = className !== 'root'
+
 		// class name is either itself or the unique hash representing its styles
-		className = className || getHashString(prefix, theme)
+		className = isNotRoot && className || getHashString(prefix, themeVals)
 
 		/** CSS Selector */
-		const selector = className.replace(/^\w/, '.$&')
+		const selector = (isNotRoot ? '.' : ':root,.') + className
 
 		const expression = createComponent(create(null), 'className', {
 			className,
@@ -98,11 +100,11 @@ const createCss = (initConfig) => {
 
 		const styles = rootStyles[selector] = {}
 
-		for (const scale in theme) {
+		for (const scale in themeVals) {
 			expression[scale] = create(null)
 
-			for (const token in theme[scale]) {
-				let value = String(theme[scale][token])
+			for (const token in themeVals[scale]) {
+				let value = String(themeVals[scale][token])
 
 				if (value.includes('$')) value = value.replace(/\$([$\w-]+)/g, ($0, $1) => ($1.includes('$') ? $0 : '$' + scale + $0))
 
@@ -397,8 +399,8 @@ const createCss = (initConfig) => {
 					}
 				}
 
-				if (typeof props.className === 'string') {
-					props.className.split(/\s+/).forEach(classNames.add, classNames)
+				if (props.className !== undefined) {
+					String(props.className).split(/\s+/).forEach(classNames.add, classNames)
 				}
 
 				const classNameSetArray = from(classNames)
@@ -432,7 +434,7 @@ const createCss = (initConfig) => {
 		)
 	}
 
-	const defaultTheme = theme(':root', config.theme)
+	const defaultTheme = theme('root', config.theme)
 
 	const sheet = createComponent(
 		{
