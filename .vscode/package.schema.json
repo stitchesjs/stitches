@@ -42,10 +42,6 @@
           "title": "ESLint configuration",
           "$ref": "http://json.schemastore.org/eslintrc"
         },
-        "jest": {
-          "title": "Jest configuration",
-          "$ref": "./jest.schema.json"
-        },
         "nodemonConfig": {
           "title": "Nodemon configuration",
           "$ref": "http://json.schemastore.org/nodemon"
