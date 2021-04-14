@@ -1,4 +1,4 @@
-import { bold, underline } from './internal/color.js'
+import { box } from './internal/color.js'
 import { corePackageUrl, reactPackageUrl, stringifyPackageUrl } from './internal/dirs.js'
 import { isProcessMeta, getProcessArgOf } from './internal/process.js'
 import esbuild from 'esbuild'
@@ -44,10 +44,6 @@ export const build = async (packageUrl, opts) => {
 	const packageName = JSON.parse(await fs.readFile(packageJsonUrl, 'utf8')).name
 
 	if (!opts.only.length || opts.only.includes(packageName)) {
-		console.log()
-		console.log(underline(bold(packageName)))
-		console.log()
-
 		const targetPathname = new URL('index.js', initPackageUrl).pathname
 		const outputPathname = new URL('stitches.js', distPackageUrl).pathname
 
@@ -84,17 +80,28 @@ export const build = async (packageUrl, opts) => {
 
 		const exports = Array.from(tail.matchAll(/([$\w]+) as (\w+)/g)).reduce((exports, each) => Object.assign(exports, { [each[2]]: each[1] }), Object.create(null))
 
+		const size = {
+			name: packageName,
+			types: {},
+		}
+
 		// write variation builds
 		for (const variant in variants) {
 			const variantInfo = variants[variant]
 			const variantPath = new URL(`dist/index.${variantInfo.extension}`, packageUrl).pathname
 			const variantCode = variantInfo.transform(lead, exports)
-			const variantSize = Number((zlib.gzipSync(variantCode, { level: 9 }).length / 1000).toFixed(2))
+			const variantMins = (Buffer.byteLength(variantCode) / 1000).toFixed(2)
+			const variantGzip = Number(zlib.gzipSync(variantCode, { level: 9 }).length / 1000).toFixed(2)
 
-			console.log(' ', `\x1b[33m${variantSize} kB\x1b[0m`, `\x1b[2m(${variant})\x1b[0m`)
+			size.types[variant] = {
+				min: variantMins,
+				gzp: variantGzip,
+			}
 
 			await fs.writeFile(variantPath, variantCode + `\n//# sourceMappingUrl=index.map`)
 		}
+
+		console.log(box(size))
 	}
 }
 
