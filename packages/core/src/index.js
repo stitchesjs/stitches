@@ -16,6 +16,9 @@ const createCss = (initConfig) => {
 
 	const config = {}
 
+	/** Captured server-side css text. */
+	config.ssrText = ''
+
 	/** Named media queries. */
 	config.media = assign({ initial: 'all' }, initConfig.media)
 
@@ -69,6 +72,8 @@ const createCss = (initConfig) => {
 			insertionMethod((currentCssText = nextUpdate))
 		}
 	}
+
+	const excludes = (cssText) => !~config.ssrText.indexOf(String(cssText))
 
 	/** Prepares global CSS and returns a function that enables the styles on the styled sheet. */
 	const theme = (
@@ -126,7 +131,7 @@ const createCss = (initConfig) => {
 			get className() {
 				const { hasChanged } = themedCss
 
-				themedCss.add(cssText)
+				if(excludes(cssText)) themedCss.add(cssText)
 
 				if (hasChanged()) {
 					update()
@@ -155,7 +160,11 @@ const createCss = (initConfig) => {
 			if (style[name] !== Object(style[name]) || ownKeys(style[name]).length) {
 				const cssText = stringify({ [name]: style[name] })
 
-				;(name === '@import' ? localImportCss : localGlobalCss).add(cssText)
+				if (name === '@import') {
+					localImportCss.add(cssText)
+				} else {
+					localGlobalCss.add(cssText)
+				}
 			}
 		}
 
@@ -167,11 +176,11 @@ const createCss = (initConfig) => {
 				let hasGlobalChanged = globalCss.hasChanged
 
 				localImportCss.forEach((localImportCss) => {
-					importCss.add(localImportCss)
+					if (excludes(localImportCss)) importCss.add(localImportCss)
 				})
 
 				localGlobalCss.forEach((localGlobalCss) => {
-					globalCss.add(localGlobalCss)
+					if (excludes(localGlobalCss)) globalCss.add(localGlobalCss)
 				})
 
 				if (hasImportChanged() || hasGlobalChanged()) {
@@ -217,7 +226,7 @@ const createCss = (initConfig) => {
 		const selector = '.' + className
 		const cssText = className === prefix + emptyClassName ? '' : stringify({ [selector]: style })
 
-		styledCss.add(unitedCss)
+		if (excludes(unitedCss)) styledCss.add(unitedCss)
 
 		const variantProps = create(null)
 		const variants = []
@@ -290,7 +299,7 @@ const createCss = (initConfig) => {
 					const variantCssText = stringify({ [variantSelector]: conditionedCss })
 					const variantCssByIndex = variedCss[variantConfigIndex - 1] || (variedCss[variantConfigIndex - 1] = new StringSet())
 
-					variantCssByIndex.add(variantCssText)
+					if (excludes(variantCssText)) variantCssByIndex.add(variantCssText)
 
 					return variantClassName
 				}
@@ -304,7 +313,7 @@ const createCss = (initConfig) => {
 				const hasPrimalChanged = primalCss.hasChanged
 				const hasVariedChanged = variedCss.hasChanged
 
-				primalCss.add(cssText)
+				if (excludes(cssText)) primalCss.add(cssText)
 
 				if (props) {
 					classNames.add(className)
@@ -319,7 +328,7 @@ const createCss = (initConfig) => {
 				}
 
 				if (hasPrimalChanged() || hasVariedChanged()) {
-					styledCss.add(unitedCss)
+					if (excludes(unitedCss)) styledCss.add(unitedCss)
 
 					return true
 				}
@@ -334,7 +343,7 @@ const createCss = (initConfig) => {
 				const { hasChanged } = inlineCss
 
 				if (inlineCssText) {
-					inlineCss.add(inlineCssText)
+					if (excludes(inlineCssText)) inlineCss.add(inlineCssText)
 				}
 
 				return hasChanged()
