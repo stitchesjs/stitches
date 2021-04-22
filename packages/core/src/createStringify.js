@@ -41,6 +41,15 @@ export const createStringify = (config) => {
 
 	const memo = {}
 
+	// TODO: PLEASE REMOVE THIS
+	//       This separates "prefixing" from "token prefixing". At this time,
+	//       Stitches assigns a default "prefix", which is required to generate
+	//       valid CSS classes. Authors don’t mind this, but they do mind when
+	//       the default prefix gets assigned to tokens. We are solving this
+	//       another way — the right way — but as a "patch" this code creates
+	//       a forked prefix just for tokens, ignoring the default "sx" prefix.
+	const tokenPrefix = config.prefix === 'sx' ? '' : '--' + config.prefix
+
 	return (css) => {
 		const jss = toJson(css)
 
@@ -97,7 +106,7 @@ export const createStringify = (config) => {
 						)
 					// whether the first character is a "$"
 					: firstChar === 36
-						? '--' + config.prefix + name.replace(/\$/g, '-')
+						? tokenPrefix + name.replace(/\$/g, '-')
 					: name
 				)
 
