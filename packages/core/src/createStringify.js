@@ -14,6 +14,7 @@ const polys = {
 	// prefixed properties
 	appearance: (d) => ({ WebkitAppearance: d, appearance: d }),
 	backfaceVisibility: (d) => ({ WebkitBackfaceVisibility: d, backfaceVisibility: d }),
+	backdropFilter: (d) => ({ WebkitBackdropFilter: d, backdropFilter: d }),
 	backgroundClip: (d) => ({ WebkitBackgroundClip: d, backgroundClip: d }),
 	boxDecorationBreak: (d) => ({ WebkitBoxDecorationBreak: d, boxDecorationBreak: d }),
 	clipPath: (d) => ({ WebkitClipPath: d, clipPath: d }),
