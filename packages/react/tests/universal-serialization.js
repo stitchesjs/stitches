@@ -48,7 +48,7 @@ describe('Serialization', () => {
 
 	myComponent.render()
 
-	const sheetCssText = `${myThemeSelector}{--sx-colors-blue:dodgerblue;}${myComponentSelector}{all:unset;font:inherit;margin:0;padding:0.5em 1em;}`
+	const sheetCssText = `${myThemeSelector}{--colors-blue:dodgerblue;}${myComponentSelector}{all:unset;font:inherit;margin:0;padding:0.5em 1em;}`
 
 	test('Sheets implicitly return their cssText', () => {
 		expect(String(sheet)).toBe(sheetCssText)

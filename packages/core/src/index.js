@@ -112,7 +112,7 @@ const createCss = (initConfig) => {
 					value,
 					token,
 					scale,
-					prefix,
+					prefix === 'sx' ? '' : prefix,
 				)
 
 				styles[themeToken.variable] = themeToken.value

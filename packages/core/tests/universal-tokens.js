@@ -18,8 +18,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root,.sxrrtg8{--sx-colors-red:tomato;}` +
-				`article{color:var(--sx-colors-red);}`
+				`:root,.sxrrtg8{--colors-red:tomato;}` +
+				`article{color:var(--colors-red);}`
 			)
 		}
 
@@ -39,8 +39,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root,.sxkoahg{--sx-shadows-red:tomato;}` +
-				`article{box-shadow:0 0 0 1px var(--sx-shadows-red);}`
+				`:root,.sxkoahg{--shadows-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--shadows-red);}`
 			)
 		}
 	})
@@ -63,8 +63,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root,.sxg0xb8{--sx-colors-red:tomato;--sx-colors-red500:var(--sx-colors-red);}` +
-				`article{color:var(--sx-colors-red500);}`
+				`:root,.sxg0xb8{--colors-red:tomato;--colors-red500:var(--colors-red);}` +
+				`article{color:var(--colors-red500);}`
 			)
 		}
 
@@ -86,8 +86,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root,.sxukjub{--sx-shadows-red:tomato;--sx-shadows-red500:var(--sx-shadows-red);--sx-shadows-redUnique:var(--sx--red);}` +
-				`article{box-shadow:0 0 0 1px var(--sx-shadows-red500);}`
+				`:root,.sxukjub{--shadows-red:tomato;--shadows-red500:var(--shadows-red);--shadows-redUnique:var(---red);}` +
+				`article{box-shadow:0 0 0 1px var(--shadows-red500);}`
 			)
 		}
 	})
@@ -109,8 +109,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root,.sxrrtg8{--sx-colors-red:tomato;}` +
-				`article{box-shadow:0 0 0 1px var(--sx-colors-red);}`
+				`:root,.sxrrtg8{--colors-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--colors-red);}`
 			)
 		}
 
@@ -130,8 +130,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root,.sxrrtg8{--sx-colors-red:tomato;}` +
-				`article{box-shadow:0 0 0 1px var(--sx-colors-red);}`
+				`:root,.sxrrtg8{--colors-red:tomato;}` +
+				`article{box-shadow:0 0 0 1px var(--colors-red);}`
 			)
 		}
 	})
@@ -155,8 +155,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root,.sx5wzk8{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
-				`article{margin-left:calc(var(--sx-space-sp1)*-1);margin-top:calc(var(--sx-space-sp2)*-1);}`
+				`:root,.sx5wzk8{--space-sp1:100px;--space-sp2:200px;}` +
+				`article{margin-left:calc(var(--space-sp1)*-1);margin-top:calc(var(--space-sp2)*-1);}`
 			)
 		}
 
@@ -179,8 +179,8 @@ describe('Tokens', () => {
 			})()
 
 			expect(toString()).toBe(
-				`:root,.sxpobec{--sx-sizes-sp1:10px;--sx-sizes-sp2:20px;--sx-sizes-sp3:30px;}` +
-				`article{margin-left:calc(var(--sx-sizes-sp1)*-1);width:var(--sx-sizes-sp1);}`
+				`:root,.sxpobec{--sizes-sp1:10px;--sizes-sp2:20px;--sizes-sp3:30px;}` +
+				`article{margin-left:calc(var(--sizes-sp1)*-1);width:var(--sizes-sp1);}`
 			)
 		}
 	})
@@ -203,8 +203,8 @@ describe('Tokens', () => {
 		})()
 
 		expect(toString()).toBe(
-			`:root,.sx5wzk8{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
-			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+			`:root,.sx5wzk8{--space-sp1:100px;--space-sp2:200px;}` +
+			`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2);}`,
 		)
 	})
 
@@ -226,14 +226,14 @@ describe('Tokens', () => {
 		})()
 
 		expect(toString()).toBe(
-			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+			`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2);}`,
 		)
 
 		mytheme.className
 
 		expect(toString()).toBe(
-			`.my-theme{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
-			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+			`.my-theme{--space-sp1:100px;--space-sp2:200px;}` +
+			`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2);}`,
 		)
 	})
 
@@ -255,8 +255,8 @@ describe('Tokens', () => {
 		})()
 
 		expect(toString()).toBe(
-			`:root,.sx5wzk8{--sx-space-sp1:100px;--sx-space-sp2:200px;}` +
-			`article{margin-left:var(--sx-space-sp1);margin-top:var(--sx-space-sp2);}`,
+			`:root,.sx5wzk8{--space-sp1:100px;--space-sp2:200px;}` +
+			`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2);}`,
 		)
 	})
 
