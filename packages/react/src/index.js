@@ -33,7 +33,7 @@ const createCss = (init) => {
 					} = composition(initProps)
 
 					/** React element. */
-					return { constructor: undefined, $$typeof: $$typeofElement, props, ref, type, __v: 0 }
+					return { $$typeof: $$typeofElement, key: null, props, ref, type }
 				},
 				$$typeof: $$typeofForward,
 				displayName: 'Stitches',
