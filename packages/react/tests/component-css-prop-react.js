@@ -87,7 +87,7 @@ describe('React Component with CSS prop', () => {
 
 		expect(toString()).toBe(
 			'.sxongxf{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block;}' +
-			'.sxongxf-9eqdh{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--sx-space-3);}' +
+			'.sxongxf-9eqdh{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3);}' +
 			'@media (min-width: 900px){' +
 				'.sxongxf-9eqdh{line-height:55px;color:red;}' +
 			'}',
@@ -110,7 +110,7 @@ describe('React Component with CSS prop', () => {
 
 		expect(toString()).toBe(
 			'.sxongxf{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block;}' +
-			'.sxongxf-9eqdh{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--sx-space-3);}' +
+			'.sxongxf-9eqdh{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3);}' +
 			'@media (min-width: 900px){' +
 				'.sxongxf-9eqdh{line-height:55px;color:red;}' +
 			'}' +

@@ -46,7 +46,7 @@ describe('Serialization', () => {
 		expect(myTheme.selector).toBe(`.${myThemeClassName}`)
 	})
 
-	const sheetCssText = `.${myThemeClassName}{--sx-colors-blue:dodgerblue;}.${myComponentClassName}{all:unset;font:inherit;margin:0;padding:0.5em 1em;}`
+	const sheetCssText = `.${myThemeClassName}{--colors-blue:dodgerblue;}.${myComponentClassName}{all:unset;font:inherit;margin:0;padding:0.5em 1em;}`
 
 	test('Sheets implicitly return their cssText', () => {
 		expect(String(sheet)).toBe(sheetCssText)
