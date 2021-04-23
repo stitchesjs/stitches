@@ -18,7 +18,11 @@ export default (
 		) + (
 			'var(' + (
 				separator === '$'
-					? '--' + config.prefix + '-' + (
+					? (
+						config.prefix === 'sx'
+							? '-'
+						: '--' + config.prefix
+					) + '-' + (
 						!token.includes('$')
 							? camelName in config.themeMap
 								? config.themeMap[camelName] + '-'
