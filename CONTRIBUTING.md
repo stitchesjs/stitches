@@ -26,7 +26,7 @@ scope and avoid unrelated commits.
    cd stitches
 
    # Assign the original repo to a remote called "upstream"
-   git remote add upstream git@github.com:modulez/stitches.git
+   git remote add upstream git@github.com:modulz/stitches.git
 
    # Install the tools necessary for testing
    yarn # or npm install
@@ -53,7 +53,7 @@ scope and avoid unrelated commits.
    # Build current code
    yarn build # or npm run build
    ```
-   
+
    > Note: ensure your version of Node is 14 or higher to run scripts
 
    ```bash
