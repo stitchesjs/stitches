@@ -47,13 +47,13 @@ describe('Components', () => {
 	})
 
 	test('The `styled` function can create an element from an explicit forwarded ref React component', () => {
-		const ForwardedComponent = React.forwardRef(() => 'text')
+		const ForwardedRefComponent = React.forwardRef((_, ref) => React.createElement('div', { ref }))
 
 		const { styled } = createCss()
-		const component = styled(ForwardedComponent)
+		const component = styled(ForwardedRefComponent)
 		const expression = component.render()
 
-		expect(component.stitchesType).toBe(ForwardedComponent)
+		expect(component.stitchesType).toBe(ForwardedRefComponent)
 		expect(React.isValidElement(expression)).toBe(true)
 		expect(expression.type.$$typeof).toBe(Symbol.for('react.forward_ref'))
 	})
