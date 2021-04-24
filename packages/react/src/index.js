@@ -10,7 +10,7 @@ const createCss = (init) => {
 	const sheet = createCoreCss(init)
 
 	return assign(sheet, {
-		/** Returns a React forwarded ref object. */
+		/** Returns a React component in the form of a forwarded ref object. */
 		styled: (
 			/** Type of component. */
 			...inits
@@ -18,9 +18,9 @@ const createCss = (init) => {
 			const defaultType = inits.map((init) => (Object(init).stitchesType ? init.stitchesType : init)).find((init) => init) || 'span'
 			const composition = sheet.css(...inits.filter((init) => $$composers in Object(init) || (init && typeof init === 'object' && !init.$$typeof)))
 
-			/** This is a React forwarded ref object, with a few extra Stitches properties */
+			/** This is a React component in the form of a forwarded ref object, with a few extra Stitches properties */
 			return {
-				/** The render function is the React component on the forwarded ref object, it returns a React element. */
+				/** The render function on the forwarded ref object returns a React element. */
 				render(
 					/** Props used to determine the expression of the current component. */
 					initProps,

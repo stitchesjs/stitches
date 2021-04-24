@@ -2,7 +2,7 @@ import * as React from 'react'
 import createCss from '../src/index.js'
 
 describe('Components', () => {
-	test('The `styled` function returns a React forwarded ref object', () => {
+	test('The `styled` function returns a React component in the form of a forwarded ref object', () => {
 		const { styled } = createCss()
 		const component = styled()
 		const expression = component.render()
@@ -12,7 +12,7 @@ describe('Components', () => {
 		expect(React.isValidElement(expression)).toBe(true)
 	})
 
-	test('The `styled` function creates an implicit span component', () => {
+	test('The `styled` function creates an implicit span element', () => {
 		const { styled } = createCss()
 		const component = styled()
 		const expression = component.render()
@@ -22,7 +22,7 @@ describe('Components', () => {
 		expect(expression.type).toBe('span')
 	})
 
-	test('The `styled` function can create an explicit div component', () => {
+	test('The `styled` function can create an explicit div element', () => {
 		const { styled } = createCss()
 		const component = styled('div')
 		const expression = component.render()
@@ -32,7 +32,7 @@ describe('Components', () => {
 		expect(expression.type).toBe('div')
 	})
 
-	test('The `styled` function can create an explicit React component', () => {
+	test('The `styled` function can create an element from an explicit React component', () => {
 		function TextComponent() {
 			return 'text'
 		}
@@ -46,11 +46,8 @@ describe('Components', () => {
 		expect(expression.type).toBe(TextComponent)
 	})
 
-	test('The `styled` function can create an explicit forwarded ref React component', () => {
-		const ForwardedComponent = {
-			$$typeof: Symbol.for('react.forward_ref'),
-			render: () => 'text',
-		}
+	test('The `styled` function can create an element from an explicit forwarded ref React component', () => {
+		const ForwardedComponent = React.forwardRef(() => 'text')
 
 		const { styled } = createCss()
 		const component = styled(ForwardedComponent)
@@ -61,8 +58,8 @@ describe('Components', () => {
 		expect(expression.type.$$typeof).toBe(Symbol.for('react.forward_ref'))
 	})
 
-	test('The `styled` function can create an explicit React memo component', () => {
-		const MyComp = () => null
+	test('The `styled` function can create an element from an explicit React memo component', () => {
+		const MyComp = () => 'text'
 		const MyCompMemo = React.memo(MyComp)
 
 		const { styled } = createCss()
@@ -74,7 +71,7 @@ describe('Components', () => {
 		expect(expression.type.$$typeof).toBe(Symbol.for('react.memo'))
 	})
 
-	test('The `styled` function creates a React element with key: null', () => {
+	test('The `styled` function creates an element with key: null', () => {
 		const { styled } = createCss()
 		const component = styled()
 		const expression = component.render()
