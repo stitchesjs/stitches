@@ -18,7 +18,7 @@ const createCss = (init) => {
 			const defaultType = inits.map((init) => (Object(init).stitchesType ? init.stitchesType : init)).find((init) => init) || 'span'
 			const composition = sheet.css(...inits.filter((init) => $$composers in Object(init) || (init && typeof init === 'object' && !init.$$typeof)))
 
-			/** This is a React component in the form of a forwarded ref object, with a few extra Stitches properties */
+			/** This is a React component in the form of a forwarded ref object, with a few extra Stitches properties. */
 			return {
 				/** The render function on the forwarded ref object returns a React element. */
 				render(
@@ -26,10 +26,9 @@ const createCss = (init) => {
 					initProps,
 					ref,
 				) {
-					// express the component, extracting `props`, `as` & `ref`
+					/** Express the component, extracting `props` & `as`. */
 					const {
 						props: { as: type = defaultType, ...props },
-						...expressedProps // eslint-disable-line no-unused-vars
 					} = composition(initProps)
 
 					/** React element. */
@@ -38,7 +37,7 @@ const createCss = (init) => {
 				$$typeof: $$typeofForward,
 				displayName: 'Stitches',
 
-				/** Below are all Stitches properties */
+				/** Below are all Stitches properties. */
 				[$$composers]: composition[$$composers],
 				[Symbol.toPrimitive]() {
 					return composition.selector
