@@ -26,7 +26,7 @@ const createCss = (init) => {
 					initProps,
 					ref,
 				) {
-					/** Express the component, extracting `props` & `as`. */
+					/** Express the composition, extracting `props` & `as`. */
 					const {
 						props: { as: type = defaultType, ...props },
 					} = composition(initProps)
