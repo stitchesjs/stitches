@@ -85,6 +85,18 @@ describe('Autoprefixer', () => {
 		expect(toString()).toBe('x-element{-moz-tab-size:none;tab-size:none;}')
 	})
 
+	test('textSizeAdjust', () => {
+		const { global, toString } = createCss()
+
+		global({
+			'x-element': {
+				textSizeAdjust: 'none',
+			},
+		})()
+
+		expect(toString()).toBe('x-element{-webkit-text-size-adjust:none;text-size-adjust:none;}')
+	})
+
 	test('userSelect', () => {
 		const { global, toString } = createCss()
 
