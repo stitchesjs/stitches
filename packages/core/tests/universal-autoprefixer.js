@@ -94,7 +94,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-webkit-text-size-adjust:none;text-size-adjust:none;}')
+		expect(toString()).toBe('x-element{-webkit-text-size-adjust:none;-moz-text-size-adjust:none;text-size-adjust:none;}')
 	})
 
 	test('userSelect', () => {
