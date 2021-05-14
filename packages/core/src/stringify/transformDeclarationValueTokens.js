@@ -1,12 +1,14 @@
+import { toTailDashed } from '../convert/toDashed.js'
+
 /** Returns a declaration value with transformed token values. */
-export default (
+export const transformDeclarationValueTokens = (
 	/** @type {string} */
-	camelName,
-	/** @type {string} */
-	stringValue,
-	/** @type {{ prefix: string, themeMap: any }} */
-	config
-) => stringValue.replace(
+	value,
+	/** @type {string | undefined} */
+	prefix,
+	/** @type {string | undefined} */
+	scale,
+) => value.replace(
 	/([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g,
 	($0, direction, multiplier, separator, token) => (
 		separator == "$" == !!multiplier
@@ -16,17 +18,11 @@ export default (
 				? 'calc('
 			: ''
 		) + (
-			'var(' + (
+			'var(--' + (
 				separator === '$'
-					? (
-						config.prefix === 'sx'
-							? '-'
-						: '--' + config.prefix
-					) + '-' + (
+					? toTailDashed(prefix) + (
 						!token.includes('$')
-							? camelName in config.themeMap
-								? config.themeMap[camelName] + '-'
-							: ''
+							? toTailDashed(scale)
 						: ''
 					) + token.replace(/\$/g, '-')
 				: separator + token

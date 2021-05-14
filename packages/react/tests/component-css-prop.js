@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('React Component with CSS prop', () => {
 	test('Authors can create a component and pass it a css prop of overrides', () => {
@@ -12,10 +12,7 @@ describe('React Component with CSS prop', () => {
 			},
 		})
 
-		expect(toString()).toBe(
-			'.sxjq6z2{order:1;}' +
-			'.sxjq6z2-yg8rb{order:2;}',
-		) // prettier-ignore
+		expect(toString()).toBe(`--stitches{--:2 c-hhyRYU}@media{.c-hhyRYU{order:1}}--stitches{--:4 c-hhyRYU-ilhKMMn-css}@media{.c-hhyRYU-ilhKMMn-css{order:2}}`)
 	})
 
 	test('React example from Radix', () => {
@@ -40,15 +37,11 @@ describe('React Component with CSS prop', () => {
 		})
 
 		expect(expression.props).toEqual({
-			className: 'sx2obmh sx2obmh-nl6rn',
+			className: 'c-bHwuwj c-bHwuwj-ibwrayD-css',
 		})
 
 		expect(toString()).toBe(
-			'.sx2obmh{color:inherit;}' +
-			'.sx2obmh-nl6rn{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;}' +
-			'@media (min-width: 900px){' +
-				'.sx2obmh-nl6rn{line-height:55px;color:red;}' +
-			'}',
-		) // prettier-ignore
+			`--stitches{--:2 c-bHwuwj}@media{.c-bHwuwj{color:inherit}}--stitches{--:4 c-bHwuwj-ibwrayD-css}@media{.c-bHwuwj-ibwrayD-css{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px}@media (min-width: 900px){.c-bHwuwj-ibwrayD-css{line-height:55px;color:red}}}`,
+		)
 	})
 })

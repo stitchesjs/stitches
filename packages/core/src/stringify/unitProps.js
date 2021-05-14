@@ -1,5 +1,5 @@
 /** CSS Properties whose number value may safely be interpretted as a pixel. */
-export default {
+export const unitProps = {
 	animationDelay: 1,
 	animationDuration: 1,
 	backgroundSize: 1,

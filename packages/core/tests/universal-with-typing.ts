@@ -1,4 +1,4 @@
-import createCss from '../types'
+import { createCss } from '../types'
 
 const { css, toString } = createCss({
 	media: {

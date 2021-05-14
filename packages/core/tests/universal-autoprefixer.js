@@ -10,7 +10,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-webkit-appearance:none;appearance:none;}')
+		expect(toString()).toBe('--stitches{--:1 kozGVo}@media{x-element{-webkit-appearance:none;appearance:none}}')
 	})
 
 	test('backfaceVisibility', () => {
@@ -22,7 +22,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-webkit-backface-visibility:visible;backface-visibility:visible;}')
+		expect(toString()).toBe('--stitches{--:1 gaCVoe}@media{x-element{-webkit-backface-visibility:visible;backface-visibility:visible}}')
 	})
 
 	test('backgroundClip', () => {
@@ -34,7 +34,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-webkit-background-clip:border-box;background-clip:border-box;}')
+		expect(toString()).toBe('--stitches{--:1 gIcRdw}@media{x-element{-webkit-background-clip:border-box;background-clip:border-box}}')
 	})
 
 	test('clipPath', () => {
@@ -46,7 +46,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-webkit-clip-path:circle(40%);clip-path:circle(40%);}')
+		expect(toString()).toBe('--stitches{--:1 ccZNl}@media{x-element{-webkit-clip-path:circle(40%);clip-path:circle(40%)}}')
 	})
 
 	test('hyphens', () => {
@@ -58,7 +58,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-webkit-hyphens:none;hyphens:none;}')
+		expect(toString()).toBe('--stitches{--:1 cRggdz}@media{x-element{-webkit-hyphens:none;hyphens:none}}')
 	})
 
 	test('maskImage', () => {
@@ -70,7 +70,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-webkit-mask-image:none;mask-image:none;}')
+		expect(toString()).toBe('--stitches{--:1 eNBesV}@media{x-element{-webkit-mask-image:none;mask-image:none}}')
 	})
 
 	test('tabSize', () => {
@@ -82,7 +82,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-moz-tab-size:none;tab-size:none;}')
+		expect(toString()).toBe('--stitches{--:1 kPCdtQ}@media{x-element{-moz-tab-size:none;tab-size:none}}')
 	})
 
 	test('userSelect', () => {
@@ -94,6 +94,6 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('x-element{-webkit-user-select:none;user-select:none;}')
+		expect(toString()).toBe('--stitches{--:1 kEUokv}@media{x-element{-webkit-user-select:none;user-select:none}}')
 	})
 })

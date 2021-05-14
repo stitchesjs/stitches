@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as renderer from 'react-test-renderer'
 
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 const RenderOf = (...args) => {
 	let Rendered
@@ -39,11 +39,11 @@ describe('React Component with CSS prop', () => {
 
 		expect(RenderOf(StyledText, null, 'Radix UI test suite')).toEqual({
 			type: 'span',
-			props: { className: 'sxongxf' },
+			props: { className: 'c-bMUtqP' },
 			children: ['Radix UI test suite'],
 		})
 
-		expect(toString()).toBe('.sxongxf{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block;}')
+		expect(toString()).toBe('--stitches{--:2 c-bMUtqP}@media{.c-bMUtqP{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block}}')
 
 		const Title = React.forwardRef((props, forwardedRef) =>
 			React.createElement(StyledText, {
@@ -80,18 +80,14 @@ describe('React Component with CSS prop', () => {
 		).toEqual({
 			type: 'span',
 			props: {
-				className: 'sxongxf sxongxf-9eqdh',
+				className: 'c-bMUtqP c-bMUtqP-ieTXEfC-css',
 			},
 			children: ['Radix UI test suite'],
 		})
 
 		expect(toString()).toBe(
-			'.sxongxf{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block;}' +
-			'.sxongxf-9eqdh{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3);}' +
-			'@media (min-width: 900px){' +
-				'.sxongxf-9eqdh{line-height:55px;color:red;}' +
-			'}',
-		) // prettier-ignore
+			`--stitches{--:2 c-bMUtqP}@media{.c-bMUtqP{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block}}--stitches{--:4 c-bMUtqP-ieTXEfC-css}@media{.c-bMUtqP-ieTXEfC-css{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3)}@media (min-width: 900px){.c-bMUtqP-ieTXEfC-css{line-height:55px;color:red}}}`,
+		)
 
 		// ...
 		const Link = styled('a', {
@@ -103,18 +99,13 @@ describe('React Component with CSS prop', () => {
 		expect(RenderOf(Link, null, 'Radix UI test suite')).toEqual({
 			type: 'a',
 			props: {
-				className: 'sxibtj5',
+				className: 'c-dnnagC',
 			},
 			children: ['Radix UI test suite'],
 		})
 
 		expect(toString()).toBe(
-			'.sxongxf{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block;}' +
-			'.sxongxf-9eqdh{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3);}' +
-			'@media (min-width: 900px){' +
-				'.sxongxf-9eqdh{line-height:55px;color:red;}' +
-			'}' +
-			'.sxibtj5 .sxongxf{color:inherit;}',
-		) // prettier-ignore
+			`--stitches{--:2 c-bMUtqP c-dnnagC}@media{.c-bMUtqP{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block}.c-dnnagC .c-bMUtqP{color:inherit}}--stitches{--:4 c-bMUtqP-ieTXEfC-css}@media{.c-bMUtqP-ieTXEfC-css{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px;text-align:center;margin-bottom:var(--space-3)}@media (min-width: 900px){.c-bMUtqP-ieTXEfC-css{line-height:55px;color:red}}}`,
+		)
 	})
 })

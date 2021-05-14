@@ -1,9 +1,9 @@
-/** Returns a filled value with a dash prefix. */
-const dash = (value) => (value ? '-' + value : '')
+import { toLeadDashed } from './convert/toDashed.js'
 
 /** CSS token value, name, and scale. */
-class ThemeToken {
-	constructor(value, token, scale = '', prefix = '') {
+export class ThemeToken {
+	/** @type {(value: string, token: string, scale: string, prefix: string) => void} */
+	constructor(value, token, scale, prefix) {
 		this.value = value
 		this.token = token
 		this.scale = scale
@@ -17,7 +17,7 @@ class ThemeToken {
 
 	/** Returns a serialized name representing the token. */
 	get variable() {
-		return '-' + dash(this.prefix) + dash(this.scale) + '-' + this.token
+		return '-' + toLeadDashed(this.prefix) + toLeadDashed(this.scale) + '-' + this.token
 	}
 
 	/** Returns a serialized CSS var() representing the token. */
@@ -25,5 +25,3 @@ class ThemeToken {
 		return this.computedValue
 	}
 }
-
-export default ThemeToken

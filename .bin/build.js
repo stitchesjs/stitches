@@ -54,6 +54,7 @@ export const build = async (packageUrl, opts) => {
 			entryPoints: [targetPathname],
 			outfile: outputPathname,
 			bundle: true,
+			external: ['react'],
 			format: 'esm',
 			sourcemap: 'external',
 			write: false,

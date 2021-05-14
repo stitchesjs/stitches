@@ -19,7 +19,12 @@ describe('Component with CSS prop', () => {
 		})
 
 		expect(toString()).toBe(
-			'.sxjq6z2{order:1;}.sxjq6z2-yg8rb{order:2;}',
-		) // prettier-ignore
+			`--stitches{--:2 c-hhyRYU}@media{` +
+				`.c-hhyRYU{order:1}` +
+			`}` +
+			`--stitches{--:4 c-hhyRYU-ilhKMMn-css}@media{` +
+				`.c-hhyRYU-ilhKMMn-css{order:2}` +
+			`}`
+		)
 	})
-})
+}) // prettier-ignore

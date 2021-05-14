@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as renderer from 'react-test-renderer'
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 let RenderOf = (...args) => {
 	let Rendered
@@ -35,13 +35,14 @@ describe('Issue #555', () => {
 		).toEqual({
 			type: 'div',
 			props: {
-				className: 'sxr9r9e',
+				className: 'c-jEKtXH',
 			},
 			children: null,
 		})
 
-		expect(toString()).toBe(`.sxr9r9e{color:dodgerblue;}`)
+		expect(toString()).toBe(`--stitches{--:2 c-jEKtXH}@media{.c-jEKtXH{color:dodgerblue}}`)
 	})
+
 	test('an element accepts styles via className prop', () => {
 		const { css, styled, toString } = createCss()
 
@@ -53,11 +54,11 @@ describe('Issue #555', () => {
 		).toEqual({
 			type: 'div',
 			props: {
-				className: 'sx03kze sxr9r9e',
+				className: 'c-PJLV c-jEKtXH',
 			},
 			children: null,
 		})
 
-		expect(toString()).toBe(`.sxr9r9e{color:dodgerblue;}`)
+		expect(toString()).toBe(`--stitches{--:2 c-jEKtXH c-PJLV}@media{.c-jEKtXH{color:dodgerblue}}`)
 	})
 }) // prettier-ignore
