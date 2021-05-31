@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "lib": ["DOM", "ES2020"],
+    "target": "esnext",
+    "module": "esnext",
+    "lib": [
+      "dom",
+      "es2020"
+    ],
     "jsx": "preserve",
     "preserveSymlinks": true,
     "moduleResolution": "node",
@@ -15,5 +18,8 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
