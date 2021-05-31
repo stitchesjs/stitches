@@ -8,11 +8,11 @@ describe('Prefix', () => {
 
 		expect(toString()).toBe('')
 
-		const hash = 'rrtg8'
+		const hash = 'iknykm'
 
-		expect(theme({ colors: { red: 'tomato' } }).toString()).toBe(`${prefix}${hash}`)
+		expect(theme({ colors: { red: 'tomato' } }).toString()).toBe(`${prefix}-t-${hash}`)
 
-		expect(toString()).toBe(`.${prefix}${hash}{--fusion-colors-red:tomato;}`)
+		expect(toString()).toBe(`--stitches{--:0 fusion-t-iknykm}@media{.${prefix}-t-${hash}{--fusion-colors-red:tomato}}`)
 	})
 
 	test('Authors can define a prefix not applied to named themes', () => {
@@ -26,7 +26,7 @@ describe('Prefix', () => {
 
 		expect(myTheme.toString()).toBe(`${themeName}`)
 
-		expect(toString()).toBe(`.${themeName}{--fusion-colors-red:tomato;}`)
+		expect(toString()).toBe(`--stitches{--:0 my-theme-name}@media{.${themeName}{--fusion-colors-red:tomato}}`)
 	})
 
 	test('Authors can define a prefix applied to components', () => {
@@ -40,6 +40,6 @@ describe('Prefix', () => {
 
 		component.toString()
 
-		expect(toString()).toBe('.fusion3ye05{color:red;}')
+		expect(toString()).toBe(`--stitches{--:2 fusion-c-gmqXFB}@media{.fusion-c-gmqXFB{color:red}}`)
 	})
 })

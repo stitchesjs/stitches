@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Variants', () => {
 	test('Variant given undefined will revert to the default', () => {
@@ -20,13 +20,10 @@ describe('Variants', () => {
 		})
 
 		const expression1 = component.render()
-		expect(expression1.props.className).toBe('sx9hpte sx9hpte11nwi--color-blue')
-
-		const expression2 = component.render({ color: 'red' })
-		expect(expression2.props.className).toBe('sx9hpte sx9hpte3ye05--color-red')
+		expect(expression1.props.className).toBe('c-PJLV c-PJLV-kydkiA-variant')
 
 		const expression3 = component.render({ color: undefined })
-		expect(expression3.props.className).toBe('sx9hpte sx9hpte11nwi--color-blue')
+		expect(expression3.props.className).toBe('c-PJLV c-PJLV-kydkiA-variant')
 	})
 
 	test('Variant with an explicit undefined will not use default variant', () => {
@@ -51,12 +48,12 @@ describe('Variants', () => {
 		})
 
 		const expression1 = component.render()
-		expect(expression1.props.className).toBe('sx5z3b4 sx5z3b4r02wp--color-undefined')
+		expect(expression1.props.className).toBe('c-PJLV c-PJLV-kydkiA-variant')
 
 		const expression2 = component.render({ color: 'red' })
-		expect(expression2.props.className).toBe('sx5z3b4 sx5z3b43ye05--color-red')
+		expect(expression2.props.className).toBe('c-PJLV c-PJLV-gmqXFB-variant')
 
 		const expression3 = component.render({ color: undefined })
-		expect(expression3.props.className).toBe('sx5z3b4 sx5z3b4r02wp--color-undefined')
+		expect(expression3.props.className).toBe('c-PJLV c-PJLV-hzqlOY-variant')
 	})
 })

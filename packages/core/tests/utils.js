@@ -16,6 +16,6 @@ describe('Utils', () => {
 
 		component.toString()
 
-		expect(stitches.toString()).toBe('.sxxl9ux{background-color:red;}')
+		expect(stitches.toString()).toBe(`--stitches{--:2 c-bzwKCF}@media{.c-bzwKCF{background-color:red}}`)
 	})
 })

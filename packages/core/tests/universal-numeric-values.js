@@ -12,7 +12,7 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe('body{margin:0;}')
+		expect(toString()).toBe(`--stitches{--:1 cSHHDh}@media{body{margin:0}}`)
 
 		global({
 			body: {
@@ -20,7 +20,7 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe('body{margin:0;}body{margin:10px;}')
+		expect(toString()).toBe(`--stitches{--:1 cSHHDh fFIrKk}@media{body{margin:0}body{margin:10px}}`)
 	})
 
 	test('Authors can use numeric values to assign numeric values', () => {
@@ -35,7 +35,7 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe('body{line-height:0;width:0;}')
+		expect(toString()).toBe(`--stitches{--:1 bpctHq}@media{body{line-height:0;width:0}}`)
 
 		global({
 			body: {
@@ -44,12 +44,12 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe('body{line-height:0;width:0;}body{line-height:10;width:10px;}')
+		expect(toString()).toBe(`--stitches{--:1 bpctHq cudWGu}@media{body{line-height:0;width:0}body{line-height:10;width:10px}}`)
 	})
 
 	test('Authors can use unit-less properties as known to React', () => {
 		for (let i = 0; i <= 33; i += 11) {
-			const { global, toString } = createCss()
+			const { global, getCssString } = createCss()
 
 			global({
 				div: {
@@ -87,7 +87,9 @@ describe('Numeric Values', () => {
 				},
 			})()
 
-			expect(toString()).toBe(
+			const cssText = getCssString().replace(/^.+@media\{|\}$/g, '')
+
+			expect(cssText).toBe(
 				'div' + '{' +
 					'animation-iteration-count:' + i + ';' +
 					'border-image-outset:' + i + ';' +
@@ -120,9 +122,9 @@ describe('Numeric Values', () => {
 					'tab-size:' + i + ';' +
 					'widows:' + i + ';' +
 					'z-index:' + i + ';' +
-					'zoom:' + i + ';' +
+					'zoom:' + i +
 				'}'
-			) // prettier-ignore
+			)
 		}
 	})
 
@@ -133,7 +135,7 @@ describe('Numeric Values', () => {
 
 		test(`Author can use the unit-only ${kebabProp} property`, () => {
 			for (let i = 0; i <= 33; i += 11) {
-				const { global, toString } = createCss()
+				const { global, getCssString } = createCss()
 
 				global({
 					div: {
@@ -141,12 +143,14 @@ describe('Numeric Values', () => {
 					},
 				})()
 
-				expect(toString()).toBe(
-					'div' + '{' +
-						kebabProp + ':' + i + (i ? 'px' : '') + ';' +
-					'}',
-				) // prettier-ignore
+				const cssText = getCssString().replace(/^.+@media\{|\}$/g, '')
+
+				expect(cssText).toBe(
+					`div{` +
+						kebabProp + `:` + i + (i ? 'px' : '') +
+					`}`
+				)
 			}
 		})
 	}
-})
+}) // prettier-ignore

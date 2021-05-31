@@ -1,18 +1,18 @@
 import * as react from 'react'
 import * as renderer from 'react-test-renderer'
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('React', () => {
 	const sheet = createCss()
 
 	let wrapper = renderer.create(react.createElement(react.Fragment))
 	let Button = sheet.styled('button', {
-		backgroundColor: 'gainsboro',
-		borderRadius: '9999px',
-		fontWeight: 500,
-		padding: '0.75em 1em',
-		border: 0,
-		transition: 'all 200ms ease',
+		'backgroundColor': 'gainsboro',
+		'borderRadius': '9999px',
+		'fontWeight': 500,
+		'padding': '0.75em 1em',
+		'border': 0,
+		'transition': 'all 200ms ease',
 
 		'&:hover': {
 			transform: 'translateY(-2px)',
@@ -38,13 +38,26 @@ describe('React', () => {
 		expect(wrapper.toJSON()).toEqual({
 			type: 'button',
 			props: {
-				className: 'sxadxkw',
+				className: 'c-iSEgvG',
 			},
 			children: null,
 		})
 
 		expect(sheet.toString()).toEqual(
-			'.sxadxkw{background-color:gainsboro;border-radius:9999px;font-weight:500;padding:0.75em 1em;border:0;transition:all 200ms ease;}.sxadxkw:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0, 0, 0, .3);}',
+			`--stitches{--:2 c-iSEgvG}@media{` +
+				`.c-iSEgvG{` +
+					`background-color:gainsboro;` +
+					`border-radius:9999px;` +
+					`font-weight:500;` +
+					`padding:0.75em 1em;` +
+					`border:0;` +
+					`transition:all 200ms ease` +
+				`}` +
+				`.c-iSEgvG:hover{` +
+					`transform:translateY(-2px);` +
+					`box-shadow:0 10px 25px rgba(0, 0, 0, .3)` +
+				`}` +
+			`}`
 		)
 	})
-})
+}) // prettier-ignore

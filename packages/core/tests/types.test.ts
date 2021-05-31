@@ -1,5 +1,5 @@
 // core types.tests.ts
-import createCss, { StitchesCss, StitchesVariants } from '../types/index.d'
+import { createCss, StitchesCss, StitchesVariants } from '../types/index.d'
 const css = createCss({
 	utils: {
 		mx: (config) => (value) => ({
