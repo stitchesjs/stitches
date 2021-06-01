@@ -8,3 +8,5 @@ const keyframes = (...args) => getReusableSheet().keyframes(...args)
 const styled = (...args) => getReusableSheet().styled(...args)
 
 export { createCss, css, global, keyframes, styled }
+
+export default createCss

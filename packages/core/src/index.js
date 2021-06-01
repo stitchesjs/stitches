@@ -7,3 +7,5 @@ const global = (...args) => getReusableSheet().global(...args)
 const keyframes = (...args) => getReusableSheet().keyframes(...args)
 
 export { createCss, css, global, keyframes }
+
+export default createCss
