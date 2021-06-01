@@ -122,7 +122,7 @@ const createComposer = (/** @type {ComposerInit} */ { variants: singularVariants
 
 			for (const pair in variantPairs) {
 				/** @type {VariantMatches} */
-				const vMatch = { [name]: pair }
+				const vMatch = { [name]: String(pair) }
 
 				/** @type {Style} */
 				const vStyle = variantPairs[pair]
@@ -141,6 +141,8 @@ const createComposer = (/** @type {ComposerInit} */ { variants: singularVariants
 			let { css: vStyle, ...vMatch } = compoundVariant
 
 			vStyle = (typeof vStyle === 'object' && vStyle) || {}
+
+			for (const name in vMatch) vMatch[name] = String(vMatch[name])
 
 			/** @type {Variant} */
 			const variant = [vMatch, vStyle]
@@ -244,6 +246,7 @@ const createRenderer = (
 					// non-matches
 					else continue variants
 				}
+
 				;(variantsToAdd[variantIndex] = variantsToAdd[variantIndex] || []).push(vStyle)
 			}
 
