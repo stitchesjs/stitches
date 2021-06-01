@@ -10,26 +10,74 @@ import { minify } from 'terser'
 const variants = {
 	esm: {
 		extension: 'mjs',
-		transform(code, exports) {
+		transform(code, allImports, allExports) {
+			const esmImports = []
+			for (const from in allImports) {
+				const esmImport = []
+				for (const as in allImports[from]) {
+					const name = allImports[from][as]
+					esmImport.push(`${name} as ${as}`)
+				}
+				esmImports.push(`import{${esmImport.join(',')}}from"${from}";`)
+			}
 			const esmExports = []
-			for (const name in exports) esmExports.push(`${exports[name]} as ${name}`)
-			return `${code}export{${esmExports.join(',')}}`
+			for (const from in allExports) {
+				const esmExport = []
+				for (const as in allExports[from]) {
+					const name = allExports[from][as]
+					esmExport.push(`${name} as ${as}`)
+				}
+				esmExports.push(`export{${esmExport.join(',')}}${from ? `from"${from}"` : ''}`)
+			}
+			return `${esmImports.join('')}${code}${esmExports.join(';')}`
 		},
 	},
 	cjs: {
 		extension: 'cjs',
-		transform(code, exports) {
-			const cjsExports = []
-			for (const name in exports) cjsExports.push(`${name}:${exports[name]}`)
-			return `${code}module.exports={${cjsExports.join(',')}}`
+		transform(code, allImports, allExports) {
+			const esmImports = []
+			for (const from in allImports) {
+				const esmImport = []
+				for (const as in allImports[from]) {
+					const name = allImports[from][as]
+					esmImport.push(`${name}:${as}`)
+				}
+				esmImports.push(`const{${esmImport.join(',')}}=require("${from}");`)
+			}
+			const esmExports = []
+			for (const from in allExports) {
+				const esmExport = []
+				for (const as in allExports[from]) {
+					const name = allExports[from][as]
+					esmExport.push(`${name}:${as}`)
+				}
+				esmExports.push(`module.exports={${esmExport.join(',')}}`)
+			}
+			return `${esmImports.join('')}${code}${esmExports.join(';')}`
 		},
 	},
 	iife: {
 		extension: 'iife.js',
-		transform(code, exports) {
-			const iifeExports = []
-			for (const name in exports) iifeExports.push(`${name}:${exports[name]}`)
-			return `(()=>{${code}globalThis.stitches={${iifeExports.join(',')}}})()`
+		transform(code, allImports, allExports) {
+			const esmImports = []
+			for (const from in allImports) {
+				const esmImport = []
+				for (const as in allImports[from]) {
+					const name = allImports[from][as]
+					esmImport.push(`${name}:${as}`)
+				}
+				esmImports.push(`const{${esmImport.join(',')}}=${from[0].toUpperCase() + from.slice(1)};`)
+			}
+			const esmExports = []
+			for (const from in allExports) {
+				const esmExport = []
+				for (const as in allExports[from]) {
+					const name = allExports[from][as]
+					esmExport.push(`${as}:${name}`)
+				}
+				esmExports.push(`globalThis.stitches={${esmExport.join(',')}}`)
+			}
+			return `(()=>{${esmImports.join('')}${code}${esmExports.join(';')}})()`
 		},
 	},
 }
@@ -76,21 +124,34 @@ export const build = async (packageUrl, opts) => {
 		fs.writeFile(new URL(`index.map`, distPackageUrl), map)
 
 		// prepare variations
-		const splitByExport = (code, index = code.indexOf('export')) => [code.slice(0, index), code.slice(index)]
-		const [lead, tail] = splitByExport(code)
-
-		const exports = Array.from(tail.matchAll(/([$\w]+) as (\w+)/g)).reduce((exports, each) => Object.assign(exports, { [each[2]]: each[1] }), Object.create(null))
-
 		const size = {
 			name: packageName,
 			types: {},
 		}
 
+		const extract = (code, keyword) => {
+			const extractions = Object.create(null)
+			const lead = code.indexOf(`${keyword}{`)
+			if (lead === -1) return [extractions, code]
+			const tail = code.indexOf('}', lead + 7) + 1
+			if (tail === 0) return [extractions, code]
+			const from = code.indexOf(';', tail + 1)
+			const name = from === -1 ? '' : code.slice(tail + 5, from - 1)
+			Array.from(code.slice(lead + 7, tail).matchAll(/([$\w]+) as (\w+),?/gy)).reduce((names, each) => Object.assign(names, { [each[2]]: each[1] }), (extractions[name] = Object.create(null)))
+			return [
+				extractions,
+				code.slice(0, lead).concat(code.slice(from === -1 ? tail : from + 1))
+			] // prettier-ignore
+		}
+
+		const [imports, codeWithoutImports] = extract(code, 'import')
+		const [exports, codeWithoutExports] = extract(codeWithoutImports, 'export')
+
 		// write variation builds
 		for (const variant in variants) {
 			const variantInfo = variants[variant]
 			const variantPath = new URL(`dist/index.${variantInfo.extension}`, packageUrl).pathname
-			const variantCode = variantInfo.transform(lead, exports)
+			const variantCode = variantInfo.transform(codeWithoutExports, imports, exports)
 			const variantMins = (Buffer.byteLength(variantCode) / 1000).toFixed(2)
 			const variantGzip = Number(zlib.gzipSync(variantCode, { level: 9 }).length / 1000).toFixed(2)
 
