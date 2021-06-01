@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { createComponentFunction } from '../../core/src/createComponent.js'
 
 /** @typedef {import('../../core/src').Config} Config */
