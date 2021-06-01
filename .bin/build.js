@@ -49,7 +49,7 @@ const variants = {
 			const exports = []
 			for (const as in allExports) {
 				const name = allExports[as]
-				exports.push(`${name}:${as}`)
+				exports.push(`${as}:${name}`)
 			}
 			return `module.exports={${exports.join(',')}};`
 		},
