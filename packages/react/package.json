@@ -9,9 +9,11 @@
   "jsdelivr": "dist/index.iife.js",
   "unpkg": "dist/index.iife.js",
   "exports": {
-    "require": "./dist/index.cjs",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.mjs"
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./types/index.d.ts"
+    }
   },
   "files": [
     "dist",
