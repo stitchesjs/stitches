@@ -7,29 +7,72 @@ import nodemon from 'nodemon'
 import zlib from 'zlib'
 import { minify } from 'terser'
 
+const matchImports = /import\s*([\w*${}\n\r\t, ]+)from\s*["']([^"']+)["'];?/g
+const matchExports = /export\s*([\w*${}\n\r\t, ]+);?$/g
+const matchNamings = /[{,]?([$\w]+)(?:\s+as\s+(\w+))?/gy
+
 const variants = {
 	esm: {
 		extension: 'mjs',
-		transform(code, exports) {
-			const esmExports = []
-			for (const name in exports) esmExports.push(`${exports[name]} as ${name}`)
-			return `${code}export{${esmExports.join(',')}}`
+		transformImports(allImports, from) {
+			const defaultImports = []
+			const imports = []
+			for (const name in allImports) {
+				const as = allImports[name]
+				if (name === 'default') defaultImports.push(as)
+				else imports.push(`${name} as ${as}`)
+			}
+			return `import${defaultImports.length ? ` ${defaultImports.join(',')} ` : ``}${imports.length ? `{${imports.join(',')}}` : ''}from"${from}";`
+		},
+		transformExports(allExports) {
+			const exports = []
+			for (const as in allExports) {
+				const name = allExports[as]
+				exports.push(`${name} as ${as}`)
+			}
+			return `export{${exports.join(',')}};`
 		},
 	},
 	cjs: {
 		extension: 'cjs',
-		transform(code, exports) {
-			const cjsExports = []
-			for (const name in exports) cjsExports.push(`${name}:${exports[name]}`)
-			return `${code}module.exports={${cjsExports.join(',')}}`
+		transformImports(allImports, from) {
+			const defaultImports = []
+			const imports = []
+			for (const name in allImports) {
+				const as = allImports[name]
+				if (name === 'default') defaultImports.push(as)
+				else imports.push(`${name}:${as}`)
+			}
+			return `const${defaultImports.length ? ` ${defaultImports.join(',')}` : imports.length ? `{${imports.join(',')}}` : ''}=require("${from}");`
+		},
+		transformExports(allExports) {
+			const exports = []
+			for (const as in allExports) {
+				const name = allExports[as]
+				exports.push(`${as}:${name}`)
+			}
+			return `module.exports={${exports.join(',')}};`
 		},
 	},
 	iife: {
 		extension: 'iife.js',
-		transform(code, exports) {
-			const iifeExports = []
-			for (const name in exports) iifeExports.push(`${name}:${exports[name]}`)
-			return `(()=>{${code}globalThis.stitches={${iifeExports.join(',')}}})()`
+		transformImports(allImports, from) {
+			const defaultImports = []
+			const imports = []
+			for (const name in allImports) {
+				const as = allImports[name]
+				if (name === 'default') defaultImports.push(as)
+				else imports.push(`${name}:${as}`)
+			}
+			return `const${defaultImports.length ? ` ${defaultImports.join(',')}` : imports.length ? `{${imports.join(',')}}` : ''}=${from[0].toUpperCase() + from.slice(1)};`
+		},
+		transformExports(allExports) {
+			const exports = []
+			for (const as in allExports) {
+				const name = allExports[as]
+				exports.push(`${as}:${name}`)
+			}
+			return `globalThis.stitches={${exports.join(',')}};`
 		},
 	},
 }
@@ -76,11 +119,6 @@ export const build = async (packageUrl, opts) => {
 		fs.writeFile(new URL(`index.map`, distPackageUrl), map)
 
 		// prepare variations
-		const splitByExport = (code, index = code.indexOf('export')) => [code.slice(0, index), code.slice(index)]
-		const [lead, tail] = splitByExport(code)
-
-		const exports = Array.from(tail.matchAll(/([$\w]+) as (\w+)/g)).reduce((exports, each) => Object.assign(exports, { [each[2]]: each[1] }), Object.create(null))
-
 		const size = {
 			name: packageName,
 			types: {},
@@ -90,7 +128,30 @@ export const build = async (packageUrl, opts) => {
 		for (const variant in variants) {
 			const variantInfo = variants[variant]
 			const variantPath = new URL(`dist/index.${variantInfo.extension}`, packageUrl).pathname
-			const variantCode = variantInfo.transform(lead, exports)
+
+			matchImports.lastIndex = 0
+			matchExports.lastIndex = 0
+			const variantCode =
+			code.replace(matchImports, (_, statement, from) => {
+				matchNamings.lastIndex = 0
+				const allImports = Array.from(
+					statement.matchAll(matchNamings)
+				).reduce(
+					(allImports, each) => Object.assign(allImports, { [each[2] || 'default']: each[1] }),
+					{}
+				)
+				return variantInfo.transformImports(allImports, from)
+			}).replace(matchExports, (_, statement) => {
+				matchNamings.lastIndex = 0
+				const allExports = Array.from(
+					statement.matchAll(matchNamings)
+				).reduce(
+					(allExports, each) => Object.assign(allExports, { [each[2] || each[1]]: each[1] }),
+					{}
+				)
+				return variantInfo.transformExports(allExports)
+			}) // prettier-ignore
+
 			const variantMins = (Buffer.byteLength(variantCode) / 1000).toFixed(2)
 			const variantGzip = Number(zlib.gzipSync(variantCode, { level: 9 }).length / 1000).toFixed(2)
 
