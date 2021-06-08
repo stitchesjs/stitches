@@ -4,7 +4,7 @@
 /** @typedef {import('.').Group} Group */
 
 /** @type {GroupName[]} */
-const names = ['themed', 'global', 'styled', 'varied', 'inline']
+const names = ['themed', 'global', 'styled', 'onevar', 'allvar', 'inline']
 
 export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 	/** @type {GroupSheet} Object hosting the hydrated stylesheet. */
@@ -127,22 +127,35 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 		if (!rules.inline) {
 			const index = sheet.cssRules.length
 			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--stitches{--:4}', index)
+			sheet.insertRule('--stitches{--:5}', index)
 
 			rules.inline = {
+				index: index,
+				group: sheet.cssRules[index + 1],
+				cache: new Set([5]),
+			}
+		}
+
+		// conditionally generate the allvar group
+		if (!rules.allvar) {
+			const index = rules.inline.index
+			sheet.insertRule('@media{}', index)
+			sheet.insertRule('--stitches{--:4}', index)
+
+			rules.allvar = {
 				index: index,
 				group: sheet.cssRules[index + 1],
 				cache: new Set([4]),
 			}
 		}
 
-		// conditionally generate the varied group
-		if (!rules.varied) {
-			const index = rules.inline.index
+		// conditionally generate the onevar group
+		if (!rules.onevar) {
+			const index = rules.allvar.index
 			sheet.insertRule('@media{}', index)
 			sheet.insertRule('--stitches{--:3}', index)
 
-			rules.varied = {
+			rules.onevar = {
 				index: index,
 				group: sheet.cssRules[index + 1],
 				cache: new Set([3]),
@@ -151,7 +164,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 		// conditionally generate the styled group
 		if (!rules.styled) {
-			const index = rules.varied.index
+			const index = rules.onevar.index
 			sheet.insertRule('@media{}', index)
 			sheet.insertRule('--stitches{--:2}', index)
 

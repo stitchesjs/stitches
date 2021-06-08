@@ -3,7 +3,7 @@ export interface GroupSheet {
 	rules: GroupRules
 }
 
-export type GroupName = 'themed' | 'global' | 'styled' | 'varied' | 'inline'
+export type GroupName = 'themed' | 'global' | 'styled' | 'onevar' | 'allvar' | 'inline'
 
 export type GroupRules = {
 	[name in GroupName]: Group

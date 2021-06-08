@@ -1,12 +1,12 @@
-import { toTailDashed } from '../convert/toDashed.js'
+import { toTailDashed } from './toTailDashed.js'
 
 /** Returns a declaration value with transformed token values. */
-export const transformDeclarationValueTokens = (
+export const toTokenizedValue = (
 	/** @type {string} */
 	value,
-	/** @type {string | undefined} */
+	/** @type {string} */
 	prefix,
-	/** @type {string | undefined} */
+	/** @type {string} */
 	scale,
 ) => value.replace(
 	/([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g,

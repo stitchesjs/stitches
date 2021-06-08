@@ -52,7 +52,7 @@ describe('Issue #450', () => {
 				`.c-fEpFmO{--is-happy:true}` +
 			`}` +
 			// variant styles
-			`--stitches{--:3 c-fEpFmO-cfZmSQ-variant c-fEpFmO-FgYNE-variant}@media{` +
+			`--stitches{--:4 c-fEpFmO-cfZmSQ-variant c-fEpFmO-FgYNE-variant}@media{` +
 				`.c-fEpFmO-cfZmSQ-variant{--is-fulfilled-positively:true}` +
 				`.c-fEpFmO-FgYNE-variant{--is-satisfied-definitely:true}` +
 			`}`

@@ -1,9 +1,8 @@
-import { createObject } from './createObject.js'
-import { createComponentId } from './createComponentId.js'
 import { createMemoMap } from './createMemoMap.js'
 
-import { transformDeclarationValueTokens } from './stringify/transformDeclarationValueTokens.js'
-import { toTailDashed } from './convert/toDashed.js'
+import { toHash } from './convert/toHash.js'
+import { toTailDashed } from './convert/toTailDashed.js'
+import { toTokenizedValue } from './convert/toTokenizedValue.js'
 
 import { ThemeToken } from './ThemeToken.js'
 
@@ -23,7 +22,7 @@ export const createThemeFunction = (/** @type {Config} */ config, /** @type {Gro
 		className = typeof className === 'string' ? className : ''
 
 		/** @type {string} Theme name. @see `{CONFIG_PREFIX}t-{THEME_UUID}` */
-		className = className || `${toTailDashed(config.prefix)}t-${createComponentId(style)}`
+		className = className || `${toTailDashed(config.prefix)}t-${toHash(style)}`
 
 		const selector = `.${className}`
 
@@ -35,7 +34,7 @@ export const createThemeFunction = (/** @type {Config} */ config, /** @type {Gro
 
 			for (const token in style[scale]) {
 				const propertyName = `--${toTailDashed(config.prefix)}${scale}-${token}`
-				const propertyValue = transformDeclarationValueTokens(style[scale][token], config.prefix, scale)
+				const propertyValue = toTokenizedValue(style[scale][token], config.prefix, scale)
 
 				themeObject[scale][token] = new ThemeToken(propertyValue, token, scale, config.prefix)
 

@@ -77,7 +77,7 @@ describe('Issue #416: Composition versus Descendancy', () => {
 		)
 
 		test('All variant CSS is generated', () => expect(getCssString()).toBe(
-			`--stitches{--:3 c-PJLV-kgptgY-variant c-PJLV-cHNUhn-variant c-PJLV-vFFMz-variant}@media{` +
+			`--stitches{--:4 c-PJLV-kgptgY-variant c-PJLV-cHNUhn-variant c-PJLV-vFFMz-variant}@media{` +
 				`.c-PJLV-kgptgY-variant{--box-a:foo-bar}` +
 				`.c-PJLV-cHNUhn-variant{--box-b:foo-bar}` +
 				`.c-PJLV-vFFMz-variant{--box-z:foo-bar}` +

@@ -1,9 +1,11 @@
-import { createObject } from './createObject.js'
 import { createMemoMap } from './createMemoMap.js'
-import { createComponentId } from './createComponentId.js'
 
 import { toCssRules } from './convert/toCssRules.js'
-import { toTailDashed } from './convert/toDashed.js'
+import { toHash } from './convert/toHash.js'
+import { toTailDashed } from './convert/toTailDashed.js'
+
+import { define } from './utility/define.js'
+import { hasOwn } from './utility/hasOwn.js'
 
 const $$composers = Symbol.for('sxs.composers')
 
@@ -59,8 +61,8 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 							composers.add(composer)
 
 							for (const name in composer[3]) {
-								if (!possibleVariants.hasOwnProperty(name)) possibleVariants[name] = new Set()
-								if (!defaultVariants.hasOwnProperty(name)) defaultVariants[name] = composer[3][name]
+								if (!hasOwn(possibleVariants, name)) possibleVariants[name] = new Set()
+								if (!hasOwn(defaultVariants, name)) defaultVariants[name] = composer[3][name]
 							}
 
 							for (const variant of composer[2]) {
@@ -76,8 +78,8 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 						composers.add(composer)
 
 						for (const name in composer[3]) {
-							if (!possibleVariants.hasOwnProperty(name)) possibleVariants[name] = new Set()
-							if (!defaultVariants.hasOwnProperty(name)) defaultVariants[name] = composer[3][name]
+							if (!hasOwn(possibleVariants, name)) possibleVariants[name] = new Set()
+							if (!hasOwn(defaultVariants, name)) defaultVariants[name] = composer[3][name]
 						}
 
 						for (const variant of composer[2]) {
@@ -104,14 +106,12 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 /** Creates a composer from a configuration object. */
 const createComposer = (/** @type {ComposerInit} */ { variants: singularVariants, compoundVariants, defaultVariants, ...style }, /** @type {Config} */ config) => {
 	/** @type {string} Composer Unique Identifier. @see `{CONFIG_PREFIX}-?c-{STYLE_HASH}` */
-	const className = `${toTailDashed(config.prefix)}c-${createComponentId(style)}`
+	const className = `${toTailDashed(config.prefix)}c-${toHash(style)}`
 
 	/** @type {Variant[]} */
 	const variants = []
 
 	defaultVariants = Object.assign({}, defaultVariants)
-
-	const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object, key)
 
 	// add singular variants
 	if (typeof singularVariants === 'object' && singularVariants) {
@@ -204,10 +204,12 @@ const createRenderer = (
 
 			if (!sheet.rules.styled.cache.has(composerClassName)) {
 				sheet.rules.styled.cache.add(composerClassName)
+
 				let index = sheet.rules.styled.group.cssRules.length
-				for (const cssText of toCssRules(composerStyle, [`.${composerClassName}`], [], config)) {
+
+				toCssRules(composerStyle, [`.${composerClassName}`], [], config, cssText => {
 					sheet.rules.styled.group.insertRule(cssText, index++)
-				}
+				})
 			}
 
 			const variantsToAdd = []
@@ -222,14 +224,18 @@ const createRenderer = (
 					delete forwardProps[name]
 
 					const matchingPair = vMatch[name]
+
 					let comparablePair = comparableProps[name]
+
 					comparablePair = typeof comparablePair === 'object' && comparablePair || String(comparablePair)
 
 					// exact matches
 					if (comparablePair === matchingPair) continue
+
 					// responsive matches
 					else if (name in comparableProps && typeof comparablePair === 'object' && comparablePair !== null) {
 						let didMatch = false
+
 						for (const query in comparablePair) {
 							if (String(comparablePair[query]) === matchingPair) {
 								if (query !== '@initial') {
@@ -237,12 +243,16 @@ const createRenderer = (
 										[query in config.media ? config.media[query] : query]: vStyle
 									}
 								}
+
 								variantIndex += Object.keys(comparablePair).indexOf(query)
+
 								didMatch = true
 							}
 						}
+
 						if (!didMatch) continue variants
 					}
+
 					// non-matches
 					else continue variants
 				}
@@ -254,14 +264,18 @@ const createRenderer = (
 				if (variantToAdd === undefined) continue
 
 				for (const vStyle of variantToAdd) {
-					const variantClassName = `${composerClassName}-${createComponentId(vStyle)}-variant`
+					const variantClassName = `${composerClassName}-${toHash(vStyle)}-variant`
+
 					classSet.add(variantClassName)
-					if (!sheet.rules.varied.cache.has(variantClassName)) {
-						sheet.rules.varied.cache.add(variantClassName)
-						let index = sheet.rules.varied.group.cssRules.length
-						for (const cssText of toCssRules(vStyle, [`.${variantClassName}`], [], config)) {
-							sheet.rules.varied.group.insertRule(cssText, index++)
-						}
+
+					if (!sheet.rules.allvar.cache.has(variantClassName)) {
+						sheet.rules.allvar.cache.add(variantClassName)
+
+						let index = sheet.rules.allvar.group.cssRules.length
+
+						toCssRules(vStyle, [`.${variantClassName}`], [], config, cssText => {
+							sheet.rules.allvar.group.insertRule(cssText, index++)
+						})
 					}
 				}
 			}
@@ -270,7 +284,7 @@ const createRenderer = (
 		// apply css property styles
 		if (typeof css === 'object' && css) {
 			/** @type {string} Inline Class Unique Identifier. @see `{COMPOSER_UUID}-i{VARIANT_UUID}-css` */
-			const iClass = `${className}-i${createComponentId(css)}-css`
+			const iClass = `${className}-i${toHash(css)}-css`
 
 			classSet.add(iClass)
 
@@ -278,9 +292,10 @@ const createRenderer = (
 				sheet.rules.inline.cache.add(iClass)
 
 				let index = sheet.rules.inline.group.cssRules.length
-				for (const cssText of toCssRules(css, [`.${iClass}`], [], config)) {
+
+				toCssRules(css, [`.${iClass}`], [], config, cssText => {
 					sheet.rules.inline.group.insertRule(cssText, index++)
-				}
+				})
 			}
 		}
 
@@ -307,7 +322,7 @@ const createRenderer = (
 		return className
 	}
 
-	return createObject(render, {
+	return define(render, {
 		type,
 		className,
 		selector,
