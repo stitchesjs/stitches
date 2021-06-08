@@ -1,7 +1,7 @@
 const splitBySpace = /\s+(?![^()]*\))/
 const split = (fn) => (data) => fn(...(typeof data === 'string' ? String(data).split(splitBySpace) : [data]))
 
-export const polyfillableProps = {
+export const toPolyfilledValue = {
 	// prefixed properties
 	appearance: (d) => ({ WebkitAppearance: d, appearance: d }),
 	backfaceVisibility: (d) => ({ WebkitBackfaceVisibility: d, backfaceVisibility: d }),

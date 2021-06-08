@@ -1,7 +1,7 @@
 const mqunit = /([\d.]+)([^]*)/
 
 /** Returns a media query with polyfilled ranges. */
-export const transformMediaQueryRanges = (
+export const toResolvedMediaQueryRanges = (
 	/** @type {string} */
 	media
 ) => media.replace(

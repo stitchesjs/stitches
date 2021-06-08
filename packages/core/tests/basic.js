@@ -119,7 +119,7 @@ describe('Basic', () => {
 			`--stitches{--:2 c-dataoT}@media{` +
 				`.c-dataoT{color:DodgerBlue}` +
 			`}` +
-			`--stitches{--:4 c-dataoT-icaIZdx-css}@media{` +
+			`--stitches{--:5 c-dataoT-icaIZdx-css}@media{` +
 				`.c-dataoT-icaIZdx-css{color:Crimson}` +
 			`}`
 		)
@@ -145,8 +145,8 @@ describe('Basic', () => {
 		const cssString1of1 = getCssString()
 
 		expect(component1of1).toBeInstanceOf(Function)
-		expect(className1of1).toBe('c-imTdEZ c-imTdEZ-caIZdx-variant')
-		expect(cssString1of1).toBe(`--stitches{--:2 c-imTdEZ}@media{.c-imTdEZ{font-size:100%}}--stitches{--:3 c-imTdEZ-caIZdx-variant}@media{.c-imTdEZ-caIZdx-variant{color:Crimson}}`)
+		expect(className1of1).toBe('c-imTdEZ c-imTdEZ-caIZdx-sv')
+		expect(cssString1of1).toBe(`--stitches{--:2 c-imTdEZ}@media{.c-imTdEZ{font-size:100%}}--stitches{--:3 c-imTdEZ-caIZdx-sv}@media{.c-imTdEZ-caIZdx-sv{color:Crimson}}`)
 	})
 
 	test('Functionality of css() — utils', () => {

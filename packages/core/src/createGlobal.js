@@ -1,8 +1,9 @@
-import { createObject } from './createObject.js'
 import { createMemoMap } from './createMemoMap.js'
-import { createComponentId } from './createComponentId.js'
 
 import { toCssRules } from './convert/toCssRules.js'
+import { toHash } from './convert/toHash.js'
+
+import { define } from './utility/define.js'
 
 /** @typedef {import('.').Config} Config */
 /** @typedef {import('.').Style} Style */
@@ -15,7 +16,7 @@ export const createGlobalFunction = (/** @type {Config} */ config, /** @type {Gr
 	createGlobalFunctionMap(config, () => (/** @type {Style} */ style) => {
 		style = (typeof style === 'object' && style) || {}
 
-		const uuid = createComponentId(style)
+		const uuid = toHash(style)
 
 		const render = () => {
 			if (!sheet.rules.global.cache.has(uuid)) {
@@ -37,15 +38,15 @@ export const createGlobalFunction = (/** @type {Config} */ config, /** @type {Gr
 
 				let globalIndex = sheet.rules.global.group.cssRules.length
 
-				for (const cssText of toCssRules(style, [], [], config)) {
+				toCssRules(style, [], [], config, (cssText) => {
 					sheet.rules.global.group.insertRule(cssText, globalIndex++)
-				}
+				})
 			}
 
 			return ''
 		}
 
-		return createObject(render, {
+		return define(render, {
 			toString: render,
 			[Symbol.toPrimitive]: render,
 		})

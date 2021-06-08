@@ -1,4 +1,4 @@
-import { toLeadDashed } from './convert/toDashed.js'
+import { toTailDashed } from './convert/toTailDashed.js'
 
 /** CSS token value, name, and scale. */
 export class ThemeToken {
@@ -17,7 +17,7 @@ export class ThemeToken {
 
 	/** Returns a serialized name representing the token. */
 	get variable() {
-		return '-' + toLeadDashed(this.prefix) + toLeadDashed(this.scale) + '-' + this.token
+		return '--' + toTailDashed(this.prefix) + toTailDashed(this.scale) + this.token
 	}
 
 	/** Returns a serialized CSS var() representing the token. */

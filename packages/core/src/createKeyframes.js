@@ -1,9 +1,10 @@
-import { createObject } from './createObject.js'
 import { createMemoMap } from './createMemoMap.js'
-import { createComponentId } from './createComponentId.js'
 
 import { toCssRules } from './convert/toCssRules.js'
-import { toTailDashed } from './convert/toDashed.js'
+import { toHash } from './convert/toHash.js'
+import { toTailDashed } from './convert/toTailDashed.js'
+
+import { define } from './utility/define.js'
 
 /** @typedef {import('.').Config} Config */
 /** @typedef {import('.').Style} Style */
@@ -12,10 +13,10 @@ import { toTailDashed } from './convert/toDashed.js'
 const createKeyframesFunctionMap = createMemoMap()
 
 /** Returns a function that applies a keyframes rule. */
-export const createKeyframesFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) =>
+export const createKeyframesFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) => (
 	createKeyframesFunctionMap(config, () => (style) => {
 		/** @type {string} Keyframes Unique Identifier. @see `{CONFIG_PREFIX}-?k-{KEYFRAME_UUID}` */
-		const name = `${toTailDashed(config.prefix)}k-${createComponentId(style)}`
+		const name = `${toTailDashed(config.prefix)}k-${toHash(style)}`
 
 		const render = () => {
 			if (!sheet.rules.global.cache.has(name)) {
@@ -23,7 +24,11 @@ export const createKeyframesFunction = (/** @type {Config} */ config, /** @type 
 
 				let index = sheet.rules.global.group.cssRules.length
 
-				const cssText = `@keyframes ${name}{${toCssRules(style, [], [], config).join('')}}`
+				const cssRules = []
+
+				toCssRules(style, [], [], config, (cssText) => cssRules.push(cssText))
+
+				const cssText = `@keyframes ${name}{${cssRules.join('')}}`
 
 				sheet.rules.global.group.insertRule(cssText, index++)
 			}
@@ -31,7 +36,7 @@ export const createKeyframesFunction = (/** @type {Config} */ config, /** @type 
 			return name
 		}
 
-		return createObject(render, {
+		return define(render, {
 			get name() {
 				return render()
 			},
@@ -39,3 +44,4 @@ export const createKeyframesFunction = (/** @type {Config} */ config, /** @type 
 			[Symbol.toPrimitive]: render,
 		})
 	})
+) // prettier-ignore
