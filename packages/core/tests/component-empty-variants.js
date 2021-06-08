@@ -52,8 +52,8 @@ describe('Empty Variants', () => {
 		})
 
 		expect(getCssString()).toBe(
-			`--stitches{--:4 c-PJLV-lhHHWD-variant}@media{` +
-				`.c-PJLV-lhHHWD-variant{font-size:24px;color:black}` +
+			`--stitches{--:4 c-PJLV-lhHHWD-cv}@media{` +
+				`.c-PJLV-lhHHWD-cv{font-size:24px;color:black}` +
 			`}`
 		)
 	})

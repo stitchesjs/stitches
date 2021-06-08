@@ -22,10 +22,10 @@ describe('Issue #492', () => {
 		})
 
 		const componentClassName = `c-PJLV`
-		const variantSweetCarolineClassName = `c-PJLV-bVaDOZ-variant`
-		const variantSweetDreamsClassName = `c-PJLV-loBWDA-variant`
-		const variantResponsiveSweetCarolineClassName = `c-PJLV-iuHgfx-variant`
-		const variantResponsiveSweetDreamsClassName = `c-PJLV-cNdtIU-variant`
+		const variantSweetCarolineClassName = `c-PJLV-bVaDOZ-sv`
+		const variantSweetDreamsClassName = `c-PJLV-loBWDA-sv`
+		const variantResponsiveSweetCarolineClassName = `c-PJLV-iuHgfx-sv`
+		const variantResponsiveSweetDreamsClassName = `c-PJLV-cNdtIU-sv`
 
 		/** Rendering of the component as-is. */
 		const rendering1 = component()
@@ -39,7 +39,7 @@ describe('Issue #492', () => {
 		expect(
 			getCssString()
 		).toBe(
-			`--stitches{--:4 ${variantSweetCarolineClassName}}@media{` +
+			`--stitches{--:3 ${variantSweetCarolineClassName}}@media{` +
 				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
 			`}`
 		)
@@ -60,7 +60,7 @@ describe('Issue #492', () => {
 		expect(
 			getCssString()
 		).toBe(
-			`--stitches{--:4 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName}}@media{` +
+			`--stitches{--:3 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName}}@media{` +
 				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
 				`@media (min-width: 640px){.${variantResponsiveSweetDreamsClassName}{--sweet-dreams:true}}` +
 			`}`
@@ -83,7 +83,7 @@ describe('Issue #492', () => {
 		expect(
 			getCssString()
 		).toBe(
-			`--stitches{--:4 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName} ${variantSweetDreamsClassName} ${variantResponsiveSweetCarolineClassName}}@media{` +
+			`--stitches{--:3 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName} ${variantSweetDreamsClassName} ${variantResponsiveSweetCarolineClassName}}@media{` +
 				// last rendering
 				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
 				`@media (min-width: 640px){.${variantResponsiveSweetDreamsClassName}{--sweet-dreams:true}}` +
@@ -120,8 +120,8 @@ describe('Issue #492', () => {
 		})
 
 		const componentClassName = `c-evVBJo`
-		const variantInitialHeavyIronButterfly = `c-evVBJo-kiVNrc-variant`
-		const variantMinWidth640LedZeppelin = `c-evVBJo-lgYcvN-variant`
+		const variantInitialHeavyIronButterfly = `c-evVBJo-kiVNrc-sv`
+		const variantMinWidth640LedZeppelin = `c-evVBJo-lgYcvN-sv`
 
 		expect(
 			rendering1.className
@@ -135,7 +135,7 @@ describe('Issue #492', () => {
 			`--stitches{--:2 ${componentClassName}}@media{` +
 				`.${componentClassName}{--rock:true}` +
 			`}` +
-			`--stitches{--:4 ${variantInitialHeavyIronButterfly} ${variantMinWidth640LedZeppelin}}@media{` +
+			`--stitches{--:3 ${variantInitialHeavyIronButterfly} ${variantMinWidth640LedZeppelin}}@media{` +
 				`.${variantInitialHeavyIronButterfly}{--weight-iron-butterfly:true}` +
 				`@media (min-width: 640px){.${variantMinWidth640LedZeppelin}{--weight-led-zeppelin:true}}` +
 			`}`
