@@ -61,9 +61,9 @@ describe('Issue #416: Composition versus Descendancy', () => {
 		const [boxA, boxB, genY, boxZ] = wrapper.toJSON().children
 
 		const baselineClass = `c-PJLV`
-		const variantAClass = `c-PJLV-kgptgY-sv`
-		const variantBClass = `c-PJLV-cHNUhn-sv`
-		const variantZClass = `c-PJLV-vFFMz-sv`
+		const variantAClass = `c-PJLV-kgptgY-foo-bar`
+		const variantBClass = `c-PJLV-cHNUhn-foo-bar`
+		const variantZClass = `c-PJLV-vFFMz-foo-bar`
 
 		test('Box A has an active variant', () => expect(boxA.props.className).toBe(`${baselineClass} ${variantAClass}`))
 
@@ -77,10 +77,10 @@ describe('Issue #416: Composition versus Descendancy', () => {
 		)
 
 		test('All variant CSS is generated', () => expect(getCssString()).toBe(
-			`--stitches{--:3 c-PJLV-kgptgY-sv c-PJLV-cHNUhn-sv c-PJLV-vFFMz-sv}@media{` +
-				`.c-PJLV-kgptgY-sv{--box-a:foo-bar}` +
-				`.c-PJLV-cHNUhn-sv{--box-b:foo-bar}` +
-				`.c-PJLV-vFFMz-sv{--box-z:foo-bar}` +
+			`--stitches{--:3 c-PJLV-kgptgY-foo-bar c-PJLV-cHNUhn-foo-bar c-PJLV-vFFMz-foo-bar}@media{` +
+				`.c-PJLV-kgptgY-foo-bar{--box-a:foo-bar}` +
+				`.c-PJLV-cHNUhn-foo-bar{--box-b:foo-bar}` +
+				`.c-PJLV-vFFMz-foo-bar{--box-z:foo-bar}` +
 			`}`
 		))
 	}

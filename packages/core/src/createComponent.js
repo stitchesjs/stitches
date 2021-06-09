@@ -278,7 +278,10 @@ const createRenderer = (
 					else continue singularVariants
 				}
 
-				;(singularVariantsToAdd[variantIndex] = singularVariantsToAdd[variantIndex] || []).push(vStyle)
+				const vName = String(Object.keys(vMatch))
+				const vClass = `${vName}-${vMatch[vName]}`
+
+				;(singularVariantsToAdd[variantIndex] = singularVariantsToAdd[variantIndex] || []).push([vClass, vStyle])
 			}
 
 			compoundVariants: for (let [vMatch, vStyle] of composerCompoundVariants) {
@@ -330,8 +333,8 @@ const createRenderer = (
 			for (const variantToAdd of singularVariantsToAdd) {
 				if (variantToAdd === undefined) continue
 
-				for (const vStyle of variantToAdd) {
-					const variantClassName = `${composerClassName}-${toHash(vStyle)}-sv`
+				for (const [vClass, vStyle] of variantToAdd) {
+					const variantClassName = `${composerClassName}-${toHash(vStyle)}-${vClass}`
 
 					classSet.add(variantClassName)
 

@@ -41,7 +41,7 @@ describe('Issue #450', () => {
 		expect(
 			RenderOf(Happy, null).props.className
 		).toBe(
-			`c-fEpFmO c-fEpFmO-cfZmSQ-sv c-fEpFmO-FgYNE-sv`
+			`c-fEpFmO c-fEpFmO-cfZmSQ-fulfilled-positively c-fEpFmO-FgYNE-satisfied-definitely`
 		)
 
 		expect(
@@ -52,9 +52,9 @@ describe('Issue #450', () => {
 				`.c-fEpFmO{--is-happy:true}` +
 			`}` +
 			// variant styles
-			`--stitches{--:3 c-fEpFmO-cfZmSQ-sv c-fEpFmO-FgYNE-sv}@media{` +
-				`.c-fEpFmO-cfZmSQ-sv{--is-fulfilled-positively:true}` +
-				`.c-fEpFmO-FgYNE-sv{--is-satisfied-definitely:true}` +
+			`--stitches{--:3 c-fEpFmO-cfZmSQ-fulfilled-positively c-fEpFmO-FgYNE-satisfied-definitely}@media{` +
+				`.c-fEpFmO-cfZmSQ-fulfilled-positively{--is-fulfilled-positively:true}` +
+				`.c-fEpFmO-FgYNE-satisfied-definitely{--is-satisfied-definitely:true}` +
 			`}`
 		)
 	})
@@ -115,8 +115,8 @@ describe('Issue #450', () => {
 		const tileComponentClass = `c-kTjQBa`
 		const roundedTileComponentClass = `c-gLsErE`
 
-		const variantLightBlueClass = `c-kTjQBa-ilDyRi-sv`
-		const variantAppearanceSecondaryClass = `c-kTjQBa-cOChOn-sv`
+		const variantLightBlueClass = `c-kTjQBa-ilDyRi-color-lightBlue`
+		const variantAppearanceSecondaryClass = `c-kTjQBa-cOChOn-appearance-secondary`
 		const variantCompoundClass = `c-kTjQBa-gYqlvA-cv`
 
 		// Normal variants

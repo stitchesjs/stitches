@@ -22,10 +22,10 @@ describe('Issue #492', () => {
 		})
 
 		const componentClassName = `c-PJLV`
-		const variantSweetCarolineClassName = `c-PJLV-bVaDOZ-sv`
-		const variantSweetDreamsClassName = `c-PJLV-loBWDA-sv`
-		const variantResponsiveSweetCarolineClassName = `c-PJLV-iuHgfx-sv`
-		const variantResponsiveSweetDreamsClassName = `c-PJLV-cNdtIU-sv`
+		const variantSweetCarolineClassName = `c-PJLV-bVaDOZ-sweet-caroline`
+		const variantSweetDreamsClassName = `c-PJLV-loBWDA-sweet-dreams`
+		const variantResponsiveSweetCarolineClassName = `c-PJLV-iuHgfx-sweet-caroline`
+		const variantResponsiveSweetDreamsClassName = `c-PJLV-cNdtIU-sweet-dreams`
 
 		/** Rendering of the component as-is. */
 		const rendering1 = component()
@@ -120,8 +120,8 @@ describe('Issue #492', () => {
 		})
 
 		const componentClassName = `c-evVBJo`
-		const variantInitialHeavyIronButterfly = `c-evVBJo-kiVNrc-sv`
-		const variantMinWidth640LedZeppelin = `c-evVBJo-lgYcvN-sv`
+		const variantInitialHeavyIronButterfly = `c-evVBJo-kiVNrc-heavy-iron-butterfly`
+		const variantMinWidth640LedZeppelin = `c-evVBJo-lgYcvN-heavy-led-zeppelin`
 
 		expect(
 			rendering1.className
