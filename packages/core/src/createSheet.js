@@ -34,7 +34,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 		// iterate all stylesheets until a hydratable stylesheet is found
 		for (const sheet of sheets) {
-			if (sheet.href && !styleSheet.href.startsWith(location.origin)) continue
+			if (sheet.href && !sheet.href.startsWith(location.origin)) continue
 
 			for (let index = 0, rules = sheet.cssRules; rules[index]; ++index) {
 				/** @type {CSSStyleRule} Possible indicator rule. */
