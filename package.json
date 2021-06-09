@@ -18,7 +18,7 @@
     "lint:tsc": "node .bin/lint-tsc.js",
     "prerelease": "npm run build && npm run test",
     "release": "lerna publish",
-    "release:canary": "npm run prerelease && lerna publish --dist-tag canary",
+    "release:canary": "npm run prerelease && lerna publish prerelease --force-publish",
     "release:pack": "npm run prerelease && lerna exec -- npm pack",
     "postinstall": "lerna bootstrap --use-workspaces",
     "test": "node .bin/test.js",
