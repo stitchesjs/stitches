@@ -1,10 +1,10 @@
 import { createCss } from './createCss.js'
+import { defaultThemeMap } from '../../core/src/default/defaultThemeMap.js'
+import { getCachedConfig } from './utility/getCachedConfig.js'
 
-const getReusableSheet = () => getReusableSheet.config || (getReusableSheet.config = createCss())
+const css = (...args) => getCachedConfig().css(...args)
+const global = (...args) => getCachedConfig().global(...args)
+const keyframes = (...args) => getCachedConfig().keyframes(...args)
+const styled = (...args) => getCachedConfig().styled(...args)
 
-const css = (...args) => getReusableSheet().css(...args)
-const global = (...args) => getReusableSheet().global(...args)
-const keyframes = (...args) => getReusableSheet().keyframes(...args)
-const styled = (...args) => getReusableSheet().styled(...args)
-
-export { createCss, css, global, keyframes, styled }
+export { createCss, css, global, keyframes, styled, defaultThemeMap }

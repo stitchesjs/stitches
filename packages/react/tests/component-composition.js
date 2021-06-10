@@ -8,14 +8,14 @@ describe('Composition', () => {
 		expect(getCssString()).toBe('')
 	})
 
-	test('Renders a component as the final composition by default', () => {
+	test('Does not render a component without an explicit rendering', () => {
 		const { styled, getCssString } = createCss()
 		const red = styled({ color: 'red' })
 		const size14 = styled({ fontSize: '14px' })
 		const bold = styled({ fontWeight: 'bold' })
 		const title = styled(red, size14, bold, { fontFamily: 'monospace' })
 		expect(`${title}`).toBe('.c-gmqXFB')
-		expect(getCssString()).toBe(`--stitches{--:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{.c-gmqXFB{color:red}.c-hzkWus{font-size:14px}.c-cQFdVt{font-weight:bold}.c-kngyIZ{font-family:monospace}}`)
+		expect(getCssString()).toBe('')
 	})
 
 	test('Renders a component with all compositions', () => {

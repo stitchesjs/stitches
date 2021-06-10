@@ -1,14 +1,12 @@
-import { createMemoMap } from './createMemoMap.js'
+import { $$composers } from '../utility/composers.js'
+import { createMemo } from '../utility/createMemo.js'
+import { define } from '../utility/define.js'
+import { hasNames } from '../utility/hasNames.js'
+import { hasOwn } from '../utility/hasOwn.js'
 
-import { toCssRules } from './convert/toCssRules.js'
-import { toHash } from './convert/toHash.js'
-import { toTailDashed } from './convert/toTailDashed.js'
-
-import { define } from './utility/define.js'
-import { hasNames } from './utility/hasNames.js'
-import { hasOwn } from './utility/hasOwn.js'
-
-const $$composers = Symbol.for('sxs.composers')
+import { toCssRules } from '../convert/toCssRules.js'
+import { toHash } from '../convert/toHash.js'
+import { toTailDashed } from '../convert/toTailDashed.js'
 
 /** @typedef {import('.').Config} Config */
 /** @typedef {import('.').Style} Style */
@@ -25,7 +23,7 @@ const $$composers = Symbol.for('sxs.composers')
 /** @typedef {{ [name: string]: { [value: string]: Style } }} SingularVariantsInit */
 /** @typedef {{ variants: SingularVariantsInit, compoundVariants: CompoundVariantsInit, defaultVariants: DefaultVariants } & Style} ComposerInit */
 
-const createComponentFunctionMap = createMemoMap()
+const createComponentFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
 export const createComponentFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) =>
@@ -35,9 +33,6 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 
 		/** @type {Set<Composer>} Composers. */
 		const composers = new Set()
-
-		const possibleVariants = {}
-		const defaultVariants = {}
 
 		for (const arg of args) {
 			// skip any void argument
@@ -60,34 +55,12 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 					if ($$composers in arg)
 						for (const composer of arg[$$composers]) {
 							composers.add(composer)
-
-							for (const name in composer[3]) {
-								if (!hasOwn(possibleVariants, name)) possibleVariants[name] = new Set()
-								if (!hasOwn(defaultVariants, name)) defaultVariants[name] = composer[3][name]
-							}
-
-							for (const variant of composer[2]) {
-								for (const name in variant[0]) {
-									possibleVariants[name].add(variant[0][name])
-								}
-							}
 						}
 					// otherwise, add a new composer to this component
 					else if (!('$$typeof' in arg)) {
 						const composer = createComposer(arg, config)
 
 						composers.add(composer)
-
-						for (const name in composer[3]) {
-							if (!hasOwn(possibleVariants, name)) possibleVariants[name] = new Set()
-							if (!hasOwn(defaultVariants, name)) defaultVariants[name] = composer[3][name]
-						}
-
-						for (const variant of composer[2]) {
-							for (const name in variant[0]) {
-								possibleVariants[name].add(variant[0][name])
-							}
-						}
 					}
 
 					break
@@ -99,9 +72,9 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 
 		// set the component type if none was set
 		if (componentType == null) componentType = 'span'
-		if (!composers.size) composers.add(['PJLV', {}, [], Object.create(null), [], []])
+		if (!composers.size) composers.add(['PJLV', {}, [], Object.create(null), [], [], []])
 
-		return createRenderer(config, componentType, composers, defaultVariants, possibleVariants, sheet)
+		return createRenderer(config, componentType, composers, sheet)
 	})
 
 /** Creates a composer from a configuration object. */
@@ -115,17 +88,15 @@ const createComposer = (/** @type {ComposerInit} */ { variants: singularVariants
 	const composerSingularVariants = []
 	const composerCompoundVariants = []
 	const processedDefaultVariants = Object.create(null)
+	const canHaveUndefinedVariants = []
 
 	for (const variantName in defaultVariants) {
 		processedDefaultVariants[variantName] = String(defaultVariants[variantName])
 	}
 
-	defaultVariants = Object.assign({}, defaultVariants)
-
 	// add singular variants
 	if (typeof singularVariants === 'object' && singularVariants) {
 		for (const name in singularVariants) {
-			if (!hasOwn(defaultVariants, name)) defaultVariants[name] = 'undefined'
 			if (!hasOwn(processedDefaultVariants, name)) processedDefaultVariants[name] = 'undefined'
 
 			const variantPairs = singularVariants[name]
@@ -133,6 +104,8 @@ const createComposer = (/** @type {ComposerInit} */ { variants: singularVariants
 			for (const pair in variantPairs) {
 				/** @type {VariantMatches} */
 				const vMatch = { [name]: String(pair) }
+
+				if (String(pair) === 'undefined') canHaveUndefinedVariants.push(name)
 
 				/** @type {Style} */
 				const vStyle = variantPairs[pair]
@@ -171,15 +144,13 @@ const createComposer = (/** @type {ComposerInit} */ { variants: singularVariants
 		}
 	}
 
-	return /** @type {Composer} */ ([className, style, variants, defaultVariants, composerSingularVariants, composerCompoundVariants])
+	return /** @type {Composer} */ ([className, style, variants, processedDefaultVariants, composerSingularVariants, composerCompoundVariants, canHaveUndefinedVariants])
 } // prettier-ignore
 
 const createRenderer = (
 	/** @type {Config} */ config,
 	/** @type {string | Function} */ type,
 	/** @type {Set<Composer>} */ composers,
-	/** @type {DefaultVariants} */ defaultVariants,
-	/** @type {{ [name: string]: Set<string> }} */ possibleVariants,
 	/** @type {GroupSheet} */ sheet
 ) => {
 	const [className] = composers.keys().next().value
@@ -193,11 +164,12 @@ const createRenderer = (
 		let comparablePropsLead = {}
 		let comparablePropsTail = { ...forwardProps }
 
-		const defaultVariants = getDefaultVariantsFromComposers(composers)
+		const [defaultVariants, canHaveUndefinedVariants] = getDefaultVariantsFromComposers(composers)
 
 		for (const name in defaultVariants) {
 			if (name in comparablePropsTail) {
 				let propData = comparablePropsTail[name]
+
 				if (typeof propData === 'object' && propData !== null) {
 					comparablePropsTail[name] = {
 						'@initial': defaultVariants[name],
@@ -205,8 +177,10 @@ const createRenderer = (
 					}
 					continue
 				}
+
 				propData = String(propData)
-				if (propData === 'undefined' && !possibleVariants[name].has('undefined')) {
+
+				if (propData === 'undefined' && !canHaveUndefinedVariants.has(name)) {
 					comparablePropsTail[name] = defaultVariants[name]
 				}
 			} else {
@@ -403,11 +377,10 @@ const createRenderer = (
 			selector,
 			props: forwardProps,
 			toString: renderedToString,
-			[Symbol.toPrimitive]: renderedToString,
 		}
 	}
 
-	const baseToString = () => {
+	const toString = () => {
 		if (!sheet.rules.styled.cache.has(className)) render()
 		return className
 	}
@@ -417,19 +390,22 @@ const createRenderer = (
 		className,
 		selector,
 		[$$composers]: composers,
-		toString: baseToString,
-		[Symbol.toPrimitive]: baseToString,
+		toString,
 	})
 } // prettier-ignore
 
-const getDefaultVariantsFromComposers = (composers) => {
-	const defaultVariants = {}
+const getDefaultVariantsFromComposers = (/** @type {Set<Composer>} */ composers) => {
+	const combinedDefaultVariants = {}
 
-	for (const [, , , composerDefaultVariants] of composers) {
-		for (const name in composerDefaultVariants) {
-			defaultVariants[name] = String(composerDefaultVariants[name])
+	const combinedCanHaveUndefinedVariants = []
+
+	for (const [, , , defaultVariants, , , canHaveUndefinedVariants] of composers) {
+		combinedCanHaveUndefinedVariants.push(...canHaveUndefinedVariants)
+
+		for (const name in defaultVariants) {
+			combinedDefaultVariants[name] = defaultVariants[name]
 		}
 	}
 
-	return defaultVariants
+	return [combinedDefaultVariants, new Set(combinedCanHaveUndefinedVariants)]
 }

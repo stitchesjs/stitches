@@ -1,16 +1,15 @@
-import { createMemoMap } from './createMemoMap.js'
+import { ThemeToken } from '../ThemeToken.js'
+import { createMemo } from '../utility/createMemo.js'
 
-import { toHash } from './convert/toHash.js'
-import { toTailDashed } from './convert/toTailDashed.js'
-import { toTokenizedValue } from './convert/toTokenizedValue.js'
-
-import { ThemeToken } from './ThemeToken.js'
+import { toHash } from '../convert/toHash.js'
+import { toTailDashed } from '../convert/toTailDashed.js'
+import { toTokenizedValue } from '../convert/toTokenizedValue.js'
 
 /** @typedef {import('./createCss.js').Config} Config */
 /** @typedef {import('./createCss.js').Style} Style */
 /** @typedef {import('./createSheet.js').GroupSheet} GroupSheet */
 
-const createThemeFunctionMap = createMemoMap()
+const createThemeFunctionMap = createMemo()
 
 /** Returns a function that applies a theme and returns tokens of that theme. */
 export const createThemeFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) => (

@@ -1,15 +1,14 @@
-import { createMemoMap } from './createMemoMap.js'
+import { createMemo } from '../utility/createMemo.js'
+import { define } from '../utility/define.js'
 
-import { toCssRules } from './convert/toCssRules.js'
-import { toHash } from './convert/toHash.js'
-
-import { define } from './utility/define.js'
+import { toCssRules } from '../convert/toCssRules.js'
+import { toHash } from '../convert/toHash.js'
 
 /** @typedef {import('.').Config} Config */
 /** @typedef {import('.').Style} Style */
 /** @typedef {import('.').GroupSheet} GroupSheet */
 
-const createGlobalFunctionMap = createMemoMap()
+const createGlobalFunctionMap = createMemo()
 
 /** Returns a function that applies global styles. */
 export const createGlobalFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) =>

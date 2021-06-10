@@ -1,18 +1,18 @@
-// default configuration
 import { defaultMedia } from './default/defaultMedia.js'
 import { defaultThemeMap } from './default/defaultThemeMap.js'
 
-// creation utilities
-import { createComponentFunction } from './createComponent.js'
-import { createGlobalFunction } from './createGlobal.js'
-import { createKeyframesFunction } from './createKeyframes.js'
-import { createThemeFunction } from './createTheme.js'
+import { createMemo } from './utility/createMemo.js'
+
+import { createComponentFunction } from './features/css.js'
+import { createGlobalFunction } from './features/global.js'
+import { createKeyframesFunction } from './features/keyframes.js'
+import { createThemeFunction } from './features/theme.js'
+
 import { createSheet } from './createSheet.js'
-import { createMemoMap } from './createMemoMap.js'
 
 /** @typedef {import('.').Config} Config */
 
-const createCssMap = createMemoMap()
+const createCssMap = createMemo()
 
 export const createCss = (/** @type {Partial<Config>} */ config) => {
 	let didRun = false

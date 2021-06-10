@@ -214,7 +214,7 @@ describe('Variants with defaults', () => {
 		const selector = component.toString()
 
 		expect(selector).toBe('.c-PJLV')
-		expect(toString()).toBe(`--stitches{--:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}`)
+		expect(toString()).toBe('')
 	})
 })
 
