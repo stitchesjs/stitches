@@ -1,26 +1,21 @@
 import { toTailDashed } from './convert/toTailDashed.js'
 
-/** CSS token value, name, and scale. */
 export class ThemeToken {
-	/** @type {(value: string, token: string, scale: string, prefix: string) => void} */
-	constructor(value, token, scale, prefix) {
-		this.value = value
-		this.token = token
-		this.scale = scale
-		this.prefix = prefix
+	constructor(name, value, scale, prefix) {
+		this.name = name == null ? '' : String(name)
+		this.value = value == null ? '' : String(value)
+		this.scale = scale == null ? '' : String(scale)
+		this.prefix = prefix == null ? '' : String(prefix)
 	}
 
-	/** Returns a serialized CSS var() representing the token. */
 	get computedValue() {
 		return 'var(' + this.variable + ')'
 	}
 
-	/** Returns a serialized name representing the token. */
 	get variable() {
-		return '--' + toTailDashed(this.prefix) + toTailDashed(this.scale) + this.token
+		return '--' + toTailDashed(this.prefix) + toTailDashed(this.scale) + this.name
 	}
 
-	/** Returns a serialized CSS var() representing the token. */
 	toString() {
 		return this.computedValue
 	}

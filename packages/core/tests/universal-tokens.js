@@ -235,7 +235,7 @@ describe('Tokens', () => {
 			`--stitches{--:0 t-hxjLZl}@media{` +
 				`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
 			`}` +
-			`--stitches{--:1 dQhsZl}@media{` +
+			`--stitches{--:1 ejuGBl}@media{` +
 				`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}` +
 			`}`
 		)
@@ -259,7 +259,7 @@ describe('Tokens', () => {
 		})()
 
 		expect(getCssString()).toBe(
-			`--stitches{--:1 dQhsZl}@media{article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}}`,
+			`--stitches{--:1 ejuGBl}@media{article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}}`,
 		)
 
 		void `${mytheme}`
@@ -267,7 +267,7 @@ describe('Tokens', () => {
 		expect(getCssString()).toBe(
 			`--stitches{--:0 my-theme}@media{` +
 				`.my-theme{--space-sp1:100px;--space-sp2:200px}` +
-			`}--stitches{--:1 dQhsZl}@media{` +
+			`}--stitches{--:1 ejuGBl}@media{` +
 				`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}` +
 			`}`
 		)
@@ -294,7 +294,7 @@ describe('Tokens', () => {
 			`--stitches{--:0 t-hxjLZl}@media{` +
 				`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
 			`}` +
-			`--stitches{--:1 dQhsZl}@media{` +
+			`--stitches{--:1 ejuGBl}@media{` +
 				`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}` +
 			`}`
 		)
