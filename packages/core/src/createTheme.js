@@ -34,7 +34,7 @@ export const createThemeFunction = (/** @type {Config} */ config, /** @type {Gro
 
 			for (const token in style[scale]) {
 				const propertyName = `--${toTailDashed(config.prefix)}${scale}-${token}`
-				const propertyValue = toTokenizedValue(style[scale][token], config.prefix, scale)
+				const propertyValue = toTokenizedValue(String(style[scale][token]), config.prefix, scale)
 
 				themeObject[scale][token] = new ThemeToken(propertyValue, token, scale, config.prefix)
 
