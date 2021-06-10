@@ -1,6 +1,6 @@
 {
   "name": "@stitches/react",
-  "version": "0.2.0-canary.4",
+  "version": "0.2.0-canary.5",
   "description": "The modern CSS-in-JS library",
   "type": "module",
   "main": "dist/index.cjs",
