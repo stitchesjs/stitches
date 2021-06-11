@@ -16,8 +16,8 @@ let RenderOf = (...args) => {
 		const value = props[prop]
 
 		// serialize objects as they might appear in a render
-		if (typeof value === 'object' && value !== null && value[Symbol.toPrimitive]) {
-			props[prop] = value[Symbol.toPrimitive]()
+		if (typeof value === 'object' && value !== null && value.toString) {
+			props[prop] = value.toString()
 		}
 	}
 

@@ -1,16 +1,15 @@
-import { createMemoMap } from './createMemoMap.js'
+import { createMemo } from '../utility/createMemo.js'
+import { define } from '../utility/define.js'
 
-import { toCssRules } from './convert/toCssRules.js'
-import { toHash } from './convert/toHash.js'
-import { toTailDashed } from './convert/toTailDashed.js'
+import { toCssRules } from '../convert/toCssRules.js'
+import { toHash } from '../convert/toHash.js'
+import { toTailDashed } from '../convert/toTailDashed.js'
 
-import { define } from './utility/define.js'
+/** @typedef {import('..').Config} Config */
+/** @typedef {import('..').Style} Style */
+/** @typedef {import('..').GroupSheet} GroupSheet */
 
-/** @typedef {import('.').Config} Config */
-/** @typedef {import('.').Style} Style */
-/** @typedef {import('.').GroupSheet} GroupSheet */
-
-const createKeyframesFunctionMap = createMemoMap()
+const createKeyframesFunctionMap = createMemo()
 
 /** Returns a function that applies a keyframes rule. */
 export const createKeyframesFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) => (
