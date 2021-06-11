@@ -318,4 +318,28 @@ describe('Tokens', () => {
 			`}`
 		)
 	})
+
+	test('Authors can render custom units', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				sizes: {
+					five: '5px',
+				},
+			}
+		})
+
+		global({
+			body: {
+				marginLeft: '5--sizes-five'
+			}
+		})()
+
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-bhZLEQ}@media{` +
+				`:root,.t-bhZLEQ{--sizes-five:5px}` +
+			`}--stitches{--:1 gvABwA}@media{` +
+				`body{margin-left:calc(var(--sizes-five)*5)}` +
+			`}`
+		)
+	})
 }) // prettier-ignore
