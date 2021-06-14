@@ -15,7 +15,7 @@ const toPhash = (/** @type {number} */ h, /** @type {string} */ x) => {
 	return h
 }
 
-export const toHash = (/** @type {string} */ value) => toAlphabeticName(
+export const toHash = (/** @type {object} */ value) => toAlphabeticName(
 	toPhash(
 		5381,
 		JSON.stringify(value)

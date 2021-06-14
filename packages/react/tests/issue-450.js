@@ -141,7 +141,7 @@ describe('Issue #450', () => {
 		expect(
 			RenderOf(RoundedTile).props.className
 		).toBe(
-			`${tileComponentClass} ${variantAppearanceSecondaryClass} ${variantLightBlueClass} ${variantCompoundClass} ${roundedTileComponentClass}`
+			`${tileComponentClass} ${roundedTileComponentClass} ${variantAppearanceSecondaryClass} ${variantLightBlueClass} ${variantCompoundClass}`
 		)
 
 		// Restyled compound variants (compound is activated explicitly by props)
@@ -150,7 +150,7 @@ describe('Issue #450', () => {
 		expect(
 			RenderOf(RoundedTile, { appearance: 'secondary', color: 'lightBlue' }).props.className
 		).toBe(
-			`${tileComponentClass} ${variantAppearanceSecondaryClass} ${variantLightBlueClass} ${variantCompoundClass} ${roundedTileComponentClass}`
+			`${tileComponentClass} ${roundedTileComponentClass} ${variantAppearanceSecondaryClass} ${variantLightBlueClass} ${variantCompoundClass}`
 		)
 	})
 }) // prettier-ignore
