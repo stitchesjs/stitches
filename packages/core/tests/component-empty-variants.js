@@ -2,7 +2,7 @@ import { createCss } from '../src/index.js'
 
 describe('Empty Variants', () => {
 	test('Empty Variants', () => {
-		const { css, toString } = createCss()
+		const { css, getCssString } = createCss()
 
 		css({
 			variants: {
@@ -24,11 +24,11 @@ describe('Empty Variants', () => {
 			size: { '@initial': 'xl' },
 		})
 
-		expect(toString()).toBe('')
+		expect(getCssString()).toBe('')
 	})
 
 	test('Empty Variants', () => {
-		const { css, toString } = createCss()
+		const { css, getCssString } = createCss()
 
 		css({
 			variants: {
@@ -51,6 +51,10 @@ describe('Empty Variants', () => {
 			size: { '@initial': 'xl' },
 		})
 
-		expect(toString()).toBe('@media all{.sxwklokppy7e--c2{font-size:24px;color:black;}}')
+		expect(getCssString()).toBe(
+			`--stitches{--:4 c-PJLV-lhHHWD-cv}@media{` +
+				`.c-PJLV-lhHHWD-cv{font-size:24px;color:black}` +
+			`}`
+		)
 	})
-})
+}) // prettier-ignore

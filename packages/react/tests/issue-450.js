@@ -1,40 +1,93 @@
 import * as React from 'react'
 import * as renderer from 'react-test-renderer'
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
-describe('Issue #416', () => {
-	test('Compound variants apply to composed components', () => {
+let RenderOf = (...typeThenPropsThenChildren) => {
+	let Rendered
+
+	void renderer.act(() => {
+		Rendered = renderer.create(React.createElement(...typeThenPropsThenChildren))
+	})
+
+	return Rendered.toJSON()
+}
+
+describe('Issue #450', () => {
+	test('Compound variants apply to composed components (basic)', () => {
+		const { styled, getCssString } = createCss()
+
+		const Happy = styled('div', {
+			'--is-happy': true,
+
+			variants: {
+				fulfilled: {
+					positively: {
+						'--is-fulfilled-positively': true,
+					},
+				},
+				satisfied: {
+					definitely: {
+						'--is-satisfied-definitely': true,
+					},
+				},
+			},
+
+			defaultVariants: {
+				fulfilled: 'positively',
+				satisfied: 'definitely',
+			},
+		})
+
+		expect(
+			RenderOf(Happy, null).props.className
+		).toBe(
+			`c-fEpFmO c-fEpFmO-cfZmSQ-fulfilled-positively c-fEpFmO-FgYNE-satisfied-definitely`
+		)
+
+		expect(
+			getCssString()
+		).toBe(
+			// composition styles
+			`--stitches{--:2 c-fEpFmO}@media{` +
+				`.c-fEpFmO{--is-happy:true}` +
+			`}` +
+			// variant styles
+			`--stitches{--:3 c-fEpFmO-cfZmSQ-fulfilled-positively c-fEpFmO-FgYNE-satisfied-definitely}@media{` +
+				`.c-fEpFmO-cfZmSQ-fulfilled-positively{--is-fulfilled-positively:true}` +
+				`.c-fEpFmO-FgYNE-satisfied-definitely{--is-satisfied-definitely:true}` +
+			`}`
+		)
+	})
+
+	test('Compound variants apply to composed components (complex)', () => {
 		const { styled } = createCss()
 
 		const Tile = styled('div', {
 			'--tile': 1,
-			variants: {
+
+			'variants': {
 				appearance: {
 					primary: {},
-					secondary: {
-						'--appearance-secondary': 1,
-					},
+					secondary: { '--appearance': 'secondary' },
 				},
 				color: {
 					red: {},
-					purple: {
-						'--color-purple': 1,
-					},
-					lightBlue: {
-						'--color-lightblue': 1,
-					},
+					purple: { '--color': 'purple' },
+					lightBlue: { '--color': 'lightBlue' },
 				},
 			},
-			compoundVariants: [
+
+			'compoundVariants': [
 				{
 					appearance: 'secondary',
 					color: 'lightBlue',
 					css: {
-						'--compound-appearance_secondary-color_lightblue': 1,
+						'--compound': 'appearance secondary / color lightBlue',
 					},
 				},
 			],
-			defaultVariants: {
+
+			'defaultVariants': {
 				appearance: 'primary',
 				color: 'red',
 			},
@@ -42,46 +95,62 @@ describe('Issue #416', () => {
 
 		const RoundedTile = styled(Tile, {
 			'--rounded-tile': 1,
-			defaultVariants: {
+
+			'defaultVariants': {
 				appearance: 'secondary',
 				color: 'lightBlue',
 			},
 		})
 
-		let RenderOf = (...args) => {
+		let RenderOf = (...typeThenPropsThenChildren) => {
 			let Rendered
 
 			void renderer.act(() => {
-				Rendered = renderer.create(React.createElement(...args))
+				Rendered = renderer.create(React.createElement(...typeThenPropsThenChildren))
 			})
 
 			return Rendered.toJSON()
 		}
 
-		const classOfAppearancePrimary = 'sx7vw5z03kz9--appearance-primary'
-		const classOfAppearanceSecondary = 'sx7vw5z8kgjb--appearance-secondary'
-		const classOfColorLightBlue = 'sx7vw5z2xt05--color-lightBlue'
-		const classOfColorRed = `sx7vw5z03kz8--color-red`
-		const classOfCompound = 'sx7vw5zt2yhf--c2'
+		const tileComponentClass = `c-kTjQBa`
+		const roundedTileComponentClass = `c-gLsErE`
 
-		/* Normal variants */
-		// appearance: primary, color: red
-		expect(RenderOf(Tile, null, 'Red').props.className).toBe(`sxkpryy sxkpryy03kze--appearance-primary sxkpryy03kze--color-red`)
-		// appearance: primary, color: lightblue
-		expect(RenderOf(Tile, { color: 'lightBlue' }, 'Blue').props.className).toBe(`sxkpryy sxkpryy03kze--appearance-primary sxkpryy2xt05--color-lightBlue`)
+		const variantLightBlueClass = `c-kTjQBa-ilDyRi-color-lightBlue`
+		const variantAppearanceSecondaryClass = `c-kTjQBa-cOChOn-appearance-secondary`
+		const variantCompoundClass = `c-kTjQBa-gYqlvA-cv`
 
-		/* Compound variants */
-		// appearance: primary, color: lightblue
-		expect(RenderOf(Tile, { appearance: 'secondary' }, 'Red').props.className).toBe(`sxkpryy sxkpryy8kgjb--appearance-secondary sxkpryy03kze--color-red`)
-		// appearance: secondary, compound*2
-		expect(RenderOf(Tile, { appearance: 'secondary', color: 'lightBlue' }, 'Red').props.className).toBe(`sxkpryy sxkpryy8kgjb--appearance-secondary sxkpryy2xt05--color-lightBlue sxkpryyt2yhf--c2`)
+		// Normal variants
 
-		/* ❌ Restyled compound variants (default) */
+		// renders { appearance: "primary"; color: "red" }, neither empty variant will render
+		expect(RenderOf(Tile).props.className).toBe(tileComponentClass)
+
+		// renders { appearance: "primary"; color: "lightBlue" }, the { color: "lightBlue" } variant will render
+		expect(RenderOf(Tile, { color: 'lightBlue' }).props.className).toBe(`${tileComponentClass} ${variantLightBlueClass}`)
+
+		// Compound variants
+
+		// renders { appearance: "secondary"; color: "lightBlue" }, the { appearance: "secondary" } variant will render
+		expect(RenderOf(Tile, { appearance: 'secondary' }).props.className).toBe(`${tileComponentClass} ${variantAppearanceSecondaryClass}`)
+
+		// renders { appearance: "secondary"; color: "lightBlue" }, the { appearance: "secondary" }, { color: "lightBlue" } variants will render
+		expect(RenderOf(Tile, { appearance: 'secondary', color: 'lightBlue' }).props.className).toBe(`${tileComponentClass} ${variantAppearanceSecondaryClass} ${variantLightBlueClass} ${variantCompoundClass}`)
+
+		// Restyled compound variants (compound is activated implicitly by defaultVariants)
+
 		// appearance: primary, color: red, +
-		expect(RenderOf(RoundedTile, null, 'Blue').props.className).toBe(`sxkpryy sxkpryy8kgjb--appearance-secondary sxkpryy2xt05--color-lightBlue sxkpryyt2yhf--c2 sxhgh1l`)
+		expect(
+			RenderOf(RoundedTile).props.className
+		).toBe(
+			`${tileComponentClass} ${roundedTileComponentClass} ${variantAppearanceSecondaryClass} ${variantLightBlueClass} ${variantCompoundClass}`
+		)
 
-		/* ❌ Restyled compound variants (explicit) */
+		// Restyled compound variants (compound is activated explicitly by props)
+
 		// appearance: secondary, compound * 2, +
-		expect(RenderOf(RoundedTile, { appearance: 'secondary', color: 'lightBlue' }, 'Blue').props.className).toBe(`sxkpryy sxkpryy8kgjb--appearance-secondary sxkpryy2xt05--color-lightBlue sxkpryyt2yhf--c2 sxhgh1l`)
+		expect(
+			RenderOf(RoundedTile, { appearance: 'secondary', color: 'lightBlue' }).props.className
+		).toBe(
+			`${tileComponentClass} ${roundedTileComponentClass} ${variantAppearanceSecondaryClass} ${variantLightBlueClass} ${variantCompoundClass}`
+		)
 	})
-})
+}) // prettier-ignore

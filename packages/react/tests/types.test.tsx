@@ -1,5 +1,5 @@
 import * as React from 'react'
-import createStyled, { StitchesCss, StitchesVariants, StitchesComponentWithAutoCompleteForReactComponents, StitchesComponentWithAutoCompleteForJSXElements } from '../types/index.d'
+import createStyled, { StitchesCss, StitchesVariants, StitchesComponentWithAutoCompleteForReactComponents, StitchesComponentWithAutoCompleteForJSXElements } from '../types/styled'
 import * as SeparatorPrimitive from '@radix-ui/react-separator'
 import type * as Polymorphic from '@radix-ui/react-polymorphic'
 
@@ -127,8 +127,8 @@ void theme.colors.gray100
 
 const themeClass = theme('dark', {})
 const sharedColor: CSS = {
-	backgroundColor: 'red',
-	fwefwe: {
+	'backgroundColor': 'red',
+	'fwefwe': {
 		'@bp1': {
 			backgroundColor: 'ActiveCaption',
 		},

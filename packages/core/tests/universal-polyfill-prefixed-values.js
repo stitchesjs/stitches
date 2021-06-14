@@ -11,8 +11,8 @@ describe('Polyfill prefixed values', () => {
 		})()
 
 		expect(toString()).toBe(
-			'.gro{width:-moz-available;width:-webkit-fill-available;}'
-		) // prettier-ignore
+			`--stitches{--:1 coIeei}@media{.gro{width:-moz-available;width:-webkit-fill-available}}`
+		)
 	})
 
 	test('width:fit-content', () => {
@@ -25,7 +25,7 @@ describe('Polyfill prefixed values', () => {
 		})()
 
 		expect(toString()).toBe(
-			'.fit{width:-moz-fit-content;width:fit-content;}'
-		) // prettier-ignore
+			`--stitches{--:1 gZsLvv}@media{.fit{width:-moz-fit-content;width:fit-content}}`
+		)
 	})
-})
+}) // prettier-ignore

@@ -1,4 +1,4 @@
-import createCss from '../src/index.js'
+import { createCss } from '../src/index.js'
 
 describe('Serialization', () => {
 	const sheet = createCss()
@@ -10,14 +10,14 @@ describe('Serialization', () => {
 		margin: 0,
 		padding: '0.5em 1em',
 	})
-	const myComponentSelector = '.sxyvi1f'
+	const myComponentSelector = '.c-cLikna'
 
 	const myTheme = theme({
 		colors: {
 			blue: 'dodgerblue',
 		},
 	})
-	const myThemeClass = 'sxfy0qk'
+	const myThemeClass = 't-jPkpUS'
 	const myThemeSelector = `.${myThemeClass}`
 
 	test('Components implicitly return their selector', () => {
@@ -48,7 +48,7 @@ describe('Serialization', () => {
 
 	myComponent.render()
 
-	const sheetCssText = `${myThemeSelector}{--colors-blue:dodgerblue;}${myComponentSelector}{all:unset;font:inherit;margin:0;padding:0.5em 1em;}`
+	const sheetCssText = `--stitches{--:0 t-jPkpUS}@media{${myThemeSelector}{--colors-blue:dodgerblue}}--stitches{--:2 c-cLikna}@media{${myComponentSelector}{all:unset;font:inherit;margin:0;padding:0.5em 1em}}`
 
 	test('Sheets implicitly return their cssText', () => {
 		expect(String(sheet)).toBe(sheetCssText)

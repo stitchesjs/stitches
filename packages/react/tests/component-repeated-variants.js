@@ -24,7 +24,11 @@ describe('emerson', () => {
 			},
 		}) // prettier-ignore
 
-		const cssText = '.sxqhal7cmht9--size-1{padding-left:var(--space-1);padding-right:var(--space-1);}'
+		const cssText = (
+			`--stitches{--:3 c-PJLV-efCiES-size-1}@media{` +
+				`.c-PJLV-efCiES-size-1{padding-left:var(--space-1);padding-right:var(--space-1)}` +
+			`}`
+		) // prettier-ignore
 
 		component.render({ size: '1' })
 

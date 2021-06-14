@@ -5,7 +5,7 @@ describe('Composition', () => {
 		const { css, toString } = createCss()
 		const generic = css()
 
-		expect(generic().props).toEqual({ className: 'sx03kze' })
+		expect(generic().props).toEqual({ className: 'PJLV' })
 		expect(toString()).toBe('')
 	})
 
@@ -16,8 +16,17 @@ describe('Composition', () => {
 		const bold = css({ fontWeight: 'bold' })
 		const title = css(red, size14, bold, { fontFamily: 'monospace' })
 
-		expect(title.className).toBe('sxlktsn')
-		expect(toString()).toBe('.sxlktsn{font-family:monospace;}')
+		expect(title.className).toBe('c-gmqXFB')
+		expect(toString()).toBe('')
+		expect(String(title)).toBe('c-gmqXFB')
+		expect(toString()).toBe(
+			`--stitches{--:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
+				`.c-gmqXFB{color:red}` +
+				`.c-hzkWus{font-size:14px}` +
+				`.c-cQFdVt{font-weight:bold}` +
+				`.c-kngyIZ{font-family:monospace}` +
+			`}`
+		)
 	})
 
 	test('Renders a component with all compositions', () => {
@@ -27,7 +36,14 @@ describe('Composition', () => {
 		const bold = css({ fontWeight: 'bold' })
 		const title = css(red, size14, bold, { fontFamily: 'monospace' })
 
-		expect(title().className).toBe('sx3ye05 sxgsv3w sxsfl0j sxlktsn')
-		expect(toString()).toBe('.sx3ye05{color:red;}.sxgsv3w{font-size:14px;}.sxsfl0j{font-weight:bold;}.sxlktsn{font-family:monospace;}')
+		expect(title().className).toBe('c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ')
+		expect(toString()).toBe(
+			`--stitches{--:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
+				`.c-gmqXFB{color:red}` +
+				`.c-hzkWus{font-size:14px}` +
+				`.c-cQFdVt{font-weight:bold}` +
+				`.c-kngyIZ{font-family:monospace}` +
+			`}`
+		)
 	})
-})
+}) // prettier-ignore

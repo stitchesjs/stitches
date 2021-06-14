@@ -1,6 +1,6 @@
 {
   "name": "@stitches/core",
-  "version": "0.1.9",
+  "version": "0.2.0-canary.8",
   "description": "The modern CSS-in-JS library",
   "type": "module",
   "main": "dist/index.cjs",
@@ -9,9 +9,11 @@
   "jsdelivr": "dist/index.iife.js",
   "unpkg": "dist/index.iife.js",
   "exports": {
-    "require": "./dist/index.cjs",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.mjs"
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./types/index.d.ts"
+    }
   },
   "files": [
     "dist",

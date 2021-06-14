@@ -2,7 +2,7 @@ import { createCss } from '../src/index.js'
 
 describe('Issue #519', () => {
 	test('locally scoped token works 1 time', () => {
-		const { css, toString } = createCss({ prefix: 'fusion' })
+		const { css, getCssString } = createCss({ prefix: 'fusion' })
 
 		css({
 			$$syntax: 'red',
@@ -12,14 +12,17 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		expect(toString()).toBe(
-			'.fusionuuu2e{--fusion--syntax:red;}' +
-			'.fusionuuu2e h1{color:var(--fusion--syntax);}'
-		) // prettier-ignore
+		expect(getCssString()).toBe(
+			`--stitches{--:2 fusion-c-fjkySu}` +
+			`@media{` +
+				`.fusion-c-fjkySu{--fusion--syntax:red}` +
+				`.fusion-c-fjkySu h1{color:var(--fusion--syntax)}` +
+			`}`
+		)
 	})
 
 	test('locally scoped prefix-free token works 1 time', () => {
-		const { css, toString } = createCss()
+		const { css, getCssString } = createCss()
 
 		css({
 			$$syntax: 'red',
@@ -29,14 +32,17 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		expect(toString()).toBe(
-			'.sxuuu2e{---syntax:red;}' +
-			'.sxuuu2e h1{color:var(---syntax);}'
-		) // prettier-ignore
+		expect(getCssString()).toBe(
+			`--stitches{--:2 c-fjkySu}` +
+			`@media{` +
+				`.c-fjkySu{---syntax:red}` +
+				`.c-fjkySu h1{color:var(---syntax)}` +
+			`}`
+		)
 	})
 
 	test('locally scoped token works 2 times', () => {
-		const { css, toString } = createCss({ prefix: 'fusion' })
+		const { css, getCssString } = createCss({ prefix: 'fusion' })
 
 		css({
 			$$syntax: 'red',
@@ -50,15 +56,18 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		expect(toString()).toBe(
-			'.fusionyrd68{--fusion--syntax:red;}' +
-			'.fusionyrd68 h1{color:var(--fusion--syntax);}' +
-			'.fusionyrd68 h2{color:var(--fusion--syntax);}'
-		) // prettier-ignore
+		expect(getCssString()).toBe(
+			`--stitches{--:2 fusion-c-lkpaIy}` +
+			`@media{` +
+				`.fusion-c-lkpaIy{--fusion--syntax:red}` +
+				`.fusion-c-lkpaIy h1{color:var(--fusion--syntax)}` +
+				`.fusion-c-lkpaIy h2{color:var(--fusion--syntax)}` +
+			`}`
+		)
 	})
 
 	test('locally scoped prefix-free token works 2 times', () => {
-		const { css, toString } = createCss()
+		const { css, getCssString } = createCss()
 
 		css({
 			$$syntax: 'red',
@@ -72,15 +81,18 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		expect(toString()).toBe(
-			'.sxyrd68{---syntax:red;}' +
-			'.sxyrd68 h1{color:var(---syntax);}' +
-			'.sxyrd68 h2{color:var(---syntax);}'
-		) // prettier-ignore
+		expect(getCssString()).toBe(
+			`--stitches{--:2 c-lkpaIy}` +
+			`@media{` +
+				`.c-lkpaIy{---syntax:red}` +
+				`.c-lkpaIy h1{color:var(---syntax)}` +
+				`.c-lkpaIy h2{color:var(---syntax)}` +
+			`}`
+		)
 	})
 
 	test('locally scoped token works 3 times', () => {
-		const { css, toString } = createCss({ prefix: 'fusion' })
+		const { css, getCssString } = createCss({ prefix: 'fusion' })
 
 		css({
 			$$syntax: 'red',
@@ -98,16 +110,19 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		expect(toString()).toBe(
-			'.fusion4gdx9{--fusion--syntax:red;}' +
-			'.fusion4gdx9 h1{color:var(--fusion--syntax);}' +
-			'.fusion4gdx9 h2{color:var(--fusion--syntax);}' +
-			'.fusion4gdx9 h3{color:var(--fusion--syntax);}'
-		) // prettier-ignore
+		expect(getCssString()).toBe(
+			`--stitches{--:2 fusion-c-kbkiiL}` +
+			`@media{` +
+				`.fusion-c-kbkiiL{--fusion--syntax:red}` +
+				`.fusion-c-kbkiiL h1{color:var(--fusion--syntax)}` +
+				`.fusion-c-kbkiiL h2{color:var(--fusion--syntax)}` +
+				`.fusion-c-kbkiiL h3{color:var(--fusion--syntax)}` +
+			`}`
+		)
 	})
 
 	test('locally scoped prefix-free token works 3 times', () => {
-		const { css, toString } = createCss()
+		const { css, getCssString } = createCss()
 
 		css({
 			$$syntax: 'red',
@@ -125,11 +140,14 @@ describe('Issue #519', () => {
 			},
 		})()
 
-		expect(toString()).toBe(
-			'.sx4gdx9{---syntax:red;}' +
-			'.sx4gdx9 h1{color:var(---syntax);}' +
-			'.sx4gdx9 h2{color:var(---syntax);}' +
-			'.sx4gdx9 h3{color:var(---syntax);}'
-		) // prettier-ignore
+		expect(getCssString()).toBe(
+			`--stitches{--:2 c-kbkiiL}` +
+			`@media{` +
+				`.c-kbkiiL{---syntax:red}` +
+				`.c-kbkiiL h1{color:var(---syntax)}` +
+				`.c-kbkiiL h2{color:var(---syntax)}` +
+				`.c-kbkiiL h3{color:var(---syntax)}` +
+			`}`
+		)
 	})
-})
+}) // prettier-ignore
