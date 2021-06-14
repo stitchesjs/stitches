@@ -204,7 +204,7 @@ describe('Issue #450', () => {
 		test('Render component2()', () => {
 			const { component2, getCssString } = getFreshComponents()
 			const render = component2()
-			expect(render.className).toBe(`c-jyxqjt c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue c-jyxqjt-gYqlvA-cv c-dkRcuu`)
+			expect(render.className).toBe(`c-jyxqjt c-dkRcuu c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue c-jyxqjt-gYqlvA-cv`)
 			expect(getCssString()).toBe(
 				`--stitches{--:2 c-jyxqjt c-dkRcuu}@media{` +
 					`.c-jyxqjt{--component:1}` +
@@ -223,7 +223,7 @@ describe('Issue #450', () => {
 		test('Render component2({ appearance: "secondary", color: "lightBlue" })', () => {
 			const { component2, getCssString } = getFreshComponents()
 			const render = component2({ appearance: 'secondary', color: 'lightBlue' })
-			expect(render.className).toBe(`c-jyxqjt c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue c-jyxqjt-gYqlvA-cv c-dkRcuu`)
+			expect(render.className).toBe(`c-jyxqjt c-dkRcuu c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue c-jyxqjt-gYqlvA-cv`)
 			expect(getCssString()).toBe(
 				`--stitches{--:2 c-jyxqjt c-dkRcuu}@media{` +
 					`.c-jyxqjt{--component:1}` +
