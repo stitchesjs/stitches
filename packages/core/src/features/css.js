@@ -19,10 +19,12 @@ import { toTailDashed } from '../convert/toTailDashed.js'
 /** @typedef {import('./css').VariantProps} VariantProps */
 /** @typedef {import('./css').VariantTuple} VariantTuple */
 
+/** @typedef {import('../createSheet').SheetGroup} SheetGroup */
+
 const createComponentFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
-export const createComponentFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) =>
+export const createComponentFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
 	createComponentFunctionMap(config, () => (...args) => {
 		/** @type {string | Function} Component type, which may be a function or a string. */
 		let componentType = null
@@ -142,7 +144,7 @@ const createRenderer = (
 	/** @type {Config} */ config,
 	/** @type {string | Function} */ type,
 	/** @type {Set<Composer>} */ composers,
-	/** @type {{}} */ sheet
+	/** @type {import('../createSheet').SheetGroup} */ sheet
 ) => {
 	const [
 		initialClassName,
@@ -204,10 +206,8 @@ const createRenderer = (
 			if (!sheet.rules.styled.cache.has(composerBaseClass)) {
 				sheet.rules.styled.cache.add(composerBaseClass)
 
-				let index = sheet.rules.styled.group.cssRules.length
-
 				toCssRules(composerBaseStyle, [`.${composerBaseClass}`], [], config, cssText => {
-					sheet.rules.styled.group.insertRule(cssText, index++)
+					sheet.rules.styled.apply(cssText)
 				})
 			}
 
@@ -225,10 +225,8 @@ const createRenderer = (
 					if (!sheet.rules.onevar.cache.has(variantClassName)) {
 						sheet.rules.onevar.cache.add(variantClassName)
 
-						let index = sheet.rules.onevar.group.cssRules.length
-
 						toCssRules(vStyle, [`.${variantClassName}`], [], config, cssText => {
-							sheet.rules.onevar.group.insertRule(cssText, index++)
+							sheet.rules.onevar.apply(cssText)
 						})
 					}
 				}
@@ -245,10 +243,8 @@ const createRenderer = (
 					if (!sheet.rules.allvar.cache.has(variantClassName)) {
 						sheet.rules.allvar.cache.add(variantClassName)
 
-						let index = sheet.rules.allvar.group.cssRules.length
-
 						toCssRules(vStyle, [`.${variantClassName}`], [], config, cssText => {
-							sheet.rules.allvar.group.insertRule(cssText, index++)
+							sheet.rules.allvar.apply(cssText)
 						})
 					}
 				}
@@ -265,10 +261,8 @@ const createRenderer = (
 			if (!sheet.rules.inline.cache.has(iClass)) {
 				sheet.rules.inline.cache.add(iClass)
 
-				let index = sheet.rules.inline.group.cssRules.length
-
 				toCssRules(css, [`.${iClass}`], [], config, cssText => {
-					sheet.rules.inline.group.insertRule(cssText, index++)
+					sheet.rules.inline.apply(cssText)
 				})
 			}
 		}
