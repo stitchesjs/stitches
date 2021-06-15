@@ -57,7 +57,6 @@ export const createCss = (/** @type {Partial<Config>} */ config) => {
 			prefix,
 			getCssString: sheet.toString,
 			toString: sheet.toString,
-			[Symbol.toPrimitive]: sheet.toString,
 		}
 
 		const defaultTheme = returnValue.theme(theme)

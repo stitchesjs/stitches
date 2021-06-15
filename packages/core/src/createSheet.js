@@ -1,13 +1,12 @@
-/** @typedef {import('.').GroupSheet} GroupSheet */
-/** @typedef {import('.').GroupRules} GroupRules */
-/** @typedef {import('.').GroupName} GroupName */
-/** @typedef {import('.').Group} Group */
+/** @typedef {import('./createSheet').RuleGroup} RuleGroup */
+/** @typedef {import('./createSheet').RuleGroupNames} RuleGroupNames */
+/** @typedef {import('./createSheet').SheetGroup} SheetGroup */
 
-/** @type {GroupName[]} */
+/** @type {RuleGroupNames} */
 const names = ['themed', 'global', 'styled', 'onevar', 'allvar', 'inline']
 
 export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
-	/** @type {GroupSheet} Object hosting the hydrated stylesheet. */
+	/** @type {SheetGroup} Object hosting the hydrated stylesheet. */
 	let groupSheet
 
 	const reset = () => {
@@ -137,6 +136,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				cache: new Set([5]),
 			}
 		}
+		addApplyToGroup(rules.inline)
 
 		// conditionally generate the allvar group
 		if (!rules.allvar) {
@@ -150,6 +150,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				cache: new Set([4]),
 			}
 		}
+		addApplyToGroup(rules.allvar)
 
 		// conditionally generate the onevar group
 		if (!rules.onevar) {
@@ -163,6 +164,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				cache: new Set([3]),
 			}
 		}
+		addApplyToGroup(rules.onevar)
 
 		// conditionally generate the styled group
 		if (!rules.styled) {
@@ -176,6 +178,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				cache: new Set([2]),
 			}
 		}
+		addApplyToGroup(rules.styled)
 
 		// conditionally generate the global group
 		if (!rules.global) {
@@ -189,6 +192,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				cache: new Set([1]),
 			}
 		}
+		addApplyToGroup(rules.global)
 
 		// conditionally generate the themed group
 		if (!rules.themed) {
@@ -202,9 +206,26 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				cache: new Set([0]),
 			}
 		}
+		addApplyToGroup(rules.themed)
 	}
 
 	reset()
 
 	return groupSheet
+}
+
+const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
+	const groupingRule = group.group
+
+	let index = 0
+
+	group.apply = (cssText) => {
+		try {
+			groupingRule.insertRule(cssText, index)
+
+			++index
+		} catch (error) {
+			console.warn(error.message)
+		}
+	}
 }
