@@ -21,15 +21,13 @@ export const createKeyframesFunction = (/** @type {Config} */ config, /** @type 
 			if (!sheet.rules.global.cache.has(name)) {
 				sheet.rules.global.cache.add(name)
 
-				let index = sheet.rules.global.group.cssRules.length
-
 				const cssRules = []
 
 				toCssRules(style, [], [], config, (cssText) => cssRules.push(cssText))
 
 				const cssText = `@keyframes ${name}{${cssRules.join('')}}`
 
-				sheet.rules.global.group.insertRule(cssText, index++)
+				sheet.rules.global.apply(cssText)
 			}
 
 			return name
@@ -40,7 +38,6 @@ export const createKeyframesFunction = (/** @type {Config} */ config, /** @type 
 				return render()
 			},
 			toString: render,
-			[Symbol.toPrimitive]: render,
 		})
 	})
 ) // prettier-ignore

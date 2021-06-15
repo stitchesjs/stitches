@@ -45,12 +45,10 @@ export const createThemeFunction = (/** @type {Config} */ config, /** @type {Gro
 			if (cssProps.length && !sheet.rules.themed.cache.has(className)) {
 				sheet.rules.themed.cache.add(className)
 
-				let index = sheet.rules.themed.group.cssRules.length
-
 				const rootPrelude = style === config.theme ? ':root,' : ''
 				const cssText = `${rootPrelude}.${className}{${cssProps.join(';')}}`
 
-				sheet.rules.themed.group.insertRule(cssText, index++)
+				sheet.rules.themed.apply(cssText)
 			}
 
 			return className
@@ -61,7 +59,6 @@ export const createThemeFunction = (/** @type {Config} */ config, /** @type {Gro
 			className,
 			selector,
 			toString: render,
-			[Symbol.toPrimitive]: render,
 		}
 	})
 ) // prettier-ignore

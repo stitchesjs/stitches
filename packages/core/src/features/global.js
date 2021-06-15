@@ -4,15 +4,16 @@ import { define } from '../utility/define.js'
 import { toCssRules } from '../convert/toCssRules.js'
 import { toHash } from '../convert/toHash.js'
 
-/** @typedef {import('.').Config} Config */
-/** @typedef {import('.').Style} Style */
-/** @typedef {import('.').GroupSheet} GroupSheet */
+/** @typedef {import('./global').Config} Config */
+/** @typedef {import('./global').Styling} Styling */
+
+/** @typedef {import('../createSheet').SheetGroup} SheetGroup */
 
 const createGlobalFunctionMap = createMemo()
 
 /** Returns a function that applies global styles. */
-export const createGlobalFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) =>
-	createGlobalFunctionMap(config, () => (/** @type {Style} */ style) => {
+export const createGlobalFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
+	createGlobalFunctionMap(config, () => (/** @type {Styling} */ style) => {
 		style = (typeof style === 'object' && style) || {}
 
 		const uuid = toHash(style)
@@ -35,10 +36,8 @@ export const createGlobalFunction = (/** @type {Config} */ config, /** @type {Gr
 					delete style['@import']
 				}
 
-				let globalIndex = sheet.rules.global.group.cssRules.length
-
 				toCssRules(style, [], [], config, (cssText) => {
-					sheet.rules.global.group.insertRule(cssText, globalIndex++)
+					sheet.rules.global.apply(cssText)
 				})
 			}
 
@@ -47,6 +46,5 @@ export const createGlobalFunction = (/** @type {Config} */ config, /** @type {Gr
 
 		return define(render, {
 			toString: render,
-			[Symbol.toPrimitive]: render,
 		})
 	})
