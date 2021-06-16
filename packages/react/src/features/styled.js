@@ -36,6 +36,7 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 			const toString = () => cssComponent.selector
 
 			styledComponent.className = cssComponent.className
+			styledComponent.displayName = `Styled.${DefaultType.displayName || DefaultType.name || DefaultType}`
 			styledComponent.selector = cssComponent.selector
 			styledComponent.type = DefaultType
 			styledComponent.toString = toString
