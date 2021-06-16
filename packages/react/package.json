@@ -17,8 +17,10 @@
   },
   "files": [
     "dist",
-    "types",
-    "utils"
+    "types/*.d.ts",
+    "types/createCss/*.d.ts",
+    "types/css/*.d.ts",
+    "types/default/*.d.ts"
   ],
   "sideEffects": false,
   "license": "MIT",

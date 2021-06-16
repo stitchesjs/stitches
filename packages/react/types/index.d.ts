@@ -1,1 +1,1 @@
-export * from './styled'
+export * from './createCss'
