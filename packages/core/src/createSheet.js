@@ -224,8 +224,8 @@ const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
 			groupingRule.insertRule(cssText, index)
 
 			++index
-		} catch (error) {
-			console.warn(error.message)
+		} catch {
+			// do nothing and continue
 		}
 	}
 }
