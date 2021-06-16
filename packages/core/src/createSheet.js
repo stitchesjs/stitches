@@ -217,7 +217,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
 	const groupingRule = group.group
 
-	let index = 0
+	let index = groupingRule.cssRules.length
 
 	group.apply = (cssText) => {
 		try {
