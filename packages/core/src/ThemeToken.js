@@ -1,8 +1,8 @@
 import { toTailDashed } from './convert/toTailDashed.js'
 
 export class ThemeToken {
-	constructor(name, value, scale, prefix) {
-		this.name = name == null ? '' : String(name)
+	constructor(token, value, scale, prefix) {
+		this.token = token == null ? '' : String(token)
 		this.value = value == null ? '' : String(value)
 		this.scale = scale == null ? '' : String(scale)
 		this.prefix = prefix == null ? '' : String(prefix)
@@ -13,7 +13,7 @@ export class ThemeToken {
 	}
 
 	get variable() {
-		return '--' + toTailDashed(this.prefix) + toTailDashed(this.scale) + this.name
+		return '--' + toTailDashed(this.prefix) + toTailDashed(this.scale) + this.token
 	}
 
 	toString() {

@@ -1,217 +1,209 @@
 import { createCss } from '../src/index.js'
 
 describe('Tokens', () => {
-	test('Authors can use a regular token', () => {
-		{
-			const { global, getCssString } = createCss({
-				theme: {
-					colors: {
-						red: 'tomato',
-					},
+	test('Authors can use a regular token #1', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				colors: {
+					red: 'tomato',
 				},
-			})
+			},
+		})
 
-			global({
-				article: {
-					color: '$red',
-				},
-			})()
+		global({
+			article: {
+				color: '$red',
+			},
+		})()
 
-			expect(getCssString()).toBe(
-				`--stitches{--:0 t-iknykm}@media{` +
-					`:root,.t-iknykm{--colors-red:tomato}` +
-				`}--stitches{--:1 fMIGFF}@media{` +
-					`article{color:var(--colors-red)}` +
-				`}`
-			)
-		}
-
-		{
-			const { global, getCssString } = createCss({
-				theme: {
-					shadows: {
-						red: 'tomato',
-					},
-				},
-			})
-
-			global({
-				article: {
-					boxShadow: '0 0 0 1px $red',
-				},
-			})()
-
-			expect(getCssString()).toBe(
-				`--stitches{--:0 t-daOLKV}@media{` +
-					`:root,.t-daOLKV{--shadows-red:tomato}` +
-				`}--stitches{--:1 bstpNq}@media{` +
-					`article{box-shadow:0 0 0 1px var(--shadows-red)}` +
-				`}`
-			)
-		}
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-iknykm}@media{` +
+				`:root,.t-iknykm{--colors-red:tomato}` +
+			`}--stitches{--:1 fMIGFF}@media{` +
+				`article{color:var(--colors-red)}` +
+			`}`
+		)
 	})
 
-	test('Authors can use a relative token', () => {
-		{
-			const { global, getCssString } = createCss({
-				theme: {
-					colors: {
-						red: 'tomato',
-						red500: '$red',
-					},
+	test('Authors can use a regular token #2', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				shadows: {
+					red: 'tomato',
 				},
-			})
+			},
+		})
 
-			global({
-				article: {
-					color: '$red500',
-				},
-			})()
+		global({
+			article: {
+				boxShadow: '0 0 0 1px $red',
+			},
+		})()
 
-			expect(getCssString()).toBe(
-				`--stitches{--:0 t-eZaaph}@media{` +
-					`:root,.t-eZaaph{--colors-red:tomato;--colors-red500:var(--colors-red)}` +
-				`}--stitches{--:1 fdgxsg}@media{` +
-					`article{color:var(--colors-red500)}` +
-				`}`
-			)
-		}
-
-		{
-			const { global, getCssString } = createCss({
-				theme: {
-					shadows: {
-						red: 'tomato',
-						red500: '$red',
-						redUnique: '$$red'
-					},
-				},
-			})
-
-			global({
-				article: {
-					boxShadow: '0 0 0 1px $red500',
-				},
-			})()
-
-			expect(getCssString()).toBe(
-				`--stitches{--:0 t-gxqihb}@media{` +
-					`:root,.t-gxqihb{--shadows-red:tomato;--shadows-red500:var(--shadows-red);--shadows-redUnique:var(---red)}` +
-				`}` +
-				`--stitches{--:1 kyFUgb}@media{` +
-					`article{box-shadow:0 0 0 1px var(--shadows-red500)}` +
-				`}`
-			)
-		}
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-daOLKV}@media{` +
+				`:root,.t-daOLKV{--shadows-red:tomato}` +
+			`}--stitches{--:1 bstpNq}@media{` +
+				`article{box-shadow:0 0 0 1px var(--shadows-red)}` +
+			`}`
+		)
 	})
 
-	test('Authors can use an absolute token', () => {
-		{
-			const { global, getCssString } = createCss({
-				theme: {
-					colors: {
-						red: 'tomato',
-					},
+	test('Authors can use a relative token #1', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				colors: {
+					red: 'tomato',
+					red500: '$red',
 				},
-			})
+			},
+		})
 
-			global({
-				article: {
-					boxShadow: '0 0 0 1px $colors$red',
-				},
-			})()
+		global({
+			article: {
+				color: '$red500',
+			},
+		})()
 
-			expect(getCssString()).toBe(
-				`--stitches{--:0 t-iknykm}@media{` +
-					`:root,.t-iknykm{--colors-red:tomato}` +
-				`}` +
-				`--stitches{--:1 hNRkrs}@media{` +
-					`article{box-shadow:0 0 0 1px var(--colors-red)}` +
-				`}`
-			)
-		}
-
-		{
-			const { global, getCssString } = createCss({
-				theme: {
-					colors: {
-						red: 'tomato',
-					},
-				},
-			})
-
-			global({
-				article: {
-					boxShadow: '0 0 0 1px $colors$red',
-				},
-			})()
-
-			expect(getCssString()).toBe(
-				`--stitches{--:0 t-iknykm}@media{` +
-					`:root,.t-iknykm{--colors-red:tomato}` +
-				`}` +
-				`--stitches{--:1 hNRkrs}@media{` +
-					`article{box-shadow:0 0 0 1px var(--colors-red)}` +
-				`}`
-			)
-		}
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-eZaaph}@media{` +
+				`:root,.t-eZaaph{--colors-red:tomato;--colors-red500:var(--colors-red)}` +
+			`}--stitches{--:1 fdgxsg}@media{` +
+				`article{color:var(--colors-red500)}` +
+			`}`
+		)
 	})
 
-	test('Authors can use a negative token', () => {
-		{
-			const { global, getCssString } = createCss({
-				theme: {
-					space: {
-						sp1: '100px',
-						sp2: '200px',
-					},
+	test('Authors can use a relative token #1', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				shadows: {
+					red: 'tomato',
+					red500: '$red',
+					redUnique: '$$red'
 				},
-			})
+			},
+		})
 
-			global({
-				article: {
-					marginLeft: '-$sp1',
-					marginTop: '-$sp2',
+		global({
+			article: {
+				boxShadow: '0 0 0 1px $red500',
+			},
+		})()
+
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-gxqihb}@media{` +
+				`:root,.t-gxqihb{--shadows-red:tomato;--shadows-red500:var(--shadows-red);--shadows-redUnique:var(---red)}` +
+			`}` +
+			`--stitches{--:1 kyFUgb}@media{` +
+				`article{box-shadow:0 0 0 1px var(--shadows-red500)}` +
+			`}`
+		)
+	})
+
+	test('Authors can use an absolute token #1', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				colors: {
+					red: 'tomato',
 				},
-			})()
+			},
+		})
 
-			expect(getCssString()).toBe(
-				`--stitches{--:0 t-hxjLZl}@media{` +
-					`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
-				`}` +
-				`--stitches{--:1 kTSGli}@media{` +
-					`article{margin-left:calc(var(--space-sp1)*-1);margin-top:calc(var(--space-sp2)*-1)}` +
-				`}`
-			)
-		}
+		global({
+			article: {
+				boxShadow: '0 0 0 1px $colors$red',
+			},
+		})()
 
-		{
-			const { global, getCssString } = createCss({
-				theme: {
-					sizes: {
-						sp1: '10px',
-						sp2: '20px',
-						sp3: '30px',
-					},
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-iknykm}@media{` +
+				`:root,.t-iknykm{--colors-red:tomato}` +
+			`}` +
+			`--stitches{--:1 hNRkrs}@media{` +
+				`article{box-shadow:0 0 0 1px var(--colors-red)}` +
+			`}`
+		)
+	})
+
+	test('Authors can use an absolute token #2', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				colors: {
+					red: 'tomato',
 				},
-			})
+			},
+		})
 
-			global({
-				article: {
-					marginLeft: '-$sizes$sp1',
-					width: '$sp1',
+		global({
+			article: {
+				boxShadow: '0 0 0 1px $colors$red',
+			},
+		})()
+
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-iknykm}@media{` +
+				`:root,.t-iknykm{--colors-red:tomato}` +
+			`}` +
+			`--stitches{--:1 hNRkrs}@media{` +
+				`article{box-shadow:0 0 0 1px var(--colors-red)}` +
+			`}`
+		)
+	})
+
+	test('Authors can use a negative token #1', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				space: {
+					sp1: '100px',
+					sp2: '200px',
 				},
-			})()
+			},
+		})
 
-			expect(getCssString()).toBe(
-				`--stitches{--:0 t-ereMzu}@media{` +
-					`:root,.t-ereMzu{--sizes-sp1:10px;--sizes-sp2:20px;--sizes-sp3:30px}` +
-				`}` +
-				`--stitches{--:1 kuTEdV}@media{` +
-					`article{margin-left:calc(var(--sizes-sp1)*-1);width:var(--sizes-sp1)}` +
-				`}`
-			)
-		}
+		global({
+			article: {
+				marginLeft: '-$sp1',
+				marginTop: '-$sp2',
+			},
+		})()
+
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-hxjLZl}@media{` +
+				`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
+			`}` +
+			`--stitches{--:1 kTSGli}@media{` +
+				`article{margin-left:calc(var(--space-sp1)*-1);margin-top:calc(var(--space-sp2)*-1)}` +
+			`}`
+		)
+	})
+
+	test('Authors can use a negative token #2', () => {
+		const { global, getCssString } = createCss({
+			theme: {
+				sizes: {
+					sp1: '10px',
+					sp2: '20px',
+					sp3: '30px',
+				},
+			},
+		})
+
+		global({
+			article: {
+				marginLeft: '-$sizes$sp1',
+				width: '$sp1',
+			},
+		})()
+
+		expect(getCssString()).toBe(
+			`--stitches{--:0 t-ereMzu}@media{` +
+				`:root,.t-ereMzu{--sizes-sp1:10px;--sizes-sp2:20px;--sizes-sp3:30px}` +
+			`}` +
+			`--stitches{--:1 kuTEdV}@media{` +
+				`article{margin-left:calc(var(--sizes-sp1)*-1);width:var(--sizes-sp1)}` +
+			`}`
+		)
 	})
 
 	test('Authors can use tokens from the global theme object', () => {
@@ -235,7 +227,7 @@ describe('Tokens', () => {
 			`--stitches{--:0 t-hxjLZl}@media{` +
 				`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
 			`}` +
-			`--stitches{--:1 ejuGBl}@media{` +
+			`--stitches{--:1 lcIUgV}@media{` +
 				`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}` +
 			`}`
 		)
@@ -259,7 +251,7 @@ describe('Tokens', () => {
 		})()
 
 		expect(getCssString()).toBe(
-			`--stitches{--:1 ejuGBl}@media{article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}}`,
+			`--stitches{--:1 lcIUgV}@media{article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}}`,
 		)
 
 		void `${mytheme}`
@@ -267,7 +259,7 @@ describe('Tokens', () => {
 		expect(getCssString()).toBe(
 			`--stitches{--:0 my-theme}@media{` +
 				`.my-theme{--space-sp1:100px;--space-sp2:200px}` +
-			`}--stitches{--:1 ejuGBl}@media{` +
+			`}--stitches{--:1 lcIUgV}@media{` +
 				`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}` +
 			`}`
 		)
@@ -294,7 +286,7 @@ describe('Tokens', () => {
 			`--stitches{--:0 t-hxjLZl}@media{` +
 				`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
 			`}` +
-			`--stitches{--:1 ejuGBl}@media{` +
+			`--stitches{--:1 lcIUgV}@media{` +
 				`article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}` +
 			`}`
 		)
