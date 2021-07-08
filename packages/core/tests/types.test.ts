@@ -1,6 +1,6 @@
 // core types.tests.ts
 // import { createCss, Arg, StitchesVariants } from '../types/index.d'
-import { createCss, Arg } from '../types/index.d'
+import { createCss } from '../types/index'
 
 const { css, global, keyframes, theme } = createCss({
 	utils: {
@@ -62,14 +62,14 @@ global({
 	},
 })
 
-const externalStyles: Arg<typeof css> = {
-	'@bp1': {
-		backgroundColor: '$gray100',
-	},
-	'backgroundColor': '$gray300',
-}
+// const externalStyles: Arg<typeof css> = {
+// 	'@bp1': {
+// 		backgroundColor: '$gray100',
+// 	},
+// 	'backgroundColor': '$gray300',
+// }
 
-void externalStyles
+// void externalStyles
 
 const PotatoButton = css({
 	variants: {
@@ -92,7 +92,7 @@ const PotatoButton = css({
 	],
 })
 
-const two = css(PotatoButton, {
+const two = css({
 	$$max: '2px',
 	width: '$$max',
 	variants: {
@@ -121,7 +121,7 @@ const two = css(PotatoButton, {
 
 two({ variant: 'green' })
 two({ variant: 'red' })
-two({ variant: 'blue' })
+// two({ variant: 'blue' })
 
 // type test = StitchesVariants<typeof PotatoButton>
 

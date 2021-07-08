@@ -5,7 +5,6 @@ import * as Theme from './theme'
 /* ========================================================================== */
 
 export * from './css'
-export { Parameter0 as Arg } from './type'
 
 /* ========================================================================== */
 
@@ -205,7 +204,11 @@ export interface CreatedCss<
 			Args extends Variant[]
 		>(
 			...composers: {
-				[K in keyof Args]: (
+				[K in keyof Args]:
+				| {
+					[IS_COMPONENT]: true
+				}
+				| (
 					& OmitKey<Style<C>, 'variants'>
 					& {
 						/**
@@ -251,13 +254,15 @@ export interface CreatedCss<
 					}
 				)
 			) => {
-				className: string,
-				selector: string,
+				className: string
+				selector: string
 				props: T
 			}
 		) & {
 			className: string
 			selector: string
+
+			[IS_COMPONENT]: true
 		}
 	}
 
@@ -265,6 +270,10 @@ export interface CreatedCss<
 		(): string
 	}
 }
+
+declare const IS_COMPONENT: unique symbol
+
+type IS_COMPONENT = typeof PrivatePropertyValue
 
 /* ========================================================================== */
 
