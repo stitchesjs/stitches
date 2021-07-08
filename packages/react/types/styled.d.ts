@@ -1,280 +1,275 @@
-import * as React from 'react'
-import {
-	$media,
-	$variants,
-	CSSPropertiesToTokenScale,
-	DeclarationListWithRootAtRules,
-	FlatInternalCSS,
-	GlobalRule,
-	IConfig,
-	InternalCSS,
-	LessInternalCSS,
-	OmitKey,
-	StitchesExtractVariantsStyles,
-	StrictMorphVariant,
-	TMedias,
-	TStyledSheet,
-	TTheme,
-	TThemeMap,
-	VariantsCall,
-} from './core'
+import { Globals, OnlyObject, OnlyNumber, OnlyString, OnlyStringNumeric, Properties } from './css'
+import * as Default from './default'
+import * as Theme from './theme'
 
-export * from './core'
+/* ========================================================================== */
 
-/** Private way to store the type without causing a TS panic: */
-declare const $elm: unique symbol
+export * from './css'
+export { Parameter0 as Arg } from './type'
 
-/* Utils:
- * -----------------------------------------------------------------------------------------------*/
-// abuse Pick to strip the call signature from ForwardRefExoticComponent
-type IntrinsicElementsKeys = keyof JSX.IntrinsicElements
-type ComponentInfer<T> = T extends IntrinsicElementsKeys | React.ComponentType<any> ? T : never
+/* ========================================================================== */
 
-/* StitchesComponent:
- * -----------------------------------------------------------------------------------------------*/
-// abuse Pick to strip the call signature from ForwardRefExoticComponent
-type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>
+/** Returns the given value narrowed to its nearest type. */
+export type NarrowValue<T> = (
+	T extends [] ? [] : never
+) | (
+	T extends bigint | boolean | number | string | symbol ? T : never
+) | NarrowObject<T>
 
-export type IntrinsicElement<T extends React.ElementType, B = React.ElementRef<T>> = {
-	[k in keyof HTMLElementTagNameMap]: HTMLElementTagNameMap[k] extends B ? k : never
-}[keyof HTMLElementTagNameMap]
-
-export interface StitchesComponentWithAutoCompleteForJSXElements<DefaultElement extends string, Variants = {}, Medias extends TMedias = TMedias, Theme = {}, Utils = {}, ThemeMap = {}>
-	extends React.ForwardRefExoticComponent<
-		Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
-			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
-		} & VariantsCall<Variants, Medias>
-	> {
-	// JSX elements have higher priority here when it comes to autocomplete
-	<Elm extends IntrinsicElementsKeys = DefaultElement extends IntrinsicElementsKeys ? DefaultElement : never>(
-		props: VariantsCall<Variants, Medias> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm], keyof Variants | 'css' | 'as'> & {
-				css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
-			},
-	): JSX.Element
-
-	// React component
-	<As extends React.ComponentType = DefaultElement extends React.ComponentType ? DefaultElement : never>(
-		props: VariantsCall<Variants, Medias> & { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
-				css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
-			},
-	): JSX.Element
-
-	toString(): string
-	/**
-	 * CSS Class associated with the current component.
-	 *
-	 * ```
-	 *
-	 * const Button = styled("button", { color: "DarkSlateGray" })
-	 *
-	 * <div className={Button.className} />
-	 * ```
-	 * <br />
-	 */
-	className: string
-	/**
-	 * CSS Selector associated with the current component.
-	 *
-	 * ```
-	 *
-	 * const Button = styled("button", { color: "DarkSlateGray" })
-	 *
-	 * const Card = styled("article", {
-	 *   [Button.selector]: { boxShadow: "0 0 0 5px" }
-	 * })
-	 * ```
-	 * <br />
-	 */
-	selector: string
-	variants: Variants
-	[$media]: Medias
-	[$elm]: DefaultElement
-	[$variants]: Variants
+/** Returns the given object with its values narrowed to their nearest type. */
+export type NarrowObject<T> = {
+	[K in keyof T]: (
+		T[K] extends Function
+			? T[K]
+		: NarrowValue<T[K]>
+	)
 }
 
-export interface StitchesComponentWithAutoCompleteForReactComponents<DefaultElement, Variants = {}, Medias extends TMedias = TMedias, Theme = {}, Utils = {}, ThemeMap = {}>
-	extends React.ForwardRefExoticComponent<
-		Omit<React.ComponentPropsWithRef<ComponentInfer<DefaultElement>>, keyof Variants | 'css' | 'as'> & {
-			css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
-		} & VariantsCall<Variants, Medias>
-	> {
-	// React components have higher priority here for autocomplete
-	<As extends React.ComponentType = DefaultElement extends React.ComponentType ? DefaultElement : never>(
-		props: VariantsCall<Variants, Medias> & { as?: As } & Omit<React.ComponentPropsWithRef<As>, keyof Variants | 'css' | 'as'> & {
-				css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
-			},
-	): JSX.Element
+/** Returns the given value widened to include looser versions of its value. */
+type Widen<T> = T extends number ? `${T}` | T : T extends 'true' ? boolean | T : T extends 'false' ? boolean | T : T extends `${number}` ? number | T : T
 
-	// JSX elements
-	<Elm extends IntrinsicElementsKeys = DefaultElement extends IntrinsicElementsKeys ? DefaultElement : never>(
-		props: VariantsCall<Variants, Medias> & { as: Elm } & Omit<JSX.IntrinsicElements[Elm], keyof Variants | 'css' | 'as'> & {
-				css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
-			},
-	): JSX.Element
+/** Returns the given value with the given keys omitted from typing. */
+type OmitKey<T, U extends keyof any> = T & { [P in U]?: unknown }
 
-	toString(): string
-	/**
-	 * CSS Class associated with the current component.
-	 *
-	 * ```
-	 *
-	 * const Button = styled("button", { color: "DarkSlateGray" })
-	 *
-	 * <div className={Button.className} />
-	 * ```
-	 * <br />
-	 */
-	className: string
-	/**
-	 * CSS Selector associated with the current component.
-	 *
-	 * ```
-	 *
-	 * const Button = styled("button", { color: "DarkSlateGray" })
-	 *
-	 * const Card = styled("article", {
-	 *   [Button.selector]: { boxShadow: "0 0 0 5px" }
-	 * })
-	 * ```
-	 * <br />
-	 */
-	selector: string
-	variants: Variants
-	[$media]: Medias
-	[$variants]: Variants
+/** Returns the first parameter of the given function. */
+type Parameter0<T> = T extends (arg: infer P) => any ? P : never
+
+/** Returns a string with the given prefix followed by the given values. */
+type Prefixed<K extends string, T> = `${K}${Extract<T, index>}`
+
+/** Returns a value of the given object using the given key. */
+type Value<T, K> = T[Extract<K, keyof T>]
+
+/** Object index (number or string). */
+type index = number | string
+
+/* ========================================================================== */
+
+interface ConfigShape {
+	prefix?: string
+	media?: {
+		[name in index]: string
+	}
+	theme?: {
+		[scale in string]: {
+			[token in index]: number | string
+		}
+	}
+	themeMap?: {
+		[property in string]: string
+	}
+	utils?: {
+		[property in index]: (value: any) => ({
+			[property in keyof Properties]: unknown
+		} & {
+			[property in string]: unknown
+		})
+	}
 }
 
-// export type NonIntrinsicElementProps<T extends React.ElementType> = IntrinsicElement<T> extends never ? React.ComponentProps<T> : Omit<React.ComponentProps<T>, keyof React.ComponentPropsWithoutRef<IntrinsicElement<T>>>
+export interface Config<ConfigType extends ConfigShape> {
+	prefix: ConfigType['prefix'] extends string ? ConfigType['prefix'] : ''
+	media: ConfigType['media'] extends object ? { all: 'all' } & ConfigType['media'] : { all: 'all' }
+	theme: ConfigType['theme'] extends object ? ConfigType['theme'] : {}
+	themeMap: ConfigType['themeMap'] extends object ? ConfigType['themeMap'] : Default.ThemeMap
+	utils: ConfigType['utils'] extends object ? ConfigType['utils'] : {}
+}
 
-/* Styled instance:
- * -----------------------------------------------------------------------------------------------*/
-export type StyledInstance<Medias extends TMedias = TMedias, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
-	<E extends React.ElementType, Variants, CloneVariants extends Variants>(
-		elm: E,
-		// prettier-ignore
-		styles: (
-			(
-				(
-					LessInternalCSS<Medias, Theme, Utils, ThemeMap>
-					& {
-						/** Unknown property. */
-						[k in string]: unknown
-					}
-				)
-				| Record<string, InternalCSS<Medias, Theme, Utils, ThemeMap>>
+/* ========================================================================== */
+
+export namespace Stitches {
+	type PropertyValue<K extends keyof Properties> = { readonly [PrivatePropertyValue]: K }
+
+	type TokenValue<K> = { readonly [PrivateTokenValue]: K }
+}
+
+declare const PrivatePropertyValue: unique symbol
+
+type PrivatePropertyValue = typeof PrivatePropertyValue
+
+declare const PrivateTokenValue: unique symbol
+
+type PrivateTokenValue = typeof PrivateTokenValue
+
+/* ========================================================================== */
+
+type Style<C extends Config<ConfigShape>> = (
+	& {
+		[K in keyof Properties]?: (
+			| Globals
+			| Properties[K]
+			| Prefixed<
+				'$',
+				keyof Value<
+					C['theme'],
+					Value<
+						C['themeMap'],
+						K
+					>
+				>
+			>
+		)
+	}
+	& {
+		[K in keyof C['utils']]?: (
+			| (
+				PrivateTokenValue extends keyof Parameter0<C['utils'][K]>
+					? Prefixed<
+						'$',
+						keyof Value<
+							C['theme'],
+							Parameter0<C['utils'][K]>[PrivateTokenValue]
+						>
+					>
+				: never
 			)
-			& {
-				variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Medias, Theme, Utils, ThemeMap> } }
+			| (
+				PrivatePropertyValue extends keyof Parameter0<C['utils'][K]>
+					?
+					| Globals
+					| Value<
+						Properties,
+						Parameter0<C['utils'][K]>[PrivatePropertyValue]
+					>
+					| Prefixed<
+						'$',
+						keyof Value<
+							C['theme'],
+							Value<
+								C['themeMap'],
+								Parameter0<C['utils'][K]>[PrivatePropertyValue]
+							>
+						>
+					>
+				: never
+			)
+			| Omit<OnlyStringNumeric, ''>
+		)
+	}
+	& {
+		[K in Prefixed<'@', keyof C['media']>]?: Style<C>
+	}
+	& {
+		[K in index]: index | Style<C> | unknown[]
+	}
+)
+
+/* ========================================================================== */
+
+export interface CreatedCss<
+	C extends Config<ConfigShape>
+> {
+	/** Normalized configuration of the current library. */
+	config: C
+
+	/** Returns a function that applies global styles. */
+	global: {
+		(
+			rules: {
+				[selectors: string]: Style<C>
 			}
-			& {
-						defaultVariants?: {
-							[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
-						}
-					}
+		): () => {}
+	}
+
+	/** Returns an object that applies `@keyframes` styles. */
+	keyframes: {
+		(
+			rules: {
+				[offsets: string]: Style<C>
+			}
+		): () => {}
+	}
+
+	/** Returns an object of theme tokens that apply a specific theme. */
+	theme: {
+		<ThemeArg extends {
+			[Scale in keyof C['theme']]?: {
+				[Token in keyof C['theme'][Scale]]: OnlyStringNumeric
+			}
+		}>(
+			theme: NarrowObject<ThemeArg>
+		): {
+			className: string
+			selector: string
+		} & Theme.Tokens<ThemeArg, C['prefix']>
+	} & Theme.Tokens<C['theme'], C['prefix']>
+
+	/** Returns a function that applies styles and variants for a specific class. */
+	css: {
+		<
+			Variant extends {
+				[name in string]: {
+					[pair in index]: Style<C>
+				}
+			},
+			Args extends Variant[]
+		>(
+			...composers: {
+				[K in keyof Args]: (
+					& OmitKey<Style<C>, 'variants'>
 					& {
+						/**
+						 * Variants configure conditional styles of the component.
+						 *
+						 * @see https://stitches.dev/docs/variants
+						 */
+						variants?: Args[K] | Variant,
 						compoundVariants?: (
-							{
-								[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
+							& {
+								[Name in Exclude<keyof Args[K], 'css'>]?: Widen<keyof Args[K][Name]>
 							}
 							& {
-								css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
-							}
-						)[]
-					}
-		),
-	): // prettier-ignore
-	E extends string
-		// jsx elements
-		? StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
-	// if it's a stitches component...
-	: E extends {
-		[$elm]: infer DeepStitchesComponentType
-	}
-		// reach in and pull its type to provide better types
-		? StitchesComponentWithAutoCompleteForJSXElements<string & DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
-	// normal react component
-	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
-} & ProxyStyledElements<Medias, Theme, Utils, ThemeMap>
-
-export type ProxyStyledElements<Medias extends TMedias = TMedias, Theme extends TTheme = {}, Utils = {}, ThemeMap = {}> = {
-	[ElKey in keyof JSX.IntrinsicElements]: <E extends React.ElementType = ElKey, Variants = {}, CloneVariants extends Variants = {}>(
-		// prettier-ignore
-		styled: (
-			(
-				(
-					LessInternalCSS<Medias, Theme, Utils, ThemeMap>
-					& {
-						/** Unknown property. */
-						[k in string]: unknown
-					}
-				)
-				| Record<string, InternalCSS<Medias, Theme, Utils, ThemeMap>>
-			)
-			& {
-				variants?: { [k in keyof Variants]: { [b in keyof Variants[k]]: InternalCSS<Medias, Theme, Utils, ThemeMap> } }
-			}
-			& {
-						defaultVariants?: {
-							[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
-						}
-					}
-					& {
-						compoundVariants?: (
-							{
-								[k in keyof CloneVariants]?: StrictMorphVariant<keyof CloneVariants[k]>
+								[name in Exclude<index, keyof Args[K] | 'css'>]: any
 							}
 							& {
-								css?: InternalCSS<Medias, Theme, Utils, ThemeMap>
+								css: Style<C>
 							}
-						)[]
+						)[],
+						defaultVariants?: {
+							[Name in keyof Args[K]]?: Widen<keyof Args[K][Name]>
+						},
 					}
-		),
-	) => // prettier-ignore
-	E extends string
-		// jsx elements
-		? StitchesComponentWithAutoCompleteForJSXElements<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
-	// if it's a stitches component...
-	: E extends {
-		[$elm]: infer DeepStitchesComponentType
+				)
+			}
+		): /** Component */ (
+			<T extends OmitKey<
+				(
+					& {
+						[K in keyof Args[0]]?: Widen<keyof Args[0][K]>
+					}
+					& {
+						[K in Exclude<keyof T, keyof Args[0]>]: any
+					}
+				),
+				'css'
+			>>(
+				props: (
+					& T
+					& {
+						/** Inline CSS. */
+						css?: Style<C>
+					}
+				)
+			) => {
+				className: string,
+				selector: string,
+				props: T
+			}
+		) & {
+			className: string
+			selector: string
+		}
 	}
-		// reach in and pull its type to provide better types
-		? StitchesComponentWithAutoCompleteForJSXElements<DeepStitchesComponentType, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils, ThemeMap>
-	// normal react component
-	: StitchesComponentWithAutoCompleteForReactComponents<E, Variants & StitchesExtractVariantsStyles<E>, Medias, Theme, Utils>
+
+	getCssString: {
+		(): string
+	}
 }
 
-type ReactFactory = <Medias extends TMedias = TMedias, Theme extends TTheme = {}, Utils = {}, Prefix = '', ThemeMap extends TThemeMap = CSSPropertiesToTokenScale>(
-	_config?: IConfig<Medias, Theme, Utils, Prefix, ThemeMap>,
-) => TStyledSheet<Medias, Theme, Utils, Prefix, ThemeMap> & {
-	styled: StyledInstance<Medias & { initial: '' }, Theme, Utils, ThemeMap>
+/* ========================================================================== */
 
-	/**
-	 * Returns all CSS applied to the stylesheet.
-	 *
-	 * ```
-	 *
-	 * <style>{toString()}</style>
-	 * ```
-	 * <br />
-	 */
-	getCssString(): string
-
-	/**
-	 * Returns all CSS applied to the stylesheet.
-	 *
-	 * ```
-	 *
-	 * <style>{toString()}</style>
-	 * ```
-	 * <br />
-	 */
-	toString(): string
-}
-
-export declare const createCss: ReactFactory
-export declare const css: TStyledSheet<{ initial: '' }, {}, {}, '', CSSPropertiesToTokenScale>
-export declare const global: (definition: OmitKey<Record<string, InternalCSS<{} & TMedias, {}, {}, CSSPropertiesToTokenScale>>, '@font-face' | '@import'> | DeclarationListWithRootAtRules) => GlobalRule
-export declare const keyframes: (definition: { [k: string]: FlatInternalCSS<{} & TMedias, {}, {}, CSSPropertiesToTokenScale> }) => GlobalRule
-export declare const styled: StyledInstance<{ initial: '' }, {}, {}, CSSPropertiesToTokenScale>
-
-export default createCss
+export type CreateCss = <
+	T extends ConfigShape
+>(
+	config?: NarrowObject<T>,
+) => CreatedCss<Config<T>>
