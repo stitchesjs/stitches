@@ -1,9 +1,13 @@
 import * as React from 'react'
-import createStyled, { StitchesCss, StitchesVariants, StitchesComponentWithAutoCompleteForReactComponents, StitchesComponentWithAutoCompleteForJSXElements } from '../types/styled'
 import * as SeparatorPrimitive from '@radix-ui/react-separator'
-import type * as Polymorphic from '@radix-ui/react-polymorphic'
+import { createCss } from '../types/index'
 
-const factory = createStyled({
+// import { createCss, StitchesVariants, StitchesComponentWithAutoCompleteForReactComponents, StitchesComponentWithAutoCompleteForJSXElements } from '../types/index'
+
+import type * as Polymorphic from '@radix-ui/react-polymorphic'
+import { Stitches } from '../types/styled'
+
+const library1 = createCss({
 	theme: {
 		colors: {
 			hiContrast: 'hsl(200, 12%, 5%)',
@@ -41,7 +45,7 @@ const factory = createStyled({
 		bp1: '(min-width: 620px)',
 	},
 	utils: {
-		marginX: (config) => (value: number | `wefwef`) => ({
+		marginX: (value: Stitches.PropertyValue<'marginLeft'>) => ({
 			marginLeft: value,
 			marginRight: value,
 		}),
@@ -49,17 +53,36 @@ const factory = createStyled({
 })
 
 const utils = {
-	mt: () => (value: string) => ({ marginTop: value }),
+	mt: (value: Stitches.PropertyValue<'marginTop'>) => ({ marginTop: value }),
 }
 
-const stitchesConfig = createStyled({
+const library2 = createCss({
 	utils,
 })
-export const { config: Config } = stitchesConfig
 
-type CSS = StitchesCss<typeof factory>
+const { config: Config } = library2
 
-export const { styled, toString, theme, css, keyframes, global, config } = factory
+// type CSS = StitchesCss<typeof library>
+
+const { config, css, keyframes, global, styled, theme, toString } = library1
+
+void config
+void config.media
+void config.media.all
+void config.media.bp1
+void config.prefix
+void config.theme
+void config.theme.colors
+void config.theme.colors.gray100
+void config.themeMap
+void config.themeMap.color
+void config.utils
+void config.utils.marginX
+
+void css
+void keyframes
+void styled
+void theme
 
 const StyledSeparator = styled(SeparatorPrimitive.Root, {
 	border: 'none',
@@ -97,7 +120,7 @@ type SeparatorVariants = StitchesVariants<typeof StyledSeparator>
 type SeparatorOwnProps = Polymorphic.OwnProps<typeof SeparatorPrimitive.Root> & { css?: CSS } & SeparatorVariants
 type SeparatorComponent = Polymorphic.ForwardRefComponent<Polymorphic.IntrinsicElement<typeof SeparatorPrimitive.Root>, SeparatorOwnProps>
 
-export const Separator = React.forwardRef((props, forwardedRef) => {
+const Separator = React.forwardRef((props, forwardedRef) => {
 	return <StyledSeparator {...props} ref={forwardedRef} />
 }) as SeparatorComponent
 
@@ -219,7 +242,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
 })
 
 /* -----------------------------------------------------------------------------------------------*/
-export function Test() {
+function Test() {
 	return (
 		<>
 			{/* Link accepts onToggle prop */}

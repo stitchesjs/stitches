@@ -1,7 +1,7 @@
-import { Config, CreateCss, CreatedCss } from './core'
+import { Config, CreateCss, CreatedCss } from './styled'
 import * as Default from './default'
 
-export * from './core'
+export * from './styled'
 
 /** Returns a library used to create styles. */
 export declare const createCss: CreateCss

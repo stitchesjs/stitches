@@ -261,6 +261,78 @@ export interface CreatedCss<
 		}
 	}
 
+	/** Returns a function that applies styles and variants for a specific class. */
+	styled: {
+		<
+			Variant extends {
+				[name in string]: {
+					[pair in index]: Style<C>
+				}
+			},
+			Args extends Variant[]
+		>(
+			...composers: {
+				[K in keyof Args]:
+				| {
+					(props: any): any;
+					readonly $$typeof: symbol;
+				}
+				| (
+					& OmitKey<Style<C>, 'variants'>
+					& {
+						/**
+						 * Variants configure conditional styles of the component.
+						 *
+						 * @see https://stitches.dev/docs/variants
+						 */
+						variants?: Args[K] | Variant,
+						compoundVariants?: (
+							& {
+								[Name in Exclude<keyof Args[K], 'css'>]?: Widen<keyof Args[K][Name]>
+							}
+							& {
+								[name in Exclude<index, keyof Args[K] | 'css'>]: any
+							}
+							& {
+								css: Style<C>
+							}
+						)[],
+						defaultVariants?: {
+							[Name in keyof Args[K]]?: Widen<keyof Args[K][Name]>
+						},
+					}
+				)
+			}
+		): /** Component */ (
+			<T extends OmitKey<
+				(
+					& {
+						[K in keyof Args[0]]?: Widen<keyof Args[0][K]>
+					}
+					& {
+						[K in Exclude<keyof T, keyof Args[0]>]: any
+					}
+				),
+				'css'
+			>>(
+				props: (
+					& T
+					& {
+						/** Inline CSS. */
+						css?: Style<C>
+					}
+				)
+			) => {
+				className: string,
+				selector: string,
+				props: T
+			}
+		) & {
+			className: string
+			selector: string
+		}
+	}
+
 	getCssString: {
 		(): string
 	}
