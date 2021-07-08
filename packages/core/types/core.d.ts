@@ -196,17 +196,17 @@ export interface CreatedCss<
 	/** Returns a function that applies styles and variants for a specific class. */
 	css: {
 		<
-			Variant extends {
+			Variants extends {
 				[name in string]: {
 					[pair in index]: Style<C>
 				}
 			},
-			Args extends Variant[]
+			Args extends Variants[]
 		>(
 			...composers: {
 				[K in keyof Args]:
 				| {
-					[IS_COMPONENT]: true
+					[$$VARIANTS]: Args[K]
 				}
 				| (
 					& OmitKey<Style<C>, 'variants'>
@@ -216,7 +216,7 @@ export interface CreatedCss<
 						 *
 						 * @see https://stitches.dev/docs/variants
 						 */
-						variants?: Args[K] | Variant,
+						variants?: Args[K] | Variants,
 						compoundVariants?: (
 							& {
 								[Name in Exclude<keyof Args[K], 'css'>]?: Widen<keyof Args[K][Name]>
@@ -262,7 +262,7 @@ export interface CreatedCss<
 			className: string
 			selector: string
 
-			[IS_COMPONENT]: true
+			[$$VARIANTS]: Variants
 		}
 	}
 
@@ -271,9 +271,9 @@ export interface CreatedCss<
 	}
 }
 
-declare const IS_COMPONENT: unique symbol
+declare const $$VARIANTS: unique symbol
 
-type IS_COMPONENT = typeof PrivatePropertyValue
+type $$VARIANTS = typeof PrivatePropertyValue
 
 /* ========================================================================== */
 

@@ -73,6 +73,14 @@ global({
 
 const PotatoButton = css({
 	variants: {
+		peace: {
+			mercy: {
+				color: 'MediumOrchid',
+			},
+			trust: {
+				color: 'Turquoise',
+			},
+		},
 		variant: {
 			blue: {
 				backgroundColor: '$gray100',
@@ -92,7 +100,11 @@ const PotatoButton = css({
 	],
 })
 
-const two = css({
+PotatoButton({
+	peace: 'mercy',
+})
+
+const two = css(PotatoButton, {
 	$$max: '2px',
 	width: '$$max',
 	variants: {
@@ -119,8 +131,14 @@ const two = css({
 	],
 })
 
-two({ variant: 'green' })
-two({ variant: 'red' })
+two({
+
+})
+
+// two({
+// 	variant: 'red'
+// })
+
 // two({ variant: 'blue' })
 
 // type test = StitchesVariants<typeof PotatoButton>
