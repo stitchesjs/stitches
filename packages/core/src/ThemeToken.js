@@ -1,5 +1,6 @@
 import { toTailDashed } from './convert/toTailDashed.js'
 
+/** @type {import('../types/theme').Token} */
 export class ThemeToken {
 	constructor(token, value, scale, prefix) {
 		this.token = token == null ? '' : String(token)

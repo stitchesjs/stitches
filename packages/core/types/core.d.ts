@@ -1,6 +1,5 @@
 import { Globals, OnlyObject, OnlyNumber, OnlyString, OnlyStringNumeric, Properties } from './css'
 import * as Default from './default'
-import * as Type from './type'
 import * as Theme from './theme'
 
 /* ========================================================================== */

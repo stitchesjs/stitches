@@ -1,9 +1,9 @@
 export declare class Token<
 	/** Token name. */
-	NameType extends string = string,
+	NameType extends number | string = string,
 
 	/** Token value. */
-	ValueType extends string = string,
+	ValueType extends number | string = string,
 
 	/** Token scale. */
 	ScaleType extends string | void = void,
