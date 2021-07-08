@@ -81,7 +81,7 @@ const PotatoButton = css({
 				color: 'Turquoise',
 			},
 		},
-		variant: {
+		hue: {
 			blue: {
 				backgroundColor: '$gray100',
 			},
@@ -108,7 +108,7 @@ const two = css(PotatoButton, {
 	$$max: '2px',
 	width: '$$max',
 	variants: {
-		variant: {
+		hue: {
 			green: {
 				width: '$$max',
 				backgroundColor: '$gray100',
@@ -119,11 +119,11 @@ const two = css(PotatoButton, {
 		},
 	},
 	defaultVariants: {
-		variant: 'red',
+		hue: 'red',
 	},
 	compoundVariants: [
 		{
-			variant: 'green',
+			hue: 'green',
 			css: {
 				backgroundColor: '$gray200',
 			},
@@ -132,7 +132,8 @@ const two = css(PotatoButton, {
 })
 
 two({
-
+	peace: 'mercy',
+	hue: 'blue',
 })
 
 // two({

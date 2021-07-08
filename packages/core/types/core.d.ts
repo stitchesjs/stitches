@@ -206,7 +206,7 @@ export interface CreatedCss<
 			...composers: {
 				[K in keyof Args]:
 				| {
-					[$$VARIANTS]: Args[K]
+					[$$VARIANTS]: Args[K][]
 				}
 				| (
 					& OmitKey<Style<C>, 'variants'>
@@ -262,7 +262,7 @@ export interface CreatedCss<
 			className: string
 			selector: string
 
-			[$$VARIANTS]: Variants
+			[$$VARIANTS]: Args
 		}
 	}
 
