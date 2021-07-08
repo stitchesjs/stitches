@@ -10,14 +10,13 @@ import { createThemeFunction } from './features/theme.js'
 
 import { createSheet } from './createSheet.js'
 
-/** @typedef {import('.').Config} Config */
-
 const createCssMap = createMemo()
 
-export const createCss = (/** @type {Partial<Config>} */ config) => {
+/** @type {import('../types/core').CreateCss} */
+export const createCss = (config) => {
 	let didRun = false
 
-	const instance = createCssMap(config, (/** @type {Partial<Config>} */ initConfig) => {
+	const instance = createCssMap(config, (initConfig) => {
 		didRun = true
 
 		initConfig = typeof initConfig === 'object' && initConfig || {}
@@ -30,7 +29,7 @@ export const createCss = (/** @type {Partial<Config>} */ config) => {
 		const themeMap = typeof initConfig.themeMap === 'object' && initConfig.themeMap || { ...defaultThemeMap }
 		const utils = typeof initConfig.utils === 'object' && initConfig.utils || {}
 
-		/** @type {Config} External configuration. */
+		/** External configuration. */
 		const config = {
 			prefix,
 			media,

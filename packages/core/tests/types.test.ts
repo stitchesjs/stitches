@@ -1,8 +1,10 @@
 // core types.tests.ts
-import { createCss, StitchesCss, StitchesVariants } from '../types/index.d'
-const css = createCss({
+// import { createCss, Arg, StitchesVariants } from '../types/index.d'
+import { createCss, Arg } from '../types/index.d'
+
+const { css, global, keyframes, theme } = createCss({
 	utils: {
-		mx: (config) => (value) => ({
+		mx: (value) => ({
 			backgroundColor: 'red',
 		}),
 	},
@@ -42,34 +44,34 @@ const css = createCss({
 	},
 })
 
-css.keyframes({
+keyframes({
 	from: {
-		color: '-moz-initial',
+		color: '$gray100',
 	},
 	to: {
-		backgroundColor: '-moz-initial',
+		color: '$gray900',
 	},
 })
 
-css.global({
+global({
 	hello: {
 		'@bp1': {
-			backgroundColor: '$1',
+			backgroundColor: '$gray100',
 		},
-		'backgroundColor': '$font100',
+		backgroundColor: '$gray300',
 	},
 })
 
-type CSS = StitchesCss<typeof css>
-
-const ExternalStyles: CSS = {
+const externalStyles: Arg<typeof css> = {
 	'@bp1': {
-		backgroundColor: '$1',
+		backgroundColor: '$gray100',
 	},
-	'backgroundColor': '$1',
+	'backgroundColor': '$gray300',
 }
 
-const PotatoButton = css.css({
+void externalStyles
+
+const PotatoButton = css({
 	variants: {
 		variant: {
 			blue: {
@@ -90,7 +92,7 @@ const PotatoButton = css.css({
 	],
 })
 
-const two = css.css(PotatoButton, {
+const two = css(PotatoButton, {
 	$$max: '2px',
 	width: '$$max',
 	variants: {
@@ -109,8 +111,6 @@ const two = css.css(PotatoButton, {
 	},
 	compoundVariants: [
 		{
-			// cool
-
 			variant: 'green',
 			css: {
 				backgroundColor: '$gray200',
@@ -123,9 +123,9 @@ two({ variant: 'green' })
 two({ variant: 'red' })
 two({ variant: 'blue' })
 
-type test = StitchesVariants<typeof PotatoButton>
+// type test = StitchesVariants<typeof PotatoButton>
 
-const theme = css.theme({})
+const myTheme = theme({})
 
 PotatoButton({
 	className: '',
