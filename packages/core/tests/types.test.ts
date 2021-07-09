@@ -145,26 +145,17 @@ two({
 	love: 'free',
 })
 
-// two({
-// 	variant: 'red'
-// })
-
-// two({ variant: 'blue' })
-
-// type test = StitchesVariants<typeof PotatoButton>
-
-const myTheme = theme({})
-
 PotatoButton({
 	className: '',
 	css: {
-		'backgroundColor': '$red100',
+		backgroundColor: '$gray300',
 
-		'@initial': {
-			backgroundColor: '-moz-initial',
+		'@all': {
+			backgroundColor: 'initial'
 		},
+
 		'@bp1': {
-			backgroundColor: '-moz-initial',
-		},
+			backgroundColor: 'initial',
+		}
 	},
 })

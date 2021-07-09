@@ -24,7 +24,8 @@ export type NarrowObject<T> = {
 	)
 }
 
-type UnionToIntersection<Union> = (
+/** Returns the given array of objects an an intersection of types. */
+type ArrayAsIntersection<T extends any[], Union = T[number]> = (
 	Union extends any
 		? (argument: Union) => void
 	: never
@@ -246,10 +247,10 @@ export interface CreatedCss<
 			<T extends OmitKey<
 				(
 					& {
-						[K in keyof UnionToIntersection<Args[number]>]?: Widen<keyof UnionToIntersection<Args[number]>[K]>
+						[K in keyof ArrayAsIntersection<Args>]?: Widen<keyof ArrayAsIntersection<Args>[K]>
 					}
 					& {
-						[K in Exclude<keyof T, keyof UnionToIntersection<Args[number]>>]: any
+						[K in Exclude<keyof T, keyof ArrayAsIntersection<Args>>]: any
 					}
 				),
 				'css'
