@@ -24,6 +24,14 @@ export type NarrowObject<T> = {
 	)
 }
 
+type UnionToIntersection<Union> = (
+	Union extends any
+		? (argument: Union) => void
+	: never
+) extends (argument: infer Intersection) => void
+	? Intersection
+: never
+
 /** Returns the given value widened to include looser versions of its value. */
 type Widen<T> = T extends number ? `${T}` | T : T extends 'true' ? boolean | T : T extends 'false' ? boolean | T : T extends `${number}` ? number | T : T
 
@@ -238,10 +246,10 @@ export interface CreatedCss<
 			<T extends OmitKey<
 				(
 					& {
-						[K in keyof Args[0]]?: Widen<keyof Args[0][K]>
+						[K in keyof UnionToIntersection<Args[number]>]?: Widen<keyof UnionToIntersection<Args[number]>[K]>
 					}
 					& {
-						[K in Exclude<keyof T, keyof Args[0]>]: any
+						[K in Exclude<keyof T, keyof UnionToIntersection<Args[number]>>]: any
 					}
 				),
 				'css'

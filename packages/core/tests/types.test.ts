@@ -117,6 +117,14 @@ const two = css(PotatoButton, {
 				backgroundColor: '$gray100',
 			},
 		},
+		love: {
+			free: {
+				color: 'ForestGreen',
+			},
+			good: {
+				color: 'GoldenRod',
+			},
+		}
 	},
 	defaultVariants: {
 		hue: 'red',
@@ -133,7 +141,8 @@ const two = css(PotatoButton, {
 
 two({
 	peace: 'mercy',
-	hue: 'blue',
+	hue: 'green',
+	love: 'free',
 })
 
 // two({
