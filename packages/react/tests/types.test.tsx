@@ -1,10 +1,12 @@
 // core types.tests.ts
+import * as Stitches from '../types/index'
 import { createCss } from '../types/index'
 
-const { global, keyframes, styled, theme } = createCss({
+const { css, global, keyframes, styled, theme } = createCss({
 	utils: {
-		mx: (value) => ({
-			backgroundColor: 'red',
+		mx: (value: Stitches.PropertyValue<'marginLeft'>) => ({
+			marginLeft: value,
+			marginRight: value,
 		}),
 	},
 	theme: {
@@ -53,11 +55,11 @@ keyframes({
 })
 
 global({
-	hello: {
+	body: {
+		backgroundColor: '$gray300',
 		'@bp1': {
 			backgroundColor: '$gray100',
 		},
-		backgroundColor: '$gray300',
 	},
 })
 
@@ -70,7 +72,7 @@ global({
 
 // void externalStyles
 
-const PotatoButton = styled({
+const PotatoButton = styled('button', {
 	variants: {
 		peace: {
 			mercy: {
@@ -91,7 +93,7 @@ const PotatoButton = styled({
 	},
 	compoundVariants: [
 		{
-			variant: 'blue',
+			hue: 'blue',
 			css: {
 				backgroundColor: '$gray200',
 			},
@@ -101,12 +103,11 @@ const PotatoButton = styled({
 
 void function Test() {
 	return (
-		<PotatoButton peace="mercy" hue='blue' />
+		<PotatoButton peace="mercy" hue="blue" />
 	)
 }
 
 const ExtendedButton = styled(PotatoButton, {
-	$$max: '2px',
 	width: '$$max',
 	variants: {
 		hue: {
@@ -142,7 +143,11 @@ const ExtendedButton = styled(PotatoButton, {
 
 void function Test() {
 	return (
-		<ExtendedButton peace="mercy" hue="green" love="free" />
+		<ExtendedButton
+			peace="mercy"
+			love="free"
+			hue="red"
+		/>
 	)
 }
 

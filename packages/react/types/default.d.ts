@@ -1,3 +1,36 @@
+/* CreateCss Interfaces */
+/* ========================================================================== */
+
+/** Default Prefix configuration. */
+export type Prefix = ''
+
+/** Default Media configuration. */
+export type Media = { all: string }
+
+/** Default Theme. */
+export type Theme = {
+	borderStyles?: ThemeScale
+	borderWidths?: ThemeScale
+	colors?: ThemeScale
+	fonts?: ThemeScale
+	fontSizes?: ThemeScale
+	fontWeights?: ThemeScale
+	letterSpacings?: ThemeScale
+	lineHeights?: ThemeScale
+	radii?: ThemeScale
+	shadows?: ThemeScale
+	sizes?: ThemeScale
+	space?: ThemeScale
+	transitions?: ThemeScale
+	zIndices?: ThemeScale
+}
+
+/** Default Theme Scale. */
+type ThemeScale = {
+	[token in number | string]: boolean | number | string
+}
+
+/** Default ThemeMap configuration. */
 export interface ThemeMap {
 	gap: 'space'
 	gridGap: 'space'
@@ -129,25 +162,7 @@ export interface ThemeMap {
 	zIndex: 'zIndices'
 }
 
-export type Theme = {
-	borderStyles: ThemeScale
-	borderWidths: ThemeScale
-	colors: ThemeScale
-	fonts: ThemeScale
-	fontSizes: ThemeScale
-	fontWeights: ThemeScale
-	letterSpacings: ThemeScale
-	lineHeights: ThemeScale
-	radii: ThemeScale
-	shadows: ThemeScale
-	sizes: ThemeScale
-	space: ThemeScale
-	transitions: ThemeScale
-	zIndices: ThemeScale
+/** Default Utilities configuration. */
+export type Utils = {
+	[property: string]: (value: unknown) => {}
 }
-
-export type ThemeScale = {
-	[token: string]: number | string
-}
-
-export type Util = (value: unknown) => {}
