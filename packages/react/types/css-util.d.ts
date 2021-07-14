@@ -30,7 +30,7 @@ export type Style<
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
-			| Util.String
+			| Util.Index
 		)
 	}
 	// known utility styles
@@ -46,12 +46,12 @@ export type Style<
 								| ValueByPropertyName<P[$$PropertyValue]>
 								| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
 								| CSS.Globals
-								| Util.String
+								| Util.Index
 							)
 						: $$ScaleValue extends keyof P
 							? (
 								| TokenByScaleName<P[$$ScaleValue], Theme>
-								| Util.String
+								| Util.Index
 							)
 						: never
 					: never
@@ -70,7 +70,7 @@ export type Style<
 				? unknown
 			: (
 				| CSS.Globals
-				| Util.String
+				| Util.Index
 			)
 		)
 	}
@@ -90,7 +90,7 @@ export type Style<
 			: (
 				| Style<Media, Theme, ThemeMap, Utils>
 				| CSS.Globals
-				| Util.String
+				| Util.Index
 				| any[]
 			)
 		)

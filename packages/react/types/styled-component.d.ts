@@ -3,6 +3,12 @@ import type * as React from 'react'
 import type * as Util from './util'
 import type * as CSSUtil from './css-util'
 
+type TransformProps<Props, Media> = {
+	[K in keyof Props]: Props[K] | {
+		[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
+	}
+}
+
 /** Returns a new Styled Component. */
 export interface StyledComponent<
 	TagName = 'span',
@@ -10,8 +16,9 @@ export interface StyledComponent<
 	Media = Default.Media,
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
-	Utils = {}
-> extends ForwardRefExoticComponent<TagName, Props> {
+	Utils = {},
+	TransformedProps = TransformProps<Props, Media>
+> extends ForwardRefExoticComponent<TagName, TransformedProps> {
 	<
 		As extends
 			| keyof JSX.IntrinsicElements
@@ -19,9 +26,9 @@ export interface StyledComponent<
 	>(
 		props: (
 			As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], Partial<Props> & { as?: As, css?: CSSUtil.Style<Media, Theme, ThemeMap, Utils> }>
+				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps> & { as?: As, css?: CSSUtil.Style<Media, Theme, ThemeMap, Utils> }>
 			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, Partial<Props> & { as?: As, css?: CSSUtil.Style<Media, Theme, ThemeMap, Utils> }>
+				? Util.Assign<P, Partial<TransformedProps> & { as?: As, css?: CSSUtil.Style<Media, Theme, ThemeMap, Utils> }>
 			: never
 		)
 	): (
@@ -39,11 +46,12 @@ export interface CssComponent<
 	Media = Default.Media,
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
-	Utils = {}
+	Utils = {},
+	TransformedProps = TransformProps<Props, Media>
 > {
 	(
 		props: (
-			& Partial<Props>
+			& Partial<TransformedProps>
 			& {
 				css?: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
 			}

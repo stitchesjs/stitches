@@ -12,3 +12,6 @@ export type Widen<T> = T extends number ? `${T}` | T : T extends 'true' ? boolea
 
 /** Narrowed string. */
 export type String = string & Record<never, never>
+
+/** Narrowed number or string. */
+export type Index = (number | string) & Record<never, never>
