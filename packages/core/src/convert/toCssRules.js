@@ -65,7 +65,7 @@ export const toCssRules = (
 						if (util !== lastUtil) {
 							lastUtil = util
 
-							each(util(config)(data))
+							each(util(data))
 
 							lastUtil = null
 
