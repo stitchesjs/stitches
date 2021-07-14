@@ -4,7 +4,7 @@ describe('Component: Utilities & Tokens', () => {
 	test('Utilities & Tokens of the same type', () => {
 		const { css, toString } = createCss({
 			utils: {
-				px: () => (value) => ({
+				px: (value) => ({
 					paddingLeft: value,
 					paddingRight: value,
 				}),
@@ -21,7 +21,7 @@ describe('Component: Utilities & Tokens', () => {
 	test('Utilities & Tokens of different types', () => {
 		const { css, toString } = createCss({
 			utils: {
-				ftw: () => (value) => ({
+				ftw: (value) => ({
 					color: value,
 					paddingLeft: value,
 					paddingRight: value,

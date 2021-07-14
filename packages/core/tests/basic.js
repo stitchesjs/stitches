@@ -152,7 +152,7 @@ describe('Basic', () => {
 	test('Functionality of css() — utils', () => {
 		const { css, getCssString } = createCss({
 			utils: {
-				userSelect: () => (value) => ({
+				userSelect: (value) => ({
 					WebkitUserSelector: value,
 					userSelect: value,
 				}),
@@ -231,7 +231,7 @@ describe('Basic', () => {
 	test('Stringification: Utils + Local Tokens', () => {
 		const { css, getCssString } = createCss({
 			utils: {
-				backdropFilter: () => (value) => ({
+				backdropFilter: (value) => ({
 					WebkitBackdropFilter: value,
 					backdropFilter: value,
 				}),
