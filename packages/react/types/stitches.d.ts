@@ -181,6 +181,7 @@ export interface Stitches<
 								)
 							}
 							& {
+								variants?: unknown
 								compoundVariants?: (
 									& (
 										'variants' extends keyof Composers[K]
