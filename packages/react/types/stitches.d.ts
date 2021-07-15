@@ -101,6 +101,8 @@ export interface Stitches<
 		<
 			Composers extends (
 				| string
+				| React.ExoticComponent<any>
+				| React.JSXElementConstructor<any>
 				| Function
 				| { [name: string]: unknown }
 			)[]
