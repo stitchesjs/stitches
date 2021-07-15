@@ -85,7 +85,7 @@ export type Style<
 				? unknown
 			: K extends keyof ThemeMap
 				? unknown
-			: K extends keyof { variants: unknown; compoundVariants: unknown }
+			: K extends keyof { variants: unknown; defaultVariants: unknown; compoundVariants: unknown }
 				? unknown
 			: (
 				| Style<Media, Theme, ThemeMap, Utils>
