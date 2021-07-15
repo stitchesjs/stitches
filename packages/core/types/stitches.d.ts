@@ -16,6 +16,7 @@ export interface Stitches<
 		media: Media
 		theme: Theme
 		themeMap: ThemeMap
+		utils: Utils
 	},
 	prefix: Prefix
 	global: {
