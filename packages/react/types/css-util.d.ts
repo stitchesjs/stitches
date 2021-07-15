@@ -112,3 +112,18 @@ export type $$ScaleValue = typeof $$ScaleValue
 export declare const $$ThemeValue: unique symbol
 
 export type $$ThemeValue = typeof $$ThemeValue
+
+/** Returns a Style interface from a configuration, leveraging the given media and style map. */
+export type CSS<
+	Config extends {
+		media?: {}
+		theme?: {}
+		themeMap?: {}
+		utils?: {}
+	}
+> = Style<
+	Config['media'],
+	Config['theme'],
+	Config['themeMap'],
+	Config['utils']
+>

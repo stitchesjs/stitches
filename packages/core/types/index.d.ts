@@ -1,8 +1,9 @@
 import type { PropertyValue, ScaleValue, CreateCss } from './create-css'
+import type { CSS, Style } from './css-util'
 import type { Stitches } from './stitches'
 import type { ThemeMap as DefaultThemeMap } from './default'
 
-export type { PropertyValue, ScaleValue, CreateCss, Stitches, DefaultThemeMap }
+export type { CSS, CreateCss, DefaultThemeMap, PropertyValue, ScaleValue, Stitches, Style }
 
 /** Returns a library used to create styles. */
 export declare const createCss: CreateCss
