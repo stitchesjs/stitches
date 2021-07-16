@@ -1,13 +1,7 @@
+import type * as CSSUtil from './css-util'
 import type * as Default from './default'
 import type * as React from 'react'
 import type * as Util from './util'
-import type * as CSSUtil from './css-util'
-
-type TransformProps<Props, Media> = {
-	[K in keyof Props]: Props[K] | {
-		[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
-	}
-}
 
 /** Returns a new Styled Component. */
 export interface StyledComponent<
@@ -17,7 +11,8 @@ export interface StyledComponent<
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
 	Utils = {},
-	TransformedProps = TransformProps<Props, Media>
+	TransformedProps = TransformProps<Props, Media>,
+	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > extends ForwardRefExoticComponent<TagName, TransformedProps> {
 	<
 		As extends
@@ -26,9 +21,9 @@ export interface StyledComponent<
 	>(
 		props: (
 			As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps> & { as?: As, css?: CSSUtil.Style<Media, Theme, ThemeMap, Utils> }>
+				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps> & { as?: As, css?: CSS }>
 			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, Partial<TransformedProps> & { as?: As, css?: CSSUtil.Style<Media, Theme, ThemeMap, Utils> }>
+				? Util.Assign<P, Partial<TransformedProps> & { as?: As, css?: CSS }>
 			: never
 		)
 	): (
@@ -47,13 +42,14 @@ export interface CssComponent<
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
 	Utils = {},
-	TransformedProps = TransformProps<Props, Media>
+	TransformedProps = TransformProps<Props, Media>,
+	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > {
 	(
 		props: (
 			& Partial<TransformedProps>
 			& {
-				css?: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+				css?: CSS
 			}
 			& {
 				[name in number | string]: any
@@ -70,6 +66,12 @@ export interface CssComponent<
 
 	[$$StyledComponentType]: TagName
 	[$$StyledComponentProps]: Props
+}
+
+type TransformProps<Props, Media> = {
+	[K in keyof Props]: Props[K] | {
+		[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
+	}
 }
 
 /** Unique symbol used to reference the type of a Styled Component. */

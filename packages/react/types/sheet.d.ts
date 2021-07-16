@@ -3,13 +3,15 @@ import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
 import type * as Util from './util'
 
-/** Stitches interface. */
-export interface Stitches<
+/** Sheet interface. */
+export default interface Sheet<
 	Prefix = Default.Prefix,
 	Media = Default.Media,
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
-	Utils = {}
+	Utils = {},
+	CSS extends { [prelude: string]: unknown } = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>,
+	KnownCSS extends { [prelude: string]: unknown } = CSSUtil.KnownCSS<Media, Theme, ThemeMap, Utils>
 > {
 	config: {
 		prefix: Prefix
@@ -21,14 +23,14 @@ export interface Stitches<
 	prefix: Prefix
 	global: {
 		(style: {
-			[prelude: string]: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+			[prelude: string]: CSS
 		}): {
 			(): string
 		}
 	},
 	keyframes: {
 		(style: {
-			[offset: string]: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+			[offset: string]: CSS
 		}): {
 			(): string
 			name: string
@@ -98,7 +100,7 @@ export interface Stitches<
 					: Composers[K] extends Function
 						? Composers[K]
 					: Composers[K] extends {
-						[K2 in keyof Composers[K]]: Composers[K][K2]
+						[Prelude in keyof Composers[K]]: Composers[K][Prelude]
 					}
 						? (
 							& {
@@ -106,12 +108,12 @@ export interface Stitches<
 									K2 extends 'variants'
 										? {
 											[name: string]: {
-												[pair in number | string]: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+												[pair in number | string]: CSS
 											}
 										}
 									: unknown
 							}
-							& CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+							& KnownCSS
 						)
 					: never
 				)
@@ -149,46 +151,41 @@ export interface Stitches<
 						[K2 in keyof Composers[K]]: Composers[K][K2]
 					}
 						? (
+							& KnownCSS
 							& {
-								[K2 in keyof Composers[K]]: (
-									| (
-										K2 extends 'variants'
-											? {
-												[name: string]: {
-													[pair in number | string]: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
-												}
-											}
-										: unknown
-									)
-								)
-							}
-							& {
-								variants?: unknown
+								variants?: {
+									[name: string]: {
+										[pair in number | string]: CSS
+									}
+								}
 								compoundVariants?: (
 									& (
 										'variants' extends keyof Composers[K]
 											? {
-												[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]>
-											}
-										: {
-											[name: string]: boolean | number | string | undefined
-										}
+												[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+											} & Util.WideObject
+										: Util.WideObject
 									)
 									& {
-										css: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+										css: CSS
 									}
 								)[]
 								defaultVariants?: (
 									'variants' extends keyof Composers[K]
 										? {
-											[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]>
+											[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
 										}
-									: {
-										[name: string]: boolean | number | string | undefined
-									}
+									: Util.WideObject
 								)
 							}
-							& CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+							& {
+								[Prelude in keyof Composers[K]]:
+									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
+										? unknown
+									: Composers[K][Prelude] extends {}
+										? CSS
+									: boolean | number | string
+							}
 						)
 					: never
 				)
@@ -203,15 +200,3 @@ export interface Stitches<
 		>
 	}
 }
-
-/* ========================================================================== */
-
-export interface GlobalComponent {
-	(): string
-}
-
-export interface GlobalExpressor {
-	toString(): ''
-}
-
-export interface ThemedExpressor {}
