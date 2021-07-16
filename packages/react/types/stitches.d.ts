@@ -3,26 +3,6 @@ import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
 import type * as Util from './util'
 
-// Construct a type with the properties of T except for those in type K.
-// type XYZ = Omit<>
-
-type Merge<T1, T2> = {
-	[K in keyof T1 | keyof T2]: (
-		| (
-			K extends keyof T1 ? T1[K] : never
-		)
-		| (
-			K extends keyof T2 ? T2[K] : never
-		)
-	)
-}
-
-type Tokens<Theme, K> = (
-	K extends keyof Theme
-		? Util.Prefixed<'$', keyof Theme[K]>
-	: never
-)
-
 /** Stitches interface. */
 export interface Stitches<
 	Prefix = Default.Prefix,
@@ -103,7 +83,7 @@ export interface Stitches<
 				| string
 				| React.ExoticComponent<any>
 				| React.JSXElementConstructor<any>
-				| Function
+				| Util.Function
 				| { [name: string]: unknown }
 			)[]
 		>(
@@ -151,7 +131,7 @@ export interface Stitches<
 				| string
 				| React.ExoticComponent<any>
 				| React.JSXElementConstructor<any>
-				| Function
+				| Util.Function
 				| { [name: string]: unknown }
 			)[]
 		>(
