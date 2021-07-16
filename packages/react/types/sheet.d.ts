@@ -97,10 +97,10 @@ export default interface Sheet<
 						? Composers[K]
 					: Composers[K] extends React.JSXElementConstructor<any>
 						? Composers[K]
-					: Composers[K] extends Function
+					: Composers[K] extends Util.Function
 						? Composers[K]
 					: Composers[K] extends {
-						[Prelude in keyof Composers[K]]: Composers[K][Prelude]
+						[K2 in keyof Composers[K]]: Composers[K][K2]
 					}
 						? (
 							& {
@@ -145,7 +145,7 @@ export default interface Sheet<
 						? Composers[K]
 					: Composers[K] extends React.JSXElementConstructor<any>
 						? Composers[K]
-					: Composers[K] extends Function
+					: Composers[K] extends Util.Function
 						? Composers[K]
 					: Composers[K] extends {
 						[K2 in keyof Composers[K]]: Composers[K][K2]

@@ -1,23 +1,19 @@
 import type * as CSSUtil from './css-util'
 import type * as Default from './default'
-import type * as Stitches from './stitches'
-
-export type PropertyValue<K extends keyof CSSUtil.CSSProperties> = { readonly [CSSUtil.$$PropertyValue]: K }
-
-export type ScaleValue<K> = { readonly [CSSUtil.$$ScaleValue]: K }
+import type Sheet from './sheet'
 
 /* Interfaces */
 /* ========================================================================== */
 
 /** Returns a shaped theme object from the given media object. */
-export type InterfaceOfMedia<
+type InterfaceOfMedia<
 	Media extends {}
 > = {
 	[K in keyof Media]: string
 }
 
 /** Returns a shaped theme object from the given theme object. */
-export type InterfaceOfTheme<
+type InterfaceOfTheme<
 	Theme extends {}
 > = (
 	// shape of left-hand scale names
@@ -39,7 +35,7 @@ export type InterfaceOfTheme<
 )
 
 /** Returns a shaped themeMap object from the given themeMap object and theme object. */
-export type InterfaceOfThemeMap<
+type InterfaceOfThemeMap<
 	ThemeMap extends {} = {},
 	Theme extends {} = {}
 > = (
@@ -61,7 +57,7 @@ export type InterfaceOfThemeMap<
 	}
 )
 
-export type InterfaceOfUtils<
+type InterfaceOfUtils<
 	Utils extends {} = {}
 > = (
 	// shape of right-hand values
@@ -75,7 +71,7 @@ export type InterfaceOfUtils<
 )
 
 /** Returns a function used to create a new Stitches interface. */
-export type CreateCss = {
+type CreateCss = {
 	<
 		Prefix extends string,
 		Media extends InterfaceOfMedia<Media>,
@@ -90,7 +86,7 @@ export type CreateCss = {
 			themeMap?: ThemeMap
 			utils?: Utils
 		}
-	): Stitches.Stitches<
+	): Sheet<
 		// post-process prefix
 		string extends Prefix ? Default.Prefix : Prefix,
 		// post-process media
@@ -104,4 +100,4 @@ export type CreateCss = {
 	>
 }
 
-export declare var createCss: CreateCss
+export default CreateCss

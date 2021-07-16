@@ -3,13 +3,15 @@ import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
 import type * as Util from './util'
 
-/** Stitches interface. */
-export interface Stitches<
+/** Sheet interface. */
+export default interface Sheet<
 	Prefix = Default.Prefix,
 	Media = Default.Media,
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
-	Utils = {}
+	Utils = {},
+	CSS extends { [prelude: string]: unknown } = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>,
+	KnownCSS extends { [prelude: string]: unknown } = CSSUtil.KnownCSS<Media, Theme, ThemeMap, Utils>
 > {
 	config: {
 		prefix: Prefix
@@ -21,14 +23,14 @@ export interface Stitches<
 	prefix: Prefix
 	global: {
 		(style: {
-			[prelude: string]: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+			[prelude: string]: CSS
 		}): {
 			(): string
 		}
 	},
 	keyframes: {
 		(style: {
-			[offset: string]: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+			[offset: string]: CSS
 		}): {
 			(): string
 			name: string
@@ -81,7 +83,7 @@ export interface Stitches<
 		<
 			Composers extends (
 				| string
-				| Function
+				| Util.Function
 				| { [name: string]: unknown }
 			)[]
 		>(
@@ -89,11 +91,7 @@ export interface Stitches<
 				[K in keyof Composers]: (
 					Composers[K] extends string
 						? Composers[K]
-					: Composers[K] extends React.ExoticComponent<any>
-						? Composers[K]
-					: Composers[K] extends React.JSXElementConstructor<any>
-						? Composers[K]
-					: Composers[K] extends Function
+					: Composers[K] extends Util.Function
 						? Composers[K]
 					: Composers[K] extends {
 						[K2 in keyof Composers[K]]: Composers[K][K2]
@@ -104,12 +102,12 @@ export interface Stitches<
 									K2 extends 'variants'
 										? {
 											[name: string]: {
-												[pair in number | string]: CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+												[pair in number | string]: CSS
 											}
 										}
 									: unknown
 							}
-							& CSSUtil.Style<Media, Theme, ThemeMap, Utils>
+							& KnownCSS
 						)
 					: never
 				)
@@ -122,24 +120,5 @@ export interface Stitches<
 			ThemeMap,
 			Utils
 		>
-	}
+	},
 }
-
-/* ========================================================================== */
-
-type Merge<T1, T2> = {
-	[K in keyof T1 | keyof T2]: (
-		| (
-			K extends keyof T1 ? T1[K] : never
-		)
-		| (
-			K extends keyof T2 ? T2[K] : never
-		)
-	)
-}
-
-type Tokens<Theme, K> = (
-	K extends keyof Theme
-		? Util.Prefixed<'$', keyof Theme[K]>
-	: never
-)
