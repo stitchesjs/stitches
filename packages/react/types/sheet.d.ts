@@ -1,11 +1,12 @@
 import type * as CSSUtil from './css-util'
 import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
+import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
 /** Sheet interface. */
 export default interface Sheet<
-	Prefix = Default.Prefix,
+	Prefix extends string = Default.Prefix,
 	Media = Default.Media,
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
@@ -71,6 +72,10 @@ export default interface Sheet<
 		): {
 			className: string
 			selector: string
+		}
+	} & {
+		[Scale in keyof Theme]: {
+			[Token in keyof Theme[Scale]]: ThemeUtil.Token<Extract<Token, string | number>, string, Extract<Scale, string>, Prefix>
 		}
 	}
 	reset: {

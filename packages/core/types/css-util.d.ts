@@ -1,5 +1,6 @@
 import type * as CSS from './css'
 import type * as Default from './default'
+import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
 /** CSS style declaration object. */
@@ -12,8 +13,6 @@ type ValueByPropertyName<PropertyName> = PropertyName extends keyof CSSPropertie
 type TokenByPropertyName<PropertyName, Theme, ThemeMap> = PropertyName extends keyof ThemeMap ? TokenByScaleName<ThemeMap[PropertyName], Theme> : never
 
 type TokenByScaleName<ScaleName, Theme> = ScaleName extends keyof Theme ? Util.Prefixed<'$', keyof Theme[ScaleName]> : never
-
-type SupportedAnimationName<K> = K extends 'animation' | 'animationName' ? {} : never
 
 /** Returns a Style interface, leveraging the given media and style map. */
 export type CSS<
@@ -33,7 +32,7 @@ export type CSS<
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
 			| Util.Index
-			| SupportedAnimationName<K>
+			| ThemeUtil.TokenInterface
 		)
 	}
 	// known utility styles
@@ -119,7 +118,7 @@ export type KnownCSS<
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
 			| Util.Index
-			| SupportedAnimationName<K>
+			| ThemeUtil.TokenInterface
 		)
 	}
 	// known utility styles

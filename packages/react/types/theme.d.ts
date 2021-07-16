@@ -1,4 +1,6 @@
-export declare class Token<
+export interface TokenInterface {}
+
+export interface Token<
 	/** Token name. */
 	NameType extends number | string = string,
 
@@ -10,7 +12,7 @@ export declare class Token<
 
 	/** Token prefix. */
 	PrefixType extends string | void = void,
-> {
+> extends TokenInterface {
 	new (name: NameType, value: ValueType, scale?: ScaleType, prefix?: PrefixType): this
 
 	/** Name of the token. */
@@ -33,24 +35,4 @@ export declare class Token<
 
 	/** Returns a serialized CSS var() representing the token. */
 	toString(): this['computedValue']
-} // prettier-ignore
-
-export type Tokens<Type extends object = {}, PrefixType extends string = ''> = __TokensLiteral<__TokensCreated<Type, PrefixType>>
-
-type __TokensCreated<Type extends object, PrefixType extends string> = {
-	[KScaleType in keyof Type]: (
-		Type[KScaleType] extends object
-			? {
-				[KTokenType in keyof Type[KScaleType]]: (
-					Type[KScaleType][KTokenType] extends string
-						? Token<string & KTokenType, string & Type[KScaleType][KTokenType], string & KScaleType, PrefixType>
-					: never
-				)
-			}
-		: {}
-	)
-} // prettier-ignore
-
-type __TokensLiteral<T> = T extends {} ? {
-	[K in keyof T]: T[K]
-} : never // prettier-ignore
+}
