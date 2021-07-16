@@ -13,6 +13,8 @@ type TokenByPropertyName<PropertyName, Theme, ThemeMap> = PropertyName extends k
 
 type TokenByScaleName<ScaleName, Theme> = ScaleName extends keyof Theme ? Util.Prefixed<'$', keyof Theme[ScaleName]> : never
 
+type SupportedAnimationName<K> = K extends 'animation' | 'animationName' ? {} : never
+
 /** Returns a Style interface, leveraging the given media and style map. */
 export type CSS<
 	Media = Default.Media,
@@ -31,6 +33,7 @@ export type CSS<
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
 			| Util.Index
+			| SupportedAnimationName<K>
 		)
 	}
 	// known utility styles
@@ -116,6 +119,7 @@ export type KnownCSS<
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
 			| Util.Index
+			| SupportedAnimationName<K>
 		)
 	}
 	// known utility styles
