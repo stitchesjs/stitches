@@ -6,8 +6,6 @@ import type * as Util from './util'
 /** CSS style declaration object. */
 export interface CSSProperties extends CSS.StandardLonghandProperties, CSS.StandardShorthandProperties, CSS.SvgProperties {}
 
-type HasKey<T, K> = K extends keyof T ? true : false
-
 type ValueByPropertyName<PropertyName> = PropertyName extends keyof CSSProperties ? CSSProperties[PropertyName] : never
 
 type TokenByPropertyName<PropertyName, Theme, ThemeMap> = PropertyName extends keyof ThemeMap ? TokenByScaleName<ThemeMap[PropertyName], Theme> : never
