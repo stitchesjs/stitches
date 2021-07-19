@@ -1,16 +1,20 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "debug.console.historySuggestions": false,
   "editor.formatOnSave": false,
+  "editor.snippetSuggestions": "none",
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.suggestSelection": "recentlyUsedByPrefix",
+  "editor.wordBasedSuggestions": false,
   "files.exclude": {
-    "node_modules/": true,
-    "package-lock.json": true,
-    "yarn.lock": true
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/package-lock.json": true,
+    "**/yarn.lock": true
   },
+  "javascript.suggest.enabled": false,
+  "javascript.suggest.names": false,
+  "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "typescript.tsserver.maxTsServerMemory": 8192
 }
