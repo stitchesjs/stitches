@@ -36,11 +36,11 @@
     "@types/react": "17.0.14",
     "@types/react-dom": "17.0.9",
     "@types/react-test-renderer": "17.0.1",
-    "@typescript-eslint/eslint-plugin": "4.28.3",
-    "@typescript-eslint/parser": "4.28.3",
+    "@typescript-eslint/eslint-plugin": "4.28.4",
+    "@typescript-eslint/parser": "4.28.4",
     "csstype": "3.0.8",
     "esbuild": "0.12.15",
-    "eslint": "7.30.0",
+    "eslint": "7.31.0",
     "lerna": "4.0.0",
     "nodemon": "2.0.12",
     "react": "17.0.2",
@@ -113,7 +113,12 @@
               }
             }
           ],
-          "@typescript-eslint/no-explicit-any": "off"
+          "@typescript-eslint/no-explicit-any": "off",
+          "@typescript-eslint/no-for-in-array": "off",
+          "@typescript-eslint/no-unnecessary-qualifier": "off",
+          "@typescript-eslint/no-unnecessary-type-assertion": "off",
+          "@typescript-eslint/promise-function-async": "off",
+          "@typescript-eslint/restrict-plus-operands": "off"
         }
       }
     ]
