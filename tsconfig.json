@@ -7,13 +7,14 @@
     "jsx": "preserve",
     "lib": [
       "dom",
-      "es2020"
+      "es2021"
     ],
     "moduleResolution": "node",
     "strict": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
+    "target": "es2021"
   },
   "files": [
     "packages/core/types/index.d.ts",
