@@ -51,7 +51,7 @@ export declare const $$StyledComponentProps: unique symbol
 export type $$StyledComponentProps = typeof $$StyledComponentProps
 
 /** Returns the first Styled Component type from the given array of compositions. */
-type StyledComponentType<T extends any[]> = (
+export type StyledComponentType<T extends any[]> = (
 	T[0] extends never
 		? 'span'
 	: T[0] extends string
@@ -64,7 +64,7 @@ type StyledComponentType<T extends any[]> = (
 )
 
 /** Returns the cumulative variants from the given array of compositions. */
-type StyledComponentProps<T extends any[]> = (
+export type StyledComponentProps<T extends any[]> = (
 	& (
 		$$StyledComponentProps extends keyof T[0]
 			? T[0][$$StyledComponentProps]

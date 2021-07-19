@@ -29,6 +29,9 @@ export type PropertyValue<K extends keyof CSSUtil.CSSProperties> = { readonly [C
 /** Returns a type that expects a value to be a kind of theme scale value. */
 export type ScaleValue<K> = { readonly [CSSUtil.$$ScaleValue]: K }
 
+/** Returns a type that suggests variants from a component as possible prop values. */
+export type VariantProps<Component> = Component[StyledComponent.$$StyledComponentProps]
+
 /** Returns a library used to create styles. */
 export declare const createCss: CreateCss
 
