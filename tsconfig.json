@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
+    "diagnostics": true,
     "esModuleInterop": true,
+    "extendedDiagnostics": true,
+    "skipLibCheck": true,
     "jsx": "preserve",
     "lib": [
       "dom",
@@ -11,5 +14,12 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
-  }
+  },
+  "files": [
+    "packages/core/types/index.d.ts",
+    "packages/react/types/index.d.ts"
+  ],
+  "include": [
+    "packages/*/types/*.ts"
+  ],
 }
