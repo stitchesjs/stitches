@@ -44,6 +44,8 @@ export default interface Sheet<
 				| (
 					& {
 						[scale in keyof Theme]?: {
+							[token in keyof Theme[scale]]?: boolean | number | string
+						} & {
 							[token in keyof number | string]: boolean | number | string
 						}
 					}
