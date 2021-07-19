@@ -79,7 +79,7 @@ type CreateCss = {
 		ThemeMap extends InterfaceOfThemeMap<ThemeMap, Theme>,
 		Utils extends InterfaceOfUtils<Utils>
 	>(
-		config: {
+		config?: {
 			prefix?: Prefix
 			media?: Media
 			theme?: Theme
