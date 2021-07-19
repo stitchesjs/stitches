@@ -16,12 +16,10 @@ export interface StyledComponent<
 > extends ForwardRefExoticComponent<TagName, TransformedProps> {
 	<As = TagName>(
 		props:
-			As extends ''
-				? { as: keyof JSX.IntrinsicElements, css?: CSS }
+			As extends keyof JSX.IntrinsicElements
+				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps> & { as?: As, css?: CSS }>
 			: As extends React.ComponentType<infer P>
 				? Util.Assign<P, Partial<TransformedProps> & { as?: As, css?: CSS }>
-			: As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as?: As, css?: CSS }>
 			: never
 	): React.ReactElement | null
 
@@ -49,7 +47,14 @@ export interface CssComponent<
 			& {
 				[name in number | string]: any
 			}
-	): React.ReactElement | null
+	): {
+		className: string
+		selector: string
+		props: object
+	}
+
+	className: string
+	selector: string
 
 	[$$StyledComponentType]: TagName
 	[$$StyledComponentProps]: Props

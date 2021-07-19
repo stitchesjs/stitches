@@ -22,7 +22,11 @@ export interface CssComponent<
 			& {
 				[name in number | string]: any
 			}
-	): React.ReactElement | null
+	): {
+		className: string
+		selector: string
+		props: object
+	}
 
 	[$$StyledComponentType]: TagName
 	[$$StyledComponentProps]: Props
