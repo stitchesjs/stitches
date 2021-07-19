@@ -30,9 +30,10 @@
     "play"
   ],
   "dependencies": {
-    "@skypack/package-check": "0.2.2",
     "@radix-ui/react-polymorphic": "0.0.12",
     "@radix-ui/react-separator": "0.0.14",
+    "@skypack/package-check": "0.2.2",
+    "@types/node": "^16.3.3",
     "@types/react": "17.0.14",
     "@types/react-dom": "17.0.9",
     "@types/react-test-renderer": "17.0.1",
