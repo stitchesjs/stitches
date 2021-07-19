@@ -40,13 +40,15 @@ export interface CssComponent<
 	TransformedProps = TransformProps<Props, Media>,
 	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > {
-	<As = TagName>(
+	(
 		props:
-			As extends ''
-				? { as: keyof JSX.IntrinsicElements, css?: CSS }
-			: As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as?: As, css?: CSS }>
-			: never
+			& Partial<TransformedProps>
+			& {
+				css?: CSS
+			}
+			& {
+				[name in number | string]: any
+			}
 	): React.ReactElement | null
 
 	[$$StyledComponentType]: TagName
