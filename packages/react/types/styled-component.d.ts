@@ -14,27 +14,22 @@ export interface StyledComponent<
 	TransformedProps = TransformProps<Props, Media>,
 	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > extends ForwardRefExoticComponent<TagName, TransformedProps> {
-	<
-		As extends
-			| keyof JSX.IntrinsicElements
-			| React.ComponentType<any> = IntrinsicElement<TagName>
-	>(
-		props: (
-			As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps> & { as?: As, css?: CSS }>
+	<As = TagName>(
+		props:
+			As extends ''
+				? { as: keyof JSX.IntrinsicElements, css?: CSS }
 			: As extends React.ComponentType<infer P>
 				? Util.Assign<P, Partial<TransformedProps> & { as?: As, css?: CSS }>
+			: As extends keyof JSX.IntrinsicElements
+				? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as?: As, css?: CSS }>
 			: never
-		)
-	): (
-		React.ReactElement | null
-	)
+	): React.ReactElement | null
 
 	[$$StyledComponentType]: TagName
 	[$$StyledComponentProps]: Props
 }
 
-/** Returns a new Css Component. */
+/** Returns a new CSS Component. */
 export interface CssComponent<
 	TagName = 'span',
 	Props = {},
@@ -45,24 +40,14 @@ export interface CssComponent<
 	TransformedProps = TransformProps<Props, Media>,
 	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > {
-	(
-		props: (
-			& Partial<TransformedProps>
-			& {
-				css?: CSS
-			}
-			& {
-				[name in number | string]: any
-			}
-		)
-	): {
-		className: string
-		selector: string
-		props: object
-	}
-
-	className: string
-	selector: string
+	<As = TagName>(
+		props:
+			As extends ''
+				? { as: keyof JSX.IntrinsicElements, css?: CSS }
+			: As extends keyof JSX.IntrinsicElements
+				? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as?: As, css?: CSS }>
+			: never
+	): React.ReactElement | null
 
 	[$$StyledComponentType]: TagName
 	[$$StyledComponentProps]: Props
