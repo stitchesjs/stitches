@@ -25,6 +25,7 @@ export interface StyledComponent<
 
 	[$$StyledComponentType]: TagName
 	[$$StyledComponentProps]: Props
+	[$$StyledComponentMedia]: Media
 }
 
 /** Returns a new CSS Component. */
@@ -58,9 +59,10 @@ export interface CssComponent<
 
 	[$$StyledComponentType]: TagName
 	[$$StyledComponentProps]: Props
+	[$$StyledComponentMedia]: Media
 }
 
-type TransformProps<Props, Media> = {
+export type TransformProps<Props, Media> = {
 	[K in keyof Props]: Props[K] | {
 		[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
 	}
@@ -77,6 +79,12 @@ export declare const $$StyledComponentProps: unique symbol
 
 /** Unique symbol used to reference the props of a Styled Component. */
 export type $$StyledComponentProps = typeof $$StyledComponentProps
+
+/** Unique symbol used to reference the media passed into a Styled Component. */
+export declare const $$StyledComponentMedia: unique symbol
+
+/** Unique symbol used to reference the media passed into a Styled Component. */
+export type $$StyledComponentMedia = typeof $$StyledComponentMedia
 
 /** Returns a narrowed JSX element from the given tag name. */
 type IntrinsicElement<TagName> = TagName extends keyof JSX.IntrinsicElements ? TagName : never

@@ -30,7 +30,7 @@ export type PropertyValue<K extends keyof CSSUtil.CSSProperties> = { readonly [C
 export type ScaleValue<K> = { readonly [CSSUtil.$$ScaleValue]: K }
 
 /** Returns a type that suggests variants from a component as possible prop values. */
-export type VariantProps<Component> = Component[StyledComponent.$$StyledComponentProps]
+export type VariantProps<Component> = StyledComponent.TransformProps<Component[StyledComponent.$$StyledComponentProps], Component[StyledComponent.$$StyledComponentMedia]>
 
 /** Returns a library used to create styles. */
 export declare const createCss: CreateCss
