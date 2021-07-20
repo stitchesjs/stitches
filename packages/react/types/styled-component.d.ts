@@ -5,7 +5,7 @@ import type * as Util from './util'
 
 /** Returns a new Styled Component. */
 export interface StyledComponent<
-	TagName = 'span',
+	Type = 'span',
 	Props = {},
 	Media = Default.Media,
 	Theme = {},
@@ -13,8 +13,8 @@ export interface StyledComponent<
 	Utils = {},
 	TransformedProps = TransformProps<Props, Media>,
 	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-> extends ForwardRefExoticComponent<TagName, TransformedProps> {
-	<As = TagName>(
+> extends ForwardRefExoticComponent<Type, TransformedProps> {
+	<As = Type>(
 		props:
 			As extends keyof JSX.IntrinsicElements
 				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps> & { as?: As, css?: CSS }>
@@ -23,7 +23,7 @@ export interface StyledComponent<
 			: never
 	): React.ReactElement | null
 
-	[$$StyledComponentType]: TagName
+	[$$StyledComponentType]: Type
 	[$$StyledComponentProps]: Props
 	[$$StyledComponentMedia]: Media
 }
@@ -99,6 +99,8 @@ export type StyledComponentType<T extends any[]> = (
 	T[0] extends never
 		? 'span'
 	: T[0] extends string
+		? T[0]
+	: T[0] extends (props: any) => any
 		? T[0]
 	: T[0] extends { [$$StyledComponentType]: unknown }
 		? T[0][$$StyledComponentType]
