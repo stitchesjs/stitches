@@ -40,7 +40,7 @@ export interface CssComponent<
 	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > {
 	(
-		props:
+		props?:
 			& Partial<TransformedProps>
 			& {
 				css?: CSS
@@ -48,7 +48,7 @@ export interface CssComponent<
 			& {
 				[name in number | string]: any
 			}
-	): {
+	): string & {
 		className: string
 		selector: string
 		props: object

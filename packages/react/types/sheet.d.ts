@@ -128,7 +128,7 @@ export default interface Sheet<
 					: never
 				)
 			}
-		): string & StyledComponent.CssComponent<
+		): StyledComponent.CssComponent<
 			StyledComponent.StyledComponentType<Composers>,
 			StyledComponent.StyledComponentProps<Composers>,
 			Media,
