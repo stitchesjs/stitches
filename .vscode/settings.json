@@ -6,6 +6,7 @@
   "editor.suggestSelection": "recentlyUsedByPrefix",
   "editor.wordBasedSuggestions": false,
   "emmet.showAbbreviationSuggestions": false,
+  "emmet.showExpandedAbbreviation": "never",
   "files.exclude": {
     "**/.DS_Store": true,
     "**/.git": true,
