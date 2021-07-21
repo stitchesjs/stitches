@@ -37,7 +37,7 @@ export default interface Sheet<
 			name: string
 		}
 	},
-	theme: {
+	theme: string & {
 		(
 			nameOrScalesArg0: (
 				| string
@@ -71,10 +71,13 @@ export default interface Sheet<
 					}
 				)
 			)
-		): {
-			className: string
-			selector: string
-		} & ThemeTokens<Extract<typeof nameOrScalesArg0 | typeof nameOrScalesArg1, { [scale: string] : unknown }>, Prefix>
+		):
+			& string
+			& {
+				className: string
+				selector: string
+			}
+			& ThemeTokens<Extract<typeof nameOrScalesArg0 | typeof nameOrScalesArg1, { [scale: string] : unknown }>, Prefix>
 	} & {
 		[Scale in keyof Theme]: {
 			[Token in keyof Theme[Scale]]: ThemeUtil.Token<Extract<Token, string | number>, string, Extract<Scale, string>, Prefix>
