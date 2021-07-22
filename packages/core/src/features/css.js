@@ -320,7 +320,8 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 		combinedUndefinedVariants.push(...undefinedVariants)
 
 		for (const name in prefilledVariants) {
-			combinedPrefilledVariants[name] = prefilledVariants[name]
+			const data = prefilledVariants[name]
+			if (combinedPrefilledVariants[name] === undefined || data !== 'undefined' || undefinedVariants.includes(data)) combinedPrefilledVariants[name] = data
 		}
 	}
 
