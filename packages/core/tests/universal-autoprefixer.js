@@ -85,6 +85,18 @@ describe('Autoprefixer', () => {
 		expect(toString()).toBe('--stitches{--:1 kPCdtQ}@media{x-element{-moz-tab-size:none;tab-size:none}}')
 	})
 
+	test('textSizeAdjust', () => {
+		const { global, toString } = createCss()
+
+		global({
+			'x-element': {
+				textSizeAdjust: '100%',
+			},
+		})()
+
+		expect(toString()).toBe('--stitches{--:1 gVFtip}@media{x-element{-webkit-text-size-adjust:100%;text-size-adjust:100%}}')
+	})
+
 	test('userSelect', () => {
 		const { global, toString } = createCss()
 

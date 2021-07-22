@@ -13,6 +13,7 @@ export const toPolyfilledValue = {
 	hyphens: (d) => ({ WebkitHyphens: d, hyphens: d }),
 	maskImage: (d) => ({ WebkitMaskImage: d, maskImage: d }),
 	tabSize: (d) => ({ MozTabSize: d, tabSize: d }),
+	textSizeAdjust: (d) => ({ WebkitTextSizeAdjust: d, textSizeAdjust: d }),
 	userSelect: (d) => ({ WebkitUserSelect: d, userSelect: d }),
 
 	// logical properties
