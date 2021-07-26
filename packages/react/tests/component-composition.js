@@ -14,7 +14,7 @@ describe('Composition', () => {
 		const size14 = styled({ fontSize: '14px' })
 		const bold = styled({ fontWeight: 'bold' })
 		const title = styled(red, size14, bold, { fontFamily: 'monospace' })
-		expect(`${title}`).toBe('.c-gmqXFB')
+		expect(`${title}`).toBe('.c-kngyIZ')
 		expect(getCssString()).toBe('')
 	})
 

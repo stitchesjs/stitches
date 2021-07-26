@@ -16,9 +16,9 @@ describe('Composition', () => {
 		const bold = css({ fontWeight: 'bold' })
 		const title = css(red, size14, bold, { fontFamily: 'monospace' })
 
-		expect(title.className).toBe('c-gmqXFB')
+		expect(title.className).toBe('c-kngyIZ')
 		expect(toString()).toBe('')
-		expect(String(title)).toBe('c-gmqXFB')
+		expect(String(title)).toBe('c-kngyIZ')
 		expect(toString()).toBe(
 			`--stitches{--:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
 				`.c-gmqXFB{color:red}` +
