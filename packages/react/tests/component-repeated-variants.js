@@ -4,7 +4,7 @@ describe('emerson', () => {
 	test('lake', () => {
 		const { styled, toString } = createCss({
 			utils: {
-				px: () => (value) => ({
+				px: (value) => ({
 					paddingLeft: value,
 					paddingRight: value,
 				}),

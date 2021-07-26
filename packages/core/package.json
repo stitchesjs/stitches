@@ -5,7 +5,14 @@
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
-  "typings": "types/index.d.ts",
+  "types": "types/index.d.ts",
+  "typesVersions": {
+    ">= 4.1": {
+      "*": [
+        "types/index.d.ts"
+      ]
+    }
+  },
   "jsdelivr": "dist/index.iife.js",
   "unpkg": "dist/index.iife.js",
   "exports": {

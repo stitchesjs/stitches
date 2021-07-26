@@ -1,25 +1,26 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "diagnostics": true,
+    "esModuleInterop": true,
+    "extendedDiagnostics": true,
+    "skipLibCheck": true,
+    "jsx": "preserve",
     "lib": [
       "dom",
-      "es2020"
+      "es2021"
     ],
-    "jsx": "preserve",
-    "preserveSymlinks": true,
     "moduleResolution": "node",
-    "importHelpers": true,
-    "declaration": true,
-    "pretty": true,
-    "sourceMap": true,
-    "inlineSources": true,
-    "resolveJsonModule": true,
     "strict": true,
-    "skipLibCheck": true
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "target": "es2021"
   },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "files": [
+    "packages/core/types/index.d.ts",
+    "packages/react/types/index.d.ts"
+  ],
+  "include": [
+    "packages/*/types/*.ts"
+  ],
 }

@@ -1,8 +1,10 @@
 // core types.tests.ts
-import { createCss, StitchesCss, StitchesVariants } from '../types/index.d'
-const css = createCss({
+// import { createCss, Arg, StitchesVariants } from '../types/index.d'
+import { createCss } from '../types/index'
+
+const { css, global, keyframes, theme } = createCss({
 	utils: {
-		mx: (config) => (value) => ({
+		mx: (value) => ({
 			backgroundColor: 'red',
 		}),
 	},
@@ -42,36 +44,44 @@ const css = createCss({
 	},
 })
 
-css.keyframes({
+keyframes({
 	from: {
-		color: '-moz-initial',
+		color: '$gray100',
 	},
 	to: {
-		backgroundColor: '-moz-initial',
+		color: '$gray900',
 	},
 })
 
-css.global({
+global({
 	hello: {
 		'@bp1': {
-			backgroundColor: '$1',
+			backgroundColor: '$gray100',
 		},
-		'backgroundColor': '$font100',
+		backgroundColor: '$gray300',
 	},
 })
 
-type CSS = StitchesCss<typeof css>
+// const externalStyles: Arg<typeof css> = {
+// 	'@bp1': {
+// 		backgroundColor: '$gray100',
+// 	},
+// 	'backgroundColor': '$gray300',
+// }
 
-const ExternalStyles: CSS = {
-	'@bp1': {
-		backgroundColor: '$1',
-	},
-	'backgroundColor': '$1',
-}
+// void externalStyles
 
-const PotatoButton = css.css({
+const PotatoButton = css({
 	variants: {
-		variant: {
+		peace: {
+			mercy: {
+				color: 'MediumOrchid',
+			},
+			trust: {
+				color: 'Turquoise',
+			},
+		},
+		hue: {
 			blue: {
 				backgroundColor: '$gray100',
 			},
@@ -90,11 +100,15 @@ const PotatoButton = css.css({
 	],
 })
 
-const two = css.css(PotatoButton, {
+PotatoButton({
+	peace: 'mercy',
+})
+
+const two = css(PotatoButton, {
 	$$max: '2px',
 	width: '$$max',
 	variants: {
-		variant: {
+		hue: {
 			green: {
 				width: '$$max',
 				backgroundColor: '$gray100',
@@ -103,15 +117,21 @@ const two = css.css(PotatoButton, {
 				backgroundColor: '$gray100',
 			},
 		},
+		love: {
+			free: {
+				color: 'ForestGreen',
+			},
+			good: {
+				color: 'GoldenRod',
+			},
+		}
 	},
 	defaultVariants: {
-		variant: 'red',
+		hue: 'red',
 	},
 	compoundVariants: [
 		{
-			// cool
-
-			variant: 'green',
+			hue: 'green',
 			css: {
 				backgroundColor: '$gray200',
 			},
@@ -119,24 +139,23 @@ const two = css.css(PotatoButton, {
 	],
 })
 
-two({ variant: 'green' })
-two({ variant: 'red' })
-two({ variant: 'blue' })
-
-type test = StitchesVariants<typeof PotatoButton>
-
-const theme = css.theme({})
+two({
+	peace: 'mercy',
+	hue: 'green',
+	love: 'free',
+})
 
 PotatoButton({
 	className: '',
 	css: {
-		'backgroundColor': '$red100',
+		backgroundColor: '$gray300',
 
-		'@initial': {
-			backgroundColor: '-moz-initial',
+		'@all': {
+			backgroundColor: 'initial'
 		},
+
 		'@bp1': {
-			backgroundColor: '-moz-initial',
-		},
+			backgroundColor: 'initial',
+		}
 	},
 })
