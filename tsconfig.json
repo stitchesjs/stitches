@@ -14,7 +14,7 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
-    "target": "es2021"
+    "target": "es2020"
   },
   "files": [
     "packages/core/types/index.d.ts",

@@ -16,6 +16,11 @@ export type CSS<
 		theme?: {}
 		themeMap?: {}
 		utils?: {}
+	} = {
+		media: {},
+		theme: {},
+		themeMap: {},
+		utils: {}
 	}
 > = CSSUtil.CSS<
 	Config['media'],

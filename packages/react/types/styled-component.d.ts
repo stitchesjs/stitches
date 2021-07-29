@@ -14,13 +14,24 @@ export interface StyledComponent<
 	TransformedProps = TransformProps<Props, Media>,
 	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > extends ForwardRefExoticComponent<Type, TransformedProps> {
-	<As = Type>(
-		props:
+	<
+		As = Type,
+		Props extends {
+			css?: Props['css'] extends CSSUtil.CSS
+				? Props['css']
+			: CSS
+		}
+	>(
+		props: (
 			As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps> & { as?: As, css?: CSS }>
+				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps>>
 			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, Partial<TransformedProps> & { as?: As, css?: CSS }>
+				? Util.Assign<P, Partial<TransformedProps>>
 			: never
+		) & {
+			as?: As,
+			css?: Props['css']
+		}
 	): React.ReactElement | null
 
 	[$$StyledComponentType]: Type
@@ -39,11 +50,17 @@ export interface CssComponent<
 	TransformedProps = TransformProps<Props, Media>,
 	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > {
-	(
+	<
+		Props extends {
+			css?: Props['css'] extends CSSUtil.CSS
+				? Props['css']
+			: CSS
+		}
+	>(
 		props?:
 			& Partial<TransformedProps>
 			& {
-				css?: CSS
+				css?: Props['css']
 			}
 			& {
 				[name in number | string]: any

@@ -13,11 +13,17 @@ export interface CssComponent<
 	TransformedProps = TransformProps<Props, Media>,
 	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > {
-	(
+	<
+		Props extends {
+			css?: Props['css'] extends CSSUtil.CSS
+				? Props['css']
+			: CSS
+		}
+	>(
 		props?:
 			& Partial<TransformedProps>
 			& {
-				css?: CSS
+				css?: Props['css']
 			}
 			& {
 				[name in number | string]: any
@@ -27,6 +33,9 @@ export interface CssComponent<
 		selector: string
 		props: object
 	}
+
+	className: string
+	selector: string
 
 	[$$StyledComponentType]: TagName
 	[$$StyledComponentProps]: Props

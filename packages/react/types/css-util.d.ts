@@ -92,24 +92,7 @@ export type CSS<
 	}
 	// unknown css declaration styles
 	& {
-		[K in string]: (
-			K extends Util.Prefixed<'@', keyof Media>
-				? unknown
-			: K extends keyof CSSProperties
-				? unknown
-			: K extends keyof Utils
-				? unknown
-			: K extends keyof ThemeMap
-				? unknown
-			: K extends keyof { variants: unknown; defaultVariants: unknown; compoundVariants: unknown }
-				? unknown
-			: (
-				| CSS<Media, Theme, ThemeMap, Utils>
-				| CSS.Globals
-				| Util.Index
-				| any[]
-			)
-		)
+		[K in string]: number | string | CSS<Media, Theme, ThemeMap, Utils> | {}
 	}
 )
 
