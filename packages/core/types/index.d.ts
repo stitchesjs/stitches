@@ -3,6 +3,7 @@ import type Sheet from './sheet'
 
 import type * as CSSUtil from './css-util'
 import type * as Default from './default'
+import type * as StyledComponent from './styled-component'
 
 export type { CreateCss, Sheet }
 
