@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Keyframes', () => {
 	test('Expected behavior for the keyframes() method', () => {
-		const { keyframes, toString } = createCss()
+		const { keyframes, toString } = createStitches()
 
 		const myKeyframes = keyframes({
 			'0%': {

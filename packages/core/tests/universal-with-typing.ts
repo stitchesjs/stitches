@@ -1,6 +1,6 @@
-import { createCss } from '../types'
+import { createStitches } from '../types'
 
-const { css, toString } = createCss({
+const { css, toString } = createStitches({
 	media: {
 		bp1: '(min-width: 640px)',
 	},

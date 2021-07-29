@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Component with CSS prop', () => {
 	test('Authors can create a component and pass it a css prop of overrides', () => {
-		const { css, toString } = createCss({
+		const { css, toString } = createStitches({
 			media: {
 				bp0: '(width < 768px)',
 				bp1: '(768px <= width < 1400px)',

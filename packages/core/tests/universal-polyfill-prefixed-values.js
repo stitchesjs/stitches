@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Polyfill prefixed values', () => {
 	test('width:stretch', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'.gro': {
@@ -16,7 +16,7 @@ describe('Polyfill prefixed values', () => {
 	})
 
 	test('width:fit-content', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'.fit': {

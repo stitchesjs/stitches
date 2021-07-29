@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as renderer from 'react-test-renderer'
 
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 const RenderOf = (...args) => {
 	let Rendered
@@ -23,7 +23,7 @@ describe('React Component with CSS prop', () => {
 	})
 
 	test('XYZ', () => {
-		const { styled, toString } = createCss({
+		const { styled, toString } = createStitches({
 			media: {
 				bp2: '(min-width: 900px)',
 			},

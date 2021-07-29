@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Component Medias', () => {
 	test('Authors can define medias applied to components', () => {
-		const { css, toString } = createCss({
+		const { css, toString } = createStitches({
 			media: {
 				mediumUp: '(width >= 768px)',
 			},

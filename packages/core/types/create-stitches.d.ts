@@ -71,7 +71,7 @@ type InterfaceOfUtils<
 )
 
 /** Returns a function used to create a new Stitches interface. */
-type CreateCss = {
+type CreateStitches = {
 	<
 		Prefix extends string,
 		Media extends InterfaceOfMedia<Media>,
@@ -100,4 +100,4 @@ type CreateCss = {
 	>
 }
 
-export default CreateCss
+export default CreateStitches

@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Empty Variants', () => {
 	test('Empty Variants', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		css({
 			variants: {
@@ -28,7 +28,7 @@ describe('Empty Variants', () => {
 	})
 
 	test('Empty Variants', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		css({
 			variants: {

@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Logical Properties', () => {
 	test('marginBlock', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -26,7 +26,7 @@ describe('Logical Properties', () => {
 	})
 
 	test('marginInline', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -50,7 +50,7 @@ describe('Logical Properties', () => {
 	})
 
 	test('paddingBlock', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -74,7 +74,7 @@ describe('Logical Properties', () => {
 	})
 
 	test('paddingInline', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {

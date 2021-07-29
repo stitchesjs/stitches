@@ -1,10 +1,10 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Prefix', () => {
 	const prefix = 'fusion'
 
 	test('Authors can define a prefix applied to themes', () => {
-		const { theme, toString } = createCss({ prefix })
+		const { theme, toString } = createStitches({ prefix })
 
 		expect(toString()).toBe('')
 
@@ -16,7 +16,7 @@ describe('Prefix', () => {
 	})
 
 	test('Authors can define a prefix not applied to named themes', () => {
-		const { theme, toString } = createCss({ prefix })
+		const { theme, toString } = createStitches({ prefix })
 
 		expect(toString()).toBe('')
 
@@ -30,7 +30,7 @@ describe('Prefix', () => {
 	})
 
 	test('Authors can define a prefix applied to components', () => {
-		const { css, toString } = createCss({ prefix })
+		const { css, toString } = createStitches({ prefix })
 
 		expect(toString()).toBe('')
 

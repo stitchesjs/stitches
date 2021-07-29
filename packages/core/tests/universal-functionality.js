@@ -1,32 +1,32 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Configuration', () => {
 	let stitches
 
-	test('createCss()', () => {
-		const { css, globalCss } = createCss()
+	test('createStitches()', () => {
+		const { css, globalCss } = createStitches()
 
 		expect(css).toBeInstanceOf(Function)
 		expect(globalCss).toBeInstanceOf(Function)
 	})
 
-	test('createCss({})', () => {
-		const { css, globalCss } = createCss({})
+	test('createStitches({})', () => {
+		const { css, globalCss } = createStitches({})
 
 		expect(css).toBeInstanceOf(Function)
 		expect(globalCss).toBeInstanceOf(Function)
 	})
 
-	test('createCss({ prefix: "fusion-" })', () => {
-		const { config } = createCss({ prefix: 'fusion-' })
+	test('createStitches({ prefix: "fusion-" })', () => {
+		const { config } = createStitches({ prefix: 'fusion-' })
 
 		expect(config.prefix).toBe('fusion-')
 	})
 
-	test('createCss({ theme })', () => {
+	test('createStitches({ theme })', () => {
 		const themeConfig = { colors: { blue: 'dodgerblue' } }
 
-		const { config } = createCss({ theme: themeConfig })
+		const { config } = createStitches({ theme: themeConfig })
 
 		expect(config.theme).toBe(themeConfig)
 	})

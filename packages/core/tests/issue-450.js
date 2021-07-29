@@ -1,9 +1,9 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Issue #450', () => {
 	test('Basic Tests', () => {
 		const getFreshComponents = () => {
-			const { css, getCssString } = createCss()
+			const { css, getCssString } = createStitches()
 
 			const component1 = css({
 				variants: {
@@ -103,7 +103,7 @@ describe('Issue #450', () => {
 
 	test('Basic Tests ported from the React version', () => {
 		const getFreshComponents = () => {
-			const { css, getCssString } = createCss()
+			const { css, getCssString } = createStitches()
 
 			const component1 = css({
 				'--component': 1,

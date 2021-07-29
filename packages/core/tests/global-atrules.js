@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Support @import', () => {
 	test('Authors can define an @import rule', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		const importURL = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 
@@ -14,7 +14,7 @@ describe('Support @import', () => {
 	})
 
 	test('Authors can define multiple @import rules', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		const importURL1 = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 		const importURL2 = `https://unpkg.com/sanitize.css@12.0.1/typography.css`
@@ -27,7 +27,7 @@ describe('Support @import', () => {
 	})
 
 	test('Authors can an @import rule without quotes', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		const importURL = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 
@@ -41,7 +41,7 @@ describe('Support @import', () => {
 
 describe('Support @font-face', () => {
 	test('Authors can define a @font-face rule', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		globalCss({
 			'@font-face': {
@@ -76,7 +76,7 @@ describe('Support @font-face', () => {
 	})
 
 	test('Authors can define multiple @font-face rules', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		globalCss({
 			'@font-face': [

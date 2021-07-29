@@ -5,14 +5,13 @@ import { toHash } from '../convert/toHash.js'
 import { toTailDashed } from '../convert/toTailDashed.js'
 import { toTokenizedValue } from '../convert/toTokenizedValue.js'
 
-/** @typedef {import('./createCss.js').Config} Config */
-/** @typedef {import('./createCss.js').Style} Style */
-/** @typedef {import('./createSheet.js').GroupSheet} GroupSheet */
-
 const createThemeFunctionMap = createMemo()
 
 /** Returns a function that applies a theme and returns tokens of that theme. */
-export const createThemeFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) => (
+export const createThemeFunction = (
+	config,
+	sheet
+) => (
 	createThemeFunctionMap(config, () => (className, style) => {
 		// theme is the first argument if it is an object, otherwise the second argument as an object
 		style = typeof className === 'object' && className || Object(style)

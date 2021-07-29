@@ -1,6 +1,6 @@
-/** @typedef {import('./createSheet').RuleGroup} RuleGroup */
-/** @typedef {import('./createSheet').RuleGroupNames} RuleGroupNames */
-/** @typedef {import('./createSheet').SheetGroup} SheetGroup */
+/** @typedef {import('./sheet').RuleGroup} RuleGroup */
+/** @typedef {import('./sheet').RuleGroupNames} RuleGroupNames */
+/** @typedef {import('./sheet').SheetGroup} SheetGroup */
 
 /** @type {RuleGroupNames} */
 const names = ['themed', 'global', 'styled', 'onevar', 'allvar', 'inline']

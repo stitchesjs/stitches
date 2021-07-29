@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Nesting', () => {
 	test('Authors can define globalCss nesting rules', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		globalCss({
 			'body > a': {
@@ -16,7 +16,7 @@ describe('Nesting', () => {
 	})
 
 	test('Authors can define component nesting rules', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		css({
 			'&:not(:hover)': {
@@ -28,7 +28,7 @@ describe('Nesting', () => {
 	})
 
 	test('Authors can define recursive globalCss nesting rules', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		globalCss({
 			p: {
@@ -43,7 +43,7 @@ describe('Nesting', () => {
 	})
 
 	test('Authors can define recursive component nesting rules', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		css({
 			'margin': 0,
@@ -56,7 +56,7 @@ describe('Nesting', () => {
 	})
 
 	test('Authors can define complex recursive globalCss nesting rules', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		globalCss({
 			'body > p, body > ul': {
@@ -74,7 +74,7 @@ describe('Nesting', () => {
 	})
 
 	test('Authors can define complex recursive component nesting rules', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		css({
 			'& > p, & > ul': {

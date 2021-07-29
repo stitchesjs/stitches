@@ -1,9 +1,9 @@
 import * as react from 'react'
 import * as renderer from 'react-test-renderer'
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('React', () => {
-	const sheet = createCss()
+	const sheet = createStitches()
 
 	let wrapper = renderer.create(react.createElement(react.Fragment))
 	let Button = sheet.styled('button', {

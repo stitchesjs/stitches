@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Numeric Values', () => {
 	test('Authors can use numeric values to assign px values', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		expect(toString()).toBe('')
 
@@ -24,7 +24,7 @@ describe('Numeric Values', () => {
 	})
 
 	test('Authors can use numeric values to assign numeric values', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		expect(toString()).toBe('')
 
@@ -49,7 +49,7 @@ describe('Numeric Values', () => {
 
 	test('Authors can use unit-less properties as known to React', () => {
 		for (let i = 0; i <= 33; i += 11) {
-			const { globalCss, getCssString } = createCss()
+			const { globalCss, getCssString } = createStitches()
 
 			globalCss({
 				div: {
@@ -135,7 +135,7 @@ describe('Numeric Values', () => {
 
 		test(`Author can use the unit-only ${kebabProp} property`, () => {
 			for (let i = 0; i <= 33; i += 11) {
-				const { globalCss, getCssString } = createCss()
+				const { globalCss, getCssString } = createStitches()
 
 				globalCss({
 					div: {

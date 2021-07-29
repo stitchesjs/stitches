@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('React Component with CSS prop', () => {
 	test('Authors can create a component and pass it a css prop of overrides', () => {
-		const { styled, toString } = createCss()
+		const { styled, toString } = createStitches()
 
 		styled('button', {
 			order: 1,
@@ -16,7 +16,7 @@ describe('React Component with CSS prop', () => {
 	})
 
 	test('React example from Radix', () => {
-		const { styled, toString } = createCss({
+		const { styled, toString } = createStitches({
 			media: {
 				bp2: '(min-width: 900px)',
 			},

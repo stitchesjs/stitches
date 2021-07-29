@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Components', () => {
 	// test('The `styled` function returns an implicit span component', () => {
-	// 	const { styled } = createCss()
+	// 	const { styled } = createStitches()
 	// 	const component = styled()
 
 	// 	expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
@@ -10,7 +10,7 @@ describe('Components', () => {
 	// })
 
 	// test('The `styled` function can return an explicit div component', () => {
-	// 	const { styled } = createCss()
+	// 	const { styled } = createStitches()
 	// 	const component = styled('div')
 
 	// 	expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
@@ -22,7 +22,7 @@ describe('Components', () => {
 	// 		return 'text'
 	// 	}
 
-	// 	const { styled } = createCss()
+	// 	const { styled } = createStitches()
 	// 	const component = styled(TextComponent)
 
 	// 	expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
@@ -35,7 +35,7 @@ describe('Components', () => {
 			render: () => 'text',
 		}
 
-		const { styled } = createCss()
+		const { styled } = createStitches()
 		const component = styled(ForwardedComponent)
 
 		expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))

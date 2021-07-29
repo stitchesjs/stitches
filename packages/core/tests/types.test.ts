@@ -1,10 +1,8 @@
-// core types.tests.ts
-// import { createCss, Arg, StitchesVariants } from '../types/index.d'
-import { createCss } from '../types/index'
+import { createStitches } from '../types/index'
 
-const { css, global, keyframes, theme } = createCss({
+const { css, globalCss, keyframes } = createStitches({
 	utils: {
-		mx: (value) => ({
+		mx: () => ({
 			backgroundColor: 'red',
 		}),
 	},
@@ -53,7 +51,7 @@ keyframes({
 	},
 })
 
-global({
+globalCss({
 	hello: {
 		'@bp1': {
 			backgroundColor: '$gray100',

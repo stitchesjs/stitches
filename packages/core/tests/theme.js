@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Theme', () => {
 	test('Expected behavior for the theme() method', () => {
-		const { theme, getCssString } = createCss()
+		const { theme, getCssString } = createStitches()
 
 		const myTheme = theme('my', {
 			colors: {
@@ -19,7 +19,7 @@ describe('Theme', () => {
 
 	test('theme() support for non-strings', () => {
 		{
-			const { getCssString } = createCss({
+			const { getCssString } = createStitches({
 				theme: {
 					sizes: {
 						sm: 100,
@@ -37,7 +37,7 @@ describe('Theme', () => {
 		}
 
 		{
-			const { getCssString } = createCss({
+			const { getCssString } = createStitches({
 				theme: {
 					sizes: {
 						sm: 100,

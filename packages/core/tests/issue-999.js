@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Issue #519', () => {
 	test('locally scoped token works 1 time', () => {
-		const { css, getCssString } = createCss({ prefix: 'fusion' })
+		const { css, getCssString } = createStitches({ prefix: 'fusion' })
 
 		css({
 			$$syntax: 'red',
@@ -22,7 +22,7 @@ describe('Issue #519', () => {
 	})
 
 	test('locally scoped prefix-free token works 1 time', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		css({
 			$$syntax: 'red',
@@ -42,7 +42,7 @@ describe('Issue #519', () => {
 	})
 
 	test('locally scoped token works 2 times', () => {
-		const { css, getCssString } = createCss({ prefix: 'fusion' })
+		const { css, getCssString } = createStitches({ prefix: 'fusion' })
 
 		css({
 			$$syntax: 'red',
@@ -67,7 +67,7 @@ describe('Issue #519', () => {
 	})
 
 	test('locally scoped prefix-free token works 2 times', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		css({
 			$$syntax: 'red',
@@ -92,7 +92,7 @@ describe('Issue #519', () => {
 	})
 
 	test('locally scoped token works 3 times', () => {
-		const { css, getCssString } = createCss({ prefix: 'fusion' })
+		const { css, getCssString } = createStitches({ prefix: 'fusion' })
 
 		css({
 			$$syntax: 'red',
@@ -122,7 +122,7 @@ describe('Issue #519', () => {
 	})
 
 	test('locally scoped prefix-free token works 3 times', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		css({
 			$$syntax: 'red',

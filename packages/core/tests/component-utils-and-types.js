@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Component: Utilities & Tokens', () => {
 	test('Utilities & Tokens of the same type', () => {
-		const { css, toString } = createCss({
+		const { css, toString } = createStitches({
 			utils: {
 				px: (value) => ({
 					paddingLeft: value,
@@ -19,7 +19,7 @@ describe('Component: Utilities & Tokens', () => {
 	})
 
 	test('Utilities & Tokens of different types', () => {
-		const { css, toString } = createCss({
+		const { css, toString } = createStitches({
 			utils: {
 				ftw: (value) => ({
 					color: value,

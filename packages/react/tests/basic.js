@@ -1,10 +1,10 @@
 import * as React from 'react'
 import * as renderer from 'react-test-renderer'
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Basic', () => {
 	test('Functionality of styled()', () => {
-		const { styled, getCssString } = createCss({
+		const { styled, getCssString } = createStitches({
 			utils: {
 				userSelect: () => (value) => ({
 					WebkitUserSelector: value,
