@@ -8,12 +8,11 @@ import { createGlobalFunction } from './features/global.js'
 import { createKeyframesFunction } from './features/keyframes.js'
 import { createThemeFunction } from './features/theme.js'
 
-import { createSheet } from './createSheet.js'
+import { createSheet } from './sheet.js'
 
 const createCssMap = createMemo()
 
-/** @type {import('../types/core').CreateCss} */
-export const createCss = (config) => {
+export const createStitches = (config) => {
 	let didRun = false
 
 	const instance = createCssMap(config, (initConfig) => {

@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Basic', () => {
 	test('Existance of methods', () => {
-		const stitches = createCss()
+		const stitches = createStitches()
 
 		expect(stitches).toBeInstanceOf(Object)
 		expect(stitches.css).toBeInstanceOf(Function)
@@ -12,13 +12,13 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of getCssString()', () => {
-		const { getCssString } = createCss()
+		const { getCssString } = createStitches()
 
 		expect(getCssString()).toBe('')
 	})
 
 	test('Functionality of css()', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		const component1of2 = css()
 		const className1of2 = `${component1of2}`
@@ -38,7 +38,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of reset()', () => {
-		const { reset, getCssString } = createCss()
+		const { reset, getCssString } = createStitches()
 
 		expect(reset).toBeInstanceOf(Function)
 
@@ -50,7 +50,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of globalCss()', () => {
-		const { globalCss, getCssString } = createCss()
+		const { globalCss, getCssString } = createStitches()
 
 		const rendering1of2 = globalCss()
 		const className1of2 = `${rendering1of2}`
@@ -70,7 +70,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of keyframes()', () => {
-		const { keyframes, getCssString } = createCss()
+		const { keyframes, getCssString } = createStitches()
 
 		const rendering1of1 = keyframes({
 			'0%': {
@@ -89,7 +89,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of theme()', () => {
-		const { theme, getCssString } = createCss()
+		const { theme, getCssString } = createStitches()
 
 		const rendering1of1 = theme({
 			colors: {
@@ -107,7 +107,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of css() — css prop', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		const component1of1 = css({ color: 'DodgerBlue' })
 		const className1of1 = `${component1of1({ css: { color: 'Crimson' } })}`
@@ -126,7 +126,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of css() — variants', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		const component1of1 = css({
 			fontSize: '100%',
@@ -150,7 +150,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of css() — utils', () => {
-		const { css, getCssString } = createCss({
+		const { css, getCssString } = createStitches({
 			utils: {
 				userSelect: (value) => ({
 					WebkitUserSelector: value,
@@ -170,7 +170,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of stringification — numeric pixel values', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		const component1of1 = css({
 			width: 100,
@@ -183,7 +183,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of stringification — token values', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		const component1of1 = css({
 			width: '$brand',
@@ -197,7 +197,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of stringification — local tokens', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		const component1of1 = css({
 			$$brand: '500px',
@@ -212,7 +212,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of stringification — local tokens prefixed', () => {
-		const { css, getCssString } = createCss({
+		const { css, getCssString } = createStitches({
 			prefix: 'fusion',
 		})
 
@@ -229,7 +229,7 @@ describe('Basic', () => {
 	})
 
 	test('Stringification: Utils + Local Tokens', () => {
-		const { css, getCssString } = createCss({
+		const { css, getCssString } = createStitches({
 			utils: {
 				backdropFilter: (value) => ({
 					WebkitBackdropFilter: value,
@@ -251,7 +251,7 @@ describe('Basic', () => {
 	})
 
 	test('Theme', () => {
-		const { getCssString } = createCss({
+		const { getCssString } = createStitches({
 			theme: {
 				colors: {
 					red: 'Crimson',

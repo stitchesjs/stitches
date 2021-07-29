@@ -1,4 +1,4 @@
-/* CreateCss Interfaces */
+/* Default Interfaces */
 /* ========================================================================== */
 
 /** Default Prefix configuration. */

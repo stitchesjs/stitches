@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Tokens', () => {
 	test('Authors can use a regular token #1', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -26,7 +26,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a regular token #2', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				shadows: {
 					red: 'tomato',
@@ -50,7 +50,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a relative token #1', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -75,7 +75,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a relative token #1', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				shadows: {
 					red: 'tomato',
@@ -102,7 +102,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use an absolute token #1', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -127,7 +127,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use an absolute token #2', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -152,7 +152,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a negative token #1', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -179,7 +179,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a negative token #2', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				sizes: {
 					sp1: '10px',
@@ -207,7 +207,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use tokens from the globalCss theme object', () => {
-		const { globalCss, theme, getCssString } = createCss({
+		const { globalCss, theme, getCssString } = createStitches({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -234,7 +234,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use tokens from a new theme object', () => {
-		const { globalCss, theme, getCssString } = createCss()
+		const { globalCss, theme, getCssString } = createStitches()
 
 		const mytheme = theme('my-theme', {
 			space: {
@@ -266,7 +266,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use tokens from the globalCss theme object', () => {
-		const { globalCss, theme, getCssString } = createCss({
+		const { globalCss, theme, getCssString } = createStitches({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -293,7 +293,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use the class from the root theme object', () => {
-		const { theme, getCssString } = createCss({
+		const { theme, getCssString } = createStitches({
 			prefix: 'pedro',
 			theme: {
 				colors: {
@@ -312,7 +312,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can render custom units', () => {
-		const { globalCss, getCssString } = createCss({
+		const { globalCss, getCssString } = createStitches({
 			theme: {
 				sizes: {
 					five: '5px',

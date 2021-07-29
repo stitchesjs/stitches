@@ -19,7 +19,7 @@ import { toTailDashed } from '../convert/toTailDashed.js'
 /** @typedef {import('./css').VariantProps} VariantProps */
 /** @typedef {import('./css').VariantTuple} VariantTuple */
 
-/** @typedef {import('../createSheet').SheetGroup} SheetGroup */
+/** @typedef {import('../sheet').SheetGroup} SheetGroup */
 
 const createComponentFunctionMap = createMemo()
 
@@ -144,7 +144,7 @@ const createRenderer = (
 	/** @type {Config} */ config,
 	/** @type {string | Function} */ type,
 	/** @type {Set<Composer>} */ composers,
-	/** @type {import('../createSheet').SheetGroup} */ sheet
+	/** @type {import('../sheet').SheetGroup} */ sheet
 ) => {
 	const [
 		initialClassName,

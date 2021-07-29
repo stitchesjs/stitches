@@ -1,8 +1,8 @@
 // core types.tests.ts
 import * as Stitches from '../types/index'
-import { createCss } from '../types/index'
+import { createStitches } from '../types/index'
 
-const { css, global, keyframes, styled, theme } = createCss({
+const { css, global, keyframes, styled, theme } = createStitches({
 	utils: {
 		mx: (value: Stitches.PropertyValue<'marginLeft'>) => ({
 			marginLeft: value,

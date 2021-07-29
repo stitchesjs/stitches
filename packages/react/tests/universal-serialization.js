@@ -1,7 +1,7 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Serialization', () => {
-	const sheet = createCss()
+	const sheet = createStitches()
 	const { styled, getCssString, toString, theme } = sheet
 
 	const myComponent = styled('button', {

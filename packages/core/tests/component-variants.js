@@ -1,4 +1,4 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Variants', () => {
 	const componentConfig = {
@@ -42,7 +42,7 @@ describe('Variants', () => {
 	}
 
 	test('Renders a component without any initial styles', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const expression = component()
 
@@ -51,7 +51,7 @@ describe('Variants', () => {
 	})
 
 	test('Renders a component with 1 matching variant', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const expression1 = component({ size: 'small' })
 
@@ -69,7 +69,7 @@ describe('Variants', () => {
 	})
 
 	test('Renders a component with 2 matching variants', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css({
 			variants: {
 				size: {
@@ -101,7 +101,7 @@ describe('Variants', () => {
 	})
 
 	test('Renders a component with a 2 matching variants and 1 matching compound', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const expression = component({ size: 'small', color: 'blue' })
 
@@ -165,7 +165,7 @@ describe('Variants with defaults', () => {
 	}
 
 	test('Renders a component with the default variant applied', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const expression = component()
 
@@ -174,7 +174,7 @@ describe('Variants with defaults', () => {
 	})
 
 	test('Renders a component with the default variant explicitly applied', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const expression = component({ size: 'small' })
 
@@ -183,7 +183,7 @@ describe('Variants with defaults', () => {
 	})
 
 	test('Renders a component with the non-default variant explicitly applied', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const expression = component({ size: 'large' })
 
@@ -192,7 +192,7 @@ describe('Variants with defaults', () => {
 	})
 
 	test('Renders a component with the default variant applied and a different variant explicitly applied', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const expression = component({ level: 1 })
 
@@ -208,7 +208,7 @@ describe('Variants with defaults', () => {
 	})
 
 	test('Renders a component with the default variant applied, a different variant explicitly applied, and a compound applied', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const expression = component({ color: 'blue' })
 
@@ -227,7 +227,7 @@ describe('Variants with defaults', () => {
 	})
 
 	test('Returns a component class without the default variant applied when stringified', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfig)
 		const className = `${component}`
 
@@ -286,7 +286,7 @@ describe('Conditional variants', () => {
 	}
 
 	test('Renders a component with no variant applied', () => {
-		const { css, getCssString } = createCss(config)
+		const { css, getCssString } = createStitches(config)
 		const component = css(componentConfig)
 		const componentClassName = 'c-PJLV'
 
@@ -295,7 +295,7 @@ describe('Conditional variants', () => {
 	})
 
 	test('Renders a component with one variant applied', () => {
-		const { css, getCssString } = createCss(config)
+		const { css, getCssString } = createStitches(config)
 		const component = css(componentConfig)
 		const componentClassName = `c-PJLV`
 		const componentSmallClassName = `${componentClassName}-Gaggi-size-small`
@@ -306,7 +306,7 @@ describe('Conditional variants', () => {
 	})
 
 	test('Renders a component with one conditional variant on one breakpoint applied', () => {
-		const { css, getCssString } = createCss(config)
+		const { css, getCssString } = createStitches(config)
 		const component = css(componentConfig)
 
 		expect(component({ size: { '@bp1': 'small' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small`)
@@ -318,7 +318,7 @@ describe('Conditional variants', () => {
 	})
 
 	test('Renders a component with one conditional variant on two breakpoints applied', () => {
-		const { css, getCssString } = createCss(config)
+		const { css, getCssString } = createStitches(config)
 		const component = css(componentConfig)
 		const componentClassName = `c-PJLV`
 		const componentSmallBp1ClassName = `${componentClassName}-iVKIeV-size-small`
@@ -336,7 +336,7 @@ describe('Conditional variants', () => {
 	})
 
 	test('Renders a component with a conditional variant repeatedly', () => {
-		const { css, getCssString } = createCss(config)
+		const { css, getCssString } = createStitches(config)
 		const component = css(componentConfig)
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
@@ -366,7 +366,7 @@ describe('Conditional variants', () => {
 
 	test('Renders a component with a conditional inline variant repeatedly', () => {
 		{
-			const { css, getCssString } = createCss(config)
+			const { css, getCssString } = createStitches(config)
 			const component = css({
 				variants: {
 					size: {
@@ -398,7 +398,7 @@ describe('Conditional variants', () => {
 		}
 
 		{
-			const { css, getCssString } = createCss(config)
+			const { css, getCssString } = createStitches(config)
 			const component = css({
 				variants: {
 					size: {
@@ -447,7 +447,7 @@ describe('Variant pairing types', () => {
 	}
 
 	test('Renders a variant with an inactive string variant', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfigForBooleanVariant)
 		const rendering = component()
 
@@ -458,7 +458,7 @@ describe('Variant pairing types', () => {
 	})
 
 	test('Renders a variant with an active string variant', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfigForBooleanVariant)
 		const rendering = component({ testBoolean: 'true' })
 
@@ -474,7 +474,7 @@ describe('Variant pairing types', () => {
 	})
 
 	test('Renders a variant with an active boolean variant', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfigForBooleanVariant)
 		const rendering = component({ testBoolean: true })
 
@@ -490,7 +490,7 @@ describe('Variant pairing types', () => {
 	})
 
 	test('Renders a variant with an active responsive string variant', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfigForBooleanVariant)
 		const rendering = component({ testBoolean: { '@media (min-width: 640px)': 'true' } })
 
@@ -508,7 +508,7 @@ describe('Variant pairing types', () => {
 	})
 
 	test('Renders a variant with an active responsive boolean variant', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 		const component = css(componentConfigForBooleanVariant)
 		const rendering = component({ testBoolean: { '@media (min-width: 640px)': true } })
 

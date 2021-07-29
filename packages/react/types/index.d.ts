@@ -1,11 +1,11 @@
-import type CreateCss from './create-css'
+import type CreateStitches from './create-stitches'
 import type Sheet from './sheet'
 
 import type * as CSSUtil from './css-util'
 import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
 
-export type { CreateCss, Sheet }
+export type { CreateStitches, Sheet }
 
 export type DefaultThemeMap = Default.ThemeMap
 
@@ -39,7 +39,7 @@ export type ScaleValue<K> = { readonly [CSSUtil.$$ScaleValue]: K }
 export type VariantProps<Component> = StyledComponent.TransformProps<Component[StyledComponent.$$StyledComponentProps], Component[StyledComponent.$$StyledComponentMedia]>
 
 /** Returns a library used to create styles. */
-export declare const createCss: CreateCss
+export declare const createStitches: CreateStitches
 
 /** Map of CSS properties to token scales. */
 export declare const defaultThemeMap: DefaultThemeMap

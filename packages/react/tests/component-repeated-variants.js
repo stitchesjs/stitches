@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('emerson', () => {
 	test('lake', () => {
-		const { styled, toString } = createCss({
+		const { styled, toString } = createStitches({
 			utils: {
 				px: (value) => ({
 					paddingLeft: value,

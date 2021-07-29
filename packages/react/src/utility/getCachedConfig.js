@@ -1,5 +1,5 @@
-import { createCss } from '../createCss.js'
+import { createStitches } from '../createStitches.js'
 
 let cachedConfig
 
-export const getCachedConfig = () => cachedConfig || (cachedConfig = createCss())
+export const getCachedConfig = () => cachedConfig || (cachedConfig = createStitches())

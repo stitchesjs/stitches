@@ -1,15 +1,15 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Composition', () => {
 	test('Renders an empty component', () => {
-		const { styled, getCssString } = createCss()
+		const { styled, getCssString } = createStitches()
 		const generic = styled()
 		expect(generic.render().props).toEqual({ className: 'PJLV' })
 		expect(getCssString()).toBe('')
 	})
 
 	test('Does not render a component without an explicit rendering', () => {
-		const { styled, getCssString } = createCss()
+		const { styled, getCssString } = createStitches()
 		const red = styled({ color: 'red' })
 		const size14 = styled({ fontSize: '14px' })
 		const bold = styled({ fontWeight: 'bold' })
@@ -19,7 +19,7 @@ describe('Composition', () => {
 	})
 
 	test('Renders a component with all compositions', () => {
-		const { styled, getCssString } = createCss()
+		const { styled, getCssString } = createStitches()
 		const red = styled({ color: 'red' })
 		const size14 = styled({ fontSize: '14px' })
 		const bold = styled({ fontWeight: 'bold' })

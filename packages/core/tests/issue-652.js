@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Issue #652', () => {
 	test('Applying both variants from the one default variant', () => {
-		const { css } = createCss()
+		const { css } = createStitches()
 
 		const component1 = css({
 			variants: {

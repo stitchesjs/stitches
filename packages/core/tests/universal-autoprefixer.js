@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Autoprefixer', () => {
 	test('appearance', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -14,7 +14,7 @@ describe('Autoprefixer', () => {
 	})
 
 	test('backfaceVisibility', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -26,7 +26,7 @@ describe('Autoprefixer', () => {
 	})
 
 	test('backgroundClip', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -38,7 +38,7 @@ describe('Autoprefixer', () => {
 	})
 
 	test('clipPath', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -50,7 +50,7 @@ describe('Autoprefixer', () => {
 	})
 
 	test('hyphens', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -62,7 +62,7 @@ describe('Autoprefixer', () => {
 	})
 
 	test('maskImage', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -74,7 +74,7 @@ describe('Autoprefixer', () => {
 	})
 
 	test('tabSize', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -86,7 +86,7 @@ describe('Autoprefixer', () => {
 	})
 
 	test('textSizeAdjust', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {
@@ -98,7 +98,7 @@ describe('Autoprefixer', () => {
 	})
 
 	test('userSelect', () => {
-		const { globalCss, toString } = createCss()
+		const { globalCss, toString } = createStitches()
 
 		globalCss({
 			'x-element': {

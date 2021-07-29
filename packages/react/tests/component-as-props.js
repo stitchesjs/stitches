@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('As prop', () => {
 	test('The "as" property can be used or overridden', () => {
-		const { styled } = createCss()
+		const { styled } = createStitches()
 		const component1 = styled()
 
 		const expression1 = component1.render()
@@ -20,7 +20,7 @@ describe('As prop', () => {
 	})
 
 	test('The "as" property is followed during extension', () => {
-		const { styled } = createCss()
+		const { styled } = createStitches()
 		const component1 = styled('div')
 		const component2 = styled(component1)
 		const expression = component2.render()

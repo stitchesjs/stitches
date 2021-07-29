@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Utils', () => {
 	test('Authors can define utilties applied to components', () => {
-		const stitches = createCss({
+		const stitches = createStitches({
 			utils: {
 				bg: (value) => ({ backgroundColor: value }),
 			},

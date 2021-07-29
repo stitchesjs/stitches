@@ -1,8 +1,8 @@
-import { createCss } from '../src/index.js'
+import { createStitches } from '../src/index.js'
 
 describe('Issue #492', () => {
 	test('Conditionally apply default variants as the @initial value', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		const component = css({
 			variants: {
@@ -95,7 +95,7 @@ describe('Issue #492', () => {
 	})
 
 	test('Apply apply @initial styles first', () => {
-		const { css, getCssString } = createCss()
+		const { css, getCssString } = createStitches()
 
 		const component = css({
 			'--rock': true,
