@@ -45,11 +45,12 @@ export const createStitches = (config) => {
 			css: createComponentFunction(config, sheet),
 			globalCss: createGlobalFunction(config, sheet),
 			keyframes: createKeyframesFunction(config, sheet),
-			theme: createThemeFunction(config, sheet),
+			createTheme: createThemeFunction(config, sheet),
 			reset() {
 				sheet.reset()
-				defaultTheme.toString()
+				returnValue.theme.toString()
 			},
+			theme: {},
 			sheet,
 			config,
 			prefix,
@@ -57,9 +58,10 @@ export const createStitches = (config) => {
 			toString: sheet.toString,
 		}
 
-		const defaultTheme = returnValue.theme(theme)
-		Object.assign(returnValue.theme, defaultTheme)
-		defaultTheme.toString()
+		// initialize default theme
+		String(
+			returnValue.theme = returnValue.createTheme(theme)
+		)
 
 		return returnValue
 	})

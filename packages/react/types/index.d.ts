@@ -38,11 +38,14 @@ export type ScaleValue<K> = { readonly [CSSUtil.$$ScaleValue]: K }
 /** Returns a type that suggests variants from a component as possible prop values. */
 export type VariantProps<Component> = StyledComponent.TransformProps<Component[StyledComponent.$$StyledComponentProps], Component[StyledComponent.$$StyledComponentMedia]>
 
+/** Map of CSS properties to token scales. */
+export declare const defaultThemeMap: DefaultThemeMap
+
 /** Returns a library used to create styles. */
 export declare const createStitches: CreateStitches
 
-/** Map of CSS properties to token scales. */
-export declare const defaultThemeMap: DefaultThemeMap
+/** Returns an object representing a theme. */
+export declare const createTheme: Sheet['createTheme']
 
 /** Returns a function that applies globalCss styles. */
 export declare const globalCss: Sheet['globalCss']

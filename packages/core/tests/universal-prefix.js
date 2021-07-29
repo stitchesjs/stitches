@@ -4,25 +4,25 @@ describe('Prefix', () => {
 	const prefix = 'fusion'
 
 	test('Authors can define a prefix applied to themes', () => {
-		const { theme, toString } = createStitches({ prefix })
+		const { createTheme, toString } = createStitches({ prefix })
 
 		expect(toString()).toBe('')
 
 		const hash = 'iknykm'
 
-		expect(theme({ colors: { red: 'tomato' } }).toString()).toBe(`${prefix}-t-${hash}`)
+		expect(createTheme({ colors: { red: 'tomato' } }).toString()).toBe(`${prefix}-t-${hash}`)
 
 		expect(toString()).toBe(`--stitches{--:0 fusion-t-iknykm}@media{.${prefix}-t-${hash}{--fusion-colors-red:tomato}}`)
 	})
 
 	test('Authors can define a prefix not applied to named themes', () => {
-		const { theme, toString } = createStitches({ prefix })
+		const { createTheme, toString } = createStitches({ prefix })
 
 		expect(toString()).toBe('')
 
 		const themeName = 'my-theme-name'
 
-		const myTheme = theme(themeName, { colors: { red: 'tomato' } })
+		const myTheme = createTheme(themeName, { colors: { red: 'tomato' } })
 
 		expect(myTheme.toString()).toBe(`${themeName}`)
 

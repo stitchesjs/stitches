@@ -234,9 +234,9 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use tokens from a new theme object', () => {
-		const { globalCss, theme, getCssString } = createStitches()
+		const { globalCss, createTheme, getCssString } = createStitches()
 
-		const mytheme = theme('my-theme', {
+		const mytheme = createTheme('my-theme', {
 			space: {
 				sp1: '100px',
 				sp2: '200px',

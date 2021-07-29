@@ -37,48 +37,54 @@ export default interface Sheet<
 			name: string
 		}
 	},
-	theme: string & {
-		(
-			nameOrScalesArg0: (
+	createTheme: {
+		<
+			Argument0 extends (
 				| string
 				| (
-					& {
-						[scale in keyof Theme]?: {
-							[token in keyof Theme[scale]]?: boolean | number | string
-						} & {
-							[token in keyof number | string]: boolean | number | string
+					{
+						[Scale in keyof Theme]?: {
+							[Token in keyof Theme[Scale]]?: boolean | number | string
 						}
-					}
-					& {
+					} & {
 						[scale in string]: {
-							[token in keyof number | string]: boolean | number | string
+							[token in number | string]: boolean | number | string
 						}
 					}
 				)
 			),
-			nameOrScalesArg1?: (
+			Argument1 extends (
 				| string
 				| (
-					& {
-						[scale in keyof Theme]?: {
-							[token in keyof number | string]: boolean | number | string
+					{
+						[Scale in keyof Theme]?: {
+							[Token in keyof Theme[Scale]]?: boolean | number | string
 						}
-					}
-					& {
+					} & {
 						[scale in string]: {
-							[token in keyof number | string]: boolean | number | string
+							[token in number | string]: boolean | number | string
 						}
 					}
 				)
 			)
+		>(
+			nameOrScalesArg0: Argument0,
+			nameOrScalesArg1?: Argument1
 		):
 			& string
 			& {
 				className: string
 				selector: string
 			}
-			& ThemeTokens<Extract<typeof nameOrScalesArg0 | typeof nameOrScalesArg1, { [scale: string] : unknown }>, Prefix>
-	} & {
+			& (
+				Argument0 extends {}
+					? ThemeTokens<Argument0, Prefix>
+				: Argument1 extends {}
+					? ThemeTokens<Argument1, Prefix>
+				: {}
+			)
+	}
+	theme: string & {
 		[Scale in keyof Theme]: {
 			[Token in keyof Theme[Scale]]: ThemeUtil.Token<Extract<Token, string | number>, string, Extract<Scale, string>, Prefix>
 		}
@@ -131,4 +137,15 @@ export default interface Sheet<
 			Utils
 		>
 	},
+}
+
+type ThemeTokens<Values, Prefix> = {
+	[Scale in keyof Values]: {
+		[Token in keyof Values[Scale]]: ThemeUtil.Token<
+			Token,
+			Values[Scale][Token],
+			Scale,
+			Prefix
+		>
+	}
 }
