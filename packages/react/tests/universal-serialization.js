@@ -2,7 +2,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Serialization', () => {
 	const sheet = createStitches()
-	const { styled, getCssString, toString, theme } = sheet
+	const { styled, getCssString, toString, createTheme } = sheet
 
 	const myComponent = styled('button', {
 		all: 'unset',
@@ -12,7 +12,7 @@ describe('Serialization', () => {
 	})
 	const myComponentSelector = '.c-cLikna'
 
-	const myTheme = theme({
+	const myTheme = createTheme({
 		colors: {
 			blue: 'dodgerblue',
 		},

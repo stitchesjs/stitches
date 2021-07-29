@@ -1,10 +1,10 @@
 import { createStitches } from '../src/index.js'
 
 describe('Theme', () => {
-	test('Expected behavior for the theme() method', () => {
-		const { theme, getCssString } = createStitches()
+	test('Expected behavior for the createTheme() method', () => {
+		const { createTheme, getCssString } = createStitches()
 
-		const myTheme = theme('my', {
+		const myTheme = createTheme('my', {
 			colors: {
 				blue: 'dodgerblue',
 			},
@@ -17,7 +17,7 @@ describe('Theme', () => {
 		expect(myTheme.selector).toBe('.my')
 	})
 
-	test('theme() support for non-strings', () => {
+	test('createTheme() support for non-strings', () => {
 		{
 			const { getCssString } = createStitches({
 				theme: {

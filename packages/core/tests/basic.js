@@ -8,7 +8,7 @@ describe('Basic', () => {
 		expect(stitches.css).toBeInstanceOf(Function)
 		expect(stitches.globalCss).toBeInstanceOf(Function)
 		expect(stitches.keyframes).toBeInstanceOf(Function)
-		expect(stitches.theme).toBeInstanceOf(Function)
+		expect(stitches.createTheme).toBeInstanceOf(Function)
 	})
 
 	test('Functionality of getCssString()', () => {
@@ -88,10 +88,10 @@ describe('Basic', () => {
 		expect(cssString1of1).toBe(`--stitches{--:1 k-jOrSYg}@media{@keyframes k-jOrSYg{0%{color:Black}100%{color:White}}}`)
 	})
 
-	test('Functionality of theme()', () => {
-		const { theme, getCssString } = createStitches()
+	test('Functionality of createTheme()', () => {
+		const { createTheme, getCssString } = createStitches()
 
-		const rendering1of1 = theme({
+		const rendering1of1 = createTheme({
 			colors: {
 				red: 'Crimson',
 				blue: 'DodgerBlue',
