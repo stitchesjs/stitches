@@ -44,8 +44,8 @@ export declare const createCss: CreateCss
 /** Map of CSS properties to token scales. */
 export declare const defaultThemeMap: DefaultThemeMap
 
-/** Returns a function that applies global styles. */
-export declare const global: Sheet['global']
+/** Returns a function that applies globalCss styles. */
+export declare const globalCss: Sheet['globalCss']
 
 /** Returns an object that applies `@keyframes` styles. */
 export declare const keyframes: Sheet['keyframes']

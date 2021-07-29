@@ -22,7 +22,7 @@ export default interface Sheet<
 		utils: Utils
 	},
 	prefix: Prefix
-	global: {
+	globalCss: {
 		(style: {
 			[prelude: string]: CSS
 		}): {

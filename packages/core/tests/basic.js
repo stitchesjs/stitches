@@ -6,7 +6,7 @@ describe('Basic', () => {
 
 		expect(stitches).toBeInstanceOf(Object)
 		expect(stitches.css).toBeInstanceOf(Function)
-		expect(stitches.global).toBeInstanceOf(Function)
+		expect(stitches.globalCss).toBeInstanceOf(Function)
 		expect(stitches.keyframes).toBeInstanceOf(Function)
 		expect(stitches.theme).toBeInstanceOf(Function)
 	})
@@ -49,10 +49,10 @@ describe('Basic', () => {
 		expect(getCssString()).toBe('')
 	})
 
-	test('Functionality of global()', () => {
-		const { global, getCssString } = createCss()
+	test('Functionality of globalCss()', () => {
+		const { globalCss, getCssString } = createCss()
 
-		const rendering1of2 = global()
+		const rendering1of2 = globalCss()
 		const className1of2 = `${rendering1of2}`
 		const cssString1of2 = getCssString()
 
@@ -60,7 +60,7 @@ describe('Basic', () => {
 		expect(className1of2).toBe('')
 		expect(cssString1of2).toBe('')
 
-		const rendering2of2 = global({ body: { margin: 0 } })
+		const rendering2of2 = globalCss({ body: { margin: 0 } })
 		const className2of2 = `${rendering2of2}`
 		const cssString2of2 = getCssString()
 

@@ -2,7 +2,7 @@ import { createCss } from '../src/index.js'
 
 describe('Tokens', () => {
 	test('Authors can use a regular token #1', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -10,7 +10,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				color: '$red',
 			},
@@ -26,7 +26,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a regular token #2', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				shadows: {
 					red: 'tomato',
@@ -34,7 +34,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				boxShadow: '0 0 0 1px $red',
 			},
@@ -50,7 +50,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a relative token #1', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -59,7 +59,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				color: '$red500',
 			},
@@ -75,7 +75,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a relative token #1', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				shadows: {
 					red: 'tomato',
@@ -85,7 +85,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				boxShadow: '0 0 0 1px $red500',
 			},
@@ -102,7 +102,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use an absolute token #1', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -110,7 +110,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				boxShadow: '0 0 0 1px $colors$red',
 			},
@@ -127,7 +127,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use an absolute token #2', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -135,7 +135,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				boxShadow: '0 0 0 1px $colors$red',
 			},
@@ -152,7 +152,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a negative token #1', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -161,7 +161,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				marginLeft: '-$sp1',
 				marginTop: '-$sp2',
@@ -179,7 +179,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a negative token #2', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				sizes: {
 					sp1: '10px',
@@ -189,7 +189,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				marginLeft: '-$sizes$sp1',
 				width: '$sp1',
@@ -206,8 +206,8 @@ describe('Tokens', () => {
 		)
 	})
 
-	test('Authors can use tokens from the global theme object', () => {
-		const { global, theme, getCssString } = createCss({
+	test('Authors can use tokens from the globalCss theme object', () => {
+		const { globalCss, theme, getCssString } = createCss({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -216,7 +216,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				marginLeft: theme.space.sp1,
 				marginTop: theme.space.sp2,
@@ -234,7 +234,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use tokens from a new theme object', () => {
-		const { global, theme, getCssString } = createCss()
+		const { globalCss, theme, getCssString } = createCss()
 
 		const mytheme = theme('my-theme', {
 			space: {
@@ -243,7 +243,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				marginLeft: mytheme.space.sp1,
 				marginTop: mytheme.space.sp2,
@@ -265,8 +265,8 @@ describe('Tokens', () => {
 		)
 	})
 
-	test('Authors can use tokens from the global theme object', () => {
-		const { global, theme, getCssString } = createCss({
+	test('Authors can use tokens from the globalCss theme object', () => {
+		const { globalCss, theme, getCssString } = createCss({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -275,7 +275,7 @@ describe('Tokens', () => {
 			},
 		})
 
-		global({
+		globalCss({
 			article: {
 				marginLeft: theme.space.sp1,
 				marginTop: theme.space.sp2,
@@ -312,7 +312,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can render custom units', () => {
-		const { global, getCssString } = createCss({
+		const { globalCss, getCssString } = createCss({
 			theme: {
 				sizes: {
 					five: '5px',
@@ -320,7 +320,7 @@ describe('Tokens', () => {
 			}
 		})
 
-		global({
+		globalCss({
 			body: {
 				marginLeft: '5--sizes-five'
 			}

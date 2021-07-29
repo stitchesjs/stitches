@@ -2,9 +2,9 @@ import { createCss } from '../src/index.js'
 
 describe('Logical Properties', () => {
 	test('marginBlock', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				marginBlock: 0,
 			},
@@ -26,9 +26,9 @@ describe('Logical Properties', () => {
 	})
 
 	test('marginInline', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				marginInline: 0,
 			},
@@ -50,9 +50,9 @@ describe('Logical Properties', () => {
 	})
 
 	test('paddingBlock', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				paddingBlock: 0,
 			},
@@ -74,9 +74,9 @@ describe('Logical Properties', () => {
 	})
 
 	test('paddingInline', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				paddingInline: 0,
 			},

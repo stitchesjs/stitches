@@ -2,9 +2,9 @@ import { createCss } from '../src/index.js'
 
 describe('Autoprefixer', () => {
 	test('appearance', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				appearance: 'none',
 			},
@@ -14,9 +14,9 @@ describe('Autoprefixer', () => {
 	})
 
 	test('backfaceVisibility', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				backfaceVisibility: 'visible',
 			},
@@ -26,9 +26,9 @@ describe('Autoprefixer', () => {
 	})
 
 	test('backgroundClip', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				backgroundClip: 'border-box',
 			},
@@ -38,9 +38,9 @@ describe('Autoprefixer', () => {
 	})
 
 	test('clipPath', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				clipPath: 'circle(40%)',
 			},
@@ -50,9 +50,9 @@ describe('Autoprefixer', () => {
 	})
 
 	test('hyphens', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				hyphens: 'none',
 			},
@@ -62,9 +62,9 @@ describe('Autoprefixer', () => {
 	})
 
 	test('maskImage', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				maskImage: 'none',
 			},
@@ -74,9 +74,9 @@ describe('Autoprefixer', () => {
 	})
 
 	test('tabSize', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				tabSize: 'none',
 			},
@@ -86,9 +86,9 @@ describe('Autoprefixer', () => {
 	})
 
 	test('textSizeAdjust', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				textSizeAdjust: '100%',
 			},
@@ -98,9 +98,9 @@ describe('Autoprefixer', () => {
 	})
 
 	test('userSelect', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'x-element': {
 				userSelect: 'none',
 			},
