@@ -4,17 +4,17 @@ describe('Configuration', () => {
 	let stitches
 
 	test('createCss()', () => {
-		const { css, global } = createCss()
+		const { css, globalCss } = createCss()
 
 		expect(css).toBeInstanceOf(Function)
-		expect(global).toBeInstanceOf(Function)
+		expect(globalCss).toBeInstanceOf(Function)
 	})
 
 	test('createCss({})', () => {
-		const { css, global } = createCss({})
+		const { css, globalCss } = createCss({})
 
 		expect(css).toBeInstanceOf(Function)
-		expect(global).toBeInstanceOf(Function)
+		expect(globalCss).toBeInstanceOf(Function)
 	})
 
 	test('createCss({ prefix: "fusion-" })', () => {

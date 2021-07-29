@@ -1,10 +1,10 @@
 import { createCss } from '../src/index.js'
 
 describe('Nesting', () => {
-	test('Authors can define global nesting rules', () => {
-		const { global, getCssString } = createCss()
+	test('Authors can define globalCss nesting rules', () => {
+		const { globalCss, getCssString } = createCss()
 
-		global({
+		globalCss({
 			'body > a': {
 				'&:not(:hover)': {
 					textDecoration: 'none',
@@ -27,10 +27,10 @@ describe('Nesting', () => {
 		expect(getCssString()).toBe(`--stitches{--:2 c-dweUti}@media{.c-dweUti:not(:hover){text-decoration:none}}`)
 	})
 
-	test('Authors can define recursive global nesting rules', () => {
-		const { global, getCssString } = createCss()
+	test('Authors can define recursive globalCss nesting rules', () => {
+		const { globalCss, getCssString } = createCss()
 
-		global({
+		globalCss({
 			p: {
 				'margin': 0,
 				'& ~ &': {
@@ -55,10 +55,10 @@ describe('Nesting', () => {
 		expect(getCssString()).toBe(`--stitches{--:2 c-fuGzNQ}@media{.c-fuGzNQ{margin:0}.c-fuGzNQ ~ .c-fuGzNQ{margin-top:0}}`)
 	})
 
-	test('Authors can define complex recursive global nesting rules', () => {
-		const { global, getCssString } = createCss()
+	test('Authors can define complex recursive globalCss nesting rules', () => {
+		const { globalCss, getCssString } = createCss()
 
-		global({
+		globalCss({
 			'body > p, body > ul': {
 				'margin': 0,
 				'& ~ &': {

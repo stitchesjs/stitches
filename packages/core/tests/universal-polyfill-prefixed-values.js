@@ -2,9 +2,9 @@ import { createCss } from '../src/index.js'
 
 describe('Polyfill prefixed values', () => {
 	test('width:stretch', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'.gro': {
 				width: 'stretch',
 			},
@@ -16,9 +16,9 @@ describe('Polyfill prefixed values', () => {
 	})
 
 	test('width:fit-content', () => {
-		const { global, toString } = createCss()
+		const { globalCss, toString } = createCss()
 
-		global({
+		globalCss({
 			'.fit': {
 				width: 'fit-content',
 			},

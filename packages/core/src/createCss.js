@@ -44,7 +44,7 @@ export const createCss = (config) => {
 
 		const returnValue = {
 			css: createComponentFunction(config, sheet),
-			global: createGlobalFunction(config, sheet),
+			globalCss: createGlobalFunction(config, sheet),
 			keyframes: createKeyframesFunction(config, sheet),
 			theme: createThemeFunction(config, sheet),
 			reset() {

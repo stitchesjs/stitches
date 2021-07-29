@@ -4,47 +4,51 @@ import { define } from '../utility/define.js'
 import { toCssRules } from '../convert/toCssRules.js'
 import { toHash } from '../convert/toHash.js'
 
-/** @typedef {import('./global').Config} Config */
-/** @typedef {import('./global').Styling} Styling */
-
-/** @typedef {import('../createSheet').SheetGroup} SheetGroup */
-
 const createGlobalFunctionMap = createMemo()
 
 /** Returns a function that applies global styles. */
-export const createGlobalFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
-	createGlobalFunctionMap(config, () => (/** @type {Styling} */ style) => {
-		style = (typeof style === 'object' && style) || {}
+export const createGlobalFunction = (
+	/** @type {object} */ config,
+	/** @type {Sheet} */ sheet
+) => createGlobalFunctionMap(config, () => (
+	/** @type {Style} */ style
+) => {
+	style = typeof style === 'object' && style || {}
 
-		const uuid = toHash(style)
+	const uuid = toHash(style)
 
-		const render = () => {
-			if (!sheet.rules.global.cache.has(uuid)) {
-				sheet.rules.global.cache.add(uuid)
+	const render = () => {
+		if (!sheet.rules.global.cache.has(uuid)) {
+			sheet.rules.global.cache.add(uuid)
 
-				// support @import rules
-				if ('@import' in style) {
-					let importIndex = [].indexOf.call(sheet.sheet.cssRules, sheet.rules.themed.group) - 1
+			// support @import rules
+			if ('@import' in style) {
+				let importIndex = [].indexOf.call(sheet.sheet.cssRules, sheet.rules.themed.group) - 1
 
-					// wrap import in quotes as a convenience
-					for (let importValue of [].concat(style['@import'])) {
-						importValue = importValue.includes('"') || importValue.includes("'") ? importValue : `"${importValue}"`
+				// wrap import in quotes as a convenience
+				for (
+					let importValue of /** @type {string[]} */ ([].concat(style['@import']))
+				) {
+					importValue = importValue.includes('"') || importValue.includes("'") ? importValue : `"${importValue}"`
 
-						sheet.sheet.insertRule(`@import ${importValue};`, importIndex++)
-					}
-
-					delete style['@import']
+					sheet.sheet.insertRule(`@import ${importValue};`, importIndex++)
 				}
 
-				toCssRules(style, [], [], config, (cssText) => {
-					sheet.rules.global.apply(cssText)
-				})
+				delete style['@import']
 			}
 
-			return ''
+			toCssRules(style, [], [], config, (cssText) => {
+				sheet.rules.global.apply(cssText)
+			})
 		}
 
-		return define(render, {
-			toString: render,
-		})
+		return ''
+	}
+
+	return define(render, {
+		toString: render,
 	})
+})
+
+/** @typedef {{ [name: string]: number | string | void | Style }} Style */
+/** @typedef {{ rules: { [name: string]: { apply(): void, cache: Set<string> } }, sheet: { insertRule(): number } }} Sheet */

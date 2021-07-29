@@ -2,11 +2,11 @@ import { createCss } from '../src/index.js'
 
 describe('Support @import', () => {
 	test('Authors can define an @import rule', () => {
-		const { global, getCssString } = createCss()
+		const { globalCss, getCssString } = createCss()
 
 		const importURL = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 
-		global({
+		globalCss({
 			'@import': `"${importURL}"`,
 		})()
 
@@ -14,12 +14,12 @@ describe('Support @import', () => {
 	})
 
 	test('Authors can define multiple @import rules', () => {
-		const { global, getCssString } = createCss()
+		const { globalCss, getCssString } = createCss()
 
 		const importURL1 = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 		const importURL2 = `https://unpkg.com/sanitize.css@12.0.1/typography.css`
 
-		global({
+		globalCss({
 			'@import': [`"${importURL1}"`, `"${importURL2}"`],
 		})()
 
@@ -27,11 +27,11 @@ describe('Support @import', () => {
 	})
 
 	test('Authors can an @import rule without quotes', () => {
-		const { global, getCssString } = createCss()
+		const { globalCss, getCssString } = createCss()
 
 		const importURL = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 
-		global({
+		globalCss({
 			'@import': importURL,
 		})()
 
@@ -41,9 +41,9 @@ describe('Support @import', () => {
 
 describe('Support @font-face', () => {
 	test('Authors can define a @font-face rule', () => {
-		const { global, getCssString } = createCss()
+		const { globalCss, getCssString } = createCss()
 
-		global({
+		globalCss({
 			'@font-face': {
 				fontFamily: 'system-ui',
 				fontStyle: 'normal',
@@ -76,9 +76,9 @@ describe('Support @font-face', () => {
 	})
 
 	test('Authors can define multiple @font-face rules', () => {
-		const { global, getCssString } = createCss()
+		const { globalCss, getCssString } = createCss()
 
-		global({
+		globalCss({
 			'@font-face': [
 				{
 					fontFamily: 'system-ui',
