@@ -11,18 +11,18 @@ describe('Basic', () => {
 		expect(stitches.createTheme).toBeInstanceOf(Function)
 	})
 
-	test('Functionality of getCssString()', () => {
-		const { getCssString } = createStitches()
+	test('Functionality of getCssText()', () => {
+		const { getCssText } = createStitches()
 
-		expect(getCssString()).toBe('')
+		expect(getCssText()).toBe('')
 	})
 
 	test('Functionality of css()', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		const component1of2 = css()
 		const className1of2 = `${component1of2}`
-		const cssString1of2 = getCssString()
+		const cssString1of2 = getCssText()
 
 		expect(component1of2).toBeInstanceOf(Function)
 		expect(className1of2).toBe('PJLV')
@@ -30,7 +30,7 @@ describe('Basic', () => {
 
 		const component2of2 = css({ color: 'DodgerBlue' })
 		const className2of2 = `${component2of2}`
-		const cssString2of2 = getCssString()
+		const cssString2of2 = getCssText()
 
 		expect(component2of2).toBeInstanceOf(Function)
 		expect(className2of2).toBe('c-dataoT')
@@ -38,23 +38,23 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of reset()', () => {
-		const { reset, getCssString } = createStitches()
+		const { reset, getCssText } = createStitches()
 
 		expect(reset).toBeInstanceOf(Function)
 
-		expect(getCssString()).toBe('')
+		expect(getCssText()).toBe('')
 
 		reset()
 
-		expect(getCssString()).toBe('')
+		expect(getCssText()).toBe('')
 	})
 
 	test('Functionality of globalCss()', () => {
-		const { globalCss, getCssString } = createStitches()
+		const { globalCss, getCssText } = createStitches()
 
 		const rendering1of2 = globalCss()
 		const className1of2 = `${rendering1of2}`
-		const cssString1of2 = getCssString()
+		const cssString1of2 = getCssText()
 
 		expect(rendering1of2).toBeInstanceOf(Function)
 		expect(className1of2).toBe('')
@@ -62,7 +62,7 @@ describe('Basic', () => {
 
 		const rendering2of2 = globalCss({ body: { margin: 0 } })
 		const className2of2 = `${rendering2of2}`
-		const cssString2of2 = getCssString()
+		const cssString2of2 = getCssText()
 
 		expect(rendering2of2).toBeInstanceOf(Function)
 		expect(className2of2).toBe('')
@@ -70,7 +70,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of keyframes()', () => {
-		const { keyframes, getCssString } = createStitches()
+		const { keyframes, getCssText } = createStitches()
 
 		const rendering1of1 = keyframes({
 			'0%': {
@@ -81,7 +81,7 @@ describe('Basic', () => {
 			},
 		})
 		const className1of1 = `${rendering1of1}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(rendering1of1).toBeInstanceOf(Function)
 		expect(className1of1).toBe('k-jOrSYg')
@@ -89,7 +89,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of createTheme()', () => {
-		const { createTheme, getCssString } = createStitches()
+		const { createTheme, getCssText } = createStitches()
 
 		const rendering1of1 = createTheme({
 			colors: {
@@ -99,7 +99,7 @@ describe('Basic', () => {
 		})
 
 		const className1of1 = `${rendering1of1}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(rendering1of1).toBeInstanceOf(Object)
 		expect(className1of1).toBe('t-kfidiM')
@@ -107,11 +107,11 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of css() — css prop', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		const component1of1 = css({ color: 'DodgerBlue' })
 		const className1of1 = `${component1of1({ css: { color: 'Crimson' } })}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(component1of1).toBeInstanceOf(Function)
 		expect(className1of1).toBe('c-dataoT c-dataoT-icaIZdx-css')
@@ -126,7 +126,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of css() — variants', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		const component1of1 = css({
 			fontSize: '100%',
@@ -142,7 +142,7 @@ describe('Basic', () => {
 			},
 		})
 		const className1of1 = `${component1of1({ shade: 'red' })}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(component1of1).toBeInstanceOf(Function)
 		expect(className1of1).toBe('c-imTdEZ c-imTdEZ-caIZdx-shade-red')
@@ -150,7 +150,7 @@ describe('Basic', () => {
 	})
 
 	test('Functionality of css() — utils', () => {
-		const { css, getCssString } = createStitches({
+		const { css, getCssText } = createStitches({
 			utils: {
 				userSelect: (value) => ({
 					WebkitUserSelector: value,
@@ -163,41 +163,41 @@ describe('Basic', () => {
 			userSelect: 'none',
 		})
 		const className1of1 = `${component1of1()}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(className1of1).toBe('c-bStdfw')
 		expect(cssString1of1).toBe(`--stitches{--:2 c-bStdfw}@media{.c-bStdfw{-webkit-user-selector:none;user-select:none}}`)
 	})
 
 	test('Functionality of stringification — numeric pixel values', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		const component1of1 = css({
 			width: 100,
 		})
 		const className1of1 = `${component1of1()}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(className1of1).toBe('c-eBcQxc')
 		expect(cssString1of1).toBe(`--stitches{--:2 c-eBcQxc}@media{.c-eBcQxc{width:100px}}`)
 	})
 
 	test('Functionality of stringification — token values', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		const component1of1 = css({
 			width: '$brand',
 		})
 
 		const className1of1 = `${component1of1()}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(className1of1).toBe('c-lpaZZu')
 		expect(cssString1of1).toBe(`--stitches{--:2 c-lpaZZu}@media{.c-lpaZZu{width:var(--sizes-brand)}}`)
 	})
 
 	test('Functionality of stringification — local tokens', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		const component1of1 = css({
 			$$brand: '500px',
@@ -205,14 +205,14 @@ describe('Basic', () => {
 		})
 
 		const className1of1 = `${component1of1()}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(className1of1).toBe('c-elRGCe')
 		expect(cssString1of1).toBe(`--stitches{--:2 c-elRGCe}@media{.c-elRGCe{---brand:500px;width:var(---brand)}}`)
 	})
 
 	test('Functionality of stringification — local tokens prefixed', () => {
-		const { css, getCssString } = createStitches({
+		const { css, getCssText } = createStitches({
 			prefix: 'fusion',
 		})
 
@@ -222,14 +222,14 @@ describe('Basic', () => {
 		})
 
 		const className1of1 = `${component1of1()}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(className1of1).toBe('fusion-c-elRGCe')
 		expect(cssString1of1).toBe(`--stitches{--:2 fusion-c-elRGCe}@media{.fusion-c-elRGCe{--fusion--brand:500px;width:var(--fusion--brand)}}`)
 	})
 
 	test('Stringification: Utils + Local Tokens', () => {
-		const { css, getCssString } = createStitches({
+		const { css, getCssText } = createStitches({
 			utils: {
 				backdropFilter: (value) => ({
 					WebkitBackdropFilter: value,
@@ -244,14 +244,14 @@ describe('Basic', () => {
 		})
 
 		const className1of1 = `${component1of1()}`
-		const cssString1of1 = getCssString()
+		const cssString1of1 = getCssText()
 
 		expect(className1of1).toBe('c-brAtkJ')
 		expect(cssString1of1).toBe(`--stitches{--:2 c-brAtkJ}@media{.c-brAtkJ{---blur:test;-webkit-backdrop-filter:var(---blur);backdrop-filter:var(---blur)}}`)
 	})
 
 	test('Theme', () => {
-		const { getCssString } = createStitches({
+		const { getCssText } = createStitches({
 			theme: {
 				colors: {
 					red: 'Crimson',
@@ -260,6 +260,6 @@ describe('Basic', () => {
 			},
 		})
 
-		expect(getCssString()).toBe(`--stitches{--:0 t-kfidiM}@media{:root,.t-kfidiM{--colors-red:Crimson;--colors-blue:DodgerBlue}}`)
+		expect(getCssText()).toBe(`--stitches{--:0 t-kfidiM}@media{:root,.t-kfidiM{--colors-red:Crimson;--colors-blue:DodgerBlue}}`)
 	})
 }) // prettier-ignore

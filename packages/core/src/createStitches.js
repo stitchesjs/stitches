@@ -54,7 +54,7 @@ export const createStitches = (config) => {
 			sheet,
 			config,
 			prefix,
-			getCssString: sheet.toString,
+			getCssText: sheet.toString,
 			toString: sheet.toString,
 		}
 

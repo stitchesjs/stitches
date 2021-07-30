@@ -3,7 +3,7 @@ import { createStitches } from '../src/index.js'
 describe('Issue #450', () => {
 	test('Basic Tests', () => {
 		const getFreshComponents = () => {
-			const { css, getCssString } = createStitches()
+			const { css, getCssText } = createStitches()
 
 			const component1 = css({
 				variants: {
@@ -49,50 +49,50 @@ describe('Issue #450', () => {
 				},
 			})
 
-			return { component1, component2, component3, getCssString }
+			return { component1, component2, component3, getCssText }
 		}
 
 		test('Render component1() as red, inherited from defaultVariants', () => {
-			const { component1, getCssString } = getFreshComponents()
+			const { component1, getCssText } = getFreshComponents()
 			const render = component1()
 			expect(render.className).toBe(`c-PJLV c-PJLV-gmqXFB-color-red`)
-			expect(getCssString()).toBe(`--stitches{--:3 c-PJLV-gmqXFB-color-red}@media{.c-PJLV-gmqXFB-color-red{color:red}}`)
+			expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-gmqXFB-color-red}@media{.c-PJLV-gmqXFB-color-red{color:red}}`)
 		})
 
 		test('Render component1({ color: "blue" }) as blue, assigned from props', () => {
-			const { component1, getCssString } = getFreshComponents()
+			const { component1, getCssText } = getFreshComponents()
 			const render = component1({ color: 'blue' })
 			expect(render.className).toBe(`c-PJLV c-PJLV-kydkiA-color-blue`)
-			expect(getCssString()).toBe(`--stitches{--:3 c-PJLV-kydkiA-color-blue}@media{.c-PJLV-kydkiA-color-blue{color:blue}}`)
+			expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-kydkiA-color-blue}@media{.c-PJLV-kydkiA-color-blue{color:blue}}`)
 		})
 
 		test('Render component1({ color: "red" }) as red, assigned from props', () => {
-			const { component1, getCssString } = getFreshComponents()
+			const { component1, getCssText } = getFreshComponents()
 			const render = component1({ color: 'red' })
 			expect(render.className).toBe(`c-PJLV c-PJLV-gmqXFB-color-red`)
-			expect(getCssString()).toBe(`--stitches{--:3 c-PJLV-gmqXFB-color-red}@media{.c-PJLV-gmqXFB-color-red{color:red}}`)
+			expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-gmqXFB-color-red}@media{.c-PJLV-gmqXFB-color-red{color:red}}`)
 		})
 
 		test('Render component1({ color: { "@media (width >= 640px)": "blue" } }) as red then blue, inherited from defaultVariants, assigned from props', () => {
-			const { component1, getCssString } = getFreshComponents()
+			const { component1, getCssText } = getFreshComponents()
 			const render = component1({ color: { '@media (min-width: 640px)': 'blue' } })
 			expect(render.className).toBe(`c-PJLV c-PJLV-gmqXFB-color-red c-PJLV-bBevdw-color-blue`)
-			expect(getCssString()).toBe(`--stitches{--:3 c-PJLV-gmqXFB-color-red c-PJLV-bBevdw-color-blue}@media{.c-PJLV-gmqXFB-color-red{color:red}@media (min-width: 640px){.c-PJLV-bBevdw-color-blue{color:blue}}}`)
+			expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-gmqXFB-color-red c-PJLV-bBevdw-color-blue}@media{.c-PJLV-gmqXFB-color-red{color:red}@media (min-width: 640px){.c-PJLV-bBevdw-color-blue{color:blue}}}`)
 		})
 
 		test('Render component2() as orange, inherited from defaultVariants', () => {
-			const { component2, getCssString } = getFreshComponents()
+			const { component2, getCssText } = getFreshComponents()
 			const render = component2()
 
 			expect(render.className).toBe(`c-PJLV c-PJLV-vMTTG-color-orange`)
-			expect(getCssString()).toBe(`--stitches{--:3 c-PJLV-vMTTG-color-orange}@media{.c-PJLV-vMTTG-color-orange{color:orange}}`)
+			expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-vMTTG-color-orange}@media{.c-PJLV-vMTTG-color-orange{color:orange}}`)
 		})
 
 		test('Render component2({ color: { "@media (width >= 640px)": "blue" } }) as orange then blue, inherited from defaultVariants, assigned from props', () => {
-			const { component2, getCssString } = getFreshComponents()
+			const { component2, getCssText } = getFreshComponents()
 			const render = component2({ color: { '@media (min-width: 640px)': 'blue' } })
 			expect(render.className).toBe(`c-PJLV c-PJLV-bBevdw-color-blue c-PJLV-vMTTG-color-orange`)
-			expect(getCssString()).toBe(
+			expect(getCssText()).toBe(
 				`--stitches{--:3 c-PJLV-bBevdw-color-blue c-PJLV-vMTTG-color-orange}@media{` +
 					`@media (min-width: 640px){.c-PJLV-bBevdw-color-blue{color:blue}}` +
 					`.c-PJLV-vMTTG-color-orange{color:orange}` +
@@ -103,7 +103,7 @@ describe('Issue #450', () => {
 
 	test('Basic Tests ported from the React version', () => {
 		const getFreshComponents = () => {
-			const { css, getCssString } = createStitches()
+			const { css, getCssText } = createStitches()
 
 			const component1 = css({
 				'--component': 1,
@@ -145,21 +145,21 @@ describe('Issue #450', () => {
 				},
 			})
 
-			return { component1, component2, getCssString }
+			return { component1, component2, getCssText }
 		}
 
 		test('Render component1()', () => {
-			const { component1, getCssString } = getFreshComponents()
+			const { component1, getCssText } = getFreshComponents()
 			const render = component1()
 			expect(render.className).toBe(`c-jyxqjt`)
-			expect(getCssString()).toBe(`--stitches{--:2 c-jyxqjt}@media{.c-jyxqjt{--component:1}}`)
+			expect(getCssText()).toBe(`--stitches{--:2 c-jyxqjt}@media{.c-jyxqjt{--component:1}}`)
 		})
 
 		test('Render component1({ color: "lightBlue" })', () => {
-			const { component1, getCssString } = getFreshComponents()
+			const { component1, getCssText } = getFreshComponents()
 			const render = component1({ color: 'lightBlue' })
 			expect(render.className).toBe(`c-jyxqjt c-jyxqjt-ilDyRi-color-lightBlue`)
-			expect(getCssString()).toBe(
+			expect(getCssText()).toBe(
 				`--stitches{--:2 c-jyxqjt}@media{` +
 					`.c-jyxqjt{--component:1}` +
 				`}` +
@@ -170,10 +170,10 @@ describe('Issue #450', () => {
 		})
 
 		test('Render component1({ appearance: "secondary" })', () => {
-			const { component1, getCssString } = getFreshComponents()
+			const { component1, getCssText } = getFreshComponents()
 			const render = component1({ appearance: 'secondary' })
 			expect(render.className).toBe(`c-jyxqjt c-jyxqjt-cOChOn-appearance-secondary`)
-			expect(getCssString()).toBe(
+			expect(getCssText()).toBe(
 				`--stitches{--:2 c-jyxqjt}@media{` +
 					`.c-jyxqjt{--component:1}` +
 				`}` +
@@ -184,10 +184,10 @@ describe('Issue #450', () => {
 		})
 
 		test('Render component1({ appearance: "secondary", color: "lightBlue" })', () => {
-			const { component1, getCssString } = getFreshComponents()
+			const { component1, getCssText } = getFreshComponents()
 			const render = component1({ appearance: 'secondary', color: 'lightBlue' })
 			expect(render.className).toBe(`c-jyxqjt c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue c-jyxqjt-gYqlvA-cv`)
-			expect(getCssString()).toBe(
+			expect(getCssText()).toBe(
 				`--stitches{--:2 c-jyxqjt}@media{` +
 					`.c-jyxqjt{--component:1}` +
 				`}` +
@@ -202,10 +202,10 @@ describe('Issue #450', () => {
 		})
 
 		test('Render component2()', () => {
-			const { component2, getCssString } = getFreshComponents()
+			const { component2, getCssText } = getFreshComponents()
 			const render = component2()
 			expect(render.className).toBe(`c-jyxqjt c-dkRcuu c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue c-jyxqjt-gYqlvA-cv`)
-			expect(getCssString()).toBe(
+			expect(getCssText()).toBe(
 				`--stitches{--:2 c-jyxqjt c-dkRcuu}@media{` +
 					`.c-jyxqjt{--component:1}` +
 					`.c-dkRcuu{--component:2}` +
@@ -221,10 +221,10 @@ describe('Issue #450', () => {
 		})
 
 		test('Render component2({ appearance: "secondary", color: "lightBlue" })', () => {
-			const { component2, getCssString } = getFreshComponents()
+			const { component2, getCssText } = getFreshComponents()
 			const render = component2({ appearance: 'secondary', color: 'lightBlue' })
 			expect(render.className).toBe(`c-jyxqjt c-dkRcuu c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue c-jyxqjt-gYqlvA-cv`)
-			expect(getCssString()).toBe(
+			expect(getCssText()).toBe(
 				`--stitches{--:2 c-jyxqjt c-dkRcuu}@media{` +
 					`.c-jyxqjt{--component:1}` +
 					`.c-dkRcuu{--component:2}` +

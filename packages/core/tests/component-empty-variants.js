@@ -2,7 +2,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Empty Variants', () => {
 	test('Empty Variants', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		css({
 			variants: {
@@ -24,11 +24,11 @@ describe('Empty Variants', () => {
 			size: { '@initial': 'xl' },
 		})
 
-		expect(getCssString()).toBe('')
+		expect(getCssText()).toBe('')
 	})
 
 	test('Empty Variants', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		css({
 			variants: {
@@ -51,7 +51,7 @@ describe('Empty Variants', () => {
 			size: { '@initial': 'xl' },
 		})
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:4 c-PJLV-lhHHWD-cv}@media{` +
 				`.c-PJLV-lhHHWD-cv{font-size:24px;color:black}` +
 			`}`

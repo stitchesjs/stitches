@@ -92,7 +92,7 @@ export default interface Sheet<
 	reset: {
 		(): void
 	}
-	getCssString: {
+	getCssText: {
 		(): string
 	},
 	css: {

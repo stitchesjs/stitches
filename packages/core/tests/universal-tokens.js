@@ -2,7 +2,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Tokens', () => {
 	test('Authors can use a regular token #1', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -16,7 +16,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-iknykm}@media{` +
 				`:root,.t-iknykm{--colors-red:tomato}` +
 			`}--stitches{--:1 fMIGFF}@media{` +
@@ -26,7 +26,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a regular token #2', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				shadows: {
 					red: 'tomato',
@@ -40,7 +40,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-daOLKV}@media{` +
 				`:root,.t-daOLKV{--shadows-red:tomato}` +
 			`}--stitches{--:1 bstpNq}@media{` +
@@ -50,7 +50,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a relative token #1', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -65,7 +65,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-eZaaph}@media{` +
 				`:root,.t-eZaaph{--colors-red:tomato;--colors-red500:var(--colors-red)}` +
 			`}--stitches{--:1 fdgxsg}@media{` +
@@ -75,7 +75,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a relative token #1', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				shadows: {
 					red: 'tomato',
@@ -91,7 +91,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-gxqihb}@media{` +
 				`:root,.t-gxqihb{--shadows-red:tomato;--shadows-red500:var(--shadows-red);--shadows-redUnique:var(---red)}` +
 			`}` +
@@ -102,7 +102,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use an absolute token #1', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -116,7 +116,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-iknykm}@media{` +
 				`:root,.t-iknykm{--colors-red:tomato}` +
 			`}` +
@@ -127,7 +127,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use an absolute token #2', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				colors: {
 					red: 'tomato',
@@ -141,7 +141,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-iknykm}@media{` +
 				`:root,.t-iknykm{--colors-red:tomato}` +
 			`}` +
@@ -152,7 +152,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a negative token #1', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -168,7 +168,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-hxjLZl}@media{` +
 				`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
 			`}` +
@@ -179,7 +179,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use a negative token #2', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				sizes: {
 					sp1: '10px',
@@ -196,7 +196,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-ereMzu}@media{` +
 				`:root,.t-ereMzu{--sizes-sp1:10px;--sizes-sp2:20px;--sizes-sp3:30px}` +
 			`}` +
@@ -207,7 +207,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use tokens from the globalCss theme object', () => {
-		const { globalCss, theme, getCssString } = createStitches({
+		const { globalCss, theme, getCssText } = createStitches({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -223,7 +223,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-hxjLZl}@media{` +
 				`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
 			`}` +
@@ -234,7 +234,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use tokens from a new theme object', () => {
-		const { globalCss, createTheme, getCssString } = createStitches()
+		const { globalCss, createTheme, getCssText } = createStitches()
 
 		const mytheme = createTheme('my-theme', {
 			space: {
@@ -250,13 +250,13 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:1 lcIUgV}@media{article{margin-left:var(--space-sp1);margin-top:var(--space-sp2)}}`,
 		)
 
 		void `${mytheme}`
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 my-theme}@media{` +
 				`.my-theme{--space-sp1:100px;--space-sp2:200px}` +
 			`}--stitches{--:1 lcIUgV}@media{` +
@@ -266,7 +266,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use tokens from the globalCss theme object', () => {
-		const { globalCss, theme, getCssString } = createStitches({
+		const { globalCss, theme, getCssText } = createStitches({
 			theme: {
 				space: {
 					sp1: '100px',
@@ -282,7 +282,7 @@ describe('Tokens', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-hxjLZl}@media{` +
 				`:root,.t-hxjLZl{--space-sp1:100px;--space-sp2:200px}` +
 			`}` +
@@ -293,7 +293,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can use the class from the root theme object', () => {
-		const { theme, getCssString } = createStitches({
+		const { theme, getCssText } = createStitches({
 			prefix: 'pedro',
 			theme: {
 				colors: {
@@ -304,7 +304,7 @@ describe('Tokens', () => {
 
 		expect(`<div class="${theme}"></div>`).toBe(`<div class="pedro-t-jPkpUS"></div>`)
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 pedro-t-jPkpUS}@media{` +
 				`:root,.pedro-t-jPkpUS{--pedro-colors-blue:dodgerblue}` +
 			`}`
@@ -312,7 +312,7 @@ describe('Tokens', () => {
 	})
 
 	test('Authors can render custom units', () => {
-		const { globalCss, getCssString } = createStitches({
+		const { globalCss, getCssText } = createStitches({
 			theme: {
 				sizes: {
 					five: '5px',
@@ -326,7 +326,7 @@ describe('Tokens', () => {
 			}
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:0 t-bhZLEQ}@media{` +
 				`:root,.t-bhZLEQ{--sizes-five:5px}` +
 			`}--stitches{--:1 gvABwA}@media{` +
