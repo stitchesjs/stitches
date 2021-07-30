@@ -14,7 +14,7 @@ let RenderOf = (...typeThenPropsThenChildren) => {
 
 describe('Issue #450', () => {
 	test('Compound variants apply to composed components (basic)', () => {
-		const { styled, getCssString } = createStitches()
+		const { styled, getCssText } = createStitches()
 
 		const Happy = styled('div', {
 			'--is-happy': true,
@@ -45,7 +45,7 @@ describe('Issue #450', () => {
 		)
 
 		expect(
-			getCssString()
+			getCssText()
 		).toBe(
 			// composition styles
 			`--stitches{--:2 c-fEpFmO}@media{` +

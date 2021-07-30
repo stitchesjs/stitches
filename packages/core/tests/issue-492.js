@@ -2,7 +2,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Issue #492', () => {
 	test('Conditionally apply default variants as the @initial value', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		const component = css({
 			variants: {
@@ -37,7 +37,7 @@ describe('Issue #492', () => {
 		)
 
 		expect(
-			getCssString()
+			getCssText()
 		).toBe(
 			`--stitches{--:3 ${variantSweetCarolineClassName}}@media{` +
 				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
@@ -58,7 +58,7 @@ describe('Issue #492', () => {
 		)
 
 		expect(
-			getCssString()
+			getCssText()
 		).toBe(
 			`--stitches{--:3 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName}}@media{` +
 				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
@@ -81,7 +81,7 @@ describe('Issue #492', () => {
 		)
 
 		expect(
-			getCssString()
+			getCssText()
 		).toBe(
 			`--stitches{--:3 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName} ${variantSweetDreamsClassName} ${variantResponsiveSweetCarolineClassName}}@media{` +
 				// last rendering
@@ -95,7 +95,7 @@ describe('Issue #492', () => {
 	})
 
 	test('Apply apply @initial styles first', () => {
-		const { css, getCssString } = createStitches()
+		const { css, getCssText } = createStitches()
 
 		const component = css({
 			'--rock': true,
@@ -130,7 +130,7 @@ describe('Issue #492', () => {
 		)
 
 		expect(
-			getCssString()
+			getCssText()
 		).toBe(
 			`--stitches{--:2 ${componentClassName}}@media{` +
 				`.${componentClassName}{--rock:true}` +

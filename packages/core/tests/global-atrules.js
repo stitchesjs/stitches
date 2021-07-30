@@ -2,7 +2,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Support @import', () => {
 	test('Authors can define an @import rule', () => {
-		const { globalCss, getCssString } = createStitches()
+		const { globalCss, getCssText } = createStitches()
 
 		const importURL = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 
@@ -10,11 +10,11 @@ describe('Support @import', () => {
 			'@import': `"${importURL}"`,
 		})()
 
-		expect(getCssString()).toBe(`@import "${importURL}";`)
+		expect(getCssText()).toBe(`@import "${importURL}";`)
 	})
 
 	test('Authors can define multiple @import rules', () => {
-		const { globalCss, getCssString } = createStitches()
+		const { globalCss, getCssText } = createStitches()
 
 		const importURL1 = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 		const importURL2 = `https://unpkg.com/sanitize.css@12.0.1/typography.css`
@@ -23,11 +23,11 @@ describe('Support @import', () => {
 			'@import': [`"${importURL1}"`, `"${importURL2}"`],
 		})()
 
-		expect(getCssString()).toBe(`@import "${importURL1}";@import "${importURL2}";`)
+		expect(getCssText()).toBe(`@import "${importURL1}";@import "${importURL2}";`)
 	})
 
 	test('Authors can an @import rule without quotes', () => {
-		const { globalCss, getCssString } = createStitches()
+		const { globalCss, getCssText } = createStitches()
 
 		const importURL = `https://unpkg.com/sanitize.css@12.0.1/sanitize.css`
 
@@ -35,13 +35,13 @@ describe('Support @import', () => {
 			'@import': importURL,
 		})()
 
-		expect(getCssString()).toBe(`@import "${importURL}";`)
+		expect(getCssText()).toBe(`@import "${importURL}";`)
 	})
 }) // prettier-ignore
 
 describe('Support @font-face', () => {
 	test('Authors can define a @font-face rule', () => {
-		const { globalCss, getCssString } = createStitches()
+		const { globalCss, getCssText } = createStitches()
 
 		globalCss({
 			'@font-face': {
@@ -62,7 +62,7 @@ describe('Support @font-face', () => {
 			},
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:1 PCbjJ}` +
 			`@media{` +
 				`@font-face{` +
@@ -76,7 +76,7 @@ describe('Support @font-face', () => {
 	})
 
 	test('Authors can define multiple @font-face rules', () => {
-		const { globalCss, getCssString } = createStitches()
+		const { globalCss, getCssText } = createStitches()
 
 		globalCss({
 			'@font-face': [
@@ -115,7 +115,7 @@ describe('Support @font-face', () => {
 			],
 		})()
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:1 JJHhj}` +
 			`@media{` +
 				`@font-face{` +

@@ -2,7 +2,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Serialization', () => {
 	const sheet = createStitches()
-	const { styled, getCssString, toString, createTheme } = sheet
+	const { styled, getCssText, toString, createTheme } = sheet
 
 	const myComponent = styled('button', {
 		all: 'unset',
@@ -57,7 +57,7 @@ describe('Serialization', () => {
 	})
 
 	test('Sheets can explicitly return their cssText', () => {
-		expect(getCssString()).toBe(sheetCssText)
+		expect(getCssText()).toBe(sheetCssText)
 		expect(toString()).toBe(sheetCssText)
 	})
 })

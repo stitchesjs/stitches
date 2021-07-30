@@ -49,7 +49,7 @@ describe('Numeric Values', () => {
 
 	test('Authors can use unit-less properties as known to React', () => {
 		for (let i = 0; i <= 33; i += 11) {
-			const { globalCss, getCssString } = createStitches()
+			const { globalCss, getCssText } = createStitches()
 
 			globalCss({
 				div: {
@@ -87,7 +87,7 @@ describe('Numeric Values', () => {
 				},
 			})()
 
-			const cssText = getCssString().replace(/^.+@media\{|\}$/g, '')
+			const cssText = getCssText().replace(/^.+@media\{|\}$/g, '')
 
 			expect(cssText).toBe(
 				'div' + '{' +
@@ -135,7 +135,7 @@ describe('Numeric Values', () => {
 
 		test(`Author can use the unit-only ${kebabProp} property`, () => {
 			for (let i = 0; i <= 33; i += 11) {
-				const { globalCss, getCssString } = createStitches()
+				const { globalCss, getCssText } = createStitches()
 
 				globalCss({
 					div: {
@@ -143,7 +143,7 @@ describe('Numeric Values', () => {
 					},
 				})()
 
-				const cssText = getCssString().replace(/^.+@media\{|\}$/g, '')
+				const cssText = getCssText().replace(/^.+@media\{|\}$/g, '')
 
 				expect(cssText).toBe(
 					`div{` +

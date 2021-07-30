@@ -2,7 +2,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Theme', () => {
 	test('Expected behavior for the createTheme() method', () => {
-		const { createTheme, getCssString } = createStitches()
+		const { createTheme, getCssText } = createStitches()
 
 		const myTheme = createTheme('my', {
 			colors: {
@@ -10,16 +10,16 @@ describe('Theme', () => {
 			},
 		})
 
-		expect(getCssString()).toBe('')
+		expect(getCssText()).toBe('')
 		expect(`<div class="${myTheme}">`).toBe('<div class="my">')
-		expect(getCssString()).toBe(`--stitches{--:0 my}@media{.my{--colors-blue:dodgerblue}}`)
+		expect(getCssText()).toBe(`--stitches{--:0 my}@media{.my{--colors-blue:dodgerblue}}`)
 		expect(myTheme.className).toBe('my')
 		expect(myTheme.selector).toBe('.my')
 	})
 
 	test('createTheme() support for non-strings', () => {
 		{
-			const { getCssString } = createStitches({
+			const { getCssText } = createStitches({
 				theme: {
 					sizes: {
 						sm: 100,
@@ -29,7 +29,7 @@ describe('Theme', () => {
 				}
 			})
 
-			expect(getCssString()).toBe(
+			expect(getCssText()).toBe(
 				`--stitches{--:0 t-egkarf}@media{` +
 					`:root,.t-egkarf{--sizes-sm:100;--sizes-md:200;--sizes-lg:500}` +
 				`}`
@@ -37,7 +37,7 @@ describe('Theme', () => {
 		}
 
 		{
-			const { getCssString } = createStitches({
+			const { getCssText } = createStitches({
 				theme: {
 					sizes: {
 						sm: 100,
@@ -47,7 +47,7 @@ describe('Theme', () => {
 				}
 			})
 
-			expect(getCssString()).toBe(
+			expect(getCssText()).toBe(
 				`--stitches{--:0 t-eJkcVD}@media{` +
 					`:root,.t-eJkcVD{` +
 						`--sizes-sm:100;` +

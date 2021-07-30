@@ -4,7 +4,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Basic', () => {
 	test('Functionality of styled()', () => {
-		const { styled, getCssString } = createStitches({
+		const { styled, getCssText } = createStitches({
 			utils: {
 				userSelect: () => (value) => ({
 					WebkitUserSelector: value,
@@ -41,7 +41,7 @@ describe('Basic', () => {
 			children: ['Hello, World!'],
 		})
 
-		expect(getCssString()).toBe(
+		expect(getCssText()).toBe(
 			`--stitches{--:2 c-iSEgvG}@media{.c-iSEgvG{background-color:gainsboro;border-radius:9999px;font-weight:500;padding:0.75em 1em;border:0;transition:all 200ms ease}.c-iSEgvG:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0, 0, 0, .3)}}`,
 		)
 	})
