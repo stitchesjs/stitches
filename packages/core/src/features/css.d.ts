@@ -25,6 +25,14 @@ export type InitComposer = {
 } & Styling
 
 /** Composer as it has been processed. */
+export type Internals = {
+	/** Component type. */
+	type: any
+	/** Component composers. */
+	composers: Set<Composer>
+}
+
+/** Composer as it has been processed. */
 export type Composer = [
 	/** Composer base class name. */
 	string,

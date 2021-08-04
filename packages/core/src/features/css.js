@@ -1,4 +1,4 @@
-import { $$composers } from '../utility/composers.js'
+import { internals } from '../utility/internals.js'
 import { createMemo } from '../utility/createMemo.js'
 import { define } from '../utility/define.js'
 import { hasNames } from '../utility/hasNames.js'
@@ -8,6 +8,7 @@ import { toCssRules } from '../convert/toCssRules.js'
 import { toHash } from '../convert/toHash.js'
 import { toTailDashed } from '../convert/toTailDashed.js'
 
+/** @typedef {import('./css').Internals} Internals */
 /** @typedef {import('./css').Composer} Composer */
 /** @typedef {import('./css').Config} Config */
 /** @typedef {import('./css').InitComposer} InitComposer */
@@ -26,53 +27,41 @@ const createComponentFunctionMap = createMemo()
 /** Returns a function that applies component styles. */
 export const createComponentFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
 	createComponentFunctionMap(config, () => (...args) => {
-		/** @type {string | Function} Component type, which may be a function or a string. */
-		let componentType = null
-
-		/** @type {Set<Composer>} Composers. */
-		const composers = new Set()
+		/** @type {Internals} */
+		let internal = {
+			type: null,
+			composers: new Set(),
+		}
 
 		for (const arg of args) {
 			// skip any void argument
 			if (arg == null) continue
 
-			switch (typeof arg) {
-				case 'function':
-					// allow a composer-less function to be the component type
-					if (componentType == null && !arg[$$composers]) {
-						componentType = arg
+			// conditionally extend the component
+			if (arg[internals]) {
+				internal.type = arg[internals].type
 
-						break
-					}
+				for (const composer of arg[internals].composers) {
+					internal.composers.add(composer)
+				}
+			}
 
-				case 'object':
-					// allow a type property to be this component type
-					if (componentType == null && arg.type != null) componentType = arg.type
+			// otherwise, conditionally define the component type
+			else if (arg.constructor !== Object || arg.$$typeof) {
+				internal.type = arg
+			}
 
-					// copy all composers into this component
-					if ($$composers in arg)
-						for (const composer of arg[$$composers]) {
-							composers.add(composer)
-						}
-					// otherwise, add a new composer to this component
-					else if (!('$$typeof' in arg)) {
-						const composer = createComposer(arg, config)
-
-						composers.add(composer)
-					}
-
-					break
-
-				case 'string':
-					componentType = arg
+			// otherwise, add a new composer to this component
+			else {
+				internal.composers.add(createComposer(arg, config))
 			}
 		}
 
 		// set the component type if none was set
-		if (componentType == null) componentType = 'span'
-		if (!composers.size) composers.add(['PJLV', {}, [], [], {}, []])
+		if (internal.type == null) internal.type = 'span'
+		if (!internal.composers.size) internal.composers.add(['PJLV', {}, [], [], {}, []])
 
-		return createRenderer(config, componentType, composers, sheet)
+		return createRenderer(config, internal, sheet)
 	})
 
 /** Creates a composer from a configuration object. */
@@ -142,8 +131,7 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 
 const createRenderer = (
 	/** @type {Config} */ config,
-	/** @type {string | Function} */ type,
-	/** @type {Set<Composer>} */ composers,
+	/** @type {Internals} */ internal,
 	/** @type {import('../sheet').SheetGroup} */ sheet
 ) => {
 	const [
@@ -151,7 +139,7 @@ const createRenderer = (
 		baseClassNames,
 		prefilledVariants,
 		undefinedVariants
-	] = getPreparedDataFromComposers(composers)
+	] = getPreparedDataFromComposers(internal.composers)
 
 	const selector = `.${baseClassName}${baseClassNames.length > 1 ? `:where(.${baseClassNames.slice(1).join('.')})` : ``}`
 
@@ -202,7 +190,7 @@ const createRenderer = (
 		// 2.2.1. orders regular variants before responsive variants
 		// 2.3. iterate their compound variants, add their compound variant classes
 
-		for (const [composerBaseClass, composerBaseStyle, singularVariants, compoundVariants] of composers) {
+		for (const [composerBaseClass, composerBaseStyle, singularVariants, compoundVariants] of internal.composers) {
 			if (!sheet.rules.styled.cache.has(composerBaseClass)) {
 				sheet.rules.styled.cache.add(composerBaseClass)
 
@@ -276,7 +264,7 @@ const createRenderer = (
 		const renderedToString = () => renderedClassName
 
 		return {
-			type,
+			type: internal.type,
 			className: renderedClassName,
 			selector,
 			props: forwardProps,
@@ -286,14 +274,14 @@ const createRenderer = (
 
 	const toString = () => {
 		if (!sheet.rules.styled.cache.has(baseClassName)) render()
+
 		return baseClassName
 	}
 
 	return define(render, {
-		type,
 		className: baseClassName,
 		selector,
-		[$$composers]: composers,
+		[internals]: internal,
 		toString,
 	})
 } // prettier-ignore
