@@ -1,12 +1,12 @@
 import { corePackageUrl, reactPackageUrl, rootUrl } from './internal/dirs.js'
 import * as fs from './internal/fs.js'
 
-const dtsOriginalURL = rootUrl.resolve('./node_modules/csstype/index.d.ts')
+const dtsOriginalURL = rootUrl.to('./node_modules/csstype/index.d.ts')
 
 const doTheThing = async (packageUrl) => {
 	const dtsOriginalTxt = await fs.readFile(dtsOriginalURL, 'utf8')
 
-	const dtsModifiedURL = corePackageUrl.resolve('./types/css.d.ts')
+	const dtsModifiedURL = corePackageUrl.to('./types/css.d.ts')
 	const dtsModifiedTxt = new ModifiedString(dtsOriginalTxt)
 		.withoutVendorTyping
 

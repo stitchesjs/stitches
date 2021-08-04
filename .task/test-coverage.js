@@ -1,7 +1,7 @@
-import cp from 'child_process'
-import fp from 'path'
-import fs from './internal/fs.js'
-import os from 'os'
+import * as cp from './internal/child_process.js'
+import * as fp from 'path'
+import * as fs from './internal/fs.js'
+import * as os from 'os'
 import { bold, dim, green, red } from './internal/color.js'
 
 // Creates a unique temporary directory

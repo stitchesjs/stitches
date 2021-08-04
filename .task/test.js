@@ -1,35 +1,29 @@
 import { passIcon, failIcon, passText, failText, infoText, dim, green } from './internal/color.js'
-import { rootUrl, corePackageUrl, reactPackageUrl, stringifyPackageUrl } from './internal/dirs.js'
 import { isProcessMeta, getProcessArgOf } from './internal/process.js'
-import expect from './internal/expect.js'
-import fs from './internal/fs.js'
+import * as fs from './internal/fs.js'
 import nodemon from 'nodemon'
+import URL from './internal/URL.js'
 
-const test = async (packageUrl, opts) => {
-	/** testing directory */
-	const packageTestsUrl = new URL('./tests/', packageUrl)
+const root = URL.from(import.meta.url).to('../')
 
-	// bootstrap the expect api
-	globalThis.expect = expect
-
+const main = async (pkg, opts) => {
 	let didFailLast
 
 	// for each file in the testing directory
-	for (let file of await fs.readdir(packageTestsUrl)) {
-		/** Test file Url. */
-		const fileUrl = new URL(file, packageTestsUrl)
-
-		/** Root relative path, used for filtering files/ */
-		const rootRelativePath = fileUrl.href.slice(rootUrl.href.length)
+	for (let file of await fs.readdir(pkg.to('tests/'))) {
+		file = pkg.to('tests/').to(file)
 
 		// filter non-js files
 		if (!file.endsWith('.js')) continue
 
 		// filter non-matching files
-		if (opts.only.length && !opts.only.some((name) => rootRelativePath.includes(name))) continue
+		if (opts.only.length && !opts.only.some(name => file.includes(name))) continue
 
 		/** Test results. */
 		const results = Object.create(null)
+
+		// bootstrap the expect api
+		globalThis.expect = (await import('./internal/expect.js')).default
 
 		// bootstrap the describe api
 		global.describe = async (description, call) => {
@@ -47,14 +41,14 @@ const test = async (packageUrl, opts) => {
 
 					// assign success to the results
 					results[description][test].push(`${passIcon} ${infoText(test)}`)
-				} catch (e) {
-					e.stack = e.stack || e.message || String(e || '')
+				} catch (error) {
+					error.stack = error.stack || error.message || String(error || '')
 
-					e.stack = [ ...e.stack.split(/\n/g).slice(1)].join('\n')
+					error.stack = [ ...error.stack.split(/\n/g).slice(1)].join('\n')
 
 					// assign failure to the results
-					results[description][test].push(`${failIcon} ${infoText(test)}`, getErrorStack(e), '')
-					results[description][test][didFail] = e
+					results[description][test].push(`${failIcon} ${infoText(test)}`, getErrorStack(error), '')
+					results[description][test][didFail] = error
 					results[description][didFail] = true
 					results[didFail] = true
 				}
@@ -63,19 +57,18 @@ const test = async (packageUrl, opts) => {
 			try {
 				// run the description
 				await call()
-			} catch (e) {
+			} catch (error) {
 				// assign description failure to the results
-				console.log({ 'e.message': e.message })
-				results[description][''] = [`${failIcon} ${infoText('Error')}`, String(e.message)]
+				results[description][''] = [`${failIcon} ${infoText('Error')}`, String(error.message)]
 			}
 		}
 
 		try {
 			// run the test file
-			await import(fileUrl)
-		} catch (e) {
+			await import(file)
+		} catch (error) {
 			// report errors running the test file
-			results[didFail] = e
+			results[didFail] = error
 		}
 
 		const failure = results[didFail]
@@ -84,7 +77,7 @@ const test = async (packageUrl, opts) => {
 		if (didFailLast && !!didFailLast != !!failure) console.log()
 
 		// report details if there is a failure
-		console.group(failure ? failText('FAIL') : passText('PASS'), infoText(rootRelativePath))
+		console.group(failure ? failText('FAIL') : passText('PASS'), infoText(file.href.slice(root.href.length)))
 
 		if (failure) {
 			process.exitCode = 1
@@ -122,16 +115,16 @@ const getErrorStack = (error) => error.stack.split(/\n/g).filter(
 		/(.*?)\(?(file:[^:]+)(.*?)\)?$/,
 		($0, before, file, after) => (
 			before.replace(/(at) ([^\s]+)?(.*)/, `${dim('$1')} ${green('$2')}$3`) +
-			file.slice(rootUrl.href.length) +
+			file.slice(root.href.length) +
 			dim(after)
 		)
 	)
 ).join('\n') // prettier-ignore
 
 export const testAll = async (opts) => {
-	await test(stringifyPackageUrl, opts)
-	await test(corePackageUrl, opts)
-	await test(reactPackageUrl, opts)
+	await main(URL.from(import.meta.url, '../packages/stringify/'), opts)
+	await main(URL.from(import.meta.url, '../packages/core/'), opts)
+	await main(URL.from(import.meta.url, '../packages/react/'), opts)
 }
 
 if (isProcessMeta(import.meta)) {
@@ -154,7 +147,7 @@ if (isProcessMeta(import.meta)) {
 				`--watch packages/stringify/types`,
 
 				// exec
-				`--exec "${['node', './.bin/test.js', ...onlyArgs].join(' ')}"`,
+				`--exec "${['node', './.task/test.js', ...onlyArgs].join(' ')}"`,
 			].join(' '),
 		).on('start', () => {
 			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')

@@ -193,7 +193,7 @@ if (isProcessMeta(import.meta)) {
 				`--watch packages/stringify/types`,
 
 				// exec
-				`--exec "${['node', './.bin/build.js', ...onlyArgs].join(' ')}"`,
+				`--exec "${['node', './.task/build.js', ...onlyArgs].join(' ')}"`,
 			].join(' '),
 		).on('start', () => {
 			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')

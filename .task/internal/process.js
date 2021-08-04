@@ -1,15 +1,11 @@
-export const {
-	argv: [exec, file, ...argv],
+import URL from './URL.js'
+
+const {
+	argv: [, file, ...argv],
 } = process
 
-export const fileUrl = new URL(file, 'file:')
-
 /** Returns whether the import.meta matches the current process. */
-export const isProcessMeta = (meta) => {
-	const metaUrl = new URL(meta.url)
-
-	return metaUrl.href === fileUrl.href
-}
+export const isProcessMeta = (meta) => new URL(meta.url).href === URL.from(file).href
 
 /** Returns the values for a given process argument. */
 export const getProcessArgOf = (name) => {
