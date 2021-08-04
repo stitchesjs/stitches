@@ -41,35 +41,35 @@ export type CSS<
 			: (
 				| (
 					Utils[K] extends (arg: infer P) => any
-						? P extends any[]
-							? (
-								$$PropertyValue extends keyof P[0]
-									? (
-										| ValueByPropertyName<P[0][$$PropertyValue]>
-										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
-										| CSS.Globals
-										| Util.Index
-									)
-								: $$ScaleValue extends keyof P[0]
-									? (
-										| TokenByScaleName<P[0][$$ScaleValue], Theme>
-										| Util.Index
-									)
-								: never
-							)[]
-						: $$PropertyValue extends keyof P
-							? (
-								| ValueByPropertyName<P[$$PropertyValue]>
-								| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
-								| CSS.Globals
-								| Util.Index
-							)
-						: $$ScaleValue extends keyof P
-							? (
-								| TokenByScaleName<P[$$ScaleValue], Theme>
-								| Util.Index
-							)
-						: never
+						? (
+							P extends any[]
+								? (
+									$$PropertyValue extends keyof P[0]
+										? (
+											| ValueByPropertyName<P[0][$$PropertyValue]>
+											| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
+											| CSS.Globals
+										)
+									: $$ScaleValue extends keyof P[0]
+										? (
+											| TokenByScaleName<P[0][$$ScaleValue], Theme>
+										)
+									: never
+								)[]
+								| P
+							: $$PropertyValue extends keyof P
+								? (
+									| ValueByPropertyName<P[$$PropertyValue]>
+									| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
+									| CSS.Globals
+								)
+							: $$ScaleValue extends keyof P
+								? (
+									| TokenByScaleName<P[$$ScaleValue], Theme>
+								)
+							: never
+						)
+						| P
 					: never
 				)
 			)
@@ -92,6 +92,7 @@ export type CSS<
 	}
 	// unknown css declaration styles
 	& {
+		/** Unknown property. */
 		[K in string]: number | string | CSS<Media, Theme, ThemeMap, Utils> | {}
 	}
 )
@@ -114,7 +115,6 @@ export type KnownCSS<
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
-			| Util.Index
 			| ThemeUtil.TokenInterface
 		)
 	}
@@ -133,12 +133,10 @@ export type KnownCSS<
 										| ValueByPropertyName<P[0][$$PropertyValue]>
 										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
 										| CSS.Globals
-										| Util.Index
 									)
 								: $$ScaleValue extends keyof P[0]
 									? (
 										| TokenByScaleName<P[0][$$ScaleValue], Theme>
-										| Util.Index
 									)
 								: never
 							)[]
@@ -147,12 +145,10 @@ export type KnownCSS<
 								| ValueByPropertyName<P[$$PropertyValue]>
 								| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
 								| CSS.Globals
-								| Util.Index
 							)
 						: $$ScaleValue extends keyof P
 							? (
 								| TokenByScaleName<P[$$ScaleValue], Theme>
-								| Util.Index
 							)
 						: never
 					: never

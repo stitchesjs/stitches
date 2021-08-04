@@ -24,14 +24,11 @@ export interface StyledComponent<
 	>(
 		props: (
 			As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps>>
+				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps & { as: As, css: Props['css'] }>>
 			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, Partial<TransformedProps>>
+				? Util.Assign<P, Partial<TransformedProps & { as: As, css: Props['css'] }>>
 			: never
-		) & {
-			as?: As,
-			css?: Props['css']
-		}
+		)
 	): React.ReactElement | null
 
 	[$$StyledComponentType]: Type
@@ -108,7 +105,7 @@ type IntrinsicElement<TagName> = TagName extends keyof JSX.IntrinsicElements ? T
 
 /** Returns a ForwardRef component. */
 type ForwardRefExoticComponent<ElementType, Props> = React.ForwardRefExoticComponent<
-	Util.Assign<ElementType extends React.ElementType ? React.ComponentPropsWithRef<ElementType> : never, Props & { as?: ElementType, css?: {} }>
+	Util.Assign<ElementType extends React.ElementType ? React.ComponentPropsWithRef<ElementType> : never, Props>
 >
 
 /** Returns the first Styled Component type from the given array of compositions. */

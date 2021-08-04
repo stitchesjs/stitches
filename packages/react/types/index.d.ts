@@ -7,6 +7,7 @@ import type * as StyledComponent from './styled-component'
 
 export type { CreateStitches, Sheet }
 
+export type CSSProperties = CSSUtil.CSSProperties
 export type DefaultThemeMap = Default.ThemeMap
 
 /** Returns a Style interface from a configuration, leveraging the given media and style map. */
