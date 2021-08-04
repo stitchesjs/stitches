@@ -147,17 +147,17 @@ const createRenderer = (
 	/** @type {import('../sheet').SheetGroup} */ sheet
 ) => {
 	const [
-		initialClassName,
+		baseClassName,
 		baseClassNames,
 		prefilledVariants,
 		undefinedVariants
 	] = getPreparedDataFromComposers(composers)
 
-	const selector = `.${initialClassName}`
+	const selector = `.${baseClassName}${baseClassNames.length > 1 ? `:where(.${baseClassNames.slice(1).join('.')})` : ``}`
 
 	/** @type {Render} */
 	const render = (props) => {
-		props = typeof props === 'object' && props || emptyProps
+		props = typeof props === 'object' && props || empty
 
 		// 1. we cannot mutate `props`
 		// 2. we delete variant props
@@ -254,7 +254,7 @@ const createRenderer = (
 		// apply css property styles
 		if (typeof css === 'object' && css) {
 			/** @type {string} Inline Class Unique Identifier. @see `{COMPOSER_UUID}-i{VARIANT_UUID}-css` */
-			const iClass = `${initialClassName}-i${toHash(css)}-css`
+			const iClass = `${baseClassName}-i${toHash(css)}-css`
 
 			classSet.add(iClass)
 
@@ -285,13 +285,13 @@ const createRenderer = (
 	}
 
 	const toString = () => {
-		if (!sheet.rules.styled.cache.has(initialClassName)) render()
-		return initialClassName
+		if (!sheet.rules.styled.cache.has(baseClassName)) render()
+		return baseClassName
 	}
 
 	return define(render, {
 		type,
-		className: initialClassName,
+		className: baseClassName,
 		selector,
 		[$$composers]: composers,
 		toString,
@@ -301,10 +301,10 @@ const createRenderer = (
 /** Returns useful data that can be known before rendering. */
 const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) => {
 	/** Class name of the first composer. */
-	let initialClassName = ''
+	let baseClassName = ''
 
 	/** @type {string[]} Combined class names for all composers. */
-	const combinedClassNames = []
+	const baseClassNames = []
 
 	/** @type {PrefilledVariants} Combined variant pairings for all composers. */
 	const combinedPrefilledVariants = {}
@@ -313,9 +313,9 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 	const combinedUndefinedVariants = []
 
 	for (const [className, , , , prefilledVariants, undefinedVariants] of composers) {
-		if (initialClassName === '') initialClassName = className
+		if (baseClassName === '') baseClassName = className
 
-		combinedClassNames.push(className)
+		baseClassNames.push(className)
 
 		combinedUndefinedVariants.push(...undefinedVariants)
 
@@ -327,8 +327,8 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 
 	/** @type {[string, string[], PrefilledVariants, Set<UndefinedVariants>]} */
 	const preparedData = [
-		initialClassName,
-		combinedClassNames,
+		baseClassName,
+		baseClassNames,
 		combinedPrefilledVariants,
 		new Set(combinedUndefinedVariants)
 	]
@@ -403,4 +403,4 @@ const getTargetVariantsToAdd = (
 }
 
 /** Fallback props object used when no props are passed. */
-const emptyProps = {}
+const empty = {}
