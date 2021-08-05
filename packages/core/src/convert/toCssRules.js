@@ -125,7 +125,7 @@ export const toCssRules = (
 								: String(data)
 							// replace tokens with stringified primitive values
 							: toTokenizedValue(
-								toSizingValue(camelName, data),
+								toSizingValue(camelName, data == null ? '' : data),
 								config.prefix,
 								config.themeMap[camelName]
 							)
