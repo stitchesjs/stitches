@@ -14,28 +14,30 @@ yarn add @stitches/core
 
 <p><br /></p>
 
-<a href="https://codepen.io/embed/prefill?editable=true&default-tab=js%2Cresult&data=%7B%22js%22%3A%22import+%7B+createStitches+%7D+from+%27https%3A%2F%2Fcdn.skypack.dev%2F%40stitches%2Fcore%27%5Cn%5Cn%2F%2F+add+your+code+here%21%5Cn%2F%2F+see+https%3A%2F%2Fstitches.dev+for+documentation%22%7D"><img src="https://img.shields.io/badge/-open_in_codepen-2b354f?logo=codepen&style=flat-square" alt="open in codepen" valign="middle" align="right"></a>
+<a href="https://codepen.io/embed/prefill?editable=true&default-tab=js%2Cresult&data=%7B%22js%22%3A%22import+%7B+css+%7D+from+%27https%3A%2F%2Fcdn.skypack.dev%2F%40stitches%2Fcore%27%3B%5Cn%5Cn%2F%2F+add+your+code+here%21%5Cn%2F%2F+see+https%3A%2F%2Fstitches.dev+for+documentation%22%7D"><img src="https://img.shields.io/badge/-open_in_codepen-2b354f?logo=codepen&style=flat-square" alt="open in codepen" valign="middle" align="right"></a>
 
 <br />
 
 ```html
 <script type="module">
-  import { createStitches } from 'https://cdn.skypack.dev/@stitches/core'
 
-  const { css } = createStitches()
+import { css } from 'https://cdn.skypack.dev/@stitches/core'
+
 </script>
 ```
 
 <p><br /></p>
 
-<a href="https://codepen.io/embed/prefill?editable=true&default-tab=js%2Cresult&data=%7B%22js%22%3A%22stitches.createStitches%5Cn%5Cn%2F%2F+add+your+code+here%21%5Cn%2F%2F+see+https%3A%2F%2Fstitches.dev+for+documentation%22%2C%22js_external%22%3A%22https%3A%2F%2Fcdn.skypack.dev%2F%40stitches%2Fcore%2Fglobal%22%7D"><img src="https://img.shields.io/badge/-open_in_codepen-2b354f?logo=codepen&style=flat-square" alt="open in codepen" valign="middle" align="right"></a>
+<a href="https://codepen.io/embed/prefill?editable=true&default-tab=js%2Cresult&data=%7B%22js%22%3A%22const+%7B+css+%7D+%3D+stitches%5Cn%5Cn%2F%2F+add+your+code+here%21%5Cn%2F%2F+see+https%3A%2F%2Fstitches.dev+for+documentation%22%2C%22js_external%22%3A%22https%3A%2F%2Funpkg.com%2F%40stitches%2Fcore%2Fdist%2Findex.global.js%22%7D"><img src="https://img.shields.io/badge/-open_in_codepen-2b354f?logo=codepen&style=flat-square" alt="open in codepen" valign="middle" align="right"></a>
 
 <br />
 
 ```js
-<script src="https://cdn.skypack.dev/@stitches/core/global"></script>
+<script src="https://unpkg.com/@stitches/core/dist/index.global.js"></script>
 <script>
-const { css } = stitches.createStitches()
+
+const { css } = stitches
+
 </script>
 ```
 
