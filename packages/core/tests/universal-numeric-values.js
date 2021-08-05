@@ -12,7 +12,7 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(`--stitches{--:1 cSHHDh}@media{body{margin:0}}`)
+		expect(toString()).toBe(`--sxs{--sxs:1 cSHHDh}@media{body{margin:0}}`)
 
 		globalCss({
 			body: {
@@ -20,7 +20,7 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(`--stitches{--:1 cSHHDh fFIrKk}@media{body{margin:0}body{margin:10px}}`)
+		expect(toString()).toBe(`--sxs{--sxs:1 cSHHDh fFIrKk}@media{body{margin:0}body{margin:10px}}`)
 	})
 
 	test('Authors can use numeric values to assign numeric values', () => {
@@ -35,7 +35,7 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(`--stitches{--:1 bpctHq}@media{body{line-height:0;width:0}}`)
+		expect(toString()).toBe(`--sxs{--sxs:1 bpctHq}@media{body{line-height:0;width:0}}`)
 
 		globalCss({
 			body: {
@@ -44,7 +44,7 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(`--stitches{--:1 bpctHq cudWGu}@media{body{line-height:0;width:0}body{line-height:10;width:10px}}`)
+		expect(toString()).toBe(`--sxs{--sxs:1 bpctHq cudWGu}@media{body{line-height:0;width:0}body{line-height:10;width:10px}}`)
 	})
 
 	test('Authors can use unit-less properties as known to React', () => {

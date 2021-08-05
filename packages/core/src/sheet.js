@@ -52,8 +52,8 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 				const { cssText } = check
 
-				// a hydratable style rule will have a selector of `--stitches`, ignore all others
-				if (!cssText.startsWith('--stitches')) continue
+				// a hydratable style rule will have a selector of `--sxs`, ignore all others
+				if (!cssText.startsWith('--sxs')) continue
 
 				const cache = cssText.slice(16, -3).trim().split(/\s+/)
 
@@ -101,14 +101,14 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 							let lastRuleCssText = ''
 
-							if (cssText.startsWith('--stitches')) return ''
+							if (cssText.startsWith('--sxs')) return ''
 
-							if (cssRules[cssRuleIndex - 1] && (lastRuleCssText = cssRules[cssRuleIndex - 1].cssText).startsWith('--stitches')) {
+							if (cssRules[cssRuleIndex - 1] && (lastRuleCssText = cssRules[cssRuleIndex - 1].cssText).startsWith('--sxs')) {
 								if (!cssRule.cssRules.length) return ''
 
 								for (const name in groupSheet.rules) {
 									if (groupSheet.rules[name].group === cssRule) {
-										return `--stitches{--:${[...groupSheet.rules[name].cache].join(' ')}}${cssText}`
+										return `--sxs{--sxs:${[...groupSheet.rules[name].cache].join(' ')}}${cssText}`
 									}
 								}
 
@@ -128,7 +128,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 		if (!rules.inline) {
 			const index = sheet.cssRules.length
 			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--stitches{--:5}', index)
+			sheet.insertRule('--sxs{--sxs:5}', index)
 
 			rules.inline = {
 				index: index,
@@ -142,7 +142,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 		if (!rules.allvar) {
 			const index = rules.inline.index
 			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--stitches{--:4}', index)
+			sheet.insertRule('--sxs{--sxs:4}', index)
 
 			rules.allvar = {
 				index: index,
@@ -156,7 +156,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 		if (!rules.onevar) {
 			const index = rules.allvar.index
 			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--stitches{--:3}', index)
+			sheet.insertRule('--sxs{--sxs:3}', index)
 
 			rules.onevar = {
 				index: index,
@@ -170,7 +170,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 		if (!rules.styled) {
 			const index = rules.onevar.index
 			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--stitches{--:2}', index)
+			sheet.insertRule('--sxs{--sxs:2}', index)
 
 			rules.styled = {
 				index: index,
@@ -184,7 +184,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 		if (!rules.global) {
 			const index = rules.styled.index
 			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--stitches{--:1}', index)
+			sheet.insertRule('--sxs{--sxs:1}', index)
 
 			rules.global = {
 				index: index,
@@ -198,7 +198,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 		if (!rules.themed) {
 			const index = rules.global.index
 			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--stitches{--:0}', index)
+			sheet.insertRule('--sxs{--sxs:0}', index)
 
 			rules.themed = {
 				index: index,

@@ -11,7 +11,7 @@ describe('Polyfill prefixed values', () => {
 		})()
 
 		expect(toString()).toBe(
-			`--stitches{--:1 coIeei}@media{.gro{width:-moz-available;width:-webkit-fill-available}}`
+			`--sxs{--sxs:1 coIeei}@media{.gro{width:-moz-available;width:-webkit-fill-available}}`
 		)
 	})
 
@@ -25,7 +25,7 @@ describe('Polyfill prefixed values', () => {
 		})()
 
 		expect(toString()).toBe(
-			`--stitches{--:1 gZsLvv}@media{.fit{width:-moz-fit-content;width:fit-content}}`
+			`--sxs{--sxs:1 gZsLvv}@media{.fit{width:-moz-fit-content;width:fit-content}}`
 		)
 	})
 }) // prettier-ignore

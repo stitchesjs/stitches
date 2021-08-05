@@ -13,7 +13,7 @@ describe('Issue #519', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:2 fusion-c-fjkySu}` +
+			`--sxs{--sxs:2 fusion-c-fjkySu}` +
 			`@media{` +
 				`.fusion-c-fjkySu{--fusion--syntax:red}` +
 				`.fusion-c-fjkySu h1{color:var(--fusion--syntax)}` +
@@ -33,7 +33,7 @@ describe('Issue #519', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:2 c-fjkySu}` +
+			`--sxs{--sxs:2 c-fjkySu}` +
 			`@media{` +
 				`.c-fjkySu{---syntax:red}` +
 				`.c-fjkySu h1{color:var(---syntax)}` +
@@ -57,7 +57,7 @@ describe('Issue #519', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:2 fusion-c-lkpaIy}` +
+			`--sxs{--sxs:2 fusion-c-lkpaIy}` +
 			`@media{` +
 				`.fusion-c-lkpaIy{--fusion--syntax:red}` +
 				`.fusion-c-lkpaIy h1{color:var(--fusion--syntax)}` +
@@ -82,7 +82,7 @@ describe('Issue #519', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:2 c-lkpaIy}` +
+			`--sxs{--sxs:2 c-lkpaIy}` +
 			`@media{` +
 				`.c-lkpaIy{---syntax:red}` +
 				`.c-lkpaIy h1{color:var(---syntax)}` +
@@ -111,7 +111,7 @@ describe('Issue #519', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:2 fusion-c-kbkiiL}` +
+			`--sxs{--sxs:2 fusion-c-kbkiiL}` +
 			`@media{` +
 				`.fusion-c-kbkiiL{--fusion--syntax:red}` +
 				`.fusion-c-kbkiiL h1{color:var(--fusion--syntax)}` +
@@ -141,7 +141,7 @@ describe('Issue #519', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:2 c-kbkiiL}` +
+			`--sxs{--sxs:2 c-kbkiiL}` +
 			`@media{` +
 				`.c-kbkiiL{---syntax:red}` +
 				`.c-kbkiiL h1{color:var(---syntax)}` +

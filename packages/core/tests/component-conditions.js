@@ -16,7 +16,7 @@ describe('Component Medias', () => {
 		})()
 
 		expect(toString()).toBe(
-			`--stitches{--:2 c-jEGvho}@media{` +
+			`--sxs{--sxs:2 c-jEGvho}@media{` +
 				`.c-jEGvho{font-size:16px}` +
 				`@media (min-width:768px){.c-jEGvho{font-size:24px}}` +
 			`}`,

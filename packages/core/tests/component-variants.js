@@ -58,14 +58,14 @@ describe('Variants', () => {
 		const expression1CssText = '.c-PJLV-Gaggi-size-small{font-size:16px}'
 
 		expect(expression1.className).toBe('c-PJLV c-PJLV-Gaggi-size-small')
-		expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-Gaggi-size-small}@media{${expression1CssText}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{${expression1CssText}}`)
 
 		const expression2 = component({ color: 'blue' })
 
 		const expression2CssText = '.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}'
 
 		expect(expression2.className).toBe('c-PJLV c-PJLV-kaCQqN-color-blue')
-		expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-Gaggi-size-small c-PJLV-kaCQqN-color-blue}@media{${expression1CssText + expression2CssText}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small c-PJLV-kaCQqN-color-blue}@media{${expression1CssText + expression2CssText}}`)
 	})
 
 	test('Renders a component with 2 matching variants', () => {
@@ -97,7 +97,7 @@ describe('Variants', () => {
 		const expressionSizeSmallCssText = '.c-PJLV-Gaggi-size-small{font-size:16px}'
 		const expressionLevel1CssText = '.c-PJLV-iRwLiB-level-1{padding:0.5em}'
 
-		expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1}@media{${expressionSizeSmallCssText + expressionLevel1CssText}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1}@media{${expressionSizeSmallCssText + expressionLevel1CssText}}`)
 	})
 
 	test('Renders a component with a 2 matching variants and 1 matching compound', () => {
@@ -111,9 +111,9 @@ describe('Variants', () => {
 
 		expect(expression.className).toBe(`c-PJLV c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small c-PJLV-cChFtv-cv`)
 		expect(getCssText()).toBe(
-			`--stitches{--:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{${
+			`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{${
 				expressionColorBlueCssText + expressionSizeSmallCssText
-			}}--stitches{--:4 c-PJLV-cChFtv-cv}@media{${
+			}}--sxs{--sxs:4 c-PJLV-cChFtv-cv}@media{${
 				expressionCompoundCssText
 			}}`
 		)
@@ -170,7 +170,7 @@ describe('Variants with defaults', () => {
 		const expression = component()
 
 		expect(expression.className).toBe('c-PJLV c-PJLV-Gaggi-size-small')
-		expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}`)
 	})
 
 	test('Renders a component with the default variant explicitly applied', () => {
@@ -179,7 +179,7 @@ describe('Variants with defaults', () => {
 		const expression = component({ size: 'small' })
 
 		expect(expression.className).toBe('c-PJLV c-PJLV-Gaggi-size-small')
-		expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}`)
 	})
 
 	test('Renders a component with the non-default variant explicitly applied', () => {
@@ -188,7 +188,7 @@ describe('Variants with defaults', () => {
 		const expression = component({ size: 'large' })
 
 		expect(expression.className).toBe('c-PJLV c-PJLV-hsYHIj-size-large')
-		expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-hsYHIj-size-large}@media{.c-PJLV-hsYHIj-size-large{font-size:24px}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-hsYHIj-size-large}@media{.c-PJLV-hsYHIj-size-large{font-size:24px}}`)
 	})
 
 	test('Renders a component with the default variant applied and a different variant explicitly applied', () => {
@@ -198,7 +198,7 @@ describe('Variants with defaults', () => {
 
 		expect(expression.className).toBe('c-PJLV c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1')
 		expect(getCssText()).toBe(
-			`--stitches{--:3 c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1}@media{` +
+			`--sxs{--sxs:3 c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1}@media{` +
 				// implicit size:small
 				`.c-PJLV-Gaggi-size-small{font-size:16px}` +
 				// explicit level:1
@@ -214,12 +214,12 @@ describe('Variants with defaults', () => {
 
 		expect(expression.className).toBe('c-PJLV c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small c-PJLV-cChFtv-cv')
 		expect(getCssText()).toBe(
-			`--stitches{--:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{` +
+			`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{` +
 				// explicit color:blue
 				`.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}` +
 				// implicit size:small
 				`.c-PJLV-Gaggi-size-small{font-size:16px}` +
-			`}--stitches{--:4 c-PJLV-cChFtv-cv}@media{` +
+			`}--sxs{--sxs:4 c-PJLV-cChFtv-cv}@media{` +
 				// compound color:blue + size:small
 				`.c-PJLV-cChFtv-cv{transform:scale(1.2)}` +
 			`}`,
@@ -232,7 +232,7 @@ describe('Variants with defaults', () => {
 		const className = `${component}`
 
 		expect(className).toBe('c-PJLV')
-		expect(getCssText()).toBe('--stitches{--:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}')
+		expect(getCssText()).toBe('--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}')
 	})
 }) // prettier-ignore
 
@@ -302,7 +302,7 @@ describe('Conditional variants', () => {
 		const componentSmallCssText = `.${componentSmallClassName}{font-size:16px}`
 
 		expect(component({ size: 'small' }).className).toBe([componentClassName, componentSmallClassName].join(' '))
-		expect(getCssText()).toBe(`--stitches{--:3 c-PJLV-Gaggi-size-small}@media{${componentSmallCssText}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{${componentSmallCssText}}`)
 	})
 
 	test('Renders a component with one conditional variant on one breakpoint applied', () => {
@@ -311,7 +311,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small`)
 		expect(getCssText()).toBe(
-			`--stitches{--:3 c-PJLV-iVKIeV-size-small}@media{` +
+			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 			`}`
 		)
@@ -328,7 +328,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(getCssText()).toBe(
-			`--stitches{--:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				componentSmallBp1CssText +
 				componentLargeBp2CssText +
 			`}`
@@ -341,7 +341,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
 		expect(getCssText()).toBe(
-			`--stitches{--:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
 			`}`
@@ -349,7 +349,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
 		expect(getCssText()).toBe(
-			`--stitches{--:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
 			`}`
@@ -357,7 +357,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
 		expect(getCssText()).toBe(
-			`--stitches{--:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
 			`}`
@@ -390,7 +390,7 @@ describe('Conditional variants', () => {
 			).toBe('c-PJLV c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large')
 
 			expect(getCssText()).toBe(
-				`--stitches{--:3 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
+				`--sxs{--sxs:3 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
 					`@media (max-width:767.9375px){.c-PJLV-gjWYHE-size-small{font-size:16px}}` +
 					`@media (min-width:768px){.c-PJLV-fzmUzy-size-large{font-size:24px}}` +
 				`}`
@@ -422,7 +422,7 @@ describe('Conditional variants', () => {
 			).toBe('c-PJLV c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large')
 
 			expect(getCssText()).toBe(
-				`--stitches{--:3 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
+				`--sxs{--sxs:3 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
 					`@media (max-width:767.9375px){.c-PJLV-gjWYHE-size-small{font-size:16px}}` +
 					`@media (min-width:768px){.c-PJLV-fzmUzy-size-large{font-size:24px}}` +
 				`}`
@@ -452,7 +452,7 @@ describe('Variant pairing types', () => {
 		const rendering = component()
 
 		expect(rendering.className).toBe('c-foEXqW')
-		expect(getCssText()).toBe(`--stitches{--:2 c-foEXqW}@media{` +
+		expect(getCssText()).toBe(`--sxs{--sxs:2 c-foEXqW}@media{` +
 			`.c-foEXqW{--component:true}` +
 		`}`)
 	})
@@ -464,10 +464,10 @@ describe('Variant pairing types', () => {
 
 		expect(rendering.className).toBe('c-foEXqW c-foEXqW-iloXEi-testBoolean-true')
 		expect(getCssText()).toBe(
-			`--stitches{--:2 c-foEXqW}@media{` +
+			`--sxs{--sxs:2 c-foEXqW}@media{` +
 				`.c-foEXqW{--component:true}` +
 			`}` +
-			`--stitches{--:3 c-foEXqW-iloXEi-testBoolean-true}@media{` +
+			`--sxs{--sxs:3 c-foEXqW-iloXEi-testBoolean-true}@media{` +
 				`.c-foEXqW-iloXEi-testBoolean-true{--test-boolean:true}` +
 			`}`
 		)
@@ -480,10 +480,10 @@ describe('Variant pairing types', () => {
 
 		expect(rendering.className).toBe('c-foEXqW c-foEXqW-iloXEi-testBoolean-true')
 		expect(getCssText()).toBe(
-			`--stitches{--:2 c-foEXqW}@media{` +
+			`--sxs{--sxs:2 c-foEXqW}@media{` +
 				`.c-foEXqW{--component:true}` +
 			`}` +
-			`--stitches{--:3 c-foEXqW-iloXEi-testBoolean-true}@media{` +
+			`--sxs{--sxs:3 c-foEXqW-iloXEi-testBoolean-true}@media{` +
 				`.c-foEXqW-iloXEi-testBoolean-true{--test-boolean:true}` +
 			`}`
 		)
@@ -496,10 +496,10 @@ describe('Variant pairing types', () => {
 
 		expect(rendering.className).toBe('c-foEXqW c-foEXqW-brOaTK-testBoolean-true')
 		expect(getCssText()).toBe(
-			`--stitches{--:2 c-foEXqW}@media{` +
+			`--sxs{--sxs:2 c-foEXqW}@media{` +
 				`.c-foEXqW{--component:true}` +
 			`}` +
-			`--stitches{--:3 c-foEXqW-brOaTK-testBoolean-true}@media{` +
+			`--sxs{--sxs:3 c-foEXqW-brOaTK-testBoolean-true}@media{` +
 				`@media (min-width: 640px){` +
 					`.c-foEXqW-brOaTK-testBoolean-true{--test-boolean:true}` +
 				`}` +
@@ -514,10 +514,10 @@ describe('Variant pairing types', () => {
 
 		expect(rendering.className).toBe('c-foEXqW c-foEXqW-brOaTK-testBoolean-true')
 		expect(getCssText()).toBe(
-			`--stitches{--:2 c-foEXqW}@media{` +
+			`--sxs{--sxs:2 c-foEXqW}@media{` +
 				`.c-foEXqW{--component:true}` +
 			`}` +
-			`--stitches{--:3 c-foEXqW-brOaTK-testBoolean-true}@media{` +
+			`--sxs{--sxs:3 c-foEXqW-brOaTK-testBoolean-true}@media{` +
 				`@media (min-width: 640px){` +
 					`.c-foEXqW-brOaTK-testBoolean-true{--test-boolean:true}` +
 				`}` +

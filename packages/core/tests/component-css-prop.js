@@ -19,10 +19,10 @@ describe('Component with CSS prop', () => {
 		})
 
 		expect(toString()).toBe(
-			`--stitches{--:2 c-hhyRYU}@media{` +
+			`--sxs{--sxs:2 c-hhyRYU}@media{` +
 				`.c-hhyRYU{order:1}` +
 			`}` +
-			`--stitches{--:5 c-hhyRYU-ilhKMMn-css}@media{` +
+			`--sxs{--sxs:5 c-hhyRYU-ilhKMMn-css}@media{` +
 				`.c-hhyRYU-ilhKMMn-css{order:2}` +
 			`}`
 		)

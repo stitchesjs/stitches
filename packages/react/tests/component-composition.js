@@ -25,6 +25,6 @@ describe('Composition', () => {
 		const bold = styled({ fontWeight: 'bold' })
 		const title = styled(red, size14, bold, { fontFamily: 'monospace' })
 		expect(title.render().props.className).toBe('c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ')
-		expect(getCssText()).toBe('--stitches{--:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{.c-gmqXFB{color:red}.c-hzkWus{font-size:14px}.c-cQFdVt{font-weight:bold}.c-kngyIZ{font-family:monospace}}')
+		expect(getCssText()).toBe('--sxs{--sxs:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{.c-gmqXFB{color:red}.c-hzkWus{font-size:14px}.c-cQFdVt{font-weight:bold}.c-kngyIZ{font-family:monospace}}')
 	})
 })

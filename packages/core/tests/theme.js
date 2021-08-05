@@ -12,7 +12,7 @@ describe('Theme', () => {
 
 		expect(getCssText()).toBe('')
 		expect(`<div class="${myTheme}">`).toBe('<div class="my">')
-		expect(getCssText()).toBe(`--stitches{--:0 my}@media{.my{--colors-blue:dodgerblue}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:0 my}@media{.my{--colors-blue:dodgerblue}}`)
 		expect(myTheme.className).toBe('my')
 		expect(myTheme.selector).toBe('.my')
 	})
@@ -30,7 +30,7 @@ describe('Theme', () => {
 			})
 
 			expect(getCssText()).toBe(
-				`--stitches{--:0 t-egkarf}@media{` +
+				`--sxs{--sxs:0 t-egkarf}@media{` +
 					`:root,.t-egkarf{--sizes-sm:100;--sizes-md:200;--sizes-lg:500}` +
 				`}`
 			)
@@ -48,7 +48,7 @@ describe('Theme', () => {
 			})
 
 			expect(getCssText()).toBe(
-				`--stitches{--:0 t-eJkcVD}@media{` +
+				`--sxs{--sxs:0 t-eJkcVD}@media{` +
 					`:root,.t-eJkcVD{` +
 						`--sizes-sm:100;` +
 						`--sizes-md:calc(var(--sizes-sm) * 3);` +

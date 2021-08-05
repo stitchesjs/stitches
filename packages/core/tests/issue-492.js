@@ -39,7 +39,7 @@ describe('Issue #492', () => {
 		expect(
 			getCssText()
 		).toBe(
-			`--stitches{--:3 ${variantSweetCarolineClassName}}@media{` +
+			`--sxs{--sxs:3 ${variantSweetCarolineClassName}}@media{` +
 				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
 			`}`
 		)
@@ -60,7 +60,7 @@ describe('Issue #492', () => {
 		expect(
 			getCssText()
 		).toBe(
-			`--stitches{--:3 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName}}@media{` +
+			`--sxs{--sxs:3 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName}}@media{` +
 				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
 				`@media (min-width: 640px){.${variantResponsiveSweetDreamsClassName}{--sweet-dreams:true}}` +
 			`}`
@@ -83,7 +83,7 @@ describe('Issue #492', () => {
 		expect(
 			getCssText()
 		).toBe(
-			`--stitches{--:3 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName} ${variantSweetDreamsClassName} ${variantResponsiveSweetCarolineClassName}}@media{` +
+			`--sxs{--sxs:3 ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName} ${variantSweetDreamsClassName} ${variantResponsiveSweetCarolineClassName}}@media{` +
 				// last rendering
 				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
 				`@media (min-width: 640px){.${variantResponsiveSweetDreamsClassName}{--sweet-dreams:true}}` +
@@ -132,10 +132,10 @@ describe('Issue #492', () => {
 		expect(
 			getCssText()
 		).toBe(
-			`--stitches{--:2 ${componentClassName}}@media{` +
+			`--sxs{--sxs:2 ${componentClassName}}@media{` +
 				`.${componentClassName}{--rock:true}` +
 			`}` +
-			`--stitches{--:3 ${variantInitialHeavyIronButterfly} ${variantMinWidth640LedZeppelin}}@media{` +
+			`--sxs{--sxs:3 ${variantInitialHeavyIronButterfly} ${variantMinWidth640LedZeppelin}}@media{` +
 				`.${variantInitialHeavyIronButterfly}{--weight-iron-butterfly:true}` +
 				`@media (min-width: 640px){.${variantMinWidth640LedZeppelin}{--weight-led-zeppelin:true}}` +
 			`}`

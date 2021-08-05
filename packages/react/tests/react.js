@@ -44,7 +44,7 @@ describe('React', () => {
 		})
 
 		expect(sheet.toString()).toEqual(
-			`--stitches{--:2 c-iSEgvG}@media{` +
+			`--sxs{--sxs:2 c-iSEgvG}@media{` +
 				`.c-iSEgvG{` +
 					`background-color:gainsboro;` +
 					`border-radius:9999px;` +

@@ -20,7 +20,7 @@ describe('Composition', () => {
 		expect(toString()).toBe('')
 		expect(String(title)).toBe('c-gmqXFB')
 		expect(toString()).toBe(
-			`--stitches{--:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
+			`--sxs{--sxs:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
 				`.c-gmqXFB{color:red}` +
 				`.c-hzkWus{font-size:14px}` +
 				`.c-cQFdVt{font-weight:bold}` +
@@ -38,7 +38,7 @@ describe('Composition', () => {
 
 		expect(title().className).toBe('c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ')
 		expect(toString()).toBe(
-			`--stitches{--:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
+			`--sxs{--sxs:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
 				`.c-gmqXFB{color:red}` +
 				`.c-hzkWus{font-size:14px}` +
 				`.c-cQFdVt{font-weight:bold}` +

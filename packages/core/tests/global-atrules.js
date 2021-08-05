@@ -63,7 +63,7 @@ describe('Support @font-face', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:1 PCbjJ}` +
+			`--sxs{--sxs:1 PCbjJ}` +
 			`@media{` +
 				`@font-face{` +
 					`font-family:system-ui;` +
@@ -116,7 +116,7 @@ describe('Support @font-face', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:1 JJHhj}` +
+			`--sxs{--sxs:1 JJHhj}` +
 			`@media{` +
 				`@font-face{` +
 					`font-family:system-ui;` +

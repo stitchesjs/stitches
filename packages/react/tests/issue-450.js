@@ -48,11 +48,11 @@ describe('Issue #450', () => {
 			getCssText()
 		).toBe(
 			// composition styles
-			`--stitches{--:2 c-fEpFmO}@media{` +
+			`--sxs{--sxs:2 c-fEpFmO}@media{` +
 				`.c-fEpFmO{--is-happy:true}` +
 			`}` +
 			// variant styles
-			`--stitches{--:3 c-fEpFmO-cfZmSQ-fulfilled-positively c-fEpFmO-FgYNE-satisfied-definitely}@media{` +
+			`--sxs{--sxs:3 c-fEpFmO-cfZmSQ-fulfilled-positively c-fEpFmO-FgYNE-satisfied-definitely}@media{` +
 				`.c-fEpFmO-cfZmSQ-fulfilled-positively{--is-fulfilled-positively:true}` +
 				`.c-fEpFmO-FgYNE-satisfied-definitely{--is-satisfied-definitely:true}` +
 			`}`

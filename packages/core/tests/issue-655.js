@@ -10,7 +10,7 @@ describe('Issue #655', () => {
 		})()
 
 		expect(getCssText()).toBe(
-			`--stitches{--:2 c-dAAqmb}` +
+			`--sxs{--sxs:2 c-dAAqmb}` +
 			`@media{.c-dAAqmb{` +
 				`max-width:-moz-fit-content;max-width:fit-content;` +
 				`min-width:-moz-fit-content;min-width:fit-content` +

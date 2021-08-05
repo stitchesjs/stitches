@@ -40,7 +40,7 @@ describe('Issue #555', () => {
 			children: null,
 		})
 
-		expect(toString()).toBe(`--stitches{--:2 c-jEKtXH}@media{.c-jEKtXH{color:dodgerblue}}`)
+		expect(toString()).toBe(`--sxs{--sxs:2 c-jEKtXH}@media{.c-jEKtXH{color:dodgerblue}}`)
 	})
 
 	test('an element accepts styles via className prop', () => {
@@ -59,6 +59,6 @@ describe('Issue #555', () => {
 			children: null,
 		})
 
-		expect(toString()).toBe(`--stitches{--:2 c-jEKtXH c-PJLV}@media{.c-jEKtXH{color:dodgerblue}}`)
+		expect(toString()).toBe(`--sxs{--sxs:2 c-jEKtXH c-PJLV}@media{.c-jEKtXH{color:dodgerblue}}`)
 	})
 }) // prettier-ignore
