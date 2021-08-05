@@ -20,7 +20,8 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs",
       "types": "./types/index.d.ts"
-    }
+    },
+    "./global": "./dist/index.global.js"
   },
   "files": [
     "dist",
@@ -30,7 +31,7 @@
   "sideEffects": false,
   "license": "MIT",
   "repository": "modulz/stitches",
-  "homepage": "https://github.com/modulz/stitches#readme",
+  "homepage": "https://stitches.dev/",
   "bugs": "https://github.com/modulz/stitches/issues",
   "contributors": [
     "Pedro Duarte <pedro@modulz.app>",

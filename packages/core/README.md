@@ -1,12 +1,43 @@
-# Stitches Core
+# @stitches/core
 
-Framework-agnostic implementation.
+**@stitches/core** is a framework-agnostic implementation of [stitches](https://stitches.dev), a CSS-in-JS library with a best-in-class developer experience.
 
 ```sh
-npm install @stitches/core
+# with npm
+npm install @stitches/react
+
+# with yarn
+yarn add @stitches/react
 ```
 
----
+<p><br /></p>
+
+<a href="https://codepen.io/embed/prefill?editable=true&default-tab=js%2Cresult&data=%7B%22js%22%3A%22import+%7B+createStitches+%7D+from+%27https%3A%2F%2Fcdn.skypack.dev%2F%40stitches%2Fcore%27%5Cn%5Cn%2F%2F+add+your+code+here%21%5Cn%2F%2F+see+https%3A%2F%2Fstitches.dev+for+documentation%22%7D"><img src="https://img.shields.io/badge/-open_in_codepen-2b354f?logo=codepen&style=flat-square" alt="open in codepen" valign="middle" align="right"></a>
+
+<br />
+
+```html
+<script type="module">
+  import { createStitches } from 'https://cdn.skypack.dev/@stitches/core'
+
+  const { css } = createStitches()
+</script>
+```
+
+<p><br /></p>
+
+<a href="https://codepen.io/embed/prefill?editable=true&default-tab=js%2Cresult&data=%7B%22js%22%3A%22stitches.createStitches%5Cn%5Cn%2F%2F+add+your+code+here%21%5Cn%2F%2F+see+https%3A%2F%2Fstitches.dev+for+documentation%22%2C%22js_external%22%3A%22https%3A%2F%2Fcdn.skypack.dev%2F%40stitches%2Fcore%2Fglobal%22%7D"><img src="https://img.shields.io/badge/-open_in_codepen-2b354f?logo=codepen&style=flat-square" alt="open in codepen" valign="middle" align="right"></a>
+
+<br />
+
+```js
+<script src="https://cdn.skypack.dev/@stitches/core/global"></script>
+<script>
+const { css } = stitches.createStitches()
+</script>
+```
+
+<p><br /></p>
 
 ## Documentation
 
@@ -19,8 +50,8 @@ Please follow our [contributing guidelines](./CONTRIBUTING.md).
 ## Authors
 
 - Pedro Duarte ([@peduarte](https://twitter.com/peduarte)) - [Modulz](https://modulz.app)
-- Jonathan Neal ([@jon_neal](https://twitter.com/jon_neal)) - [Modulz](https://modulz.app)
 - Abdulhadi Alhallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [Modulz](https://modulz.app)
+- Jonathan Neal ([@jon_neal](https://twitter.com/jon_neal)) - [Modulz](https://modulz.app)
 
 ## License
 

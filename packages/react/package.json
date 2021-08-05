@@ -20,7 +20,8 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs",
       "types": "./types/index.d.ts"
-    }
+    },
+    "./global": "./dist/index.global.js"
   },
   "files": [
     "dist",

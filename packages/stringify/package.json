@@ -9,9 +9,12 @@
   "jsdelivr": "dist/index.global.js",
   "unpkg": "dist/index.global.js",
   "exports": {
-    "require": "./dist/index.cjs",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.mjs"
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./types/index.d.ts"
+    },
+    "./global": "./dist/index.global.js"
   },
   "files": [
     "dist",
