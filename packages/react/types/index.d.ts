@@ -1,11 +1,11 @@
 import type CreateStitches from './create-stitches'
-import type Sheet from './sheet'
+import type Stitches from './stitches'
 
 import type * as CSSUtil from './css-util'
 import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
 
-export type { CreateStitches, Sheet }
+export type { CreateStitches, Stitches }
 
 export type CSSProperties = CSSUtil.CSSProperties
 export type DefaultThemeMap = Default.ThemeMap
@@ -46,16 +46,16 @@ export declare const defaultThemeMap: DefaultThemeMap
 export declare const createStitches: CreateStitches
 
 /** Returns an object representing a theme. */
-export declare const createTheme: Sheet['createTheme']
+export declare const createTheme: Stitches['createTheme']
 
 /** Returns a function that applies globalCss styles. */
-export declare const globalCss: Sheet['globalCss']
+export declare const globalCss: Stitches['globalCss']
 
 /** Returns an object that applies `@keyframes` styles. */
-export declare const keyframes: Sheet['keyframes']
+export declare const keyframes: Stitches['keyframes']
 
 /** Returns a function that applies styles and variants for a specific class. */
-export declare const css: Sheet['css']
+export declare const css: Stitches['css']
 
 /** Returns a function that applies styles and variants for a specific class. */
-export declare const styled: Sheet['styled']
+export declare const styled: Stitches['styled']

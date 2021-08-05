@@ -4,8 +4,8 @@ import type * as StyledComponent from './styled-component'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
-/** Sheet interface. */
-export default interface Sheet<
+/** Stitches interface. */
+export default interface Stitches<
 	Prefix extends string = Default.Prefix,
 	Media = Default.Media,
 	Theme = {},
@@ -99,6 +99,8 @@ export default interface Sheet<
 		<
 			Composers extends (
 				| string
+				| React.ExoticComponent<any>
+				| React.JSXElementConstructor<any>
 				| Util.Function
 				| { [name: string]: unknown }
 			)[]
@@ -106,6 +108,10 @@ export default interface Sheet<
 			...composers: {
 				[K in keyof Composers]: (
 					Composers[K] extends string
+						? Composers[K]
+					: Composers[K] extends React.ExoticComponent<any>
+						? Composers[K]
+					: Composers[K] extends React.JSXElementConstructor<any>
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
@@ -137,6 +143,78 @@ export default interface Sheet<
 			Utils
 		>
 	},
+	styled: {
+		<
+			Composers extends (
+				| string
+				| React.ExoticComponent<any>
+				| React.JSXElementConstructor<any>
+				| Util.Function
+				| { [name: string]: unknown }
+			)[]
+		>(
+			...composers: {
+				[K in keyof Composers]: (
+					Composers[K] extends string
+						? Composers[K]
+					: Composers[K] extends React.ExoticComponent<any>
+						? Composers[K]
+					: Composers[K] extends React.JSXElementConstructor<any>
+						? Composers[K]
+					: Composers[K] extends Util.Function
+						? Composers[K]
+					: Composers[K] extends {
+						[K2 in keyof Composers[K]]: Composers[K][K2]
+					}
+						? (
+							& KnownCSS
+							& {
+								variants?: {
+									[name: string]: {
+										[pair in number | string]: CSS
+									}
+								}
+								compoundVariants?: (
+									& (
+										'variants' extends keyof Composers[K]
+											? {
+												[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+											} & Util.WideObject
+										: Util.WideObject
+									)
+									& {
+										css: CSS
+									}
+								)[]
+								defaultVariants?: (
+									'variants' extends keyof Composers[K]
+										? {
+											[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+										}
+									: Util.WideObject
+								)
+							}
+							& {
+								[Prelude in keyof Composers[K]]:
+									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
+										? unknown
+									: Composers[K][Prelude] extends {}
+										? CSS
+									: boolean | number | string
+							}
+						)
+					: never
+				)
+			}
+		): StyledComponent.StyledComponent<
+			StyledComponent.StyledComponentType<Composers>,
+			StyledComponent.StyledComponentProps<Composers>,
+			Media,
+			Theme,
+			ThemeMap,
+			Utils
+		>
+	}
 }
 
 type ThemeTokens<Values, Prefix> = {

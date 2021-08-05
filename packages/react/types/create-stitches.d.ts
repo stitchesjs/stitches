@@ -1,6 +1,6 @@
 import type * as CSSUtil from './css-util'
 import type * as Default from './default'
-import type Sheet from './sheet'
+import type Stitches from './stitches'
 
 /* Interfaces */
 /* ========================================================================== */
@@ -86,7 +86,7 @@ type CreateStitches = {
 			themeMap?: ThemeMap
 			utils?: Utils
 		}
-	): Sheet<
+	): Stitches<
 		// post-process prefix
 		string extends Prefix ? Default.Prefix : Prefix,
 		// post-process media
