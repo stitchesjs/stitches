@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { internals } from '../../../core/src/utility/internals.js'
+import { internal } from '../../../core/src/utility/internal.js'
 import { createMemo } from '../../../core/src/utility/createMemo.js'
 
 import { createComponentFunction } from '../../../core/src/features/css.js'
@@ -17,7 +17,7 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 
 		const styled = (...args) => {
 			const cssComponent = css(...args)
-			const DefaultType = cssComponent[internals].type
+			const DefaultType = cssComponent[internal].type
 
 			const styledComponent = React.forwardRef((props, ref) => {
 				const Type = props && props.as || DefaultType
@@ -37,7 +37,7 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 			styledComponent.displayName = `Styled.${DefaultType.displayName || DefaultType.name || DefaultType}`
 			styledComponent.selector = cssComponent.selector
 			styledComponent.toString = toString
-			styledComponent[internals] = cssComponent[internals]
+			styledComponent[internal] = cssComponent[internal]
 
 			return styledComponent
 		}

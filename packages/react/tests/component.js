@@ -1,6 +1,6 @@
 import { createStitches } from '../src/index.js'
 
-const internals = Symbol.for('stitches.internal')
+const internal = Symbol.for('sxs.internal')
 
 describe('Components', () => {
 	test('The `styled` function returns an implicit span component', () => {
@@ -8,7 +8,7 @@ describe('Components', () => {
 		const component = styled()
 
 		expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
-		expect(component[internals].type).toBe('span')
+		expect(component[internal].type).toBe('span')
 	})
 
 	test('The `styled` function can return an explicit div component', () => {
@@ -16,7 +16,7 @@ describe('Components', () => {
 		const component = styled('div')
 
 		expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
-		expect(component[internals].type).toBe('div')
+		expect(component[internal].type).toBe('div')
 	})
 
 	test('The `styled` function can return an explicit React component', () => {
@@ -28,7 +28,7 @@ describe('Components', () => {
 		const component = styled(TextComponent)
 
 		expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
-		expect(component[internals].type).toBe(TextComponent)
+		expect(component[internal].type).toBe(TextComponent)
 	})
 
 	test('The `styled` function can return an explicit forwarded React component', () => {
@@ -41,6 +41,6 @@ describe('Components', () => {
 		const component = styled(ForwardedComponent)
 
 		expect(component.$$typeof).toBe(Symbol.for('react.forward_ref'))
-		expect(component[internals].type).toBe(ForwardedComponent)
+		expect(component[internal].type).toBe(ForwardedComponent)
 	})
 })
