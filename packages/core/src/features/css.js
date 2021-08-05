@@ -39,7 +39,7 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 
 			// conditionally extend the component
 			if (arg[internals]) {
-				internal.type = arg[internals].type
+				if (internal.type == null) internal.type = arg[internals].type
 
 				for (const composer of arg[internals].composers) {
 					internal.composers.add(composer)
@@ -48,7 +48,7 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 
 			// otherwise, conditionally define the component type
 			else if (arg.constructor !== Object || arg.$$typeof) {
-				internal.type = arg
+				if (internal.type == null) internal.type = arg
 			}
 
 			// otherwise, add a new composer to this component
