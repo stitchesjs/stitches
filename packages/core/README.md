@@ -2,12 +2,14 @@
 
 **@stitches/core** is a framework-agnostic implementation of [stitches](https://stitches.dev), a CSS-in-JS library with a best-in-class developer experience.
 
+<p><br /></p>
+
 ```sh
 # with npm
-npm install @stitches/react
+npm install @stitches/core
 
 # with yarn
-yarn add @stitches/react
+yarn add @stitches/core
 ```
 
 <p><br /></p>
