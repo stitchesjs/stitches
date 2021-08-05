@@ -13,8 +13,8 @@
       ]
     }
   },
-  "jsdelivr": "dist/index.iife.js",
-  "unpkg": "dist/index.iife.js",
+  "jsdelivr": "dist/index.global.js",
+  "unpkg": "dist/index.global.js",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
