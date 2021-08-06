@@ -136,16 +136,13 @@ export default interface Stitches<
 			}
 		): StyledComponent.CssComponent<
 			StyledComponent.StyledComponentType<Composers>,
-			StyledComponent.StyledComponentProps<Composers>,
-			Media,
-			Theme,
-			ThemeMap,
-			Utils
+			StyledComponent.StyledComponentProps<Composers> & { css?: CSS },
+			Media
 		>
 	},
 	styled: {
 		<
-			DefaultType extends (
+			Type extends (
 				| string
 				| React.ExoticComponent<any>
 				| React.JSXElementConstructor<any>
@@ -159,7 +156,7 @@ export default interface Stitches<
 				| { [name: string]: unknown }
 			)[]
 		>(
-			type: DefaultType,
+			type: Type,
 			...composers: {
 				[K in keyof Composers]: (
 					Composers[K] extends string
@@ -215,11 +212,8 @@ export default interface Stitches<
 			}
 		): StyledComponent.StyledComponent<
 			DefaultType,
-			StyledComponent.StyledComponentProps<Composers>,
-			Media,
-			Theme,
-			ThemeMap,
-			Utils
+			StyledComponent.StyledComponentProps<Composers> & { css?: CSS },
+			Media
 		>
 	}
 }

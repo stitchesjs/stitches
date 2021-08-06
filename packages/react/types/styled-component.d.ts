@@ -7,58 +7,39 @@ import type * as Util from './util'
 export interface StyledComponent<
 	Type = 'span',
 	Props = {},
-	Media = Default.Media,
-	Theme = {},
-	ThemeMap = Default.ThemeMap,
-	Utils = {},
-	TransformedProps = TransformProps<Props, Media>,
-	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-> extends ForwardRefExoticComponent<Type, TransformedProps> {
-	<
-		As = Type,
-		Props extends {
-			css?: Props['css'] extends CSSUtil.CSS
-				? Props['css']
-			: CSS
-		}
-	>(
-		props: (
-			As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], Partial<TransformedProps & { as: As, css: Props['css'] }>>
-			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, Partial<TransformedProps & { as: As, css: Props['css'] }>>
-			: never
-		)
+	Media = Default.Media
+> extends React.ForwardRefExoticComponent<
+	Util.Assign<
+		Type extends React.ElementType
+			? React.ComponentPropsWithRef<Type>
+		: never,
+		Props & { as?: Type }
+	>
+> {
+	<As = Type>(
+		props: As extends ''
+		? { as: keyof JSX.IntrinsicElements }
+		: As extends React.ComponentType<infer P>
+		? Util.Assign<P, Props & { as: As }>
+		: As extends keyof JSX.IntrinsicElements
+		? Util.Assign<JSX.IntrinsicElements[As], Props & { as: As }>
+		: never
 	): React.ReactElement | null
 
 	[$$StyledComponentType]: Type
-	[$$StyledComponentProps]: Props
+	[$$StyledComponentProps]: Omit<Props, 'css'>
 	[$$StyledComponentMedia]: Media
 }
 
 /** Returns a new CSS Component. */
 export interface CssComponent<
-	TagName = 'span',
+	Type = 'span',
 	Props = {},
-	Media = Default.Media,
-	Theme = {},
-	ThemeMap = Default.ThemeMap,
-	Utils = {},
-	TransformedProps = TransformProps<Props, Media>,
-	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+	Media = Default.Media
 > {
-	<
-		Props extends {
-			css?: Props['css'] extends CSSUtil.CSS
-				? Props['css']
-			: CSS
-		}
-	>(
+	(
 		props?:
-			& Partial<TransformedProps>
-			& {
-				css?: Props['css']
-			}
+			& Props
 			& {
 				[name in number | string]: any
 			}
@@ -71,15 +52,22 @@ export interface CssComponent<
 	className: string
 	selector: string
 
-	[$$StyledComponentType]: TagName
-	[$$StyledComponentProps]: Props
+	[$$StyledComponentType]: Type
+	[$$StyledComponentProps]: Omit<Props, 'css'>
 	[$$StyledComponentMedia]: Media
 }
 
 export type TransformProps<Props, Media> = {
-	[K in keyof Props]: Props[K] | {
-		[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
-	}
+	[K in keyof Props]:
+		K extends 'css'
+			? Props['css'] extends CSSUtil.CSS
+				? Props['css']
+			: CSSUtil.CSS
+		:
+			| Props[K]
+			| {
+				[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
+			}
 }
 
 /** Unique symbol used to reference the type of a Styled Component. */
@@ -104,8 +92,13 @@ export type $$StyledComponentMedia = typeof $$StyledComponentMedia
 type IntrinsicElement<TagName> = TagName extends keyof JSX.IntrinsicElements ? TagName : never
 
 /** Returns a ForwardRef component. */
-type ForwardRefExoticComponent<ElementType, Props> = React.ForwardRefExoticComponent<
-	Util.Assign<ElementType extends React.ElementType ? React.ComponentPropsWithRef<ElementType> : never, Props>
+type ForwardRefExoticComponent<Type, Props> = React.ForwardRefExoticComponent<
+	Util.Assign<
+		Type extends React.ElementType
+			? React.ComponentPropsWithRef<Type>
+		: never,
+		Props & { as?: Type }
+	>
 >
 
 /** Returns the first Styled Component type from the given array of compositions. */

@@ -4,27 +4,13 @@ import type * as Util from './util'
 
 /** Returns a new CSS Component. */
 export interface CssComponent<
-	TagName = 'span',
+	Type = 'span',
 	Props = {},
-	Media = Default.Media,
-	Theme = {},
-	ThemeMap = Default.ThemeMap,
-	Utils = {},
-	TransformedProps = TransformProps<Props, Media>,
-	CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+	Media = Default.Media
 > {
-	<
-		Props extends {
-			css?: Props['css'] extends CSSUtil.CSS
-				? Props['css']
-			: CSS
-		}
-	>(
+	(
 		props?:
-			& Partial<TransformedProps>
-			& {
-				css?: Props['css']
-			}
+			& Props
 			& {
 				[name in number | string]: any
 			}
@@ -37,15 +23,22 @@ export interface CssComponent<
 	className: string
 	selector: string
 
-	[$$StyledComponentType]: TagName
-	[$$StyledComponentProps]: Props
+	[$$StyledComponentType]: Type
+	[$$StyledComponentProps]: Omit<Props, 'css'>
 	[$$StyledComponentMedia]: Media
 }
 
 export type TransformProps<Props, Media> = {
-	[K in keyof Props]: Props[K] | {
-		[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
-	}
+	[K in keyof Props]:
+		K extends 'css'
+			? Props['css'] extends CSSUtil.CSS
+				? Props['css']
+			: CSSUtil.CSS
+		:
+			| Props[K]
+			| {
+				[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
+			}
 }
 
 /** Unique symbol used to reference the type of a Styled Component. */
@@ -71,6 +64,8 @@ export type StyledComponentType<T extends any[]> = (
 	T[0] extends never
 		? 'span'
 	: T[0] extends string
+		? T[0]
+	: T[0] extends (props: any) => any
 		? T[0]
 	: T[0] extends { [$$StyledComponentType]: unknown }
 		? T[0][$$StyledComponentType]

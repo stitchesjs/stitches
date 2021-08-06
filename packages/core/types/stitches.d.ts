@@ -130,11 +130,8 @@ export default interface Stitches<
 			}
 		): StyledComponent.CssComponent<
 			StyledComponent.StyledComponentType<Composers>,
-			StyledComponent.StyledComponentProps<Composers>,
-			Media,
-			Theme,
-			ThemeMap,
-			Utils
+			StyledComponent.StyledComponentProps<Composers> & { css?: CSS },
+			Media
 		>
 	},
 }

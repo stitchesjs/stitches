@@ -30,6 +30,9 @@ export type CSS<
 	Config['utils']
 >
 
+/** Returns the properties, attributes, and children expected by a component. */
+export type ComponentProps<Component> = Parameters<Component>[0]
+
 /** Returns a type that expects a value to be a kind of CSS property value. */
 export type PropertyValue<K extends keyof CSSUtil.CSSProperties> = { readonly [CSSUtil.$$PropertyValue]: K }
 
