@@ -22,6 +22,10 @@ export default interface Stitches<
 		utils: Utils
 	},
 	prefix: Prefix
+	/** The **prefix** property defined.
+	 *
+	 * [Read Documentation](https://stitches.dev/docs/variants)
+	 */
 	globalCss: {
 		(style: {
 			[prelude: string]: CSS
@@ -173,11 +177,16 @@ export default interface Stitches<
 						? (
 							& KnownCSS
 							& {
+								/** The **variants** property sets variants.
+								 *
+								 * [Read Documentation](https://stitches.dev/docs/variants)
+								 */
 								variants?: {
 									[name: string]: {
 										[pair in number | string]: CSS
 									}
 								}
+								/** Compound variants. */
 								compoundVariants?: (
 									& (
 										'variants' extends keyof Composers[K]
@@ -212,7 +221,9 @@ export default interface Stitches<
 			}
 		): StyledComponent.StyledComponent<
 			DefaultType,
-			StyledComponent.StyledComponentProps<Composers> & { css?: CSS },
+			StyledComponent.StyledComponentProps<Composers> & {
+				css?: CSS
+			},
 			Media
 		>
 	}
