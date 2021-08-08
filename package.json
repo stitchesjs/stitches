@@ -26,8 +26,9 @@
     "test:watch": "node .task/test.js --watch"
   },
   "workspaces": [
-    "packages/*",
-    "play"
+    "packages/core",
+    "packages/react",
+    "packages/stringify"
   ],
   "dependencies": {
     "@radix-ui/react-polymorphic": "0.0.13",
