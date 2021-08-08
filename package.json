@@ -9,18 +9,12 @@
     "Jonathan Neal <jonathan@modulz.app>"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "node .task/build.js",
     "build:watch": "node .task/build.js --watch",
     "lint": "node .task/lint.js",
     "lint:esm": "node .task/lint-esm.js",
     "lint:pkg": "node .task/lint-pkg.js",
     "lint:tsc": "node .task/lint-tsc.js",
-    "prerelease": "npm run build && npm run test",
-    "release": "lerna publish --force-publish",
-    "release:canary": "npm run prerelease && lerna publish prerelease --force-publish",
-    "release:pack": "npm run prerelease && lerna exec -- npm pack",
-    "postinstall": "lerna bootstrap --use-workspaces",
     "test": "node .task/test.js",
     "test:coverage": "node .task/test-coverage.js .task/test.js",
     "test:watch": "node .task/test.js --watch"
@@ -50,7 +44,6 @@
     "csstype": "3.0.8",
     "esbuild": "0.12.18",
     "eslint": "7.32.0",
-    "lerna": "4.0.0",
     "nodemon": "2.0.12",
     "react": "17.0.2",
     "react-test-renderer": "17.0.2",
