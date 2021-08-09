@@ -24,9 +24,11 @@
     "./global": "./dist/index.global.js"
   },
   "files": [
-    "dist",
-    "types",
-    "utils"
+    "dist/*.cjs",
+    "dist/*.js",
+    "dist/*.map",
+    "dist/*.mjs",
+    "types/*.d.ts"
   ],
   "sideEffects": false,
   "license": "MIT",
