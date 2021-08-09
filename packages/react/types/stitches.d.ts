@@ -133,7 +133,7 @@ export default interface Stitches<
 										}
 									: unknown
 							}
-							& KnownCSS
+							& CSS
 						)
 					: never
 				)
@@ -175,7 +175,6 @@ export default interface Stitches<
 						[K2 in keyof Composers[K]]: Composers[K][K2]
 					}
 						? (
-							& KnownCSS
 							& {
 								/** The **variants** property sets variants.
 								 *
@@ -212,7 +211,7 @@ export default interface Stitches<
 									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
 										? unknown
 									: Composers[K][Prelude] extends {}
-										? CSS
+										? CSS[Prelude]
 									: boolean | number | string
 							}
 						)
