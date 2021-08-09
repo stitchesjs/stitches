@@ -26,6 +26,9 @@ export interface StyledComponent<
 		: never
 	): React.ReactElement | null
 
+	className: string
+	selector: string
+
 	[$$StyledComponentType]: Type
 	[$$StyledComponentProps]: Omit<Props, 'css'>
 	[$$StyledComponentMedia]: Media
