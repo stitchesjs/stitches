@@ -110,7 +110,7 @@ export type KnownCSS<
 > = (
 	// nested at-rule css styles
 	& {
-		[K in Util.Prefixed<'@', keyof Media>]?: KnownCSS<Media, Theme, ThemeMap, Utils>
+		[K in Util.Prefixed<'@', keyof Media>]?: CSS<Media, Theme, ThemeMap, Utils>
 	}
 	// known property styles
 	& {
