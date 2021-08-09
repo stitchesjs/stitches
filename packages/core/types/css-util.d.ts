@@ -29,8 +29,7 @@ export type CSS<
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
-			| Util.Index
-			| ThemeUtil.TokenInterface
+			| ThemeUtil.ScaleValue
 		)
 	}
 	// known utility styles
@@ -48,12 +47,12 @@ export type CSS<
 										| ValueByPropertyName<P[0][$$PropertyValue]>
 										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
 										| CSS.Globals
-										| Util.Index
+										| ThemeUtil.ScaleValue
 									)
 								: $$ScaleValue extends keyof P[0]
 									? (
 										| TokenByScaleName<P[0][$$ScaleValue], Theme>
-										| Util.Index
+										| ThemeUtil.ScaleValue
 									)
 								: never
 							)[]
@@ -62,12 +61,12 @@ export type CSS<
 								| ValueByPropertyName<P[$$PropertyValue]>
 								| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
 								| CSS.Globals
-								| Util.Index
+								| ThemeUtil.ScaleValue
 							)
 						: $$ScaleValue extends keyof P
 							? (
 								| TokenByScaleName<P[$$ScaleValue], Theme>
-								| Util.Index
+								| ThemeUtil.ScaleValue
 							)
 						: never
 					: never
@@ -114,8 +113,7 @@ export type KnownCSS<
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
-			| Util.Index
-			| ThemeUtil.TokenInterface
+			| ThemeUtil.ScaleValue
 		)
 	}
 	// known utility styles
@@ -133,12 +131,12 @@ export type KnownCSS<
 										| ValueByPropertyName<P[0][$$PropertyValue]>
 										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
 										| CSS.Globals
-										| Util.Index
+										| ThemeUtil.ScaleValue
 									)
 								: $$ScaleValue extends keyof P[0]
 									? (
 										| TokenByScaleName<P[0][$$ScaleValue], Theme>
-										| Util.Index
+										| ThemeUtil.ScaleValue
 									)
 								: never
 							)[]
@@ -147,12 +145,12 @@ export type KnownCSS<
 								| ValueByPropertyName<P[$$PropertyValue]>
 								| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
 								| CSS.Globals
-								| Util.Index
+								| ThemeUtil.ScaleValue
 							)
 						: $$ScaleValue extends keyof P
 							? (
 								| TokenByScaleName<P[$$ScaleValue], Theme>
-								| Util.Index
+								| ThemeUtil.ScaleValue
 							)
 						: never
 					: never
