@@ -7,22 +7,23 @@ import type * as Util from './util'
 export interface StyledComponent<
 	Type = 'span',
 	Props = {},
-	Media = Default.Media
+	Media = Default.Media,
+	TransformedProps = TransformProps<Props, Media>
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
 		Type extends React.ElementType
 			? React.ComponentPropsWithRef<Type>
 		: never,
-		Props & { as?: Type }
+		TransformedProps & { as?: Type }
 	>
 > {
 	<As = Type>(
 		props: As extends ''
 		? { as: keyof JSX.IntrinsicElements }
 		: As extends React.ComponentType<infer P>
-		? Util.Assign<P, Props & { as: As }>
+		? Util.Assign<P, TransformedProps & { as: As }>
 		: As extends keyof JSX.IntrinsicElements
-		? Util.Assign<JSX.IntrinsicElements[As], Props & { as: As }>
+		? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as: As }>
 		: never
 	): React.ReactElement | null
 
@@ -38,11 +39,12 @@ export interface StyledComponent<
 export interface CssComponent<
 	Type = 'span',
 	Props = {},
-	Media = Default.Media
+	Media = Default.Media,
+	TransformedProps = TransformProps<Props, Media>
 > {
 	(
 		props?:
-			& Props
+			& TransformedProps
 			& {
 				[name in number | string]: any
 			}
@@ -63,14 +65,17 @@ export interface CssComponent<
 export type TransformProps<Props, Media> = {
 	[K in keyof Props]:
 		K extends 'css'
-			? Props['css'] extends CSSUtil.CSS
-				? Props['css']
-			: CSSUtil.CSS
+			? unknown
 		:
 			| Props[K]
-			| {
-				[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
-			}
+			| (
+				& {
+					[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
+				}
+				& {
+					[KMedia in string]: Props[K]
+				}
+			)
 }
 
 /** Unique symbol used to reference the type of a Styled Component. */
