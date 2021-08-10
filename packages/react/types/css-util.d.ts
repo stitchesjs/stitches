@@ -55,7 +55,7 @@ export type CSS<
 									: $$ScaleValue extends keyof P[0]
 										? (
 											| TokenByScaleName<P[0][$$ScaleValue], Theme>
-											| ThemeUtil.ScaleValue
+											| { scale: P[0][$$ScaleValue] }
 											| undefined
 										)
 									: never
@@ -66,13 +66,12 @@ export type CSS<
 									| ValueByPropertyName<P[$$PropertyValue]>
 									| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
 									| CSS.Globals
-									| ThemeUtil.ScaleValue
 									| undefined
 								)
 							: $$ScaleValue extends keyof P
 								? (
 									| TokenByScaleName<P[$$ScaleValue], Theme>
-									| ThemeUtil.ScaleValue
+									| { scale: P[$$ScaleValue] }
 									| undefined
 								)
 							: never
