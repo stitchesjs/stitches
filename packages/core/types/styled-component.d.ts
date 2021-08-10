@@ -6,11 +6,12 @@ import type * as Util from './util'
 export interface CssComponent<
 	Type = 'span',
 	Props = {},
-	Media = Default.Media
+	Media = Default.Media,
+	TransformedProps = TransformProps<Omit<Props, 'css'>, Media> & { css?: Props['css'] }
 > {
 	(
 		props?:
-			& Props
+			& TransformedProps
 			& {
 				[name in number | string]: any
 			}

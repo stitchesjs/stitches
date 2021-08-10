@@ -77,11 +77,9 @@ export default interface Stitches<
 				selector: string
 			}
 			& (
-				Argument0 extends {}
-					? ThemeTokens<Argument0, Prefix>
-				: Argument1 extends {}
+				Argument0 extends string
 					? ThemeTokens<Argument1, Prefix>
-				: {}
+					: ThemeTokens<Argument0, Prefix>
 			)
 	}
 	theme: string & {

@@ -5,7 +5,7 @@
 export type Prefix = ''
 
 /** Default Media configuration. */
-export type Media = { all: string }
+export type Media = {}
 
 /** Default Theme. */
 export type Theme = {
