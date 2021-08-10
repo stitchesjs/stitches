@@ -1,4 +1,3 @@
-import { defaultMedia } from './default/defaultMedia.js'
 import { defaultThemeMap } from './default/defaultThemeMap.js'
 
 import { createMemo } from './utility/createMemo.js'
@@ -22,7 +21,7 @@ export const createStitches = (config) => {
 
 		// internal configuration
 		const prefix = 'prefix' in initConfig ? String(initConfig.prefix) : ''
-		const media = { ...defaultMedia, ...(typeof initConfig.media === 'object' && initConfig.media || {}) }
+		const media = typeof initConfig.media === 'object' && initConfig.media || {}
 		const root = typeof initConfig.root === 'object' ? initConfig.root || null : globalThis.document || null
 		const theme = typeof initConfig.theme === 'object' && initConfig.theme || {}
 		const themeMap = typeof initConfig.themeMap === 'object' && initConfig.themeMap || { ...defaultThemeMap }

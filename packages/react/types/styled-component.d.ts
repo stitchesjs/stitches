@@ -8,7 +8,7 @@ export interface StyledComponent<
 	Type = 'span',
 	Props = {},
 	Media = Default.Media,
-	TransformedProps = TransformProps<Props, Media>
+	TransformedProps = TransformProps<Omit<Props, 'css'>, Media> & { css?: Props['css'] }
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
 		Type extends React.ElementType
@@ -40,7 +40,7 @@ export interface CssComponent<
 	Type = 'span',
 	Props = {},
 	Media = Default.Media,
-	TransformedProps = TransformProps<Props, Media>
+	TransformedProps = TransformProps<Omit<Props, 'css'>, Media> & { css?: Props['css'] }
 > {
 	(
 		props?:
@@ -64,18 +64,15 @@ export interface CssComponent<
 
 export type TransformProps<Props, Media> = {
 	[K in keyof Props]:
-		K extends 'css'
-			? unknown
-		:
-			| Props[K]
-			| (
-				& {
-					[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
-				}
-				& {
-					[KMedia in string]: Props[K]
-				}
-			)
+	| Props[K]
+	| (
+		& {
+			[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
+		}
+		& {
+			[KMedia in string]: Props[K]
+		}
+	)
 }
 
 /** Unique symbol used to reference the type of a Styled Component. */
