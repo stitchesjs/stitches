@@ -3,11 +3,11 @@
     "diagnostics": true,
     "esModuleInterop": true,
     "extendedDiagnostics": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "jsx": "preserve",
     "lib": [
       "dom",
-      "es2021"
+      "es2020"
     ],
     "moduleResolution": "node",
     "strict": true,
@@ -16,11 +16,4 @@
     "strictPropertyInitialization": true,
     "target": "es2020"
   },
-  "files": [
-    "packages/core/types/index.d.ts",
-    "packages/react/types/index.d.ts"
-  ],
-  "include": [
-    "packages/*/types/*.ts"
-  ],
 }
