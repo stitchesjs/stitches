@@ -108,3 +108,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Playground files
+playground
