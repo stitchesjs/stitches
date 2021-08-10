@@ -7,31 +7,38 @@ export interface StyledComponent<
 	Type = 'span',
 	Props = {},
 	Media = Default.Media,
+	CSS = {},
 	TransformedProps = TransformProps<Props, Media>
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
 		Type extends React.ElementType
 			? React.ComponentPropsWithRef<Type>
 		: never,
-		TransformedProps & { as?: Type }
+		TransformedProps & { as?: Type } & { css?: CSS }
 	>
 > {
 	<As = Type>(
-		props: As extends ''
-		? { as: keyof JSX.IntrinsicElements }
-		: As extends React.ComponentType<infer P>
-		? Util.Assign<P, TransformedProps & { as: As }>
-		: As extends keyof JSX.IntrinsicElements
-		? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as: As }>
-		: never
+		props: (
+			As extends ''
+				? { as: keyof JSX.IntrinsicElements }
+			: As extends React.ComponentType<infer P>
+				? Util.Assign<P, TransformedProps & { as: As }>
+			: As extends keyof JSX.IntrinsicElements
+				? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as: As }>
+			: never
+		)
 	): React.ReactElement | null
 
 	className: string
 	selector: string
 
 	[$$StyledComponentType]: Type
-	[$$StyledComponentProps]: Omit<Props, 'css'>
+	[$$StyledComponentProps]: Props
 	[$$StyledComponentMedia]: Media
+}
+
+type InferLate<CSS extends {} = {}, Props extends {} = {}> = {
+	[K in keyof Props]: K extends 'css' ? CSS : unknown
 }
 
 /** Returns a new CSS Component. */
@@ -39,11 +46,15 @@ export interface CssComponent<
 	Type = 'span',
 	Props = {},
 	Media = Default.Media,
+	CSS = {},
 	TransformedProps = TransformProps<Props, Media>
 > {
 	(
 		props?:
 			& TransformedProps
+			& {
+				css?: CSS
+			}
 			& {
 				[name in number | string]: any
 			}
@@ -57,24 +68,20 @@ export interface CssComponent<
 	selector: string
 
 	[$$StyledComponentType]: Type
-	[$$StyledComponentProps]: Omit<Props, 'css'>
+	[$$StyledComponentProps]: Props
 	[$$StyledComponentMedia]: Media
 }
 
 export type TransformProps<Props, Media> = {
 	[K in keyof Props]: (
-		K extends 'css'
-			? Props[K]
-		: (
-			| Props[K]
-			| (
-				& {
-					[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
-				}
-				& {
-					[KMedia in string]: Props[K]
-				}
-			)
+		| Props[K]
+		| (
+			& {
+				[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
+			}
+			& {
+				[KMedia in string]: Props[K]
+			}
 		)
 	)
 }

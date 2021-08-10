@@ -1,4 +1,3 @@
-import type * as CSSUtil from './css-util'
 import type * as Default from './default'
 import type * as Util from './util'
 
@@ -7,39 +6,44 @@ export interface CssComponent<
 	Type = 'span',
 	Props = {},
 	Media = Default.Media,
-	TransformedProps = TransformProps<Omit<Props, 'css'>, Media> & { css?: Props['css'] }
+	CSS = {},
+	TransformedProps = TransformProps<Props, Media>
 > {
 	(
 		props?:
 			& TransformedProps
+			& {
+				css?: CSS
+			}
 			& {
 				[name in number | string]: any
 			}
 	): string & {
 		className: string
 		selector: string
-		props: object
+		props: {}
 	}
 
 	className: string
 	selector: string
 
 	[$$StyledComponentType]: Type
-	[$$StyledComponentProps]: Omit<Props, 'css'>
+	[$$StyledComponentProps]: Props
 	[$$StyledComponentMedia]: Media
 }
 
 export type TransformProps<Props, Media> = {
-	[K in keyof Props]:
-		K extends 'css'
-			? Props['css'] extends CSSUtil.CSS
-				? Props['css']
-			: CSSUtil.CSS
-		:
-			| Props[K]
-			| {
+	[K in keyof Props]: (
+		| Props[K]
+		| (
+			& {
 				[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
 			}
+			& {
+				[KMedia in string]: Props[K]
+			}
+		)
+	)
 }
 
 /** Unique symbol used to reference the type of a Styled Component. */
