@@ -119,7 +119,10 @@ export default interface Stitches<
 								variants?: {
 									[name: string]: {
 										[pair in number | string]: CSS
-									}
+									} | 
+									(
+										(...args: any[]) => CSS
+									)
 								}
 								/** Compound variants. */
 								compoundVariants?: (
@@ -137,7 +140,10 @@ export default interface Stitches<
 								defaultVariants?: (
 									'variants' extends keyof Composers[K]
 										? {
-											[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+											[Name in keyof Composers[K]['variants']]?:
+												Composers[K]['variants'][Name] extends Function ?
+													Util.Argument<Composers[K]['variants'][Name]>
+												: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
 										}
 									: Util.WideObject
 								)
@@ -157,7 +163,7 @@ export default interface Stitches<
 			}
 		): StyledComponent.CssComponent<
 			StyledComponent.StyledComponentType<Composers>,
-			StyledComponent.StyledComponentProps<Composers> & { css?: CSS },
+			StyledComponent.StyledComponentProps<Composers, Media> & { css?: CSS },
 			Media
 		>
 	},

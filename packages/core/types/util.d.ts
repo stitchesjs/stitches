@@ -1,6 +1,12 @@
 /* Utilities */
 /* ========================================================================== */
 
+/** Returns a functions arguments as an array. */
+export type ArgumentTypes<F extends Function> = F extends (...args: infer A) => any ? A : never;
+
+/** Returns a single argument or a tuple of arguments depending on the function. */
+export type Argument<F extends Function> = ArgumentTypes<F> extends [any] ? ArgumentTypes<F>[0] : ArgumentTypes<F>
+
 /** Returns a string with the given prefix followed by the given values. */
 export type Prefixed<K extends string, T> = `${K}${Extract<T, boolean | number | string>}`
 

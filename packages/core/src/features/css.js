@@ -75,6 +75,9 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 	/** @type {VariantTuple[]} */
 	const compoundVariants = []
 
+	/** @type {VariantTuple[]} */
+	const functionVariants = []
+
 	/** @type {PrefilledVariants} */
 	const prefilledVariants = Object.create(null)
 
@@ -82,7 +85,7 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 	const undefinedVariants = []
 
 	for (const variantName in initDefaultVariants) {
-		prefilledVariants[variantName] = String(initDefaultVariants[variantName])
+		prefilledVariants[variantName] = Array.isArray(initDefaultVariants[variantName]) ? initDefaultVariants[variantName] : String(initDefaultVariants[variantName])
 	}
 
 	// add singular variants
@@ -91,6 +94,15 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 			if (!hasOwn(prefilledVariants, name)) prefilledVariants[name] = 'undefined'
 
 			const variantPairs = initSingularVariants[name]
+
+			if (typeof variantPairs === 'function') {
+				/** @type {VariantTuple} */
+				const variant = [variantPairs.name, variantPairs, !hasNames(variantPairs)]
+
+				functionVariants.push(variant)
+
+				continue
+			}
 
 			for (const pair in variantPairs) {
 				/** @type {VariantMatcher} */
@@ -126,7 +138,7 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 		}
 	}
 
-	return /** @type {Composer} */ ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
+	return /** @type {Composer} */ ([className, style, singularVariants, compoundVariants, prefilledVariants, functionVariants, undefinedVariants])
 } // prettier-ignore
 
 const createRenderer = (
@@ -190,7 +202,7 @@ const createRenderer = (
 		// 2.2.1. orders regular variants before responsive variants
 		// 2.3. iterate their compound variants, add their compound variant classes
 
-		for (const [composerBaseClass, composerBaseStyle, singularVariants, compoundVariants] of internals.composers) {
+		for (const [composerBaseClass, composerBaseStyle, singularVariants, compoundVariants,, functionVariants] of internals.composers) {
 			if (!sheet.rules.styled.cache.has(composerBaseClass)) {
 				sheet.rules.styled.cache.add(composerBaseClass)
 
@@ -235,6 +247,35 @@ const createRenderer = (
 							sheet.rules.allvar.apply(cssText)
 						})
 					}
+				}
+			}
+
+			for (const variantToAdd of functionVariants) {
+				if (variantToAdd === undefined) continue
+
+				const [vClass, vFunction] = variantToAdd
+
+				var vStyle = {};
+				if (typeof variantProps[vClass] === 'object' && '@initial' in variantProps[vClass]) {
+					for(const media in variantProps[vClass]) {
+						if(variantProps[vClass][media] === "undefined") continue;
+
+						vStyle[media] = Array.isArray(variantProps[vClass][media]) ? vFunction(...variantProps[vClass][media]) : vFunction(variantProps[vClass][media])
+					}
+				} else {
+					vStyle = Array.isArray(variantProps[vClass]) ? vFunction(...variantProps[vClass]) : vFunction(variantProps[vClass])
+				}
+
+				const variantClassName = `${composerBaseClass}-${toHash(vStyle)}-${vClass}`
+
+				classSet.add(variantClassName)
+
+				if (!sheet.rules.dynvar.cache.has(variantClassName)) {
+					sheet.rules.dynvar.cache.add(variantClassName)
+
+					toCssRules(vStyle, [`.${variantClassName}`], [], config, cssText => {
+						sheet.rules.dynvar.apply(cssText)
+					})
 				}
 			}
 		}

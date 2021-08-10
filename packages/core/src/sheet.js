@@ -3,7 +3,7 @@
 /** @typedef {import('./sheet').SheetGroup} SheetGroup */
 
 /** @type {RuleGroupNames} */
-const names = ['themed', 'global', 'styled', 'onevar', 'allvar', 'inline']
+const names = ['themed', 'global', 'styled', 'onevar', 'dynvar', 'allvar', 'inline']
 
 export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 	/** @type {SheetGroup} Object hosting the hydrated stylesheet. */
@@ -151,6 +151,20 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 			}
 		}
 		addApplyToGroup(rules.allvar)
+
+		// conditionally generate the dynvar group
+		if (!rules.dynvar) {
+			const index = rules.allvar.index
+			sheet.insertRule('@media{}', index)
+			sheet.insertRule('--sxs{--sxs:3}', index)
+
+			rules.dynvar = {
+				index: index,
+				group: sheet.cssRules[index + 1],
+				cache: new Set([3]),
+			}
+		}
+		addApplyToGroup(rules.dynvar)
 
 		// conditionally generate the onevar group
 		if (!rules.onevar) {
