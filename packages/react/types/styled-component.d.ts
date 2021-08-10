@@ -1,4 +1,3 @@
-import type * as CSSUtil from './css-util'
 import type * as Default from './default'
 import type * as React from 'react'
 import type * as Util from './util'
@@ -8,7 +7,7 @@ export interface StyledComponent<
 	Type = 'span',
 	Props = {},
 	Media = Default.Media,
-	TransformedProps = TransformProps<Omit<Props, 'css'>, Media> & { css?: Props['css'] }
+	TransformedProps = TransformProps<Props, Media>
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
 		Type extends React.ElementType
@@ -40,7 +39,7 @@ export interface CssComponent<
 	Type = 'span',
 	Props = {},
 	Media = Default.Media,
-	TransformedProps = TransformProps<Omit<Props, 'css'>, Media> & { css?: Props['css'] }
+	TransformedProps = TransformProps<Props, Media>
 > {
 	(
 		props?:
@@ -51,7 +50,7 @@ export interface CssComponent<
 	): string & {
 		className: string
 		selector: string
-		props: object
+		props: {}
 	}
 
 	className: string
@@ -63,15 +62,20 @@ export interface CssComponent<
 }
 
 export type TransformProps<Props, Media> = {
-	[K in keyof Props]:
-	| Props[K]
-	| (
-		& {
-			[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
-		}
-		& {
-			[KMedia in string]: Props[K]
-		}
+	[K in keyof Props]: (
+		K extends 'css'
+			? Props[K]
+		: (
+			| Props[K]
+			| (
+				& {
+					[KMedia in Util.Prefixed<'@', 'initial' | keyof Media>]?: Props[K]
+				}
+				& {
+					[KMedia in string]: Props[K]
+				}
+			)
+		)
 	)
 }
 
