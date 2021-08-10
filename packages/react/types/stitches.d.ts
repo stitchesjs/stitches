@@ -249,7 +249,7 @@ export default interface Stitches<
 				)
 			}
 		): StyledComponent.StyledComponent<
-			DefaultType,
+			Type,
 			StyledComponent.StyledComponentProps<Composers> & {
 				css?: CSS
 			},
