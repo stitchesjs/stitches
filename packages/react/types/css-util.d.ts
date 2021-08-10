@@ -29,8 +29,8 @@ export type CSS<
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
-			| Util.Index
-			| ThemeUtil.TokenInterface
+			| ThemeUtil.ScaleValue
+			| undefined
 		)
 	}
 	// known utility styles
@@ -49,10 +49,14 @@ export type CSS<
 											| ValueByPropertyName<P[0][$$PropertyValue]>
 											| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
 											| CSS.Globals
+											| ThemeUtil.ScaleValue
+											| undefined
 										)
 									: $$ScaleValue extends keyof P[0]
 										? (
 											| TokenByScaleName<P[0][$$ScaleValue], Theme>
+											| ThemeUtil.ScaleValue
+											| undefined
 										)
 									: never
 								)[]
@@ -62,10 +66,14 @@ export type CSS<
 									| ValueByPropertyName<P[$$PropertyValue]>
 									| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
 									| CSS.Globals
+									| ThemeUtil.ScaleValue
+									| undefined
 								)
 							: $$ScaleValue extends keyof P
 								? (
 									| TokenByScaleName<P[$$ScaleValue], Theme>
+									| ThemeUtil.ScaleValue
+									| undefined
 								)
 							: never
 						)
@@ -87,13 +95,14 @@ export type CSS<
 			: (
 				| CSS.Globals
 				| Util.Index
+				| undefined
 			)
 		)
 	}
 	// unknown css declaration styles
 	& {
 		/** Unknown property. */
-		[K in string]: number | string | CSS<Media, Theme, ThemeMap, Utils> | {}
+		[K in string]: number | string | CSS<Media, Theme, ThemeMap, Utils> | {} | undefined
 	}
 )
 
@@ -107,7 +116,7 @@ export type KnownCSS<
 > = (
 	// nested at-rule css styles
 	& {
-		[K in Util.Prefixed<'@', keyof Media>]?: KnownCSS<Media, Theme, ThemeMap, Utils>
+		[K in Util.Prefixed<'@', keyof Media>]?: CSS<Media, Theme, ThemeMap, Utils>
 	}
 	// known property styles
 	& {
@@ -115,7 +124,7 @@ export type KnownCSS<
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
-			| ThemeUtil.TokenInterface
+			| ThemeUtil.ScaleValue
 		)
 	}
 	// known utility styles
@@ -133,10 +142,12 @@ export type KnownCSS<
 										| ValueByPropertyName<P[0][$$PropertyValue]>
 										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
 										| CSS.Globals
+										| ThemeUtil.ScaleValue
 									)
 								: $$ScaleValue extends keyof P[0]
 									? (
 										| TokenByScaleName<P[0][$$ScaleValue], Theme>
+										| ThemeUtil.ScaleValue
 									)
 								: never
 							)[]
@@ -145,10 +156,12 @@ export type KnownCSS<
 								| ValueByPropertyName<P[$$PropertyValue]>
 								| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
 								| CSS.Globals
+								| ThemeUtil.ScaleValue
 							)
 						: $$ScaleValue extends keyof P
 							? (
 								| TokenByScaleName<P[$$ScaleValue], Theme>
+								| ThemeUtil.ScaleValue
 							)
 						: never
 					: never

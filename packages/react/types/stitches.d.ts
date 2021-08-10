@@ -124,16 +124,45 @@ export default interface Stitches<
 					}
 						? (
 							& {
-								[K2 in keyof Composers[K]]:
-									K2 extends 'variants'
+								/** The **variants** property sets variants.
+								 *
+								 * [Read Documentation](https://stitches.dev/docs/variants)
+								 */
+								variants?: {
+									[name: string]: {
+										[pair in number | string]: CSS
+									}
+								}
+								/** Compound variants. */
+								compoundVariants?: (
+									& (
+										'variants' extends keyof Composers[K]
+											? {
+												[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+											} & Util.WideObject
+										: Util.WideObject
+									)
+									& {
+										css: CSS
+									}
+								)[]
+								defaultVariants?: (
+									'variants' extends keyof Composers[K]
 										? {
-											[name: string]: {
-												[pair in number | string]: CSS
-											}
+											[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
 										}
-									: unknown
+									: Util.WideObject
+								)
 							}
-							& KnownCSS
+							& {
+								[Prelude in keyof Composers[K]]:
+									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
+										? unknown
+									: Composers[K][Prelude] extends {}
+										? CSS[Prelude]
+									: boolean | number | string
+							}
+							& CSS
 						)
 					: never
 				)
@@ -175,7 +204,6 @@ export default interface Stitches<
 						[K2 in keyof Composers[K]]: Composers[K][K2]
 					}
 						? (
-							& KnownCSS
 							& {
 								/** The **variants** property sets variants.
 								 *
@@ -212,9 +240,10 @@ export default interface Stitches<
 									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
 										? unknown
 									: Composers[K][Prelude] extends {}
-										? CSS
+										? CSS[Prelude]
 									: boolean | number | string
 							}
+							& CSS
 						)
 					: never
 				)

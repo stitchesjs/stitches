@@ -1,4 +1,4 @@
-export interface TokenInterface {}
+export interface ScaleValue {}
 
 export interface Token<
 	/** Token name. */
@@ -12,7 +12,7 @@ export interface Token<
 
 	/** Token prefix. */
 	PrefixType extends string | void = void,
-> extends TokenInterface {
+> extends ScaleValue {
 	new (name: NameType, value: ValueType, scale?: ScaleType, prefix?: PrefixType): this
 
 	/** Name of the token. */

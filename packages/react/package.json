@@ -1,6 +1,6 @@
 {
   "name": "@stitches/react",
-  "version": "1.0.0-canary.3",
+  "version": "1.0.0-canary.5",
   "description": "The modern CSS-in-JS library",
   "type": "module",
   "main": "dist/index.cjs",
@@ -24,9 +24,11 @@
     "./global": "./dist/index.global.js"
   },
   "files": [
-    "dist",
-    "types",
-    "utils"
+    "dist/*.cjs",
+    "dist/*.js",
+    "dist/*.map",
+    "dist/*.mjs",
+    "types/*.d.ts"
   ],
   "sideEffects": false,
   "license": "MIT",

@@ -1,12 +1,15 @@
-import { corePackageUrl, reactPackageUrl, rootUrl } from './internal/dirs.js'
 import * as fs from './internal/fs.js'
+import URL from './internal/URL.js'
 
+const rootUrl = URL.from(import.meta.url).to('../')
 const dtsOriginalURL = rootUrl.to('./node_modules/csstype/index.d.ts')
 
-const doTheThing = async (packageUrl) => {
+const generateType = async (packageUrl) => {
 	const dtsOriginalTxt = await fs.readFile(dtsOriginalURL, 'utf8')
 
-	const dtsModifiedURL = corePackageUrl.to('./types/css.d.ts')
+	const dtsModifiedURL = packageUrl.to('types/css.d.ts')
+	console.log(dtsModifiedURL.pathname)
+
 	const dtsModifiedTxt = new ModifiedString(dtsOriginalTxt)
 		.withoutVendorTyping
 
@@ -35,9 +38,9 @@ const doTheThing = async (packageUrl) => {
 	await fs.writeFile(dtsModifiedURL, dtsModifiedTxt)
 } // prettier-ignore
 
-const doAllTheThings = async () => {
-	await doTheThing(corePackageUrl)
-	await doTheThing(reactPackageUrl)
+const generateTypes = async () => {
+	await generateType(rootUrl.to('packages/core/'))
+	await generateType(rootUrl.to('packages/react/'))
 }
 
 class ModifiedString extends String {
@@ -147,8 +150,14 @@ class ModifiedString extends String {
 
 	get withoutGenericTyping() {
 		return this.replace(
-			/\n? *(<(TLength|TTime)[^>]*>|\| (TLength|TTime)|TLength \|)/g,
+			/\n? *(<(TLength|TTime)[^>]*>)|\| TTime|TTime \|/g,
 			''
+		).replace(
+			/\| TLength/g,
+			'| number'
+		).replace(
+			/TLength \|/g,
+			'number |'
 		)
 	}
 
@@ -190,6 +199,13 @@ class ModifiedString extends String {
 		).replace(
 			/\(string & \{\}\)/g,
 			'OnlyString'
+		)
+		.replace(
+			/number \| "([^\n]+)" \| OnlyString/g,
+			'"$1" | number | OnlyString'
+		).replace(
+			/(number \| OnlyString( \| OnlyNumber)?|OnlyString \| OnlyNumber)/g,
+			'OnlyStringNumeric'
 		)
 	}
 
@@ -238,12 +254,6 @@ class ModifiedString extends String {
 			/\n? *\| *"-[^\n]+(?=\n)/g, ''
 		)
 	}
-} // prettier-ignore
+}
 
-doAllTheThings()
-
-// const coreCssTypeUrl = new URL('./types/csstype.d.ts', corePackageUrl)
-
-// console.log(corePackageUrl)
-
-// 'csstype.d.ts'
+generateTypes()

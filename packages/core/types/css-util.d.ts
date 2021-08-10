@@ -29,8 +29,8 @@ export type CSS<
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
-			| Util.Index
-			| ThemeUtil.TokenInterface
+			| ThemeUtil.ScaleValue
+			| undefined
 		)
 	}
 	// known utility styles
@@ -41,35 +41,43 @@ export type CSS<
 			: (
 				| (
 					Utils[K] extends (arg: infer P) => any
-						? P extends any[]
-							? (
-								$$PropertyValue extends keyof P[0]
-									? (
-										| ValueByPropertyName<P[0][$$PropertyValue]>
-										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
-										| CSS.Globals
-										| Util.Index
-									)
-								: $$ScaleValue extends keyof P[0]
-									? (
-										| TokenByScaleName<P[0][$$ScaleValue], Theme>
-										| Util.Index
-									)
-								: never
-							)[]
-						: $$PropertyValue extends keyof P
-							? (
-								| ValueByPropertyName<P[$$PropertyValue]>
-								| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
-								| CSS.Globals
-								| Util.Index
-							)
-						: $$ScaleValue extends keyof P
-							? (
-								| TokenByScaleName<P[$$ScaleValue], Theme>
-								| Util.Index
-							)
-						: never
+						? (
+							P extends any[]
+								? (
+									$$PropertyValue extends keyof P[0]
+										? (
+											| ValueByPropertyName<P[0][$$PropertyValue]>
+											| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
+											| CSS.Globals
+											| ThemeUtil.ScaleValue
+											| undefined
+										)
+									: $$ScaleValue extends keyof P[0]
+										? (
+											| TokenByScaleName<P[0][$$ScaleValue], Theme>
+											| ThemeUtil.ScaleValue
+											| undefined
+										)
+									: never
+								)[]
+								| P
+							: $$PropertyValue extends keyof P
+								? (
+									| ValueByPropertyName<P[$$PropertyValue]>
+									| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
+									| CSS.Globals
+									| ThemeUtil.ScaleValue
+									| undefined
+								)
+							: $$ScaleValue extends keyof P
+								? (
+									| TokenByScaleName<P[$$ScaleValue], Theme>
+									| ThemeUtil.ScaleValue
+									| undefined
+								)
+							: never
+						)
+						| P
 					: never
 				)
 			)
@@ -87,12 +95,14 @@ export type CSS<
 			: (
 				| CSS.Globals
 				| Util.Index
+				| undefined
 			)
 		)
 	}
 	// unknown css declaration styles
 	& {
-		[K in string]: number | string | CSS<Media, Theme, ThemeMap, Utils> | {}
+		/** Unknown property. */
+		[K in string]: number | string | CSS<Media, Theme, ThemeMap, Utils> | {} | undefined
 	}
 )
 
@@ -106,7 +116,7 @@ export type KnownCSS<
 > = (
 	// nested at-rule css styles
 	& {
-		[K in Util.Prefixed<'@', keyof Media>]?: KnownCSS<Media, Theme, ThemeMap, Utils>
+		[K in Util.Prefixed<'@', keyof Media>]?: CSS<Media, Theme, ThemeMap, Utils>
 	}
 	// known property styles
 	& {
@@ -114,8 +124,7 @@ export type KnownCSS<
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| CSS.Globals
-			| Util.Index
-			| ThemeUtil.TokenInterface
+			| ThemeUtil.ScaleValue
 		)
 	}
 	// known utility styles
@@ -133,12 +142,12 @@ export type KnownCSS<
 										| ValueByPropertyName<P[0][$$PropertyValue]>
 										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
 										| CSS.Globals
-										| Util.Index
+										| ThemeUtil.ScaleValue
 									)
 								: $$ScaleValue extends keyof P[0]
 									? (
 										| TokenByScaleName<P[0][$$ScaleValue], Theme>
-										| Util.Index
+										| ThemeUtil.ScaleValue
 									)
 								: never
 							)[]
@@ -147,12 +156,12 @@ export type KnownCSS<
 								| ValueByPropertyName<P[$$PropertyValue]>
 								| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
 								| CSS.Globals
-								| Util.Index
+								| ThemeUtil.ScaleValue
 							)
 						: $$ScaleValue extends keyof P
 							? (
 								| TokenByScaleName<P[$$ScaleValue], Theme>
-								| Util.Index
+								| ThemeUtil.ScaleValue
 							)
 						: never
 					: never
