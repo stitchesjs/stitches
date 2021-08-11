@@ -22,9 +22,9 @@ export interface StyledComponent<
 			As extends ''
 				? { as: keyof JSX.IntrinsicElements }
 			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, TransformedProps & { as: As }>
+				? Util.Assign<P, TransformedProps & { as: As, css?: CSS }>
 			: As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as: As }>
+				? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as: As, css?: CSS }>
 			: never
 		)
 	): React.ReactElement | null
@@ -35,10 +35,6 @@ export interface StyledComponent<
 	[$$StyledComponentType]: Type
 	[$$StyledComponentProps]: Props
 	[$$StyledComponentMedia]: Media
-}
-
-type InferLate<CSS extends {} = {}, Props extends {} = {}> = {
-	[K in keyof Props]: K extends 'css' ? CSS : unknown
 }
 
 /** Returns a new CSS Component. */
