@@ -1,6 +1,7 @@
 {
   "debug.console.historySuggestions": false,
   "editor.formatOnSave": false,
+  "editor.insertSpaces": false,
   "editor.snippetSuggestions": "none",
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "editor.suggestSelection": "recentlyUsedByPrefix",
