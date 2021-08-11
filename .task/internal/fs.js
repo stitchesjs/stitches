@@ -12,8 +12,8 @@ export const copydir = async function copydir(src, dst) {
 
 		for (const dirent of await readdir(src, { withFileTypes: true })) {
 			await (dirent.isDirectory() ? copydir : copyFile)(
-				src.asDir.to(dirent.name),
-				dst.asDir.to(dirent.name)
+				src.dir.to(dirent.name),
+				dst.dir.to(dirent.name)
 			)
 		}
 	}
@@ -21,6 +21,23 @@ export const copydir = async function copydir(src, dst) {
 	copydir(URL.from(src), URL.from(dst))
 }
 
+/** Asynchronously reads a file as parsed JSON. */
+export const readFileJson = {
+	async readFileJson(/** @type {import('fs').PathLike | fs.FileHandle} */ path) {
+		const json = await fs.readFile(path, 'utf8')
+
+		/** @type {JSONValue} */
+		const data = JSON.parse(json)
+
+		return data
+	}
+}.readFileJson
+
 fs.copydir = copydir
+fs.readFileJson = readFileJson
+
+/** @typedef { string | number | boolean | null | JSONArray | JSONObject } JSONValue */
+/** @typedef { JSONValue[] } JSONArray */
+/** @typedef {{ [k: string]: JSONValue }} JSONObject */
 
 export default fs

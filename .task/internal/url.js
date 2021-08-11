@@ -13,7 +13,7 @@ export default class URL extends globalThis.URL {
 		return this.href.endsWith(searchString, length)
 	}
 
-	get asDir() {
+	get dir() {
 		return new URL(this.href + '/')
 	}
 
