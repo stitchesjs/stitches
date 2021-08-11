@@ -1,4 +1,4 @@
-import { pathToFileURL } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 export default class URL extends globalThis.URL {
 	to(/** @type {string[]} */ ...segments) {
@@ -15,6 +15,10 @@ export default class URL extends globalThis.URL {
 
 	get dir() {
 		return new URL(this.href + '/')
+	}
+
+	get ospathname() {
+		return fileURLToPath(this)
 	}
 
 	static from(/** @type {string | globalThis.URL} */ segment, /** @type {string[]} */ ...segments) {
