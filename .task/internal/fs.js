@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import { copyFile, mkdir, readdir } from 'fs/promises'
-import URL from './URL.js'
+import URL from './url.js'
 
 export * from 'fs/promises'
 export { existsSync as exists } from 'fs'
