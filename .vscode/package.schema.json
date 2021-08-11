@@ -6,59 +6,9 @@
     },
     {
       "properties": {
-        "babel": {
-          "title": "Babel configuration",
-          "$ref": "http://json.schemastore.org/babelrc"
-        },
-        "browserslist": {
-          "title": "Browserslist configuration",
-          "oneOf": [
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            {
-              "type": "object",
-              "additionalProperties": {
-                "description": "Browser queries by environment",
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            }
-          ],
-          "examples": [
-            ["last 1 version", "> 1%", "IE 10"],
-            {
-              "development": ["last 1 version"],
-              "production": ["last 1 version", "> 1%", "ie 10"]
-            }
-          ]
-        },
         "eslintConfig": {
           "title": "ESLint configuration",
           "$ref": "http://json.schemastore.org/eslintrc"
-        },
-        "nodemonConfig": {
-          "title": "Nodemon configuration",
-          "$ref": "http://json.schemastore.org/nodemon"
-        },
-        "preconstruct": {
-          "title": "Preconstruct configuration",
-          "properties": {
-            "packages": {
-              "description": "List of paths or glob patterns specifying packages to be built with preconstruct.",
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "default": ["."]
-            }
-          },
-          "additionalProperties": true
         },
         "prettier": {
           "title": "Prettier configuration",
