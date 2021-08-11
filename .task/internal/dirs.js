@@ -1,5 +1,5 @@
 import process from 'node:process'
-import URL from './URL.js'
+import URL from './url.js'
 
 /** Root directory. */
 export const rootUrl = new URL('../../', import.meta.url)

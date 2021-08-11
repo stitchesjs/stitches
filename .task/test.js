@@ -2,7 +2,7 @@ import { passIcon, failIcon, passText, failText, infoText, dim, green } from './
 import { isProcessMeta, getProcessArgOf } from './internal/process.js'
 import * as fs from './internal/fs.js'
 import nodemon from 'nodemon'
-import URL from './internal/URL.js'
+import URL from './internal/url.js'
 
 const root = URL.from(import.meta.url).to('../')
 

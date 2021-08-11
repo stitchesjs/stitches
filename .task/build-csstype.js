@@ -1,5 +1,5 @@
 import * as fs from './internal/fs.js'
-import URL from './internal/URL.js'
+import URL from './internal/url.js'
 
 const rootUrl = URL.from(import.meta.url).to('../')
 const dtsOriginalURL = rootUrl.to('./node_modules/csstype/index.d.ts')

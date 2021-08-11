@@ -1,4 +1,4 @@
-import URL from './URL.js'
+import URL from './url.js'
 
 const {
 	argv: [, file, ...argv],

@@ -1,6 +1,6 @@
 import * as fs from './internal/fs.js'
 import * as js from './internal/js.js'
-import URL from './internal/URL.js'
+import URL from './internal/url.js'
 import { box } from './internal/color.js'
 import { transformDestructuring } from './internal/js.transformDestructuring.js'
 import { transformModulesToCJS } from './internal/js.transformModulesToCJS.js'

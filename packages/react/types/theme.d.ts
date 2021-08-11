@@ -1,4 +1,9 @@
-export interface ScaleValue {}
+export interface ScaleValue {
+	token: number | string
+	value: number | string
+	scale: string
+	prefix: string
+}
 
 export interface Token<
 	/** Token name. */
