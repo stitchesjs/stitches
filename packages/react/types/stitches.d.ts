@@ -90,7 +90,12 @@ export default interface Stitches<
 	}
 	theme: string & {
 		[Scale in keyof Theme]: {
-			[Token in keyof Theme[Scale]]: ThemeUtil.Token<Extract<Token, string | number>, string, Extract<Scale, string>, Prefix>
+			[Token in keyof Theme[Scale]]: ThemeUtil.Token<
+				Extract<Token, string | number>,
+				string,
+				Extract<Scale, string | void>,
+				Extract<Prefix, string | void>
+			>
 		}
 	}
 	reset: {
@@ -164,8 +169,8 @@ export default interface Stitches<
 								[Prelude in keyof Composers[K]]:
 									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
 										? unknown
-									: Composers[K][Prelude] extends {}
-										? CSS[Prelude]
+									: Composers[K][Prelude] extends Record<string, unknown>
+										? CSS
 									: boolean | number | string
 							}
 							& CSS
@@ -176,7 +181,8 @@ export default interface Stitches<
 		): StyledComponent.CssComponent<
 			StyledComponent.StyledComponentType<Composers>,
 			StyledComponent.StyledComponentProps<Composers, Media> & { css?: CSS },
-			Media
+			Media,
+			CSS
 		>
 	},
 	styled: {
@@ -251,8 +257,8 @@ export default interface Stitches<
 								[Prelude in keyof Composers[K]]:
 									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
 										? unknown
-									: Composers[K][Prelude] extends {}
-										? CSS[Prelude]
+									: Composers[K][Prelude] extends Record<string, unknown>
+										? CSS
 									: boolean | number | string
 							}
 							& CSS
@@ -265,7 +271,8 @@ export default interface Stitches<
 			StyledComponent.StyledComponentProps<Composers, Media> & {
 				css?: CSS
 			},
-			Media
+			Media,
+			CSS
 		>
 	}
 }
@@ -273,10 +280,10 @@ export default interface Stitches<
 type ThemeTokens<Values, Prefix> = {
 	[Scale in keyof Values]: {
 		[Token in keyof Values[Scale]]: ThemeUtil.Token<
-			Token,
+			Extract<Token, number | string>,
 			Values[Scale][Token],
-			Scale,
-			Prefix
+			Extract<Scale, string | void>,
+			Extract<Prefix, string | void>
 		>
 	}
 }
