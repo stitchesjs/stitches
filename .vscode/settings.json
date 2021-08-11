@@ -16,7 +16,5 @@
   },
   "javascript.suggest.enabled": false,
   "javascript.suggest.names": false,
-  "typescript.disableAutomaticTypeAcquisition": true,
-  "typescript.tsdk": "./node_modules/typescript/lib",
   "typescript.tsserver.maxTsServerMemory": 8192
 }

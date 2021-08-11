@@ -11,8 +11,7 @@ export default interface Stitches<
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
 	Utils = {},
-	CSS extends { [prelude: string]: unknown } = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>,
-	KnownCSS extends { [prelude: string]: unknown } = CSSUtil.KnownCSS<Media, Theme, ThemeMap, Utils>
+	CSS extends { [prelude: string]: unknown } = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 > {
 	config: {
 		prefix: Prefix
@@ -161,7 +160,7 @@ export default interface Stitches<
 							}
 							& {
 								[Prelude in keyof Composers[K]]:
-									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
+									Prelude extends keyof CSS | 'compoundVariants' | 'defaultVariants' | 'variants'
 										? unknown
 									: Composers[K][Prelude] extends Record<string, unknown>
 										? CSS
@@ -243,7 +242,7 @@ export default interface Stitches<
 							}
 							& {
 								[Prelude in keyof Composers[K]]:
-									Prelude extends keyof KnownCSS | 'compoundVariants' | 'defaultVariants' | 'variants'
+									Prelude extends keyof CSS | 'compoundVariants' | 'defaultVariants' | 'variants'
 										? unknown
 									: Composers[K][Prelude] extends Record<string, unknown>
 										? CSS
