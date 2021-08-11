@@ -15,6 +15,7 @@
     "lint:esm": "node .task/lint-esm.js",
     "lint:pkg": "node .task/lint-pkg.js",
     "lint:tsc": "node .task/lint-tsc.js",
+    "release": "node .task/release.js",
     "test": "node .task/test.js",
     "test:coverage": "node .task/test-coverage.js .task/test.js",
     "test:watch": "node .task/test.js --watch"
