@@ -1,6 +1,6 @@
 {
   "name": "@stitches/stringify",
-  "version": "1.0.0-canary.8",
+  "version": "1.0.0-canary.9",
   "description": "Converts an object into CSS",
   "type": "module",
   "main": "dist/index.cjs",
