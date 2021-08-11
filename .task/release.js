@@ -4,61 +4,64 @@ import * as cp from './internal/child_process.js'
 import * as fs from './internal/fs.js'
 import * as rl from './internal/readline.js'
 
-let main = async () => {
-	let root = URL.from(import.meta.url).to('../')
-	let pkg = await fs.readFileJson(root.to('package.json'), 'utf8')
+const main = async () => {
+	const root = URL.from(import.meta.url).to('../')
+	const pkg = await fs.readFileJson(root.to('package.json'), 'utf8')
 
-	let q1option = new Set(['major', 'minor', 'patch', 'prerelease'])
-	let q1answer = await rl.question(`Bump ${co.dim('(major, minor, patch, prerelease)')}:`)
-	if (!q1option.has(q1answer)) return
+	const state = {}
 
-	await cp.spawn('npm', ['version', q1answer, '--workspaces'], { stdio: 'pipe' })
+	const q1option = new Set(['major', 'minor', 'patch', 'prerelease'])
 
-	let workspacepkgpaths = new Set
-	let workspacetags = new Set
-	let version = ''
+	state.release = await rl.question(`Release Type ${co.dim('(major, minor, patch, prerelease)')}:`)
+	state.npmtag = state.release === 'prerelease' ? 'canary' : 'latest'
+
+	if (!q1option.has(state.release)) return
+
+	await cp.spawn('npm', ['version', state.release, '--workspaces'], { stdio: 'pipe' })
+
+	const workspacepkgpaths = new Set
+	const workspacetags = new Set
 
 	for (let workspace of pkg.workspaces) {
 		workspace = root.to(workspace).dir
 
-		let workspacepkgpath = workspace.to('package.json')
-		let workspacepkg = await fs.readFileJson(workspacepkgpath)
+		const workspacepkgpath = workspace.to('package.json')
+		const workspacepkg = await fs.readFileJson(workspacepkgpath)
 
-		version = `v${workspacepkg.version}`
+		state.version = `v${workspacepkg.version}`
 
 		workspacepkgpaths.add(workspacepkgpath)
 		workspacetags.add(`${workspacepkg.name}@${workspacepkg.version}`)
 	}
 
-	console.log(`Bumped ${co.bold(version)}`)
+	console.log(`Bumped ${co.bold(state.version)}`)
 
-	let tag = q1answer === 'prerelease' ? 'canary' : 'latest'
+	const confirm = await rl.question(`Publish ${co.bold(state.version)} as ${co.bold(state.npmtag)} ${co.dim('(y/n)')}:`)
 
-	let q2option = new Set(['y'])
-	let q2answer = await rl.question(`Publish ${co.bold(version)} as ${co.bold(tag)} ${co.dim('(y/n)')}:`)
-
-	if (!q2option.has(q2answer)) {
+	if (confirm !== 'y') {
 		for (const workspacepkgpath of workspacepkgpaths) {
 			await cp.spawn('git', ['checkout', '--', workspacepkgpath.ospathname])
 		}
+
 		return
 	}
 
-	await cp.spawn('npm', ['run', 'build'])
+	await cp.spawn('npm', ['run', 'build'], { stdio: 'ignore' })
 
-	let q3answer = await rl.question(`OTP:`)
-	if (!q3answer) return
+	state.otp = await rl.question(`OTP:`)
+
+	if (!state.otp) return
 
 	for (const workspacepkgpath of workspacepkgpaths) {
 		await cp.spawn('git', ['add', workspacepkgpath.ospathname])
 	}
 
-	await cp.spawn('git', ['commit', '-m', version])
-	await cp.spawn('git', ['tag', version])
+	await cp.spawn('git', ['commit', '-m', state.version])
+	await cp.spawn('git', ['tag', state.version])
 	await cp.spawn('git', ['push'])
 	await cp.spawn('git', ['push', '--tags'])
 
-	await cp.spawn('npm', ['publish', '--tag', tag, '--workspaces', '--otp', otp])
+	await cp.spawn('npm', ['publish', '--tag', state.npmtag, '--workspaces', '--otp', state.otp])
 }
 
 main()
