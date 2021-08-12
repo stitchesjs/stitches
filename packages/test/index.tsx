@@ -29,9 +29,23 @@ type CSS = Stitches.CSS<typeof config>
 
 const Component1 = styled('button', {
 	color: '$', // we should see `$red100` here
+	'&:hover': {
+		color: '$', // we should see `$red100` here
+		'&:hover': {
+			color: '$', // we should see `$red100` here
+		},
+	},
 	variants: {
 		mySize: {
-			myLarge: {},
+			myLarge: {
+				color: '$', // we should see `$red100` here
+				'&:hover': {
+					color: '$', // we should see `$red100` here
+					'&:hover': {
+						color: '$', // we should see `$red100` here
+					},
+				},
+			},
 		},
 	},
 })
