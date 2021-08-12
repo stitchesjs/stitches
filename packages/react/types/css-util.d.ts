@@ -17,7 +17,8 @@ export type CSS<
 	Media = Default.Media,
 	Theme = {},
 	ThemeMap = Default.ThemeMap,
-	Utils = {}
+	Utils = {},
+	isFlat= false
 > = (
 	// nested at-rule css styles
 	& {
@@ -97,7 +98,7 @@ export type CSS<
 		)
 	}
 	// unknown css declaration styles
-	& {
+	& (false extends isFlat ? {
 		/** Unknown property. */
 		[K in string]: (
 			| number
@@ -106,7 +107,7 @@ export type CSS<
 			| {}
 			| undefined
 		)
-	}
+	}: {})
 )
 
 /** Unique symbol used to reference a property value. */
