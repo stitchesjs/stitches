@@ -13,6 +13,8 @@ const { config, styled } = Stitches.createStitches({
 	},
 })
 
+type CSS = Stitches.CSS<typeof config>
+
 // ---------------------------------------------------------------------------
 // INSTRUCTIONS:
 // Test cases are below.
@@ -25,7 +27,7 @@ const { config, styled } = Stitches.createStitches({
 // USE CASE 1
 // ---------------------------------------------------------------------------
 
-const StyledStatus = styled('span', {
+const Component1 = styled('button', {
 	color: '$', // we should see `$red100` here
 	variants: {
 		mySize: {
@@ -34,14 +36,28 @@ const StyledStatus = styled('span', {
 	},
 })
 
-export const Status: React.ForwardRefExoticComponent<React.ComponentProps<typeof StyledStatus>> = React.forwardRef(
+export const ForwardComponent1: React.ForwardRefExoticComponent<React.ComponentProps<typeof Component1>> = React.forwardRef(
 	(props, forwardedRef) => {
-		return <StyledStatus aria-hidden {...props} ref={forwardedRef} />
+		return <Component1 aria-hidden {...props} ref={forwardedRef} />
 	}
 )
 
 export default function Home() {
-	return <Status onClick={event => { }} css={{color: '$'}} mySize="myLarge" /> // we should see `$red100` here
+	return <ForwardComponent1
+		onClick={event => {
+			void event // we should see `React.MouseEvent<HTMLButtonElement, MouseEvent>` here
+		}}
+		mySize="myLarge"
+		css={{
+			color: '$', // we should see `$red100` here
+			'&:hover': {
+				color: '$', // we should see `$red100` here
+				'&:hover': {
+					color: '$', // we should see `$red100` here
+				},
+			},
+		}}
+	/>
 }
 
 // ---------------------------------------------------------------------------
@@ -49,38 +65,47 @@ export default function Home() {
 // Uncomment to test
 // ---------------------------------------------------------------------------
 
-// type CSS = Stitches.CSS<typeof config>
+const sharedStylesForComponent2: CSS = {
+	color: '$', // we should see `$red100` here
+	'&:hover': {
+		color: '$', // we should see `$red100` here
+		'&:hover': {
+			color: '$', // we should see `$red100` here
+		},
+	},
+}
 
-// const shared: CSS = {
-// 	color: '$red100'
-// }
-
-// const Text = styled('span', shared)
+export const Component2 = styled('span', sharedStylesForComponent2)
 
 // ---------------------------------------------------------------------------
 // USE CASE 3
 // ---------------------------------------------------------------------------
 
-// type CSS = Stitches.CSS<typeof config>
+export const Component3 = styled('span', {
+	color: '$', // we should see `$red100` here
+	variants: {
+		mySize: {
+			myLarge: {},
+		},
+	},
+})
 
-// const StyledStatus = styled('span', {
-// 	color: '$', // we should see `$red100` here
-// 	variants: {
-// 		mySize: {
-// 			myLarge: {},
-// 		},
-// 	},
-// })
+export type Component3Variants = Stitches.VariantProps<typeof Component3>;
+export type Component3Props = { css?: CSS, children?: React.ReactNode } & Component3Variants;
 
-// type StatusVariants = Stitches.VariantProps<typeof StyledStatus>;
-// type StatusProps = { css?: CSS, children?: React.ReactNode } & StatusVariants;
+export const ForwardComponent3 = React.forwardRef<HTMLSpanElement, Component3Props>(
+	(props, forwardedRef) => {
+		return <Component3 {...props} ref={forwardedRef} />
+	}
+)
 
-// export const Status = React.forwardRef<HTMLSpanElement, StatusProps>(
-// 	(props, forwardedRef) => {
-// 		return <StyledStatus {...props} ref={forwardedRef} />
-// 	}
-// )
-
-// export default function Home() {
-// 	return <Status mySize="myLarge" css={{color: '$red100'}}  /> // we should see `$red100` here and `mySize` variant
-// }
+export function TestForwardComponent3() {
+	return (
+		<ForwardComponent3
+			css={{
+				color: '$red100' // we should see `$red100` here
+			}}
+			// we should see `mySize` variant as an option here
+		/>
+	)
+}
