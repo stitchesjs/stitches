@@ -56,3 +56,31 @@ export default function Home() {
 // }
 
 // const Text = styled('span', shared)
+
+// ---------------------------------------------------------------------------
+// USE CASE 3
+// ---------------------------------------------------------------------------
+
+// type CSS = Stitches.CSS<typeof config>
+
+// const StyledStatus = styled('span', {
+// 	color: '$', // we should see `$red100` here
+// 	variants: {
+// 		mySize: {
+// 			myLarge: {},
+// 		},
+// 	},
+// })
+
+// type StatusVariants = Stitches.VariantProps<typeof StyledStatus>;
+// type StatusProps = { css?: CSS, children?: React.ReactNode } & StatusVariants;
+
+// export const Status = React.forwardRef<HTMLSpanElement, StatusProps>(
+// 	(props, forwardedRef) => {
+// 		return <StyledStatus {...props} ref={forwardedRef} />
+// 	}
+// )
+
+// export default function Home() {
+// 	return <Status mySize="myLarge" css={{color: '$red100'}}  /> // we should see `$red100` here and `mySize` variant
+// }
