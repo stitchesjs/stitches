@@ -1,5 +1,5 @@
 import type * as CSS from './css'
-import type * as Default from './default'
+import type * as Config from './config'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
@@ -14,11 +14,10 @@ type TokenByScaleName<ScaleName, Theme> = ScaleName extends keyof Theme ? Util.P
 
 /** Returns a Style interface, leveraging the given media and style map. */
 export type CSS<
-	Media = Default.Media,
+	Media = {},
 	Theme = {},
-	ThemeMap = Default.ThemeMap,
-	Utils = {},
-	isFlat= false
+	ThemeMap = Config.DefaultThemeMap,
+	Utils = {}
 > = (
 	// nested at-rule css styles
 	& {
@@ -98,7 +97,7 @@ export type CSS<
 		)
 	}
 	// unknown css declaration styles
-	& (false extends isFlat ? {
+	& {
 		/** Unknown property. */
 		[K in string]: (
 			| number
@@ -107,7 +106,7 @@ export type CSS<
 			| {}
 			| undefined
 		)
-	}: {})
+	}
 )
 
 /** Unique symbol used to reference a property value. */

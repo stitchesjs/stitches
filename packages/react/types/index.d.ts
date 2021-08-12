@@ -1,14 +1,12 @@
-import type CreateStitches from './create-stitches'
 import type Stitches from './stitches'
 
+import type * as Config from './config'
 import type * as CSSUtil from './css-util'
-import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
 
-export type { CreateStitches, Stitches }
-
+export type CreateStitches = Config.CreateStitches
 export type CSSProperties = CSSUtil.CSSProperties
-export type DefaultThemeMap = Default.ThemeMap
+export type DefaultThemeMap = Config.DefaultThemeMap
 
 /** Returns a Style interface from a configuration, leveraging the given media and style map. */
 
@@ -28,12 +26,11 @@ export type CSS<
 	Config['media'],
 	Config['theme'],
 	Config['themeMap'],
-	Config['utils'],
-  false
+	Config['utils']
 >
 
 /** Returns the properties, attributes, and children expected by a component. */
-export type ComponentProps<Component> = Parameters<Component>[0]
+export type ComponentProps<Component> = Component extends ((...args: any[]) => any) ? Parameters<Component>[0] : never
 
 /** Returns a type that expects a value to be a kind of CSS property value. */
 export type PropertyValue<K extends keyof CSSUtil.CSSProperties> = { readonly [CSSUtil.$$PropertyValue]: K }

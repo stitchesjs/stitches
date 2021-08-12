@@ -1,17 +1,15 @@
 import type * as CSSUtil from './css-util'
-import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
 /** Stitches interface. */
 export default interface Stitches<
-	Prefix extends string = Default.Prefix,
-	Media = Default.Media,
-	Theme = {},
-	ThemeMap = Default.ThemeMap,
-	Utils = {},
-	CSS extends { [prelude: string]: unknown } = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+	Prefix extends string = '',
+	Media extends {} = {},
+	Theme extends {} = {},
+	ThemeMap extends {} = {},
+	Utils extends {} = {}
 > {
 	config: {
 		prefix: Prefix
@@ -27,14 +25,14 @@ export default interface Stitches<
 	 */
 	globalCss: {
 		(style: {
-			[prelude: string]: CSS
+			[prelude: string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		}): {
 			(): string
 		}
 	},
 	keyframes: {
 		(style: {
-			[offset: string]: CSS
+			[offset: string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		}): {
 			(): string
 			name: string
@@ -123,14 +121,14 @@ export default interface Stitches<
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils> & {
 						/** The **variants** property sets variants.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
 						 */
 						variants?: {
 							[name: string]: {
-								[pair in number | string]: CSS
+								[pair in number | string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 							}
 						}
 						/** Compound variants. */
@@ -143,7 +141,7 @@ export default interface Stitches<
 								: Util.WideObject
 							)
 							& {
-								css: CSS
+								css: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 							}
 						)[]
 						defaultVariants?: (
@@ -156,8 +154,8 @@ export default interface Stitches<
 					} & {
 						[K2 in keyof Composers[K]]: K2 extends 'variants' | 'defaultVariants' | 'compoundVariants'
 							? unknown
-						: K2 extends keyof CSS
-							? CSS[K2]
+						: K2 extends keyof CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+							? CSSUtil.CSS<Media, Theme, ThemeMap, Utils>[K2]
 						: unknown
 					}
 				)
@@ -166,7 +164,7 @@ export default interface Stitches<
 			StyledComponent.StyledComponentType<Composers>,
 			StyledComponent.StyledComponentProps<Composers>,
 			Media,
-			CSS
+			CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>
 	},
 	styled: {
@@ -196,14 +194,14 @@ export default interface Stitches<
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils> & {
 						/** The **variants** property sets variants.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
 						 */
 						variants?: {
 							[name: string]: {
-								[pair in number | string]: CSS
+								[pair in number | string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 							}
 						}
 						/** Compound variants. */
@@ -216,7 +214,7 @@ export default interface Stitches<
 								: Util.WideObject
 							)
 							& {
-								css: CSS
+								css: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 							}
 						)[]
 						defaultVariants?: (
@@ -229,8 +227,8 @@ export default interface Stitches<
 					} & {
 						[K2 in keyof Composers[K]]: K2 extends 'variants' | 'defaultVariants' | 'compoundVariants'
 							? unknown
-						: K2 extends keyof CSS
-							? CSS[K2]
+						: K2 extends keyof CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+							? CSSUtil.CSS<Media, Theme, ThemeMap, Utils>[K2]
 						: unknown
 					}
 				)
@@ -239,7 +237,7 @@ export default interface Stitches<
 			Type,
 			StyledComponent.StyledComponentProps<Composers>,
 			Media,
-			CSS
+			CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>
 	}
 }
