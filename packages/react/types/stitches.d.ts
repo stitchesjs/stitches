@@ -121,7 +121,7 @@ export default interface Stitches<
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils> & {
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
 						/** The **variants** property sets variants.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
@@ -194,7 +194,7 @@ export default interface Stitches<
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils> & {
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
 						/** The **variants** property sets variants.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
