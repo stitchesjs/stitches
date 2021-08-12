@@ -18,7 +18,7 @@ export type CSS<
 	Theme = {},
 	ThemeMap = Config.DefaultThemeMap,
 	Utils = {},
-	IsFlat = false
+	Flat = false
 > = (
 	// nested at-rule css styles
 	& {
@@ -98,7 +98,7 @@ export type CSS<
 		)
 	}
 	// unknown css declaration styles
-	& (true extends IsFlat ? {} : {
+	& (true extends Flat ? Record<never, never> : {
 		/** Unknown property. */
 		[K in string]: (
 			| number
