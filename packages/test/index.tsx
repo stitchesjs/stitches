@@ -1,7 +1,7 @@
 import * as Stitches from '@stitches/react'
 import * as React from 'react'
 
-const { css, config, styled } = Stitches.createStitches({
+const { config, styled } = Stitches.createStitches({
 	utils: {
 		/** util to do stuff */
 		ml: (value: Stitches.PropertyValue<'margin'>) => ({ marginLeft: value }),
@@ -11,10 +11,7 @@ const { css, config, styled } = Stitches.createStitches({
 			red100: '#ff0000',
 		},
 	},
-	themeMap: { ...Stitches.defaultThemeMap },
 })
-
-type CSS = Stitches.CSS<typeof config>
 
 // ---------------------------------------------------------------------------
 // INSTRUCTIONS:
@@ -28,8 +25,8 @@ type CSS = Stitches.CSS<typeof config>
 // USE CASE 1
 // ---------------------------------------------------------------------------
 
-const StyledStatus = Stitches.styled('span', {
-	color: 'red',
+const StyledStatus = styled('span', {
+	color: '$',
 	variants: {
 		mySize: {
 			myLarge: {},
@@ -51,6 +48,8 @@ export default function Home() {
 // USE CASE 2
 // Uncomment to test
 // ---------------------------------------------------------------------------
+
+// type CSS = Stitches.CSS<typeof config>
 
 // const shared: CSS = {
 // 	color: '$red100'
