@@ -23,6 +23,7 @@
   "workspaces": [
     "packages/core",
     "packages/react",
+    "packages/test",
     "packages/stringify"
   ],
   "dependencies": {
