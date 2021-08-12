@@ -26,7 +26,7 @@ const { config, styled } = Stitches.createStitches({
 // ---------------------------------------------------------------------------
 
 const StyledStatus = styled('span', {
-	color: '$',
+	color: '$', // we should see `$red100` here
 	variants: {
 		mySize: {
 			myLarge: {},
@@ -41,7 +41,7 @@ export const Status: React.ForwardRefExoticComponent<React.ComponentProps<typeof
 )
 
 export default function Home() {
-	return <Status onClick={event => { }} />
+	return <Status onClick={event => { }} css={{color: '$'}} mySize="myLarge" /> // we should see `$red100` here
 }
 
 // ---------------------------------------------------------------------------
