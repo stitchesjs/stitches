@@ -26,7 +26,8 @@ export type CSS<
 	Config['media'],
 	Config['theme'],
 	Config['themeMap'],
-	Config['utils']
+	Config['utils'],
+	false
 >
 
 /** Returns the properties, attributes, and children expected by a component. */
