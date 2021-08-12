@@ -11,6 +11,7 @@ export type CSSProperties = CSSUtil.CSSProperties
 export type DefaultThemeMap = Default.ThemeMap
 
 /** Returns a Style interface from a configuration, leveraging the given media and style map. */
+
 export type CSS<
 	Config extends {
 		media?: {}
@@ -27,7 +28,8 @@ export type CSS<
 	Config['media'],
 	Config['theme'],
 	Config['themeMap'],
-	Config['utils']
+	Config['utils'],
+  false
 >
 
 /** Returns the properties, attributes, and children expected by a component. */

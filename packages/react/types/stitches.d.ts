@@ -123,10 +123,7 @@ export default interface Stitches<
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
-					: Composers[K] extends {
-						[K2 in keyof Composers[K]]: Composers[K][K2]
-					}
-						? (
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true>  & (
 							& {
 								/** The **variants** property sets variants.
 								 *
@@ -158,17 +155,8 @@ export default interface Stitches<
 									: Util.WideObject
 								)
 							}
-							& {
-								[Prelude in keyof Composers[K]]:
-									Prelude extends keyof CSS | 'compoundVariants' | 'defaultVariants' | 'variants'
-										? unknown
-									: Composers[K][Prelude] extends Record<string, unknown>
-										? CSS
-									: boolean | number | string
-							}
-							& CSS
-						)
-					: never
+			
+						) & {[K2 in keyof Composers[K]]:K2 extends 'variants' | 'defaultVariants' | 'compoundVariants' ? unknown : K2 extends keyof CSS ? CSS[K2] : unknown}
 				)
 			}
 		): StyledComponent.CssComponent<
@@ -205,10 +193,7 @@ export default interface Stitches<
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
-					: Composers[K] extends {
-						[K2 in keyof Composers[K]]: Composers[K][K2]
-					}
-						? (
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true>  & (
 							& {
 								/** The **variants** property sets variants.
 								 *
@@ -240,17 +225,7 @@ export default interface Stitches<
 									: Util.WideObject
 								)
 							}
-							& {
-								[Prelude in keyof Composers[K]]:
-									Prelude extends keyof CSS | 'compoundVariants' | 'defaultVariants' | 'variants'
-										? unknown
-									: Composers[K][Prelude] extends Record<string, unknown>
-										? CSS
-									: boolean | number | string
-							}
-							& CSS
-						)
-					: never
+						) & {[K2 in keyof Composers[K]]:K2 extends 'variants' | 'defaultVariants' | 'compoundVariants' ? unknown : K2 extends keyof CSS ? CSS[K2] : unknown}				
 				)
 			}
 		): StyledComponent.StyledComponent<
