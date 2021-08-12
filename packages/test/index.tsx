@@ -1,7 +1,6 @@
 import * as Stitches from '@stitches/react'
 import * as React from 'react'
 
-
 const { css, config, styled } = Stitches.createStitches({
 	utils: {
 		/** util to do stuff */

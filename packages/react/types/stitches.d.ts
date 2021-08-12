@@ -123,40 +123,43 @@ export default interface Stitches<
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true>  & (
-							& {
-								/** The **variants** property sets variants.
-								 *
-								 * [Read Documentation](https://stitches.dev/docs/variants)
-								 */
-								variants?: {
-									[name: string]: {
-										[pair in number | string]: CSS
-									}
-								}
-								/** Compound variants. */
-								compoundVariants?: (
-									& (
-										'variants' extends keyof Composers[K]
-											? {
-												[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
-											} & Util.WideObject
-										: Util.WideObject
-									)
-									& {
-										css: CSS
-									}
-								)[]
-								defaultVariants?: (
-									'variants' extends keyof Composers[K]
-										? {
-											[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
-										}
-									: Util.WideObject
-								)
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
+						/** The **variants** property sets variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants)
+						 */
+						variants?: {
+							[name: string]: {
+								[pair in number | string]: CSS
 							}
-			
-						) & {[K2 in keyof Composers[K]]:K2 extends 'variants' | 'defaultVariants' | 'compoundVariants' ? unknown : K2 extends keyof CSS ? CSS[K2] : unknown}
+						}
+						/** Compound variants. */
+						compoundVariants?: (
+							& (
+								'variants' extends keyof Composers[K]
+									? {
+										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+									} & Util.WideObject
+								: Util.WideObject
+							)
+							& {
+								css: CSS
+							}
+						)[]
+						defaultVariants?: (
+							'variants' extends keyof Composers[K]
+								? {
+									[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+								}
+							: Util.WideObject
+						)
+					} & {
+						[K2 in keyof Composers[K]]: K2 extends 'variants' | 'defaultVariants' | 'compoundVariants'
+							? unknown
+						: K2 extends keyof CSS
+							? CSS[K2]
+						: unknown
+					}
 				)
 			}
 		): StyledComponent.CssComponent<
@@ -193,39 +196,43 @@ export default interface Stitches<
 						? Composers[K]
 					: Composers[K] extends Util.Function
 						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true>  & (
-							& {
-								/** The **variants** property sets variants.
-								 *
-								 * [Read Documentation](https://stitches.dev/docs/variants)
-								 */
-								variants?: {
-									[name: string]: {
-										[pair in number | string]: CSS
-									}
-								}
-								/** Compound variants. */
-								compoundVariants?: (
-									& (
-										'variants' extends keyof Composers[K]
-											? {
-												[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
-											} & Util.WideObject
-										: Util.WideObject
-									)
-									& {
-										css: CSS
-									}
-								)[]
-								defaultVariants?: (
-									'variants' extends keyof Composers[K]
-										? {
-											[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
-										}
-									: Util.WideObject
-								)
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
+						/** The **variants** property sets variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants)
+						 */
+						variants?: {
+							[name: string]: {
+								[pair in number | string]: CSS
 							}
-						) & {[K2 in keyof Composers[K]]:K2 extends 'variants' | 'defaultVariants' | 'compoundVariants' ? unknown : K2 extends keyof CSS ? CSS[K2] : unknown}				
+						}
+						/** Compound variants. */
+						compoundVariants?: (
+							& (
+								'variants' extends keyof Composers[K]
+									? {
+										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+									} & Util.WideObject
+								: Util.WideObject
+							)
+							& {
+								css: CSS
+							}
+						)[]
+						defaultVariants?: (
+							'variants' extends keyof Composers[K]
+								? {
+									[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+								}
+							: Util.WideObject
+						)
+					} & {
+						[K2 in keyof Composers[K]]: K2 extends 'variants' | 'defaultVariants' | 'compoundVariants'
+							? unknown
+						: K2 extends keyof CSS
+							? CSS[K2]
+						: unknown
+					}
 				)
 			}
 		): StyledComponent.StyledComponent<
