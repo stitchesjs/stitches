@@ -149,14 +149,14 @@ export const PolymorphicComponent1 = React.forwardRef(({ children, ...props }, f
 )) as PolymorphicComponent;
 
 export function TestPolymorphicComponent1() {
-		return (
-			<PolymorphicComponent1
-				css={{
-					color: '$red100' // we should see `$red100` here
-				}}
-				mySize="myLarge"
-				// we should see `mySize` variant as an option here
-			/>
-		)
-	}
+	return (
+		<PolymorphicComponent1
+			css={{
+				color: '$red100' // we should see `$red100` here
+			}}
+			mySize="myLarge"
+			// we should see `mySize` variant as an option here
+		/>
+	)
+}
 
