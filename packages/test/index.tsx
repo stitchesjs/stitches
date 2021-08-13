@@ -142,8 +142,21 @@ export type Component3Props = { css?: CSS, children?: React.ReactNode } & Compon
 
 type PolymorphicComponent = Polymorphic.ForwardRefComponent<'span', Component3Props>;
 
-export const TestPolymorphicComponent = React.forwardRef(({ children, ...props }, forwardedRef) => (
+export const PolymorphicComponent1 = React.forwardRef(({ children, ...props }, forwardedRef) => (
     <Component3 {...props} ref={forwardedRef}>
       {children}
     </Component3>
 )) as PolymorphicComponent;
+
+export function TestPolymorphicComponent1() {
+		return (
+			<PolymorphicComponent1
+				css={{
+					color: '$red100' // we should see `$red100` here
+				}}
+				mySize="myLarge"
+				// we should see `mySize` variant as an option here
+			/>
+		)
+	}
+
