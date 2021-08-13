@@ -10,14 +10,17 @@
     "types/*.d.ts"
   ],
   "devDependencies": {
+    "@stitches/react": "^1.0.0-canary.7",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
     "@typescript-eslint/parser": "^1.6.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.0.1",
     "prettier": "^1.16.4",
-    "@stitches/react": "^1.0.0-canary.7",
     "react": "17.0.2"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@radix-ui/react-polymorphic": "0.0.13"
+  }
 }
