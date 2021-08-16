@@ -100,7 +100,7 @@ export default interface Stitches<
 	}
 	getCssText: {
 		(): string
-	},
+	}
 	css: {
 		<
 			Composers extends (
@@ -113,25 +113,23 @@ export default interface Stitches<
 		>(
 			...composers: {
 				[K in keyof Composers]: (
-					Composers[K] extends string
-						? Composers[K]
-					: Composers[K] extends React.ExoticComponent<any>
-						? Composers[K]
-					: Composers[K] extends React.JSXElementConstructor<any>
-						? Composers[K]
-					: Composers[K] extends Util.Function
+					// Strings, React Components, and Functions can be skipped over
+					Composers[K] extends string | React.ExoticComponent<any> | React.JSXElementConstructor<any> | Util.Function
 						? Composers[K]
 					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
-						/** The **variants** property sets variants.
+						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
 						 */
 						variants?: {
-							[name: string]: {
-								[pair in number | string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+							[Name in string]: {
+								[Pair in number | string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 							}
 						}
-						/** Compound variants. */
+						/** The **variants** property lets you to set a subclass of styles based on a combination of active variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants#compound-variants)
+						 */
 						compoundVariants?: (
 							& (
 								'variants' extends keyof Composers[K]
@@ -144,6 +142,10 @@ export default interface Stitches<
 								css: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 							}
 						)[]
+						/** The **defaultVariants** property allows you to predefine the active key-value pairs of variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants#default-variants)
+						 */
 						defaultVariants?: (
 							'variants' extends keyof Composers[K]
 								? {
@@ -152,7 +154,7 @@ export default interface Stitches<
 							: Util.WideObject
 						)
 					} & {
-						[K2 in keyof Composers[K]]: K2 extends 'variants' | 'defaultVariants' | 'compoundVariants'
+						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
 							? unknown
 						: K2 extends keyof CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 							? CSSUtil.CSS<Media, Theme, ThemeMap, Utils>[K2]
@@ -166,7 +168,7 @@ export default interface Stitches<
 			Media,
 			CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>
-	},
+	}
 	styled: {
 		<
 			Type extends (

@@ -1,5 +1,5 @@
 import type * as CSS from './css'
-import type * as Default from './default'
+import type * as Config from './config'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
@@ -14,10 +14,11 @@ type TokenByScaleName<ScaleName, Theme> = ScaleName extends keyof Theme ? Util.P
 
 /** Returns a Style interface, leveraging the given media and style map. */
 export type CSS<
-	Media = Default.Media,
+	Media = {},
 	Theme = {},
-	ThemeMap = Default.ThemeMap,
-	Utils = {}
+	ThemeMap = Config.DefaultThemeMap,
+	Utils = {},
+	Flat = false
 > = (
 	// nested at-rule css styles
 	& {
@@ -35,53 +36,50 @@ export type CSS<
 	}
 	// known utility styles
 	& {
-		[K in keyof Utils]?: (
-			K extends keyof CSSProperties
-				? unknown
-			: (
+		[K in keyof Utils]?: K extends keyof CSSProperties
+			? unknown
+		: Utils[K] extends (arg: infer P) => any
+			? (
 				| (
-					Utils[K] extends (arg: infer P) => any
+					P extends any[]
 						? (
-							P extends any[]
-								? (
-									$$PropertyValue extends keyof P[0]
-										? (
-											| ValueByPropertyName<P[0][$$PropertyValue]>
-											| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
-											| CSS.Globals
-											| ThemeUtil.ScaleValue
-											| undefined
-										)
-									: $$ScaleValue extends keyof P[0]
-										? (
-											| TokenByScaleName<P[0][$$ScaleValue], Theme>
-											| ThemeUtil.ScaleValue
-											| undefined
-										)
-									: never
-								)[]
-								| P
-							: $$PropertyValue extends keyof P
-								? (
-									| ValueByPropertyName<P[$$PropertyValue]>
-									| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
-									| CSS.Globals
-									| ThemeUtil.ScaleValue
-									| undefined
-								)
-							: $$ScaleValue extends keyof P
-								? (
-									| TokenByScaleName<P[$$ScaleValue], Theme>
-									| ThemeUtil.ScaleValue
-									| undefined
-								)
-							: never
+							| (
+								$$PropertyValue extends keyof P[0]
+									? (
+										| ValueByPropertyName<P[0][$$PropertyValue]>
+										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
+										| CSS.Globals
+										| ThemeUtil.ScaleValue
+										| undefined
+									)
+								: $$ScaleValue extends keyof P[0]
+									? (
+										| TokenByScaleName<P[0][$$ScaleValue], Theme>
+										| { scale: P[0][$$ScaleValue] }
+										| undefined
+									)
+								: never
+							)[]
+							| P
 						)
-						| P
+					: $$PropertyValue extends keyof P
+						? (
+							| ValueByPropertyName<P[$$PropertyValue]>
+							| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
+							| CSS.Globals
+							| undefined
+						)
+					: $$ScaleValue extends keyof P
+						? (
+							| TokenByScaleName<P[$$ScaleValue], Theme>
+							| { scale: P[$$ScaleValue] }
+							| undefined
+						)
 					: never
 				)
+				| P
 			)
-		)
+		: never
 	}
 	// known theme styles
 	& {
@@ -100,10 +98,16 @@ export type CSS<
 		)
 	}
 	// unknown css declaration styles
-	& {
+	& (true extends Flat ? Record<never, never> : {
 		/** Unknown property. */
-		[K in string]: number | string | CSS<Media, Theme, ThemeMap, Utils> | {} | undefined
-	}
+		[K in string]: (
+			| number
+			| string
+			| CSS<Media, Theme, ThemeMap, Utils>
+			| {}
+			| undefined
+		)
+	})
 )
 
 /** Unique symbol used to reference a property value. */
