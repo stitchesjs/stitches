@@ -8316,7 +8316,7 @@ export namespace Property {
 
   export type Left = "auto" | OnlyStringNumeric;
 
-  export type LetterSpacing = number | "normal";
+  export type LetterSpacing = "normal" | OnlyStringNumeric;
 
   export type LineBreak = "anywhere" | "auto" | "loose" | "normal" | "strict";
 

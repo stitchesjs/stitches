@@ -15,16 +15,16 @@ const generateType = async (packageUrl) => {
 
 		.withCamelCasedColors
 
-		.withAddedColorFunctions
 		.withAddedLicense
+
+		.withAddedColorFunctions
 		.withFixedColorScheme
 		.withFixedFontFamily
-		.withFixedGlobals
 		.withFixedMatchingSelector
 		.withFixedNestingSelectors
+		.withFixedProperties
 		.withFixedStretchValue
 		.withFixedSystemColor
-		.withFixedZIndex
 
 		.withoutBrowserComments
 		.withoutImplicitGlobals
@@ -54,7 +54,7 @@ class ModifiedString extends String {
 
 	get withAddedColorFunctions() {
 		return this.replace(
-			/"currentcolor"/ig,
+			/"CurrentColor"/g,
 			'"CurrentColor" | "hsl(" | "lab(" | "rgb("'
 		)
 	}
@@ -69,7 +69,7 @@ class ModifiedString extends String {
 	}
 
 	get withCamelCasedColors() {
-		const cssColorNames = ['AliceBlue', 'AntiqueWhite', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque', 'Black', 'BlanchedAlmond', 'Blue', 'BlueViolet', 'Brown', 'BurlyWood', 'CadetBlue', 'Chartreuse', 'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan', 'DarkBlue', 'DarkCyan', 'DarkGoldenRod', 'DarkGray', 'DarkGrey', 'DarkGreen', 'DarkKhaki', 'DarkMagenta', 'DarkOliveGreen', 'DarkOrange', 'DarkOrchid', 'DarkRed', 'DarkSalmon', 'DarkSeaGreen', 'DarkSlateBlue', 'DarkSlateGray', 'DarkSlateGrey', 'DarkTurquoise', 'DarkViolet', 'DeepPink', 'DeepSkyBlue', 'DimGray', 'DimGrey', 'DodgerBlue', 'FireBrick', 'FloralWhite', 'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod', 'Gray', 'Grey', 'Green', 'GreenYellow', 'HoneyDew', 'HotPink', 'IndianRed', 'Indigo', 'Ivory', 'Khaki', 'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue', 'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey', 'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue', 'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime', 'LimeGreen', 'Linen', 'Magenta', 'Maroon', 'MediumAquaMarine', 'MediumBlue', 'MediumOrchid', 'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen', 'MediumTurquoise', 'MediumVioletRed', 'MidnightBlue', 'MintCream', 'MistyRose', 'Moccasin', 'NavajoWhite', 'Navy', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'RebeccaPurple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue', 'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'Tan', 'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White', 'WhiteSmoke', 'Yellow', 'YellowGreen'].reduce(
+		const cssColorNames = ['AliceBlue', 'AntiqueWhite', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque', 'Black', 'BlanchedAlmond', 'Blue', 'BlueViolet', 'Brown', 'BurlyWood', 'CadetBlue', 'Chartreuse', 'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'CurrentColor', 'Crimson', 'Cyan', 'DarkBlue', 'DarkCyan', 'DarkGoldenRod', 'DarkGray', 'DarkGrey', 'DarkGreen', 'DarkKhaki', 'DarkMagenta', 'DarkOliveGreen', 'DarkOrange', 'DarkOrchid', 'DarkRed', 'DarkSalmon', 'DarkSeaGreen', 'DarkSlateBlue', 'DarkSlateGray', 'DarkSlateGrey', 'DarkTurquoise', 'DarkViolet', 'DeepPink', 'DeepSkyBlue', 'DimGray', 'DimGrey', 'DodgerBlue', 'FireBrick', 'FloralWhite', 'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod', 'Gray', 'Grey', 'Green', 'GreenYellow', 'HoneyDew', 'HotPink', 'IndianRed', 'Indigo', 'Ivory', 'Khaki', 'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue', 'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey', 'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue', 'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime', 'LimeGreen', 'Linen', 'Magenta', 'Maroon', 'MediumAquaMarine', 'MediumBlue', 'MediumOrchid', 'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen', 'MediumTurquoise', 'MediumVioletRed', 'MidnightBlue', 'MintCream', 'MistyRose', 'Moccasin', 'NavajoWhite', 'Navy', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed', 'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed', 'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple', 'RebeccaPurple', 'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Salmon', 'SandyBrown', 'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue', 'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'Tan', 'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White', 'WhiteSmoke', 'Yellow', 'YellowGreen'].reduce(
 			(colors, UpperCamelCaseColorName) =>
 				Object.assign(colors, {
 					[`"${UpperCamelCaseColorName.toLowerCase()}"`]: `"${UpperCamelCaseColorName}"`,
@@ -79,7 +79,7 @@ class ModifiedString extends String {
 
 		return this.replace(
 			RegExp(Object.keys(cssColorNames).join('|'), 'ig'),
-			$0 => cssColorNames[$0]
+			$0 => cssColorNames[$0.toLowerCase()]
 		)
 	}
 
@@ -94,13 +94,6 @@ class ModifiedString extends String {
 		return this.replace(
 			'type GenericFamily = "cursive" | "fantasy" | "monospace" | "sans-serif" | "serif"',
 			'type GenericFamily = "cursive" | "emoji" | "fangsong" | "fantasy" | "math" | "monospace" | "sans-serif" | "serif" | "system-ui" | "ui-monospace" | "ui-rounded" | "ui-sans-serif" | "ui-serif"'
-		)
-	}
-
-	get withFixedGlobals() {
-		return this.replace(
-			'export type Globals = "-moz-initial" | "inherit" | "initial" | "revert" | "unset";',
-			'export type Globals = "inherit" | "initial" | "revert" | "unset";'
 		)
 	}
 
@@ -120,6 +113,19 @@ class ModifiedString extends String {
 				/"&[^"]+/g,
 				'$&('
 			)
+		)
+	}
+
+	get withFixedProperties() {
+		return this.replace(
+			'type ZIndex = Globals | "auto" | (number & {})',
+			'type ZIndex = Globals | "auto" | (number & {}) | (string & {})'
+		).replace(
+			'type LetterSpacing<TLength = (string & {}) | 0> = Globals | TLength | "normal"',
+			'type LetterSpacing = Globals | "normal" | (number & {}) | (string & {})'
+		).replace(
+			/Property.LetterSpacing<TLength>/g,
+			'Property.LetterSpacing'
 		)
 	}
 
@@ -144,13 +150,6 @@ class ModifiedString extends String {
 		).replace(
 			/DeprecatedSystemColor/g,
 			'SystemColor'
-		)
-	}
-
-	get withFixedZIndex() {
-		return this.replace(
-			'type ZIndex = Globals | "auto" | (number & {})',
-			'type ZIndex = Globals | "auto" | number | (string & {})'
 		)
 	}
 
@@ -195,13 +194,6 @@ class ModifiedString extends String {
 
 	get withoutNarrowingPatch() {
 		return this.replace(
-			/export namespace Property/,
-			'export type OnlyObject = Record<never,never>\n\n' +
-			'export type OnlyNumber = number & OnlyObject\n\n' +
-			'export type OnlyString = string & OnlyObject\n\n' +
-			'export type OnlyStringNumeric = (number | string) & OnlyObject\n\n' +
-			'export namespace Property'
-		).replace(
 			/\(number & \{\}\)/g,
 			'OnlyNumber'
 		).replace(
@@ -212,8 +204,15 @@ class ModifiedString extends String {
 			/number \| "([^\n]+)" \| OnlyString/g,
 			'"$1" | number | OnlyString'
 		).replace(
-			/(number \| OnlyString( \| OnlyNumber)?|OnlyString \| OnlyNumber)/g,
+			/((number|OnlyNumber) \| (string|OnlyString)( \| OnlyNumber)?|OnlyString \| OnlyNumber)/g,
 			'OnlyStringNumeric'
+		).replace(
+			/export namespace Property/,
+			'export type OnlyObject = Record<never,never>\n\n' +
+			'export type OnlyNumber = number & OnlyObject\n\n' +
+			'export type OnlyString = string & OnlyObject\n\n' +
+			'export type OnlyStringNumeric = (number | string) & OnlyObject\n\n' +
+			'export namespace Property'
 		)
 	}
 
