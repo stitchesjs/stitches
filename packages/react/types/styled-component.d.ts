@@ -1,9 +1,13 @@
 import type * as React from 'react'
 import type * as Util from './util'
 
+export declare const $_STITCHES_CSS: unique symbol
+export type $MarkerType = {[$_STITCHES_CSS]?: never}
+export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
+
 /** Returns a new Styled Component. */
 export interface StyledComponent<
-	Type = 'span',
+	Type extends string | React.ComponentType<any> = 'span',
 	Props = {},
 	Media = {},
 	CSS = {}
@@ -15,14 +19,25 @@ export interface StyledComponent<
 		TransformProps<Props, Media> & { css?: CSS }
 	>
 > {
+		<M extends undefined, As = Type>(
+		props: (
+			As extends ''
+				? { as: IntrinsicElementsKeys }
+			: As extends React.ComponentType<infer P>
+				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: {[$_STITCHES_CSS]?: M} }>
+			: As extends IntrinsicElementsKeys
+				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: {[$_STITCHES_CSS]?: M}}>
+			: never
+		)
+	): React.ReactElement | null
 	<As = Type>(
 		props: (
 			As extends ''
-				? { as: keyof JSX.IntrinsicElements }
+				? { as: IntrinsicElementsKeys }
 			: As extends React.ComponentType<infer P>
 				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: CSS }>
-			: As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: CSS }>
+			: As extends IntrinsicElementsKeys
+				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: CSS}>
 			: never
 		)
 	): React.ReactElement | null
@@ -98,7 +113,7 @@ export declare const $$StyledComponentMedia: unique symbol
 export type $$StyledComponentMedia = typeof $$StyledComponentMedia
 
 /** Returns a narrowed JSX element from the given tag name. */
-type IntrinsicElement<TagName> = TagName extends keyof JSX.IntrinsicElements ? TagName : never
+type IntrinsicElement<TagName> = TagName extends IntrinsicElementsKeys ? TagName : never
 
 /** Returns a ForwardRef component. */
 type ForwardRefExoticComponent<Type, Props> = React.ForwardRefExoticComponent<
