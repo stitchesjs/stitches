@@ -8824,7 +8824,7 @@ export namespace Property {
 
   export type WritingMode = "horizontal-tb" | "sideways-lr" | "sideways-rl" | "vertical-lr" | "vertical-rl";
 
-  export type ZIndex = "auto" | OnlyNumber;
+  export type ZIndex = "auto" | OnlyStringNumeric;
 
   export type Zoom = "normal" | "reset" | OnlyStringNumeric;
 
