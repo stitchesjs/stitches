@@ -24,6 +24,7 @@ const generateType = async (packageUrl) => {
 		.withFixedNestingSelectors
 		.withFixedStretchValue
 		.withFixedSystemColor
+		.withFixedZIndex
 
 		.withoutBrowserComments
 		.withoutImplicitGlobals
@@ -143,6 +144,13 @@ class ModifiedString extends String {
 		).replace(
 			/DeprecatedSystemColor/g,
 			'SystemColor'
+		)
+	}
+
+	get withFixedZIndex() {
+		return this.replace(
+			'type ZIndex = Globals | "auto" | (number & {})',
+			'type ZIndex = Globals | "auto" | number | (string & {})'
 		)
 	}
 
