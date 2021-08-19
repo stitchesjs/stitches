@@ -1,13 +1,16 @@
 import type * as React from 'react'
 import type * as Util from './util'
 
-export declare const $_STITCHES_CSS: unique symbol
-export type $MarkerType = {[$_STITCHES_CSS]?: never}
+
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 
+/** Removes index signatures from a type */
+type RemoveIndex<T> = {
+  [ K in keyof T as string extends K ? never : number extends K ? never : K ] : T[K]
+};
 /** Returns a new Styled Component. */
 export interface StyledComponent<
-	Type extends string | React.ComponentType<any> = 'span',
+	Type = 'span',
 	Props = {},
 	Media = {},
 	CSS = {}
@@ -19,25 +22,14 @@ export interface StyledComponent<
 		TransformProps<Props, Media> & { css?: CSS }
 	>
 > {
-		<M extends undefined, As = Type>(
+	<C, As = Type>(
 		props: (
 			As extends ''
 				? { as: IntrinsicElementsKeys }
 			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: {[$_STITCHES_CSS]?: M} }>
+				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: RemoveIndex<CSS> & {[k in keyof C]: k extends keyof CSS ? CSS[k]: never}}>
 			: As extends IntrinsicElementsKeys
-				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: {[$_STITCHES_CSS]?: M}}>
-			: never
-		)
-	): React.ReactElement | null
-	<As = Type>(
-		props: (
-			As extends ''
-				? { as: IntrinsicElementsKeys }
-			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: CSS }>
-			: As extends IntrinsicElementsKeys
-				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: CSS}>
+				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: RemoveIndex<CSS> & {[k in keyof C]: k extends keyof CSS ? CSS[k]: never}}>
 			: never
 		)
 	): React.ReactElement | null

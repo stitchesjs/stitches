@@ -11,24 +11,24 @@ export const { config, styled } = Stitches.createStitches({
         },
     },
 });
-const Text = styled('span', {});
+export const Text = styled('span', {});
 const DEFAULT_TAG = 'h1';
-export const Heading = React.forwardRef((props, forwardedRef) => {
+const Heading = React.forwardRef((props, forwardedRef) => {
     return (<>
 			{/* types here will be fast */}
 			<Text as={DEFAULT_TAG} onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef}/>
-			<Text onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef}/>
+			<Text onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ backgroundColor: '$red100', backgroundClip: 'border-box' }}/>
 			<Text onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ backgroundColor: '$red100' }}/>
-			<Text onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ ...props.css, backgroundColor: '$red100' }}/>
-			<Text as="a" href="" onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ ...props.css, backgroundColor: '$red100' }}/>
+			<Text as="b" onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ ...props.css, backgroundColor: '$red100', padding: 'initial' }}/>
+			<Text as="div" onClick={(e) => { console.log(e.altKey); }} css={{ ...props.css, backgroundColor: '$red100', background: 'red', paddingLeft: 'initial' }}/>
 			{/*
             types here will be correct but autocompletion is going to be painfully slow when you add a new prop.
             This is the only case where  the autocompletion is slow
         */}
-			<Text as={DEFAULT_TAG} {...props} ref={forwardedRef}/>
+			<Text as={DEFAULT_TAG} {...props} onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef}/>
 		</>);
 });
 const App = () => {
-    // when consuming the component it should be very fast
-    return <Heading />;
+    // when consuming the component it should be very fast too
+    return <Heading css={{ backgroundColor: '$red100', padding: 'inherit' }}/>;
 };

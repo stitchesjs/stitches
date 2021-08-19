@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "extendedDiagnostics": true,
     "skipLibCheck": true,
+    "noEmit": false,
     "jsx": "preserve",
     "lib": [
       "dom",

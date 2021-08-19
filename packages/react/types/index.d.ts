@@ -28,7 +28,7 @@ export type CSS<
 	Config['themeMap'],
 	Config['utils'],
 	false
-> & StyledComponent.$MarkerType
+> 
 
 /** Returns the properties, attributes, and children expected by a component. */
 export type ComponentProps<Component> = Component extends ((...args: any[]) => any) ? Parameters<Component>[0] : never
