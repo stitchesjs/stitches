@@ -24,9 +24,14 @@ export default interface Stitches<
 	 * [Read Documentation](https://stitches.dev/docs/variants)
 	 */
 	globalCss: {
-		(style: {
-			[prelude: string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-		}): {
+		<Prelude extends string>(
+			style: {
+				/** The **@import** CSS at-rule imports style rules from other style sheets. */
+				'@import'?: unknown
+			} & {
+				[K in Prelude]: K extends '@import' ? string : CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+			}
+		): {
 			(): string
 		}
 	},
