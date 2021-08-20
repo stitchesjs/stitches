@@ -9344,7 +9344,7 @@ export namespace AtRule {
 
   export interface Property {
     inherits?: Inherits;
-    initialValue?: string;
+    initialValue?: boolean | OnlyStringNumeric
     syntax?: string;
   }
 
@@ -9452,7 +9452,7 @@ export namespace AtRule {
 
   type Size = DataType.PageSize | "auto" | "landscape" | "portrait" | OnlyStringNumeric;
 
-  type Inherits = "false" | "true";
+  type Inherits = "false" | "true" | boolean;
 
   type Height = DataType.ViewportLength | OnlyString;
 

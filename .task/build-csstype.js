@@ -23,6 +23,7 @@ const generateType = async (packageUrl) => {
 		.withFixedMatchingSelector
 		.withFixedNestingSelectors
 		.withFixedProperties
+		.withFixedPropertyAtRule
 		.withFixedStretchValue
 		.withFixedSystemColor
 
@@ -125,6 +126,16 @@ class ModifiedString extends String {
 		).replace(
 			/Property.LetterSpacing<TLength>/g,
 			'Property.LetterSpacing'
+		)
+	}
+
+	get withFixedPropertyAtRule() {
+		return this.replace(
+			'type Inherits = "false" | "true";',
+			'type Inherits = "false" | "true" | boolean;'
+		).replace(
+			'initialValue?: string;',
+			'initialValue?: boolean | number | string',
 		)
 	}
 
@@ -248,6 +259,8 @@ class ModifiedString extends String {
 			/"-[^"]+" *\| *\n?/g, ''
 		).replace(
 			/\n? *\| *"-[^\n]+(?=\n)/g, ''
+		).replace(
+			/\n    MozFontFeatureSettings?: FontFeatureSettings;/, ''
 		)
 	}
 }

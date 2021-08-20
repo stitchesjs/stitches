@@ -1,10 +1,12 @@
-import type * as CSS from './css'
+import type * as Native from './css'
 import type * as Config from './config'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
+export { Native }
+
 /** CSS style declaration object. */
-export interface CSSProperties extends CSS.StandardLonghandProperties, CSS.StandardShorthandProperties, CSS.SvgProperties {}
+export interface CSSProperties extends Native.StandardLonghandProperties, Native.StandardShorthandProperties, Native.SvgProperties {}
 
 type ValueByPropertyName<PropertyName> = PropertyName extends keyof CSSProperties ? CSSProperties[PropertyName] : never
 
@@ -29,7 +31,7 @@ export type CSS<
 		[K in keyof CSSProperties]?: (
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
-			| CSS.Globals
+			| Native.Globals
 			| ThemeUtil.ScaleValue
 			| undefined
 		)
@@ -48,7 +50,7 @@ export type CSS<
 									? (
 										| ValueByPropertyName<P[0][$$PropertyValue]>
 										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
-										| CSS.Globals
+										| Native.Globals
 										| ThemeUtil.ScaleValue
 										| undefined
 									)
@@ -66,7 +68,7 @@ export type CSS<
 						? (
 							| ValueByPropertyName<P[$$PropertyValue]>
 							| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
-							| CSS.Globals
+							| Native.Globals
 							| undefined
 						)
 					: $$ScaleValue extends keyof P
@@ -91,7 +93,7 @@ export type CSS<
 			: K extends keyof Utils
 				? unknown
 			: (
-				| CSS.Globals
+				| Native.Globals
 				| Util.Index
 				| undefined
 			)
