@@ -9237,7 +9237,7 @@ export namespace Property {
 
   export type Stroke = DataType.Paint;
 
-  export type StrokeDasharray = "none";
+  export type StrokeDasharray = DataType.Dasharray | "none";
 
   export type StrokeDashoffset = OnlyStringNumeric;
 

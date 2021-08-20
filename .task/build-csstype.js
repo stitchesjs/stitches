@@ -32,7 +32,6 @@ const generateType = async (packageUrl) => {
 		.withoutGenericTyping
 		.withoutNarrowingPatch
 		.withoutNeverInChain
-		.withoutDasharrayType
 		.withoutTrailingSpace
 	.toString()
 
@@ -171,16 +170,6 @@ class ModifiedString extends String {
 	get withoutBrowserComments() {
 		return this.replace(
 			/(?<=   )\* [-_|][\W\w]+?(?=\*\/)/g,
-			''
-		)
-	}
-
-	get withoutDasharrayType() {
-		return this.replace(
-			'type Dasharray =;\n',
-			''
-		).replace(
-			'DataType.Dasharray | ',
 			''
 		)
 	}
