@@ -1,0 +1,27 @@
+{
+  "name": "@stitches/test",
+  "version": "1.0.0-canary.7",
+  "type": "module",
+  "files": [
+    "dist/*.cjs",
+    "dist/*.js",
+    "dist/*.map",
+    "dist/*.mjs",
+    "types/*.d.ts"
+  ],
+  "devDependencies": {
+    "@stitches/react": "^1.0.0-canary.10",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.16.4",
+    "typescript": "^4.3.5",
+    "react": "17.0.2"
+  },
+  "private": true,
+  "dependencies": {
+    "@radix-ui/react-polymorphic": "0.0.13"
+  }
+}

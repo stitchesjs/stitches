@@ -1,6 +1,13 @@
 import type * as React from 'react'
 import type * as Util from './util'
 
+
+export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
+
+/** Removes index signatures from a type */
+type RemoveIndex<T> = {
+  [ K in keyof T as string extends K ? never : number extends K ? never : K ] : T[K]
+};
 /** Returns a new Styled Component. */
 export interface StyledComponent<
 	Type = 'span',
@@ -15,14 +22,14 @@ export interface StyledComponent<
 		TransformProps<Props, Media> & { css?: CSS }
 	>
 > {
-	<As = Type>(
+	<C, As = Type>(
 		props: (
 			As extends ''
-				? { as: keyof JSX.IntrinsicElements }
+				? { as: IntrinsicElementsKeys }
 			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: CSS }>
-			: As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: CSS }>
+				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: RemoveIndex<CSS> & {[k in keyof C]: k extends keyof CSS ? CSS[k]: never}}>
+			: As extends IntrinsicElementsKeys
+				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: RemoveIndex<CSS> & {[k in keyof C]: k extends keyof CSS ? CSS[k]: never}}>
 			: never
 		)
 	): React.ReactElement | null
@@ -98,7 +105,7 @@ export declare const $$StyledComponentMedia: unique symbol
 export type $$StyledComponentMedia = typeof $$StyledComponentMedia
 
 /** Returns a narrowed JSX element from the given tag name. */
-type IntrinsicElement<TagName> = TagName extends keyof JSX.IntrinsicElements ? TagName : never
+type IntrinsicElement<TagName> = TagName extends IntrinsicElementsKeys ? TagName : never
 
 /** Returns a ForwardRef component. */
 type ForwardRefExoticComponent<Type, Props> = React.ForwardRefExoticComponent<
