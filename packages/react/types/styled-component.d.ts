@@ -4,10 +4,6 @@ import type * as Util from './util'
 
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 
-/** Removes index signatures from a type */
-type RemoveIndex<T> = {
-  [ K in keyof T as string extends K ? never : number extends K ? never : K ] : T[K]
-};
 /** Returns a new Styled Component. */
 export interface StyledComponent<
 	Type = 'span',
@@ -16,22 +12,20 @@ export interface StyledComponent<
 	CSS = {}
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
-		Type extends React.ElementType
+		Type extends IntrinsicElementsKeys | React.ComponentType<any> 
 			? React.ComponentPropsWithRef<Type>
 		: never,
 		TransformProps<Props, Media> & { css?: CSS }
 	>
 > {
-	<C, As = Type>(
-		props: (
-			As extends ''
-				? { as: IntrinsicElementsKeys }
-			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: RemoveIndex<CSS> & {[k in keyof C]: k extends keyof CSS ? CSS[k]: never}}>
-			: As extends IntrinsicElementsKeys
-				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: RemoveIndex<CSS> & {[k in keyof C]: k extends keyof CSS ? CSS[k]: never}}>
-			: never
-		)
+	(props:  Util.Assign< (Type extends IntrinsicElementsKeys | React.ComponentType<any> ?  React.ComponentPropsWithRef<Type> : {}), TransformProps<Props, Media> & {as?: never,  css?: CSS } >
+	): React.ReactElement | null
+	<C extends CSS, As extends string | React.ComponentType<any> = Type extends string | React.ComponentType<any> ? Type : never >(
+		props:  Util.Assign< ( React.ComponentPropsWithRef<As extends IntrinsicElementsKeys | React.ComponentType<any> ? As : never>), TransformProps<Props, Media> & { 
+			as?: As, 
+			css?: {[k in keyof C]:  (k extends keyof CSS ? CSS[k] : never) }
+		}
+	> 
 	): React.ReactElement | null
 
 	className: string
