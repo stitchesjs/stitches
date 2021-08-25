@@ -130,8 +130,11 @@ class ModifiedString extends String {
 			'FontWeightAbsolute = "bold" | "normal"',
 			'FontWeightAbsolute = "bold" | "normal" | (string & {})'
 		).replace(
-			/DataType\.FontWeightAbsolute \| \(string & \{\}\)/g,
+			'DataType.FontWeightAbsolute | (string & {})',
 			'DataType.FontWeightAbsolute'
+		).replace(
+			'FlexGrow = Globals | (number & {})',
+			'FlexGrow = Globals | (number & {}) | (string & {})'
 		)
 	}
 

@@ -8117,7 +8117,7 @@ export namespace Property {
 
   export type FlexFlow = "column" | "column-reverse" | "nowrap" | "row" | "row-reverse" | "wrap" | "wrap-reverse" | OnlyString;
 
-  export type FlexGrow = OnlyNumber;
+  export type FlexGrow = OnlyStringNumeric;
 
   export type FlexShrink = OnlyNumber;
 
