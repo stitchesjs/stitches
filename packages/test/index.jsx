@@ -10,7 +10,7 @@ export const { config, styled } = Stitches.createStitches({
         bp6: '',
         bp8: '',
         bp9: '',
-        bp10: ''
+        bp10: '',
     },
     utils: {
         ml: (value) => ({ marginLeft: value }),
@@ -22,25 +22,16 @@ export const { config, styled } = Stitches.createStitches({
     },
 });
 export const Text = styled('span', {
-    background: '$red100'
+    background: '$red100',
 });
 const DEFAULT_TAG = 'h1';
 const Heading = React.forwardRef((props, forwardedRef) => {
     return (<>
-			{/* types here will be fast */}
-			<Text onClick={(e) => { console.log(e.altKey); }} css={props.css}/>
-			<Text as={DEFAULT_TAG} onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ borderTopColor: 'AliceBlue', backgroundColor: 'ActiveText', backgroundAttachment: 'inherit' }}/>
-			<Text onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ backgroundColor: '$red100', backgroundClip: 'border-box', ml: 'auto', "@bp1": {
-                backgroundAttachment: 'fixed'
-            }, "@bp10": {
-                backgroundColor: 'ActiveText', backgroundClip: 'border-box'
-            } }}/>
+			<Text onClick={(e) => { console.log(e.altKey); }} css={{ backgroundClip: 'content-box', "@bp10": { backgroundClip: 'content-box' } }}/>
+			<Text as={DEFAULT_TAG} onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ borderTopColor: 'AliceBlue', backgroundColor: 'ActiveText', backgroundAttachment: 'inherit', backgroundOrigin: 'border-box', colorAdjust: 'economy' }}/>
+			<Text onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ 'backgroundClip': 'border-box', 'ml': 'auto', '@bp1': { backgroundAttachment: 'fixed', }, hello: { backgroundClip: 'border-box' } }}/>
 			<Text onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ backgroundColor: '$red100', backgroundAttachment: 'inherit', backgroundOrigin: 'border-box' }}/>
-			<Text as="b" onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ ...props.css, backgroundColor: '$red100', padding: 'initial', "@bp3": {
-                backgroundColor: '$red100',
-                backdropFilter: ''
-            }
-        }}/>
+			<Text as="b" onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef} css={{ ...props.css, 'backgroundColor': '$red100', 'padding': 'initial', '@bp3': { paddingBlock: 'inherit', }, }}/>
 			<Text as="div" onClick={(e) => { console.log(e.altKey); }} css={{ ...props.css, backgroundColor: '$red100', background: 'red', paddingLeft: 'initial' }}/>
 			<Text as="div" onClick={(e) => { console.log(e.altKey); }} css={props.css}/>
 			<Text as={DEFAULT_TAG} {...props} onClick={(e) => { console.log(e.altKey); }} ref={forwardedRef}/>
