@@ -18,14 +18,31 @@ export interface StyledComponent<
 		TransformProps<Props, Media> & { css?: CSS }
 	>
 > {
-	(props:  Util.Assign< (Type extends IntrinsicElementsKeys | React.ComponentType<any> ?  React.ComponentPropsWithRef<Type> : {}), TransformProps<Props, Media> & {as?: never,  css?: CSS } >
+	(
+		props: Util.Assign<
+			Type extends IntrinsicElementsKeys | React.ComponentType<any>
+				? React.ComponentPropsWithRef<Type>
+			: {},
+			TransformProps<Props, Media> & {
+				as?: never,
+				css?: CSS
+			}
+		>
 	): React.ReactElement | null
-	<C extends CSS, As extends string | React.ComponentType<any> = Type extends string | React.ComponentType<any> ? Type : never >(
-		props:  Util.Assign< ( React.ComponentPropsWithRef<As extends IntrinsicElementsKeys | React.ComponentType<any> ? As : never>), TransformProps<Props, Media> & { 
-			as?: As, 
-			css?: {[k in keyof C]:  (k extends keyof CSS ? CSS[k] : never) }
-		}
-	> 
+
+	<
+		C extends CSS,
+		As extends string | React.ComponentType<any> = Type extends string | React.ComponentType<any> ? Type : never
+	>(
+		props: Util.Assign<
+			React.ComponentPropsWithRef<As extends IntrinsicElementsKeys | React.ComponentType<any> ? As : never>,
+			TransformProps<Props, Media> & { 
+				as?: As,
+				css?: {
+					[K in keyof C]: K extends keyof CSS ? CSS[K] : never
+				}
+			}
+		>
 	): React.ReactElement | null
 
 	className: string

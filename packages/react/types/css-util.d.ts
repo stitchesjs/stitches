@@ -38,7 +38,7 @@ export type CSS<
 	}
 	// known utility styles
 	& {
-		[K in keyof Utils as K extends keyof CSSProperties ? never: K]?: Utils[K] extends (arg: infer P) => any
+		[K in keyof Utils as K extends keyof CSSProperties ? never : K]?: Utils[K] extends (arg: infer P) => any
 			? (
 				| (
 					P extends any[]
@@ -83,24 +83,28 @@ export type CSS<
 	}
 	// known theme styles
 	& {
-		[K in keyof ThemeMap as  K extends keyof CSSProperties ? never : K extends keyof Utils ? never : K]?: (
+		[K in keyof ThemeMap as K extends keyof CSSProperties ? never : K extends keyof Utils ? never : K]?: (
 				| Native.Globals
 				| Util.Index
 				| undefined
 			)
 	}
 	// unknown css declaration styles
-	& (true extends Flat ? Record<never, never> : {
-		/** Unknown property. */
-		[K:string]: (
-			| number
-			| string
-			| CSS<Media, Theme, ThemeMap, Utils>
-			| {}
-			| undefined
-		)
-	}))
-
+	& (
+		true extends Flat
+			? Record<never, never>
+		: {
+			/** Unknown property. */
+			[K: string]: (
+				| number
+				| string
+				| CSS<Media, Theme, ThemeMap, Utils>
+				| {}
+				| undefined
+			)
+		}
+	)
+)
 
 /** Unique symbol used to reference a property value. */
 export declare const $$PropertyValue: unique symbol
