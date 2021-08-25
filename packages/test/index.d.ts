@@ -2,7 +2,17 @@ import * as Stitches from '@stitches/react';
 import * as React from 'react';
 export declare const config: {
     prefix: "";
-    media: {};
+    media: {
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    };
     theme: {
         colors: {
             red100: string;
@@ -14,9 +24,181 @@ export declare const config: {
             marginLeft: Stitches.PropertyValue<"margin">;
         };
     };
-}, styled: <Type extends string | import("@stitches/react/types/util").Function | React.ExoticComponent<any> | React.JSXElementConstructor<any>, Composers extends (string | import("@stitches/react/types/util").Function | React.ExoticComponent<any> | React.JSXElementConstructor<any> | {
+}, styled: <Type extends keyof JSX.IntrinsicElements | React.ComponentType<any>, Composers extends (string | import("@stitches/react/types/util").Function | React.ComponentType<any> | {
     [name: string]: unknown;
-})[]>(type: Type, ...composers: { [K in keyof Composers]: Composers[K] extends string | import("@stitches/react/types/util").Function | React.ExoticComponent<any> | React.JSXElementConstructor<any> ? Composers[K] : {} & {
+})[]>(type: Type, ...composers: { [K in keyof Composers]: Composers[K] extends string | import("@stitches/react/types/util").Function | React.ComponentType<any> ? Composers[K] : {
+    "@bp1"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+    "@bp2"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+    "@bp3"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+    "@bp4"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+    "@bp5"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+    "@bp6"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+    "@bp8"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+    "@bp9"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+    "@bp10"?: import("@stitches/react/types/css-util").CSS<{
+        bp1: "";
+        bp2: "";
+        bp3: "";
+        bp4: "";
+        bp5: "";
+        bp6: "";
+        bp8: "";
+        bp9: "";
+        bp10: "";
+    }, {
+        colors: {
+            red100: string;
+        };
+    }, import("@stitches/react/types/config").DefaultThemeMap, {
+        ml: (value: Stitches.PropertyValue<'margin'>) => {
+            marginLeft: Stitches.PropertyValue<"margin">;
+        };
+    }, false> | undefined;
+} & {
     alignContent?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.AlignContent | undefined;
     alignItems?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.AlignItems | undefined;
     alignSelf?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.AlignSelf | undefined;
@@ -47,17 +229,17 @@ export declare const config: {
     blockSize?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.BlockSize | undefined;
     borderBlockColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.BorderBlockColor | undefined;
     borderBlockEndColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | undefined;
-    borderBlockEndStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderBlockEndStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderBlockEndWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
     borderBlockStartColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | undefined;
-    borderBlockStartStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderBlockStartStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderBlockStartWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
-    borderBlockStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderBlockStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderBlockWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
     borderBottomColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | "$red100" | undefined;
     borderBottomLeftRadius?: import("@stitches/react/types/css").OnlyStringNumeric | import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
     borderBottomRightRadius?: import("@stitches/react/types/css").OnlyStringNumeric | import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
-    borderBottomStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderBottomStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderBottomWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
     borderCollapse?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.BorderCollapse | undefined;
     borderEndEndRadius?: import("@stitches/react/types/css").OnlyStringNumeric | import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
@@ -69,18 +251,18 @@ export declare const config: {
     borderImageWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.BorderImageWidth | undefined;
     borderInlineColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.BorderInlineColor | undefined;
     borderInlineEndColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | undefined;
-    borderInlineEndStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderInlineEndStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderInlineEndWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
     borderInlineStartColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | undefined;
-    borderInlineStartStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderInlineStartStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderInlineStartWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
-    borderInlineStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderInlineStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderInlineWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
     borderLeftColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | "$red100" | undefined;
-    borderLeftStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderLeftStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderLeftWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
     borderRightColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | "$red100" | undefined;
-    borderRightStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderRightStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderRightWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
     borderSpacing?: import("@stitches/react/types/css").OnlyStringNumeric | import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
     borderStartEndRadius?: import("@stitches/react/types/css").OnlyStringNumeric | import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
@@ -88,7 +270,7 @@ export declare const config: {
     borderTopColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | "$red100" | undefined;
     borderTopLeftRadius?: import("@stitches/react/types/css").OnlyStringNumeric | import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
     borderTopRightRadius?: import("@stitches/react/types/css").OnlyStringNumeric | import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
-    borderTopStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "dashed" | "dotted" | "double" | "groove" | "hidden" | "outset" | "ridge" | "solid") | undefined;
+    borderTopStyle?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | ("inset" | "none" | "hidden" | "dashed" | "dotted" | "double" | "groove" | "outset" | "ridge" | "solid") | undefined;
     borderTopWidth?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | (number | "medium" | "thick" | "thin") | undefined;
     bottom?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.Bottom | undefined;
     boxDecorationBreak?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.BoxDecorationBreak | undefined;
@@ -369,7 +551,7 @@ export declare const config: {
     zoom?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.Zoom | undefined;
     all?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
     animation?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.Animation | undefined;
-    background?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | "$red100" | import("@stitches/react/types/css").Property.Background | undefined;
+    background?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.Background | "$red100" | undefined;
     backgroundPosition?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.BackgroundPosition | undefined;
     border?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | "$red100" | import("@stitches/react/types/css").Property.Border | undefined;
     borderBlock?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | "$red100" | import("@stitches/react/types/css").Property.BorderBlock | undefined;
@@ -436,7 +618,7 @@ export declare const config: {
     stopColor?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.StopColor | undefined;
     stopOpacity?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").OnlyNumber | undefined;
     stroke?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | "$red100" | ((("AliceBlue" | "AntiqueWhite" | "Aqua" | "Aquamarine" | "Azure" | "Beige" | "Bisque" | "Black" | "BlanchedAlmond" | "Blue" | "BlueViolet" | "Brown" | "BurlyWood" | "CadetBlue" | "Chartreuse" | "Chocolate" | "Coral" | "CornflowerBlue" | "Cornsilk" | "Crimson" | "Cyan" | "DarkBlue" | "DarkCyan" | "DarkGoldenRod" | "DarkGray" | "DarkGreen" | "DarkGrey" | "DarkKhaki" | "DarkMagenta" | "DarkOliveGreen" | "DarkOrange" | "DarkOrchid" | "DarkRed" | "DarkSalmon" | "DarkSeaGreen" | "DarkSlateBlue" | "DarkSlateGray" | "DarkSlateGrey" | "DarkTurquoise" | "DarkViolet" | "DeepPink" | "DeepSkyBlue" | "DimGray" | "DimGrey" | "DodgerBlue" | "FireBrick" | "FloralWhite" | "ForestGreen" | "Fuchsia" | "Gainsboro" | "GhostWhite" | "Gold" | "GoldenRod" | "Gray" | "Green" | "GreenYellow" | "Grey" | "HoneyDew" | "HotPink" | "IndianRed" | "Indigo" | "Ivory" | "Khaki" | "Lavender" | "LavenderBlush" | "LawnGreen" | "LemonChiffon" | "LightBlue" | "LightCoral" | "LightCyan" | "LightGoldenRodYellow" | "LightGray" | "LightGreen" | "LightGrey" | "LightPink" | "LightSalmon" | "LightSeaGreen" | "LightSkyBlue" | "LightSlateGray" | "LightSlateGrey" | "LightSteelBlue" | "LightYellow" | "Lime" | "LimeGreen" | "Linen" | "Magenta" | "Maroon" | "MediumAquaMarine" | "MediumBlue" | "MediumOrchid" | "MediumPurple" | "MediumSeaGreen" | "MediumSlateBlue" | "MediumSpringGreen" | "MediumTurquoise" | "MediumVioletRed" | "MidnightBlue" | "MintCream" | "MistyRose" | "Moccasin" | "NavajoWhite" | "Navy" | "OldLace" | "Olive" | "OliveDrab" | "Orange" | "OrangeRed" | "Orchid" | "PaleGoldenRod" | "PaleGreen" | "PaleTurquoise" | "PaleVioletRed" | "PapayaWhip" | "PeachPuff" | "Peru" | "Pink" | "Plum" | "PowderBlue" | "Purple" | "RebeccaPurple" | "Red" | "RosyBrown" | "RoyalBlue" | "SaddleBrown" | "Salmon" | "SandyBrown" | "SeaGreen" | "SeaShell" | "Sienna" | "Silver" | "SkyBlue" | "SlateBlue" | "SlateGray" | "SlateGrey" | "Snow" | "SpringGreen" | "SteelBlue" | "Tan" | "Teal" | "Thistle" | "Tomato" | "transparent" | "Turquoise" | "Violet" | "Wheat" | "White" | "WhiteSmoke" | "Yellow" | "YellowGreen") | ("ActiveText" | "ButtonFace" | "ButtonText" | "ButtonBorder" | "Canvas" | "CanvasText" | "Field" | "FieldText" | "GrayText" | "Highlight" | "HighlightText" | "LinkText" | "Mark" | "MarkText" | "VisitedText") | "CurrentColor" | "hsl(" | "lab(" | "rgb(" | import("@stitches/react/types/css").OnlyString) | "none" | "child" | "context-fill" | "context-stroke") | undefined;
-    strokeDasharray?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | "none" | undefined;
+    strokeDasharray?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.StrokeDasharray | undefined;
     strokeDashoffset?: import("@stitches/react/types/css").OnlyStringNumeric | import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | undefined;
     strokeLinecap?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.StrokeLinecap | undefined;
     strokeLinejoin?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/theme").ScaleValue | import("@stitches/react/types/css").Property.StrokeLinejoin | undefined;
@@ -448,126 +630,23 @@ export declare const config: {
 } & {
     ml?: Stitches.PropertyValue<"margin"> | import("@stitches/react/types/css").Globals | import("@stitches/react/types/css").Property.Margin | undefined;
 } & {
-    gap?: unknown;
     gridGap?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/util").Index | undefined;
-    columnGap?: unknown;
     gridColumnGap?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/util").Index | undefined;
-    rowGap?: unknown;
     gridRowGap?: import("@stitches/react/types/css").Globals | import("@stitches/react/types/util").Index | undefined;
-    inset?: unknown;
-    insetBlock?: unknown;
-    insetBlockEnd?: unknown;
-    insetBlockStart?: unknown;
-    insetInline?: unknown;
-    insetInlineEnd?: unknown;
-    insetInlineStart?: unknown;
-    margin?: unknown;
-    marginTop?: unknown;
-    marginRight?: unknown;
-    marginBottom?: unknown;
-    marginLeft?: unknown;
-    marginBlock?: unknown;
-    marginBlockEnd?: unknown;
-    marginBlockStart?: unknown;
-    marginInline?: unknown;
-    marginInlineEnd?: unknown;
-    marginInlineStart?: unknown;
-    padding?: unknown;
-    paddingTop?: unknown;
-    paddingRight?: unknown;
-    paddingBottom?: unknown;
-    paddingLeft?: unknown;
-    paddingBlock?: unknown;
-    paddingBlockEnd?: unknown;
-    paddingBlockStart?: unknown;
-    paddingInline?: unknown;
-    paddingInlineEnd?: unknown;
-    paddingInlineStart?: unknown;
-    scrollPadding?: unknown;
-    scrollPaddingTop?: unknown;
-    scrollPaddingRight?: unknown;
-    scrollPaddingBottom?: unknown;
-    scrollPaddingLeft?: unknown;
-    scrollPaddingBlock?: unknown;
-    scrollPaddingBlockEnd?: unknown;
-    scrollPaddingBlockStart?: unknown;
-    scrollPaddingInline?: unknown;
-    scrollPaddingInlineEnd?: unknown;
-    scrollPaddingInlineStart?: unknown;
-    top?: unknown;
-    right?: unknown;
-    bottom?: unknown;
-    left?: unknown;
-    fontSize?: unknown;
-    background?: unknown;
-    backgroundColor?: unknown;
-    backgroundImage?: unknown;
-    border?: unknown;
-    borderBlock?: unknown;
-    borderBlockEnd?: unknown;
-    borderBlockStart?: unknown;
-    borderBottom?: unknown;
-    borderBottomColor?: unknown;
-    borderColor?: unknown;
-    borderInline?: unknown;
-    borderInlineEnd?: unknown;
-    borderInlineStart?: unknown;
-    borderLeft?: unknown;
-    borderLeftColor?: unknown;
-    borderRight?: unknown;
-    borderRightColor?: unknown;
-    borderTop?: unknown;
-    borderTopColor?: unknown;
-    caretColor?: unknown;
-    color?: unknown;
-    columnRuleColor?: unknown;
-    outline?: unknown;
-    outlineColor?: unknown;
-    fill?: unknown;
-    stroke?: unknown;
-    textDecorationColor?: unknown;
-    fontFamily?: unknown;
-    fontWeight?: unknown;
-    lineHeight?: unknown;
-    letterSpacing?: unknown;
-    blockSize?: unknown;
-    minBlockSize?: unknown;
-    maxBlockSize?: unknown;
-    inlineSize?: unknown;
-    minInlineSize?: unknown;
-    maxInlineSize?: unknown;
-    width?: unknown;
-    minWidth?: unknown;
-    maxWidth?: unknown;
-    height?: unknown;
-    minHeight?: unknown;
-    maxHeight?: unknown;
-    flexBasis?: unknown;
-    gridTemplateColumns?: unknown;
-    gridTemplateRows?: unknown;
-    borderWidth?: unknown;
-    borderTopWidth?: unknown;
-    borderLeftWidth?: unknown;
-    borderRightWidth?: unknown;
-    borderBottomWidth?: unknown;
-    borderStyle?: unknown;
-    borderTopStyle?: unknown;
-    borderLeftStyle?: unknown;
-    borderRightStyle?: unknown;
-    borderBottomStyle?: unknown;
-    borderRadius?: unknown;
-    borderTopLeftRadius?: unknown;
-    borderTopRightRadius?: unknown;
-    borderBottomRightRadius?: unknown;
-    borderBottomLeftRadius?: unknown;
-    boxShadow?: unknown;
-    textShadow?: unknown;
-    transition?: unknown;
-    zIndex?: unknown;
 } & Record<never, never> & {
     variants?: {
         [x: string]: {
-            [x: string]: import("@stitches/react/types/css-util").CSS<{}, {
+            [x: string]: import("@stitches/react/types/css-util").CSS<{
+                bp1: "";
+                bp2: "";
+                bp3: "";
+                bp4: "";
+                bp5: "";
+                bp6: "";
+                bp8: "";
+                bp9: "";
+                bp10: "";
+            }, {
                 colors: {
                     red100: string;
                 };
@@ -576,7 +655,17 @@ export declare const config: {
                     marginLeft: Stitches.PropertyValue<"margin">;
                 };
             }, false>;
-            [x: number]: import("@stitches/react/types/css-util").CSS<{}, {
+            [x: number]: import("@stitches/react/types/css-util").CSS<{
+                bp1: "";
+                bp2: "";
+                bp3: "";
+                bp4: "";
+                bp5: "";
+                bp6: "";
+                bp8: "";
+                bp9: "";
+                bp10: "";
+            }, {
                 colors: {
                     red100: string;
                 };
@@ -588,7 +677,17 @@ export declare const config: {
         };
     } | undefined;
     compoundVariants?: (("variants" extends keyof Composers[K] ? { [Name in keyof Composers[K][keyof Composers[K] & "variants"]]?: import("@stitches/react/types/util").String | import("@stitches/react/types/util").Widen<keyof Composers[K][keyof Composers[K] & "variants"][Name]> | undefined; } & import("@stitches/react/types/util").WideObject : import("@stitches/react/types/util").WideObject) & {
-        css: import("@stitches/react/types/css-util").CSS<{}, {
+        css: import("@stitches/react/types/css-util").CSS<{
+            bp1: "";
+            bp2: "";
+            bp3: "";
+            bp4: "";
+            bp5: "";
+            bp6: "";
+            bp8: "";
+            bp9: "";
+            bp10: "";
+        }, {
             colors: {
                 red100: string;
             };
@@ -599,7 +698,17 @@ export declare const config: {
         }, false>;
     })[] | undefined;
     defaultVariants?: ("variants" extends keyof Composers[K] ? { [Name_1 in keyof Composers[K][keyof Composers[K] & "variants"]]?: import("@stitches/react/types/util").String | import("@stitches/react/types/util").Widen<keyof Composers[K][keyof Composers[K] & "variants"][Name_1]> | undefined; } : import("@stitches/react/types/util").WideObject) | undefined;
-} & { [K2 in keyof Composers[K]]: K2 extends "compoundVariants" | "defaultVariants" | "variants" ? unknown : K2 extends string ? import("@stitches/react/types/css-util").CSS<{}, {
+} & { [K2 in keyof Composers[K]]: K2 extends "compoundVariants" | "defaultVariants" | "variants" ? unknown : K2 extends string | number ? import("@stitches/react/types/css-util").CSS<{
+    bp1: "";
+    bp2: "";
+    bp3: "";
+    bp4: "";
+    bp5: "";
+    bp6: "";
+    bp8: "";
+    bp9: "";
+    bp10: "";
+}, {
     colors: {
         red100: string;
     };
@@ -607,7 +716,27 @@ export declare const config: {
     ml: (value: Stitches.PropertyValue<'margin'>) => {
         marginLeft: Stitches.PropertyValue<"margin">;
     };
-}, false>[K2] : unknown; }; }) => import("@stitches/react/types/styled-component").StyledComponent<Type, import("@stitches/react/types/styled-component").StyledComponentProps<Composers>, {}, import("@stitches/react/types/css-util").CSS<{}, {
+}, false>[K2] : unknown; }; }) => import("@stitches/react/types/styled-component").StyledComponent<Type, import("@stitches/react/types/styled-component").StyledComponentProps<Composers>, {
+    bp1: "";
+    bp2: "";
+    bp3: "";
+    bp4: "";
+    bp5: "";
+    bp6: "";
+    bp8: "";
+    bp9: "";
+    bp10: "";
+}, import("@stitches/react/types/css-util").CSS<{
+    bp1: "";
+    bp2: "";
+    bp3: "";
+    bp4: "";
+    bp5: "";
+    bp6: "";
+    bp8: "";
+    bp9: "";
+    bp10: "";
+}, {
     colors: {
         red100: string;
     };
@@ -617,7 +746,27 @@ export declare const config: {
     };
 }, false>>;
 export declare type StitchesCss = Stitches.CSS<typeof config>;
-export declare const Text: import("@stitches/react/types/styled-component").StyledComponent<"span", {}, {}, import("@stitches/react/types/css-util").CSS<{}, {
+export declare const Text: import("@stitches/react/types/styled-component").StyledComponent<"span", {}, {
+    bp1: "";
+    bp2: "";
+    bp3: "";
+    bp4: "";
+    bp5: "";
+    bp6: "";
+    bp8: "";
+    bp9: "";
+    bp10: "";
+}, import("@stitches/react/types/css-util").CSS<{
+    bp1: "";
+    bp2: "";
+    bp3: "";
+    bp4: "";
+    bp5: "";
+    bp6: "";
+    bp8: "";
+    bp9: "";
+    bp10: "";
+}, {
     colors: {
         red100: string;
     };

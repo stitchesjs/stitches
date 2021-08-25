@@ -189,15 +189,11 @@ export default interface Stitches<
 	styled: {
 		<
 			Type extends (
-				| string
-				| React.ExoticComponent<any>
-				| React.JSXElementConstructor<any>
-				| Util.Function
+				| keyof JSX.IntrinsicElements | React.ComponentType<any> 
 			),
 			Composers extends (
 				| string
-				| React.ExoticComponent<any>
-				| React.JSXElementConstructor<any>
+				| React.ComponentType<any>
 				| Util.Function
 				| { [name: string]: unknown }
 			)[]
@@ -206,7 +202,7 @@ export default interface Stitches<
 			...composers: {
 				[K in keyof Composers]: (
 					// Strings, React Components, and Functions can be skipped over
-					Composers[K] extends string | React.ExoticComponent<any> | React.JSXElementConstructor<any> | Util.Function
+					Composers[K] extends (string | React.ComponentType<any> | Util.Function)
 						? Composers[K]
 					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
 						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
