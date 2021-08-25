@@ -9448,7 +9448,7 @@ export namespace AtRule {
 
   type FontVariationSettings = "normal" | OnlyString;
 
-  type FontWeight = DataType.FontWeightAbsolute | OnlyString;
+  type FontWeight = DataType.FontWeightAbsolute;
 
   type Size = DataType.PageSize | "auto" | "landscape" | "portrait" | OnlyStringNumeric;
 
@@ -9591,7 +9591,7 @@ declare namespace DataType {
     | "ultra-expanded"
     | OnlyString;
 
-  type FontWeightAbsolute = "bold" | "normal" | OnlyNumber;
+  type FontWeightAbsolute = "bold" | "normal" | OnlyStringNumeric;
 
   type GenericFamily = "cursive" | "emoji" | "fangsong" | "fantasy" | "math" | "monospace" | "sans-serif" | "serif" | "system-ui" | "ui-monospace" | "ui-rounded" | "ui-sans-serif" | "ui-serif";
 

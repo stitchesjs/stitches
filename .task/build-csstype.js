@@ -126,6 +126,12 @@ class ModifiedString extends String {
 		).replace(
 			/Property.LetterSpacing<TLength>/g,
 			'Property.LetterSpacing'
+		).replace(
+			'FontWeightAbsolute = "bold" | "normal"',
+			'FontWeightAbsolute = "bold" | "normal" | (string & {})'
+		).replace(
+			/DataType\.FontWeightAbsolute \| \(string & \{\}\)/g,
+			'DataType.FontWeightAbsolute'
 		)
 	}
 
