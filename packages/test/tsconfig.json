@@ -17,4 +17,5 @@
     "strictPropertyInitialization": true,
     "target": "es2020"
   },
+  "exclude": ["built-types"]
 }

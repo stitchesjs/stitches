@@ -20,7 +20,6 @@ export type CSS<
 	Theme = {},
 	ThemeMap = Config.DefaultThemeMap,
 	Utils = {},
-	Flat = false
 > = (
 	// nested at-rule css styles
 	& {
@@ -90,20 +89,16 @@ export type CSS<
 			)
 	}
 	// unknown css declaration styles
-	& (
-		true extends Flat
-			? Record<never, never>
-		: {
-			/** Unknown property. */
-			[K: string]: (
-				| number
-				| string
-				| CSS<Media, Theme, ThemeMap, Utils>
-				| {}
-				| undefined
-			)
-		}
-	)
+	& {
+		/** Unknown property. */
+		[K: string]: (
+			| number
+			| string
+			| CSS<Media, Theme, ThemeMap, Utils>
+			| {}
+			| undefined
+		)
+	}
 )
 
 /** Unique symbol used to reference a property value. */

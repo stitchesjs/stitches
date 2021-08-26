@@ -3,6 +3,9 @@ import type * as StyledComponent from './styled-component'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
+/** Remove an index signature from a type */
+export type RemoveIndex<T> = {[k in keyof T as string extends k ? never : number extends k ? never : k]: T[k]}
+
 /** Stitches interface. */
 export default interface Stitches<
 	Prefix extends string = '',
@@ -126,21 +129,22 @@ export default interface Stitches<
 				| React.JSXElementConstructor<any>
 				| Util.Function
 				| { [name: string]: unknown }
-			)[]
+			)[],
+			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>(
 			...composers: {
 				[K in keyof Composers]: (
 					// Strings, React Components, and Functions can be skipped over
 					Composers[K] extends string | React.ExoticComponent<any> | React.JSXElementConstructor<any> | Util.Function
 						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
+					: RemoveIndex<CSS> & {
 						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
 						 */
 						variants?: {
 							[Name in string]: {
-								[Pair in number | string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+								[Pair in number | string]: CSS
 							}
 						}
 						/** The **variants** property lets you to set a subclass of styles based on a combination of active variants.
@@ -156,7 +160,7 @@ export default interface Stitches<
 								: Util.WideObject
 							)
 							& {
-								css: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+								css: CSS
 							}
 						)[]
 						/** The **defaultVariants** property allows you to predefine the active key-value pairs of variants.
@@ -173,8 +177,8 @@ export default interface Stitches<
 					} & {
 						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
 							? unknown
-						: K2 extends keyof CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-							? CSSUtil.CSS<Media, Theme, ThemeMap, Utils>[K2]
+						: K2 extends keyof CSS
+							? CSS[K2]
 						: unknown
 					}
 				)
@@ -183,7 +187,7 @@ export default interface Stitches<
 			StyledComponent.StyledComponentType<Composers>,
 			StyledComponent.StyledComponentProps<Composers>,
 			Media,
-			CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+			CSS
 		>
 	}
 	styled: {
@@ -194,7 +198,8 @@ export default interface Stitches<
 				| React.ComponentType<any>
 				| Util.Function
 				| { [name: string]: unknown }
-			)[]
+			)[], 
+			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>(
 			type: Type,
 			...composers: {
@@ -202,14 +207,14 @@ export default interface Stitches<
 					// Strings, React Components, and Functions can be skipped over
 					Composers[K] extends string | React.ComponentType<any> | Util.Function
 						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
+					:  RemoveIndex<CSS> & {
 						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
 						 */
 						variants?: {
 							[Name in string]: {
-								[Pair in number | string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+								[Pair in number | string]: CSS
 							}
 						}
 						/** The **variants** property lets you to set a subclass of styles based on a combination of active variants.
@@ -225,7 +230,7 @@ export default interface Stitches<
 								: Util.WideObject
 							)
 							& {
-								css: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+								css: CSS
 							}
 						)[]
 						/** The **defaultVariants** property allows you to predefine the active key-value pairs of variants.
@@ -242,8 +247,8 @@ export default interface Stitches<
 					} & {
 						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
 							? unknown
-						: K2 extends keyof CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-							? CSSUtil.CSS<Media, Theme, ThemeMap, Utils>[K2]
+						: K2 extends keyof CSS
+							? CSS[K2]
 						: unknown
 					}
 				)
