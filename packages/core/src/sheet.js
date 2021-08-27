@@ -55,7 +55,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				// a hydratable style rule will have a selector of `--sxs`, ignore all others
 				if (!cssText.startsWith('--sxs')) continue
 
-				const cache = cssText.slice(16, -3).trim().split(/\s+/)
+				const cache = cssText.slice(14, -3).trim().split(/\s+/)
 
 				/** @type {GroupName} Name of the group. */
 				const groupName = names[cache[0]]
