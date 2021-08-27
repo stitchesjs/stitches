@@ -55,9 +55,7 @@ export const createThemeFunction = (
 
 		return {
 			...themeObject,
-			get className() {
-				return render()
-			},
+			className,
 			selector,
 			toString: render,
 		}

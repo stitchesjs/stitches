@@ -59,7 +59,7 @@ describe('Theme', () => {
 		}
 	})
 
-	test('theme.className injects the theme', () => {
+	test('theme.className does not inject the theme', () => {
 		const { getCssText, createTheme } = createStitches()
 
 		const theme = createTheme({
@@ -72,6 +72,7 @@ describe('Theme', () => {
 
 		void theme.className
 
-		expect(getCssText()).toBe(`--sxs{--sxs:0 t-gpVVQE}@media{.t-gpVVQE{--colors-blue:#0000ff}}`)
+		expect(getCssText()).toBe(``)
+		// expect(getCssText()).toBe(`--sxs{--sxs:0 t-gpVVQE}@media{.t-gpVVQE{--colors-blue:#0000ff}}`)
 	})
 })
