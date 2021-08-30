@@ -32,6 +32,7 @@ export type CSS<
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| Native.Globals
 			| ThemeUtil.ScaleValue
+			| Util.Index
 			| undefined
 		)
 	}
