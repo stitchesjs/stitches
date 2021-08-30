@@ -40,7 +40,7 @@ declare namespace ConfigType {
 
 	/** Utility interface. */
 	export type Utils<T = {}> = {
-		[Property in keyof T]: T[Property] extends (value: infer V) => {} ? T[Property] & ((value: V) => {
+		[Property in keyof T]: T[Property] extends (value: infer V) => {} ? T[Property] | ((value: V) => {
 			[K in keyof CSSUtil.CSSProperties]?: CSSUtil.CSSProperties[K] | V
 		}) : never
 	}
