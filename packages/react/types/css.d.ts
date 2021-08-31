@@ -215,14 +215,14 @@ export interface StandardLonghandProperties {
    */
   backgroundImage?: Property.BackgroundImage;
 	/**
-   * The **`boder-image`** CSS property sets one or more boder images on an element.
+   * The **`border-image`** CSS property draws an image around a given element.
    *
    * **Syntax**: `<border-image>#`
    *
-   * **Initial value**: `none`
+   * **Initial value**: `none 100% / 1 / 0 stretch`
    *
    */
-	 boderImage?: Property.BackgroundImage;
+	 borderImage?: Property.BackgroundImage;
   /**
    * The **`background-origin`** CSS property sets the background's origin: from the border start, inside the border, or inside the padding.
    *

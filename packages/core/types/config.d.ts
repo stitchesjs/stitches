@@ -115,7 +115,7 @@ export interface DefaultThemeMap {
 	background: 'colors'
 	backgroundColor: 'colors'
 	backgroundImage: 'colors'
-	boderImage: 'colors'
+	borderImage: 'colors'
 	border: 'colors'
 	borderBlock: 'colors'
 	borderBlockEnd: 'colors'
