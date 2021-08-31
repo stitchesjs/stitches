@@ -86,6 +86,7 @@ export const defaultThemeMap = {
 	background: colors,
 	backgroundColor: colors,
 	backgroundImage: colors,
+	borderImage: colors,
 	border: colors,
 	borderBlock: colors,
 	borderBlockEnd: colors,
