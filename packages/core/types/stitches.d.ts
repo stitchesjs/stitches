@@ -35,7 +35,7 @@ export default interface Stitches<
 				'@font-face'?: unknown
 			} & {
 				[K in Prelude]: K extends '@import'
-					? string
+					? string | string[]
 				: K extends '@font-face'
 					? CSSUtil.Native.AtRule.FontFace | CSSUtil.Native.AtRule.FontFace[]
 				: K extends `@keyframes ${string}`
