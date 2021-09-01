@@ -13,10 +13,6 @@ import nodemon from 'nodemon'
 import zlib from 'zlib'
 import { minify } from 'terser'
 
-const matchImports = /import\s*([\w*${}\n\r\t, ]+)from\s*["']([^"']+)["'];?/g
-const matchExports = /export\s*([\w*${}\n\r\t, ]+);?$/g
-const matchNamings = /[{,]?([$\w]+)(?:\s+as\s+(\w+))?/gy
-
 const variants = {
 	esm: {
 		extension: 'mjs',
@@ -86,7 +82,7 @@ export const build = async (packageUrl, opts) => {
 			entryPoints: [targetPathname],
 			outfile: outputPathname,
 			bundle: true,
-			external: ['react'],
+			external: ['astro/dist/internal/h.js', 'react'],
 			format: 'esm',
 			sourcemap: 'external',
 			write: false,
@@ -127,6 +123,7 @@ export const build = async (packageUrl, opts) => {
 }
 
 export const buildAll = async (opts) => {
+	await build(URL.from(import.meta.url, '../packages/astro/'), opts)
 	await build(stringifyPackageUrl, opts)
 	await build(corePackageUrl, opts)
 	await build(reactPackageUrl, opts)
@@ -141,6 +138,9 @@ if (isProcessMeta(import.meta)) {
 		nodemon(
 			[
 				'-q',
+				`--watch packages/astro/src`,
+				`--watch packages/astro/tests`,
+				`--watch packages/astro/types`,
 				`--watch packages/core/src`,
 				`--watch packages/core/tests`,
 				`--watch packages/core/types`,

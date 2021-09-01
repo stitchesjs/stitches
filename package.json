@@ -43,6 +43,7 @@
     "acorn-logical-assignment": "0.1.4",
     "acorn-private-methods": "1.0.0",
     "astring": "1.7.5",
+    "astro": "0.20.4",
     "csstype": "3.0.8",
     "esbuild": "0.12.23",
     "eslint": "7.32.0",
