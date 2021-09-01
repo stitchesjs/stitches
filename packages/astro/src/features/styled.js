@@ -31,8 +31,6 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 
 					delete forwardProps.className
 
-					console.log({ children: children.$slots.default })
-
 					return h(Type, forwardProps, children.$slots.default)
 				}
 			}
