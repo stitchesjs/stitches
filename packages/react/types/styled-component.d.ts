@@ -1,4 +1,3 @@
-import type * as Default from './default'
 import type * as React from 'react'
 import type * as Util from './util'
 
@@ -6,15 +5,14 @@ import type * as Util from './util'
 export interface StyledComponent<
 	Type = 'span',
 	Props = {},
-	Media = Default.Media,
-	CSS = {},
-	TransformedProps = TransformProps<Props, Media>
+	Media = {},
+	CSS = {}
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
 		Type extends React.ElementType
 			? React.ComponentPropsWithRef<Type>
 		: never,
-		TransformedProps & { as?: Type } & { css?: CSS }
+		TransformProps<Props, Media> & { css?: CSS }
 	>
 > {
 	<As = Type>(
@@ -22,9 +20,9 @@ export interface StyledComponent<
 			As extends ''
 				? { as: keyof JSX.IntrinsicElements }
 			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, TransformedProps & { as: As, css?: CSS }>
+				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: CSS }>
 			: As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], TransformedProps & { as: As, css?: CSS }>
+				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: CSS }>
 			: never
 		)
 	): React.ReactElement | null
@@ -41,13 +39,12 @@ export interface StyledComponent<
 export interface CssComponent<
 	Type = 'span',
 	Props = {},
-	Media = Default.Media,
-	CSS = {},
-	TransformedProps = TransformProps<Props, Media>
+	Media = {},
+	CSS = {}
 > {
 	(
 		props?:
-			& TransformedProps
+			& TransformProps<Props, Media>
 			& {
 				css?: CSS
 			}
