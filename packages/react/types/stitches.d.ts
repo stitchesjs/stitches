@@ -151,7 +151,7 @@ export default interface Stitches<
 							'variants' extends keyof Composers[K]
 								? {
 									[Name in keyof Composers[K]['variants']]?:
-										Composers[K]['variants'][Name] extends Function ?
+										Composers[K]['variants'][Name] extends Util.Function ?
 											Util.Argument<Composers[K]['variants'][Name]>
 										: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
 								}
