@@ -1,17 +1,18 @@
 import type * as CSSUtil from './css-util'
-import type * as Default from './default'
 import type * as StyledComponent from './styled-component'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
+/** Remove an index signature from a type */
+export type RemoveIndex<T> = {[k in keyof T as string extends k ? never : number extends k ? never : k]: T[k]}
+
 /** Stitches interface. */
 export default interface Stitches<
-	Prefix extends string = Default.Prefix,
-	Media = Default.Media,
-	Theme = {},
-	ThemeMap = Default.ThemeMap,
-	Utils = {},
-	CSS extends { [prelude: string]: unknown } = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+	Prefix extends string = '',
+	Media extends {} = {},
+	Theme extends {} = {},
+	ThemeMap extends {} = {},
+	Utils extends {} = {}
 > {
 	config: {
 		prefix: Prefix
@@ -21,16 +22,37 @@ export default interface Stitches<
 		utils: Utils
 	},
 	prefix: Prefix
+	/** The **prefix** property defined.
+	 *
+	 * [Read Documentation](https://stitches.dev/docs/variants)
+	 */
 	globalCss: {
-		(style: {
-			[prelude: string]: CSS
-		}): {
+		<Prelude extends string>(
+			style: {
+				/** The **@import** CSS at-rule imports style rules from other style sheets. */
+				'@import'?: unknown
+				/** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
+				'@font-face'?: unknown
+			} & {
+				[K in Prelude]: K extends '@import'
+					? string | string[]
+				: K extends '@font-face'
+					? CSSUtil.Native.AtRule.FontFace | CSSUtil.Native.AtRule.FontFace[]
+				: K extends `@keyframes ${string}`
+					? {
+						[KeyFrame in string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+					}
+				: K extends `@property ${string}`
+					? CSSUtil.Native.AtRule.Property
+				: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+			}
+		): {
 			(): string
 		}
 	},
 	keyframes: {
 		(style: {
-			[offset: string]: CSS
+			[offset: string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		}): {
 			(): string
 			name: string
@@ -86,7 +108,7 @@ export default interface Stitches<
 			[Token in keyof Theme[Scale]]: ThemeUtil.Token<
 				Extract<Token, string | number>,
 				string,
-				Extract<Scale, string>,
+				Extract<Scale, string | void>,
 				Extract<Prefix, string | void>
 			>
 		}
@@ -96,73 +118,70 @@ export default interface Stitches<
 	}
 	getCssText: {
 		(): string
-	},
+	}
 	css: {
 		<
 			Composers extends (
 				| string
 				| Util.Function
 				| { [name: string]: unknown }
-			)[]
+			)[],
+			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>(
 			...composers: {
 				[K in keyof Composers]: (
-					Composers[K] extends string
+					// Strings and Functions can be skipped over
+					Composers[K] extends string | Util.Function
 						? Composers[K]
-					: Composers[K] extends Util.Function
-						? Composers[K]
-					: Composers[K] extends {
-						[K2 in keyof Composers[K]]: Composers[K][K2]
-					}
-						? (
+					: RemoveIndex<CSS> & {
+						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants)
+						 */
+						variants?: {
+							[Name in string]: {
+								[Pair in number | string]: CSS
+							} | (
+								(...args: any[]) => CSS
+							)
+						}
+						/** The **variants** property lets you to set a subclass of styles based on a combination of active variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants#compound-variants)
+						 */
+						compoundVariants?: (
+							& (
+								'variants' extends keyof Composers[K]
+									? {
+										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+									} & Util.WideObject
+								: Util.WideObject
+							)
 							& {
-								/** The **variants** property sets variants.
-								 *
-								 * [Read Documentation](https://stitches.dev/docs/variants)
-								 */
-								variants?: {
-									[name: string]: {
-										[pair in number | string]: CSS
-									} | 
-									(
-										(...args: any[]) => CSS
-									)
+								css: CSS
+							}
+						)[]
+						/** The **defaultVariants** property allows you to predefine the active key-value pairs of variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants#default-variants)
+						 */
+						defaultVariants?: (
+							'variants' extends keyof Composers[K]
+								? {
+									[Name in keyof Composers[K]['variants']]?:
+										Composers[K]['variants'][Name] extends Util.Function ?
+											Util.Argument<Composers[K]['variants'][Name]>
+										: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
 								}
-								/** Compound variants. */
-								compoundVariants?: (
-									& (
-										'variants' extends keyof Composers[K]
-											? {
-												[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
-											} & Util.WideObject
-										: Util.WideObject
-									)
-									& {
-										css: CSS
-									}
-								)[]
-								defaultVariants?: (
-									'variants' extends keyof Composers[K]
-										? {
-											[Name in keyof Composers[K]['variants']]?:
-												Composers[K]['variants'][Name] extends Util.Function ?
-													Util.Argument<Composers[K]['variants'][Name]>
-												: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
-										}
-									: Util.WideObject
-								)
-							}
-							& {
-								[Prelude in keyof Composers[K]]:
-									Prelude extends keyof CSS | 'compoundVariants' | 'defaultVariants' | 'variants'
-										? unknown
-									: Composers[K][Prelude] extends Record<string, unknown>
-										? CSS
-									: boolean | number | string
-							}
-							& CSS
+							: Util.WideObject
 						)
-					: never
+					} & {
+						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
+							? unknown
+						: K2 extends keyof CSS
+							? CSS[K2]
+						: unknown
+					}
 				)
 			}
 		): StyledComponent.CssComponent<
@@ -171,7 +190,7 @@ export default interface Stitches<
 			Media,
 			CSS
 		>
-	},
+	}
 }
 
 type ThemeTokens<Values, Prefix> = {

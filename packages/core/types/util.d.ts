@@ -35,4 +35,4 @@ export type Index = (number | string) & Record<never, never>
 export type Function = (...args: any[]) => unknown
 
 /** Widened object. */
-export type WideObject = { [name in number | string]: boolean | number | string | undefined | object }
+export type WideObject = { [name in number | string]: boolean | number | string | undefined | WideObject }

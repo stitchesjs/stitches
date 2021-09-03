@@ -1,17 +1,15 @@
-import type * as Default from './default'
 import type * as Util from './util'
 
 /** Returns a new CSS Component. */
 export interface CssComponent<
 	Type = 'span',
 	Props = {},
-	Media = Default.Media,
-	CSS = {},
-	TransformedProps = TransformProps<Props, Media>
+	Media = {},
+	CSS = {}
 > {
 	(
 		props?:
-			& TransformedProps
+			& TransformProps<Props, Media>
 			& {
 				css?: CSS
 			}

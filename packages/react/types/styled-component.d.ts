@@ -1,6 +1,9 @@
 import type * as React from 'react'
 import type * as Util from './util'
 
+
+export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
+
 /** Returns a new Styled Component. */
 export interface StyledComponent<
 	Type = 'span',
@@ -9,22 +12,37 @@ export interface StyledComponent<
 	CSS = {}
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
-		Type extends React.ElementType
+		Type extends IntrinsicElementsKeys | React.ComponentType<any> 
 			? React.ComponentPropsWithRef<Type>
 		: never,
 		TransformProps<Props, Media> & { css?: CSS }
 	>
 > {
-	<As = Type>(
-		props: (
-			As extends ''
-				? { as: keyof JSX.IntrinsicElements }
-			: As extends React.ComponentType<infer P>
-				? Util.Assign<P, TransformProps<Props, Media> & { as: As, css?: CSS }>
-			: As extends keyof JSX.IntrinsicElements
-				? Util.Assign<JSX.IntrinsicElements[As], TransformProps<Props, Media> & { as: As, css?: CSS }>
-			: never
-		)
+	(
+		props: Util.Assign<
+			Type extends IntrinsicElementsKeys | React.ComponentType<any>
+				? React.ComponentPropsWithRef<Type>
+			: {},
+			TransformProps<Props, Media> & {
+				as?: never,
+				css?: CSS
+			}
+		>
+	): React.ReactElement | null
+
+	<
+		C extends CSS,
+		As extends string | React.ComponentType<any> = Type extends string | React.ComponentType<any> ? Type : never
+	>(
+		props: Util.Assign<
+			React.ComponentPropsWithRef<As extends IntrinsicElementsKeys | React.ComponentType<any> ? As : never>,
+			TransformProps<Props, Media> & { 
+				as?: As,
+				css?: {
+					[K in keyof C]: K extends keyof CSS ? CSS[K] : never
+				}
+			}
+		>
 	): React.ReactElement | null
 
 	className: string
@@ -98,7 +116,7 @@ export declare const $$StyledComponentMedia: unique symbol
 export type $$StyledComponentMedia = typeof $$StyledComponentMedia
 
 /** Returns a narrowed JSX element from the given tag name. */
-type IntrinsicElement<TagName> = TagName extends keyof JSX.IntrinsicElements ? TagName : never
+type IntrinsicElement<TagName> = TagName extends IntrinsicElementsKeys ? TagName : never
 
 /** Returns a ForwardRef component. */
 type ForwardRefExoticComponent<Type, Props> = React.ForwardRefExoticComponent<

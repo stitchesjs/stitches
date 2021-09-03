@@ -214,6 +214,15 @@ export interface StandardLonghandProperties {
    *
    */
   backgroundImage?: Property.BackgroundImage;
+	/**
+   * The **`border-image`** CSS property draws an image around a given element.
+   *
+   * **Syntax**: `<border-image>#`
+   *
+   * **Initial value**: `none 100% / 1 / 0 stretch`
+   *
+   */
+	 borderImage?: Property.BackgroundImage;
   /**
    * The **`background-origin`** CSS property sets the background's origin: from the border start, inside the border, or inside the padding.
    *
@@ -8117,7 +8126,7 @@ export namespace Property {
 
   export type FlexFlow = "column" | "column-reverse" | "nowrap" | "row" | "row-reverse" | "wrap" | "wrap-reverse" | OnlyString;
 
-  export type FlexGrow = OnlyNumber;
+  export type FlexGrow = OnlyStringNumeric;
 
   export type FlexShrink = OnlyNumber;
 
@@ -8316,7 +8325,7 @@ export namespace Property {
 
   export type Left = "auto" | OnlyStringNumeric;
 
-  export type LetterSpacing = number | "normal";
+  export type LetterSpacing = "normal" | OnlyStringNumeric;
 
   export type LineBreak = "anywhere" | "auto" | "loose" | "normal" | "strict";
 
@@ -8824,7 +8833,7 @@ export namespace Property {
 
   export type WritingMode = "horizontal-tb" | "sideways-lr" | "sideways-rl" | "vertical-lr" | "vertical-rl";
 
-  export type ZIndex = "auto" | OnlyNumber;
+  export type ZIndex = "auto" | OnlyStringNumeric;
 
   export type Zoom = "normal" | "reset" | OnlyStringNumeric;
 
@@ -9237,7 +9246,7 @@ export namespace Property {
 
   export type Stroke = DataType.Paint;
 
-  export type StrokeDasharray = "none";
+  export type StrokeDasharray = DataType.Dasharray | "none";
 
   export type StrokeDashoffset = OnlyStringNumeric;
 
@@ -9344,7 +9353,7 @@ export namespace AtRule {
 
   export interface Property {
     inherits?: Inherits;
-    initialValue?: string;
+    initialValue?: boolean | OnlyStringNumeric
     syntax?: string;
   }
 
@@ -9448,11 +9457,11 @@ export namespace AtRule {
 
   type FontVariationSettings = "normal" | OnlyString;
 
-  type FontWeight = DataType.FontWeightAbsolute | OnlyString;
+  type FontWeight = DataType.FontWeightAbsolute;
 
   type Size = DataType.PageSize | "auto" | "landscape" | "portrait" | OnlyStringNumeric;
 
-  type Inherits = "false" | "true";
+  type Inherits = "false" | "true" | boolean;
 
   type Height = DataType.ViewportLength | OnlyString;
 
@@ -9591,7 +9600,7 @@ declare namespace DataType {
     | "ultra-expanded"
     | OnlyString;
 
-  type FontWeightAbsolute = "bold" | "normal" | OnlyNumber;
+  type FontWeightAbsolute = "bold" | "normal" | OnlyStringNumeric;
 
   type GenericFamily = "cursive" | "emoji" | "fangsong" | "fantasy" | "math" | "monospace" | "sans-serif" | "serif" | "system-ui" | "ui-monospace" | "ui-rounded" | "ui-sans-serif" | "ui-serif";
 

@@ -3,6 +3,9 @@ import type * as StyledComponent from './styled-component'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
+/** Remove an index signature from a type */
+export type RemoveIndex<T> = {[k in keyof T as string extends k ? never : number extends k ? never : k]: T[k]}
+
 /** Stitches interface. */
 export default interface Stitches<
 	Prefix extends string = '',
@@ -24,9 +27,26 @@ export default interface Stitches<
 	 * [Read Documentation](https://stitches.dev/docs/variants)
 	 */
 	globalCss: {
-		(style: {
-			[prelude: string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-		}): {
+		<Prelude extends string>(
+			style: {
+				/** The **@import** CSS at-rule imports style rules from other style sheets. */
+				'@import'?: unknown
+				/** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
+				'@font-face'?: unknown
+			} & {
+				[K in Prelude]: K extends '@import'
+					? string
+				: K extends '@font-face'
+					? CSSUtil.Native.AtRule.FontFace | CSSUtil.Native.AtRule.FontFace[]
+				: K extends `@keyframes ${string}`
+					? {
+						[KeyFrame in string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+					}
+				: K extends `@property ${string}`
+					? CSSUtil.Native.AtRule.Property
+				: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+			}
+		): {
 			(): string
 		}
 	},
@@ -78,11 +98,9 @@ export default interface Stitches<
 				selector: string
 			}
 			& (
-				Argument0 extends {}
-					? ThemeTokens<Argument0, Prefix>
-				: Argument1 extends {}
+				Argument0 extends string
 					? ThemeTokens<Argument1, Prefix>
-				: {}
+					: ThemeTokens<Argument0, Prefix>
 			)
 	}
 	theme: string & {
@@ -100,7 +118,7 @@ export default interface Stitches<
 	}
 	getCssText: {
 		(): string
-	},
+	}
 	css: {
 		<
 			Composers extends (
@@ -109,32 +127,30 @@ export default interface Stitches<
 				| React.JSXElementConstructor<any>
 				| Util.Function
 				| { [name: string]: unknown }
-			)[]
+			)[],
+			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>(
 			...composers: {
 				[K in keyof Composers]: (
-					Composers[K] extends string
+					// Strings, React Components, and Functions can be skipped over
+					Composers[K] extends string | React.ExoticComponent<any> | React.JSXElementConstructor<any> | Util.Function
 						? Composers[K]
-					: Composers[K] extends React.ExoticComponent<any>
-						? Composers[K]
-					: Composers[K] extends React.JSXElementConstructor<any>
-						? Composers[K]
-					: Composers[K] extends Util.Function
-						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
-						/** The **variants** property sets variants.
+					: RemoveIndex<CSS> & {
+						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
 						 */
 						variants?: {
-							[name: string]: {
-								[pair in number | string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-							} | 
-							(
-								(...args: any[]) => CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+							[Name in string]: {
+								[Pair in number | string]: CSS
+							} | (
+								(...args: any[]) => CSS
 							)
 						}
-						/** Compound variants. */
+						/** The **variants** property lets you to set a subclass of styles based on a combination of active variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants#compound-variants)
+						 */
 						compoundVariants?: (
 							& (
 								'variants' extends keyof Composers[K]
@@ -144,9 +160,13 @@ export default interface Stitches<
 								: Util.WideObject
 							)
 							& {
-								css: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+								css: CSS
 							}
 						)[]
+						/** The **defaultVariants** property allows you to predefine the active key-value pairs of variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants#default-variants)
+						 */
 						defaultVariants?: (
 							'variants' extends keyof Composers[K]
 								? {
@@ -158,10 +178,10 @@ export default interface Stitches<
 							: Util.WideObject
 						)
 					} & {
-						[K2 in keyof Composers[K]]: K2 extends 'variants' | 'defaultVariants' | 'compoundVariants'
+						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
 							? unknown
-						: K2 extends keyof CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-							? CSSUtil.CSS<Media, Theme, ThemeMap, Utils>[K2]
+						: K2 extends keyof CSS
+							? CSS[K2]
 						: unknown
 					}
 				)
@@ -170,50 +190,40 @@ export default interface Stitches<
 			StyledComponent.StyledComponentType<Composers>,
 			StyledComponent.StyledComponentProps<Composers, Media>,
 			Media,
-			CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+			CSS
 		>
-	},
+	}
 	styled: {
 		<
-			Type extends (
-				| string
-				| React.ExoticComponent<any>
-				| React.JSXElementConstructor<any>
-				| Util.Function
-			),
+			Type extends keyof JSX.IntrinsicElements | React.ComponentType<any> | Util.Function,
 			Composers extends (
 				| string
-				| React.ExoticComponent<any>
-				| React.JSXElementConstructor<any>
+				| React.ComponentType<any>
 				| Util.Function
 				| { [name: string]: unknown }
-			)[]
+			)[],
+			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>(
 			type: Type,
 			...composers: {
 				[K in keyof Composers]: (
-					Composers[K] extends string
+					// Strings, React Components, and Functions can be skipped over
+					Composers[K] extends string | React.ComponentType<any> | Util.Function
 						? Composers[K]
-					: Composers[K] extends React.ExoticComponent<any>
-						? Composers[K]
-					: Composers[K] extends React.JSXElementConstructor<any>
-						? Composers[K]
-					: Composers[K] extends Util.Function
-						? Composers[K]
-					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils, true> & {
-						/** The **variants** property sets variants.
+					:  RemoveIndex<CSS> & {
+						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
 						 */
 						variants?: {
-							[name: string]: {
-								[pair in number | string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-							} | 
-							(
-								(...args: any[]) => CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-							)
+							[Name in string]: {
+								[Pair in number | string]: CSS
+							}
 						}
-						/** Compound variants. */
+						/** The **variants** property lets you to set a subclass of styles based on a combination of active variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants#compound-variants)
+						 */
 						compoundVariants?: (
 							& (
 								'variants' extends keyof Composers[K]
@@ -223,9 +233,13 @@ export default interface Stitches<
 								: Util.WideObject
 							)
 							& {
-								css: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+								css: CSS
 							}
 						)[]
+						/** The **defaultVariants** property allows you to predefine the active key-value pairs of variants.
+						 *
+						 * [Read Documentation](https://stitches.dev/docs/variants#default-variants)
+						 */
 						defaultVariants?: (
 							'variants' extends keyof Composers[K]
 								? {
@@ -237,10 +251,10 @@ export default interface Stitches<
 							: Util.WideObject
 						)
 					} & {
-						[K2 in keyof Composers[K]]: K2 extends 'variants' | 'defaultVariants' | 'compoundVariants'
+						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
 							? unknown
-						: K2 extends keyof CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-							? CSSUtil.CSS<Media, Theme, ThemeMap, Utils>[K2]
+						: K2 extends keyof CSS
+							? CSS[K2]
 						: unknown
 					}
 				)

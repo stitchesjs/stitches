@@ -1,37 +1,53 @@
-/* Default Interfaces */
-/* ========================================================================== */
+import type * as CSSUtil from './css-util'
+import type Stitches from './stitches'
 
-/** Default Prefix configuration. */
-export type Prefix = ''
+/** Configuration Interface */
+declare namespace ConfigType {
+	/** Prefix interface. */
+	export type Prefix<T = ''> = T extends string ? T: string
 
-/** Default Media configuration. */
-export type Media = {}
+	/** Media interface. */
+	export type Media<T = {}> = {
+		[name in keyof T]: T[name] extends string ? T[name] : string
+	}
 
-/** Default Theme. */
-export type Theme = {
-	borderStyles?: ThemeScale
-	borderWidths?: ThemeScale
-	colors?: ThemeScale
-	fonts?: ThemeScale
-	fontSizes?: ThemeScale
-	fontWeights?: ThemeScale
-	letterSpacings?: ThemeScale
-	lineHeights?: ThemeScale
-	radii?: ThemeScale
-	shadows?: ThemeScale
-	sizes?: ThemeScale
-	space?: ThemeScale
-	transitions?: ThemeScale
-	zIndices?: ThemeScale
+	/** Theme interface. */
+	export type Theme<T = {}> = {
+		borderStyles?: { [token in number | string]: boolean | number | string }
+		borderWidths?: { [token in number | string]: boolean | number | string }
+		colors?: { [token in number | string]: boolean | number | string }
+		fonts?: { [token in number | string]: boolean | number | string }
+		fontSizes?: { [token in number | string]: boolean | number | string }
+		fontWeights?: { [token in number | string]: boolean | number | string }
+		letterSpacings?: { [token in number | string]: boolean | number | string }
+		lineHeights?: { [token in number | string]: boolean | number | string }
+		radii?: { [token in number | string]: boolean | number | string }
+		shadows?: { [token in number | string]: boolean | number | string }
+		sizes?: { [token in number | string]: boolean | number | string }
+		space?: { [token in number | string]: boolean | number | string }
+		transitions?: { [token in number | string]: boolean | number | string }
+		zIndices?: { [token in number | string]: boolean | number | string }
+	} & {
+		[Scale in keyof T]: {
+			[Token in keyof T[Scale]]: T[Scale][Token] extends (boolean | number | string) ? T[Scale][Token] : (boolean | number | string)
+		}
+	}
+
+	/** ThemeMap interface. */
+	export type ThemeMap<T = {}> = {
+		[Property in keyof T]: T[Property] extends string ? T[Property] : string
+	}
+
+	/** Utility interface. */
+	export type Utils<T = {}> = {
+		[Property in keyof T]: T[Property] extends (value: infer V) => {} ? T[Property] | ((value: V) => {
+			[K in keyof CSSUtil.CSSProperties]?: CSSUtil.CSSProperties[K] | V
+		}) : never
+	}
 }
 
-/** Default Theme Scale. */
-type ThemeScale = {
-	[token in number | string]: boolean | number | string
-}
-
-/** Default ThemeMap configuration. */
-export interface ThemeMap {
+/** Default ThemeMap. */
+export interface DefaultThemeMap {
 	gap: 'space'
 	gridGap: 'space'
 	columnGap: 'space'
@@ -67,6 +83,17 @@ export interface ThemeMap {
 	paddingInline: 'space'
 	paddingInlineEnd: 'space'
 	paddingInlineStart: 'space'
+	scrollMargin: 'space'
+	scrollMarginTop: 'space'
+	scrollMarginRight: 'space'
+	scrollMarginBottom: 'space'
+	scrollMarginLeft: 'space'
+	scrollMarginBlock: 'space'
+	scrollMarginBlockEnd: 'space'
+	scrollMarginBlockStart: 'space'
+	scrollMarginInline: 'space'
+	scrollMarginInlineEnd: 'space'
+	scrollMarginInlineStart: 'space'
 	scrollPadding: 'space'
 	scrollPaddingTop: 'space'
 	scrollPaddingRight: 'space'
@@ -88,6 +115,7 @@ export interface ThemeMap {
 	background: 'colors'
 	backgroundColor: 'colors'
 	backgroundImage: 'colors'
+	borderImage: 'colors'
 	border: 'colors'
 	borderBlock: 'colors'
 	borderBlockEnd: 'colors'
@@ -162,7 +190,21 @@ export interface ThemeMap {
 	zIndex: 'zIndices'
 }
 
-/** Default Utilities configuration. */
-export type Utils = {
-	[property: string]: (value: unknown) => {}
+/** Returns a function used to create a new Stitches interface. */
+export type CreateStitches = {
+	<
+		Prefix extends string = '',
+		Media extends {} = {},
+		Theme extends {} = {},
+		ThemeMap extends {} = DefaultThemeMap,
+		Utils extends {} = {}
+	>(
+		config?: {
+			prefix?: ConfigType.Prefix<Prefix>
+			media?: ConfigType.Media<Media>
+			theme?: ConfigType.Theme<Theme>
+			themeMap?: ConfigType.ThemeMap<ThemeMap>
+			utils?: ConfigType.Utils<Utils>
+		}
+	): Stitches<Prefix, Media, Theme, ThemeMap, Utils>
 }

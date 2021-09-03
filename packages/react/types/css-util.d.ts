@@ -1,10 +1,12 @@
-import type * as CSS from './css'
+import type * as Native from './css'
 import type * as Config from './config'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
+export { Native }
+
 /** CSS style declaration object. */
-export interface CSSProperties extends CSS.StandardLonghandProperties, CSS.StandardShorthandProperties, CSS.SvgProperties {}
+export interface CSSProperties extends Native.StandardLonghandProperties, Native.StandardShorthandProperties, Native.SvgProperties {}
 
 type ValueByPropertyName<PropertyName> = PropertyName extends keyof CSSProperties ? CSSProperties[PropertyName] : never
 
@@ -18,7 +20,6 @@ export type CSS<
 	Theme = {},
 	ThemeMap = Config.DefaultThemeMap,
 	Utils = {},
-	IsFlat = false
 > = (
 	// nested at-rule css styles
 	& {
@@ -29,16 +30,15 @@ export type CSS<
 		[K in keyof CSSProperties]?: (
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
-			| CSS.Globals
+			| Native.Globals
 			| ThemeUtil.ScaleValue
+			| Util.Index
 			| undefined
 		)
 	}
 	// known utility styles
 	& {
-		[K in keyof Utils]?: K extends keyof CSSProperties
-			? unknown
-		: Utils[K] extends (arg: infer P) => any
+		[K in keyof Utils as K extends keyof CSSProperties ? never : K]?: Utils[K] extends (arg: infer P) => any
 			? (
 				| (
 					P extends any[]
@@ -48,7 +48,7 @@ export type CSS<
 									? (
 										| ValueByPropertyName<P[0][$$PropertyValue]>
 										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
-										| CSS.Globals
+										| Native.Globals
 										| ThemeUtil.ScaleValue
 										| undefined
 									)
@@ -66,7 +66,7 @@ export type CSS<
 						? (
 							| ValueByPropertyName<P[$$PropertyValue]>
 							| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
-							| CSS.Globals
+							| Native.Globals
 							| undefined
 						)
 					: $$ScaleValue extends keyof P
@@ -83,31 +83,23 @@ export type CSS<
 	}
 	// known theme styles
 	& {
-		[K in keyof ThemeMap]?: (
-			K extends keyof CSSProperties
-				? unknown
-			: K extends keyof CSSProperties
-				? unknown
-			: K extends keyof Utils
-				? unknown
-			: (
-				| CSS.Globals
+		[K in keyof ThemeMap as K extends keyof CSSProperties ? never : K extends keyof Utils ? never : K]?: (
+				| Native.Globals
 				| Util.Index
 				| undefined
 			)
-		)
 	}
 	// unknown css declaration styles
-	& (true extends IsFlat ? {} : {
+	& {
 		/** Unknown property. */
-		[K in string]: (
+		[K: string]: (
 			| number
 			| string
 			| CSS<Media, Theme, ThemeMap, Utils>
 			| {}
 			| undefined
 		)
-	})
+	}
 )
 
 /** Unique symbol used to reference a property value. */

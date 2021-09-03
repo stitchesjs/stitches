@@ -1,10 +1,12 @@
-import type * as CSS from './css'
-import type * as Default from './default'
+import type * as Native from './css'
+import type * as Config from './config'
 import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
+export { Native }
+
 /** CSS style declaration object. */
-export interface CSSProperties extends CSS.StandardLonghandProperties, CSS.StandardShorthandProperties, CSS.SvgProperties {}
+export interface CSSProperties extends Native.StandardLonghandProperties, Native.StandardShorthandProperties, Native.SvgProperties {}
 
 type ValueByPropertyName<PropertyName> = PropertyName extends keyof CSSProperties ? CSSProperties[PropertyName] : never
 
@@ -14,10 +16,10 @@ type TokenByScaleName<ScaleName, Theme> = ScaleName extends keyof Theme ? Util.P
 
 /** Returns a Style interface, leveraging the given media and style map. */
 export type CSS<
-	Media = Default.Media,
+	Media = {},
 	Theme = {},
-	ThemeMap = Default.ThemeMap,
-	Utils = {}
+	ThemeMap = Config.DefaultThemeMap,
+	Utils = {},
 > = (
 	// nested at-rule css styles
 	& {
@@ -28,81 +30,75 @@ export type CSS<
 		[K in keyof CSSProperties]?: (
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
-			| CSS.Globals
+			| Native.Globals
 			| ThemeUtil.ScaleValue
+			| Util.Index
 			| undefined
 		)
 	}
 	// known utility styles
 	& {
-		[K in keyof Utils]?: (
-			K extends keyof CSSProperties
-				? unknown
-			: (
+		[K in keyof Utils as K extends keyof CSSProperties ? never : K]?: Utils[K] extends (arg: infer P) => any
+			? (
 				| (
-					Utils[K] extends (arg: infer P) => any
+					P extends any[]
 						? (
-							P extends any[]
-								? (
-									$$PropertyValue extends keyof P[0]
-										? (
-											| ValueByPropertyName<P[0][$$PropertyValue]>
-											| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
-											| CSS.Globals
-											| ThemeUtil.ScaleValue
-											| undefined
-										)
-									: $$ScaleValue extends keyof P[0]
-										? (
-											| TokenByScaleName<P[0][$$ScaleValue], Theme>
-											| ThemeUtil.ScaleValue
-											| undefined
-										)
-									: never
-								)[]
-								| P
-							: $$PropertyValue extends keyof P
-								? (
-									| ValueByPropertyName<P[$$PropertyValue]>
-									| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
-									| CSS.Globals
-									| ThemeUtil.ScaleValue
-									| undefined
-								)
-							: $$ScaleValue extends keyof P
-								? (
-									| TokenByScaleName<P[$$ScaleValue], Theme>
-									| ThemeUtil.ScaleValue
-									| undefined
-								)
-							: never
+							| (
+								$$PropertyValue extends keyof P[0]
+									? (
+										| ValueByPropertyName<P[0][$$PropertyValue]>
+										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
+										| Native.Globals
+										| ThemeUtil.ScaleValue
+										| undefined
+									)
+								: $$ScaleValue extends keyof P[0]
+									? (
+										| TokenByScaleName<P[0][$$ScaleValue], Theme>
+										| { scale: P[0][$$ScaleValue] }
+										| undefined
+									)
+								: never
+							)[]
+							| P
 						)
-						| P
+					: $$PropertyValue extends keyof P
+						? (
+							| ValueByPropertyName<P[$$PropertyValue]>
+							| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
+							| Native.Globals
+							| undefined
+						)
+					: $$ScaleValue extends keyof P
+						? (
+							| TokenByScaleName<P[$$ScaleValue], Theme>
+							| { scale: P[$$ScaleValue] }
+							| undefined
+						)
 					: never
 				)
+				| P
 			)
-		)
+		: never
 	}
 	// known theme styles
 	& {
-		[K in keyof ThemeMap]?: (
-			K extends keyof CSSProperties
-				? unknown
-			: K extends keyof CSSProperties
-				? unknown
-			: K extends keyof Utils
-				? unknown
-			: (
-				| CSS.Globals
+		[K in keyof ThemeMap as K extends keyof CSSProperties ? never : K extends keyof Utils ? never : K]?: (
+				| Native.Globals
 				| Util.Index
 				| undefined
 			)
-		)
 	}
 	// unknown css declaration styles
 	& {
 		/** Unknown property. */
-		[K in string]: number | string | CSS<Media, Theme, ThemeMap, Utils> | {} | undefined
+		[K: string]: (
+			| number
+			| string
+			| CSS<Media, Theme, ThemeMap, Utils>
+			| {}
+			| undefined
+		)
 	}
 )
 

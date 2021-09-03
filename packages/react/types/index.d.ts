@@ -26,9 +26,8 @@ export type CSS<
 	Config['media'],
 	Config['theme'],
 	Config['themeMap'],
-	Config['utils'],
-	false
->
+	Config['utils']
+> 
 
 /** Returns the properties, attributes, and children expected by a component. */
 export type ComponentProps<Component> = Component extends ((...args: any[]) => any) ? Parameters<Component>[0] : never

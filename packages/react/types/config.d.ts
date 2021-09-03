@@ -40,7 +40,7 @@ declare namespace ConfigType {
 
 	/** Utility interface. */
 	export type Utils<T = {}> = {
-		[Property in keyof T]: T[Property] extends (value: infer V) => {} ? T[Property] & ((value: V) => {
+		[Property in keyof T]: T[Property] extends (value: infer V) => {} ? T[Property] | ((value: V) => {
 			[K in keyof CSSUtil.CSSProperties]?: CSSUtil.CSSProperties[K] | V
 		}) : never
 	}
@@ -83,6 +83,17 @@ export interface DefaultThemeMap {
 	paddingInline: 'space'
 	paddingInlineEnd: 'space'
 	paddingInlineStart: 'space'
+	scrollMargin: 'space'
+	scrollMarginTop: 'space'
+	scrollMarginRight: 'space'
+	scrollMarginBottom: 'space'
+	scrollMarginLeft: 'space'
+	scrollMarginBlock: 'space'
+	scrollMarginBlockEnd: 'space'
+	scrollMarginBlockStart: 'space'
+	scrollMarginInline: 'space'
+	scrollMarginInlineEnd: 'space'
+	scrollMarginInlineStart: 'space'
 	scrollPadding: 'space'
 	scrollPaddingTop: 'space'
 	scrollPaddingRight: 'space'
@@ -104,6 +115,7 @@ export interface DefaultThemeMap {
 	background: 'colors'
 	backgroundColor: 'colors'
 	backgroundImage: 'colors'
+	borderImage: 'colors'
 	border: 'colors'
 	borderBlock: 'colors'
 	borderBlockEnd: 'colors'
