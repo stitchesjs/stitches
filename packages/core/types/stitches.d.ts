@@ -138,13 +138,18 @@ export default interface Stitches<
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
 						 */
-						variants?: {
-							[Name in string]: {
-								[Pair in number | string]: CSS
-							} | (
-								(...args: any[]) => CSS
-							)
-						}
+						variants?:
+							'variants' extends keyof Composers[K] ?
+							(
+								{
+									[Property in keyof Composers[K]['variants']]: Composers[K]['variants'][Property] extends (value: infer V) => {} ?
+									Composers[K]['variants'][Property]| ((value: V) => {
+											[K in keyof CSS]?: CSS[K] | V
+										}) : {
+											[Pair in number | string]: CSS
+										}
+								}
+							) : {}
 						/** The **variants** property lets you to set a subclass of styles based on a combination of active variants.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants#compound-variants)
@@ -153,7 +158,10 @@ export default interface Stitches<
 							& (
 								'variants' extends keyof Composers[K]
 									? {
-										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+										[Name in keyof Composers[K]['variants']]?:
+											Composers[K]['variants'][Name] extends Function ?
+											Util.Widen<CSSUtil.ExtractUtilities<Name, Composers[K]['variants'], Theme, ThemeMap>>
+											: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
 									} & Util.WideObject
 								: Util.WideObject
 							)
@@ -169,8 +177,8 @@ export default interface Stitches<
 							'variants' extends keyof Composers[K]
 								? {
 									[Name in keyof Composers[K]['variants']]?:
-										Composers[K]['variants'][Name] extends Util.Function ?
-											Util.Argument<Composers[K]['variants'][Name]>
+										Composers[K]['variants'][Name] extends Function ?
+										Util.Widen<CSSUtil.ExtractUtilities<Name, Composers[K]['variants'], Theme, ThemeMap>>
 										: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
 								}
 							: Util.WideObject
@@ -186,7 +194,7 @@ export default interface Stitches<
 			}
 		): StyledComponent.CssComponent<
 			StyledComponent.StyledComponentType<Composers>,
-			StyledComponent.StyledComponentProps<Composers, Media>,
+			StyledComponent.StyledComponentProps<Composers, Theme, ThemeMap>,
 			Media,
 			CSS
 		>

@@ -1,5 +1,6 @@
 import type * as React from 'react'
 import type * as Util from './util'
+import type * as CSSUtil from './css-util'
 
 
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
@@ -12,7 +13,7 @@ export interface StyledComponent<
 	CSS = {}
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
-		Type extends IntrinsicElementsKeys | React.ComponentType<any> 
+		Type extends IntrinsicElementsKeys | React.ComponentType<any>
 			? React.ComponentPropsWithRef<Type>
 		: never,
 		TransformProps<Props, Media> & { css?: CSS }
@@ -36,7 +37,7 @@ export interface StyledComponent<
 	>(
 		props: Util.Assign<
 			React.ComponentPropsWithRef<As extends IntrinsicElementsKeys | React.ComponentType<any> ? As : never>,
-			TransformProps<Props, Media> & { 
+			TransformProps<Props, Media> & {
 				as?: As,
 				css?: {
 					[K in keyof C]: K extends keyof CSS ? CSS[K] : never
@@ -144,24 +145,22 @@ export type StyledComponentType<T extends any[]> = (
 )
 
 /** Returns the cumulative variants from the given array of compositions. */
-export type StyledComponentProps<T extends any[], M> = (
+export type StyledComponentProps<T extends any[], Theme, ThemeMap> = (
 	& (
 		$$StyledComponentProps extends keyof T[0]
 			? T[0][$$StyledComponentProps]
 		: T[0] extends { variants: { [name: string]: unknown } }
 			? {
-				[K in keyof T[0]['variants']]?: Util.Widen<T[0]['variants'][K] extends Function ?
-					Util.Argument<T[0]['variants'][K]> |
-					{
-						[key in Util.Prefixed<'@', keyof M>]?: Util.Argument<T[0]['variants'][K]>
-					}
-					: keyof T[0]['variants'][K]>
+				[K in keyof T[0]['variants']]?:
+					T[0]['variants'][K] extends Function ?
+						Util.Widen<CSSUtil.ExtractUtilities<K, T[0]['variants'], Theme, ThemeMap>>
+					: Util.Widen<keyof T[0]['variants'][K]>
 			}
 		: {}
 	)
 	& (
 		T extends [lead: any, ...tail: infer V]
-			? StyledComponentProps<V, M>
+			? StyledComponentProps<V, Theme, ThemeMap>
 		: {}
 	)
 )

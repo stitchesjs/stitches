@@ -14,6 +14,49 @@ type TokenByPropertyName<PropertyName, Theme, ThemeMap> = PropertyName extends k
 
 type TokenByScaleName<ScaleName, Theme> = ScaleName extends keyof Theme ? Util.Prefixed<'$', keyof Theme[ScaleName]> : never
 
+export type ExtractUtilities<K extends keyof Utils, Utils, Theme, ThemeMap> = Utils[K] extends (arg: infer P) => any
+	? (
+		| (
+			P extends any[]
+				? (
+					| (
+						$$PropertyValue extends keyof P[0]
+							? (
+								| ValueByPropertyName<P[0][$$PropertyValue]>
+								| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
+								| Native.Globals
+								| ThemeUtil.ScaleValue
+								| undefined
+							)
+						: $$ScaleValue extends keyof P[0]
+							? (
+								| TokenByScaleName<P[0][$$ScaleValue], Theme>
+								| { scale: P[0][$$ScaleValue] }
+								| undefined
+							)
+						: never
+					)[]
+					| P
+				)
+			: $$PropertyValue extends keyof P
+				? (
+					| ValueByPropertyName<P[$$PropertyValue]>
+					| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
+					| Native.Globals
+					| undefined
+				)
+			: $$ScaleValue extends keyof P
+				? (
+					| TokenByScaleName<P[$$ScaleValue], Theme>
+					| { scale: P[$$ScaleValue] }
+					| undefined
+				)
+			: never
+		)
+		| P
+	)
+	: never
+
 /** Returns a Style interface, leveraging the given media and style map. */
 export type CSS<
 	Media = {},
@@ -37,50 +80,7 @@ export type CSS<
 		)
 	}
 	// known utility styles
-	& {
-		[K in keyof Utils as K extends keyof CSSProperties ? never : K]?: Utils[K] extends (arg: infer P) => any
-			? (
-				| (
-					P extends any[]
-						? (
-							| (
-								$$PropertyValue extends keyof P[0]
-									? (
-										| ValueByPropertyName<P[0][$$PropertyValue]>
-										| TokenByPropertyName<P[0][$$PropertyValue], Theme, ThemeMap>
-										| Native.Globals
-										| ThemeUtil.ScaleValue
-										| undefined
-									)
-								: $$ScaleValue extends keyof P[0]
-									? (
-										| TokenByScaleName<P[0][$$ScaleValue], Theme>
-										| { scale: P[0][$$ScaleValue] }
-										| undefined
-									)
-								: never
-							)[]
-							| P
-						)
-					: $$PropertyValue extends keyof P
-						? (
-							| ValueByPropertyName<P[$$PropertyValue]>
-							| TokenByPropertyName<P[$$PropertyValue], Theme, ThemeMap>
-							| Native.Globals
-							| undefined
-						)
-					: $$ScaleValue extends keyof P
-						? (
-							| TokenByScaleName<P[$$ScaleValue], Theme>
-							| { scale: P[$$ScaleValue] }
-							| undefined
-						)
-					: never
-				)
-				| P
-			)
-		: never
-	}
+	& { [K in keyof Utils as K extends keyof CSSProperties ? never : K]?: ExtractUtilities<K, Utils, Theme, ThemeMap> }
 	// known theme styles
 	& {
 		[K in keyof ThemeMap as K extends keyof CSSProperties ? never : K extends keyof Utils ? never : K]?: (

@@ -1,4 +1,5 @@
 import type * as Util from './util'
+import type * as CSSUtil from './css-util'
 
 /** Returns a new CSS Component. */
 export interface CssComponent<
@@ -78,24 +79,22 @@ export type StyledComponentType<T extends any[]> = (
 )
 
 /** Returns the cumulative variants from the given array of compositions. */
-export type StyledComponentProps<T extends any[], M> = (
+export type StyledComponentProps<T extends any[], Theme, ThemeMap> = (
 	& (
 		$$StyledComponentProps extends keyof T[0]
 			? T[0][$$StyledComponentProps]
 		: T[0] extends { variants: { [name: string]: unknown } }
 			? {
-				[K in keyof T[0]['variants']]?: Util.Widen<T[0]['variants'][K] extends Function ?
-					Util.Argument<T[0]['variants'][K]> |
-					{
-						[key in Util.Prefixed<'@', keyof M>]?: Util.Argument<T[0]['variants'][K]>
-					}
-					: keyof T[0]['variants'][K]>
+				[K in keyof T[0]['variants']]?:
+					T[0]['variants'][K] extends Function ?
+						Util.Widen<CSSUtil.ExtractUtilities<K, T[0]['variants'], Theme, ThemeMap>>
+					: Util.Widen<keyof T[0]['variants'][K]>
 			}
 		: {}
 	)
 	& (
 		T extends [lead: any, ...tail: infer V]
-			? StyledComponentProps<V, M>
+			? StyledComponentProps<V, Theme, ThemeMap>
 		: {}
 	)
 )
