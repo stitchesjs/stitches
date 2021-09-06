@@ -46,9 +46,6 @@ export type Composer = [
 	/** Composer compound variants. */
 	VariantTuple[],
 
-	/** Composer dynamic variants. */
-	VariantTuple[],
-
 	/** Composer variants pairings with any default variants applied. */
 	PrefilledVariants,
 
