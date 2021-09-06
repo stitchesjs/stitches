@@ -9,23 +9,20 @@ describe('Variants', () => {
 						backgroundColor: 'dodgerblue',
 						color: 'white',
 					}
-				} else if (color === 'blue') {
+				} else if (color === 'red') {
 					return {
 						backgroundColor: 'tomato',
 						color: 'white',
 					}
 				}
 			},
-			size: (size) => {
-				if (size === 'small') {
-					return {
-						fontSize: '16px',
-					}
-				} else if (size === 'large') {
-					return {
-						fontSize: '24px',
-					}
-				}
+			size: {
+				small: {
+					fontSize: '16px',
+				},
+				large: {
+					fontSize: '24px',
+				},
 			},
 			level: (level) => {
 				if (level === "1") {
@@ -120,23 +117,20 @@ describe('Variants with defaults', () => {
 						backgroundColor: 'dodgerblue',
 						color: 'white',
 					}
-				} else if (color === 'blue') {
+				} else if (color === 'red') {
 					return {
 						backgroundColor: 'tomato',
 						color: 'white',
 					}
 				}
 			},
-			size: (size) => {
-				if (size === 'small') {
-					return {
-						fontSize: '16px',
-					}
-				} else if (size === 'large') {
-					return {
-						fontSize: '24px',
-					}
-				}
+			size: {
+				small: {
+					fontSize: '16px',
+				},
+				large: {
+					fontSize: '24px',
+				},
 			},
 			level: (level) => {
 				if (level === "1") {
@@ -253,23 +247,20 @@ describe('Conditional variants', () => {
 						backgroundColor: 'dodgerblue',
 						color: 'white',
 					}
-				} else if (color === 'blue') {
+				} else if (color === 'red') {
 					return {
 						backgroundColor: 'tomato',
 						color: 'white',
 					}
 				}
 			},
-			size: (size) => {
-				if (size === 'small') {
-					return {
-						fontSize: '16px',
-					}
-				} else if (size === 'large') {
-					return {
-						fontSize: '24px',
-					}
-				}
+			size: {
+				small: {
+					fontSize: '16px',
+				},
+				large: {
+					fontSize: '24px',
+				},
 			},
 			level: (level) => {
 				if (level === "1") {
