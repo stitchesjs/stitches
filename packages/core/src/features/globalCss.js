@@ -11,35 +11,37 @@ export const createGlobalCssFunction = (
 	/** @type {object} */ config,
 	/** @type {Sheet} */ sheet
 ) => createGlobalCssFunctionMap(config, () => (
-	/** @type {Style} */ style
+	/** @type {Style[]} */ ...styles
 ) => {
-	style = typeof style === 'object' && style || {}
-
-	const uuid = toHash(style)
-
 	const render = () => {
-		if (!sheet.rules.global.cache.has(uuid)) {
-			sheet.rules.global.cache.add(uuid)
+		for (let style of styles) {
+			style = typeof style === 'object' && style || {}
 
-			// support @import rules
-			if ('@import' in style) {
-				let importIndex = [].indexOf.call(sheet.sheet.cssRules, sheet.rules.themed.group) - 1
+			let uuid = toHash(style)
 
-				// wrap import in quotes as a convenience
-				for (
-					let importValue of /** @type {string[]} */ ([].concat(style['@import']))
-				) {
-					importValue = importValue.includes('"') || importValue.includes("'") ? importValue : `"${importValue}"`
+			if (!sheet.rules.global.cache.has(uuid)) {
+				sheet.rules.global.cache.add(uuid)
 
-					sheet.sheet.insertRule(`@import ${importValue};`, importIndex++)
+				// support @import rules
+				if ('@import' in style) {
+					let importIndex = [].indexOf.call(sheet.sheet.cssRules, sheet.rules.themed.group) - 1
+
+					// wrap import in quotes as a convenience
+					for (
+						let importValue of /** @type {string[]} */ ([].concat(style['@import']))
+					) {
+						importValue = importValue.includes('"') || importValue.includes("'") ? importValue : `"${importValue}"`
+
+						sheet.sheet.insertRule(`@import ${importValue};`, importIndex++)
+					}
+
+					delete style['@import']
 				}
 
-				delete style['@import']
+				toCssRules(style, [], [], config, (cssText) => {
+					sheet.rules.global.apply(cssText)
+				})
 			}
-
-			toCssRules(style, [], [], config, (cssText) => {
-				sheet.rules.global.apply(cssText)
-			})
 		}
 
 		return ''

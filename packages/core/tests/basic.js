@@ -66,7 +66,7 @@ describe('Basic', () => {
 
 		expect(rendering2of2).toBeInstanceOf(Function)
 		expect(className2of2).toBe('')
-		expect(cssString2of2).toBe(`--sxs{--sxs:1 PJLV cSHHDh}@media{body{margin:0}}`)
+		expect(cssString2of2).toBe(`--sxs{--sxs:1 cSHHDh}@media{body{margin:0}}`)
 	})
 
 	test('Functionality of keyframes()', () => {

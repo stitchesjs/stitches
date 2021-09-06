@@ -52,22 +52,13 @@ keyframes({
 })
 
 globalCss({
-	hello: {
+	body: {
 		'@bp1': {
 			backgroundColor: '$gray100',
 		},
 		backgroundColor: '$gray300',
 	},
 })
-
-// const externalStyles: Arg<typeof css> = {
-// 	'@bp1': {
-// 		backgroundColor: '$gray100',
-// 	},
-// 	'backgroundColor': '$gray300',
-// }
-
-// void externalStyles
 
 const PotatoButton = css({
 	variants: {

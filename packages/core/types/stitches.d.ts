@@ -28,24 +28,27 @@ export default interface Stitches<
 	 */
 	globalCss: {
 		<Prelude extends string>(
-			style: {
-				/** The **@import** CSS at-rule imports style rules from other style sheets. */
-				'@import'?: unknown
-				/** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
-				'@font-face'?: unknown
-			} & {
-				[K in Prelude]: K extends '@import'
-					? string | string[]
-				: K extends '@font-face'
-					? CSSUtil.Native.AtRule.FontFace | CSSUtil.Native.AtRule.FontFace[]
-				: K extends `@keyframes ${string}`
-					? {
-						[KeyFrame in string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-					}
-				: K extends `@property ${string}`
-					? CSSUtil.Native.AtRule.Property
-				: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-			}
+			...styles: (
+				& {
+					/** The **@import** CSS at-rule imports style rules from other style sheets. */
+					'@import'?: unknown
+					/** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
+					'@font-face'?: unknown
+				}
+				& {
+					[K in Prelude]: K extends '@import'
+						? string | string[]
+					: K extends '@font-face'
+						? CSSUtil.Native.AtRule.FontFace | CSSUtil.Native.AtRule.FontFace[]
+					: K extends `@keyframes ${string}`
+						? {
+							[KeyFrame in string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+						}
+					: K extends `@property ${string}`
+						? CSSUtil.Native.AtRule.Property
+					: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+				}
+			)[]
 		): {
 			(): string
 		}
