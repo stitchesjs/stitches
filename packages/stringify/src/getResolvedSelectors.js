@@ -24,4 +24,4 @@ export const getResolvedSelectors = (
 		},
 		[]
 	)
-) // prettier-ignore
+)

@@ -34,6 +34,6 @@ describe('replacer (prefixing)', () => {
 				'-moz-tab-size:2;' +
 				'tab-size:2;' +
 			'}',
-		) // prettier-ignore
+		)
 	})
 })

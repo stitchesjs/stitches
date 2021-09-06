@@ -26,7 +26,7 @@ describe('nesting rules', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		) // prettier-ignore
+		)
 	})
 
 	test('stringify() generates string of reverse-nested CSS', () => {
@@ -46,7 +46,7 @@ describe('nesting rules', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		) // prettier-ignore
+		)
 	})
 
 	test('stringify() generates a string of implicitly nested CSS', () => {
@@ -74,7 +74,7 @@ describe('nesting rules', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		) // prettier-ignore
+		)
 	})
 
 	test('stringify() generates a string of pseudo-expectedly implicitly nested CSS', () => {
@@ -102,6 +102,6 @@ describe('nesting rules', () => {
 					'margin:0;' +
 				'}' +
 			'}',
-		) // prettier-ignore
+		)
 	})
 })

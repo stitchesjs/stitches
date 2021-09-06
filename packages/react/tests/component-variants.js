@@ -98,7 +98,7 @@ describe('Variants', () => {
 			`}--sxs{--sxs:4 c-PJLV-cChFtv-cv}@media{` +
 				expressionCompoundCssText +
 			`}`
-		) // prettier-ignore
+		)
 	})
 })
 
@@ -205,7 +205,7 @@ describe('Variants with defaults', () => {
 				// compound color:blue + size:small
 				`.c-PJLV-cChFtv-cv{transform:scale(1.2)}` +
 			`}`
-		) // prettier-ignore
+		)
 	})
 
 	test('Returns a component selector without the default variant applied when toString is used', () => {
@@ -353,4 +353,4 @@ describe('Conditional variants', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

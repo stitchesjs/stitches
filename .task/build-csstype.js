@@ -37,7 +37,7 @@ const generateType = async (packageUrl) => {
 	.toString()
 
 	await fs.writeFile(dtsModifiedURL, dtsModifiedTxt)
-} // prettier-ignore
+}
 
 const generateTypes = async () => {
 	await generateType(rootUrl.to('packages/core/'))

@@ -54,7 +54,7 @@ export const box = ({
 		].join('\n')),
 		border(`╰────────────────────────────────╯`),
 	].join('\n')
-} // prettier-ignore
+}
 
 export const passIcon = green('✔')
 export const failIcon = red('✖')

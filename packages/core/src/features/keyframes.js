@@ -40,4 +40,4 @@ export const createKeyframesFunction = (/** @type {Config} */ config, /** @type 
 			toString: render,
 		})
 	})
-) // prettier-ignore
+)

@@ -37,7 +37,7 @@ describe('Support @import', () => {
 
 		expect(getCssText()).toBe(`@import "${importURL}";`)
 	})
-}) // prettier-ignore
+})
 
 describe('Support @font-face', () => {
 	test('Authors can define a @font-face rule', () => {
@@ -134,4 +134,4 @@ describe('Support @font-face', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

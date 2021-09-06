@@ -22,6 +22,6 @@ describe('at-rule (font-face)', () => {
 					'opacity:1;' +
 				'}' +
 			'}',
-		) // prettier-ignore
+		)
 	})
 })

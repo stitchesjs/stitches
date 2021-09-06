@@ -153,4 +153,4 @@ describe('Numeric Values', () => {
 			}
 		})
 	}
-}) // prettier-ignore
+})

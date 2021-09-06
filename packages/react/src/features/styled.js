@@ -29,7 +29,7 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 				forwardProps.ref = ref
 
 				return React.createElement(Type, forwardProps)
-			}) // prettier-ignore
+			})
 
 			const toString = () => cssComponent.selector
 
@@ -44,4 +44,4 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 
 		return styled
 	})
-) // prettier-ignore
+)

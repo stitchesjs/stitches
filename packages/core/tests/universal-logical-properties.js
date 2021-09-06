@@ -96,4 +96,4 @@ describe('Logical Properties', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

@@ -22,13 +22,13 @@ describe('emerson', () => {
 					},
 				},
 			},
-		}) // prettier-ignore
+		})
 
 		const cssText = (
 			`--sxs{--sxs:3 c-PJLV-efCiES-size-1}@media{` +
 				`.c-PJLV-efCiES-size-1{padding-left:var(--space-1);padding-right:var(--space-1)}` +
 			`}`
-		) // prettier-ignore
+		)
 
 		component.render({ size: '1' })
 

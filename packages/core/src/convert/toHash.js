@@ -20,4 +20,4 @@ export const toHash = (/** @type {object} */ value) => toAlphabeticName(
 		5381,
 		JSON.stringify(value)
 	) >>> 0
-) // prettier-ignore
+)

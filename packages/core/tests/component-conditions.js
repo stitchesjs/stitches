@@ -22,4 +22,4 @@ describe('Component Medias', () => {
 			`}`,
 		)
 	})
-}) // prettier-ignore
+})

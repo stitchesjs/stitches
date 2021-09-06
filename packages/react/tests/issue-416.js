@@ -84,4 +84,4 @@ describe('Issue #416: Composition versus Descendancy', () => {
 			`}`
 		))
 	}
-}) // prettier-ignore
+})

@@ -118,7 +118,7 @@ describe('Variants', () => {
 			}}`
 		)
 	})
-}) // prettier-ignore
+})
 
 describe('Variants with defaults', () => {
 	const componentConfig = {
@@ -234,7 +234,7 @@ describe('Variants with defaults', () => {
 		expect(className).toBe('c-PJLV')
 		expect(getCssText()).toBe('--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}')
 	})
-}) // prettier-ignore
+})
 
 describe('Conditional variants', () => {
 	const config = {
@@ -429,7 +429,7 @@ describe('Conditional variants', () => {
 			)
 		}
 	})
-}) // prettier-ignore
+})
 
 describe('Variant pairing types', () => {
 	const componentConfigForBooleanVariant = {
@@ -524,4 +524,4 @@ describe('Variant pairing types', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

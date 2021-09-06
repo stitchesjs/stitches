@@ -26,4 +26,4 @@ export const toResolvedSelectors = (
 			[]
 		)
 	: nestedSelectors
-) // prettier-ignore
+)

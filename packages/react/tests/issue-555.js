@@ -61,4 +61,4 @@ describe('Issue #555', () => {
 
 		expect(toString()).toBe(`--sxs{--sxs:2 c-jEKtXH c-PJLV}@media{.c-jEKtXH{color:dodgerblue}}`)
 	})
-}) // prettier-ignore
+})

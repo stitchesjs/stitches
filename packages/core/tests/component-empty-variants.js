@@ -57,4 +57,4 @@ describe('Empty Variants', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

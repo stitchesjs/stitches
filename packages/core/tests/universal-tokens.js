@@ -334,4 +334,4 @@ describe('Tokens', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

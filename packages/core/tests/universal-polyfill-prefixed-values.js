@@ -28,4 +28,4 @@ describe('Polyfill prefixed values', () => {
 			`--sxs{--sxs:1 gZsLvv}@media{.fit{width:-moz-fit-content;width:fit-content}}`
 		)
 	})
-}) // prettier-ignore
+})

@@ -127,7 +127,7 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 	}
 
 	return /** @type {Composer} */ ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
-} // prettier-ignore
+}
 
 const createRenderer = (
 	/** @type {Config} */ config,
@@ -284,7 +284,7 @@ const createRenderer = (
 		[internal]: internals,
 		toString,
 	})
-} // prettier-ignore
+}
 
 /** Returns useful data that can be known before rendering. */
 const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) => {
@@ -322,7 +322,7 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 	]
 
 	return preparedData
-} // prettier-ignore
+}
 
 const getTargetVariantsToAdd = (
 	/** @type {VariantTuple[]} */

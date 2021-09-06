@@ -46,4 +46,4 @@ describe('Composition', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

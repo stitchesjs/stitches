@@ -14,7 +14,7 @@ export const toSizingValue = (/** @type {string} */ declarationName, /** @type {
 			),
 		)
 	: String(declarationValue)
-) // prettier-ignore
+)
 
 /** CSS Properties whose value include a sizing keyword. */
 const sizeProps = {

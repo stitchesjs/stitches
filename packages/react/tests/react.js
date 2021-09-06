@@ -60,4 +60,4 @@ describe('React', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

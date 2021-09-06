@@ -141,4 +141,4 @@ describe('Issue #492', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

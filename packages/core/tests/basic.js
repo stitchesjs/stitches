@@ -262,4 +262,4 @@ describe('Basic', () => {
 
 		expect(getCssText()).toBe(`--sxs{--sxs:0 t-kfidiM}@media{:root,.t-kfidiM{--colors-red:Crimson;--colors-blue:DodgerBlue}}`)
 	})
-}) // prettier-ignore
+})

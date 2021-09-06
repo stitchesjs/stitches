@@ -104,7 +104,7 @@ const main = async (pkg, opts) => {
 
 		didFailLast = results[didFail]
 	}
-} // prettier-ignore
+}
 
 const didFail = Symbol.for('test.failure')
 
@@ -119,7 +119,7 @@ const getErrorStack = (error) => error.stack.split(/\n/g).filter(
 			dim(after)
 		)
 	)
-).join('\n') // prettier-ignore
+).join('\n')
 
 export const testAll = async (opts) => {
 	await main(URL.from(import.meta.url, '../packages/stringify/'), opts)
@@ -152,7 +152,7 @@ if (isProcessMeta(import.meta)) {
 		).on('start', () => {
 			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
 			console.clear()
-		}).on('quit', () => process.exit()) // prettier-ignore
+		}).on('quit', () => process.exit())
 	} else {
 		testAll({
 			only: getProcessArgOf('only'),

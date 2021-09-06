@@ -27,4 +27,4 @@ describe('Component with CSS prop', () => {
 			`}`
 		)
 	})
-}) // prettier-ignore
+})

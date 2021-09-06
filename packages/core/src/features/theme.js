@@ -62,4 +62,4 @@ export const createThemeFunction = (
 			toString: render,
 		}
 	})
-) // prettier-ignore
+)

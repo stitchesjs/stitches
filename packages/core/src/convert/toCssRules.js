@@ -146,11 +146,11 @@ export const toCssRules = (
 	}
 
 	walk(style, selectors, conditions)
-} // prettier-ignore
+}
 
 const toCssString = (/** @type {string[]} */ declarations, /** @type {string[]} */ selectors, /** @type {string[]} */ conditions) => (
 	`${conditions.map((condition) => `${condition}{`).join('')}${selectors.length ? `${selectors.join(',')}{` : ''}${declarations.join(';')}${selectors.length ? `}` : ''}${Array(conditions.length ? conditions.length + 1 : 0).join('}')}`
-) // prettier-ignore
+)
 
 /** CSS Properties whose number value may safely be interpretted as a pixel. */
 export const unitProps = {

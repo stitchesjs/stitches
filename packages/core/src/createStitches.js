@@ -68,4 +68,4 @@ export const createStitches = (config) => {
 	if (!didRun) instance.reset()
 
 	return instance
-} // prettier-ignore
+}

@@ -44,4 +44,4 @@ export const toResolvedMediaQueryRanges = (
 			')'
 		)
 	}
-) // prettier-ignore
+)

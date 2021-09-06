@@ -153,4 +153,4 @@ describe('Issue #450', () => {
 			`${tileComponentClass} ${roundedTileComponentClass} ${variantAppearanceSecondaryClass} ${variantLightBlueClass} ${variantCompoundClass}`
 		)
 	})
-}) // prettier-ignore
+})
