@@ -59,7 +59,7 @@ export const createComponentFunction = (/** @type {Config} */ config, /** @type 
 
 		// set the component type if none was set
 		if (internals.type == null) internals.type = 'span'
-		if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], [], {}, []])
+		if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], {}, []])
 
 		return createRenderer(config, internals, sheet)
 	})
@@ -74,9 +74,6 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 
 	/** @type {VariantTuple[]} */
 	const compoundVariants = []
-
-	/** @type {VariantTuple[]} */
-	const dynamicVariants = []
 
 	/** @type {PrefilledVariants} */
 	const prefilledVariants = Object.create(null)
@@ -97,14 +94,14 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 
 			if (typeof variantPairs === 'function') {
 				/** @type {VariantMatcher} */
-				const vMatch = name
+				const vMatch = { [name]: String(name) }
 
 				const vStyle = variantPairs
 
 				/** @type {VariantTuple} */
 				const variant = [vMatch, vStyle, false]
 
-				dynamicVariants.push(variant)
+				singularVariants.push(variant)
 
 				continue
 			}
@@ -143,7 +140,7 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 		}
 	}
 
-	return /** @type {Composer} */ ([className, style, singularVariants, compoundVariants, dynamicVariants, prefilledVariants, undefinedVariants])
+	return /** @type {Composer} */ ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
 } // prettier-ignore
 
 const createRenderer = (
@@ -207,7 +204,7 @@ const createRenderer = (
 		// 2.2.1. orders regular variants before responsive variants
 		// 2.3. iterate their compound variants, add their compound variant classes
 
-		for (const [composerBaseClass, composerBaseStyle, singularVariants, compoundVariants, dynamicVariants] of internals.composers) {
+		for (const [composerBaseClass, composerBaseStyle, singularVariants, compoundVariants] of internals.composers) {
 			if (!sheet.rules.styled.cache.has(composerBaseClass)) {
 				sheet.rules.styled.cache.add(composerBaseClass)
 
@@ -223,48 +220,6 @@ const createRenderer = (
 				if (variantToAdd === undefined) continue
 
 				for (const [vClass, vStyle] of variantToAdd) {
-					const variantClassName = `${composerBaseClass}-${toHash(vStyle)}-${vClass}`
-
-					classSet.add(variantClassName)
-
-					if (!sheet.rules.onevar.cache.has(variantClassName)) {
-						sheet.rules.onevar.cache.add(variantClassName)
-
-						toCssRules(vStyle, [`.${variantClassName}`], [], config, cssText => {
-							sheet.rules.onevar.apply(cssText)
-						})
-					}
-				}
-			}
-
-			for (const variantToAdd of dynamicVariants) {
-				if (variantToAdd === undefined) continue
-
-				const [vName, vFunction] = variantToAdd
-
-				const vProp = variantProps[vName]
-
-				if (vProp === 'undefined') continue
-
-				let vStyle = {}
-				let vClasses = []
-
-				if (typeof vProp === 'object') {
-					for (const query in vProp) {
-						if (query === '@initial') continue
-
-						vStyle = {
-							[query in config.media ? config.media[query] : query]: vFunction(vProp[query]),
-						}
-
-						vClasses.push([`${vName}-${vProp[query]}`, vStyle])
-					}
-				} else {
-					vStyle = vFunction(vProp)
-					vClasses.push([`${vName}-${vProp}`, vStyle])
-				}
-
-				for(const [vClass, vStyle] of vClasses) {
 					const variantClassName = `${composerBaseClass}-${toHash(vStyle)}-${vClass}`
 
 					classSet.add(variantClassName)
@@ -359,7 +314,7 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 	/** @type {UndefinedVariants} List of variant names that can have an "undefined" pairing. */
 	const combinedUndefinedVariants = []
 
-	for (const [className, , , , , prefilledVariants, undefinedVariants] of composers) {
+	for (const [className, , , , prefilledVariants, undefinedVariants] of composers) {
 		if (baseClassName === '') baseClassName = className
 
 		baseClassNames.push(className)
@@ -400,6 +355,14 @@ const getTargetVariantsToAdd = (
 		// skip empty variants
 		if (vEmpty) continue
 
+		// replace variant name
+		if (typeof vStyle == 'function') {
+			vMatch[vStyle.name] = typeof variantProps[vStyle.name] === 'object' ? vStyle.name : variantProps[vStyle.name]
+
+			// skip empty variants
+			if (vMatch[vStyle.name] === 'undefined') continue targetVariants
+		}
+
 		/** Position the variant should be inserted into. */
 		let vOrder = 0
 
@@ -421,7 +384,19 @@ const getTargetVariantsToAdd = (
 				let qOrder = 0
 
 				for (const query in pPair) {
-					if (vPair === String(pPair[query])) {
+					// responsive dynamic matches
+					if (typeof vStyle === 'function') {
+						if (query !== '@initial') {
+							;(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([
+								isCompoundVariant ? `cv` : `${vName}-${pPair[query]}`,
+								{
+									[query in media ? media[query] : query]: vStyle(pPair[query]),
+								},
+							])
+
+							vOrder += qOrder
+						}
+					} else if (vPair === String(pPair[query])) {
 						if (query !== '@initial') {
 							vStyle = {
 								[query in media ? media[query] : query]: vStyle,
@@ -443,7 +418,7 @@ const getTargetVariantsToAdd = (
 			else continue targetVariants
 		}
 
-		(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`, vStyle])
+		;(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`, typeof vStyle === 'function' ? vStyle(vMatch[vName]) : vStyle])
 	}
 
 	return targetVariantsToAdd
