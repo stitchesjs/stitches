@@ -82,7 +82,7 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 	const undefinedVariants = []
 
 	for (const variantName in initDefaultVariants) {
-		prefilledVariants[variantName] = Array.isArray(initDefaultVariants[variantName]) ? initDefaultVariants[variantName] : String(initDefaultVariants[variantName])
+		prefilledVariants[variantName] = String(initDefaultVariants[variantName])
 	}
 
 	// add singular variants
