@@ -2,10 +2,10 @@ import { defaultThemeMap } from './default/defaultThemeMap.js'
 
 import { createMemo } from './utility/createMemo.js'
 
-import { createComponentFunction } from './features/css.js'
-import { createGlobalFunction } from './features/global.js'
+import { createCssFunction } from './features/css.js'
+import { createGlobalCssFunction } from './features/globalCss.js'
 import { createKeyframesFunction } from './features/keyframes.js'
-import { createThemeFunction } from './features/theme.js'
+import { createCreateThemeFunction } from './features/createTheme.js'
 
 import { createSheet } from './sheet.js'
 
@@ -41,10 +41,10 @@ export const createStitches = (config) => {
 		const sheet = createSheet(root)
 
 		const returnValue = {
-			css: createComponentFunction(config, sheet),
-			globalCss: createGlobalFunction(config, sheet),
+			css: createCssFunction(config, sheet),
+			globalCss: createGlobalCssFunction(config, sheet),
 			keyframes: createKeyframesFunction(config, sheet),
-			createTheme: createThemeFunction(config, sheet),
+			createTheme: createCreateThemeFunction(config, sheet),
 			reset() {
 				sheet.reset()
 				returnValue.theme.toString()

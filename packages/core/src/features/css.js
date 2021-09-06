@@ -22,11 +22,11 @@ import { toTailDashed } from '../convert/toTailDashed.js'
 
 /** @typedef {import('../sheet').SheetGroup} SheetGroup */
 
-const createComponentFunctionMap = createMemo()
+const createCssFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
-export const createComponentFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
-	createComponentFunctionMap(config, () => (...args) => {
+export const createCssFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
+	createCssFunctionMap(config, () => (...args) => {
 		/** @type {Internals} */
 		let internals = {
 			type: null,

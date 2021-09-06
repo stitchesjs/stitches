@@ -3,17 +3,17 @@ import React from 'react'
 import { internal } from '../../../core/src/utility/internal.js'
 import { createMemo } from '../../../core/src/utility/createMemo.js'
 
-import { createComponentFunction } from '../../../core/src/features/css.js'
+import { createCssFunction } from '../../../core/src/features/css.js'
 
 /** @typedef {import('../../../core/src').Config} Config */
 /** @typedef {import('../../../core/src').GroupSheet} GroupSheet */
 
-const createComponentFunctionMap = createMemo()
+const createCssFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
 export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {GroupSheet} */ sheet }) => (
-	createComponentFunctionMap(config, () => {
-		const css = createComponentFunction(config, sheet)
+	createCssFunctionMap(config, () => {
+		const css = createCssFunction(config, sheet)
 
 		const styled = (...args) => {
 			const cssComponent = css(...args)

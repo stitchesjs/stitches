@@ -4,13 +4,13 @@ import { define } from '../utility/define.js'
 import { toCssRules } from '../convert/toCssRules.js'
 import { toHash } from '../convert/toHash.js'
 
-const createGlobalFunctionMap = createMemo()
+const createGlobalCssFunctionMap = createMemo()
 
 /** Returns a function that applies global styles. */
-export const createGlobalFunction = (
+export const createGlobalCssFunction = (
 	/** @type {object} */ config,
 	/** @type {Sheet} */ sheet
-) => createGlobalFunctionMap(config, () => (
+) => createGlobalCssFunctionMap(config, () => (
 	/** @type {Style} */ style
 ) => {
 	style = typeof style === 'object' && style || {}
