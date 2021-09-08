@@ -173,7 +173,7 @@ export default interface Stitches<
 								}
 							: Util.WideObject
 						)
-					} & {
+					} & CSS & {
 						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
 							? unknown
 						: K2 extends keyof CSS

@@ -175,7 +175,7 @@ export default interface Stitches<
 								}
 							: Util.WideObject
 						)
-					} & {
+					} & CSS & {
 						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
 							? unknown
 						: K2 extends keyof CSS
@@ -208,7 +208,7 @@ export default interface Stitches<
 					// Strings, React Components, and Functions can be skipped over
 					Composers[K] extends string | React.ComponentType<any> | Util.Function
 						? Composers[K]
-					:  RemoveIndex<CSS> & {
+					: RemoveIndex<CSS> & {
 						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
 						 *
 						 * [Read Documentation](https://stitches.dev/docs/variants)
@@ -245,7 +245,7 @@ export default interface Stitches<
 								}
 							: Util.WideObject
 						)
-					} & {
+					} & CSS & {
 						[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants'
 							? unknown
 						: K2 extends keyof CSS
