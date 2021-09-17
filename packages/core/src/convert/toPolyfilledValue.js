@@ -12,6 +12,7 @@ export const toPolyfilledValue = {
 	content: (d) => ({ content: d.includes('"') || d.includes("'") || /^([A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(d) ? d : `"${d}"` }),
 	hyphens: (d) => ({ WebkitHyphens: d, hyphens: d }),
 	maskImage: (d) => ({ WebkitMaskImage: d, maskImage: d }),
+	maskSize: (d) => ({ WebkitMaskSize: d, maskSize: d }),
 	tabSize: (d) => ({ MozTabSize: d, tabSize: d }),
 	textSizeAdjust: (d) => ({ WebkitTextSizeAdjust: d, textSizeAdjust: d }),
 	userSelect: (d) => ({ WebkitUserSelect: d, userSelect: d }),
