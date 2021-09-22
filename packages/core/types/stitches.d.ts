@@ -27,21 +27,21 @@ export default interface Stitches<
 	 * [Read Documentation](https://stitches.dev/docs/variants)
 	 */
 	globalCss: {
-		<Styles extends { [K: string]: unknown }[]>(
-			...styles: {
-				[Index in keyof Styles]: (
-					& {
-						/** The **@import** CSS at-rule imports style rules from other style sheets. */
-						'@import'?: unknown
+		<Styles extends { [K: string]: any }>(
+			...styles: (
+				{
+					/** The **@import** CSS at-rule imports style rules from other style sheets. */
+					'@import'?: unknown
 
-						/** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
-						'@font-face'?: unknown
-					}
-					& {
-						[K in keyof Styles[Index]]: K extends '@import'
+					/** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
+					'@font-face'?: unknown
+				}
+				& {
+					[K in keyof Styles]: (
+						K extends '@import'
 							? string | string[]
 						: K extends '@font-face'
-							? CSSUtil.Native.AtRule.FontFace | CSSUtil.Native.AtRule.FontFace[]
+							? CSSUtil.Native.AtRule.FontFace | Array<CSSUtil.Native.AtRule.FontFace>
 						: K extends `@keyframes ${string}`
 							? {
 								[KeyFrame in string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
@@ -49,9 +49,9 @@ export default interface Stitches<
 						: K extends `@property ${string}`
 							? CSSUtil.Native.AtRule.Property
 						: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-					}
-				)
-			}
+					)
+				}
+			)[]
 		): {
 			(): string
 		}
