@@ -38,6 +38,16 @@ For full documentation, visit [stitches.dev](https://stitches.dev).
 
 Please follow our [contributing guidelines](./CONTRIBUTING.md).
 
+## Community
+
+You can join the [Stitches Discord](https://discord.com/invite/H4eG3Mk) to chat with other members of the community.
+
+Here's a list of community-built projects:
+
+- [babel-plugin-transform-stitches-display-name](https://github.com/afzalsayed96/babel-plugin-transform-stitches-display-name)
+- [stitches-normalize-css](https://github.com/psongpin/stitches-normalize-css)
+- [stitches-crochet](https://github.com/orenelbaum/stitches-crochet)
+
 ## Authors
 
 - Pedro Duarte ([@peduarte](https://twitter.com/peduarte)) - [Modulz](https://modulz.app)
