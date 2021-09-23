@@ -109,16 +109,22 @@ export default interface Stitches<
 					: ThemeTokens<Argument0, Prefix>
 			)
 	}
-	theme: string & {
-		[Scale in keyof Theme]: {
-			[Token in keyof Theme[Scale]]: ThemeUtil.Token<
-				Extract<Token, string | number>,
-				string,
-				Extract<Scale, string | void>,
-				Extract<Prefix, string | void>
-			>
+	theme:
+		string 
+		& {
+			className: string
+			selector: string
 		}
-	}
+		& {
+			[Scale in keyof Theme]: {
+				[Token in keyof Theme[Scale]]: ThemeUtil.Token<
+					Extract<Token, string | number>,
+					string,
+					Extract<Scale, string | void>,
+					Extract<Prefix, string | void>
+				>
+			}
+		}
 	reset: {
 		(): void
 	}
