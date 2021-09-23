@@ -164,7 +164,7 @@ export default interface Stitches<
 								'variants' extends keyof Composers[K]
 									? {
 										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
-									} & Util.WideObject
+									}
 								: Util.WideObject
 							)
 							& {
