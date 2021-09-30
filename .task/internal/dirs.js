@@ -16,6 +16,9 @@ export const coreTestsUrl = new URL('tests/', corePackageUrl)
 /** React package directory. */
 export const reactPackageUrl = new URL('react/', packagesUrl)
 
+/** Solid package directory. */
+export const solidPackageUrl = new URL('solid/', packagesUrl)
+
 /** React tests directory. */
 export const reactTestsUrl = new URL('tests/', reactPackageUrl)
 

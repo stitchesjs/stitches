@@ -6,7 +6,7 @@ import { transformDestructuring } from './internal/js.transformDestructuring.js'
 import { transformModulesToCJS } from './internal/js.transformModulesToCJS.js'
 import { transformOptionalCatchToParam } from './internal/js.transformOptionalCatchToParam.js'
 import { transformIIFE } from './internal/js.transformIIFE.js'
-import { corePackageUrl, reactPackageUrl, stringifyPackageUrl } from './internal/dirs.js'
+import { corePackageUrl, reactPackageUrl, solidPackageUrl, stringifyPackageUrl } from './internal/dirs.js'
 import { isProcessMeta, getProcessArgOf } from './internal/process.js'
 import esbuild from 'esbuild'
 import nodemon from 'nodemon'
@@ -86,7 +86,7 @@ export const build = async (packageUrl, opts) => {
 			entryPoints: [targetPathname],
 			outfile: outputPathname,
 			bundle: true,
-			external: ['react'],
+			external: ['react', 'solid-js/web'],
 			format: 'esm',
 			sourcemap: 'external',
 			write: false,
@@ -130,6 +130,7 @@ export const buildAll = async (opts) => {
 	await build(stringifyPackageUrl, opts)
 	await build(corePackageUrl, opts)
 	await build(reactPackageUrl, opts)
+	await build(solidPackageUrl, opts)
 }
 
 if (isProcessMeta(import.meta)) {
@@ -147,6 +148,7 @@ if (isProcessMeta(import.meta)) {
 				`--watch packages/react/src`,
 				`--watch packages/react/tests`,
 				`--watch packages/react/types`,
+				`--watch packages/solid/src`,
 				`--watch packages/stringify/src`,
 				`--watch packages/stringify/tests`,
 				`--watch packages/stringify/types`,
@@ -154,10 +156,12 @@ if (isProcessMeta(import.meta)) {
 				// exec
 				`--exec "${['node', './.task/build.js', ...onlyArgs].join(' ')}"`,
 			].join(' '),
-		).on('start', () => {
-			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
-			console.clear()
-		}).on('quit', () => process.exit())
+		)
+			.on('start', () => {
+				process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
+				console.clear()
+			})
+			.on('quit', () => process.exit())
 	} else {
 		buildAll({
 			only: getProcessArgOf('only'),
