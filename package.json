@@ -23,6 +23,7 @@
   "workspaces": [
     "packages/core",
     "packages/react",
+    "packages/solid",
     "packages/test",
     "packages/stringify"
   ],
