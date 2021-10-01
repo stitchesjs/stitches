@@ -2,7 +2,7 @@
 import * as Stitches from '../types/index'
 import { createStitches } from '../types/index'
 
-const { css, global, keyframes, styled, theme } = createStitches({
+const { css, globalCss, keyframes, styled, theme } = createStitches({
 	utils: {
 		mx: (value: Stitches.PropertyValue<'marginLeft'>) => ({
 			marginLeft: value,
@@ -54,7 +54,7 @@ keyframes({
 	},
 })
 
-global({
+globalCss({
 	body: {
 		backgroundColor: '$gray300',
 		'@bp1': {
