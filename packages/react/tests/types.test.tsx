@@ -166,3 +166,19 @@ void function Test() {
 		}} />
 	)
 }
+
+/* -------------------------------------------------------------------------------------------------
+ * Issue #821
+ * -----------------------------------------------------------------------------------------------*/
+
+type UnionProps = { type: 'single', collapsible: boolean; } | { type: 'multiple' };
+const UnionComponent: React.FC<UnionProps> = () => null
+const StyledUnionComponent = styled(UnionComponent, {})
+
+void function Test() {
+	<>
+		<StyledUnionComponent type="single" collapsible />
+		{/* @ts-expect-error */}
+		<StyledUnionComponent type="multiple" collapsible />
+	</>
+}

@@ -5,7 +5,7 @@
 export type Prefixed<K extends string, T> = `${K}${Extract<T, boolean | number | string>}`
 
 /** Returns an object from the given object assigned with the values of another given object. */
-export type Assign<T1 = {}, T2 = {}> = Omit<T1, keyof T2> & T2
+export type Assign<T1 = {}, T2 = {}> = T1 extends any ? Omit<T1, keyof T2> & T2 : never
 
 /** Returns a widened value from the given value. */
 export type Widen<T> =
