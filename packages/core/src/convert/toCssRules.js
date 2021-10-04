@@ -52,14 +52,14 @@ export const toCssRules = (
 				const datas = isAtRuleLike && Array.isArray(style[name]) ? style[name] : [style[name]]
 
 				for (data of datas) {
-					/** Whether the current data represents a nesting rule. */
-					const isRuleLike = typeof data === 'object' && data && data.toString === toStringOfObject
-
 					const camelName = toCamelCase(name)
+					
+					/** Whether the current data represents a nesting rule, which is a plain object whose key is not already a util. */
+					const isRuleLike = typeof data === 'object' && data && data.toString === toStringOfObject && (!config.utils[camelName] || !selectors.length)
 
 					// if the left-hand "name" matches a configured utility
 					// conditionally transform the current data using the configured utility
-					if (camelName in config.utils) {
+					if (camelName in config.utils && !isRuleLike) {
 						const util = config.utils[camelName]
 
 						if (util !== lastUtil) {
