@@ -25,7 +25,7 @@ export interface StyledComponent<
 			: {},
 			TransformProps<Props, Media> & {
 				as?: never,
-				css?: CSS
+				css?: CSS | CssComponent<Type, Props, Media, CSS>
 			}
 		>
 	): React.ReactElement | null
