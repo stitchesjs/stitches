@@ -33,10 +33,29 @@ export type CSS<
 export type ComponentProps<Component> = Component extends ((...args: any[]) => any) ? Parameters<Component>[0] : never
 
 /** Returns a type that expects a value to be a kind of CSS property value. */
-export type PropertyValue<K extends keyof CSSUtil.CSSProperties> = { readonly [CSSUtil.$$PropertyValue]: K }
+export type PropertyValue<K extends keyof CSSUtil.CSSProperties, C = null> = (
+	C extends null 
+		? { readonly [CSSUtil.$$PropertyValue]: K } 
+	: C extends { [K: string]: any } 
+		? CSSUtil.CSS<
+			C['media'],
+			C['theme'],
+			C['themeMap'],
+			C['utils']
+		>[K]
+	: never
+)
 
 /** Returns a type that expects a value to be a kind of theme scale value. */
-export type ScaleValue<K> = { readonly [CSSUtil.$$ScaleValue]: K }
+export type ScaleValue<K, C = null> = (
+	C extends null
+		? { readonly [CSSUtil.$$ScaleValue]: K }
+	: C extends { [K: string]: any }
+		? K extends keyof C['theme']
+			? `$${string & keyof C['theme'][K]}` 
+		: never
+	: never
+)
 
 /** Returns a type that suggests variants from a component as possible prop values. */
 export type VariantProps<Component extends {[key: symbol | string]: any}> = StyledComponent.TransformProps<Component[StyledComponent.$$StyledComponentProps], Component[StyledComponent.$$StyledComponentMedia]>
