@@ -31,7 +31,6 @@ export const createStitches = (config) => {
 		const config = {
 			prefix,
 			media,
-			root,
 			theme,
 			themeMap,
 			utils,
