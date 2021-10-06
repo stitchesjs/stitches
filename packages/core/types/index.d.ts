@@ -9,7 +9,6 @@ export type CSSProperties = CSSUtil.CSSProperties
 export type DefaultThemeMap = Config.DefaultThemeMap
 
 /** Returns a Style interface from a configuration, leveraging the given media and style map. */
-
 export type CSS<
 	Config extends {
 		media?: {}
@@ -33,26 +32,26 @@ export type CSS<
 export type ComponentProps<Component> = Component extends ((...args: any[]) => any) ? Parameters<Component>[0] : never
 
 /** Returns a type that expects a value to be a kind of CSS property value. */
-export type PropertyValue<K extends keyof CSSUtil.CSSProperties, C = null> = (
-	C extends null 
-		? { readonly [CSSUtil.$$PropertyValue]: K } 
-	: C extends { [K: string]: any } 
+export type PropertyValue<Property extends keyof CSSUtil.CSSProperties, Config = null> = (
+	Config extends null 
+		? { readonly [K in CSSUtil.$$PropertyValue]: Property } 
+	: Config extends { [K: string]: any } 
 		? CSSUtil.CSS<
-			C['media'],
-			C['theme'],
-			C['themeMap'],
-			C['utils']
-		>[K]
+			Config['media'],
+			Config['theme'],
+			Config['themeMap'],
+			Config['utils']
+		>[Property]
 	: never
 )
 
 /** Returns a type that expects a value to be a kind of theme scale value. */
-export type ScaleValue<K, C = null> = (
-	C extends null
-		? { readonly [CSSUtil.$$ScaleValue]: K }
-	: C extends { [K: string]: any }
-		? K extends keyof C['theme']
-			? `$${string & keyof C['theme'][K]}` 
+export type ScaleValue<Scale, Config = null> = (
+	Config extends null
+		? { readonly [K in CSSUtil.$$ScaleValue]: Scale }
+	: Config extends { [K: string]: any }
+		? Scale extends keyof Config['theme']
+			? `$${string & keyof Config['theme'][Scale]}` 
 		: never
 	: never
 )
