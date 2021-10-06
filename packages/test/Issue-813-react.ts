@@ -2,7 +2,7 @@
 import { createStitches } from '@stitches/react'
 import * as Stitches from '@stitches/react'
 
-const { config, styled } = createStitches({
+export const { config, styled } = createStitches({
 	theme: {
 		colors: {
 			primary: 'transparent'
