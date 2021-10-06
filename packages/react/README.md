@@ -49,7 +49,7 @@ For full documentation, visit [stitches.dev](https://stitches.dev).
 
 ## Contributing
 
-Please follow our [contributing guidelines](./CONTRIBUTING.md).
+Please follow our [contributing guidelines](https://github.com/modulz/stitches/blob/canary/CONTRIBUTING.md).
 
 ## Authors
 
