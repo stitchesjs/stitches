@@ -6,6 +6,7 @@
     "skipLibCheck": true,
     "noEmit": false,
     "jsx": "preserve",
+    "declaration": true,
     "lib": [
       "dom",
       "es2020"

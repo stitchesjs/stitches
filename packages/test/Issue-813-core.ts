@@ -2,7 +2,7 @@
 import { createStitches } from '@stitches/core'
 import * as Stitches from '@stitches/core'
 
-const { config, css } = createStitches({
+export const { config, css } = createStitches({
 	theme: {
 		colors: {
 			primary: 'transparent'
@@ -14,7 +14,7 @@ const { config, css } = createStitches({
 		}), 
 		c: (value: Stitches.ScaleValue<'colors'>) => ({
 			color: value
-		})
+		}),
 	}
 })
 
@@ -24,7 +24,7 @@ export const colorValue1: Stitches.PropertyValue<'backgroundColor', typeof confi
 export const colorValue2: Stitches.PropertyValue<'backgroundColor', typeof config> = "$primary"
 
 // ensure `ScaleValue` accepts a valid token
-export const colorToken: Stitches.ScaleValue<'colors', typeof config> = '$primary'
+export const colorToken: Stitches.ScaleValue<'colors', typeof config> = "$primary"
 
 export const box = css({ 
 	// ensure `bg` accepts a valid CSS Color
