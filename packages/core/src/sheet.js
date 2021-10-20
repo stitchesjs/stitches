@@ -5,6 +5,19 @@
 /** @type {RuleGroupNames} */
 const names = ['themed', 'global', 'styled', 'onevar', 'allvar', 'inline']
 
+const isSheetAccessible = (/** @type {CSSStyleSheet} */ sheet) => {
+	if (sheet.href && !sheet.href.startsWith(location.origin)) {
+		return false
+	}
+
+	try {
+		sheet.cssRules
+		return true
+	} catch (e) {
+		return false
+	}
+}
+
 export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 	/** @type {SheetGroup} Object hosting the hydrated stylesheet. */
 	let groupSheet
@@ -33,7 +46,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 		// iterate all stylesheets until a hydratable stylesheet is found
 		for (const sheet of sheets) {
-			if (sheet.href && !sheet.href.startsWith(location.origin)) continue
+			if (!isSheetAccessible(sheet)) continue
 
 			for (let index = 0, rules = sheet.cssRules; rules[index]; ++index) {
 				/** @type {CSSStyleRule} Possible indicator rule. */
@@ -81,7 +94,10 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 					type,
 					cssRules: [],
 					insertRule(cssText, index) {
-						this.cssRules.splice(index, 0, createCSSMediaRule(cssText, { import: 3, undefined: 1 }[(cssText.toLowerCase().match(/^@([a-z]+)/) || [])[1]] || 4))
+						this.cssRules.splice(index, 0, createCSSMediaRule(cssText, {
+							import: 3,
+							undefined: 1
+						}[(cssText.toLowerCase().match(/^@([a-z]+)/) || [])[1]] || 4))
 					},
 					get cssText() {
 						return sourceCssText === '@media{}' ? `@media{${[].map.call(this.cssRules, (cssRule) => cssRule.cssText).join('')}}` : sourceCssText
