@@ -89,8 +89,14 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				})
 			}
 
+
+			const styleEl = document.createElement('style')
+			styleEl.dataset.stitches = 'true'
+
+			const sheet = root ? (root.head || root).appendChild(styleEl).sheet : createCSSMediaRule('', 'text/css')
+
 			groupSheet = {
-				sheet: root ? (root.head || root).appendChild(document.createElement('style')).sheet : createCSSMediaRule('', 'text/css'),
+				sheet,
 				rules: {},
 				reset,
 				toString() {
