@@ -360,21 +360,24 @@ const getTargetVariantsToAdd = (
 				let didMatch
 
 				let qOrder = 0
-
+				let matchedQueries = []
 				for (const query in pPair) {
 					if (vPair === String(pPair[query])) {
 						if (query !== '@initial') {
-							vStyle = {
-								[query in media ? media[query] : query]: vStyle,
-							}
+							const cleanQuery = query.slice(1)
+							matchedQueries.push(cleanQuery in media ? media[cleanQuery] : query.replace(/^@media ?/, ''))
 						}
 
 						vOrder += qOrder
-
 						didMatch = true
 					}
 
 					++qOrder
+				}
+				if (matchedQueries.length) {
+					vStyle = {
+						['@media ' + matchedQueries.join(', ')]: vStyle,
+					}
 				}
 
 				if (!didMatch) continue targetVariants

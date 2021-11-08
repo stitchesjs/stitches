@@ -22,7 +22,7 @@ describe('Issue #725', () => {
 				'@wide': 'end',
 			},
 		})
-		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-lfUpcg-justify-end}@media{@media (min-width: 1536px){@media (min-width: 720px){.c-PJLV-lfUpcg-justify-end{justify-content:flex-end}}}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-jobbEJ-justify-end}@media{@media (min-width: 720px), (min-width: 1536px){.c-PJLV-jobbEJ-justify-end{justify-content:flex-end}}}`)
 	})
 
 	test('Combination with other variants', () => {
@@ -55,6 +55,6 @@ describe('Issue #725', () => {
 				'@mobile': 'start'
 			},
 		})
-		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-gmqXFB-color-red c-PJLV-lfUpcg-justify-end c-PJLV-hFhRfe-justify-start}@media{.c-PJLV-gmqXFB-color-red{color:red}@media (min-width: 1536px){@media (min-width: 720px){.c-PJLV-lfUpcg-justify-end{justify-content:flex-end}}}@media (min-width: 420px){.c-PJLV-hFhRfe-justify-start{justify-content:flex-start}}}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-gmqXFB-color-red c-PJLV-jobbEJ-justify-end c-PJLV-kxjDkG-justify-start}@media{.c-PJLV-gmqXFB-color-red{color:red}@media (min-width: 720px), (min-width: 1536px){.c-PJLV-jobbEJ-justify-end{justify-content:flex-end}}@media (min-width: 420px){.c-PJLV-kxjDkG-justify-start{justify-content:flex-start}}}`)
 	})
 })
