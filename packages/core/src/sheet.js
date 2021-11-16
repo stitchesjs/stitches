@@ -3,7 +3,7 @@
 /** @typedef {import('./sheet').SheetGroup} SheetGroup */
 
 /** @type {RuleGroupNames} */
-const names = ['themed', 'global', 'styled', 'onevar', 'allvar', 'inline']
+export const names = ['themed', 'global', 'styled', 'onevar', 'resonevar', 'allvar', 'inline']
 
 export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 	/** @type {SheetGroup} Object hosting the hydrated stylesheet. */
@@ -21,10 +21,6 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 			for (const groupName in rules) {
 				delete rules[groupName]
-			}
-
-			if (sheet.ownerRule) {
-				sheet.ownerRule.textContent = sheet.ownerRule.textContent
 			}
 		}
 
@@ -123,90 +119,22 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 		}
 
 		const { sheet, rules } = groupSheet
-
-		// conditionally generate the inline group
-		if (!rules.inline) {
-			const index = sheet.cssRules.length
-			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--sxs{--sxs:5}', index)
-
-			rules.inline = {
-				index: index,
-				group: sheet.cssRules[index + 1],
-				cache: new Set([5]),
+		for (let i = names.length - 1; i >= 0; --i) {
+			// name of group on current index
+			const name = names[i]
+			if (!rules[name]) {
+				// name of prev group
+				const prevName = names[i + 1]
+				// get the index of that prev group or else get the length of the whole sheet
+				const index = rules[prevName] ? rules[prevName].index : sheet.cssRules.length
+				// insert the grouping & the sxs rule
+				sheet.insertRule('@media{}', index)
+				sheet.insertRule(`--sxs{--sxs:${i}}`, index)
+				// add the group to the group sheet
+				rules[name] = { group: sheet.cssRules[index + 1], index, cache: new Set([i]) }
 			}
+			addApplyToGroup(rules[name])
 		}
-		addApplyToGroup(rules.inline)
-
-		// conditionally generate the allvar group
-		if (!rules.allvar) {
-			const index = rules.inline.index
-			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--sxs{--sxs:4}', index)
-
-			rules.allvar = {
-				index: index,
-				group: sheet.cssRules[index + 1],
-				cache: new Set([4]),
-			}
-		}
-		addApplyToGroup(rules.allvar)
-
-		// conditionally generate the onevar group
-		if (!rules.onevar) {
-			const index = rules.allvar.index
-			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--sxs{--sxs:3}', index)
-
-			rules.onevar = {
-				index: index,
-				group: sheet.cssRules[index + 1],
-				cache: new Set([3]),
-			}
-		}
-		addApplyToGroup(rules.onevar)
-
-		// conditionally generate the styled group
-		if (!rules.styled) {
-			const index = rules.onevar.index
-			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--sxs{--sxs:2}', index)
-
-			rules.styled = {
-				index: index,
-				group: sheet.cssRules[index + 1],
-				cache: new Set([2]),
-			}
-		}
-		addApplyToGroup(rules.styled)
-
-		// conditionally generate the global group
-		if (!rules.global) {
-			const index = rules.styled.index
-			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--sxs{--sxs:1}', index)
-
-			rules.global = {
-				index: index,
-				group: sheet.cssRules[index + 1],
-				cache: new Set([1]),
-			}
-		}
-		addApplyToGroup(rules.global)
-
-		// conditionally generate the themed group
-		if (!rules.themed) {
-			const index = rules.global.index
-			sheet.insertRule('@media{}', index)
-			sheet.insertRule('--sxs{--sxs:0}', index)
-
-			rules.themed = {
-				index: index,
-				group: sheet.cssRules[index + 1],
-				cache: new Set([0]),
-			}
-		}
-		addApplyToGroup(rules.themed)
 	}
 
 	reset()
@@ -228,4 +156,24 @@ const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
 			// do nothing and continue
 		}
 	}
+}
+/** Pending rules for injection */
+const $pr = Symbol()
+export const createRulesInjectionDeferrer = (globalSheet) => {
+	// the injection deferrer
+	function injector() {
+		for (let i = 0; i < injector[$pr].length; i++) {
+			const [sheet, cssString] = injector[$pr][i]
+			globalSheet.rules[sheet].apply(cssString)
+		}
+		injector[$pr] = []
+		return null
+	}
+	// private prop to store pending rules
+	injector[$pr] = []
+	// mocking the rules.apply api used on the sheet
+	injector.rules = {}
+	// creating the apply methods under rules[something]
+	names.forEach((sheetName) => (injector.rules[sheetName] = { apply: (rule) => injector[$pr].push([sheetName, rule]) }))
+	return injector
 }

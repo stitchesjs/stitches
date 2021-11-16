@@ -119,7 +119,7 @@ describe('Basic', () => {
 			`--sxs{--sxs:2 c-dataoT}@media{` +
 				`.c-dataoT{color:DodgerBlue}` +
 			`}` +
-			`--sxs{--sxs:5 c-dataoT-icaIZdx-css}@media{` +
+			`--sxs{--sxs:6 c-dataoT-icaIZdx-css}@media{` +
 				`.c-dataoT-icaIZdx-css{color:Crimson}` +
 			`}`
 		)

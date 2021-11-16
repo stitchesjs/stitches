@@ -95,7 +95,7 @@ describe('Variants', () => {
 			`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{` +
 				expressionColorBlueCssText +
 				expressionSizeSmallCssText +
-			`}--sxs{--sxs:4 c-PJLV-cChFtv-cv}@media{` +
+			`}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{` +
 				expressionCompoundCssText +
 			`}`
 		)
@@ -201,7 +201,7 @@ describe('Variants with defaults', () => {
 				`.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}` +
 				// implicit size:small
 				`.c-PJLV-Gaggi-size-small{font-size:16px}` +
-			`}--sxs{--sxs:4 c-PJLV-cChFtv-cv}@media{` +
+			`}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{` +
 				// compound color:blue + size:small
 				`.c-PJLV-cChFtv-cv{transform:scale(1.2)}` +
 			`}`
@@ -296,7 +296,7 @@ describe('Conditional variants', () => {
 
 		expect(component.render({ size: { '@bp1': 'small' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
 		expect(toString()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small}@media{` +
 				componentSmallBp1CssText +
 			`}`
 		)
@@ -313,7 +313,7 @@ describe('Conditional variants', () => {
 
 		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 			componentSmallBp1CssText +
 			componentLargeBp2CssText +
 			`}`
@@ -331,7 +331,7 @@ describe('Conditional variants', () => {
 
 		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				componentSmallBp1CssText +
 				componentLargeBp2CssText +
 			`}`
@@ -339,7 +339,7 @@ describe('Conditional variants', () => {
 
 		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
 			`}`
@@ -347,7 +347,7 @@ describe('Conditional variants', () => {
 
 		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
 		expect(toString()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
 			`}`

@@ -22,7 +22,7 @@ describe('Component with CSS prop', () => {
 			`--sxs{--sxs:2 c-hhyRYU}@media{` +
 				`.c-hhyRYU{order:1}` +
 			`}` +
-			`--sxs{--sxs:5 c-hhyRYU-ilhKMMn-css}@media{` +
+			`--sxs{--sxs:6 c-hhyRYU-ilhKMMn-css}@media{` +
 				`.c-hhyRYU-ilhKMMn-css{order:2}` +
 			`}`
 		)
