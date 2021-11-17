@@ -2,6 +2,16 @@
 /** @typedef {import('./sheet').RuleGroupNames} RuleGroupNames */
 /** @typedef {import('./sheet').SheetGroup} SheetGroup */
 
+/**
+ * Rules in the sheet appear in this order:
+ * 1. theme rules (themed)
+ * 2. global rules (global)
+ * 3. component rules (styled)
+ * 4. non-responsive variants rules (onevar)
+ * 5. responsive variants rules (resonevar)
+ * 6. compound variants rules (allvar)
+ * 7. inline rules (inline)
+ */
 /** @type {RuleGroupNames} */
 export const names = ['themed', 'global', 'styled', 'onevar', 'resonevar', 'allvar', 'inline']
 
@@ -159,6 +169,12 @@ const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
 }
 /** Pending rules for injection */
 const $pr = Symbol()
+
+/** 
+ * When a stitches component is extending some other random react component,
+ * it’s gonna create a react component (Injector) using this function and then render it after the children, 
+ * this way, we would force the styles of the wrapper to be injected after the wrapped component
+ */
 export const createRulesInjectionDeferrer = (globalSheet) => {
 	// the injection deferrer
 	function injector() {
