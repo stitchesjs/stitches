@@ -77,7 +77,7 @@ describe('Issue #450', () => {
 			const { component1, getCssText } = getFreshComponents()
 			const render = component1({ color: { '@media (min-width: 640px)': 'blue' } })
 			expect(render.className).toBe(`c-PJLV c-PJLV-gmqXFB-color-red c-PJLV-bBevdw-color-blue`)
-			expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-gmqXFB-color-red c-PJLV-bBevdw-color-blue}@media{.c-PJLV-gmqXFB-color-red{color:red}@media (min-width: 640px){.c-PJLV-bBevdw-color-blue{color:blue}}}`)
+			expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-gmqXFB-color-red}@media{.c-PJLV-gmqXFB-color-red{color:red}}--sxs{--sxs:4 c-PJLV-bBevdw-color-blue}@media{@media (min-width: 640px){.c-PJLV-bBevdw-color-blue{color:blue}}}`)
 		})
 
 		test('Render component2() as orange, inherited from defaultVariants', () => {
@@ -93,10 +93,7 @@ describe('Issue #450', () => {
 			const render = component2({ color: { '@media (min-width: 640px)': 'blue' } })
 			expect(render.className).toBe(`c-PJLV c-PJLV-bBevdw-color-blue c-PJLV-vMTTG-color-orange`)
 			expect(getCssText()).toBe(
-				`--sxs{--sxs:3 c-PJLV-bBevdw-color-blue c-PJLV-vMTTG-color-orange}@media{` +
-					`@media (min-width: 640px){.c-PJLV-bBevdw-color-blue{color:blue}}` +
-					`.c-PJLV-vMTTG-color-orange{color:orange}` +
-				`}`
+				`--sxs{--sxs:3 c-PJLV-vMTTG-color-orange}` + `@media{.c-PJLV-vMTTG-color-orange{color:orange}}` + `--sxs{--sxs:4 c-PJLV-bBevdw-color-blue}@media{` + `@media (min-width: 640px){.c-PJLV-bBevdw-color-blue{color:blue}}` + `}`,
 			)
 		})
 	})
@@ -190,14 +187,14 @@ describe('Issue #450', () => {
 			expect(getCssText()).toBe(
 				`--sxs{--sxs:2 c-jyxqjt}@media{` +
 					`.c-jyxqjt{--component:1}` +
-				`}` +
-				`--sxs{--sxs:3 c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue}@media{` +
+					`}` +
+					`--sxs{--sxs:3 c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue}@media{` +
 					`.c-jyxqjt-cOChOn-appearance-secondary{--appearance:secondary}` +
 					`.c-jyxqjt-ilDyRi-color-lightBlue{--color:lightBlue}` +
-				`}` +
-				`--sxs{--sxs:4 c-jyxqjt-gYqlvA-cv}@media{` +
+					`}` +
+					`--sxs{--sxs:5 c-jyxqjt-gYqlvA-cv}@media{` +
 					`.c-jyxqjt-gYqlvA-cv{--compound:appearance secondary / color lightBlue}` +
-				`}`
+					`}`,
 			)
 		})
 
@@ -209,14 +206,14 @@ describe('Issue #450', () => {
 				`--sxs{--sxs:2 c-jyxqjt c-dkRcuu}@media{` +
 					`.c-jyxqjt{--component:1}` +
 					`.c-dkRcuu{--component:2}` +
-				`}` +
-				`--sxs{--sxs:3 c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue}@media{` +
+					`}` +
+					`--sxs{--sxs:3 c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue}@media{` +
 					`.c-jyxqjt-cOChOn-appearance-secondary{--appearance:secondary}` +
 					`.c-jyxqjt-ilDyRi-color-lightBlue{--color:lightBlue}` +
-				`}` +
-				`--sxs{--sxs:4 c-jyxqjt-gYqlvA-cv}@media{` +
+					`}` +
+					`--sxs{--sxs:5 c-jyxqjt-gYqlvA-cv}@media{` +
 					`.c-jyxqjt-gYqlvA-cv{--compound:appearance secondary / color lightBlue}` +
-				`}`
+					`}`,
 			)
 		})
 
@@ -228,14 +225,14 @@ describe('Issue #450', () => {
 				`--sxs{--sxs:2 c-jyxqjt c-dkRcuu}@media{` +
 					`.c-jyxqjt{--component:1}` +
 					`.c-dkRcuu{--component:2}` +
-				`}` +
-				`--sxs{--sxs:3 c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue}@media{` +
+					`}` +
+					`--sxs{--sxs:3 c-jyxqjt-cOChOn-appearance-secondary c-jyxqjt-ilDyRi-color-lightBlue}@media{` +
 					`.c-jyxqjt-cOChOn-appearance-secondary{--appearance:secondary}` +
 					`.c-jyxqjt-ilDyRi-color-lightBlue{--color:lightBlue}` +
-				`}` +
-				`--sxs{--sxs:4 c-jyxqjt-gYqlvA-cv}@media{` +
+					`}` +
+					`--sxs{--sxs:5 c-jyxqjt-gYqlvA-cv}@media{` +
 					`.c-jyxqjt-gYqlvA-cv{--compound:appearance secondary / color lightBlue}` +
-				`}`
+					`}`,
 			)
 		})
 	})

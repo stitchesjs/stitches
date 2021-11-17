@@ -7,6 +7,7 @@ import { hasOwn } from '../utility/hasOwn.js'
 import { toCssRules } from '../convert/toCssRules.js'
 import { toHash } from '../convert/toHash.js'
 import { toTailDashed } from '../convert/toTailDashed.js'
+import { createRulesInjectionDeferrer } from '../sheet.js'
 
 /** @typedef {import('./css').Internals} Internals */
 /** @typedef {import('./css').Composer} Composer */
@@ -141,6 +142,9 @@ const createRenderer = (
 		undefinedVariants
 	] = getPreparedDataFromComposers(internals.composers)
 
+	const differedInjector = typeof internals.type === 'function' ? createRulesInjectionDeferrer(sheet) : null
+	const injectionTarget = differedInjector?.rules || sheet.rules
+
 	const selector = `.${baseClassName}${baseClassNames.length > 1 ? `:where(.${baseClassNames.slice(1).join('.')})` : ``}`
 
 	/** @type {Render} */
@@ -194,8 +198,8 @@ const createRenderer = (
 			if (!sheet.rules.styled.cache.has(composerBaseClass)) {
 				sheet.rules.styled.cache.add(composerBaseClass)
 
-				toCssRules(composerBaseStyle, [`.${composerBaseClass}`], [], config, cssText => {
-					sheet.rules.styled.apply(cssText)
+				toCssRules(composerBaseStyle, [`.${composerBaseClass}`], [], config, (cssText) => {
+					injectionTarget.styled.apply(cssText)
 				})
 			}
 
@@ -205,16 +209,22 @@ const createRenderer = (
 			for (const variantToAdd of singularVariantsToAdd) {
 				if (variantToAdd === undefined) continue
 
-				for (const [vClass, vStyle] of variantToAdd) {
+				for (const [vClass, vStyle, isResponsive] of variantToAdd) {
 					const variantClassName = `${composerBaseClass}-${toHash(vStyle)}-${vClass}`
 
 					classSet.add(variantClassName)
 
-					if (!sheet.rules.onevar.cache.has(variantClassName)) {
-						sheet.rules.onevar.cache.add(variantClassName)
+					const groupCache = (isResponsive ? sheet.rules.resonevar : sheet.rules.onevar ).cache
+					/* 
+					 * make sure that normal variants are injected before responsive ones
+					 * @see {@link https://github.com/modulz/stitches/issues/737|github}
+					 */
+					const targetInjectionGroup = isResponsive ? injectionTarget.resonevar : injectionTarget.onevar
 
-						toCssRules(vStyle, [`.${variantClassName}`], [], config, cssText => {
-							sheet.rules.onevar.apply(cssText)
+					if (!groupCache.has(variantClassName)) {
+						groupCache.add(variantClassName)
+						toCssRules(vStyle, [`.${variantClassName}`], [], config, (cssText) => {
+							targetInjectionGroup.apply(cssText)
 						})
 					}
 				}
@@ -231,8 +241,8 @@ const createRenderer = (
 					if (!sheet.rules.allvar.cache.has(variantClassName)) {
 						sheet.rules.allvar.cache.add(variantClassName)
 
-						toCssRules(vStyle, [`.${variantClassName}`], [], config, cssText => {
-							sheet.rules.allvar.apply(cssText)
+						toCssRules(vStyle, [`.${variantClassName}`], [], config, (cssText) => {
+							injectionTarget.allvar.apply(cssText)
 						})
 					}
 				}
@@ -249,8 +259,8 @@ const createRenderer = (
 			if (!sheet.rules.inline.cache.has(iClass)) {
 				sheet.rules.inline.cache.add(iClass)
 
-				toCssRules(css, [`.${iClass}`], [], config, cssText => {
-					sheet.rules.inline.apply(cssText)
+				toCssRules(css, [`.${iClass}`], [], config, (cssText) => {
+					injectionTarget.inline.apply(cssText)
 				})
 			}
 		}
@@ -269,6 +279,7 @@ const createRenderer = (
 			selector,
 			props: forwardProps,
 			toString: renderedToString,
+			differedInjector,
 		}
 	}
 
@@ -347,6 +358,7 @@ const getTargetVariantsToAdd = (
 		/** @type {string & keyof typeof vMatch} */
 		let vName
 
+		let isResponsive = false
 		for (vName in vMatch) {
 			const vPair = vMatch[vName]
 
@@ -367,6 +379,7 @@ const getTargetVariantsToAdd = (
 							vStyle = {
 								[query in media ? media[query] : query]: vStyle,
 							}
+							isResponsive = true
 						}
 
 						vOrder += qOrder
@@ -384,7 +397,7 @@ const getTargetVariantsToAdd = (
 			else continue targetVariants
 		}
 
-		(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`, vStyle])
+		(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`, vStyle, isResponsive])
 	}
 
 	return targetVariantsToAdd

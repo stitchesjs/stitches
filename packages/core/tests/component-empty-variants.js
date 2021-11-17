@@ -52,7 +52,7 @@ describe('Empty Variants', () => {
 		})
 
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:4 c-PJLV-lhHHWD-cv}@media{` +
+			`--sxs{--sxs:5 c-PJLV-lhHHWD-cv}@media{` +
 				`.c-PJLV-lhHHWD-cv{font-size:24px;color:black}` +
 			`}`
 		)

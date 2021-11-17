@@ -113,7 +113,7 @@ describe('Variants', () => {
 		expect(getCssText()).toBe(
 			`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{${
 				expressionColorBlueCssText + expressionSizeSmallCssText
-			}}--sxs{--sxs:4 c-PJLV-cChFtv-cv}@media{${
+			}}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{${
 				expressionCompoundCssText
 			}}`
 		)
@@ -219,7 +219,7 @@ describe('Variants with defaults', () => {
 				`.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}` +
 				// implicit size:small
 				`.c-PJLV-Gaggi-size-small{font-size:16px}` +
-			`}--sxs{--sxs:4 c-PJLV-cChFtv-cv}@media{` +
+			`}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{` +
 				// compound color:blue + size:small
 				`.c-PJLV-cChFtv-cv{transform:scale(1.2)}` +
 			`}`,
@@ -311,7 +311,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small`)
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 			`}`
 		)
@@ -328,7 +328,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				componentSmallBp1CssText +
 				componentLargeBp2CssText +
 			`}`
@@ -341,7 +341,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
 			`}`
@@ -349,7 +349,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
 			`}`
@@ -357,7 +357,7 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:3 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
 				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
 				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
 			`}`
@@ -390,7 +390,7 @@ describe('Conditional variants', () => {
 			).toBe('c-PJLV c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large')
 
 			expect(getCssText()).toBe(
-				`--sxs{--sxs:3 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
+				`--sxs{--sxs:4 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
 					`@media (max-width:767.9375px){.c-PJLV-gjWYHE-size-small{font-size:16px}}` +
 					`@media (min-width:768px){.c-PJLV-fzmUzy-size-large{font-size:24px}}` +
 				`}`
@@ -422,7 +422,7 @@ describe('Conditional variants', () => {
 			).toBe('c-PJLV c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large')
 
 			expect(getCssText()).toBe(
-				`--sxs{--sxs:3 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
+				`--sxs{--sxs:4 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
 					`@media (max-width:767.9375px){.c-PJLV-gjWYHE-size-small{font-size:16px}}` +
 					`@media (min-width:768px){.c-PJLV-fzmUzy-size-large{font-size:24px}}` +
 				`}`
@@ -499,7 +499,7 @@ describe('Variant pairing types', () => {
 			`--sxs{--sxs:2 c-foEXqW}@media{` +
 				`.c-foEXqW{--component:true}` +
 			`}` +
-			`--sxs{--sxs:3 c-foEXqW-brOaTK-testBoolean-true}@media{` +
+			`--sxs{--sxs:4 c-foEXqW-brOaTK-testBoolean-true}@media{` +
 				`@media (min-width: 640px){` +
 					`.c-foEXqW-brOaTK-testBoolean-true{--test-boolean:true}` +
 				`}` +
@@ -517,7 +517,7 @@ describe('Variant pairing types', () => {
 			`--sxs{--sxs:2 c-foEXqW}@media{` +
 				`.c-foEXqW{--component:true}` +
 			`}` +
-			`--sxs{--sxs:3 c-foEXqW-brOaTK-testBoolean-true}@media{` +
+			`--sxs{--sxs:4 c-foEXqW-brOaTK-testBoolean-true}@media{` +
 				`@media (min-width: 640px){` +
 					`.c-foEXqW-brOaTK-testBoolean-true{--test-boolean:true}` +
 				`}` +
