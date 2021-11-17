@@ -33,7 +33,7 @@ describe('Issue #737', () => {
 					]),
 				)
 			})
-			expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-gmqXFB-variant-red}@media{.c-PJLV-gmqXFB-variant-red{color:red}}--sxs{--sxs:4 c-PJLV-kmHUKy-variant-red}@media{@media (min-width: 768px){.c-PJLV-kmHUKy-variant-red{color:red}}}`)
+			expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-gmqXFB-variant-red}@media{.c-PJLV-gmqXFB-variant-red{color:red}}--sxs{--sxs:4 c-PJLV-iOPXJy-variant-red}@media{@media (min-width: 768px){.c-PJLV-iOPXJy-variant-red{color:red}}}`)
 
 		})
 	}

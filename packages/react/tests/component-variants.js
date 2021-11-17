@@ -291,12 +291,12 @@ describe('Conditional variants', () => {
 		const { styled, toString } = createStitches(config)
 		const component = styled('div', componentConfig)
 		const componentClassName = `c-PJLV`
-		const componentSmallBp1ClassName = `${componentClassName}-iVKIeV-size-small`
+		const componentSmallBp1ClassName = `${componentClassName}-fHtTAQ-size-small`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px}}`
 
 		expect(component.render({ size: { '@bp1': 'small' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
 		expect(toString()).toBe(
-			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small}@media{` +
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small}@media{` +
 				componentSmallBp1CssText +
 			`}`
 		)
@@ -306,14 +306,14 @@ describe('Conditional variants', () => {
 		const { styled, toString } = createStitches(config)
 		const component = styled('div', componentConfig)
 		const componentClassName = `c-PJLV`
-		const componentSmallBp1ClassName = `${componentClassName}-iVKIeV-size-small`
-		const componentLargeBp2ClassName = `${componentClassName}-bUkcYv-size-large`
+		const componentSmallBp1ClassName = `${componentClassName}-fHtTAQ-size-small`
+		const componentLargeBp2ClassName = `${componentClassName}-XwbVw-size-large`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px}}`
 		const componentLargeBp2CssText = `@media (min-width: 768px){.${componentLargeBp2ClassName}{font-size:24px}}`
 
 		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe(
-			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
 			componentSmallBp1CssText +
 			componentLargeBp2CssText +
 			`}`
@@ -324,14 +324,14 @@ describe('Conditional variants', () => {
 		const { styled, toString } = createStitches(config)
 		const component = styled('div', componentConfig)
 		const componentClassName = `c-PJLV`
-		const componentSmallBp1ClassName = `${componentClassName}-iVKIeV-size-small`
-		const componentLargeBp2ClassName = `${componentClassName}-bUkcYv-size-large`
+		const componentSmallBp1ClassName = `${componentClassName}-fHtTAQ-size-small`
+		const componentLargeBp2ClassName = `${componentClassName}-XwbVw-size-large`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px}}`
-		const componentLargeBp2CssText = `@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}`
+		const componentLargeBp2CssText = `@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}`
 
 		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe(
-			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
 				componentSmallBp1CssText +
 				componentLargeBp2CssText +
 			`}`
@@ -339,17 +339,17 @@ describe('Conditional variants', () => {
 
 		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
 		expect(toString()).toBe(
-			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
-				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
-				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
+				`@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` +
+				`@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` +
 			`}`
 		)
 
-		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe(`c-PJLV c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large`)
+		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe(`c-PJLV c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large`)
 		expect(toString()).toBe(
-			`--sxs{--sxs:4 c-PJLV-iVKIeV-size-small c-PJLV-bUkcYv-size-large}@media{` +
-				`@media (max-width: 767px){.c-PJLV-iVKIeV-size-small{font-size:16px}}` +
-				`@media (min-width: 768px){.c-PJLV-bUkcYv-size-large{font-size:24px}}` +
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
+				`@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` +
+				`@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` +
 			`}`
 		)
 	})
