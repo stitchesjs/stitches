@@ -53,9 +53,10 @@ describe('Issue #416: Composition versus Descendancy', () => {
 		}
 
 		let wrapper
-
-		renderer.act(() => {
-			wrapper = renderer.create(React.createElement(App))
+		test('it can render without errors', () => {
+			renderer.act(() => {
+				wrapper = renderer.create(React.createElement(App))
+			})
 		})
 
 		const [boxA, boxB, genY, boxZ] = wrapper.toJSON().children

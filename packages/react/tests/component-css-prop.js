@@ -12,7 +12,7 @@ describe('React Component with CSS prop', () => {
 			},
 		})
 
-		expect(toString()).toBe(`--sxs{--sxs:2 c-hhyRYU}@media{.c-hhyRYU{order:1}}--sxs{--sxs:5 c-hhyRYU-ilhKMMn-css}@media{.c-hhyRYU-ilhKMMn-css{order:2}}`)
+		expect(toString()).toBe(`--sxs{--sxs:2 c-hhyRYU}@media{.c-hhyRYU{order:1}}--sxs{--sxs:6 c-hhyRYU-ilhKMMn-css}@media{.c-hhyRYU-ilhKMMn-css{order:2}}`)
 	})
 
 	test('React example from Radix', () => {
@@ -41,7 +41,7 @@ describe('React Component with CSS prop', () => {
 		})
 
 		expect(toString()).toBe(
-			`--sxs{--sxs:2 c-bHwuwj}@media{.c-bHwuwj{color:inherit}}--sxs{--sxs:5 c-bHwuwj-ibwrayD-css}@media{.c-bHwuwj-ibwrayD-css{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px}@media (min-width: 900px){.c-bHwuwj-ibwrayD-css{line-height:55px;color:red}}}`,
+			`--sxs{--sxs:2 c-bHwuwj}@media{.c-bHwuwj{color:inherit}}--sxs{--sxs:6 c-bHwuwj-ibwrayD-css}@media{.c-bHwuwj-ibwrayD-css{font-weight:500;font-variant-numeric:proportional-nums;line-height:35px}@media (min-width: 900px){.c-bHwuwj-ibwrayD-css{line-height:55px;color:red}}}`,
 		)
 	})
 })
