@@ -22,14 +22,14 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 			const styledComponent = React.forwardRef((props, ref) => {
 				const Type = props && props.as || DefaultType
 
-				const { props: forwardProps, differedInjector } = cssComponent(props)
+				const { props: forwardProps, deferredInjector } = cssComponent(props)
 
 				delete forwardProps.as
 
 				forwardProps.ref = ref
 
-				if (differedInjector) {
-					return React.createElement(React.Fragment, null, React.createElement(Type, forwardProps), React.createElement(differedInjector, null))
+				if (deferredInjector) {
+					return React.createElement(React.Fragment, null, React.createElement(Type, forwardProps), React.createElement(deferredInjector, null))
 				}
 
 				return React.createElement(Type, forwardProps)

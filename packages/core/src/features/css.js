@@ -142,8 +142,8 @@ const createRenderer = (
 		undefinedVariants
 	] = getPreparedDataFromComposers(internals.composers)
 
-	const differedInjector = typeof internals.type === 'function' ? createRulesInjectionDeferrer(sheet) : null
-	const injectionTarget = (differedInjector || sheet).rules
+	const deferredInjector = typeof internals.type === 'function' ? createRulesInjectionDeferrer(sheet) : null
+	const injectionTarget = (deferredInjector || sheet).rules
 
 	const selector = `.${baseClassName}${baseClassNames.length > 1 ? `:where(.${baseClassNames.slice(1).join('.')})` : ``}`
 
@@ -279,7 +279,7 @@ const createRenderer = (
 			selector,
 			props: forwardProps,
 			toString: renderedToString,
-			differedInjector,
+			deferredInjector,
 		}
 	}
 
