@@ -143,7 +143,7 @@ const createRenderer = (
 	] = getPreparedDataFromComposers(internals.composers)
 
 	const differedInjector = typeof internals.type === 'function' ? createRulesInjectionDeferrer(sheet) : null
-	const injectionTarget = differedInjector?.rules || sheet.rules
+	const injectionTarget = (differedInjector || sheet).rules
 
 	const selector = `.${baseClassName}${baseClassNames.length > 1 ? `:where(.${baseClassNames.slice(1).join('.')})` : ``}`
 
@@ -372,12 +372,16 @@ const getTargetVariantsToAdd = (
 				let didMatch
 
 				let qOrder = 0
-				let matchedQueries = []
+				// media queries matching the same variant
+				let matchedQueries
 				for (const query in pPair) {
 					if (vPair === String(pPair[query])) {
 						if (query !== '@initial') {
-							const cleanQuery = query.slice(1)
-							matchedQueries.push(cleanQuery in media ? media[cleanQuery] : query.replace(/^@media ?/, ''))
+							// check if the cleanQuery is in the media config and then we push the resulting media query to the matchedQueries array, 
+							// if not, we remove the @media from the beginning and push it to the matched queries which then will be resolved a few lines down
+							// when we finish working on this variant and want wrap the vStyles with the matchedQueries
+							const cleanQuery = query.slice(1);
+							(matchedQueries = matchedQueries || []).push(cleanQuery in media ? media[cleanQuery] : query.replace(/^@media ?/, ''))
 							isResponsive = true
 						}
 
@@ -387,7 +391,7 @@ const getTargetVariantsToAdd = (
 
 					++qOrder
 				}
-				if (matchedQueries.length) {
+				if (matchedQueries && matchedQueries.length) {
 					vStyle = {
 						['@media ' + matchedQueries.join(', ')]: vStyle,
 					}
@@ -399,7 +403,6 @@ const getTargetVariantsToAdd = (
 			// non-matches
 			else continue targetVariants
 		}
-
 		(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`, vStyle, isResponsive])
 	}
 
