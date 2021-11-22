@@ -4,7 +4,7 @@ import { createStitches } from '../src/index.js'
 
 describe('Issue #671 - forwardRef', () => {
 	{
-		const { styled, getCssText, reset } = createStitches()
+		const { styled, getCssText } = createStitches()
 
 		const StyledBase = styled('div', { color: 'black' })
 		const ForwardRefReactComponent = React.forwardRef((props, ref) => React.createElement(StyledBase, { ...props, ref }))
@@ -23,10 +23,7 @@ describe('Issue #671 - forwardRef', () => {
 		})
 
 		test('a stitches component extending a forwardRef react component will inject the styles in the correct order', () => {
-			// failing test -> before the fix
-			expect(getCssText()).toBe(`--sxs{--sxs:2 c-fjEkWJ c-bjcmt}@media{.c-fjEkWJ{color:white}.c-bjcmt{color:black}}`)
-			reset()
-
+			expect(getCssText()).toBe(`--sxs{--sxs:2 c-fjEkWJ c-bjcmt}@media{.c-bjcmt{color:black}.c-fjEkWJ{color:white}}`)
 		})
 	}
 })
