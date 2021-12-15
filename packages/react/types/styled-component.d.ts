@@ -24,7 +24,7 @@ export interface StyledComponent<
 				? React.ComponentPropsWithRef<Type>
 			: {},
 			TransformProps<Props, Media> & {
-				as?: never,
+				as?: Type extends string | React.ComponentType<any> ? IntrinsicElementsKeys | React.ComponentType<any> : never,
 				css?: CSS
 			}
 		>
