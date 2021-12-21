@@ -18,6 +18,11 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 		const styled = (...args) => {
 			const cssComponent = css(...args)
 			const DefaultType = cssComponent[internal].type
+			const last = args.length - 1
+			const hasCustomName = last > 0 && args[last] && typeof args[last] === 'string'
+			const displayName = hasCustomName
+				? args[last].replace(/\./g, '_').replace(/\W/g, '')
+				: DefaultType.displayName || DefaultType.name || DefaultType
 
 			const styledComponent = React.forwardRef((props, ref) => {
 				const Type = props && props.as || DefaultType
@@ -38,7 +43,7 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 			const toString = () => cssComponent.selector
 
 			styledComponent.className = cssComponent.className
-			styledComponent.displayName = `Styled.${DefaultType.displayName || DefaultType.name || DefaultType}`
+			styledComponent.displayName = `Styled.${displayName}`
 			styledComponent.selector = cssComponent.selector
 			styledComponent.toString = toString
 			styledComponent[internal] = cssComponent[internal]
