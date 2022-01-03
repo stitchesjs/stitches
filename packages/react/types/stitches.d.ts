@@ -276,7 +276,7 @@ type ThemeTokens<Values, Prefix> = {
 	[Scale in keyof Values]: {
 		[Token in keyof Values[Scale]]: ThemeUtil.Token<
 			Extract<Token, number | string>,
-			Values[Scale][Token],
+			Values[Scale][Token] & (string | number),
 			Extract<Scale, string | void>,
 			Extract<Prefix, string | void>
 		>
