@@ -18,11 +18,16 @@ const DEFAULT_TAG = 'h1'
 const bla: CSS = {
 	background: '$amber1',
 }
- const Test = styled('div', bla)
+const Test = styled('div', bla)
 export type HeadingProps = React.ComponentProps<typeof DEFAULT_TAG> & { css?: CSS }
 
 // ref should be span element
 type ref = React.ElementRef<typeof Text>
+
+// should be inferred as a element
+const Link = Text.as('a')
+// should be inferred as button element
+const Button = Link.as('button')
 
 const Heading = React.forwardRef<React.ElementRef<typeof DEFAULT_TAG>, HeadingProps>((props, forwardedRef) => {
 	return (
@@ -35,6 +40,7 @@ const Heading = React.forwardRef<React.ElementRef<typeof DEFAULT_TAG>, HeadingPr
 			<Text as="div" onClick={(e: any) => { console.log(e.altKey) }} css={{ ...props.css, backgroundColor: '$red100', background: 'red', paddingLeft: 'initial'}} />
 			<Text as="div" onClick={(e: any) => { console.log(e.altKey) }} css={props.css} />
 			<Text as={DEFAULT_TAG} {...props} onClick={(e: any) => { console.log(e.altKey) }} ref={forwardedRef} />
+			<Link href="#" />
 		</>
 	)
 })

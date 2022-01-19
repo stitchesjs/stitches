@@ -17,31 +17,37 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 
 		const styled = (...args) => {
 			const cssComponent = css(...args)
-			const DefaultType = cssComponent[internal].type
 
-			const styledComponent = React.forwardRef((props, ref) => {
-				const Type = props && props.as || DefaultType
+			const createStyledComponent = DefaultType => {
+				const styledComponent = React.forwardRef((props, ref) => {
+					const Type = props && props.as || DefaultType
 
-				const { props: forwardProps, deferredInjector } = cssComponent(props)
+					const { props: forwardProps, deferredInjector } = cssComponent(props)
 
-				delete forwardProps.as
+					delete forwardProps.as
 
-				forwardProps.ref = ref
+					forwardProps.ref = ref
 
-				if (deferredInjector) {
-					return React.createElement(React.Fragment, null, React.createElement(Type, forwardProps), React.createElement(deferredInjector, null))
-				}
+					if (deferredInjector) {
+						return React.createElement(React.Fragment, null, React.createElement(Type, forwardProps), React.createElement(deferredInjector, null))
+					}
 
-				return React.createElement(Type, forwardProps)
-			})
+					return React.createElement(Type, forwardProps)
+				})
 
-			const toString = () => cssComponent.selector
+				const toString = () => cssComponent.selector
 
-			styledComponent.className = cssComponent.className
-			styledComponent.displayName = `Styled.${DefaultType.displayName || DefaultType.name || DefaultType}`
-			styledComponent.selector = cssComponent.selector
-			styledComponent.toString = toString
-			styledComponent[internal] = cssComponent[internal]
+				styledComponent.className = cssComponent.className
+				styledComponent.displayName = `Styled.${DefaultType.displayName || DefaultType.name || DefaultType}`
+				styledComponent.selector = cssComponent.selector
+				styledComponent.toString = toString
+				styledComponent[internal] = cssComponent[internal]
+
+				return styledComponent
+			}
+
+			const styledComponent = createStyledComponent(cssComponent[internal].type)
+			styledComponent.as = createStyledComponent
 
 			return styledComponent
 		}

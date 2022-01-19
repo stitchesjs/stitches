@@ -47,6 +47,7 @@ export interface StyledComponent<
 
 	className: string
 	selector: string
+	as: <Type extends IntrinsicElementsKeys | React.ComponentType<any>>(as: Type) => StyledComponent<Type, Props, Media, CSS>
 
 	[$$StyledComponentType]: Type
 	[$$StyledComponentProps]: Props
