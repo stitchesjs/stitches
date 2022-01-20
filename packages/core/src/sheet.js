@@ -21,8 +21,7 @@ const isSheetAccessible = (/** @type {CSSStyleSheet} */ sheet) => {
 	}
 
 	try {
-		sheet.cssRules
-		return true
+		return !!sheet.cssRules
 	} catch (e) {
 		return false
 	}
