@@ -72,9 +72,9 @@ export const createCssFunction = (/** @type {Config} */ config, /** @type {Sheet
 /** Creates a composer from a configuration object. */
 const createComposer = (/** @type {InitComposer} */ { variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, componentName, ...style }, /** @type {Config} */ config) => {
 	/** @type {string} */
-	const hash = componentName ? `${componentName}-${toHash(style)}` : toHash(style)
+	const baseClass = componentName && componentName.length > 0 ? `${componentName}-${toHash(style)}` : toHash(style)
 	/** @type {string} Composer Unique Identifier. @see `{CONFIG_PREFIX}-?c-{STYLE_HASH}` */
-	const className = `${toTailDashed(config.prefix)}c-${hash}`
+	const className = `${toTailDashed(config.prefix)}c-${baseClass}`
 
 	/** @type {VariantTuple[]} */
 	const singularVariants = []
