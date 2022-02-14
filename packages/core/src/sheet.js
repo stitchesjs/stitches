@@ -177,7 +177,7 @@ const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
 			groupingRule.insertRule(cssText, index)
 
 			++index
-		} catch {
+		} catch (__) {
 			// do nothing and continue
 		}
 	}
