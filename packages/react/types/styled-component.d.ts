@@ -32,11 +32,12 @@ export interface StyledComponent<
 
 	<
 		C extends CSS,
-		As extends string | React.ComponentType<any> = Type extends string | React.ComponentType<any> ? Type : never
+		As extends string | React.ComponentType<any> = Type extends string | React.ComponentType<any> ? Type : any,
+		InnerProps = Type extends StyledComponent<any, infer IP, any, any> ? IP : {},
 	>(
 		props: Util.Assign<
 			React.ComponentPropsWithRef<As extends IntrinsicElementsKeys | React.ComponentType<any> ? As : never>,
-			TransformProps<Props, Media> & { 
+			TransformProps<Util.Assign<InnerProps, Props>, Media> & { 
 				as?: As,
 				css?: {
 					[K in keyof C]: K extends keyof CSS ? CSS[K] : never
