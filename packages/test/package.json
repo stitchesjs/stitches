@@ -1,6 +1,6 @@
 {
   "name": "@stitches/test",
-  "version": "1.2.6",
+  "version": "1.2.7-0",
   "type": "module",
   "files": [
     "dist/*.cjs",
