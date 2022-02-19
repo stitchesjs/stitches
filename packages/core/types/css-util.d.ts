@@ -27,7 +27,7 @@ export type CSS<
 	}
 	// known property styles
 	& {
-		[K in keyof CSSProperties]?: (
+		[K in keyof CSSProperties as K extends keyof Utils ? never : K]?: (
 			| ValueByPropertyName<K>
 			| TokenByPropertyName<K, Theme, ThemeMap>
 			| Native.Globals
