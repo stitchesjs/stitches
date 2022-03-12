@@ -110,7 +110,7 @@ export default interface Stitches<
 			)
 	}
 	theme:
-		string 
+		string
 		& {
 			className: string
 			selector: string
@@ -145,7 +145,9 @@ export default interface Stitches<
 			...composers: {
 				[K in keyof Composers]: (
 					// Strings, React Components, and Functions can be skipped over
-					Composers[K] extends string | React.ExoticComponent<any> | React.JSXElementConstructor<any> | Util.Function
+					string extends Composers[K]
+						? Composers[K]
+					: Composers[K] extends string | React.ExoticComponent<any> | React.JSXElementConstructor<any> | Util.Function
 						? Composers[K]
 					: RemoveIndex<CSS> & {
 						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
@@ -208,14 +210,16 @@ export default interface Stitches<
 				| React.ComponentType<any>
 				| Util.Function
 				| { [name: string]: unknown }
-			)[], 
+			)[],
 			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>(
 			type: Type,
 			...composers: {
 				[K in keyof Composers]: (
 					// Strings, React Components, and Functions can be skipped over
-					Composers[K] extends string | React.ComponentType<any> | Util.Function
+					string extends Composers[K]
+						? Composers[K]
+					: Composers[K] extends string | React.ComponentType<any> | Util.Function
 						? Composers[K]
 					: RemoveIndex<CSS> & {
 						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
