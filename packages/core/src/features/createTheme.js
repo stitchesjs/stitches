@@ -31,14 +31,16 @@ export const createCreateThemeFunction = (
 			themeObject[scale] = {}
 
 			for (const token in style[scale]) {
-				const scalePrefix = config.hasScalePrefix ? scale : ''
+				const propertyName = `--${toTailDashed(config.prefix)}${toTailDashed(config.hasScalePrefix ? scale : '')}${token}`
+				const propertyValue = toTokenizedValue(String(style[scale][token]), config.prefix, config.hasScalePrefix ? scale : '')
 
-				const propertyName = `--${toTailDashed(config.prefix)}${toTailDashed(scalePrefix)}${token}`
-				const propertyValue = toTokenizedValue(String(style[scalePrefix][token]), config.prefix, scalePrefix)
-
-				themeObject[scale][token] = new ThemeToken(token, propertyValue, scalePrefix, config.prefix)
+				themeObject[scale][token] = new ThemeToken(token, propertyValue,scale, config.prefix)
 
 				cssProps.push(`${propertyName}:${propertyValue}`)
+
+				if (config.prefix == "dy") {
+					console.log({ propertyName, propertyValue, ...themeObject })
+				}
 			}
 		}
 
