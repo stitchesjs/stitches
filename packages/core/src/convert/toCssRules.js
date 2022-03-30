@@ -53,7 +53,7 @@ export const toCssRules = (
 
 				for (data of datas) {
 					const camelName = toCamelCase(name)
-					
+
 					/** Whether the current data represents a nesting rule, which is a plain object whose key is not already a util. */
 					const isRuleLike = typeof data === 'object' && data && data.toString === toStringOfObject && (!config.utils[camelName] || !selectors.length)
 
@@ -127,7 +127,7 @@ export const toCssRules = (
 							: toTokenizedValue(
 								toSizingValue(camelName, data == null ? '' : data),
 								config.prefix,
-								config.themeMap[camelName]
+								config.hasScalePrefix ? config.themeMap[camelName] : ''
 							)
 						)
 
