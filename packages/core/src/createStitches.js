@@ -21,6 +21,7 @@ export const createStitches = (config) => {
 
 		// internal configuration
 		const prefix = 'prefix' in initConfig ? String(initConfig.prefix) : ''
+		const hasScalePrefix = 'hasScalePrefix' in initConfig ? String(initConfig.hasScalePrefix) : true
 		const media = typeof initConfig.media === 'object' && initConfig.media || {}
 		const root = typeof initConfig.root === 'object' ? initConfig.root || null : globalThis.document || null
 		const theme = typeof initConfig.theme === 'object' && initConfig.theme || {}
@@ -30,6 +31,7 @@ export const createStitches = (config) => {
 		/** External configuration. */
 		const config = {
 			prefix,
+			hasScalePrefix,
 			media,
 			theme,
 			themeMap,
@@ -52,6 +54,7 @@ export const createStitches = (config) => {
 			sheet,
 			config,
 			prefix,
+			hasScalePrefix,
 			getCssText: sheet.toString,
 			toString: sheet.toString,
 		}
