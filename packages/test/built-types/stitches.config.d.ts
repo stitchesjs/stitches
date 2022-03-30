@@ -4250,6 +4250,7 @@ export declare const styled: <Type extends import("@stitches/react/types/util").
     name: string;
 }, config: {
     prefix: "";
+    hasScalePrefix: true;
     media: {
         bp1: "(min-width: 520px)";
         bp2: "(min-width: 900px)";

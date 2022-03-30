@@ -6,6 +6,9 @@ declare namespace ConfigType {
 	/** Prefix interface. */
 	export type Prefix<T = ''> = T extends string ? T: string
 
+	/** HasScalePrefix interface. */
+	export type HasScalePrefix<T = true> = T extends boolean ? T: boolean
+
 	/** Media interface. */
 	export type Media<T = {}> = {
 		[name in keyof T]: T[name] extends string ? T[name] : string
@@ -194,6 +197,7 @@ export interface DefaultThemeMap {
 export type CreateStitches = {
 	<
 		Prefix extends string = '',
+		HasScalePrefix extends boolean = true,
 		Media extends {} = {},
 		Theme extends {} = {},
 		ThemeMap extends {} = DefaultThemeMap,
@@ -201,10 +205,11 @@ export type CreateStitches = {
 	>(
 		config?: {
 			prefix?: ConfigType.Prefix<Prefix>
+			hasScalePrefix?: ConfigType.HasScalePrefix<HasScalePrefix>
 			media?: ConfigType.Media<Media>
 			theme?: ConfigType.Theme<Theme>
 			themeMap?: ConfigType.ThemeMap<ThemeMap>
 			utils?: ConfigType.Utils<Utils>
 		}
-	): Stitches<Prefix, Media, Theme, ThemeMap, Utils>
+	): Stitches<Prefix, HasScalePrefix, Media, Theme, ThemeMap, Utils>
 }

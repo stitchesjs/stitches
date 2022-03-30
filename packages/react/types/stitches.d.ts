@@ -9,6 +9,7 @@ export type RemoveIndex<T> = {[k in keyof T as string extends k ? never : number
 /** Stitches interface. */
 export default interface Stitches<
 	Prefix extends string = '',
+	HasScalePrefix extends boolean = true,
 	Media extends {} = {},
 	Theme extends {} = {},
 	ThemeMap extends {} = {},
@@ -16,6 +17,7 @@ export default interface Stitches<
 > {
 	config: {
 		prefix: Prefix
+		hasScalePrefix: HasScalePrefix
 		media: Media
 		theme: Theme
 		themeMap: ThemeMap
@@ -110,7 +112,7 @@ export default interface Stitches<
 			)
 	}
 	theme:
-		string 
+		string
 		& {
 			className: string
 			selector: string
@@ -208,7 +210,7 @@ export default interface Stitches<
 				| React.ComponentType<any>
 				| Util.Function
 				| { [name: string]: unknown }
-			)[], 
+			)[],
 			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
 		>(
 			type: Type,
