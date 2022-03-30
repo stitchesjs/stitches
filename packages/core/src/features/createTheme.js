@@ -34,7 +34,7 @@ export const createCreateThemeFunction = (
 				const propertyName = `--${toTailDashed(config.prefix)}${toTailDashed(config.hasScalePrefix ? scale : '')}${token}`
 				const propertyValue = toTokenizedValue(String(style[scale][token]), config.prefix, config.hasScalePrefix ? scale : '')
 
-				themeObject[scale][token] = new ThemeToken(token, propertyValue,scale, config.prefix)
+				themeObject[scale][token] = new ThemeToken(token, propertyValue, config.hasScalePrefix ? scale : '', config.prefix)
 
 				cssProps.push(`${propertyName}:${propertyValue}`)
 
