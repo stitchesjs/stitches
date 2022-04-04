@@ -11,10 +11,7 @@ export const copydir = async function copydir(src, dst) {
 		await mkdir(dst, { recursive: true })
 
 		for (const dirent of await readdir(src, { withFileTypes: true })) {
-			await (dirent.isDirectory() ? copydir : copyFile)(
-				src.dir.to(dirent.name),
-				dst.dir.to(dirent.name)
-			)
+			await (dirent.isDirectory() ? copydir : copyFile)(src.dir.to(dirent.name), dst.dir.to(dirent.name))
 		}
 	}
 
@@ -30,7 +27,7 @@ export const readFileJson = {
 		const data = JSON.parse(json)
 
 		return data
-	}
+	},
 }.readFileJson
 
 fs.copydir = copydir

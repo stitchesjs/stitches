@@ -6,25 +6,21 @@ export let transformDestructuring = (ast) => {
 		if (objectPattern.keyOfParentNode === 'params') {
 			let { parentNode } = objectPattern
 
-			if (
-				parentNode.body.type !== 'BlockStatement'
-			) {
+			if (parentNode.body.type !== 'BlockStatement') {
 				parentNode.body.replaceWith(
 					js.BlockStatement({
 						body: [
 							js.ReturnStatement({
-								argument: parentNode.body
-							})
-						]
-					})
+								argument: parentNode.body,
+							}),
+						],
+					}),
 				)
 			}
 
 			let argName = `_arg${objectPattern.keyOfParent}`
 
-			objectPattern.replaceWith(
-				js.Identifier({ name: argName })
-			)
+			objectPattern.replaceWith(js.Identifier({ name: argName }))
 
 			parentNode.body.body.unshift(
 				js.VariableDeclaration({
@@ -33,9 +29,9 @@ export let transformDestructuring = (ast) => {
 						js.VariableDeclarator({
 							id: objectPattern,
 							init: js.Identifier({ name: argName }),
-						})
-					]
-				})
+						}),
+					],
+				}),
 			)
 		}
 	})

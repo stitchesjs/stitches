@@ -7,12 +7,12 @@ export let transformModulesToCJS = (ast) => {
 			expression: js.AssignmentExpression({
 				left: js.MemberExpression({
 					object: js.Identifier({ name: 'module' }),
-					property: js.Identifier({ name: 'exports' })
+					property: js.Identifier({ name: 'exports' }),
 				}),
 				right: js.ObjectExpression({
 					properties: [],
 				}),
-			})
+			}),
 		})
 
 		exportNamedDeclaration.find('ExportSpecifier', (exportSpecifier) => {
@@ -20,7 +20,7 @@ export let transformModulesToCJS = (ast) => {
 				js.create('Property', {
 					key: js.create('Identifier', { name: exportSpecifier.exported.name }),
 					value: js.create('Identifier', { name: exportSpecifier.local.name }),
-				})
+				}),
 			)
 		})
 
@@ -35,12 +35,10 @@ export let transformModulesToCJS = (ast) => {
 					id: js.Identifier({ name: importDeclaration.specifiers[0].local.name }),
 					init: js.CallExpression({
 						callee: js.Identifier({ name: 'require' }),
-						arguments: [
-							importDeclaration.source,
-						],
+						arguments: [importDeclaration.source],
 					}),
-				})
-			]
+				}),
+			],
 		})
 
 		importDeclaration.replaceWith(variableDeclaration)

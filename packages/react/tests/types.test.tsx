@@ -56,7 +56,7 @@ keyframes({
 
 globalCss({
 	body: {
-		backgroundColor: '$gray300',
+		'backgroundColor': '$gray300',
 		'@bp1': {
 			backgroundColor: '$gray100',
 		},
@@ -102,9 +102,7 @@ const PotatoButton = styled('button', {
 })
 
 void function Test() {
-	return (
-		<PotatoButton peace="mercy" hue="blue" />
-	)
+	return <PotatoButton peace="mercy" hue="blue" />
 }
 
 const ExtendedButton = styled(PotatoButton, {
@@ -126,7 +124,7 @@ const ExtendedButton = styled(PotatoButton, {
 			good: {
 				color: 'GoldenRod',
 			},
-		}
+		},
 	},
 	defaultVariants: {
 		hue: 'red',
@@ -142,28 +140,24 @@ const ExtendedButton = styled(PotatoButton, {
 })
 
 void function Test() {
-	return (
-		<ExtendedButton
-			peace="mercy"
-			love="free"
-			hue="red"
-		/>
-	)
+	return <ExtendedButton peace="mercy" love="free" hue="red" />
 }
 
 void function Test() {
 	return (
-		<PotatoButton css={{
-			backgroundColor: '$gray300',
+		<PotatoButton
+			css={{
+				'backgroundColor': '$gray300',
 
-			'@all': {
-				backgroundColor: 'initial'
-			},
+				'@all': {
+					backgroundColor: 'initial',
+				},
 
-			'@bp1': {
-				backgroundColor: 'initial',
-			}
-		}} />
+				'@bp1': {
+					backgroundColor: 'initial',
+				},
+			}}
+		/>
 	)
 }
 
@@ -171,12 +165,12 @@ void function Test() {
  * Issue #821
  * -----------------------------------------------------------------------------------------------*/
 
-type UnionProps = { type: 'single', collapsible: boolean; } | { type: 'multiple' };
+type UnionProps = { type: 'single'; collapsible: boolean } | { type: 'multiple' }
 const UnionComponent: React.FC<UnionProps> = () => null
 const StyledUnionComponent = styled(UnionComponent, {})
 
 void function Test() {
-	<>
+	;<>
 		<StyledUnionComponent type="single" collapsible />
 		{/* @ts-expect-error */}
 		<StyledUnionComponent type="multiple" collapsible />

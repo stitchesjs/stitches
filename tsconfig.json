@@ -5,15 +5,12 @@
     "extendedDiagnostics": true,
     "skipLibCheck": false,
     "jsx": "preserve",
-    "lib": [
-      "dom",
-      "es2020"
-    ],
+    "lib": ["dom", "es2020"],
     "moduleResolution": "node",
     "strict": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
     "target": "es2020"
-  },
+  }
 }

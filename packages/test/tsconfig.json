@@ -7,10 +7,7 @@
     "noEmit": false,
     "jsx": "preserve",
     "declaration": true,
-    "lib": [
-      "dom",
-      "es2020"
-    ],
+    "lib": ["dom", "es2020"],
     "moduleResolution": "node",
     "strict": true,
     "strictNullChecks": true,

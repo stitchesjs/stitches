@@ -11,11 +11,7 @@ describe('Issue #671 - forwardRef', () => {
 		const StitshcesComponentExtendingForwardRefReactComponent = styled(ForwardRefReactComponent, { color: 'white' })
 
 		const App = () => {
-			return React.createElement(
-				'div',
-				null,
-				React.createElement(StitshcesComponentExtendingForwardRefReactComponent, {}),
-			)
+			return React.createElement('div', null, React.createElement(StitshcesComponentExtendingForwardRefReactComponent, {}))
 		}
 
 		renderer.act(() => {

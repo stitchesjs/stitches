@@ -2,7 +2,9 @@ import { toKebabCase } from './toCase.js'
 import { getResolvedSelectors } from './getResolvedSelectors.js'
 import { isArray } from './Array.js'
 
-const { prototype: { toString } } = Object
+const {
+	prototype: { toString },
+} = Object
 
 /** Comma matcher outside rounded brackets. */
 const comma = /\s*,\s*(?![^()]*\))/

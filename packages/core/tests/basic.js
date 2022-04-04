@@ -115,14 +115,7 @@ describe('Basic', () => {
 
 		expect(component1of1).toBeInstanceOf(Function)
 		expect(className1of1).toBe('c-dataoT c-dataoT-icaIZdx-css')
-		expect(cssString1of1).toBe(
-			`--sxs{--sxs:2 c-dataoT}@media{` +
-				`.c-dataoT{color:DodgerBlue}` +
-			`}` +
-			`--sxs{--sxs:6 c-dataoT-icaIZdx-css}@media{` +
-				`.c-dataoT-icaIZdx-css{color:Crimson}` +
-			`}`
-		)
+		expect(cssString1of1).toBe(`--sxs{--sxs:2 c-dataoT}@media{` + `.c-dataoT{color:DodgerBlue}` + `}` + `--sxs{--sxs:6 c-dataoT-icaIZdx-css}@media{` + `.c-dataoT-icaIZdx-css{color:Crimson}` + `}`)
 	})
 
 	test('Functionality of css() — variants', () => {

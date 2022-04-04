@@ -20,9 +20,7 @@ yarn add @stitches/core
 
 ```html
 <script type="module">
-
-import { css } from 'https://cdn.skypack.dev/@stitches/core'
-
+  import { css } from 'https://cdn.skypack.dev/@stitches/core'
 </script>
 ```
 
@@ -32,12 +30,11 @@ import { css } from 'https://cdn.skypack.dev/@stitches/core'
 
 <br />
 
-```js
+```html
 <script src="https://unpkg.com/@stitches/core/dist/index.global.js"></script>
+
 <script>
-
-const { css } = stitches
-
+  const { css } = stitches
 </script>
 ```
 

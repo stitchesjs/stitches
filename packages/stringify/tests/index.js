@@ -18,13 +18,7 @@ describe('stringify()', () => {
 				},
 				replacer,
 			),
-		).toEqual(
-			'a{' +
-				'color:white;' +
-				'background-color:black;' +
-				'margin:0;' +
-			'}',
-		)
+		).toEqual('a{' + 'color:white;' + 'background-color:black;' + 'margin:0;' + '}')
 	})
 
 	test('stringify() generates CSS with the replacer function for a nested rule', () => {
@@ -43,17 +37,7 @@ describe('stringify()', () => {
 				},
 				replacer,
 			),
-		).toEqual(
-			'a{' +
-				'color:white;' +
-			'}' +
-			'a *{' +
-				'margin:0;' +
-			'}' +
-			'a{' +
-				'background-color:black;' +
-			'}',
-		)
+		).toEqual('a{' + 'color:white;' + '}' + 'a *{' + 'margin:0;' + '}' + 'a{' + 'background-color:black;' + '}')
 	})
 
 	test('stringify() generates CSS with the replacer function for a @custom-media at-rule', () => {
@@ -80,13 +64,7 @@ describe('stringify()', () => {
 				},
 				replacer,
 			),
-		).toEqual(
-			'@media (min-width: 640px){' +
-				'a{' +
-					'margin:0;' +
-				'}' +
-			'}',
-		)
+		).toEqual('@media (min-width: 640px){' + 'a{' + 'margin:0;' + '}' + '}')
 	})
 
 	test('stringify() generates CSS with the replacer function for a @when at-rule', () => {
@@ -109,12 +87,6 @@ describe('stringify()', () => {
 				},
 				replacer,
 			),
-		).toEqual(
-			'@media (min-width: 640px){' +
-				'a{' +
-					'margin:0;' +
-				'}' +
-			'}',
-		)
+		).toEqual('@media (min-width: 640px){' + 'a{' + 'margin:0;' + '}' + '}')
 	})
 })

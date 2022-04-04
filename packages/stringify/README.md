@@ -7,15 +7,15 @@ import { stringify } from '@stitches/stringify'
 
 stringify({
   body: {
-    backgroundColor: 'white',
-    color: 'black',
+    'backgroundColor': 'white',
+    'color': 'black',
 
     '& > nav > ul': {
       '@media (min-width: 640px)': {
         margin: 0,
-      }
-    }
-  }
+      },
+    },
+  },
 })
 ```
 
@@ -49,8 +49,8 @@ import { stringify } from '@stitches/stringify'
 
 stringify({
   body: {
-    margin: 0
-  }
+    margin: 0,
+  },
 })
 ```
 
@@ -61,31 +61,30 @@ The **replacer** is an optional function that alters the behavior of the stringi
 The **replacer** function takes two parameters, the **property** and **value** of a declaration, and returns a JavaScript object representing a fragment of CSS to replace it.
 
 ```js
-const replacer = (property, value) => (
+const replacer = (property, value) =>
   // add a prefix to "tab-size" for Firefox
   property === 'tab-size'
     ? {
-      ['-moz-' + property]: value,
-      [property]: value,
-    }
-  // add common prefixes for Safari 14
-  : /^(appearance|backface-visibility|background-clip|clip-path|hyphens|mask-image|user-select)$/.test(property)
+        ['-moz-' + property]: value,
+        [property]: value,
+      }
+    : // add common prefixes for Safari 14
+    /^(appearance|backface-visibility|background-clip|clip-path|hyphens|mask-image|user-select)$/.test(property)
     ? {
-      ['-webkit-' + property]: value,
-      [property]: value,
-    }
-  : null
-)
+        ['-webkit-' + property]: value,
+        [property]: value,
+      }
+    : null
 ```
 
 ```js
 stringify({
   button: {
-    appearance: 'none'
+    appearance: 'none',
   },
   textarea: {
-    tabSize: 2
-  }
+    tabSize: 2,
+  },
 })
 ```
 
@@ -111,12 +110,12 @@ The **replacer** function prevents recursion by ignoring replacement of the same
 stringify({
   q: {
     '&::before': {
-      content: '«'
+      content: '«',
     },
     '&::after': {
-      content: '»'
-    }
-  }
+      content: '»',
+    },
+  },
 })
 ```
 
@@ -136,10 +135,7 @@ Arrays can be used to create multiple declarations or unnested rules with the sa
 
 ```js
 stringify({
-  '@import': [
-    '"https://unpkg.com/sanitize.css"',
-    '"https://unpkg.com/sanitize.css/typography.css"'
-  ]
+  '@import': ['"https://unpkg.com/sanitize.css"', '"https://unpkg.com/sanitize.css/typography.css"'],
 })
 ```
 
@@ -153,11 +149,8 @@ stringify({
 ```js
 stringify({
   body: {
-    background: [
-      'white',
-      'var(--page-bg, white)'
-    ]
-  }
+    background: ['white', 'var(--page-bg, white)'],
+  },
 })
 ```
 

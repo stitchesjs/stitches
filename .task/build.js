@@ -154,10 +154,12 @@ if (isProcessMeta(import.meta)) {
 				// exec
 				`--exec "${['node', './.task/build.js', ...onlyArgs].join(' ')}"`,
 			].join(' '),
-		).on('start', () => {
-			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
-			console.clear()
-		}).on('quit', () => process.exit())
+		)
+			.on('start', () => {
+				process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
+				console.clear()
+			})
+			.on('quit', () => process.exit())
 	} else {
 		buildAll({
 			only: getProcessArgOf('only'),

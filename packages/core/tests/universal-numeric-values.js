@@ -90,40 +90,104 @@ describe('Numeric Values', () => {
 			const cssText = getCssText().replace(/^.+@media\{|\}$/g, '')
 
 			expect(cssText).toBe(
-				'div' + '{' +
-					'animation-iteration-count:' + i + ';' +
-					'border-image-outset:' + i + ';' +
-					'border-image-slice:' + i + ';' +
-					'border-image-width:' + i + ';' +
-					'box-flex:' + i + ';' +
-					'box-flex-group:' + i + ';' +
-					'box-ordinal-group:' + i + ';' +
-					'column-count:' + i + ';' +
-					'columns:' + i + ';' +
-					'flex:' + i + ';' +
-					'flex-grow:' + i + ';' +
-					'flex-shrink:' + i + ';' +
-					'flex-order:' + i + ';' +
-					'grid-row:' + i + ';' +
-					'grid-row-end:' + i + ';' +
-					'grid-row-span:' + i + ';' +
-					'grid-row-start:' + i + ';' +
-					'grid-column:' + i + ';' +
-					'grid-column-end:' + i + ';' +
-					'grid-column-span:' + i + ';' +
-					'grid-column-start:' + i + ';' +
-					'font-weight:' + i + ';' +
-					'line-clamp:' + i + ';' +
-					'line-height:' + i + ';' +
-					'opacity:' + i + ';' +
-					'order:' + i + ';' +
-					'orphans:' + i + ';' +
-					'-moz-tab-size:' + i + ';' +
-					'tab-size:' + i + ';' +
-					'widows:' + i + ';' +
-					'z-index:' + i + ';' +
-					'zoom:' + i +
-				'}'
+				'div' +
+					'{' +
+					'animation-iteration-count:' +
+					i +
+					';' +
+					'border-image-outset:' +
+					i +
+					';' +
+					'border-image-slice:' +
+					i +
+					';' +
+					'border-image-width:' +
+					i +
+					';' +
+					'box-flex:' +
+					i +
+					';' +
+					'box-flex-group:' +
+					i +
+					';' +
+					'box-ordinal-group:' +
+					i +
+					';' +
+					'column-count:' +
+					i +
+					';' +
+					'columns:' +
+					i +
+					';' +
+					'flex:' +
+					i +
+					';' +
+					'flex-grow:' +
+					i +
+					';' +
+					'flex-shrink:' +
+					i +
+					';' +
+					'flex-order:' +
+					i +
+					';' +
+					'grid-row:' +
+					i +
+					';' +
+					'grid-row-end:' +
+					i +
+					';' +
+					'grid-row-span:' +
+					i +
+					';' +
+					'grid-row-start:' +
+					i +
+					';' +
+					'grid-column:' +
+					i +
+					';' +
+					'grid-column-end:' +
+					i +
+					';' +
+					'grid-column-span:' +
+					i +
+					';' +
+					'grid-column-start:' +
+					i +
+					';' +
+					'font-weight:' +
+					i +
+					';' +
+					'line-clamp:' +
+					i +
+					';' +
+					'line-height:' +
+					i +
+					';' +
+					'opacity:' +
+					i +
+					';' +
+					'order:' +
+					i +
+					';' +
+					'orphans:' +
+					i +
+					';' +
+					'-moz-tab-size:' +
+					i +
+					';' +
+					'tab-size:' +
+					i +
+					';' +
+					'widows:' +
+					i +
+					';' +
+					'z-index:' +
+					i +
+					';' +
+					'zoom:' +
+					i +
+					'}',
 			)
 		}
 	})
@@ -145,11 +209,7 @@ describe('Numeric Values', () => {
 
 				const cssText = getCssText().replace(/^.+@media\{|\}$/g, '')
 
-				expect(cssText).toBe(
-					`div{` +
-						kebabProp + `:` + i + (i ? 'px' : '') +
-					`}`
-				)
+				expect(cssText).toBe(`div{` + kebabProp + `:` + i + (i ? 'px' : '') + `}`)
 			}
 		})
 	}

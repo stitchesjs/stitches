@@ -6,20 +6,21 @@ export * from 'readline'
 export const question = (
 	/** @type {string} */ query,
 	/** @type {import('events').Abortable} */
-	opts = undefined
-) => new Promise(resolver => {
-	query = String(query).replace(/[^\s]$/, '$& ')
+	opts = undefined,
+) =>
+	new Promise((resolver) => {
+		query = String(query).replace(/[^\s]$/, '$& ')
 
-	opts = Object(opts)
+		opts = Object(opts)
 
-	const int = readline.createInterface({
-		input: process.stdin,
-		output: process.stdout,
+		const int = readline.createInterface({
+			input: process.stdin,
+			output: process.stdout,
+		})
+
+		int.question(query, opts, (answer) => {
+			int.close()
+
+			resolver(answer)
+		})
 	})
-
-	int.question(query, opts, answer => {
-		int.close()
-
-		resolver(answer)
-	})
-})

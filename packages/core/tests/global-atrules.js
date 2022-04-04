@@ -64,14 +64,14 @@ describe('Support @font-face', () => {
 
 		expect(getCssText()).toBe(
 			`--sxs{--sxs:1 PCbjJ}` +
-			`@media{` +
+				`@media{` +
 				`@font-face{` +
-					`font-family:system-ui;` +
-					`font-style:normal;` +
-					`font-weight:400;` +
-					`src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma")` +
+				`font-family:system-ui;` +
+				`font-style:normal;` +
+				`font-weight:400;` +
+				`src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma")` +
 				`}` +
-			`}`,
+				`}`,
 		)
 	})
 
@@ -117,21 +117,20 @@ describe('Support @font-face', () => {
 
 		expect(getCssText()).toBe(
 			`--sxs{--sxs:1 JJHhj}` +
-			`@media{` +
+				`@media{` +
 				`@font-face{` +
-					`font-family:system-ui;` +
-					`font-style:normal;` +
-					`font-weight:400;` +
-					`src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma")` +
+				`font-family:system-ui;` +
+				`font-style:normal;` +
+				`font-weight:400;` +
+				`src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma")` +
 				`}` +
-
 				`@font-face{` +
-					`font-family:system-ui;` +
-					`font-style:italic;` +
-					`font-weight:400;` +
-					`src:local(".SFNS-Italic"),local(".SFNSText-Italic"),local(".HelveticaNeueDeskInterface-Italic"),local(".LucidaGrandeUI"),local("Segoe UI Italic"),local("Ubuntu Italic"),local("Roboto-Italic"),local("DroidSans"),local("Tahoma")` +
+				`font-family:system-ui;` +
+				`font-style:italic;` +
+				`font-weight:400;` +
+				`src:local(".SFNS-Italic"),local(".SFNSText-Italic"),local(".HelveticaNeueDeskInterface-Italic"),local(".LucidaGrandeUI"),local("Segoe UI Italic"),local("Ubuntu Italic"),local("Roboto-Italic"),local("DroidSans"),local("Tahoma")` +
 				`}` +
-			`}`
+				`}`,
 		)
 	})
 })

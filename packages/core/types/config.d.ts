@@ -4,7 +4,7 @@ import type Stitches from './stitches'
 /** Configuration Interface */
 declare namespace ConfigType {
 	/** Prefix interface. */
-	export type Prefix<T = ''> = T extends string ? T: string
+	export type Prefix<T = ''> = T extends string ? T : string
 
 	/** Media interface. */
 	export type Media<T = {}> = {
@@ -29,7 +29,7 @@ declare namespace ConfigType {
 		zIndices?: { [token in number | string]: boolean | number | string }
 	} & {
 		[Scale in keyof T]: {
-			[Token in keyof T[Scale]]: T[Scale][Token] extends (boolean | number | string) ? T[Scale][Token] : (boolean | number | string)
+			[Token in keyof T[Scale]]: T[Scale][Token] extends boolean | number | string ? T[Scale][Token] : boolean | number | string
 		}
 	}
 
@@ -40,9 +40,13 @@ declare namespace ConfigType {
 
 	/** Utility interface. */
 	export type Utils<T = {}> = {
-		[Property in keyof T]: T[Property] extends (value: infer V) => {} ? T[Property] | ((value: V) => {
-			[K in keyof CSSUtil.CSSProperties]?: CSSUtil.CSSProperties[K] | V
-		}) : never
+		[Property in keyof T]: T[Property] extends (value: infer V) => {}
+			?
+					| T[Property]
+					| ((value: V) => {
+							[K in keyof CSSUtil.CSSProperties]?: CSSUtil.CSSProperties[K] | V
+					  })
+			: never
 	}
 }
 
@@ -192,19 +196,11 @@ export interface DefaultThemeMap {
 
 /** Returns a function used to create a new Stitches interface. */
 export type CreateStitches = {
-	<
-		Prefix extends string = '',
-		Media extends {} = {},
-		Theme extends {} = {},
-		ThemeMap extends {} = DefaultThemeMap,
-		Utils extends {} = {}
-	>(
-		config?: {
-			prefix?: ConfigType.Prefix<Prefix>
-			media?: ConfigType.Media<Media>
-			theme?: ConfigType.Theme<Theme>
-			themeMap?: ConfigType.ThemeMap<ThemeMap>
-			utils?: ConfigType.Utils<Utils>
-		}
-	): Stitches<Prefix, Media, Theme, ThemeMap, Utils>
+	<Prefix extends string = '', Media extends {} = {}, Theme extends {} = {}, ThemeMap extends {} = DefaultThemeMap, Utils extends {} = {}>(config?: {
+		prefix?: ConfigType.Prefix<Prefix>
+		media?: ConfigType.Media<Media>
+		theme?: ConfigType.Theme<Theme>
+		themeMap?: ConfigType.ThemeMap<ThemeMap>
+		utils?: ConfigType.Utils<Utils>
+	}): Stitches<Prefix, Media, Theme, ThemeMap, Utils>
 }

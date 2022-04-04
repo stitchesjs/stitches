@@ -115,7 +115,7 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 			/** @type {InitComposer['compoundVariants']} */
 			let { css: vStyle, ...vMatch } = compoundVariant
 
-			vStyle = typeof vStyle === 'object' && vStyle || {}
+			vStyle = (typeof vStyle === 'object' && vStyle) || {}
 
 			// serialize all compound variant pairs
 			for (const name in vMatch) vMatch[name] = String(vMatch[name])
@@ -130,17 +130,8 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 	return /** @type {Composer} */ ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
 }
 
-const createRenderer = (
-	/** @type {Config} */ config,
-	/** @type {Internals} */ internals,
-	/** @type {import('../sheet').SheetGroup} */ sheet
-) => {
-	const [
-		baseClassName,
-		baseClassNames,
-		prefilledVariants,
-		undefinedVariants
-	] = getPreparedDataFromComposers(internals.composers)
+const createRenderer = (/** @type {Config} */ config, /** @type {Internals} */ internals, /** @type {import('../sheet').SheetGroup} */ sheet) => {
+	const [baseClassName, baseClassNames, prefilledVariants, undefinedVariants] = getPreparedDataFromComposers(internals.composers)
 
 	const deferredInjector = typeof internals.type === 'function' || !!internals.type.$$typeof ? createRulesInjectionDeferrer(sheet) : null
 	const injectionTarget = (deferredInjector || sheet).rules
@@ -149,7 +140,7 @@ const createRenderer = (
 
 	/** @type {Render} */
 	const render = (props) => {
-		props = typeof props === 'object' && props || empty
+		props = (typeof props === 'object' && props) || empty
 
 		// 1. we cannot mutate `props`
 		// 2. we delete variant props
@@ -174,18 +165,14 @@ const createRenderer = (
 				} else {
 					data = String(data)
 
-					variantProps[name] = (
-						data === 'undefined' && !undefinedVariants.has(name)
-							? prefilledVariants[name]
-						: data
-					)
+					variantProps[name] = data === 'undefined' && !undefinedVariants.has(name) ? prefilledVariants[name] : data
 				}
 			} else {
 				variantProps[name] = prefilledVariants[name]
 			}
 		}
 
-		const classSet = new Set([ ...baseClassNames ])
+		const classSet = new Set([...baseClassNames])
 
 		// 1. builds up the variants (fills in defaults, calculates @initial on responsive, etc.)
 		// 2. iterates composers
@@ -214,8 +201,8 @@ const createRenderer = (
 
 					classSet.add(variantClassName)
 
-					const groupCache = (isResponsive ? sheet.rules.resonevar : sheet.rules.onevar ).cache
-					/* 
+					const groupCache = (isResponsive ? sheet.rules.resonevar : sheet.rules.onevar).cache
+					/*
 					 * make sure that normal variants are injected before responsive ones
 					 * @see {@link https://github.com/modulz/stitches/issues/737|github}
 					 */
@@ -265,11 +252,13 @@ const createRenderer = (
 			}
 		}
 
-		for (const propClassName of String(props.className || '').trim().split(/\s+/)) {
+		for (const propClassName of String(props.className || '')
+			.trim()
+			.split(/\s+/)) {
 			if (propClassName) classSet.add(propClassName)
 		}
 
-		const renderedClassName = forwardProps.className = [ ...classSet ].join(' ')
+		const renderedClassName = (forwardProps.className = [...classSet].join(' '))
 
 		const renderedToString = () => renderedClassName
 
@@ -325,12 +314,7 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 	}
 
 	/** @type {[string, string[], PrefilledVariants, Set<UndefinedVariants>]} */
-	const preparedData = [
-		baseClassName,
-		baseClassNames,
-		combinedPrefilledVariants,
-		new Set(combinedUndefinedVariants)
-	]
+	const preparedData = [baseClassName, baseClassNames, combinedPrefilledVariants, new Set(combinedUndefinedVariants)]
 
 	return preparedData
 }
@@ -377,11 +361,11 @@ const getTargetVariantsToAdd = (
 				for (const query in pPair) {
 					if (vPair === String(pPair[query])) {
 						if (query !== '@initial') {
-							// check if the cleanQuery is in the media config and then we push the resulting media query to the matchedQueries array, 
+							// check if the cleanQuery is in the media config and then we push the resulting media query to the matchedQueries array,
 							// if not, we remove the @media from the beginning and push it to the matched queries which then will be resolved a few lines down
 							// when we finish working on this variant and want wrap the vStyles with the matchedQueries
-							const cleanQuery = query.slice(1);
-							(matchedQueries = matchedQueries || []).push(cleanQuery in media ? media[cleanQuery] : query.replace(/^@media ?/, ''))
+							const cleanQuery = query.slice(1)
+							;(matchedQueries = matchedQueries || []).push(cleanQuery in media ? media[cleanQuery] : query.replace(/^@media ?/, ''))
 							isResponsive = true
 						}
 
@@ -403,7 +387,7 @@ const getTargetVariantsToAdd = (
 			// non-matches
 			else continue targetVariants
 		}
-		(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`, vStyle, isResponsive])
+		;(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`, vStyle, isResponsive])
 	}
 
 	return targetVariantsToAdd

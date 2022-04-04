@@ -88,7 +88,7 @@ describe('Variants', () => {
 						padding: '1em',
 					},
 				},
-			}
+			},
 		})
 		const expression = component({ size: 'small', level: 1 })
 
@@ -110,13 +110,7 @@ describe('Variants', () => {
 		const expressionCompoundCssText = '.c-PJLV-cChFtv-cv{transform:scale(1.2)}'
 
 		expect(expression.className).toBe(`c-PJLV c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small c-PJLV-cChFtv-cv`)
-		expect(getCssText()).toBe(
-			`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{${
-				expressionColorBlueCssText + expressionSizeSmallCssText
-			}}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{${
-				expressionCompoundCssText
-			}}`
-		)
+		expect(getCssText()).toBe(`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{${expressionColorBlueCssText + expressionSizeSmallCssText}}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{${expressionCompoundCssText}}`)
 	})
 })
 
@@ -219,10 +213,10 @@ describe('Variants with defaults', () => {
 				`.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}` +
 				// implicit size:small
 				`.c-PJLV-Gaggi-size-small{font-size:16px}` +
-			`}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{` +
+				`}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{` +
 				// compound color:blue + size:small
 				`.c-PJLV-cChFtv-cv{transform:scale(1.2)}` +
-			`}`,
+				`}`,
 		)
 	})
 
@@ -310,11 +304,7 @@ describe('Conditional variants', () => {
 		const component = css(componentConfig)
 
 		expect(component({ size: { '@bp1': 'small' } }).className).toBe(`c-PJLV c-PJLV-fHtTAQ-size-small`)
-		expect(getCssText()).toBe(
-			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small}@media{` +
-				`@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` +
-			`}`
-		)
+		expect(getCssText()).toBe(`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small}@media{` + `@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` + `}`)
 	})
 
 	test('Renders a component with one conditional variant on two breakpoints applied', () => {
@@ -327,12 +317,7 @@ describe('Conditional variants', () => {
 		const componentLargeBp2CssText = `@media (min-width: 768px){.${componentLargeBp2ClassName}{font-size:24px}}`
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
-		expect(getCssText()).toBe(
-			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
-				componentSmallBp1CssText +
-				componentLargeBp2CssText +
-			`}`
-		)
+		expect(getCssText()).toBe(`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` + componentSmallBp1CssText + componentLargeBp2CssText + `}`)
 	})
 
 	test('Renders a component with a conditional variant repeatedly', () => {
@@ -341,26 +326,17 @@ describe('Conditional variants', () => {
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large`)
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
-				`@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` +
-				`@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` +
-			`}`
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` + `@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` + `@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` + `}`,
 		)
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large`)
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
-				`@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` +
-				`@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` +
-			`}`
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` + `@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` + `@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` + `}`,
 		)
 
 		expect(component({ size: { '@bp1': 'small', '@bp2': 'large' } }).className).toBe(`c-PJLV c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large`)
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
-				`@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` +
-				`@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` +
-			`}`
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` + `@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` + `@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` + `}`,
 		)
 	})
 
@@ -390,10 +366,7 @@ describe('Conditional variants', () => {
 			).toBe('c-PJLV c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large')
 
 			expect(getCssText()).toBe(
-				`--sxs{--sxs:4 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
-					`@media (max-width:767.9375px){.c-PJLV-gjWYHE-size-small{font-size:16px}}` +
-					`@media (min-width:768px){.c-PJLV-fzmUzy-size-large{font-size:24px}}` +
-				`}`
+				`--sxs{--sxs:4 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` + `@media (max-width:767.9375px){.c-PJLV-gjWYHE-size-small{font-size:16px}}` + `@media (min-width:768px){.c-PJLV-fzmUzy-size-large{font-size:24px}}` + `}`,
 			)
 		}
 
@@ -422,10 +395,7 @@ describe('Conditional variants', () => {
 			).toBe('c-PJLV c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large')
 
 			expect(getCssText()).toBe(
-				`--sxs{--sxs:4 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` +
-					`@media (max-width:767.9375px){.c-PJLV-gjWYHE-size-small{font-size:16px}}` +
-					`@media (min-width:768px){.c-PJLV-fzmUzy-size-large{font-size:24px}}` +
-				`}`
+				`--sxs{--sxs:4 c-PJLV-gjWYHE-size-small c-PJLV-fzmUzy-size-large}@media{` + `@media (max-width:767.9375px){.c-PJLV-gjWYHE-size-small{font-size:16px}}` + `@media (min-width:768px){.c-PJLV-fzmUzy-size-large{font-size:24px}}` + `}`,
 			)
 		}
 	})
@@ -434,16 +404,16 @@ describe('Conditional variants', () => {
 describe('Variant pairing types', () => {
 	const componentConfigForBooleanVariant = {
 		'--component': true,
-		variants: {
+		'variants': {
 			testBoolean: {
 				true: {
 					'--test-boolean': true,
 				},
 				false: {
 					'--test-boolean': false,
-				}
-			}
-		}
+				},
+			},
+		},
 	}
 
 	test('Renders a variant with an inactive string variant', () => {
@@ -452,9 +422,7 @@ describe('Variant pairing types', () => {
 		const rendering = component()
 
 		expect(rendering.className).toBe('c-foEXqW')
-		expect(getCssText()).toBe(`--sxs{--sxs:2 c-foEXqW}@media{` +
-			`.c-foEXqW{--component:true}` +
-		`}`)
+		expect(getCssText()).toBe(`--sxs{--sxs:2 c-foEXqW}@media{` + `.c-foEXqW{--component:true}` + `}`)
 	})
 
 	test('Renders a variant with an active string variant', () => {
@@ -463,14 +431,7 @@ describe('Variant pairing types', () => {
 		const rendering = component({ testBoolean: 'true' })
 
 		expect(rendering.className).toBe('c-foEXqW c-foEXqW-iloXEi-testBoolean-true')
-		expect(getCssText()).toBe(
-			`--sxs{--sxs:2 c-foEXqW}@media{` +
-				`.c-foEXqW{--component:true}` +
-			`}` +
-			`--sxs{--sxs:3 c-foEXqW-iloXEi-testBoolean-true}@media{` +
-				`.c-foEXqW-iloXEi-testBoolean-true{--test-boolean:true}` +
-			`}`
-		)
+		expect(getCssText()).toBe(`--sxs{--sxs:2 c-foEXqW}@media{` + `.c-foEXqW{--component:true}` + `}` + `--sxs{--sxs:3 c-foEXqW-iloXEi-testBoolean-true}@media{` + `.c-foEXqW-iloXEi-testBoolean-true{--test-boolean:true}` + `}`)
 	})
 
 	test('Renders a variant with an active boolean variant', () => {
@@ -479,14 +440,7 @@ describe('Variant pairing types', () => {
 		const rendering = component({ testBoolean: true })
 
 		expect(rendering.className).toBe('c-foEXqW c-foEXqW-iloXEi-testBoolean-true')
-		expect(getCssText()).toBe(
-			`--sxs{--sxs:2 c-foEXqW}@media{` +
-				`.c-foEXqW{--component:true}` +
-			`}` +
-			`--sxs{--sxs:3 c-foEXqW-iloXEi-testBoolean-true}@media{` +
-				`.c-foEXqW-iloXEi-testBoolean-true{--test-boolean:true}` +
-			`}`
-		)
+		expect(getCssText()).toBe(`--sxs{--sxs:2 c-foEXqW}@media{` + `.c-foEXqW{--component:true}` + `}` + `--sxs{--sxs:3 c-foEXqW-iloXEi-testBoolean-true}@media{` + `.c-foEXqW-iloXEi-testBoolean-true{--test-boolean:true}` + `}`)
 	})
 
 	test('Renders a variant with an active responsive string variant', () => {
@@ -496,14 +450,7 @@ describe('Variant pairing types', () => {
 
 		expect(rendering.className).toBe('c-foEXqW c-foEXqW-brOaTK-testBoolean-true')
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:2 c-foEXqW}@media{` +
-				`.c-foEXqW{--component:true}` +
-			`}` +
-			`--sxs{--sxs:4 c-foEXqW-brOaTK-testBoolean-true}@media{` +
-				`@media (min-width: 640px){` +
-					`.c-foEXqW-brOaTK-testBoolean-true{--test-boolean:true}` +
-				`}` +
-			`}`
+			`--sxs{--sxs:2 c-foEXqW}@media{` + `.c-foEXqW{--component:true}` + `}` + `--sxs{--sxs:4 c-foEXqW-brOaTK-testBoolean-true}@media{` + `@media (min-width: 640px){` + `.c-foEXqW-brOaTK-testBoolean-true{--test-boolean:true}` + `}` + `}`,
 		)
 	})
 
@@ -514,14 +461,7 @@ describe('Variant pairing types', () => {
 
 		expect(rendering.className).toBe('c-foEXqW c-foEXqW-brOaTK-testBoolean-true')
 		expect(getCssText()).toBe(
-			`--sxs{--sxs:2 c-foEXqW}@media{` +
-				`.c-foEXqW{--component:true}` +
-			`}` +
-			`--sxs{--sxs:4 c-foEXqW-brOaTK-testBoolean-true}@media{` +
-				`@media (min-width: 640px){` +
-					`.c-foEXqW-brOaTK-testBoolean-true{--test-boolean:true}` +
-				`}` +
-			`}`
+			`--sxs{--sxs:2 c-foEXqW}@media{` + `.c-foEXqW{--component:true}` + `}` + `--sxs{--sxs:4 c-foEXqW-brOaTK-testBoolean-true}@media{` + `@media (min-width: 640px){` + `.c-foEXqW-brOaTK-testBoolean-true{--test-boolean:true}` + `}` + `}`,
 		)
 	})
 })

@@ -17,15 +17,15 @@ export const createStitches = (config) => {
 	const instance = createCssMap(config, (initConfig) => {
 		didRun = true
 
-		initConfig = typeof initConfig === 'object' && initConfig || {}
+		initConfig = (typeof initConfig === 'object' && initConfig) || {}
 
 		// internal configuration
 		const prefix = 'prefix' in initConfig ? String(initConfig.prefix) : ''
-		const media = typeof initConfig.media === 'object' && initConfig.media || {}
+		const media = (typeof initConfig.media === 'object' && initConfig.media) || {}
 		const root = typeof initConfig.root === 'object' ? initConfig.root || null : globalThis.document || null
-		const theme = typeof initConfig.theme === 'object' && initConfig.theme || {}
-		const themeMap = typeof initConfig.themeMap === 'object' && initConfig.themeMap || { ...defaultThemeMap }
-		const utils = typeof initConfig.utils === 'object' && initConfig.utils || {}
+		const theme = (typeof initConfig.theme === 'object' && initConfig.theme) || {}
+		const themeMap = (typeof initConfig.themeMap === 'object' && initConfig.themeMap) || { ...defaultThemeMap }
+		const utils = (typeof initConfig.utils === 'object' && initConfig.utils) || {}
 
 		/** External configuration. */
 		const config = {
@@ -57,9 +57,7 @@ export const createStitches = (config) => {
 		}
 
 		// initialize default theme
-		String(
-			returnValue.theme = returnValue.createTheme(theme)
-		)
+		String((returnValue.theme = returnValue.createTheme(theme)))
 
 		return returnValue
 	})

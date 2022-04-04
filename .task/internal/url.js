@@ -1,4 +1,4 @@
-import { fileURLToPath, pathToFileURL } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url'
 
 export default class URL extends globalThis.URL {
 	to(/** @type {string[]} */ ...segments) {
@@ -22,10 +22,6 @@ export default class URL extends globalThis.URL {
 	}
 
 	static from(/** @type {string | globalThis.URL} */ segment, /** @type {string[]} */ ...segments) {
-		return (
-			/^file:/.test(segment)
-				? new URL(segment)
-			: new URL(pathToFileURL(segment))
-		).to(...segments)
+		return (/^file:/.test(segment) ? new URL(segment) : new URL(pathToFileURL(segment))).to(...segments)
 	}
 }

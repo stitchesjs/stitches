@@ -14,21 +14,17 @@ describe('emerson', () => {
 		const component = styled('span', {
 			variants: {
 				size: {
-					'1': {
+					1: {
 						px: '$1',
 					},
-					'2': {
+					2: {
 						px: '$2',
 					},
 				},
 			},
 		})
 
-		const cssText = (
-			`--sxs{--sxs:3 c-PJLV-efCiES-size-1}@media{` +
-				`.c-PJLV-efCiES-size-1{padding-left:var(--space-1);padding-right:var(--space-1)}` +
-			`}`
-		)
+		const cssText = `--sxs{--sxs:3 c-PJLV-efCiES-size-1}@media{` + `.c-PJLV-efCiES-size-1{padding-left:var(--space-1);padding-right:var(--space-1)}` + `}`
 
 		component.render({ size: '1' })
 

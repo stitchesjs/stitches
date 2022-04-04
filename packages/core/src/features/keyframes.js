@@ -12,7 +12,7 @@ import { toTailDashed } from '../convert/toTailDashed.js'
 const createKeyframesFunctionMap = createMemo()
 
 /** Returns a function that applies a keyframes rule. */
-export const createKeyframesFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) => (
+export const createKeyframesFunction = (/** @type {Config} */ config, /** @type {GroupSheet} */ sheet) =>
 	createKeyframesFunctionMap(config, () => (style) => {
 		/** @type {string} Keyframes Unique Identifier. @see `{CONFIG_PREFIX}-?k-{KEYFRAME_UUID}` */
 		const name = `${toTailDashed(config.prefix)}k-${toHash(style)}`
@@ -40,4 +40,3 @@ export const createKeyframesFunction = (/** @type {Config} */ config, /** @type 
 			toString: render,
 		})
 	})
-)

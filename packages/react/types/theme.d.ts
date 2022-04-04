@@ -8,13 +8,10 @@ export interface ScaleValue {
 export interface Token<
 	/** Token name. */
 	NameType extends number | string = string,
-
 	/** Token value. */
 	ValueType extends number | string = string,
-
 	/** Token scale. */
 	ScaleType extends string | void = void,
-
 	/** Token prefix. */
 	PrefixType extends string | void = void,
 > extends ScaleValue {

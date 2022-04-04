@@ -6,9 +6,6 @@ describe('at-rule (import)', () => {
 			stringify({
 				'@import': ['"https://unpkg.com/sanitize.css"', '"https://unpkg.com/sanitize.css/typography.css"'],
 			}),
-		).toEqual(
-			'@import "https://unpkg.com/sanitize.css";' +
-			'@import "https://unpkg.com/sanitize.css/typography.css";',
-		)
+		).toEqual('@import "https://unpkg.com/sanitize.css";' + '@import "https://unpkg.com/sanitize.css/typography.css";')
 	})
 })

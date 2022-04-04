@@ -15,9 +15,4 @@ const toPhash = (/** @type {number} */ h, /** @type {string} */ x) => {
 	return h
 }
 
-export const toHash = (/** @type {object} */ value) => toAlphabeticName(
-	toPhash(
-		5381,
-		JSON.stringify(value)
-	) >>> 0
-)
+export const toHash = (/** @type {object} */ value) => toAlphabeticName(toPhash(5381, JSON.stringify(value)) >>> 0)

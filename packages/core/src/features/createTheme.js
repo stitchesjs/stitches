@@ -8,13 +8,10 @@ import { toTokenizedValue } from '../convert/toTokenizedValue.js'
 const createCreateThemeFunctionMap = createMemo()
 
 /** Returns a function that applies a theme and returns tokens of that theme. */
-export const createCreateThemeFunction = (
-	config,
-	sheet
-) => (
+export const createCreateThemeFunction = (config, sheet) =>
 	createCreateThemeFunctionMap(config, () => (className, style) => {
 		// theme is the first argument if it is an object, otherwise the second argument as an object
-		style = typeof className === 'object' && className || Object(style)
+		style = (typeof className === 'object' && className) || Object(style)
 
 		// class name is the first argument if it is a string, otherwise an empty string
 		className = typeof className === 'string' ? className : ''
@@ -62,4 +59,3 @@ export const createCreateThemeFunction = (
 			toString: render,
 		}
 	})
-)

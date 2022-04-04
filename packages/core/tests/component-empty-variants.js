@@ -51,10 +51,6 @@ describe('Empty Variants', () => {
 			size: { '@initial': 'xl' },
 		})
 
-		expect(getCssText()).toBe(
-			`--sxs{--sxs:5 c-PJLV-lhHHWD-cv}@media{` +
-				`.c-PJLV-lhHHWD-cv{font-size:24px;color:black}` +
-			`}`
-		)
+		expect(getCssText()).toBe(`--sxs{--sxs:5 c-PJLV-lhHHWD-cv}@media{` + `.c-PJLV-lhHHWD-cv{font-size:24px;color:black}` + `}`)
 	})
 })

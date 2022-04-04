@@ -56,7 +56,7 @@ globalCss({
 		'@bp1': {
 			backgroundColor: '$gray100',
 		},
-		backgroundColor: '$gray300',
+		'backgroundColor': '$gray300',
 	},
 })
 
@@ -113,7 +113,7 @@ const two = css(PotatoButton, {
 			good: {
 				color: 'GoldenRod',
 			},
-		}
+		},
 	},
 	defaultVariants: {
 		hue: 'red',
@@ -137,14 +137,14 @@ two({
 PotatoButton({
 	className: '',
 	css: {
-		backgroundColor: '$gray300',
+		'backgroundColor': '$gray300',
 
 		'@all': {
-			backgroundColor: 'initial'
+			backgroundColor: 'initial',
 		},
 
 		'@bp1': {
 			backgroundColor: 'initial',
-		}
+		},
 	},
 })

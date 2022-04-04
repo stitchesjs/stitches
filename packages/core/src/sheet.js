@@ -126,10 +126,17 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 					type,
 					cssRules: [],
 					insertRule(cssText, index) {
-						this.cssRules.splice(index, 0, createCSSMediaRule(cssText, {
-							import: 3,
-							undefined: 1
-						}[(cssText.toLowerCase().match(/^@([a-z]+)/) || [])[1]] || 4))
+						this.cssRules.splice(
+							index,
+							0,
+							createCSSMediaRule(
+								cssText,
+								{
+									import: 3,
+									undefined: 1,
+								}[(cssText.toLowerCase().match(/^@([a-z]+)/) || [])[1]] || 4,
+							),
+						)
 					},
 					get cssText() {
 						return sourceCssText === '@media{}' ? `@media{${[].map.call(this.cssRules, (cssRule) => cssRule.cssText).join('')}}` : sourceCssText
@@ -187,9 +194,9 @@ const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
 /** Pending rules for injection */
 const $pr = Symbol()
 
-/** 
+/**
  * When a stitches component is extending some other random react component,
- * it’s gonna create a react component (Injector) using this function and then render it after the children, 
+ * it’s gonna create a react component (Injector) using this function and then render it after the children,
  * this way, we would force the styles of the wrapper to be injected after the wrapped component
  */
 export const createRulesInjectionDeferrer = (globalSheet) => {

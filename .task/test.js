@@ -17,7 +17,7 @@ const main = async (pkg, opts) => {
 		if (!file.endsWith('.js')) continue
 
 		// filter non-matching files
-		if (opts.only.length && !opts.only.some(name => file.includes(name))) continue
+		if (opts.only.length && !opts.only.some((name) => file.includes(name))) continue
 
 		/** Test results. */
 		const results = Object.create(null)
@@ -44,7 +44,7 @@ const main = async (pkg, opts) => {
 				} catch (error) {
 					error.stack = error.stack || error.message || String(error || '')
 
-					error.stack = [ ...error.stack.split(/\n/g).slice(1)].join('\n')
+					error.stack = [...error.stack.split(/\n/g).slice(1)].join('\n')
 
 					// assign failure to the results
 					results[description][test].push(`${failIcon} ${infoText(test)}`, getErrorStack(error), '')
@@ -108,18 +108,12 @@ const main = async (pkg, opts) => {
 
 const didFail = Symbol.for('test.failure')
 
-const getErrorStack = (error) => error.stack.split(/\n/g).filter(
-	(line) => !line.includes(import.meta.url) && !line.includes('node:')
-).map(
-	(line) => line.replace(
-		/(.*?)\(?(file:[^:]+)(.*?)\)?$/,
-		($0, before, file, after) => (
-			before.replace(/(at) ([^\s]+)?(.*)/, `${dim('$1')} ${green('$2')}$3`) +
-			file.slice(root.href.length) +
-			dim(after)
-		)
-	)
-).join('\n')
+const getErrorStack = (error) =>
+	error.stack
+		.split(/\n/g)
+		.filter((line) => !line.includes(import.meta.url) && !line.includes('node:'))
+		.map((line) => line.replace(/(.*?)\(?(file:[^:]+)(.*?)\)?$/, ($0, before, file, after) => before.replace(/(at) ([^\s]+)?(.*)/, `${dim('$1')} ${green('$2')}$3`) + file.slice(root.href.length) + dim(after)))
+		.join('\n')
 
 export const testAll = async (opts) => {
 	await main(URL.from(import.meta.url, '../packages/stringify/'), opts)
@@ -149,10 +143,12 @@ if (isProcessMeta(import.meta)) {
 				// exec
 				`--exec "${['node', './.task/test.js', ...onlyArgs].join(' ')}"`,
 			].join(' '),
-		).on('start', () => {
-			process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
-			console.clear()
-		}).on('quit', () => process.exit())
+		)
+			.on('start', () => {
+				process.stdout.write('\u001b[3J\u001b[2J\u001b[1J')
+				console.clear()
+			})
+			.on('quit', () => process.exit())
 	} else {
 		testAll({
 			only: getProcessArgOf('only'),

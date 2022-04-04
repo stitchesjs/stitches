@@ -11,7 +11,7 @@ import { createCssFunction } from '../../../core/src/features/css.js'
 const createCssFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
-export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {GroupSheet} */ sheet }) => (
+export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {GroupSheet} */ sheet }) =>
 	createCssFunctionMap(config, () => {
 		const css = createCssFunction(config, sheet)
 
@@ -20,7 +20,7 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 			const DefaultType = cssComponent[internal].type
 
 			const styledComponent = React.forwardRef((props, ref) => {
-				const Type = props && props.as || DefaultType
+				const Type = (props && props.as) || DefaultType
 
 				const { props: forwardProps, deferredInjector } = cssComponent(props)
 
@@ -48,4 +48,3 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 
 		return styled
 	})
-)

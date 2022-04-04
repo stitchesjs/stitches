@@ -92,6 +92,8 @@ describe('Issue #725', () => {
 			variant: { '@bp1': 'red', '@bp2': 'red' },
 			disabled: { '@bp2': true, '@bp1': false },
 		})
-		expect(getCssText()).toBe(`--sxs{--sxs:4 c-PJLV-dJnmKC-disabled-true c-PJLV-gSmlSg-variant-red}@media{@media (min-width: 1536px){.c-PJLV-dJnmKC-disabled-true{background-color:gray}}@media (min-width: 720px), (min-width: 1536px){.c-PJLV-gSmlSg-variant-red{background-color:tomato}}}--sxs{--sxs:5 c-PJLV-elpmbs-cv}@media{@media (min-width: 1536px){@media (min-width: 720px), (min-width: 1536px){.c-PJLV-elpmbs-cv{padding:50px}}}}`)
+		expect(getCssText()).toBe(
+			`--sxs{--sxs:4 c-PJLV-dJnmKC-disabled-true c-PJLV-gSmlSg-variant-red}@media{@media (min-width: 1536px){.c-PJLV-dJnmKC-disabled-true{background-color:gray}}@media (min-width: 720px), (min-width: 1536px){.c-PJLV-gSmlSg-variant-red{background-color:tomato}}}--sxs{--sxs:5 c-PJLV-elpmbs-cv}@media{@media (min-width: 1536px){@media (min-width: 720px), (min-width: 1536px){.c-PJLV-elpmbs-cv{padding:50px}}}}`,
+		)
 	})
 })

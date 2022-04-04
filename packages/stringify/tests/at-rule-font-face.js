@@ -27,7 +27,7 @@ describe('at-rule (font-face)', () => {
 				'font-style:normal;' +
 				'font-weight:400;' +
 				'src:local(".SFNS-Regular"),local(".SFNSText-Regular"),local(".HelveticaNeueDeskInterface-Regular"),local(".LucidaGrandeUI"),local("Segoe UI"),local("Ubuntu"),local("Roboto-Regular"),local("DroidSans"),local("Tahoma");' +
-			'}',
+				'}',
 		)
 	})
 })

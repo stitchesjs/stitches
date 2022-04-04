@@ -4,24 +4,11 @@ export const getResolvedSelectors = (
 	parentSelectors,
 	/** @type {string[]} Nested selectors (e.g. `["&:hover", "&:focus"]`). */
 	nestedSelectors,
-) => (
-	parentSelectors.reduce(
-		(resolvedSelectors, parentSelector) => {
-			resolvedSelectors.push(
-				...nestedSelectors.map(
-					(selector) => (
-						selector.includes('&') ? selector.replace(
-							/&/g,
-							/[ +>|~]/.test(parentSelector) && /&.*&/.test(selector)
-								? `:is(${parentSelector})`
-							: parentSelector
-						) : parentSelector + ' ' + selector
-					)
-				)
-			)
+) =>
+	parentSelectors.reduce((resolvedSelectors, parentSelector) => {
+		resolvedSelectors.push(
+			...nestedSelectors.map((selector) => (selector.includes('&') ? selector.replace(/&/g, /[ +>|~]/.test(parentSelector) && /&.*&/.test(selector) ? `:is(${parentSelector})` : parentSelector) : parentSelector + ' ' + selector)),
+		)
 
-			return resolvedSelectors
-		},
-		[]
-	)
-)
+		return resolvedSelectors
+	}, [])

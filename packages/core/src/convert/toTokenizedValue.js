@@ -8,33 +8,13 @@ export const toTokenizedValue = (
 	prefix,
 	/** @type {string} */
 	scale,
-) => value.replace(
-	/([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g,
-	($0, direction, multiplier, separator, token) => (
-		separator == "$" == !!multiplier
+) =>
+	value.replace(/([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g, ($0, direction, multiplier, separator, token) =>
+		(separator == '$') == !!multiplier
 			? $0
-		: (
-			direction || separator == '--'
-				? 'calc('
-			: ''
-		) + (
-			'var(--' + (
-				separator === '$'
-					? toTailDashed(prefix) + (
-						!token.includes('$')
-							? toTailDashed(scale)
-						: ''
-					) + token.replace(/\$/g, '-')
-				: token
-			) + ')' + (
-				direction || separator == '--'
-					? '*' + (
-						direction || ''
-					) + (
-						multiplier || '1'
-					) + ')'
-				: ''
-			)
-		)
-	),
-)
+			: (direction || separator == '--' ? 'calc(' : '') +
+			  ('var(--' +
+					(separator === '$' ? toTailDashed(prefix) + (!token.includes('$') ? toTailDashed(scale) : '') + token.replace(/\$/g, '-') : token) +
+					')' +
+					(direction || separator == '--' ? '*' + (direction || '') + (multiplier || '1') + ')' : '')),
+	)

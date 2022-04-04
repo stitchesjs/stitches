@@ -72,17 +72,11 @@ describe('Issue #416: Composition versus Descendancy', () => {
 
 		test('Gen Y has no variant, but activates the variants of Box A and Box B', () => expect(genY.props.className).toBe(`${baselineClass} ${variantAClass} ${variantBClass}`))
 
-		test(
-			'Box Z has an active variant, but does not activate the variants of Box A or Box B',
-			() => expect(boxZ.props.className).toBe(`${baselineClass} ${variantZClass}`)
-		)
+		test('Box Z has an active variant, but does not activate the variants of Box A or Box B', () => expect(boxZ.props.className).toBe(`${baselineClass} ${variantZClass}`))
 
-		test('All variant CSS is generated', () => expect(getCssText()).toBe(
-			`--sxs{--sxs:3 c-PJLV-kgptgY-foo-bar c-PJLV-cHNUhn-foo-bar c-PJLV-vFFMz-foo-bar}@media{` +
-				`.c-PJLV-kgptgY-foo-bar{--box-a:foo-bar}` +
-				`.c-PJLV-cHNUhn-foo-bar{--box-b:foo-bar}` +
-				`.c-PJLV-vFFMz-foo-bar{--box-z:foo-bar}` +
-			`}`
-		))
+		test('All variant CSS is generated', () =>
+			expect(getCssText()).toBe(
+				`--sxs{--sxs:3 c-PJLV-kgptgY-foo-bar c-PJLV-cHNUhn-foo-bar c-PJLV-vFFMz-foo-bar}@media{` + `.c-PJLV-kgptgY-foo-bar{--box-a:foo-bar}` + `.c-PJLV-cHNUhn-foo-bar{--box-b:foo-bar}` + `.c-PJLV-vFFMz-foo-bar{--box-z:foo-bar}` + `}`,
+			))
 	}
 })

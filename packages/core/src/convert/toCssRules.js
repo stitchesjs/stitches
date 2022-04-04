@@ -16,13 +16,7 @@ const comma = /\s*,\s*(?![^()]*\))/
 /** Default toString method of Objects. */
 const toStringOfObject = Object.prototype.toString
 
-export const toCssRules = (
-	/** @type {Style} */ style,
-	/** @type {string[]} */ selectors,
-	/** @type {string[]} */ conditions,
-	/** @type {Config} */ config,
-	/** @type {(cssText: string) => any} */ onCssText
-) => {
+export const toCssRules = (/** @type {Style} */ style, /** @type {string[]} */ selectors, /** @type {string[]} */ conditions, /** @type {Config} */ config, /** @type {(cssText: string) => any} */ onCssText) => {
 	/** @type {[string[], string[], string[]]} CSSOM-compatible rule being created. */
 	let currentRule = undefined
 
@@ -53,7 +47,7 @@ export const toCssRules = (
 
 				for (data of datas) {
 					const camelName = toCamelCase(name)
-					
+
 					/** Whether the current data represents a nesting rule, which is a plain object whose key is not already a util. */
 					const isRuleLike = typeof data === 'object' && data && data.toString === toStringOfObject && (!config.utils[camelName] || !selectors.length)
 
@@ -115,21 +109,17 @@ export const toCssRules = (
 						name = !isAtRuleLike && name.charCodeAt(0) === 36 ? `--${toTailDashed(config.prefix)}${name.slice(1).replace(/\$/g, '-')}` : name
 
 						/** CSS right-hand side value, which may be a specially-formatted custom property. */
-						data = (
+						data =
 							// preserve object-like data
-							isRuleLike ? data
-							// replace specially-marked numeric property values with pixel versions
-							: typeof data === 'number'
+							isRuleLike
+								? data
+								: // replace specially-marked numeric property values with pixel versions
+								typeof data === 'number'
 								? data && camelName in unitProps
 									? String(data) + 'px'
-								: String(data)
-							// replace tokens with stringified primitive values
-							: toTokenizedValue(
-								toSizingValue(camelName, data == null ? '' : data),
-								config.prefix,
-								config.themeMap[camelName]
-							)
-						)
+									: String(data)
+								: // replace tokens with stringified primitive values
+								  toTokenizedValue(toSizingValue(camelName, data == null ? '' : data), config.prefix, config.themeMap[camelName])
 
 						currentRule[0].push(`${isAtRuleLike ? `${name} ` : `${toHyphenCase(name)}:`}${data}`)
 					}
@@ -148,9 +138,8 @@ export const toCssRules = (
 	walk(style, selectors, conditions)
 }
 
-const toCssString = (/** @type {string[]} */ declarations, /** @type {string[]} */ selectors, /** @type {string[]} */ conditions) => (
+const toCssString = (/** @type {string[]} */ declarations, /** @type {string[]} */ selectors, /** @type {string[]} */ conditions) =>
 	`${conditions.map((condition) => `${condition}{`).join('')}${selectors.length ? `${selectors.join(',')}{` : ''}${declarations.join(';')}${selectors.length ? `}` : ''}${Array(conditions.length ? conditions.length + 1 : 0).join('}')}`
-)
 
 /** CSS Properties whose number value may safely be interpretted as a pixel. */
 export const unitProps = {

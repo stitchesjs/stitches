@@ -8,12 +8,12 @@ export let transformIIFE = (ast) => {
 				right: js.CallExpression({
 					callee: js.ArrowFunctionExpression({
 						body: js.BlockStatement({
-							body: ast.body
-						})
-					})
-				})
-			})
-		})
+							body: ast.body,
+						}),
+					}),
+				}),
+			}),
+		}),
 	]
 
 	// remove imports
@@ -26,14 +26,14 @@ export let transformIIFE = (ast) => {
 		exportNamedDeclaration.replaceWith(
 			js.ReturnStatement({
 				argument: js.ObjectExpression({
-					properties: exportNamedDeclaration.specifiers.map(
-						(exportSpecifier) => js.Property({
+					properties: exportNamedDeclaration.specifiers.map((exportSpecifier) =>
+						js.Property({
 							key: exportSpecifier.exported,
 							value: exportSpecifier.local,
-						})
-					)
-				})
-			})
+						}),
+					),
+				}),
+			}),
 		)
 	})
 

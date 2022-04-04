@@ -26,14 +26,10 @@ describe('Theme', () => {
 						md: 200,
 						lg: 500,
 					},
-				}
+				},
 			})
 
-			expect(getCssText()).toBe(
-				`--sxs{--sxs:0 t-egkarf}@media{` +
-					`:root,.t-egkarf{--sizes-sm:100;--sizes-md:200;--sizes-lg:500}` +
-				`}`
-			)
+			expect(getCssText()).toBe(`--sxs{--sxs:0 t-egkarf}@media{` + `:root,.t-egkarf{--sizes-sm:100;--sizes-md:200;--sizes-lg:500}` + `}`)
 		}
 
 		{
@@ -44,18 +40,10 @@ describe('Theme', () => {
 						md: 'calc($sm * 3)',
 						lg: 'calc($md * 3)',
 					},
-				}
+				},
 			})
 
-			expect(getCssText()).toBe(
-				`--sxs{--sxs:0 t-eJkcVD}@media{` +
-					`:root,.t-eJkcVD{` +
-						`--sizes-sm:100;` +
-						`--sizes-md:calc(var(--sizes-sm) * 3);` +
-						`--sizes-lg:calc(var(--sizes-md) * 3)` +
-					`}` +
-				`}`
-			)
+			expect(getCssText()).toBe(`--sxs{--sxs:0 t-eJkcVD}@media{` + `:root,.t-eJkcVD{` + `--sizes-sm:100;` + `--sizes-md:calc(var(--sizes-sm) * 3);` + `--sizes-lg:calc(var(--sizes-md) * 3)` + `}` + `}`)
 		}
 	})
 
@@ -65,7 +53,7 @@ describe('Theme', () => {
 		const theme = createTheme({
 			colors: {
 				blue: '#0000ff',
-			}
+			},
 		})
 
 		expect(getCssText()).toBe(``)

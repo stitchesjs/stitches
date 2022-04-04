@@ -6,13 +6,7 @@ import acornJsx from 'acorn-jsx'
 import acornLogicalAssignment from 'acorn-logical-assignment'
 import acornPrivateMethods from 'acorn-private-methods'
 
-let acornPlugins = [
-	acornJsx({ allowNamespaces: true, allowNamespacedObjects: true }),
-	acornClassFields,
-	acornLogicalAssignment,
-	acornPrivateMethods,
-	importAssertions
-]
+let acornPlugins = [acornJsx({ allowNamespaces: true, allowNamespacedObjects: true }), acornClassFields, acornLogicalAssignment, acornPrivateMethods, importAssertions]
 
 let prototype = Node.prototype
 let parser = Parser.extend(...acornPlugins)
@@ -48,11 +42,11 @@ let defaultProps = {
 	},
 	CatchClause: {
 		param: null,
-		body: { type: 'BlockStatement', body: [] }
+		body: { type: 'BlockStatement', body: [] },
 	},
 	ExportNamedDeclaration: {
 		declaration: null,
-		specifiers: []
+		specifiers: [],
 	},
 	ExportSpecifier: {
 		local: null,
@@ -67,7 +61,7 @@ let defaultProps = {
 	},
 	Identifier: { name: '_' },
 	ImportDefaultSpecifier: {
-		local: null
+		local: null,
 	},
 	ImportDeclaration: {
 		specifiers: [],
@@ -75,7 +69,7 @@ let defaultProps = {
 	},
 	Literal: {
 		value: '_',
-		raw: '\'_\'',
+		raw: "'_'",
 		optional: false,
 	},
 	MemberExpression: {
@@ -122,10 +116,9 @@ let defaultProps = {
 			type: 'CallExpression',
 			callee: null,
 			arguments: [],
-		}
+		},
 	},
 }
-
 
 let createNode = (...props) => Object.assign(Object.create(prototype), ...props)
 
@@ -154,7 +147,7 @@ export let VariableDeclarator = (props) => create('VariableDeclarator', props)
 
 export let parents = new WeakMap()
 
-let createPrototypeOf = (value) => value == null ? value : Array.isArray(value) ? [] : Object.create(Object.getPrototypeOf(value))
+let createPrototypeOf = (value) => (value == null ? value : Array.isArray(value) ? [] : Object.create(Object.getPrototypeOf(value)))
 
 Object.defineProperties(prototype, {
 	clone: {
@@ -177,7 +170,7 @@ Object.defineProperties(prototype, {
 				}
 
 				return Object.assign(process(this), overrides)
-			}
+			},
 		}.clone,
 		configurable: true,
 		writable: true,
@@ -198,7 +191,7 @@ Object.defineProperties(prototype, {
 				}
 
 				find(this)
-			}
+			},
 		}.find,
 		configurable: true,
 		writable: true,
@@ -229,14 +222,15 @@ Object.defineProperties(prototype, {
 		get: {
 			keyOfParent() {
 				return (parents.get(this) || [])[0] || null
-			}
+			},
 		}.keyOfParent,
 		configurable: true,
 	},
 	keyOfParentNode: {
 		get: {
 			keyOfParentNode() {
-				let object = this, key
+				let object = this,
+					key
 				while (true) {
 					key = keyOfParent(object)
 					object = parentOf(object)
@@ -252,7 +246,7 @@ Object.defineProperties(prototype, {
 		value: {
 			remove() {
 				return this.replaceWith()
-			}
+			},
 		}.remove,
 		configurable: true,
 		writable: true,
@@ -268,7 +262,7 @@ Object.defineProperties(prototype, {
 				} else {
 					node[name] = Array.isArray(node[name]) || nodes.length > 1 ? nodes : nodes[0] || null
 				}
-			}
+			},
 		}.replaceWith,
 		configurable: true,
 		writable: true,

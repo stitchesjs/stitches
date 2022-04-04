@@ -10,9 +10,7 @@ describe('Polyfill prefixed values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(
-			`--sxs{--sxs:1 coIeei}@media{.gro{width:-moz-available;width:-webkit-fill-available}}`
-		)
+		expect(toString()).toBe(`--sxs{--sxs:1 coIeei}@media{.gro{width:-moz-available;width:-webkit-fill-available}}`)
 	})
 
 	test('width:fit-content', () => {
@@ -24,8 +22,6 @@ describe('Polyfill prefixed values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(
-			`--sxs{--sxs:1 gZsLvv}@media{.fit{width:-moz-fit-content;width:fit-content}}`
-		)
+		expect(toString()).toBe(`--sxs{--sxs:1 gZsLvv}@media{.fit{width:-moz-fit-content;width:fit-content}}`)
 	})
 })

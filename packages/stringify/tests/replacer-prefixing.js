@@ -24,16 +24,6 @@ describe('replacer (prefixing)', () => {
 				},
 				replacer,
 			),
-		).toEqual(
-			'button{' +
-				'-webkit-appearance:none;' +
-				'appearance:none;' +
-				'color:black;' +
-			'}' +
-			'textarea{' +
-				'-moz-tab-size:2;' +
-				'tab-size:2;' +
-			'}',
-		)
+		).toEqual('button{' + '-webkit-appearance:none;' + 'appearance:none;' + 'color:black;' + '}' + 'textarea{' + '-moz-tab-size:2;' + 'tab-size:2;' + '}')
 	})
 })

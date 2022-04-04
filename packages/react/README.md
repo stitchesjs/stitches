@@ -20,9 +20,7 @@ yarn add @stitches/react
 
 ```html
 <script type="module">
-
-import { styled } from 'https://cdn.skypack.dev/@stitches/react'
-
+  import { styled } from 'https://cdn.skypack.dev/@stitches/react'
 </script>
 ```
 
@@ -32,12 +30,11 @@ import { styled } from 'https://cdn.skypack.dev/@stitches/react'
 
 <br />
 
-```js
+```html
 <script src="https://unpkg.com/@stitches/react/dist/index.global.js"></script>
+
 <script>
-
-const { styled } = stitches
-
+  const { styled } = stitches
 </script>
 ```
 

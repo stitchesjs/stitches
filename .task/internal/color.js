@@ -29,16 +29,13 @@ export const bgWhite = (string) => color(string, 47)
 
 export const pad = (string, size = 0, char = ' ') => string.padStart((string.length + size) / 2, char).padEnd(size, char)
 
-export const box = ({
-	name,
-	types
-}) => {
+export const box = ({ name, types }) => {
 	const border = (text) => dim(cyan(text))
 	const v = border('│')
 	const h = (size) => border(pad('', size, '┈'))
 
 	const nameLead = pad('', 16 - name.length / 2)
-	const nameTail = pad('', nameLead.length + name.length % 2)
+	const nameTail = pad('', nameLead.length + (name.length % 2))
 	const nullLine = pad('', 32)
 
 	const kb = (kb) => bold(green(kb.slice(0, -3))) + ' ' + dim(kb.slice(-2))
@@ -47,11 +44,13 @@ export const box = ({
 		border(`╭────────────────────────────────╮`),
 		`${v}${nameLead}${bold(white(name))}${nameTail}${v}`,
 		`${v}${nullLine}${v}`,
-		...Object.entries(types).map(([type, { min, gzp }]) => [
-			`${v}  ${h(15 - type.length)} ${cyan(type)} ${h(15 - type.length - type.length % 2)}  ${v}`,
-			`${v}  ${' '.repeat(3 - min.length % 2)}${kb(min + ' kB')}${' '.repeat(3)} ${border('╷')} ${' '.repeat(3 - gzp.length % 2)}${kb(gzp + ' kB')}${' '.repeat(3)} ${v}`,
-			`${v}    ${dim(cyan('minified'))}    ${border('╵')}    ${dim(cyan('gzipped'))}    ${v}`,
-		].join('\n')),
+		...Object.entries(types).map(([type, { min, gzp }]) =>
+			[
+				`${v}  ${h(15 - type.length)} ${cyan(type)} ${h(15 - type.length - (type.length % 2))}  ${v}`,
+				`${v}  ${' '.repeat(3 - (min.length % 2))}${kb(min + ' kB')}${' '.repeat(3)} ${border('╷')} ${' '.repeat(3 - (gzp.length % 2))}${kb(gzp + ' kB')}${' '.repeat(3)} ${v}`,
+				`${v}    ${dim(cyan('minified'))}    ${border('╵')}    ${dim(cyan('gzipped'))}    ${v}`,
+			].join('\n'),
+		),
 		border(`╰────────────────────────────────╯`),
 	].join('\n')
 }
