@@ -23,7 +23,9 @@ describe('Support @import', () => {
 			'@import': [`"${importURL1}"`, `"${importURL2}"`],
 		})()
 
-		expect(getCssText()).toBe(`@import "${importURL1}";@import "${importURL2}";`)
+		expect(getCssText()).toBe(
+			`@import "${importURL1}";@import "${importURL2}";`,
+		)
 	})
 
 	test('Authors can an @import rule without quotes', () => {

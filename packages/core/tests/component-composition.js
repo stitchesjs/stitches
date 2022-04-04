@@ -19,7 +19,14 @@ describe('Composition', () => {
 		expect(title.className).toBe('c-gmqXFB')
 		expect(toString()).toBe('')
 		expect(String(title)).toBe('c-gmqXFB')
-		expect(toString()).toBe(`--sxs{--sxs:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` + `.c-gmqXFB{color:red}` + `.c-hzkWus{font-size:14px}` + `.c-cQFdVt{font-weight:bold}` + `.c-kngyIZ{font-family:monospace}` + `}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
+				`.c-gmqXFB{color:red}` +
+				`.c-hzkWus{font-size:14px}` +
+				`.c-cQFdVt{font-weight:bold}` +
+				`.c-kngyIZ{font-family:monospace}` +
+				`}`,
+		)
 	})
 
 	test('Renders a component with all compositions', () => {
@@ -30,6 +37,13 @@ describe('Composition', () => {
 		const title = css(red, size14, bold, { fontFamily: 'monospace' })
 
 		expect(title().className).toBe('c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ')
-		expect(toString()).toBe(`--sxs{--sxs:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` + `.c-gmqXFB{color:red}` + `.c-hzkWus{font-size:14px}` + `.c-cQFdVt{font-weight:bold}` + `.c-kngyIZ{font-family:monospace}` + `}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:2 c-gmqXFB c-hzkWus c-cQFdVt c-kngyIZ}@media{` +
+				`.c-gmqXFB{color:red}` +
+				`.c-hzkWus{font-size:14px}` +
+				`.c-cQFdVt{font-weight:bold}` +
+				`.c-kngyIZ{font-family:monospace}` +
+				`}`,
+		)
 	})
 })

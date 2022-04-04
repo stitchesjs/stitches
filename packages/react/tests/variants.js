@@ -54,6 +54,8 @@ describe('Variants', () => {
 		expect(expression2.props.className).toBe('c-PJLV c-PJLV-gmqXFB-color-red')
 
 		const expression3 = component.render({ color: undefined })
-		expect(expression3.props.className).toBe('c-PJLV c-PJLV-hzqlOY-color-undefined')
+		expect(expression3.props.className).toBe(
+			'c-PJLV c-PJLV-hzqlOY-color-undefined',
+		)
 	})
 })

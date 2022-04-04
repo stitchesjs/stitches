@@ -58,14 +58,19 @@ describe('Variants', () => {
 		const expression1CssText = '.c-PJLV-Gaggi-size-small{font-size:16px}'
 
 		expect(expression1.props.className).toBe('c-PJLV c-PJLV-Gaggi-size-small')
-		expect(toString()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{${expression1CssText}}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{${expression1CssText}}`,
+		)
 
 		const expression2 = component.render({ color: 'blue' })
 
-		const expression2CssText = '.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}'
+		const expression2CssText =
+			'.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}'
 
 		expect(expression2.props.className).toBe('c-PJLV c-PJLV-kaCQqN-color-blue')
-		expect(toString()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small c-PJLV-kaCQqN-color-blue}@media{${expression1CssText}${expression2CssText}}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:3 c-PJLV-Gaggi-size-small c-PJLV-kaCQqN-color-blue}@media{${expression1CssText}${expression2CssText}}`,
+		)
 	})
 
 	test('Renders a component with 2 matching variants', () => {
@@ -73,12 +78,17 @@ describe('Variants', () => {
 		const component = styled('div', componentConfig)
 		const expression = component.render({ size: 'small', level: 1 })
 
-		expect(expression.props.className).toBe('c-PJLV c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1')
+		expect(expression.props.className).toBe(
+			'c-PJLV c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1',
+		)
 
-		const expressionSizeSmallCssText = '.c-PJLV-Gaggi-size-small{font-size:16px}'
+		const expressionSizeSmallCssText =
+			'.c-PJLV-Gaggi-size-small{font-size:16px}'
 		const expressionLevel1CssText = '.c-PJLV-iRwLiB-level-1{padding:0.5em}'
 
-		expect(toString()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1}@media{${expressionSizeSmallCssText}${expressionLevel1CssText}}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:3 c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1}@media{${expressionSizeSmallCssText}${expressionLevel1CssText}}`,
+		)
 	})
 
 	test('Renders a component with a 2 matching variants and 1 matching compound', () => {
@@ -86,12 +96,23 @@ describe('Variants', () => {
 		const component = styled('div', componentConfig)
 		const expression = component.render({ size: 'small', color: 'blue' })
 
-		const expressionSizeSmallCssText = '.c-PJLV-Gaggi-size-small{font-size:16px}'
-		const expressionColorBlueCssText = '.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}'
+		const expressionSizeSmallCssText =
+			'.c-PJLV-Gaggi-size-small{font-size:16px}'
+		const expressionColorBlueCssText =
+			'.c-PJLV-kaCQqN-color-blue{background-color:dodgerblue;color:white}'
 		const expressionCompoundCssText = '.c-PJLV-cChFtv-cv{transform:scale(1.2)}'
 
-		expect(expression.props.className).toBe('c-PJLV c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small c-PJLV-cChFtv-cv')
-		expect(toString()).toBe(`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{` + expressionColorBlueCssText + expressionSizeSmallCssText + `}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{` + expressionCompoundCssText + `}`)
+		expect(expression.props.className).toBe(
+			'c-PJLV c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small c-PJLV-cChFtv-cv',
+		)
+		expect(toString()).toBe(
+			`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{` +
+				expressionColorBlueCssText +
+				expressionSizeSmallCssText +
+				`}--sxs{--sxs:5 c-PJLV-cChFtv-cv}@media{` +
+				expressionCompoundCssText +
+				`}`,
+		)
 	})
 })
 
@@ -145,7 +166,9 @@ describe('Variants with defaults', () => {
 		const expression = component.render()
 
 		expect(expression.props.className).toBe('c-PJLV c-PJLV-Gaggi-size-small')
-		expect(toString()).toBe('--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}')
+		expect(toString()).toBe(
+			'--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}',
+		)
 	})
 
 	test('Renders a component with the default variant explicitly applied', () => {
@@ -154,7 +177,9 @@ describe('Variants with defaults', () => {
 		const expression = component.render({ size: 'small' })
 
 		expect(expression.props.className).toBe('c-PJLV c-PJLV-Gaggi-size-small')
-		expect(toString()).toBe('--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}')
+		expect(toString()).toBe(
+			'--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{.c-PJLV-Gaggi-size-small{font-size:16px}}',
+		)
 	})
 
 	test('Renders a component with the non-default variant explicitly applied', () => {
@@ -163,7 +188,9 @@ describe('Variants with defaults', () => {
 		const expression = component.render({ size: 'large' })
 
 		expect(expression.props.className).toBe('c-PJLV c-PJLV-hsYHIj-size-large')
-		expect(toString()).toBe('--sxs{--sxs:3 c-PJLV-hsYHIj-size-large}@media{.c-PJLV-hsYHIj-size-large{font-size:24px}}')
+		expect(toString()).toBe(
+			'--sxs{--sxs:3 c-PJLV-hsYHIj-size-large}@media{.c-PJLV-hsYHIj-size-large{font-size:24px}}',
+		)
 	})
 
 	test('Renders a component with the default variant applied and a different variant explicitly applied', () => {
@@ -171,7 +198,9 @@ describe('Variants with defaults', () => {
 		const component = styled('div', componentConfig)
 		const expression = component.render({ level: 1 })
 
-		expect(expression.props.className).toBe('c-PJLV c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1')
+		expect(expression.props.className).toBe(
+			'c-PJLV c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1',
+		)
 		expect(toString()).toBe(
 			`--sxs{--sxs:3 c-PJLV-Gaggi-size-small c-PJLV-iRwLiB-level-1}@media{` +
 				// implicit size:small
@@ -187,7 +216,9 @@ describe('Variants with defaults', () => {
 		const component = styled('div', componentConfig)
 		const expression = component.render({ color: 'blue' })
 
-		expect(expression.props.className).toBe('c-PJLV c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small c-PJLV-cChFtv-cv')
+		expect(expression.props.className).toBe(
+			'c-PJLV c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small c-PJLV-cChFtv-cv',
+		)
 		expect(toString()).toBe(
 			`--sxs{--sxs:3 c-PJLV-kaCQqN-color-blue c-PJLV-Gaggi-size-small}@media{` +
 				// explicit color:blue
@@ -276,8 +307,12 @@ describe('Conditional variants', () => {
 		const componentSmallClassName = `${componentClassName}-Gaggi-size-small`
 		const componentSmallCssText = `.${componentSmallClassName}{font-size:16px}`
 
-		expect(component.render({ size: 'small' }).props.className).toBe([componentClassName, componentSmallClassName].join(' '))
-		expect(toString()).toBe(`--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{${componentSmallCssText}}`)
+		expect(component.render({ size: 'small' }).props.className).toBe(
+			[componentClassName, componentSmallClassName].join(' '),
+		)
+		expect(toString()).toBe(
+			`--sxs{--sxs:3 c-PJLV-Gaggi-size-small}@media{${componentSmallCssText}}`,
+		)
 	})
 
 	test('Renders a component with one conditional variant on one breakpoint applied', () => {
@@ -287,8 +322,14 @@ describe('Conditional variants', () => {
 		const componentSmallBp1ClassName = `${componentClassName}-fHtTAQ-size-small`
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px}}`
 
-		expect(component.render({ size: { '@bp1': 'small' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
-		expect(toString()).toBe(`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small}@media{` + componentSmallBp1CssText + `}`)
+		expect(
+			component.render({ size: { '@bp1': 'small' } }).props.className,
+		).toBe([componentClassName, componentSmallBp1ClassName].join(' '))
+		expect(toString()).toBe(
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small}@media{` +
+				componentSmallBp1CssText +
+				`}`,
+		)
 	})
 
 	test('Renders a component with one conditional variant on two breakpoints applied', () => {
@@ -300,8 +341,22 @@ describe('Conditional variants', () => {
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px}}`
 		const componentLargeBp2CssText = `@media (min-width: 768px){.${componentLargeBp2ClassName}{font-size:24px}}`
 
-		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
-		expect(toString()).toBe(`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` + componentSmallBp1CssText + componentLargeBp2CssText + `}`)
+		expect(
+			component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props
+				.className,
+		).toBe(
+			[
+				componentClassName,
+				componentSmallBp1ClassName,
+				componentLargeBp2ClassName,
+			].join(' '),
+		)
+		expect(toString()).toBe(
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
+				componentSmallBp1CssText +
+				componentLargeBp2CssText +
+				`}`,
+		)
 	})
 
 	test('Renders a component with a conditional variant repeatedly', () => {
@@ -313,17 +368,49 @@ describe('Conditional variants', () => {
 		const componentSmallBp1CssText = `@media (max-width: 767px){.${componentSmallBp1ClassName}{font-size:16px}}`
 		const componentLargeBp2CssText = `@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}`
 
-		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
-		expect(toString()).toBe(`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` + componentSmallBp1CssText + componentLargeBp2CssText + `}`)
-
-		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe([componentClassName, componentSmallBp1ClassName, componentLargeBp2ClassName].join(' '))
+		expect(
+			component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props
+				.className,
+		).toBe(
+			[
+				componentClassName,
+				componentSmallBp1ClassName,
+				componentLargeBp2ClassName,
+			].join(' '),
+		)
 		expect(toString()).toBe(
-			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` + `@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` + `@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` + `}`,
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
+				componentSmallBp1CssText +
+				componentLargeBp2CssText +
+				`}`,
 		)
 
-		expect(component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props.className).toBe(`c-PJLV c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large`)
+		expect(
+			component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props
+				.className,
+		).toBe(
+			[
+				componentClassName,
+				componentSmallBp1ClassName,
+				componentLargeBp2ClassName,
+			].join(' '),
+		)
 		expect(toString()).toBe(
-			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` + `@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` + `@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` + `}`,
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
+				`@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` +
+				`@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` +
+				`}`,
+		)
+
+		expect(
+			component.render({ size: { '@bp1': 'small', '@bp2': 'large' } }).props
+				.className,
+		).toBe(`c-PJLV c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:4 c-PJLV-fHtTAQ-size-small c-PJLV-XwbVw-size-large}@media{` +
+				`@media (max-width: 767px){.c-PJLV-fHtTAQ-size-small{font-size:16px}}` +
+				`@media (min-width: 768px){.c-PJLV-XwbVw-size-large{font-size:24px}}` +
+				`}`,
 		)
 	})
 })

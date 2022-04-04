@@ -18,6 +18,13 @@ describe('Component with CSS prop', () => {
 			},
 		})
 
-		expect(toString()).toBe(`--sxs{--sxs:2 c-hhyRYU}@media{` + `.c-hhyRYU{order:1}` + `}` + `--sxs{--sxs:6 c-hhyRYU-ilhKMMn-css}@media{` + `.c-hhyRYU-ilhKMMn-css{order:2}` + `}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:2 c-hhyRYU}@media{` +
+				`.c-hhyRYU{order:1}` +
+				`}` +
+				`--sxs{--sxs:6 c-hhyRYU-ilhKMMn-css}@media{` +
+				`.c-hhyRYU-ilhKMMn-css{order:2}` +
+				`}`,
+		)
 	})
 })

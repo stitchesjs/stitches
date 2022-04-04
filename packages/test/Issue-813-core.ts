@@ -19,12 +19,19 @@ export const { config, css } = createStitches({
 })
 
 // ensure `PropertyValue` accepts a valid CSS Color
-export const colorValue1: Stitches.PropertyValue<'backgroundColor', typeof config> = 'RebeccaPurple'
+export const colorValue1: Stitches.PropertyValue<
+	'backgroundColor',
+	typeof config
+> = 'RebeccaPurple'
 // ensure `PropertyValue` accepts a valid token
-export const colorValue2: Stitches.PropertyValue<'backgroundColor', typeof config> = '$primary'
+export const colorValue2: Stitches.PropertyValue<
+	'backgroundColor',
+	typeof config
+> = '$primary'
 
 // ensure `ScaleValue` accepts a valid token
-export const colorToken: Stitches.ScaleValue<'colors', typeof config> = '$primary'
+export const colorToken: Stitches.ScaleValue<'colors', typeof config> =
+	'$primary'
 
 export const box = css({
 	// ensure `bg` accepts a valid CSS Color

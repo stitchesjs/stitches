@@ -69,7 +69,9 @@ const replacer = (property, value) =>
         [property]: value,
       }
     : // add common prefixes for Safari 14
-    /^(appearance|backface-visibility|background-clip|clip-path|hyphens|mask-image|user-select)$/.test(property)
+    /^(appearance|backface-visibility|background-clip|clip-path|hyphens|mask-image|user-select)$/.test(
+        property,
+      )
     ? {
         ['-webkit-' + property]: value,
         [property]: value,
@@ -135,7 +137,10 @@ Arrays can be used to create multiple declarations or unnested rules with the sa
 
 ```js
 stringify({
-  '@import': ['"https://unpkg.com/sanitize.css"', '"https://unpkg.com/sanitize.css/typography.css"'],
+  '@import': [
+    '"https://unpkg.com/sanitize.css"',
+    '"https://unpkg.com/sanitize.css/typography.css"',
+  ],
 })
 ```
 

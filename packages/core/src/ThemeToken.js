@@ -14,7 +14,9 @@ export class ThemeToken {
 	}
 
 	get variable() {
-		return '--' + toTailDashed(this.prefix) + toTailDashed(this.scale) + this.token
+		return (
+			'--' + toTailDashed(this.prefix) + toTailDashed(this.scale) + this.token
+		)
 	}
 
 	toString() {

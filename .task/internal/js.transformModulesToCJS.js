@@ -32,7 +32,9 @@ export let transformModulesToCJS = (ast) => {
 		let variableDeclaration = js.VariableDeclaration({
 			declarations: [
 				js.VariableDeclarator({
-					id: js.Identifier({ name: importDeclaration.specifiers[0].local.name }),
+					id: js.Identifier({
+						name: importDeclaration.specifiers[0].local.name,
+					}),
 					init: js.CallExpression({
 						callee: js.Identifier({ name: 'require' }),
 						arguments: [importDeclaration.source],

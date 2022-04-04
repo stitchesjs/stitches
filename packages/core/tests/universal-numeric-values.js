@@ -20,7 +20,9 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(`--sxs{--sxs:1 cSHHDh fFIrKk}@media{body{margin:0}body{margin:10px}}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:1 cSHHDh fFIrKk}@media{body{margin:0}body{margin:10px}}`,
+		)
 	})
 
 	test('Authors can use numeric values to assign numeric values', () => {
@@ -35,7 +37,9 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(`--sxs{--sxs:1 bpctHq}@media{body{line-height:0;width:0}}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:1 bpctHq}@media{body{line-height:0;width:0}}`,
+		)
 
 		globalCss({
 			body: {
@@ -44,7 +48,9 @@ describe('Numeric Values', () => {
 			},
 		})()
 
-		expect(toString()).toBe(`--sxs{--sxs:1 bpctHq cudWGu}@media{body{line-height:0;width:0}body{line-height:10;width:10px}}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:1 bpctHq cudWGu}@media{body{line-height:0;width:0}body{line-height:10;width:10px}}`,
+		)
 	})
 
 	test('Authors can use unit-less properties as known to React', () => {
@@ -192,10 +198,16 @@ describe('Numeric Values', () => {
 		}
 	})
 
-	const commonProps = 'fontSize margin marginTop marginRight marginBottom marginLeft padding paddingTop paddingRight paddingBottom paddingLeft'.split(' ')
+	const commonProps =
+		'fontSize margin marginTop marginRight marginBottom marginLeft padding paddingTop paddingRight paddingBottom paddingLeft'.split(
+			' ',
+		)
 
 	for (const prop of commonProps) {
-		const kebabProp = prop.replace(/[A-Z]/g, (letter) => '-' + letter.toLowerCase())
+		const kebabProp = prop.replace(
+			/[A-Z]/g,
+			(letter) => '-' + letter.toLowerCase(),
+		)
 
 		test(`Author can use the unit-only ${kebabProp} property`, () => {
 			for (let i = 0; i <= 33; i += 11) {
@@ -209,7 +221,9 @@ describe('Numeric Values', () => {
 
 				const cssText = getCssText().replace(/^.+@media\{|\}$/g, '')
 
-				expect(cssText).toBe(`div{` + kebabProp + `:` + i + (i ? 'px' : '') + `}`)
+				expect(cssText).toBe(
+					`div{` + kebabProp + `:` + i + (i ? 'px' : '') + `}`,
+				)
 			}
 		})
 	}

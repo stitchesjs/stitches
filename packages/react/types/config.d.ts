@@ -29,7 +29,12 @@ declare namespace ConfigType {
 		zIndices?: { [token in number | string]: boolean | number | string }
 	} & {
 		[Scale in keyof T]: {
-			[Token in keyof T[Scale]]: T[Scale][Token] extends boolean | number | string ? T[Scale][Token] : boolean | number | string
+			[Token in keyof T[Scale]]: T[Scale][Token] extends
+				| boolean
+				| number
+				| string
+				? T[Scale][Token]
+				: boolean | number | string
 		}
 	}
 
@@ -196,7 +201,13 @@ export interface DefaultThemeMap {
 
 /** Returns a function used to create a new Stitches interface. */
 export type CreateStitches = {
-	<Prefix extends string = '', Media extends {} = {}, Theme extends {} = {}, ThemeMap extends {} = DefaultThemeMap, Utils extends {} = {}>(config?: {
+	<
+		Prefix extends string = '',
+		Media extends {} = {},
+		Theme extends {} = {},
+		ThemeMap extends {} = DefaultThemeMap,
+		Utils extends {} = {},
+	>(config?: {
 		prefix?: ConfigType.Prefix<Prefix>
 		media?: ConfigType.Media<Media>
 		theme?: ConfigType.Theme<Theme>

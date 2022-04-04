@@ -24,7 +24,10 @@ describe('emerson', () => {
 			},
 		})
 
-		const cssText = `--sxs{--sxs:3 c-PJLV-efCiES-size-1}@media{` + `.c-PJLV-efCiES-size-1{padding-left:var(--space-1);padding-right:var(--space-1)}` + `}`
+		const cssText =
+			`--sxs{--sxs:3 c-PJLV-efCiES-size-1}@media{` +
+			`.c-PJLV-efCiES-size-1{padding-left:var(--space-1);padding-right:var(--space-1)}` +
+			`}`
 
 		component.render({ size: '1' })
 

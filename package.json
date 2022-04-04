@@ -133,7 +133,7 @@
   "prettier": {
     "arrowParens": "always",
     "bracketSpacing": true,
-    "printWidth": 240,
+    "printWidth": 80,
     "quoteProps": "consistent",
     "semi": false,
     "singleQuote": true,

@@ -26,7 +26,10 @@ import { createRulesInjectionDeferrer } from '../sheet.js'
 const createCssFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
-export const createCssFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
+export const createCssFunction = (
+	/** @type {Config} */ config,
+	/** @type {SheetGroup} */ sheet,
+) =>
 	createCssFunctionMap(config, () => (...args) => {
 		/** @type {Internals} */
 		let internals = {
@@ -60,13 +63,22 @@ export const createCssFunction = (/** @type {Config} */ config, /** @type {Sheet
 
 		// set the component type if none was set
 		if (internals.type == null) internals.type = 'span'
-		if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], {}, []])
+		if (!internals.composers.size)
+			internals.composers.add(['PJLV', {}, [], [], {}, []])
 
 		return createRenderer(config, internals, sheet)
 	})
 
 /** Creates a composer from a configuration object. */
-const createComposer = (/** @type {InitComposer} */ { variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style }, /** @type {Config} */ config) => {
+const createComposer = (
+	/** @type {InitComposer} */ {
+		variants: initSingularVariants,
+		compoundVariants: initCompoundVariants,
+		defaultVariants: initDefaultVariants,
+		...style
+	},
+	/** @type {Config} */ config,
+) => {
 	/** @type {string} Composer Unique Identifier. @see `{CONFIG_PREFIX}-?c-{STYLE_HASH}` */
 	const className = `${toTailDashed(config.prefix)}c-${toHash(style)}`
 
@@ -89,7 +101,8 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 	// add singular variants
 	if (typeof initSingularVariants === 'object' && initSingularVariants) {
 		for (const name in initSingularVariants) {
-			if (!hasOwn(prefilledVariants, name)) prefilledVariants[name] = 'undefined'
+			if (!hasOwn(prefilledVariants, name))
+				prefilledVariants[name] = 'undefined'
 
 			const variantPairs = initSingularVariants[name]
 
@@ -127,16 +140,35 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 		}
 	}
 
-	return /** @type {Composer} */ ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
+	return /** @type {Composer} */ ([
+		className,
+		style,
+		singularVariants,
+		compoundVariants,
+		prefilledVariants,
+		undefinedVariants,
+	])
 }
 
-const createRenderer = (/** @type {Config} */ config, /** @type {Internals} */ internals, /** @type {import('../sheet').SheetGroup} */ sheet) => {
-	const [baseClassName, baseClassNames, prefilledVariants, undefinedVariants] = getPreparedDataFromComposers(internals.composers)
+const createRenderer = (
+	/** @type {Config} */ config,
+	/** @type {Internals} */ internals,
+	/** @type {import('../sheet').SheetGroup} */ sheet,
+) => {
+	const [baseClassName, baseClassNames, prefilledVariants, undefinedVariants] =
+		getPreparedDataFromComposers(internals.composers)
 
-	const deferredInjector = typeof internals.type === 'function' || !!internals.type.$$typeof ? createRulesInjectionDeferrer(sheet) : null
+	const deferredInjector =
+		typeof internals.type === 'function' || !!internals.type.$$typeof
+			? createRulesInjectionDeferrer(sheet)
+			: null
 	const injectionTarget = (deferredInjector || sheet).rules
 
-	const selector = `.${baseClassName}${baseClassNames.length > 1 ? `:where(.${baseClassNames.slice(1).join('.')})` : ``}`
+	const selector = `.${baseClassName}${
+		baseClassNames.length > 1
+			? `:where(.${baseClassNames.slice(1).join('.')})`
+			: ``
+	}`
 
 	/** @type {Render} */
 	const render = (props) => {
@@ -165,7 +197,10 @@ const createRenderer = (/** @type {Config} */ config, /** @type {Internals} */ i
 				} else {
 					data = String(data)
 
-					variantProps[name] = data === 'undefined' && !undefinedVariants.has(name) ? prefilledVariants[name] : data
+					variantProps[name] =
+						data === 'undefined' && !undefinedVariants.has(name)
+							? prefilledVariants[name]
+							: data
 				}
 			} else {
 				variantProps[name] = prefilledVariants[name]
@@ -181,38 +216,70 @@ const createRenderer = (/** @type {Config} */ config, /** @type {Internals} */ i
 		// 2.2.1. orders regular variants before responsive variants
 		// 2.3. iterate their compound variants, add their compound variant classes
 
-		for (const [composerBaseClass, composerBaseStyle, singularVariants, compoundVariants] of internals.composers) {
+		for (const [
+			composerBaseClass,
+			composerBaseStyle,
+			singularVariants,
+			compoundVariants,
+		] of internals.composers) {
 			if (!sheet.rules.styled.cache.has(composerBaseClass)) {
 				sheet.rules.styled.cache.add(composerBaseClass)
 
-				toCssRules(composerBaseStyle, [`.${composerBaseClass}`], [], config, (cssText) => {
-					injectionTarget.styled.apply(cssText)
-				})
+				toCssRules(
+					composerBaseStyle,
+					[`.${composerBaseClass}`],
+					[],
+					config,
+					(cssText) => {
+						injectionTarget.styled.apply(cssText)
+					},
+				)
 			}
 
-			const singularVariantsToAdd = getTargetVariantsToAdd(singularVariants, variantProps, config.media)
-			const compoundVariantsToAdd = getTargetVariantsToAdd(compoundVariants, variantProps, config.media, true)
+			const singularVariantsToAdd = getTargetVariantsToAdd(
+				singularVariants,
+				variantProps,
+				config.media,
+			)
+			const compoundVariantsToAdd = getTargetVariantsToAdd(
+				compoundVariants,
+				variantProps,
+				config.media,
+				true,
+			)
 
 			for (const variantToAdd of singularVariantsToAdd) {
 				if (variantToAdd === undefined) continue
 
 				for (const [vClass, vStyle, isResponsive] of variantToAdd) {
-					const variantClassName = `${composerBaseClass}-${toHash(vStyle)}-${vClass}`
+					const variantClassName = `${composerBaseClass}-${toHash(
+						vStyle,
+					)}-${vClass}`
 
 					classSet.add(variantClassName)
 
-					const groupCache = (isResponsive ? sheet.rules.resonevar : sheet.rules.onevar).cache
+					const groupCache = (
+						isResponsive ? sheet.rules.resonevar : sheet.rules.onevar
+					).cache
 					/*
 					 * make sure that normal variants are injected before responsive ones
 					 * @see {@link https://github.com/modulz/stitches/issues/737|github}
 					 */
-					const targetInjectionGroup = isResponsive ? injectionTarget.resonevar : injectionTarget.onevar
+					const targetInjectionGroup = isResponsive
+						? injectionTarget.resonevar
+						: injectionTarget.onevar
 
 					if (!groupCache.has(variantClassName)) {
 						groupCache.add(variantClassName)
-						toCssRules(vStyle, [`.${variantClassName}`], [], config, (cssText) => {
-							targetInjectionGroup.apply(cssText)
-						})
+						toCssRules(
+							vStyle,
+							[`.${variantClassName}`],
+							[],
+							config,
+							(cssText) => {
+								targetInjectionGroup.apply(cssText)
+							},
+						)
 					}
 				}
 			}
@@ -221,16 +288,24 @@ const createRenderer = (/** @type {Config} */ config, /** @type {Internals} */ i
 				if (variantToAdd === undefined) continue
 
 				for (const [vClass, vStyle] of variantToAdd) {
-					const variantClassName = `${composerBaseClass}-${toHash(vStyle)}-${vClass}`
+					const variantClassName = `${composerBaseClass}-${toHash(
+						vStyle,
+					)}-${vClass}`
 
 					classSet.add(variantClassName)
 
 					if (!sheet.rules.allvar.cache.has(variantClassName)) {
 						sheet.rules.allvar.cache.add(variantClassName)
 
-						toCssRules(vStyle, [`.${variantClassName}`], [], config, (cssText) => {
-							injectionTarget.allvar.apply(cssText)
-						})
+						toCssRules(
+							vStyle,
+							[`.${variantClassName}`],
+							[],
+							config,
+							(cssText) => {
+								injectionTarget.allvar.apply(cssText)
+							},
+						)
 					}
 				}
 			}
@@ -287,7 +362,9 @@ const createRenderer = (/** @type {Config} */ config, /** @type {Internals} */ i
 }
 
 /** Returns useful data that can be known before rendering. */
-const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) => {
+const getPreparedDataFromComposers = (
+	/** @type {Set<Composer>} */ composers,
+) => {
 	/** Class name of the first composer. */
 	let baseClassName = ''
 
@@ -300,7 +377,14 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 	/** @type {UndefinedVariants} List of variant names that can have an "undefined" pairing. */
 	const combinedUndefinedVariants = []
 
-	for (const [className, , , , prefilledVariants, undefinedVariants] of composers) {
+	for (const [
+		className,
+		,
+		,
+		,
+		prefilledVariants,
+		undefinedVariants,
+	] of composers) {
 		if (baseClassName === '') baseClassName = className
 
 		baseClassNames.push(className)
@@ -309,12 +393,22 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 
 		for (const name in prefilledVariants) {
 			const data = prefilledVariants[name]
-			if (combinedPrefilledVariants[name] === undefined || data !== 'undefined' || undefinedVariants.includes(data)) combinedPrefilledVariants[name] = data
+			if (
+				combinedPrefilledVariants[name] === undefined ||
+				data !== 'undefined' ||
+				undefinedVariants.includes(data)
+			)
+				combinedPrefilledVariants[name] = data
 		}
 	}
 
 	/** @type {[string, string[], PrefilledVariants, Set<UndefinedVariants>]} */
-	const preparedData = [baseClassName, baseClassNames, combinedPrefilledVariants, new Set(combinedUndefinedVariants)]
+	const preparedData = [
+		baseClassName,
+		baseClassNames,
+		combinedPrefilledVariants,
+		new Set(combinedUndefinedVariants),
+	]
 
 	return preparedData
 }
@@ -365,7 +459,11 @@ const getTargetVariantsToAdd = (
 							// if not, we remove the @media from the beginning and push it to the matched queries which then will be resolved a few lines down
 							// when we finish working on this variant and want wrap the vStyles with the matchedQueries
 							const cleanQuery = query.slice(1)
-							;(matchedQueries = matchedQueries || []).push(cleanQuery in media ? media[cleanQuery] : query.replace(/^@media ?/, ''))
+							;(matchedQueries = matchedQueries || []).push(
+								cleanQuery in media
+									? media[cleanQuery]
+									: query.replace(/^@media ?/, ''),
+							)
 							isResponsive = true
 						}
 
@@ -387,7 +485,11 @@ const getTargetVariantsToAdd = (
 			// non-matches
 			else continue targetVariants
 		}
-		;(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`, vStyle, isResponsive])
+		;(targetVariantsToAdd[vOrder] = targetVariantsToAdd[vOrder] || []).push([
+			isCompoundVariant ? `cv` : `${vName}-${vMatch[vName]}`,
+			vStyle,
+			isResponsive,
+		])
 	}
 
 	return targetVariantsToAdd

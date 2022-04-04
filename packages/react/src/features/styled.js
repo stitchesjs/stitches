@@ -11,7 +11,10 @@ import { createCssFunction } from '../../../core/src/features/css.js'
 const createCssFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
-export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {GroupSheet} */ sheet }) =>
+export const createStyledFunction = ({
+	/** @type {Config} */ config,
+	/** @type {GroupSheet} */ sheet,
+}) =>
 	createCssFunctionMap(config, () => {
 		const css = createCssFunction(config, sheet)
 
@@ -29,7 +32,12 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 				forwardProps.ref = ref
 
 				if (deferredInjector) {
-					return React.createElement(React.Fragment, null, React.createElement(Type, forwardProps), React.createElement(deferredInjector, null))
+					return React.createElement(
+						React.Fragment,
+						null,
+						React.createElement(Type, forwardProps),
+						React.createElement(deferredInjector, null),
+					)
 				}
 
 				return React.createElement(Type, forwardProps)
@@ -38,7 +46,9 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 			const toString = () => cssComponent.selector
 
 			styledComponent.className = cssComponent.className
-			styledComponent.displayName = `Styled.${DefaultType.displayName || DefaultType.name || DefaultType}`
+			styledComponent.displayName = `Styled.${
+				DefaultType.displayName || DefaultType.name || DefaultType
+			}`
 			styledComponent.selector = cssComponent.selector
 			styledComponent.toString = toString
 			styledComponent[internal] = cssComponent[internal]

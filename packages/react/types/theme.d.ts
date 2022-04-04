@@ -15,7 +15,12 @@ export interface Token<
 	/** Token prefix. */
 	PrefixType extends string | void = void,
 > extends ScaleValue {
-	new (name: NameType, value: ValueType, scale?: ScaleType, prefix?: PrefixType): this
+	new (
+		name: NameType,
+		value: ValueType,
+		scale?: ScaleType,
+		prefix?: PrefixType,
+	): this
 
 	/** Name of the token. */
 	token: NameType
@@ -30,7 +35,11 @@ export interface Token<
 	prefix: PrefixType extends string ? PrefixType : ''
 
 	/** Serialized custom property representing the token. */
-	variable: `--${this['prefix'] extends '' ? '' : `${this['prefix']}-`}${this['scale'] extends '' ? '' : `${this['scale']}-`}${this['token']}`
+	variable: `--${this['prefix'] extends ''
+		? ''
+		: `${this['prefix']}-`}${this['scale'] extends ''
+		? ''
+		: `${this['scale']}-`}${this['token']}`
 
 	/** Serialized CSS var() representing the token. */
 	computedValue: `var(${this['variable']})`

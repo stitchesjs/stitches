@@ -16,7 +16,13 @@ describe('Logical Properties', () => {
 			},
 		})()
 
-		expect(toString()).toBe(`--sxs{--sxs:1 IvBLl}@media{` + `x-element{margin-block-start:0;margin-block-end:0}` + `y-element{margin-block-start:10px;margin-block-end:10px}` + `z-element{margin-block-start:5px;margin-block-end:10px}` + `}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:1 IvBLl}@media{` +
+				`x-element{margin-block-start:0;margin-block-end:0}` +
+				`y-element{margin-block-start:10px;margin-block-end:10px}` +
+				`z-element{margin-block-start:5px;margin-block-end:10px}` +
+				`}`,
+		)
 	})
 
 	test('marginInline', () => {
@@ -35,7 +41,11 @@ describe('Logical Properties', () => {
 		})()
 
 		expect(toString()).toBe(
-			`--sxs{--sxs:1 eNPHKF}@media{` + `x-element{margin-inline-start:0;margin-inline-end:0}` + `y-element{margin-inline-start:10px;margin-inline-end:10px}` + `z-element{margin-inline-start:5px;margin-inline-end:10px}` + `}`,
+			`--sxs{--sxs:1 eNPHKF}@media{` +
+				`x-element{margin-inline-start:0;margin-inline-end:0}` +
+				`y-element{margin-inline-start:10px;margin-inline-end:10px}` +
+				`z-element{margin-inline-start:5px;margin-inline-end:10px}` +
+				`}`,
 		)
 	})
 
@@ -55,7 +65,11 @@ describe('Logical Properties', () => {
 		})()
 
 		expect(toString()).toBe(
-			`--sxs{--sxs:1 kcHEgy}@media{` + `x-element{padding-block-start:0;padding-block-end:0}` + `y-element{padding-block-start:10px;padding-block-end:10px}` + `z-element{padding-block-start:5px;padding-block-end:10px}` + `}`,
+			`--sxs{--sxs:1 kcHEgy}@media{` +
+				`x-element{padding-block-start:0;padding-block-end:0}` +
+				`y-element{padding-block-start:10px;padding-block-end:10px}` +
+				`z-element{padding-block-start:5px;padding-block-end:10px}` +
+				`}`,
 		)
 	})
 
@@ -75,7 +89,11 @@ describe('Logical Properties', () => {
 		})()
 
 		expect(toString()).toBe(
-			`--sxs{--sxs:1 cVrbiG}@media{` + `x-element{padding-inline-start:0;padding-inline-end:0}` + `y-element{padding-inline-start:10px;padding-inline-end:10px}` + `z-element{padding-inline-start:5px;padding-inline-end:10px}` + `}`,
+			`--sxs{--sxs:1 cVrbiG}@media{` +
+				`x-element{padding-inline-start:0;padding-inline-end:0}` +
+				`y-element{padding-inline-start:10px;padding-inline-end:10px}` +
+				`z-element{padding-inline-start:5px;padding-inline-end:10px}` +
+				`}`,
 		)
 	})
 })

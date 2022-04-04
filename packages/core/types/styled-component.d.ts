@@ -64,11 +64,12 @@ export type StyledComponentType<T extends any[]> = T[0] extends never
 	: never
 
 /** Returns the cumulative variants from the given array of compositions. */
-export type StyledComponentProps<T extends any[]> = ($$StyledComponentProps extends keyof T[0]
-	? T[0][$$StyledComponentProps]
-	: T[0] extends { variants: { [name: string]: unknown } }
-	? {
-			[K in keyof T[0]['variants']]?: Util.Widen<keyof T[0]['variants'][K]>
-	  }
-	: {}) &
-	(T extends [lead: any, ...tail: infer V] ? StyledComponentProps<V> : {})
+export type StyledComponentProps<T extends any[]> =
+	($$StyledComponentProps extends keyof T[0]
+		? T[0][$$StyledComponentProps]
+		: T[0] extends { variants: { [name: string]: unknown } }
+		? {
+				[K in keyof T[0]['variants']]?: Util.Widen<keyof T[0]['variants'][K]>
+		  }
+		: {}) &
+		(T extends [lead: any, ...tail: infer V] ? StyledComponentProps<V> : {})

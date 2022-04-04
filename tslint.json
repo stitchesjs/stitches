@@ -32,6 +32,12 @@
     "prefer-object-spread": true,
     "prefer-template": true,
     "switch-default": true,
-    "variable-name": [true, "allow-leading-underscore", "ban-keywords", "check-format", "allow-pascal-case"]
+    "variable-name": [
+      true,
+      "allow-leading-underscore",
+      "ban-keywords",
+      "check-format",
+      "allow-pascal-case"
+    ]
   }
 }

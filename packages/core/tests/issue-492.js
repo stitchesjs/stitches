@@ -30,9 +30,15 @@ describe('Issue #492', () => {
 		/** Rendering of the component as-is. */
 		const rendering1 = component()
 
-		expect(rendering1.className).toBe(`${componentClassName} ${variantSweetCarolineClassName}`)
+		expect(rendering1.className).toBe(
+			`${componentClassName} ${variantSweetCarolineClassName}`,
+		)
 
-		expect(getCssText()).toBe(`--sxs{--sxs:3 ${variantSweetCarolineClassName}}@media{` + `.${variantSweetCarolineClassName}{--sweet-caroline:true}` + `}`)
+		expect(getCssText()).toBe(
+			`--sxs{--sxs:3 ${variantSweetCarolineClassName}}@media{` +
+				`.${variantSweetCarolineClassName}{--sweet-caroline:true}` +
+				`}`,
+		)
 
 		/** Rendering of the component as-is. */
 		const rendering2 = component({
@@ -41,7 +47,9 @@ describe('Issue #492', () => {
 			},
 		})
 
-		expect(rendering2.className).toBe(`${componentClassName} ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName}`)
+		expect(rendering2.className).toBe(
+			`${componentClassName} ${variantSweetCarolineClassName} ${variantResponsiveSweetDreamsClassName}`,
+		)
 
 		expect(getCssText()).toBe(
 			`--sxs{--sxs:3 ${variantSweetCarolineClassName}}` +
@@ -59,7 +67,9 @@ describe('Issue #492', () => {
 			},
 		})
 
-		expect(rendering3.className).toBe(`${componentClassName} ${variantSweetDreamsClassName} ${variantResponsiveSweetCarolineClassName}`)
+		expect(rendering3.className).toBe(
+			`${componentClassName} ${variantSweetDreamsClassName} ${variantResponsiveSweetCarolineClassName}`,
+		)
 
 		expect(getCssText()).toBe(
 			// initial variants
@@ -102,7 +112,9 @@ describe('Issue #492', () => {
 		const variantInitialHeavyIronButterfly = `c-evVBJo-kiVNrc-heavy-iron-butterfly`
 		const variantMinWidth640LedZeppelin = `c-evVBJo-lgYcvN-heavy-led-zeppelin`
 
-		expect(rendering1.className).toBe(`${componentClassName} ${variantInitialHeavyIronButterfly} ${variantMinWidth640LedZeppelin}`)
+		expect(rendering1.className).toBe(
+			`${componentClassName} ${variantInitialHeavyIronButterfly} ${variantMinWidth640LedZeppelin}`,
+		)
 
 		expect(getCssText()).toBe(
 			'--sxs{--sxs:2 c-evVBJo}@media{.c-evVBJo{--rock:true}}--sxs{--sxs:3 c-evVBJo-kiVNrc-heavy-iron-butterfly}@media{.c-evVBJo-kiVNrc-heavy-iron-butterfly{--weight-iron-butterfly:true}}--sxs{--sxs:4 c-evVBJo-lgYcvN-heavy-led-zeppelin}@media{@media (min-width: 640px){.c-evVBJo-lgYcvN-heavy-led-zeppelin{--weight-led-zeppelin:true}}}',

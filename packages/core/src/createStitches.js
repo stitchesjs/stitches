@@ -21,11 +21,18 @@ export const createStitches = (config) => {
 
 		// internal configuration
 		const prefix = 'prefix' in initConfig ? String(initConfig.prefix) : ''
-		const media = (typeof initConfig.media === 'object' && initConfig.media) || {}
-		const root = typeof initConfig.root === 'object' ? initConfig.root || null : globalThis.document || null
-		const theme = (typeof initConfig.theme === 'object' && initConfig.theme) || {}
-		const themeMap = (typeof initConfig.themeMap === 'object' && initConfig.themeMap) || { ...defaultThemeMap }
-		const utils = (typeof initConfig.utils === 'object' && initConfig.utils) || {}
+		const media =
+			(typeof initConfig.media === 'object' && initConfig.media) || {}
+		const root =
+			typeof initConfig.root === 'object'
+				? initConfig.root || null
+				: globalThis.document || null
+		const theme =
+			(typeof initConfig.theme === 'object' && initConfig.theme) || {}
+		const themeMap = (typeof initConfig.themeMap === 'object' &&
+			initConfig.themeMap) || { ...defaultThemeMap }
+		const utils =
+			(typeof initConfig.utils === 'object' && initConfig.utils) || {}
 
 		/** External configuration. */
 		const config = {

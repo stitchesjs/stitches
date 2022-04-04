@@ -1,4 +1,12 @@
-import { passIcon, failIcon, passText, failText, infoText, dim, green } from './internal/color.js'
+import {
+	passIcon,
+	failIcon,
+	passText,
+	failText,
+	infoText,
+	dim,
+	green,
+} from './internal/color.js'
 import { isProcessMeta, getProcessArgOf } from './internal/process.js'
 import * as fs from './internal/fs.js'
 import nodemon from 'nodemon'
@@ -17,7 +25,8 @@ const main = async (pkg, opts) => {
 		if (!file.endsWith('.js')) continue
 
 		// filter non-matching files
-		if (opts.only.length && !opts.only.some((name) => file.includes(name))) continue
+		if (opts.only.length && !opts.only.some((name) => file.includes(name)))
+			continue
 
 		/** Test results. */
 		const results = Object.create(null)
@@ -47,7 +56,11 @@ const main = async (pkg, opts) => {
 					error.stack = [...error.stack.split(/\n/g).slice(1)].join('\n')
 
 					// assign failure to the results
-					results[description][test].push(`${failIcon} ${infoText(test)}`, getErrorStack(error), '')
+					results[description][test].push(
+						`${failIcon} ${infoText(test)}`,
+						getErrorStack(error),
+						'',
+					)
 					results[description][test][didFail] = error
 					results[description][didFail] = true
 					results[didFail] = true
@@ -59,7 +72,10 @@ const main = async (pkg, opts) => {
 				await call()
 			} catch (error) {
 				// assign description failure to the results
-				results[description][''] = [`${failIcon} ${infoText('Error')}`, String(error.message)]
+				results[description][''] = [
+					`${failIcon} ${infoText('Error')}`,
+					String(error.message),
+				]
 			}
 		}
 
@@ -77,7 +93,10 @@ const main = async (pkg, opts) => {
 		if (didFailLast && !!didFailLast != !!failure) console.log()
 
 		// report details if there is a failure
-		console.group(failure ? failText('FAIL') : passText('PASS'), infoText(file.href.slice(root.href.length)))
+		console.group(
+			failure ? failText('FAIL') : passText('PASS'),
+			infoText(file.href.slice(root.href.length)),
+		)
 
 		if (failure) {
 			process.exitCode = 1
@@ -111,8 +130,21 @@ const didFail = Symbol.for('test.failure')
 const getErrorStack = (error) =>
 	error.stack
 		.split(/\n/g)
-		.filter((line) => !line.includes(import.meta.url) && !line.includes('node:'))
-		.map((line) => line.replace(/(.*?)\(?(file:[^:]+)(.*?)\)?$/, ($0, before, file, after) => before.replace(/(at) ([^\s]+)?(.*)/, `${dim('$1')} ${green('$2')}$3`) + file.slice(root.href.length) + dim(after)))
+		.filter(
+			(line) => !line.includes(import.meta.url) && !line.includes('node:'),
+		)
+		.map((line) =>
+			line.replace(
+				/(.*?)\(?(file:[^:]+)(.*?)\)?$/,
+				($0, before, file, after) =>
+					before.replace(
+						/(at) ([^\s]+)?(.*)/,
+						`${dim('$1')} ${green('$2')}$3`,
+					) +
+					file.slice(root.href.length) +
+					dim(after),
+			),
+		)
 		.join('\n')
 
 export const testAll = async (opts) => {

@@ -1,6 +1,10 @@
 import fs from './internal/fs.js'
 import { bold, underline } from './internal/color.js'
-import { corePackageUrl, reactPackageUrl, stringifyPackageUrl } from './internal/dirs.js'
+import {
+	corePackageUrl,
+	reactPackageUrl,
+	stringifyPackageUrl,
+} from './internal/dirs.js'
 import { isProcessMeta, getProcessArgOf } from './internal/process.js'
 import { ESLint } from 'eslint'
 
@@ -23,7 +27,12 @@ export const lint = async (packageUrl, opts) => {
 		const resultText = formatter.format(results)
 
 		if (resultText) console.log(resultText)
-		else console.log('\x1b[32m✔\x1b[0m', 'Your code is flawless.', 'Hopefully this determination is flawless, too.')
+		else
+			console.log(
+				'\x1b[32m✔\x1b[0m',
+				'Your code is flawless.',
+				'Hopefully this determination is flawless, too.',
+			)
 	}
 }
 

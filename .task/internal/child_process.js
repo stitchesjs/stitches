@@ -3,7 +3,11 @@ import { rootUrl } from './dirs.js'
 
 export * from 'child_process'
 
-export const spawn = (/** @type {string} */ exec, /** @type {readonly string[]} */ args = [], /** @type {cp.SpawnOptionsWithoutStdio} */ opts = {}) =>
+export const spawn = (
+	/** @type {string} */ exec,
+	/** @type {readonly string[]} */ args = [],
+	/** @type {cp.SpawnOptionsWithoutStdio} */ opts = {},
+) =>
 	new Promise((close, error) => {
 		cp.spawn(exec, [].concat(args || []), {
 			cwd: rootUrl.pathname,

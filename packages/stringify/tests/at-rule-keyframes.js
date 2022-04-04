@@ -13,6 +13,15 @@ describe('at-rule (font-face)', () => {
 					},
 				},
 			}),
-		).toEqual('@keyframes{' + '0%{' + 'opacity:0;' + '}' + '1%{' + 'opacity:1;' + '}' + '}')
+		).toEqual(
+			'@keyframes{' +
+				'0%{' +
+				'opacity:0;' +
+				'}' +
+				'1%{' +
+				'opacity:1;' +
+				'}' +
+				'}',
+		)
 	})
 })

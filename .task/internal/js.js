@@ -6,13 +6,22 @@ import acornJsx from 'acorn-jsx'
 import acornLogicalAssignment from 'acorn-logical-assignment'
 import acornPrivateMethods from 'acorn-private-methods'
 
-let acornPlugins = [acornJsx({ allowNamespaces: true, allowNamespacedObjects: true }), acornClassFields, acornLogicalAssignment, acornPrivateMethods, importAssertions]
+let acornPlugins = [
+	acornJsx({ allowNamespaces: true, allowNamespacedObjects: true }),
+	acornClassFields,
+	acornLogicalAssignment,
+	acornPrivateMethods,
+	importAssertions,
+]
 
 let prototype = Node.prototype
 let parser = Parser.extend(...acornPlugins)
 
 export let parse = (code) => {
-	let parsed = parser.parse(code, { sourceType: 'module', ecmaVersion: 'latest' })
+	let parsed = parser.parse(code, {
+		sourceType: 'module',
+		ecmaVersion: 'latest',
+	})
 
 	return parsed
 }
@@ -122,19 +131,25 @@ let defaultProps = {
 
 let createNode = (...props) => Object.assign(Object.create(prototype), ...props)
 
-export let create = (type, props) => createNode({ type }, defaultProps[type], props)
+export let create = (type, props) =>
+	createNode({ type }, defaultProps[type], props)
 
-export let ArrowFunctionExpression = (props) => create('ArrowFunctionExpression', props)
-export let AssignmentExpression = (props) => create('AssignmentExpression', props)
+export let ArrowFunctionExpression = (props) =>
+	create('ArrowFunctionExpression', props)
+export let AssignmentExpression = (props) =>
+	create('AssignmentExpression', props)
 export let BlockStatement = (props) => create('BlockStatement', props)
 export let CallExpression = (props) => create('CallExpression', props)
 export let CatchClause = (props) => create('CatchClause', props)
-export let ExportNamedDeclaration = (props) => create('ExportNamedDeclaration', props)
-export let ExportSpecifier = (props) => create('ExportSpecifierExportSpecifier', props)
+export let ExportNamedDeclaration = (props) =>
+	create('ExportNamedDeclaration', props)
+export let ExportSpecifier = (props) =>
+	create('ExportSpecifierExportSpecifier', props)
 export let ExpressionStatement = (props) => create('ExpressionStatement', props)
 export let Identifier = (props) => create('Identifier', props)
 export let ImportDeclaration = (props) => create('ImportDeclaration', props)
-export let ImportDefaultSpecifier = (props) => create('ImportDefaultSpecifier', props)
+export let ImportDefaultSpecifier = (props) =>
+	create('ImportDefaultSpecifier', props)
 export let Literal = (props) => create('Literal', props)
 export let MemberExpression = (props) => create('MemberExpression', props)
 export let ObjectExpression = (props) => create('ObjectExpression', props)
@@ -147,7 +162,12 @@ export let VariableDeclarator = (props) => create('VariableDeclarator', props)
 
 export let parents = new WeakMap()
 
-let createPrototypeOf = (value) => (value == null ? value : Array.isArray(value) ? [] : Object.create(Object.getPrototypeOf(value)))
+let createPrototypeOf = (value) =>
+	value == null
+		? value
+		: Array.isArray(value)
+		? []
+		: Object.create(Object.getPrototypeOf(value))
 
 Object.defineProperties(prototype, {
 	clone: {
@@ -260,7 +280,10 @@ Object.defineProperties(prototype, {
 				if (Array.isArray(node)) {
 					node.splice(name, 1, ...nodes)
 				} else {
-					node[name] = Array.isArray(node[name]) || nodes.length > 1 ? nodes : nodes[0] || null
+					node[name] =
+						Array.isArray(node[name]) || nodes.length > 1
+							? nodes
+							: nodes[0] || null
 				}
 			},
 		}.replaceWith,

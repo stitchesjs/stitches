@@ -1,4 +1,9 @@
-import { deepEqual as toEqual, equal as toBe, notDeepEqual as toNotEqual, notEqual as toNotBe } from 'node:assert/strict'
+import {
+	deepEqual as toEqual,
+	equal as toBe,
+	notDeepEqual as toNotEqual,
+	notEqual as toNotBe,
+} from 'node:assert/strict'
 
 export default function expect(actual) {
 	return {

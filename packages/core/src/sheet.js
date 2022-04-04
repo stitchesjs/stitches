@@ -13,7 +13,15 @@
  * 7. inline rules (inline)
  */
 /** @type {RuleGroupNames} */
-export const names = ['themed', 'global', 'styled', 'onevar', 'resonevar', 'allvar', 'inline']
+export const names = [
+	'themed',
+	'global',
+	'styled',
+	'onevar',
+	'resonevar',
+	'allvar',
+	'inline',
+]
 
 const isSheetAccessible = (/** @type {CSSStyleSheet} */ sheet) => {
 	if (sheet.href && !sheet.href.startsWith(location.origin)) {
@@ -41,12 +49,19 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 				if (cssText.startsWith('--sxs')) return ''
 
-				if (cssRules[cssRuleIndex - 1] && (lastRuleCssText = cssRules[cssRuleIndex - 1].cssText).startsWith('--sxs')) {
+				if (
+					cssRules[cssRuleIndex - 1] &&
+					(lastRuleCssText = cssRules[cssRuleIndex - 1].cssText).startsWith(
+						'--sxs',
+					)
+				) {
 					if (!cssRule.cssRules.length) return ''
 
 					for (const name in groupSheet.rules) {
 						if (groupSheet.rules[name].group === cssRule) {
-							return `--sxs{--sxs:${[...groupSheet.rules[name].cache].join(' ')}}${cssText}`
+							return `--sxs{--sxs:${[...groupSheet.rules[name].cache].join(
+								' ',
+							)}}${cssText}`
 						}
 					}
 
@@ -63,7 +78,8 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 			const { rules, sheet } = groupSheet
 
 			if (!sheet.deleteRule) {
-				while (Object(Object(sheet.cssRules)[0]).type === 3) sheet.cssRules.splice(0, 1)
+				while (Object(Object(sheet.cssRules)[0]).type === 3)
+					sheet.cssRules.splice(0, 1)
 
 				sheet.cssRules = []
 			}
@@ -121,7 +137,10 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 		// if no hydratable stylesheet is found
 		if (!groupSheet) {
-			const createCSSMediaRule = (/** @type {string} */ sourceCssText, type) => {
+			const createCSSMediaRule = (
+				/** @type {string} */ sourceCssText,
+				type,
+			) => {
 				return /** @type {CSSMediaRule} */ ({
 					type,
 					cssRules: [],
@@ -139,13 +158,20 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 						)
 					},
 					get cssText() {
-						return sourceCssText === '@media{}' ? `@media{${[].map.call(this.cssRules, (cssRule) => cssRule.cssText).join('')}}` : sourceCssText
+						return sourceCssText === '@media{}'
+							? `@media{${[].map
+									.call(this.cssRules, (cssRule) => cssRule.cssText)
+									.join('')}}`
+							: sourceCssText
 					},
 				})
 			}
 
 			groupSheet = {
-				sheet: root ? (root.head || root).appendChild(document.createElement('style')).sheet : createCSSMediaRule('', 'text/css'),
+				sheet: root
+					? (root.head || root).appendChild(document.createElement('style'))
+							.sheet
+					: createCSSMediaRule('', 'text/css'),
 				rules: {},
 				reset,
 				toString,
@@ -160,12 +186,18 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				// name of prev group
 				const prevName = names[i + 1]
 				// get the index of that prev group or else get the length of the whole sheet
-				const index = rules[prevName] ? rules[prevName].index : sheet.cssRules.length
+				const index = rules[prevName]
+					? rules[prevName].index
+					: sheet.cssRules.length
 				// insert the grouping & the sxs rule
 				sheet.insertRule('@media{}', index)
 				sheet.insertRule(`--sxs{--sxs:${i}}`, index)
 				// add the group to the group sheet
-				rules[name] = { group: sheet.cssRules[index + 1], index, cache: new Set([i]) }
+				rules[name] = {
+					group: sheet.cssRules[index + 1],
+					index,
+					cache: new Set([i]),
+				}
 			}
 			addApplyToGroup(rules[name])
 		}
@@ -214,6 +246,11 @@ export const createRulesInjectionDeferrer = (globalSheet) => {
 	// mocking the rules.apply api used on the sheet
 	injector.rules = {}
 	// creating the apply methods under rules[something]
-	names.forEach((sheetName) => (injector.rules[sheetName] = { apply: (rule) => injector[$pr].push([sheetName, rule]) }))
+	names.forEach(
+		(sheetName) =>
+			(injector.rules[sheetName] = {
+				apply: (rule) => injector[$pr].push([sheetName, rule]),
+			}),
+	)
 	return injector
 }

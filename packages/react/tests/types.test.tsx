@@ -165,7 +165,9 @@ void function Test() {
  * Issue #821
  * -----------------------------------------------------------------------------------------------*/
 
-type UnionProps = { type: 'single'; collapsible: boolean } | { type: 'multiple' }
+type UnionProps =
+	| { type: 'single'; collapsible: boolean }
+	| { type: 'multiple' }
 const UnionComponent: React.FC<UnionProps> = () => null
 const StyledUnionComponent = styled(UnionComponent, {})
 

@@ -31,7 +31,10 @@ class ModifiedString extends String {
 	// with
 
 	get withAddedColorFunctions() {
-		return this.replace(/"CurrentColor"/g, '"CurrentColor" | "hsl(" | "lab(" | "rgb("')
+		return this.replace(
+			/"CurrentColor"/g,
+			'"CurrentColor" | "hsl(" | "lab(" | "rgb("',
+		)
 	}
 
 	get withAddedLicense() {
@@ -199,11 +202,17 @@ class ModifiedString extends String {
 			Object.create(null),
 		)
 
-		return this.replace(RegExp(Object.keys(cssColorNames).join('|'), 'ig'), ($0) => cssColorNames[$0.toLowerCase()])
+		return this.replace(
+			RegExp(Object.keys(cssColorNames).join('|'), 'ig'),
+			($0) => cssColorNames[$0.toLowerCase()],
+		)
 	}
 
 	get withFixedColorScheme() {
-		return this.replace('type ColorScheme = Globals | "dark" | "light" | "normal"', 'type ColorScheme = Globals | "dark" | "light" | "light dark" | "normal"')
+		return this.replace(
+			'type ColorScheme = Globals | "dark" | "light" | "normal"',
+			'type ColorScheme = Globals | "dark" | "light" | "light dark" | "normal"',
+		)
 	}
 
 	get withFixedFontFamily() {
@@ -214,20 +223,45 @@ class ModifiedString extends String {
 	}
 
 	get withFixedNestingSelectors() {
-		return this.replace(/Pseudos =[\W\w]+?;/g, (fragment) => fragment.replace(/":/g, '"&:').replace(/  \| "&:matches"\n/, '')).replace(/AdvancedPseudos =[\W\w]+?;/g, (fragment) => fragment.replace(/"&[^"]+/g, '$&('))
+		return this.replace(/Pseudos =[\W\w]+?;/g, (fragment) =>
+			fragment.replace(/":/g, '"&:').replace(/  \| "&:matches"\n/, ''),
+		).replace(/AdvancedPseudos =[\W\w]+?;/g, (fragment) =>
+			fragment.replace(/"&[^"]+/g, '$&('),
+		)
 	}
 
 	get withFixedProperties() {
-		return this.replace('type ZIndex = Globals | "auto" | (number & {})', 'type ZIndex = Globals | "auto" | (number & {}) | (string & {})')
-			.replace('type LetterSpacing<TLength = (string & {}) | 0> = Globals | TLength | "normal"', 'type LetterSpacing = Globals | "normal" | (number & {}) | (string & {})')
+		return this.replace(
+			'type ZIndex = Globals | "auto" | (number & {})',
+			'type ZIndex = Globals | "auto" | (number & {}) | (string & {})',
+		)
+			.replace(
+				'type LetterSpacing<TLength = (string & {}) | 0> = Globals | TLength | "normal"',
+				'type LetterSpacing = Globals | "normal" | (number & {}) | (string & {})',
+			)
 			.replace(/Property.LetterSpacing<TLength>/g, 'Property.LetterSpacing')
-			.replace('FontWeightAbsolute = "bold" | "normal"', 'FontWeightAbsolute = "bold" | "normal" | (string & {})')
-			.replace('DataType.FontWeightAbsolute | (string & {})', 'DataType.FontWeightAbsolute')
-			.replace('FlexGrow = Globals | (number & {})', 'FlexGrow = Globals | (number & {}) | (string & {})')
+			.replace(
+				'FontWeightAbsolute = "bold" | "normal"',
+				'FontWeightAbsolute = "bold" | "normal" | (string & {})',
+			)
+			.replace(
+				'DataType.FontWeightAbsolute | (string & {})',
+				'DataType.FontWeightAbsolute',
+			)
+			.replace(
+				'FlexGrow = Globals | (number & {})',
+				'FlexGrow = Globals | (number & {}) | (string & {})',
+			)
 	}
 
 	get withFixedPropertyAtRule() {
-		return this.replace('type Inherits = "false" | "true";', 'type Inherits = "false" | "true" | boolean;').replace('initialValue?: string;', 'initialValue?: boolean | number | string')
+		return this.replace(
+			'type Inherits = "false" | "true";',
+			'type Inherits = "false" | "true" | boolean;',
+		).replace(
+			'initialValue?: string;',
+			'initialValue?: boolean | number | string',
+		)
 	}
 
 	get withFixedMatchingSelector() {
@@ -235,7 +269,9 @@ class ModifiedString extends String {
 	}
 
 	get withFixedStretchValue() {
-		return this.replace(/(\n +\| +)?"fit-content"/g, ($0, $1) => ($1 ? `${$1}"stretch"${$1}"fit-content"` : '"stretch" | "fit-content"'))
+		return this.replace(/(\n +\| +)?"fit-content"/g, ($0, $1) =>
+			$1 ? `${$1}"stretch"${$1}"fit-content"` : '"stretch" | "fit-content"',
+		)
 	}
 
 	get withFixedSystemColor() {
@@ -264,8 +300,14 @@ class ModifiedString extends String {
 	get withoutNarrowingPatch() {
 		return this.replace(/\(number & \{\}\)/g, 'OnlyNumber')
 			.replace(/\(string & \{\}\)/g, 'OnlyString')
-			.replace(/number \| "([^\n]+)" \| OnlyString/g, '"$1" | number | OnlyString')
-			.replace(/((number|OnlyNumber) \| (string|OnlyString)( \| OnlyNumber)?|OnlyString \| OnlyNumber)/g, 'OnlyStringNumeric')
+			.replace(
+				/number \| "([^\n]+)" \| OnlyString/g,
+				'"$1" | number | OnlyString',
+			)
+			.replace(
+				/((number|OnlyNumber) \| (string|OnlyString)( \| OnlyNumber)?|OnlyString \| OnlyNumber)/g,
+				'OnlyStringNumeric',
+			)
 			.replace(
 				/export namespace Property/,
 				'export type OnlyObject = Record<never,never>\n\n' +
@@ -289,8 +331,14 @@ class ModifiedString extends String {
 	}
 
 	get withoutVendorTyping() {
-		return this.replace(/\nexport (interface|type) (Obsolete|Vendor)[^\n]+?\{\n[\W\w]+?\n\};?(?=\n)/g, '')
-			.replace(/\nexport interface (Obsolete|Vendor)[^\n]+?\>\n[\W\w]+?\{\};?(?=\n)/g, '')
+		return this.replace(
+			/\nexport (interface|type) (Obsolete|Vendor)[^\n]+?\{\n[\W\w]+?\n\};?(?=\n)/g,
+			'',
+		)
+			.replace(
+				/\nexport interface (Obsolete|Vendor)[^\n]+?\>\n[\W\w]+?\{\};?(?=\n)/g,
+				'',
+			)
 			.replace(/\nexport interface (Obsolete|Vendor)[^\n]+?{};?(?=\n)/g, '')
 			.replace(/\n    (Obsolete|Vendor)[^\n]+?,(?=\n)/g, '')
 			.replace(/\n *\| *":*-[^"]+"/g, '')

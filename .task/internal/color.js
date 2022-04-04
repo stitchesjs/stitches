@@ -2,7 +2,8 @@ const ansi = (id) => `\x1b[${id}m`
 const escape = (string) => string.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&')
 const ansiRe = RegExp(escape(ansi(0)), 'g')
 
-export const color = (string, id) => ansi(id) + string.replace(ansiRe, ansi(0) + ansi(id)) + ansi(0)
+export const color = (string, id) =>
+	ansi(id) + string.replace(ansiRe, ansi(0) + ansi(id)) + ansi(0)
 
 export const bold = (string) => color(string, 1)
 export const dim = (string) => color(string, 2)
@@ -27,7 +28,8 @@ export const bgMagenta = (string) => color(string, 45)
 export const bgCyan = (string) => color(string, 46)
 export const bgWhite = (string) => color(string, 47)
 
-export const pad = (string, size = 0, char = ' ') => string.padStart((string.length + size) / 2, char).padEnd(size, char)
+export const pad = (string, size = 0, char = ' ') =>
+	string.padStart((string.length + size) / 2, char).padEnd(size, char)
 
 export const box = ({ name, types }) => {
 	const border = (text) => dim(cyan(text))
@@ -45,6 +47,7 @@ export const box = ({ name, types }) => {
 		`${v}${nameLead}${bold(white(name))}${nameTail}${v}`,
 		`${v}${nullLine}${v}`,
 		...Object.entries(types).map(([type, { min, gzp }]) =>
+			// prettier-ignore
 			[
 				`${v}  ${h(15 - type.length)} ${cyan(type)} ${h(15 - type.length - (type.length % 2))}  ${v}`,
 				`${v}  ${' '.repeat(3 - (min.length % 2))}${kb(min + ' kB')}${' '.repeat(3)} ${border('╷')} ${' '.repeat(3 - (gzp.length % 2))}${kb(gzp + ' kB')}${' '.repeat(3)} ${v}`,

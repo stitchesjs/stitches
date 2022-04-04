@@ -22,7 +22,9 @@ describe('Issue #725', () => {
 				'@wide': 'end',
 			},
 		})
-		expect(getCssText()).toBe(`--sxs{--sxs:4 c-PJLV-jobbEJ-justify-end}@media{@media (min-width: 720px), (min-width: 1536px){.c-PJLV-jobbEJ-justify-end{justify-content:flex-end}}}`)
+		expect(getCssText()).toBe(
+			`--sxs{--sxs:4 c-PJLV-jobbEJ-justify-end}@media{@media (min-width: 720px), (min-width: 1536px){.c-PJLV-jobbEJ-justify-end{justify-content:flex-end}}}`,
+		)
 	})
 
 	test('Combination with other variants', () => {

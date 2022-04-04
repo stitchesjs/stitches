@@ -33,8 +33,24 @@ export const toResolvedMediaQueryRanges = (
 				(o1[0] === '=' ? '' : (o1[0] === '>') === isP1Value ? 'max-' : 'min-') +
 				name +
 				':' +
-				(o1[0] !== '=' && o1.length === 1 ? value.replace(mqunit, (_, v, u) => Number(v) + shift * (o1 === '>' ? 1 : -1) + u) : value) +
-				(o2 ? ') and (' + ((o2[0] === '>' ? 'min-' : 'max-') + name + ':' + (o2.length === 1 ? p3.replace(mqunit, (_, v, u) => Number(v) + shift * (o2 === '>' ? -1 : 1) + u) : p3)) : '') +
+				(o1[0] !== '=' && o1.length === 1
+					? value.replace(
+							mqunit,
+							(_, v, u) => Number(v) + shift * (o1 === '>' ? 1 : -1) + u,
+					  )
+					: value) +
+				(o2
+					? ') and (' +
+					  ((o2[0] === '>' ? 'min-' : 'max-') +
+							name +
+							':' +
+							(o2.length === 1
+								? p3.replace(
+										mqunit,
+										(_, v, u) => Number(v) + shift * (o2 === '>' ? -1 : 1) + u,
+								  )
+								: p3))
+					: '') +
 				')'
 			)
 		},

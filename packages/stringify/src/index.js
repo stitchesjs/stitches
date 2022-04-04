@@ -25,18 +25,26 @@ export const stringify = (
 		each: for (const name in style) {
 			const isAtRuleLike = name.charCodeAt(0) === 64
 
-			for (const data of isAtRuleLike && isArray(style[name]) ? style[name] : [style[name]]) {
+			for (const data of isAtRuleLike && isArray(style[name])
+				? style[name]
+				: [style[name]]) {
 				if (replacer && (name !== prevName || data !== prevData)) {
 					const next = replacer(name, data, style)
 
 					if (next !== null) {
-						cssText += typeof next === 'object' && next ? parse(next, selectors, conditions, name, data) : next == null ? '' : next
+						cssText +=
+							typeof next === 'object' && next
+								? parse(next, selectors, conditions, name, data)
+								: next == null
+								? ''
+								: next
 
 						continue each
 					}
 				}
 
-				const isObjectLike = typeof data === 'object' && data && data.toString === toString
+				const isObjectLike =
+					typeof data === 'object' && data && data.toString === toString
 
 				if (isObjectLike) {
 					if (used.has(selectors)) {
@@ -47,9 +55,17 @@ export const stringify = (
 
 					const usedName = Object(name)
 
-					const nextSelectors = isAtRuleLike ? selectors : selectors.length ? getResolvedSelectors(selectors, name.split(comma)) : name.split(comma)
+					const nextSelectors = isAtRuleLike
+						? selectors
+						: selectors.length
+						? getResolvedSelectors(selectors, name.split(comma))
+						: name.split(comma)
 
-					cssText += parse(data, nextSelectors, isAtRuleLike ? conditions.concat(usedName) : conditions)
+					cssText += parse(
+						data,
+						nextSelectors,
+						isAtRuleLike ? conditions.concat(usedName) : conditions,
+					)
 
 					if (used.has(usedName)) {
 						used.delete(usedName)
@@ -75,7 +91,10 @@ export const stringify = (
 						cssText += selectors + '{'
 					}
 
-					cssText += (isAtRuleLike ? name + ' ' : toKebabCase(name) + ':') + String(data) + ';'
+					cssText +=
+						(isAtRuleLike ? name + ' ' : toKebabCase(name) + ':') +
+						String(data) +
+						';'
 				}
 			}
 		}

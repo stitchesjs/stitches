@@ -347,15 +347,25 @@ export const {
 
 		ta: (value: Stitches.PropertyValue<'textAlign'>) => ({ textAlign: value }),
 
-		fd: (value: Stitches.PropertyValue<'flexDirection'>) => ({ flexDirection: value }),
+		fd: (value: Stitches.PropertyValue<'flexDirection'>) => ({
+			flexDirection: value,
+		}),
 		fw: (value: Stitches.PropertyValue<'flexWrap'>) => ({ flexWrap: value }),
 
-		ai: (value: Stitches.PropertyValue<'alignItems'>) => ({ alignItems: value }),
-		ac: (value: Stitches.PropertyValue<'alignContent'>) => ({ alignContent: value }),
-		jc: (value: Stitches.PropertyValue<'justifyContent'>) => ({ justifyContent: value }),
+		ai: (value: Stitches.PropertyValue<'alignItems'>) => ({
+			alignItems: value,
+		}),
+		ac: (value: Stitches.PropertyValue<'alignContent'>) => ({
+			alignContent: value,
+		}),
+		jc: (value: Stitches.PropertyValue<'justifyContent'>) => ({
+			justifyContent: value,
+		}),
 		as: (value: Stitches.PropertyValue<'alignSelf'>) => ({ alignSelf: value }),
 		fg: (value: Stitches.PropertyValue<'flexGrow'>) => ({ flexGrow: value }),
-		fs: (value: Stitches.PropertyValue<'flexShrink'>) => ({ flexShrink: value }),
+		fs: (value: Stitches.PropertyValue<'flexShrink'>) => ({
+			flexShrink: value,
+		}),
 		fb: (value: Stitches.PropertyValue<'flexBasis'>) => ({ flexBasis: value }),
 
 		bc: (value: Stitches.PropertyValue<'backgroundColor'>) => ({
@@ -380,12 +390,16 @@ export const {
 
 		bs: (value: Stitches.PropertyValue<'boxShadow'>) => ({ boxShadow: value }),
 
-		lh: (value: Stitches.PropertyValue<'lineHeight'>) => ({ lineHeight: value }),
+		lh: (value: Stitches.PropertyValue<'lineHeight'>) => ({
+			lineHeight: value,
+		}),
 
 		ox: (value: Stitches.PropertyValue<'overflowX'>) => ({ overflowX: value }),
 		oy: (value: Stitches.PropertyValue<'overflowY'>) => ({ overflowY: value }),
 
-		pe: (value: Stitches.PropertyValue<'pointerEvents'>) => ({ pointerEvents: value }),
+		pe: (value: Stitches.PropertyValue<'pointerEvents'>) => ({
+			pointerEvents: value,
+		}),
 		us: (value: Stitches.PropertyValue<'userSelect'>) => ({
 			WebkitUserSelect: value,
 			userSelect: value,

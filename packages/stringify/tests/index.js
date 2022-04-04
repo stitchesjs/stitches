@@ -2,8 +2,12 @@ import { stringify } from '../src/index.js'
 
 describe('stringify()', () => {
 	test('stringify() generates CSS with the replacer function for an at-rule', () => {
-		const replaceColor = ({ foreground: color, background: backgroundColor }) => ({ color, backgroundColor })
-		const replacer = (property, value) => (property === '@color' ? replaceColor(value) : null)
+		const replaceColor = ({
+			foreground: color,
+			background: backgroundColor,
+		}) => ({ color, backgroundColor })
+		const replacer = (property, value) =>
+			property === '@color' ? replaceColor(value) : null
 
 		expect(
 			stringify(
@@ -18,11 +22,14 @@ describe('stringify()', () => {
 				},
 				replacer,
 			),
-		).toEqual('a{' + 'color:white;' + 'background-color:black;' + 'margin:0;' + '}')
+		).toEqual(
+			'a{' + 'color:white;' + 'background-color:black;' + 'margin:0;' + '}',
+		)
 	})
 
 	test('stringify() generates CSS with the replacer function for a nested rule', () => {
-		const replacer = (property, value) => (property === '@within' ? { '& *': value } : null)
+		const replacer = (property, value) =>
+			property === '@within' ? { '& *': value } : null
 
 		expect(
 			stringify(
@@ -37,7 +44,17 @@ describe('stringify()', () => {
 				},
 				replacer,
 			),
-		).toEqual('a{' + 'color:white;' + '}' + 'a *{' + 'margin:0;' + '}' + 'a{' + 'background-color:black;' + '}')
+		).toEqual(
+			'a{' +
+				'color:white;' +
+				'}' +
+				'a *{' +
+				'margin:0;' +
+				'}' +
+				'a{' +
+				'background-color:black;' +
+				'}',
+		)
 	})
 
 	test('stringify() generates CSS with the replacer function for a @custom-media at-rule', () => {
@@ -47,7 +64,10 @@ describe('stringify()', () => {
 				replacements[property.slice(14)] = value
 			} else if (property.startsWith('@media ') && property.includes('--')) {
 				return {
-					[property.replace(/\((--[\w-]+)\)/g, ($0, $1) => replacements[$1] || $1)]: value,
+					[property.replace(
+						/\((--[\w-]+)\)/g,
+						($0, $1) => replacements[$1] || $1,
+					)]: value,
 				}
 			} else return null
 		}

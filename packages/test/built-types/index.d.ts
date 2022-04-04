@@ -848,7 +848,9 @@ export declare const Text: import('@stitches/react/types/styled-component').Styl
 			ac: (value: import('@stitches/react').PropertyValue<'alignContent'>) => {
 				alignContent: import('@stitches/react').PropertyValue<'alignContent'>
 			}
-			jc: (value: import('@stitches/react').PropertyValue<'justifyContent'>) => {
+			jc: (
+				value: import('@stitches/react').PropertyValue<'justifyContent'>,
+			) => {
 				justifyContent: import('@stitches/react').PropertyValue<'justifyContent'>
 			}
 			as: (value: import('@stitches/react').PropertyValue<'alignSelf'>) => {
@@ -863,22 +865,32 @@ export declare const Text: import('@stitches/react/types/styled-component').Styl
 			fb: (value: import('@stitches/react').PropertyValue<'flexBasis'>) => {
 				flexBasis: import('@stitches/react').PropertyValue<'flexBasis'>
 			}
-			bc: (value: import('@stitches/react').PropertyValue<'backgroundColor'>) => {
+			bc: (
+				value: import('@stitches/react').PropertyValue<'backgroundColor'>,
+			) => {
 				backgroundColor: import('@stitches/react').PropertyValue<'backgroundColor'>
 			}
 			br: (value: import('@stitches/react').PropertyValue<'borderRadius'>) => {
 				borderRadius: import('@stitches/react').PropertyValue<'borderRadius'>
 			}
-			btrr: (value: import('@stitches/react').PropertyValue<'borderTopRightRadius'>) => {
+			btrr: (
+				value: import('@stitches/react').PropertyValue<'borderTopRightRadius'>,
+			) => {
 				borderTopRightRadius: import('@stitches/react').PropertyValue<'borderTopRightRadius'>
 			}
-			bbrr: (value: import('@stitches/react').PropertyValue<'borderBottomRightRadius'>) => {
+			bbrr: (
+				value: import('@stitches/react').PropertyValue<'borderBottomRightRadius'>,
+			) => {
 				borderBottomRightRadius: import('@stitches/react').PropertyValue<'borderBottomRightRadius'>
 			}
-			bblr: (value: import('@stitches/react').PropertyValue<'borderBottomLeftRadius'>) => {
+			bblr: (
+				value: import('@stitches/react').PropertyValue<'borderBottomLeftRadius'>,
+			) => {
 				borderBottomLeftRadius: import('@stitches/react').PropertyValue<'borderBottomLeftRadius'>
 			}
-			btlr: (value: import('@stitches/react').PropertyValue<'borderTopLeftRadius'>) => {
+			btlr: (
+				value: import('@stitches/react').PropertyValue<'borderTopLeftRadius'>,
+			) => {
 				borderTopLeftRadius: import('@stitches/react').PropertyValue<'borderTopLeftRadius'>
 			}
 			bs: (value: import('@stitches/react').PropertyValue<'boxShadow'>) => {
@@ -900,7 +912,9 @@ export declare const Text: import('@stitches/react/types/styled-component').Styl
 				WebkitUserSelect: import('@stitches/react').PropertyValue<'userSelect'>
 				userSelect: import('@stitches/react').PropertyValue<'userSelect'>
 			}
-			userSelect: (value: import('@stitches/react').PropertyValue<'userSelect'>) => {
+			userSelect: (
+				value: import('@stitches/react').PropertyValue<'userSelect'>,
+			) => {
 				WebkitUserSelect: import('@stitches/react').PropertyValue<'userSelect'>
 				userSelect: import('@stitches/react').PropertyValue<'userSelect'>
 			}
@@ -908,11 +922,15 @@ export declare const Text: import('@stitches/react/types/styled-component').Styl
 				width: import('@stitches/react').PropertyValue<'width'>
 				height: import('@stitches/react').PropertyValue<'width'>
 			}
-			appearance: (value: import('@stitches/react').PropertyValue<'appearance'>) => {
+			appearance: (
+				value: import('@stitches/react').PropertyValue<'appearance'>,
+			) => {
 				WebkitAppearance: import('@stitches/react').PropertyValue<'appearance'>
 				appearance: import('@stitches/react').PropertyValue<'appearance'>
 			}
-			backgroundClip: (value: import('@stitches/react').PropertyValue<'backgroundClip'>) => {
+			backgroundClip: (
+				value: import('@stitches/react').PropertyValue<'backgroundClip'>,
+			) => {
 				WebkitBackgroundClip: import('@stitches/react').PropertyValue<'backgroundClip'>
 				backgroundClip: import('@stitches/react').PropertyValue<'backgroundClip'>
 			}

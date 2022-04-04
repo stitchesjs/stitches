@@ -43,7 +43,9 @@ describe('React Component with CSS prop', () => {
 			children: ['Radix UI test suite'],
 		})
 
-		expect(toString()).toBe('--sxs{--sxs:2 c-bMUtqP}@media{.c-bMUtqP{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block}}')
+		expect(toString()).toBe(
+			'--sxs{--sxs:2 c-bMUtqP}@media{.c-bMUtqP{line-height:1;margin:0;font-weight:400;font-variant-numeric:tabular-nums;display:block}}',
+		)
 
 		const Title = React.forwardRef((props, forwardedRef) =>
 			React.createElement(StyledText, {

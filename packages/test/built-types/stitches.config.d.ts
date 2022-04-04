@@ -2,7 +2,10 @@
 import type * as Stitches from '@stitches/react'
 export type { VariantProps } from '@stitches/react'
 export declare const styled: <
-		Type extends import('@stitches/react/types/util').Function | keyof JSX.IntrinsicElements | import('react').ComponentType<any>,
+		Type extends
+			| import('@stitches/react/types/util').Function
+			| keyof JSX.IntrinsicElements
+			| import('react').ComponentType<any>,
 		Composers extends (
 			| string
 			| import('@stitches/react/types/util').Function
@@ -917,7 +920,10 @@ export declare const styled: <
 	>(
 		type: Type,
 		...composers: {
-			[K in keyof Composers]: Composers[K] extends string | import('@stitches/react/types/util').Function | import('react').ComponentType<any>
+			[K in keyof Composers]: Composers[K] extends
+				| string
+				| import('@stitches/react/types/util').Function
+				| import('react').ComponentType<any>
 				? Composers[K]
 				: import('@stitches/react/types/stitches').RemoveIndex<CSS_1> & {
 						variants?:
@@ -931,9 +937,13 @@ export declare const styled: <
 						compoundVariants?:
 							| (('variants' extends keyof Composers[K]
 									? {
-											[Name in keyof Composers[K][keyof Composers[K] & 'variants']]?:
+											[Name in keyof Composers[K][keyof Composers[K] &
+												'variants']]?:
 												| import('@stitches/react/types/util').String
-												| import('@stitches/react/types/util').Widen<keyof Composers[K][keyof Composers[K] & 'variants'][Name]>
+												| import('@stitches/react/types/util').Widen<
+														keyof Composers[K][keyof Composers[K] &
+															'variants'][Name]
+												  >
 												| undefined
 									  } & import('@stitches/react/types/util').WideObject
 									: import('@stitches/react/types/util').WideObject) & {
@@ -943,14 +953,27 @@ export declare const styled: <
 						defaultVariants?:
 							| ('variants' extends keyof Composers[K]
 									? {
-											[Name_1 in keyof Composers[K][keyof Composers[K] & 'variants']]?:
+											[Name_1 in keyof Composers[K][keyof Composers[K] &
+												'variants']]?:
 												| import('@stitches/react/types/util').String
-												| import('@stitches/react/types/util').Widen<keyof Composers[K][keyof Composers[K] & 'variants'][Name_1]>
+												| import('@stitches/react/types/util').Widen<
+														keyof Composers[K][keyof Composers[K] &
+															'variants'][Name_1]
+												  >
 												| undefined
 									  }
 									: import('@stitches/react/types/util').WideObject)
 							| undefined
-				  } & { [K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants' ? unknown : K2 extends keyof CSS_1 ? CSS_1[K2] : unknown }
+				  } & {
+						[K2 in keyof Composers[K]]: K2 extends
+							| 'compoundVariants'
+							| 'defaultVariants'
+							| 'variants'
+							? unknown
+							: K2 extends keyof CSS_1
+							? CSS_1[K2]
+							: unknown
+				  }
 		}
 	) => import('@stitches/react/types/styled-component').StyledComponent<
 		Type,
@@ -3436,7 +3459,11 @@ export declare const styled: <
 	) => string & {
 		className: string
 		selector: string
-	} & (Argument0 extends {} ? import('@stitches/react/types/stitches').ThemeTokens<Argument0, ''> : Argument1 extends {} ? import('@stitches/react/types/stitches').ThemeTokens<Argument1, ''> : {}),
+	} & (Argument0 extends {}
+			? import('@stitches/react/types/stitches').ThemeTokens<Argument0, ''>
+			: Argument1 extends {}
+			? import('@stitches/react/types/stitches').ThemeTokens<Argument1, ''>
+			: {}),
 	getCssText: () => string,
 	keyframes: (style: {
 		[offset: string]: import('@stitches/react/types/css-util').CSS<

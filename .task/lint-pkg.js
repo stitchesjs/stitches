@@ -1,7 +1,11 @@
 import fs from './internal/fs.js'
 import { bold, underline } from './internal/color.js'
 import { isProcessMeta, getProcessArgOf } from './internal/process.js'
-import { corePackageUrl, reactPackageUrl, stringifyPackageUrl } from './internal/dirs.js'
+import {
+	corePackageUrl,
+	reactPackageUrl,
+	stringifyPackageUrl,
+} from './internal/dirs.js'
 import * as cp from './internal/child_process.js'
 
 export const lint = async (packageUrl, opts) => {
@@ -13,7 +17,10 @@ export const lint = async (packageUrl, opts) => {
 	if (!opts.only.length || opts.only.includes(packageName)) {
 		console.log(underline(bold(packageName)))
 
-		await cp.spawn('./node_modules/.bin/package-check', ['--cwd', packageUrl.pathname])
+		await cp.spawn('./node_modules/.bin/package-check', [
+			'--cwd',
+			packageUrl.pathname,
+		])
 	}
 }
 

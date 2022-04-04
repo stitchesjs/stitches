@@ -6,7 +6,11 @@ import { transformDestructuring } from './internal/js.transformDestructuring.js'
 import { transformModulesToCJS } from './internal/js.transformModulesToCJS.js'
 import { transformOptionalCatchToParam } from './internal/js.transformOptionalCatchToParam.js'
 import { transformIIFE } from './internal/js.transformIIFE.js'
-import { corePackageUrl, reactPackageUrl, stringifyPackageUrl } from './internal/dirs.js'
+import {
+	corePackageUrl,
+	reactPackageUrl,
+	stringifyPackageUrl,
+} from './internal/dirs.js'
 import { isProcessMeta, getProcessArgOf } from './internal/process.js'
 import esbuild from 'esbuild'
 import nodemon from 'nodemon'
@@ -107,19 +111,27 @@ export const build = async (packageUrl, opts) => {
 		// write variation builds
 		for (const variant in variants) {
 			const variantInfo = variants[variant]
-			const variantPath = new URL(`dist/index.${variantInfo.extension}`, packageUrl).pathname
+			const variantPath = new URL(
+				`dist/index.${variantInfo.extension}`,
+				packageUrl,
+			).pathname
 
 			let { code: variantCode } = await variantInfo.transform(code, smap)
 
 			const variantMins = (Buffer.byteLength(variantCode) / 1000).toFixed(2)
-			const variantGzip = Number(zlib.gzipSync(variantCode, { level: 9 }).length / 1000).toFixed(2)
+			const variantGzip = Number(
+				zlib.gzipSync(variantCode, { level: 9 }).length / 1000,
+			).toFixed(2)
 
 			size.types[variant] = {
 				min: variantMins,
 				gzp: variantGzip,
 			}
 
-			await fs.writeFile(variantPath, variantCode + `\n//# sourceMappingUrl=index.map`)
+			await fs.writeFile(
+				variantPath,
+				variantCode + `\n//# sourceMappingUrl=index.map`,
+			)
 		}
 
 		console.log(box(size))

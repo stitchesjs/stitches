@@ -15,7 +15,9 @@ describe('Component: Utilities & Tokens', () => {
 			px: 15,
 		})()
 
-		expect(toString()).toBe(`--sxs{--sxs:2 c-ccgTVz}@media{.c-ccgTVz{padding-left:15px;padding-right:15px}}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:2 c-ccgTVz}@media{.c-ccgTVz{padding-left:15px;padding-right:15px}}`,
+		)
 	})
 
 	test('Utilities & Tokens of different types', () => {
@@ -33,6 +35,8 @@ describe('Component: Utilities & Tokens', () => {
 			ftw: '$sp',
 		})()
 
-		expect(toString()).toBe(`--sxs{--sxs:2 c-ilqzId}@media{.c-ilqzId{color:var(--colors-sp);padding-left:var(--space-sp);padding-right:var(--space-sp)}}`)
+		expect(toString()).toBe(
+			`--sxs{--sxs:2 c-ilqzId}@media{.c-ilqzId{color:var(--colors-sp);padding-left:var(--space-sp);padding-right:var(--space-sp)}}`,
+		)
 	})
 })

@@ -12,12 +12,16 @@ const main = async () => {
 
 	const q1option = new Set(['major', 'minor', 'patch', 'prerelease'])
 
-	state.release = await rl.question(`Release Type ${co.dim('(major, minor, patch, prerelease)')}:`)
+	state.release = await rl.question(
+		`Release Type ${co.dim('(major, minor, patch, prerelease)')}:`,
+	)
 	state.npmtag = state.release === 'prerelease' ? 'canary' : 'latest'
 
 	if (!q1option.has(state.release)) return
 
-	await cp.spawn('npm', ['version', state.release, '--workspaces'], { stdio: 'pipe' })
+	await cp.spawn('npm', ['version', state.release, '--workspaces'], {
+		stdio: 'pipe',
+	})
 
 	const workspacepkgpaths = new Set()
 	const workspacetags = new Set()
@@ -36,7 +40,11 @@ const main = async () => {
 
 	console.log(`Bumped ${co.bold(state.version)}`)
 
-	const confirm = await rl.question(`Publish ${co.bold(state.version)} as ${co.bold(state.npmtag)} ${co.dim('(y/n)')}:`)
+	const confirm = await rl.question(
+		`Publish ${co.bold(state.version)} as ${co.bold(state.npmtag)} ${co.dim(
+			'(y/n)',
+		)}:`,
+	)
 
 	if (confirm !== 'y') {
 		for (const workspacepkgpath of workspacepkgpaths) {
@@ -61,7 +69,14 @@ const main = async () => {
 	await cp.spawn('git', ['push'])
 	await cp.spawn('git', ['push', '--tags'])
 
-	await cp.spawn('npm', ['publish', '--tag', state.npmtag, '--workspaces', '--otp', state.otp])
+	await cp.spawn('npm', [
+		'publish',
+		'--tag',
+		state.npmtag,
+		'--workspaces',
+		'--otp',
+		state.otp,
+	])
 }
 
 main()

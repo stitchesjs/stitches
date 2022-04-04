@@ -21,7 +21,11 @@ import { bold, dim, green, red } from './internal/color.js'
 	const results = []
 
 	for (const filename of await fs.readdir(NODE_V8_COVERAGE)) {
-		results.push(...JSON.parse(await fs.readFile(fp.join(NODE_V8_COVERAGE, filename), 'utf8')).result)
+		results.push(
+			...JSON.parse(
+				await fs.readFile(fp.join(NODE_V8_COVERAGE, filename), 'utf8'),
+			).result,
+		)
 	}
 
 	await fs.rmdir(NODE_V8_COVERAGE, { recursive: true })
@@ -33,7 +37,10 @@ import { bold, dim, green, red } from './internal/color.js'
 	let lcovInfo = ''
 
 	/** Filter for filtered results */
-	const filter = (url) => !url.protocol.startsWith('node') && !url.pathname.includes('/node_modules/') && url.pathname.includes('/src/')
+	const filter = (url) =>
+		!url.protocol.startsWith('node') &&
+		!url.pathname.includes('/node_modules/') &&
+		url.pathname.includes('/src/')
 
 	for (let result of results) {
 		/** URL classed result URL */
@@ -84,12 +91,19 @@ import { bold, dim, green, red } from './internal/color.js'
 				for (const lineIndex in rows) {
 					const nextLineOffset = lineOffset + rows[lineIndex].data.length
 
-					if (range.startLine == null && range.startOffset >= lineOffset && range.startOffset < nextLineOffset) {
+					if (
+						range.startLine == null &&
+						range.startOffset >= lineOffset &&
+						range.startOffset < nextLineOffset
+					) {
 						range.startLine = Number(lineIndex) + 1
 						range.startCol = range.startOffset - lineOffset + 1
 					}
 
-					if (range.endOffset >= lineOffset && range.endOffset < nextLineOffset) {
+					if (
+						range.endOffset >= lineOffset &&
+						range.endOffset < nextLineOffset
+					) {
 						range.endLine = Number(lineIndex) + 1
 						range.endCol = range.endOffset - lineOffset + 1
 
@@ -143,7 +157,17 @@ import { bold, dim, green, red } from './internal/color.js'
 				}
 			}
 
-			lcovInfo += `${Object.entries(lcov).reduce((report, [name, data]) => report.concat(data.reduce((string, each) => string.concat(`${name.toUpperCase()}:${each}\n`), '')), '')}end_of_record\n`
+			lcovInfo += `${Object.entries(lcov).reduce(
+				(report, [name, data]) =>
+					report.concat(
+						data.reduce(
+							(string, each) =>
+								string.concat(`${name.toUpperCase()}:${each}\n`),
+							'',
+						),
+					),
+				'',
+			)}end_of_record\n`
 		}
 	}
 
@@ -184,6 +208,7 @@ import { bold, dim, green, red } from './internal/color.js'
 	lcovList.sort((a, b) => a.SF[0] - b.SF[0])
 
 	console.log(
+		// prettier-ignore
 		[
 			[dim('╭'), dim('─'.repeat(44)), dim('┬'), dim('─'.repeat(11)), dim('┬'), dim('─'.repeat(11)), dim('╮')].join(''),
 			[dim('│'), bold('Coverage') + ' '.repeat(34), dim('│'), bold('Functions'), dim('│'), ' '.repeat(4) + bold('Lines'), dim('│')].join(' '),

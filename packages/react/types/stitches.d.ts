@@ -4,10 +4,22 @@ import type * as ThemeUtil from './theme'
 import type * as Util from './util'
 
 /** Remove an index signature from a type */
-export type RemoveIndex<T> = { [k in keyof T as string extends k ? never : number extends k ? never : k]: T[k] }
+export type RemoveIndex<T> = {
+	[k in keyof T as string extends k
+		? never
+		: number extends k
+		? never
+		: k]: T[k]
+}
 
 /** Stitches interface. */
-export default interface Stitches<Prefix extends string = '', Media extends {} = {}, Theme extends {} = {}, ThemeMap extends {} = {}, Utils extends {} = {}> {
+export default interface Stitches<
+	Prefix extends string = '',
+	Media extends {} = {},
+	Theme extends {} = {},
+	ThemeMap extends {} = {},
+	Utils extends {} = {},
+> {
 	config: {
 		prefix: Prefix
 		media: Media
@@ -32,7 +44,9 @@ export default interface Stitches<Prefix extends string = '', Media extends {} =
 				[K in keyof Styles]: K extends '@import'
 					? string | string[]
 					: K extends '@font-face'
-					? CSSUtil.Native.AtRule.FontFace | Array<CSSUtil.Native.AtRule.FontFace>
+					?
+							| CSSUtil.Native.AtRule.FontFace
+							| Array<CSSUtil.Native.AtRule.FontFace>
 					: K extends `@keyframes ${string}`
 					? {
 							[KeyFrame in string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
@@ -81,14 +95,21 @@ export default interface Stitches<Prefix extends string = '', Media extends {} =
 		): string & {
 			className: string
 			selector: string
-		} & (Argument0 extends string ? ThemeTokens<Argument1, Prefix> : ThemeTokens<Argument0, Prefix>)
+		} & (Argument0 extends string
+				? ThemeTokens<Argument1, Prefix>
+				: ThemeTokens<Argument0, Prefix>)
 	}
 	theme: string & {
 		className: string
 		selector: string
 	} & {
 		[Scale in keyof Theme]: {
-			[Token in keyof Theme[Scale]]: ThemeUtil.Token<Extract<Token, string | number>, string, Extract<Scale, string | void>, Extract<Prefix, string | void>>
+			[Token in keyof Theme[Scale]]: ThemeUtil.Token<
+				Extract<Token, string | number>,
+				string,
+				Extract<Scale, string | void>,
+				Extract<Prefix, string | void>
+			>
 		}
 	}
 	reset: {
@@ -98,9 +119,22 @@ export default interface Stitches<Prefix extends string = '', Media extends {} =
 		(): string
 	}
 	css: {
-		<Composers extends (string | React.ExoticComponent<any> | React.JSXElementConstructor<any> | Util.Function | { [name: string]: unknown })[], CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>>(
+		<
+			Composers extends (
+				| string
+				| React.ExoticComponent<any>
+				| React.JSXElementConstructor<any>
+				| Util.Function
+				| { [name: string]: unknown }
+			)[],
+			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>,
+		>(
 			...composers: {
-				[K in keyof Composers]: Composers[K] extends string | React.ExoticComponent<any> | React.JSXElementConstructor<any> | Util.Function // Strings, React Components, and Functions can be skipped over
+				[K in keyof Composers]: Composers[K] extends
+					| string
+					| React.ExoticComponent<any>
+					| React.JSXElementConstructor<any>
+					| Util.Function // Strings, React Components, and Functions can be skipped over
 					? Composers[K]
 					: RemoveIndex<CSS> & {
 							/** The **variants** property lets you set a subclass of styles based on a key-value pair.
@@ -118,7 +152,9 @@ export default interface Stitches<Prefix extends string = '', Media extends {} =
 							 */
 							compoundVariants?: (('variants' extends keyof Composers[K]
 								? {
-										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+										[Name in keyof Composers[K]['variants']]?:
+											| Util.Widen<keyof Composers[K]['variants'][Name]>
+											| Util.String
 								  }
 								: Util.WideObject) & {
 								css: CSS
@@ -129,24 +165,49 @@ export default interface Stitches<Prefix extends string = '', Media extends {} =
 							 */
 							defaultVariants?: 'variants' extends keyof Composers[K]
 								? {
-										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+										[Name in keyof Composers[K]['variants']]?:
+											| Util.Widen<keyof Composers[K]['variants'][Name]>
+											| Util.String
 								  }
 								: Util.WideObject
 					  } & CSS & {
-								[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants' ? unknown : K2 extends keyof CSS ? CSS[K2] : unknown
+								[K2 in keyof Composers[K]]: K2 extends
+									| 'compoundVariants'
+									| 'defaultVariants'
+									| 'variants'
+									? unknown
+									: K2 extends keyof CSS
+									? CSS[K2]
+									: unknown
 							}
 			}
-		): StyledComponent.CssComponent<StyledComponent.StyledComponentType<Composers>, StyledComponent.StyledComponentProps<Composers>, Media, CSS>
+		): StyledComponent.CssComponent<
+			StyledComponent.StyledComponentType<Composers>,
+			StyledComponent.StyledComponentProps<Composers>,
+			Media,
+			CSS
+		>
 	}
 	styled: {
 		<
-			Type extends keyof JSX.IntrinsicElements | React.ComponentType<any> | Util.Function,
-			Composers extends (string | React.ComponentType<any> | Util.Function | { [name: string]: unknown })[],
+			Type extends
+				| keyof JSX.IntrinsicElements
+				| React.ComponentType<any>
+				| Util.Function,
+			Composers extends (
+				| string
+				| React.ComponentType<any>
+				| Util.Function
+				| { [name: string]: unknown }
+			)[],
 			CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>,
 		>(
 			type: Type,
 			...composers: {
-				[K in keyof Composers]: Composers[K] extends string | React.ComponentType<any> | Util.Function // Strings, React Components, and Functions can be skipped over
+				[K in keyof Composers]: Composers[K] extends
+					| string
+					| React.ComponentType<any>
+					| Util.Function // Strings, React Components, and Functions can be skipped over
 					? Composers[K]
 					: RemoveIndex<CSS> & {
 							/** The **variants** property lets you set a subclass of styles based on a key-value pair.
@@ -164,7 +225,9 @@ export default interface Stitches<Prefix extends string = '', Media extends {} =
 							 */
 							compoundVariants?: (('variants' extends keyof Composers[K]
 								? {
-										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+										[Name in keyof Composers[K]['variants']]?:
+											| Util.Widen<keyof Composers[K]['variants'][Name]>
+											| Util.String
 								  }
 								: Util.WideObject) & {
 								css: CSS
@@ -175,19 +238,38 @@ export default interface Stitches<Prefix extends string = '', Media extends {} =
 							 */
 							defaultVariants?: 'variants' extends keyof Composers[K]
 								? {
-										[Name in keyof Composers[K]['variants']]?: Util.Widen<keyof Composers[K]['variants'][Name]> | Util.String
+										[Name in keyof Composers[K]['variants']]?:
+											| Util.Widen<keyof Composers[K]['variants'][Name]>
+											| Util.String
 								  }
 								: Util.WideObject
 					  } & CSS & {
-								[K2 in keyof Composers[K]]: K2 extends 'compoundVariants' | 'defaultVariants' | 'variants' ? unknown : K2 extends keyof CSS ? CSS[K2] : unknown
+								[K2 in keyof Composers[K]]: K2 extends
+									| 'compoundVariants'
+									| 'defaultVariants'
+									| 'variants'
+									? unknown
+									: K2 extends keyof CSS
+									? CSS[K2]
+									: unknown
 							}
 			}
-		): StyledComponent.StyledComponent<Type, StyledComponent.StyledComponentProps<Composers>, Media, CSSUtil.CSS<Media, Theme, ThemeMap, Utils>>
+		): StyledComponent.StyledComponent<
+			Type,
+			StyledComponent.StyledComponentProps<Composers>,
+			Media,
+			CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
+		>
 	}
 }
 
 type ThemeTokens<Values, Prefix> = {
 	[Scale in keyof Values]: {
-		[Token in keyof Values[Scale]]: ThemeUtil.Token<Extract<Token, number | string>, Values[Scale][Token] & (string | number), Extract<Scale, string | void>, Extract<Prefix, string | void>>
+		[Token in keyof Values[Scale]]: ThemeUtil.Token<
+			Extract<Token, number | string>,
+			Values[Scale][Token] & (string | number),
+			Extract<Scale, string | void>,
+			Extract<Prefix, string | void>
+		>
 	}
 }

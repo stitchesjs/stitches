@@ -24,7 +24,9 @@ describe('Issue #671', () => {
 		})
 
 		test('a stitches component extending a react component will inject the styles in the correct order', () => {
-			expect(getCssText()).toBe(`--sxs{--sxs:2 c-kydkiA c-gmqXFB}@media{.c-gmqXFB{color:red}.c-kydkiA{color:blue}}`)
+			expect(getCssText()).toBe(
+				`--sxs{--sxs:2 c-kydkiA c-gmqXFB}@media{.c-gmqXFB{color:red}.c-kydkiA{color:blue}}`,
+			)
 		})
 	}
 })

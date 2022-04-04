@@ -29,6 +29,8 @@ describe('Issue #652', () => {
 
 		const expression2 = component2()
 
-		expect(expression2.className).toBe(`c-PJLV c-PJLV-gmqXFB-hue-primary c-PJLV-kydkiA-hue-primary`)
+		expect(expression2.className).toBe(
+			`c-PJLV c-PJLV-gmqXFB-hue-primary c-PJLV-kydkiA-hue-primary`,
+		)
 	})
 })
