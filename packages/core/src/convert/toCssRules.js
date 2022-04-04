@@ -145,7 +145,7 @@ export const toCssRules = (
 		currentRule = undefined
 	}
 
-	walk(style, selectors, conditions)
+	walk(config.cssPreProcessor(style), selectors, conditions)
 }
 
 const toCssString = (/** @type {string[]} */ declarations, /** @type {string[]} */ selectors, /** @type {string[]} */ conditions) => (

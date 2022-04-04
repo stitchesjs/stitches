@@ -6,6 +6,9 @@ declare namespace ConfigType {
 	/** Prefix interface. */
 	export type Prefix<T = ''> = T extends string ? T: string
 
+	/** CSS pre-processor interface. */
+	export type CssPreProcessor = (styles: Record<string, any>) => Record<string, any>
+
 	/** Media interface. */
 	export type Media<T = {}> = {
 		[name in keyof T]: T[name] extends string ? T[name] : string
@@ -201,6 +204,7 @@ export type CreateStitches = {
 	>(
 		config?: {
 			prefix?: ConfigType.Prefix<Prefix>
+			cssPreProcessor?: ConfigType.CssPreProcessor
 			media?: ConfigType.Media<Media>
 			theme?: ConfigType.Theme<Theme>
 			themeMap?: ConfigType.ThemeMap<ThemeMap>
