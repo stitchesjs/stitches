@@ -16,7 +16,6 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.0.1",
-    "prettier": "^1.16.4",
     "react": "17.0.2",
     "typescript": "^4.3.5"
   },

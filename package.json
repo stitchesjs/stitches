@@ -18,7 +18,9 @@
     "release": "node .task/release.js",
     "test": "node .task/test.js",
     "test:coverage": "node .task/test-coverage.js .task/test.js",
-    "test:watch": "node .task/test.js --watch"
+    "test:watch": "node .task/test.js --watch",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "workspaces": [
     "packages/core",
@@ -47,6 +49,7 @@
     "esbuild": "0.13.2",
     "eslint": "7.32.0",
     "nodemon": "2.0.13",
+    "prettier": "2.6.2",
     "react": "17.0.2",
     "react-test-renderer": "17.0.2",
     "terser": "5.9.0",
