@@ -1,3 +1,5 @@
+import { getNonce } from './utility/getNonce'
+
 /** @typedef {import('./sheet').RuleGroup} RuleGroup */
 /** @typedef {import('./sheet').RuleGroupNames} RuleGroupNames */
 /** @typedef {import('./sheet').SheetGroup} SheetGroup */
@@ -137,8 +139,20 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				})
 			}
 
+			const createSheet = () => {
+				if (!root) {
+					return createCSSMediaRule('', 'text/css')
+				}
+				const styleEl = document.createElement('style')
+				const nonce = getNonce()
+				if (nonce) {
+					styleEl.setAttribute('nonce', nonce)
+				}
+				return (root.head || root).appendChild(styleEl).sheet
+			}
+
 			groupSheet = {
-				sheet: root ? (root.head || root).appendChild(document.createElement('style')).sheet : createCSSMediaRule('', 'text/css'),
+				sheet: createSheet(),
 				rules: {},
 				reset,
 				toString,
@@ -187,9 +201,9 @@ const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
 /** Pending rules for injection */
 const $pr = Symbol()
 
-/** 
+/**
  * When a stitches component is extending some other random react component,
- * it’s gonna create a react component (Injector) using this function and then render it after the children, 
+ * it’s gonna create a react component (Injector) using this function and then render it after the children,
  * this way, we would force the styles of the wrapper to be injected after the wrapped component
  */
 export const createRulesInjectionDeferrer = (globalSheet) => {
