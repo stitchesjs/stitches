@@ -44,6 +44,9 @@ declare namespace ConfigType {
 			[K in keyof CSSUtil.CSSProperties]?: CSSUtil.CSSProperties[K] | V
 		}) : never
 	}
+
+	/** Root interface. */
+	export type Root<T = Document> = T extends DocumentOrShadowRoot ? T : DocumentOrShadowRoot
 }
 
 /** Default ThemeMap. */
@@ -197,7 +200,8 @@ export type CreateStitches = {
 		Media extends {} = {},
 		Theme extends {} = {},
 		ThemeMap extends {} = DefaultThemeMap,
-		Utils extends {} = {}
+		Utils extends {} = {},
+		Root extends DocumentOrShadowRoot = Document
 	>(
 		config?: {
 			prefix?: ConfigType.Prefix<Prefix>
@@ -205,6 +209,7 @@ export type CreateStitches = {
 			theme?: ConfigType.Theme<Theme>
 			themeMap?: ConfigType.ThemeMap<ThemeMap>
 			utils?: ConfigType.Utils<Utils>
+			root?: ConfigType.Root<Root>
 		}
 	): Stitches<Prefix, Media, Theme, ThemeMap, Utils>
 }
