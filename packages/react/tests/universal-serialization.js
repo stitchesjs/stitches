@@ -4,14 +4,13 @@ describe('Serialization', () => {
 	const sheet = createStitches()
 	const { styled, getCssText, toString, createTheme } = sheet
 
-	const myComponent = styled.withName('myComponent', 'button', {
+	const myComponent = styled.withName('myComponent')('button', {
 		all: 'unset',
 		font: 'inherit',
 		margin: 0,
 		padding: '0.5em 1em',
 	})
-	const baseSelector = '.c-myComponent-cLikna'
-	const myComponentSelector = `${baseSelector}:where(.c-myComponent-PJLV)`
+	const myComponentSelector = '.c-myComponent-cLikna'
 
 	const myTheme = createTheme({
 		colors: {
@@ -49,7 +48,7 @@ describe('Serialization', () => {
 
 	myComponent.render()
 
-	const sheetCssText = `--sxs{--sxs:0 t-jPkpUS}@media{${myThemeSelector}{--colors-blue:dodgerblue}}--sxs{--sxs:2 c-myComponent-cLikna c-myComponent-PJLV}@media{${baseSelector}{all:unset;font:inherit;margin:0;padding:0.5em 1em}}`
+	const sheetCssText = `--sxs{--sxs:0 t-jPkpUS}@media{${myThemeSelector}{--colors-blue:dodgerblue}}--sxs{--sxs:2 c-myComponent-cLikna}@media{${myComponentSelector}{all:unset;font:inherit;margin:0;padding:0.5em 1em}}`
 
 	test('Sheets implicitly return their cssText', () => {
 		expect(String(sheet)).toBe(sheetCssText)

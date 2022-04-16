@@ -25,12 +25,15 @@ import { createRulesInjectionDeferrer } from '../sheet.js'
 
 const createCssFunctionMap = createMemo()
 
+/** @type {string | null} */
+let nameBuffer = null
+
 /** Returns a function that applies component styles. */
-export const createCssFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
-	createCssFunctionMap(config, () => (...args) => {
-		const last = args.length - 1
-		const hasCustomName = args[last] && typeof args[last] === 'object' && args[last].componentName
-		const componentName = hasCustomName ? args[last].componentName : null
+export const createCssFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) => {
+
+	const css = createCssFunctionMap(config, () => (...args) => {
+		const componentName = nameBuffer
+		nameBuffer = null
 
 		/** @type {Internals} */
 		let internals = {
@@ -64,10 +67,21 @@ export const createCssFunction = (/** @type {Config} */ config, /** @type {Sheet
 
 		// set the component type if none was set
 		if (internals.type == null) internals.type = 'span'
-		if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], {}, []])
+		if (!internals.composers.size) {
+			const prefix = componentName ? `c-${componentName}-` : ''
+			internals.composers.add([`${prefix}PJLV`, {}, [], [], {}, []])
+		}
 
 		return createRenderer(config, internals, sheet)
 	})
+
+	css.withName = (/** @type {string | null} */ componentName) => (...args) => {
+		nameBuffer = componentName
+		return css(...args)
+	}
+
+	return css
+}
 
 /** Creates a composer from a configuration object. */
 const createComposer = (/** @type {InitComposer} */ { variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, componentName, ...style }, /** @type {Config} */ config) => {
