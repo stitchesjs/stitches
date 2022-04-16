@@ -28,6 +28,10 @@ const createCssFunctionMap = createMemo()
 /** Returns a function that applies component styles. */
 export const createCssFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
 	createCssFunctionMap(config, () => (...args) => {
+		const last = args.length - 1
+		const hasCustomName = args[last] && typeof args[last] === 'object' && args[last].componentName
+		const componentName = hasCustomName ? args[last].componentName : null
+
 		/** @type {Internals} */
 		let internals = {
 			type: null,
@@ -54,7 +58,7 @@ export const createCssFunction = (/** @type {Config} */ config, /** @type {Sheet
 
 			// otherwise, add a new composer to this component
 			else {
-				internals.composers.add(createComposer(arg, config))
+				internals.composers.add(createComposer({componentName, ...arg}, config))
 			}
 		}
 
@@ -66,9 +70,11 @@ export const createCssFunction = (/** @type {Config} */ config, /** @type {Sheet
 	})
 
 /** Creates a composer from a configuration object. */
-const createComposer = (/** @type {InitComposer} */ { variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style }, /** @type {Config} */ config) => {
+const createComposer = (/** @type {InitComposer} */ { variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, componentName, ...style }, /** @type {Config} */ config) => {
+	/** @type {string} */
+	const baseClass = componentName && componentName.length > 0 ? `${componentName}-${toHash(style)}` : toHash(style)
 	/** @type {string} Composer Unique Identifier. @see `{CONFIG_PREFIX}-?c-{STYLE_HASH}` */
-	const className = `${toTailDashed(config.prefix)}c-${toHash(style)}`
+	const className = `${toTailDashed(config.prefix)}c-${baseClass}`
 
 	/** @type {VariantTuple[]} */
 	const singularVariants = []

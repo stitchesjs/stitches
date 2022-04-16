@@ -37,14 +37,20 @@ export const createStyledFunction = ({ /** @type {Config} */ config, /** @type {
 
 			const toString = () => cssComponent.selector
 
+			const last = args.length - 1
+			const hasCustomName = args[last] && typeof args[last] === 'object' && args[last].componentName
+			const componentName = hasCustomName ? args[last].componentName : null
+	
 			styledComponent.className = cssComponent.className
-			styledComponent.displayName = `Styled.${DefaultType.displayName || DefaultType.name || DefaultType}`
+			styledComponent.displayName = componentName || `Styled.${DefaultType.displayName || DefaultType.name || DefaultType}`
 			styledComponent.selector = cssComponent.selector
 			styledComponent.toString = toString
 			styledComponent[internal] = cssComponent[internal]
 
 			return styledComponent
 		}
+
+		styled.withName = (componentName, ...args) => styled(...args, { componentName })
 
 		return styled
 	})
