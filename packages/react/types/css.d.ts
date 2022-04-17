@@ -9303,8 +9303,8 @@ export namespace AtRule {
     fontWeight?: FontWeight;
     src?: string;
     unicodeRange?: string;
-		sizeAdjust?: string;
-  	ascentOverride?: string;
+    sizeAdjust?: string;
+    ascentOverride?: string;
   }
 
   export interface FontFaceHyphen {
