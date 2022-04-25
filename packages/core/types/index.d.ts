@@ -8,6 +8,7 @@ export { $$PropertyValue, $$ScaleValue, $$ThemeValue} from './css-util'
 export type CreateStitches = Config.CreateStitches
 export type CSSProperties = CSSUtil.CSSProperties
 export type DefaultThemeMap = Config.DefaultThemeMap
+export type FontFace = CSSUtil.Native.AtRule.FontFace
 
 /** Returns a Style interface from a configuration, leveraging the given media and style map. */
 export type CSS<
