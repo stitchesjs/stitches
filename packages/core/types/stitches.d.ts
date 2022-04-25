@@ -29,29 +29,21 @@ export default interface Stitches<
 	globalCss: {
 		<Styles extends ({ [K: string]: any })[], CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>>(
 			...styles: {
-				[K in keyof Styles]: (
-					Styles[K] extends '@import'
-						? unknown
-						: Styles[K] extends '@font-face'
-							? unknown
-							: Styles[K] extends `@keyframes ${string}`
-								? unknown
-								: Styles[K] extends `@property ${string}`
-									? unknown
-									: CSS
-				) & {
-					/** The **@import** CSS at-rule imports style rules from other style sheets. */
-					'@import'?: string | string[]
+				[K in keyof Styles]:
+					CSS
+				   & {
+					   /** The **@import** CSS at-rule imports style rules from other style sheets. */
+					   '@import'?: string | string[]
 
-					/** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
-					'@font-face'?: CSSUtil.Native.AtRule.FontFace | Array<CSSUtil.Native.AtRule.FontFace>
-				} & {
-					[KA in `@property ${string}`]: CSSUtil.Native.AtRule.Property
-				} & {
-					[KS in `@keyframes ${string}`]: {
-						[KeyFrame in string]: CSS
+					   /** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
+					   '@font-face'?: CSSUtil.Native.AtRule.FontFace | Array<CSSUtil.Native.AtRule.FontFace>
+					} & {
+					   [KA in `@property ${string}`]: CSSUtil.Native.AtRule.Property
+					} & {
+					   [KS in `@keyframes ${string}`]: {
+						   [KeyFrame in string]: CSS
+						}
 					}
-				}
 			}
 		): {
 			(): string
