@@ -1,6 +1,6 @@
 // core types.tests.ts
 import * as Stitches from '../types/index'
-import { createStitches } from '../types/index'
+import { createStitches, FontFace } from '../types/index'
 
 const { css, globalCss, keyframes, styled, theme } = createStitches({
 	utils: {
@@ -181,4 +181,25 @@ void function Test() {
 		{/* @ts-expect-error */}
 		<StyledUnionComponent type="multiple" collapsible />
 	</>
+}
+
+/* -------------------------------------------------------------------------------------------------
+ * Issue #1010
+ * -----------------------------------------------------------------------------------------------*/
+const fontFaceArray: FontFace[] = [
+	{
+		fontFamily: "Inter",
+		src: `url(file.woff2) format("woff2")`,
+		fontDisplay: "swap"
+	  }
+];
+const styles = {
+	"@font-face": fontFaceArray,
+	body: {
+	  // Falbacking to a serif font so it's easier to see that the swap is hapenning
+	  fontFamily: "Inter, serif"
+	}
+  };
+void function Test() {
+	globalCss(styles)
 }
