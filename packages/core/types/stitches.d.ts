@@ -110,7 +110,7 @@ export default interface Stitches<
 			)
 	}
 	theme:
-		string 
+		string
 		& {
 			className: string
 			selector: string
@@ -143,7 +143,9 @@ export default interface Stitches<
 			...composers: {
 				[K in keyof Composers]: (
 					// Strings and Functions can be skipped over
-					Composers[K] extends string | Util.Function
+					string extends Composers[K]
+						? Composers[K]
+					: Composers[K] extends string | Util.Function
 						? Composers[K]
 					: RemoveIndex<CSS> & {
 						/** The **variants** property lets you set a subclass of styles based on a key-value pair.
