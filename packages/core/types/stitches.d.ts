@@ -21,37 +21,38 @@ export default interface Stitches<
 		themeMap: ThemeMap
 		utils: Utils
 	},
-	prefix: Prefix
 	/** The **prefix** property defined.
 	 *
 	 * [Read Documentation](https://stitches.dev/docs/variants)
 	 */
+	prefix: Prefix,
 	globalCss: {
-		<Styles extends { [K: string]: any }>(
-			...styles: (
-				{
+		<Styles extends ({ [K: string]: any })[], CSS = CSSUtil.CSS<Media, Theme, ThemeMap, Utils>>(
+			...styles: {
+				[K in keyof Styles]: (
+					Styles[K] extends '@import'
+						? unknown
+						: Styles[K] extends '@font-face'
+							? unknown
+							: Styles[K] extends `@keyframes ${string}`
+								? unknown
+								: Styles[K] extends `@property ${string}`
+									? unknown
+									: CSS
+				) & {
 					/** The **@import** CSS at-rule imports style rules from other style sheets. */
-					'@import'?: unknown
+					'@import'?: string | string[]
 
 					/** The **@font-face** CSS at-rule specifies a custom font with which to display text. */
-					'@font-face'?: unknown
+					'@font-face'?: CSSUtil.Native.AtRule.FontFace | Array<CSSUtil.Native.AtRule.FontFace>
+				} & {
+					[KA in `@property ${string}`]: CSSUtil.Native.AtRule.Property
+				} & {
+					[KS in `@keyframes ${string}`]: {
+						[KeyFrame in string]: CSS
+					}
 				}
-				& {
-					[K in keyof Styles]: (
-						K extends '@import'
-							? string | string[]
-						: K extends '@font-face'
-							? CSSUtil.Native.AtRule.FontFace | Array<CSSUtil.Native.AtRule.FontFace>
-						: K extends `@keyframes ${string}`
-							? {
-								[KeyFrame in string]: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-							}
-						: K extends `@property ${string}`
-							? CSSUtil.Native.AtRule.Property
-						: CSSUtil.CSS<Media, Theme, ThemeMap, Utils>
-					)
-				}
-			)[]
+			}
 		): {
 			(): string
 		}
