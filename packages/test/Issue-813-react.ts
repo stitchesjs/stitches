@@ -11,7 +11,7 @@ export const { config, styled } = createStitches({
 	utils: {
 		bg: (value: Stitches.PropertyValue<'backgroundColor'>) => ({
 			color: value
-		}), 
+		}),
 		c: (value: Stitches.ScaleValue<'colors'>) => ({
 			color: value
 		})
@@ -26,7 +26,7 @@ export const colorValue2: Stitches.PropertyValue<'backgroundColor', typeof confi
 // ensure `ScaleValue` accepts a valid token
 export const colorToken: Stitches.ScaleValue<'colors', typeof config> = '$primary'
 
-export const Box = styled('div', { 
+export const Box = styled('div', {
 	// ensure `bg` accepts a valid CSS Color
 	bg: 'RebeccaPurple',
 	// ensure `bg` accepts a valid token

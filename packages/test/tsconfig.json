@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "diagnostics": true,
+    "outDir": "built-types",
+    "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "extendedDiagnostics": true,
-    "skipLibCheck": true,
     "noEmit": false,
     "jsx": "preserve",
     "declaration": true,

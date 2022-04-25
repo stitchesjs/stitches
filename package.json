@@ -9,6 +9,7 @@
     "Jonathan Neal <jonathan@modulz.app>"
   ],
   "scripts": {
+    "build:test:types": "yarn workspace @stitches/test build",
     "build": "node .task/build.js",
     "build:watch": "node .task/build.js --watch",
     "lint": "node .task/lint.js",
@@ -31,7 +32,7 @@
     "@radix-ui/react-separator": "0.1.0",
     "@skypack/package-check": "0.2.2",
     "@types/node": "16.9.6",
-    "@types/react": "17.0.24",
+    "@types/react": "17.0.33",
     "@types/react-dom": "17.0.9",
     "@types/react-test-renderer": "17.0.1",
     "@typescript-eslint/eslint-plugin": "4.31.2",

@@ -9,16 +9,17 @@
     "dist/*.mjs",
     "types/*.d.ts"
   ],
+  "scripts": {
+    "build": "tsc --generateTrace traces --incremental false"
+  },
   "devDependencies": {
-    "@stitches/react": "1.2.6",
+    "@stitches/react": "1.2.7",
     "@typescript-eslint/eslint-plugin": "^1.6.0",
     "@typescript-eslint/parser": "^1.6.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.0.1",
-    "prettier": "^1.16.4",
-    "react": "17.0.2",
-    "typescript": "^4.6.2"
+    "prettier": "^1.16.4"
   },
   "private": true,
   "dependencies": {

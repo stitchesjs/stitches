@@ -4,6 +4,7 @@ import type * as Config from './config'
 import type * as CSSUtil from './css-util'
 import type * as StyledComponent from './styled-component'
 
+export { $$PropertyValue, $$ScaleValue, $$ThemeValue} from './css-util'
 export type CreateStitches = Config.CreateStitches
 export type CSSProperties = CSSUtil.CSSProperties
 export type DefaultThemeMap = Config.DefaultThemeMap
@@ -33,9 +34,9 @@ export type ComponentProps<Component> = Component extends ((...args: any[]) => a
 
 /** Returns a type that expects a value to be a kind of CSS property value. */
 export type PropertyValue<Property extends keyof CSSUtil.CSSProperties, Config = null> = (
-	Config extends null 
-		? { readonly [K in CSSUtil.$$PropertyValue]: Property } 
-	: Config extends { [K: string]: any } 
+	Config extends null
+		? { readonly [K in CSSUtil.$$PropertyValue]: Property }
+	: Config extends { [K: string]: any }
 		? CSSUtil.CSS<
 			Config['media'],
 			Config['theme'],
@@ -51,7 +52,7 @@ export type ScaleValue<Scale, Config = null> = (
 		? { readonly [K in CSSUtil.$$ScaleValue]: Scale }
 	: Config extends { [K: string]: any }
 		? Scale extends keyof Config['theme']
-			? `$${string & keyof Config['theme'][Scale]}` 
+			? `$${string & keyof Config['theme'][Scale]}`
 		: never
 	: never
 )
