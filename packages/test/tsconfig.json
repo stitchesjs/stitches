@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "extendedDiagnostics": true,
     "noEmit": false,
+    "skipLibCheck": true,
     "jsx": "preserve",
     "declaration": true,
     "lib": [

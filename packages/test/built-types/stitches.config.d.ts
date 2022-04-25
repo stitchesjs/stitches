@@ -1,7 +1,7 @@
 /// <reference types="react" />
 import type * as Stitches from '@stitches/react';
 export type { VariantProps } from '@stitches/react';
-export declare const styled: <Type extends keyof JSX.IntrinsicElements | import("react").ComponentType<any> | import("@stitches/react/types/util").Function, Composers extends (string | import("react").ComponentType<any> | import("@stitches/react/types/util").Function | {
+export declare const styled: <Type extends import("@stitches/react/types/util").Function | keyof JSX.IntrinsicElements | import("react").ComponentType<any>, Composers extends (string | import("@stitches/react/types/util").Function | import("react").ComponentType<any> | {
     [name: string]: unknown;
 })[], CSS_1 = import("@stitches/react/types/css-util").CSS<{
     bp1: "(min-width: 520px)";
@@ -998,7 +998,7 @@ export declare const styled: <Type extends keyof JSX.IntrinsicElements | import(
             readonly [Stitches.$$PropertyValue]: "backgroundClip";
         };
     };
-}>>(type: Type, ...composers: { [K in keyof Composers]: string extends Composers[K] ? Composers[K] : Composers[K] extends string | import("react").ComponentType<any> | import("@stitches/react/types/util").Function ? Composers[K] : import("@stitches/react/types/stitches").RemoveIndex<CSS_1> & {
+}>>(type: Type, ...composers: { [K in keyof Composers]: string extends Composers[K] ? Composers[K] : Composers[K] extends string | import("@stitches/react/types/util").Function | import("react").ComponentType<any> ? Composers[K] : import("@stitches/react/types/stitches").RemoveIndex<CSS_1> & {
     variants?: {
         [x: string]: {
             [x: string]: CSS_1;
@@ -1009,7 +1009,7 @@ export declare const styled: <Type extends keyof JSX.IntrinsicElements | import(
         css: CSS_1;
     })[] | undefined;
     defaultVariants?: ("variants" extends keyof Composers[K] ? { [Name_1 in keyof Composers[K][keyof Composers[K] & "variants"]]?: import("@stitches/react/types/util").String | import("@stitches/react/types/util").Widen<keyof Composers[K][keyof Composers[K] & "variants"][Name_1]> | undefined; } : import("@stitches/react/types/util").WideObject) | undefined;
-} & CSS_1 & { [K2 in keyof Composers[K]]: K2 extends "variants" | "compoundVariants" | "defaultVariants" ? unknown : K2 extends keyof CSS_1 ? CSS_1[K2] : unknown; }; }) => import("@stitches/react/types/styled-component").StyledComponent<Type, import("@stitches/react/types/styled-component").StyledComponentProps<Composers>, {
+} & CSS_1 & { [K2 in keyof Composers[K]]: K2 extends "compoundVariants" | "defaultVariants" | "variants" ? unknown : K2 extends keyof CSS_1 ? CSS_1[K2] : unknown; }; }) => import("@stitches/react/types/styled-component").StyledComponent<Type, import("@stitches/react/types/styled-component").StyledComponentProps<Composers>, {
     bp1: "(min-width: 520px)";
     bp2: "(min-width: 900px)";
     bp3: "(min-width: 1200px)";
