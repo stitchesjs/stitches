@@ -1,4 +1,4 @@
-import { createStitches, FontFace } from '../types/index'
+import { createStitches } from '../types/index'
 
 const { css, globalCss, keyframes } = createStitches({
 	utils: {
@@ -148,77 +148,3 @@ PotatoButton({
 		}
 	},
 })
-
-/* -------------------------------------------------------------------------------------------------
- * Issue #1010
- * -----------------------------------------------------------------------------------------------*/
-const fontFaceArray: FontFace[] = [
-	{
-		fontFamily: "Inter",
-		src: `url(file.woff2) format("woff2")`,
-		fontDisplay: "swap"
-	  }
-];
-const styles = {
-	"@font-face": fontFaceArray,
-	body: {
-	  // Falbacking to a serif font so it's easier to see that the swap is hapenning
-	  fontFamily: "Inter, serif"
-	}
-  };
-void function Test() {
-	globalCss(styles)
-}
-
-/* -------------------------------------------------------------------------------------------------
- * Issue #842
- * -----------------------------------------------------------------------------------------------*/
-void function Test() {
-	globalCss(
-		{
-			"@font-face": [
-				{
-					fontFamily: "Roboto",
-					fontStyle: "normal",
-					fontWeight: "100",
-					src: "url('/Roboto-Thin.ttf') format('truetype')"
-				}
-			]
-		}, {
-			body: {
-				color: "red"
-			}
-		}, {
-			"@property thing": {
-				inherits: true,
-				syntax: "$plue"
-			}
-		}, {
-			"@keyframes fancy-frame": {
-				something: {
-					color: "$red"
-				}
-			}
-		}
-	)
-
-
-	globalCss(
-		{
-			body: {
-				color: "red"
-			}
-		}, {
-			"@property thing": {
-				inherits: true,
-				syntax: "$plue"
-			}
-		}, {
-			"@keyframes fancy-frame": {
-				something: {
-					color: "$red"
-				}
-			}
-		}
-	)
-}
