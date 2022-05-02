@@ -203,3 +203,56 @@ const styles = {
 void function Test() {
 	globalCss(styles)
 }
+
+/* -------------------------------------------------------------------------------------------------
+ * Issue #842
+ * -----------------------------------------------------------------------------------------------*/
+void function Test() {
+	globalCss(
+		{
+			"@font-face": [
+				{
+					fontFamily: "Roboto",
+					fontStyle: "normal",
+					fontWeight: "100",
+					src: "url('/Roboto-Thin.ttf') format('truetype')"
+				}
+			]
+		}, {
+			body: {
+				color: "red"
+			}
+		}, {
+			"@property thing": {
+				inherits: true,
+				syntax: "$plue"
+			}
+		}, {
+			"@keyframes fancy-frame": {
+				something: {
+					color: "$red"
+				}
+			}
+		}
+	)
+
+
+	globalCss(
+		{
+			body: {
+				color: "red"
+			}
+		}, {
+			"@property thing": {
+				inherits: true,
+				syntax: "$plue"
+			}
+		}, {
+			"@keyframes fancy-frame": {
+				something: {
+					color: "$red"
+				}
+			}
+		}
+	)
+}
