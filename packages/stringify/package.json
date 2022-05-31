@@ -25,13 +25,13 @@
   ],
   "sideEffects": false,
   "license": "MIT",
-  "repository": "modulz/stitches",
-  "homepage": "https://github.com/modulz/stitches#readme",
-  "bugs": "https://github.com/modulz/stitches/issues",
+  "repository": "stitchesjs/stitches",
+  "homepage": "https://github.com/stitchesjs/stitches#readme",
+  "bugs": "https://github.com/stitchesjs/stitches/issues",
   "contributors": [
-    "Jonathan Neal <jonathan@modulz.app>",
-    "Pedro Duarte <pedro@modulz.app>",
-    "Abdulhadi Alhallak <abdulhadi@modulz.app>"
+    "Jonathan Neal",
+    "Pedro Duarte",
+    "Abdulhadi Alhallak <abdul@workos.com>"
   ],
   "publishConfig": {
     "access": "public"

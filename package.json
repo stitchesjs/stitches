@@ -4,9 +4,9 @@
   "type": "module",
   "license": "MIT",
   "contributors": [
-    "Pedro Duarte <pedro@modulz.app>",
-    "Abdulhadi Alhallak <abdulhadi@modulz.app>",
-    "Jonathan Neal <jonathan@modulz.app>"
+    "Pedro Duarte",
+    "Abdulhadi Alhallak <abdul@workos.com>",
+    "Jonathan Neal"
   ],
   "scripts": {
     "build:test:types": "yarn workspace @stitches/test build",

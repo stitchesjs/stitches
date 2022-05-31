@@ -68,8 +68,8 @@ scope and avoid unrelated commits.
 
 That’s it! Now [open a pull request] with a clear title and description.
 
-[already been reported]: https://github.com/modulz/stitches/issues
-[fork this project]: https://github.com/modulz/stitches/fork
+[already been reported]: https://github.com/stitchesjs/stitches/issues
+[fork this project]: https://github.com/stitchesjs/stitches/fork
 [live example]: https://codesandbox.io/
 [open a pull request]: https://help.github.com/articles/using-pull-requests/
 [reduced test case]: https://css-tricks.com/reduced-test-cases/

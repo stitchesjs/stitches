@@ -217,7 +217,7 @@ const createRenderer = (
 					const groupCache = (isResponsive ? sheet.rules.resonevar : sheet.rules.onevar ).cache
 					/* 
 					 * make sure that normal variants are injected before responsive ones
-					 * @see {@link https://github.com/modulz/stitches/issues/737|github}
+					 * @see {@link https://github.com/stitchesjs/stitches/issues/737|github}
 					 */
 					const targetInjectionGroup = isResponsive ? injectionTarget.resonevar : injectionTarget.onevar
 
