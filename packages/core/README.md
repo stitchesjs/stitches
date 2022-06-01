@@ -59,6 +59,6 @@ Please follow our [contributing guidelines](./CONTRIBUTING.md).
 
 ## License
 
-Licensed under the MIT License, Copyright © 2021-present WorkOS.
+Licensed under the MIT License, Copyright © 2022-present WorkOS.
 
 See [LICENSE](./LICENSE.md) for more information.

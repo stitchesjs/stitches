@@ -56,6 +56,6 @@ Here's a list of community-built projects:
 
 ## License
 
-Licensed under the MIT License, Copyright © 2021-present WorkOS.
+Licensed under the MIT License, Copyright © 2022-present WorkOS.
 
 See [LICENSE](./LICENSE.md) for more information.
