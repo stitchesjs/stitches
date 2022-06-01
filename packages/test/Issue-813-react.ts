@@ -1,4 +1,4 @@
-// https://github.com/modulz/stitches/issues/813
+// https://github.com/stitchesjs/stitches/issues/813
 import { createStitches } from '@stitches/react'
 import * as Stitches from '@stitches/react'
 

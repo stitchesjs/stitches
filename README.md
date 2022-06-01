@@ -16,7 +16,7 @@ Framework-agnostic implementation.
 npm install @stitches/core
 ```
 
-[Read more](https://github.com/modulz/stitches/tree/main/packages/core)
+[Read more](https://github.com/stitchesjs/stitches/tree/main/packages/core)
 
 #### Stitches React
 
@@ -26,7 +26,7 @@ React wrapper including the `styled` API.
 npm install @stitches/react
 ```
 
-[Read more](https://github.com/modulz/stitches/tree/main/packages/react)
+[Read more](https://github.com/stitchesjs/stitches/tree/main/packages/react)
 
 ---
 
@@ -50,12 +50,12 @@ Here's a list of community-built projects:
 
 ## Authors
 
-- Pedro Duarte ([@peduarte](https://twitter.com/peduarte)) - [Modulz](https://modulz.app)
-- Jonathan Neal ([@jon_neal](https://twitter.com/jon_neal)) - [Modulz](https://modulz.app)
-- Abdulhadi Alhallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [Modulz](https://modulz.app)
+- Pedro Duarte ([@peduarte](https://twitter.com/peduarte))
+- Jonathan Neal ([@jon_neal](https://twitter.com/jon_neal))
+- Abdulhadi Alhallak ([@hadi_hlk](https://twitter.com/hadi_hlk)) - [WorkOS](https://workos.com)
 
 ## License
 
-Licensed under the MIT License, Copyright © 2021-present Modulz.
+Licensed under the MIT License, Copyright © 2022-present WorkOS.
 
 See [LICENSE](./LICENSE.md) for more information.
