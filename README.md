@@ -47,6 +47,7 @@ Here's a list of community-built projects:
 - [babel-plugin-transform-stitches-display-name](https://github.com/afzalsayed96/babel-plugin-transform-stitches-display-name)
 - [stitches-normalize-css](https://github.com/psongpin/stitches-normalize-css)
 - [stitches-crochet](https://github.com/orenelbaum/stitches-crochet)
+- [stitches-native](https://github.com/Temzasse/stitches-native)
 
 ## Authors
 
