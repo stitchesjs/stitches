@@ -9303,6 +9303,11 @@ export namespace AtRule {
     fontWeight?: FontWeight;
     src?: string;
     unicodeRange?: string;
+    sizeAdjust?: string;
+    ascentOverride?: string;
+    descentOverride?: string;
+    lineGapOverride?: string;
+    advanceOverride?: string;
   }
 
   export interface FontFaceHyphen {
@@ -9316,6 +9321,11 @@ export namespace AtRule {
     "font-weight"?: FontWeight;
     src?: string;
     "unicode-range"?: string;
+    "size-adjust"?: string;
+    "ascent-override"?: string;
+    "descent-override"?: string;
+    "line-gap-override"?: string;
+    "advance-override"?: string;
   }
 
   export type FontFaceFallback = {
