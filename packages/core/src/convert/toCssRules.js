@@ -152,7 +152,7 @@ const toCssString = (/** @type {string[]} */ declarations, /** @type {string[]} 
 	`${conditions.map((condition) => `${condition}{`).join('')}${selectors.length ? `${selectors.join(',')}{` : ''}${declarations.join(';')}${selectors.length ? `}` : ''}${Array(conditions.length ? conditions.length + 1 : 0).join('}')}`
 )
 
-/** CSS Properties whose number value may safely be interpretted as a pixel. */
+/** CSS Properties whose number values should be unitless. */
 export const unitlessProps = {
 	animationIterationCount: 1,
 	borderImageOutset: 1,
