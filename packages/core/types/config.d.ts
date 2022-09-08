@@ -27,6 +27,7 @@ declare namespace ConfigType {
 		space?: { [token in number | string]: boolean | number | string }
 		transitions?: { [token in number | string]: boolean | number | string }
 		zIndices?: { [token in number | string]: boolean | number | string }
+		opacities?: { [token in number | string]: boolean | number | string }
 	} & {
 		[Scale in keyof T]: {
 			[Token in keyof T[Scale]]: T[Scale][Token] extends (boolean | number | string) ? T[Scale][Token] : (boolean | number | string)
@@ -188,6 +189,8 @@ export interface DefaultThemeMap {
 	transition: 'transitions'
 
 	zIndex: 'zIndices'
+
+	opacity: 'opacities'
 }
 
 /** Returns a function used to create a new Stitches interface. */

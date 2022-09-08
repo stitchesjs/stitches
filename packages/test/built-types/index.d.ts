@@ -778,6 +778,19 @@ export declare const Text: import("@stitches/react/types/styled-component").Styl
         4: string;
         max: string;
     };
+    opacities: {
+        min: string;
+        1: string;
+        2: string;
+        3: string;
+        4: string;
+        5: string;
+        6: string;
+        7: string;
+        8: string;
+        9: string;
+        max: string;
+    };
 }, import("@stitches/react/types/config").DefaultThemeMap, {
     p: (value: {
         readonly [$$PropertyValue]: "padding";

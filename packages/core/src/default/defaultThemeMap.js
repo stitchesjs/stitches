@@ -12,6 +12,7 @@ const sizes = 'sizes'
 const space = 'space'
 const transitions = 'transitions'
 const zIndices = 'zIndices'
+const opacities = 'opacities'
 
 /** @type {DefaultThemeMap} */
 export const defaultThemeMap = {
@@ -160,6 +161,8 @@ export const defaultThemeMap = {
 	transition: transitions,
 
 	zIndex: zIndices,
+
+	opacity: opacities
 }
 
 /**
@@ -308,4 +311,6 @@ export const defaultThemeMap = {
  * @property {transitions} transition
 
  * @property {zIndices} zIndex
+
+ * @property {opacities} opacity
  */

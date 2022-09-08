@@ -188,6 +188,8 @@ export interface DefaultThemeMap {
 	transition: 'transitions'
 
 	zIndex: 'zIndices'
+
+	opacity: "opacities"
 }
 
 /** Returns a function used to create a new Stitches interface. */

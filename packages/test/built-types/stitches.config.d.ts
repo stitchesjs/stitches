@@ -770,6 +770,19 @@ export declare const styled: <Type extends import("@stitches/react/types/util").
         4: string;
         max: string;
     };
+    opacities: {
+        min: string;
+        1: string;
+        2: string;
+        3: string;
+        4: string;
+        5: string;
+        6: string;
+        7: string;
+        8: string;
+        9: string;
+        max: string;
+    };
 }, import("@stitches/react/types/config").DefaultThemeMap, {
     p: (value: Stitches.PropertyValue<'padding'>) => {
         padding: {
@@ -1785,6 +1798,19 @@ export declare const styled: <Type extends import("@stitches/react/types/util").
         4: string;
         max: string;
     };
+    opacities: {
+        min: string;
+        1: string;
+        2: string;
+        3: string;
+        4: string;
+        5: string;
+        6: string;
+        7: string;
+        8: string;
+        9: string;
+        max: string;
+    };
 }, import("@stitches/react/types/config").DefaultThemeMap, {
     p: (value: Stitches.PropertyValue<'padding'>) => {
         padding: {
@@ -2771,6 +2797,19 @@ export declare const styled: <Type extends import("@stitches/react/types/util").
         4?: string | number | boolean | undefined;
         max?: string | number | boolean | undefined;
     } | undefined;
+    opacities?: {
+        min?: string | number | boolean | undefined;
+        1?: string | number | boolean | undefined;
+        2?: string | number | boolean | undefined;
+        3?: string | number | boolean | undefined;
+        4?: string | number | boolean | undefined;
+        5?: string | number | boolean | undefined;
+        6?: string | number | boolean | undefined;
+        7?: string | number | boolean | undefined;
+        8?: string | number | boolean | undefined;
+        9?: string | number | boolean | undefined;
+        max?: string | number | boolean | undefined;
+    } | undefined;
 } & {
     [x: string]: {
         [x: string]: string | number | boolean;
@@ -3533,6 +3572,20 @@ export declare const styled: <Type extends import("@stitches/react/types/util").
         3?: string | number | boolean | undefined;
         4?: string | number | boolean | undefined;
         max?: string | number | boolean | undefined;
+    } | undefined;
+    opacities?: {
+        min?: string | number | boolean | undefined;
+        1?: string | number | boolean | undefined;
+        2?: string | number | boolean | undefined;
+        3?: string | number | boolean | undefined;
+        4?: string | number | boolean | undefined;
+        5?: string | number | boolean | undefined;
+        6?: string | number | boolean | undefined;
+        7?: string | number | boolean | undefined;
+        8?: string | number | boolean | undefined;
+        9?: string | number | boolean | undefined;
+        max?: string | number | boolean | undefined;
+
     } | undefined;
 } & {
     [x: string]: {
@@ -4308,6 +4361,19 @@ export declare const styled: <Type extends import("@stitches/react/types/util").
             2: string;
             3: string;
             4: string;
+            max: string;
+        };
+        opacities: {
+            min: string;
+            1: string;
+            2: string;
+            3: string;
+            4: string;
+            5: string;
+            6: string;
+            7: string;
+            8: string;
+            9: string;
             max: string;
         };
     }, import("@stitches/react/types/config").DefaultThemeMap, {
@@ -5312,6 +5378,19 @@ export declare const styled: <Type extends import("@stitches/react/types/util").
             4: string;
             max: string;
         };
+        opacities: {
+            min: string;
+            1: string;
+            2: string;
+            3: string;
+            4: string;
+            5: string;
+            6: string;
+            7: string;
+            8: string;
+            9: string;
+            max: string;
+          },
     };
     themeMap: import("@stitches/react/types/config").DefaultThemeMap;
     utils: {
