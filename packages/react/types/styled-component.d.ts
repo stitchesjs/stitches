@@ -1,5 +1,5 @@
 import type * as React from 'react'
-import type * as Util from './util'
+import type * as Util from './util.js'
 
 
 export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
@@ -12,7 +12,7 @@ export interface StyledComponent<
 	CSS = {}
 > extends React.ForwardRefExoticComponent<
 	Util.Assign<
-		Type extends IntrinsicElementsKeys | React.ComponentType<any> 
+		Type extends IntrinsicElementsKeys | React.ComponentType<any>
 			? React.ComponentPropsWithRef<Type>
 		: never,
 		TransformProps<Props, Media> & { css?: CSS }
@@ -37,7 +37,7 @@ export interface StyledComponent<
 	>(
 		props: Util.Assign<
 			React.ComponentPropsWithRef<As extends IntrinsicElementsKeys | React.ComponentType<any> ? As : never>,
-			TransformProps<Util.Assign<InnerProps, Props>, Media> & { 
+			TransformProps<Util.Assign<InnerProps, Props>, Media> & {
 				as?: As,
 				css?: {
 					[K in keyof C]: K extends keyof CSS ? CSS[K] : never

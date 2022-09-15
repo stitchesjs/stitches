@@ -1,6 +1,6 @@
-import type * as CSSUtil from './css-util'
-import type * as StyledComponent from './styled-component'
-import type * as ThemeUtil from './theme'
+import type * as CSSUtil from './css-util.js'
+import type * as StyledComponent from './styled-component.js'
+import type * as ThemeUtil from './theme.js'
 import type * as Util from './util'
 
 /** Remove an index signature from a type */
