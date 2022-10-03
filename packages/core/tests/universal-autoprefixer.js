@@ -82,7 +82,7 @@ describe('Autoprefixer', () => {
 			},
 		})()
 
-		expect(toString()).toBe('--sxs{--sxs:1 kPCdtQ}@media{x-element{-moz-tab-size:none;tab-size:none}}')
+		expect(toString()).toBe('--sxs{--sxs:1 kPCdtQ}@media{x-element{tab-size:none}}')
 	})
 
 	test('textSizeAdjust', () => {

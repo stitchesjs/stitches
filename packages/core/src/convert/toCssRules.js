@@ -118,9 +118,9 @@ export const toCssRules = (
 						data = (
 							// preserve object-like data
 							isRuleLike ? data
-							// replace specially-marked numeric property values with pixel versions
+							// replace all non-unitless props that are not custom properties with pixel versions
 							: typeof data === 'number'
-								? data && !(camelName in unitlessProps)
+								? data && !(camelName in unitlessProps) && !(name.charCodeAt(0) === 45)
 									? String(data) + 'px'
 								: String(data)
 							// replace tokens with stringified primitive values
