@@ -75,7 +75,6 @@ describe('Numeric Values', () => {
 					gridColumnSpan: i,
 					gridColumnStart: i,
 					fontWeight: i,
-					lineClamp: i,
 					lineHeight: i,
 					opacity: i,
 					order: i,
@@ -113,12 +112,10 @@ describe('Numeric Values', () => {
 					'grid-column-span:' + i + ';' +
 					'grid-column-start:' + i + ';' +
 					'font-weight:' + i + ';' +
-					'line-clamp:' + i + ';' +
 					'line-height:' + i + ';' +
 					'opacity:' + i + ';' +
 					'order:' + i + ';' +
 					'orphans:' + i + ';' +
-					'-moz-tab-size:' + i + ';' +
 					'tab-size:' + i + ';' +
 					'widows:' + i + ';' +
 					'z-index:' + i + ';' +
