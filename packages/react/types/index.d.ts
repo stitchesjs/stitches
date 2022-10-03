@@ -36,7 +36,7 @@ export type ComponentProps<Component> = Component extends ((...args: any[]) => a
 /** Returns a type that expects a value to be a kind of CSS property value. */
 export type PropertyValue<Property extends keyof CSSUtil.CSSProperties, Config = null> = (
 	Config extends null
-		? { readonly [K in CSSUtil.$$PropertyValue]: Property }
+		? CSSUtil.WithPropertyValue<Property>
 	: Config extends { [K: string]: any }
 		? CSSUtil.CSS<
 			Config['media'],
@@ -50,7 +50,7 @@ export type PropertyValue<Property extends keyof CSSUtil.CSSProperties, Config =
 /** Returns a type that expects a value to be a kind of theme scale value. */
 export type ScaleValue<Scale, Config = null> = (
 	Config extends null
-		? { readonly [K in CSSUtil.$$ScaleValue]: Scale }
+		? CSSUtil.WithScaleValue<Scale>
 	: Config extends { [K: string]: any }
 		? Scale extends keyof Config['theme']
 			? `$${string & keyof Config['theme'][Scale]}`

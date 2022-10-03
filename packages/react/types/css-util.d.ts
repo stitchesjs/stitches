@@ -117,3 +117,11 @@ export type $$ScaleValue = typeof $$ScaleValue
 export declare const $$ThemeValue: unique symbol
 
 export type $$ThemeValue = typeof $$ThemeValue
+
+// https://github.com/microsoft/TypeScript/issues/37888#issuecomment-846638356
+export type WithPropertyValue<T> = {
+	readonly [K in $$PropertyValue]: T
+}
+export type WithScaleValue<T> = {
+	readonly [K in $$ScaleValue]: T;
+}
