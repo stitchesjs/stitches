@@ -1799,6 +1799,19 @@ export interface StandardLonghandProperties<TLength = (string & {}) | 0> {
 	 */
 	gridTemplateRows: GridTemplateRowsProperty<TLength>
 	/**
+	 * The **`grid-gap`** CSS property The gap CSS property sets the gaps (gutters) between rows and columns. It is a shorthand for row-gap and column-gap.
+	 *
+	 * **Initial value**: `normal`
+	 *
+	 * | Chrome | Firefox |  Safari  |  Edge  | IE  |
+	 * | :----: | :-----: | :------: | :----: | :-: |
+	 * | **57** | **52**  | **10.1** | **16** | No  |
+	 *
+	 * @see https://developer.mozilla.org/docs/Web/CSS/gap
+	 */
+   gridGap?: GridGapProperty<TLength>;
+   /**
+  /**
 	 * The **`hanging-punctuation`** CSS property specifies whether a punctuation mark should hang at the start or end of a line of text. Hanging punctuation may be placed outside the line box.
 	 *
 	 * **Initial value**: `none`
