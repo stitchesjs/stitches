@@ -1301,6 +1301,15 @@ export interface StandardLonghandProperties {
    */
   gridTemplateRows?: Property.GridTemplateRows;
   /**
+   * The **`grid-gap`** CSS property sets the size of the gap (gutter) between between rows and columns.
+   *
+   * **Syntax**: `normal | <length-percentage>`
+   *
+   * **Initial value**: `normal`
+   *
+   */	
+  gridGap?: Property.GridGap;
+  /**
    * The **`hanging-punctuation`** CSS property specifies whether a punctuation mark should hang at the start or end of a line of text. Hanging punctuation may be placed outside the line box.
    *
    * **Syntax**: `none | [ first || [ force-end | allow-end ] || last ]`
@@ -4840,6 +4849,15 @@ export interface StandardLonghandPropertiesHyphen {
    *
    */
   "grid-template-rows"?: Property.GridTemplateRows;
+  /**
+    * The **`grid-gap`** CSS property sets the size of the gap (gutter) between between rows and columns.
+    *
+    * **Syntax**: `normal | <length-percentage>`
+    *
+    * **Initial value**: `normal`
+    *
+    */
+   "grid-gap"?: Property.GridGap;
   /**
    * The **`hanging-punctuation`** CSS property specifies whether a punctuation mark should hang at the start or end of a line of text. Hanging punctuation may be placed outside the line box.
    *
