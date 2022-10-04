@@ -8,10 +8,10 @@ const createGlobalCssFunctionMap = createMemo()
 
 /** Returns a function that applies global styles. */
 export const createGlobalCssFunction = (
-	/** @type {object} */ config,
-	/** @type {Sheet} */ sheet
+	 config,
+	 sheet
 ) => createGlobalCssFunctionMap(config, () => (
-	/** @type {Style[]} */ ...styles
+	 ...styles
 ) => {
 	const render = () => {
 		for (let style of styles) {
@@ -51,6 +51,3 @@ export const createGlobalCssFunction = (
 		toString: render,
 	})
 })
-
-/** @typedef {{ [name: string]: number | string | void | Style }} Style */
-/** @typedef {{ rules: { [name: string]: { apply(): void, cache: Set<string> } }, sheet: { insertRule(): number } }} Sheet */

@@ -7,9 +7,6 @@ import { toSizingValue } from './toSizingValue.js'
 import { toTailDashed } from './toTailDashed.js'
 import { toTokenizedValue } from './toTokenizedValue.js'
 
-/** @typedef {import('../createStitches.js').Config} Config */
-/** @typedef {import('../createStitches.js').Style} Style */
-
 /** Comma matcher outside rounded brackets. */
 const comma = /\s*,\s*(?![^()]*\))/
 
@@ -17,11 +14,11 @@ const comma = /\s*,\s*(?![^()]*\))/
 const toStringOfObject = Object.prototype.toString
 
 export const toCssRules = (
-	/** @type {Style} */ style,
-	/** @type {string[]} */ selectors,
-	/** @type {string[]} */ conditions,
-	/** @type {Config} */ config,
-	/** @type {(cssText: string) => any} */ onCssText
+	 style,
+	 selectors,
+	 conditions,
+	 config,
+	 onCssText
 ) => {
 	/** @type {[string[], string[], string[]]} CSSOM-compatible rule being created. */
 	let currentRule = undefined
@@ -148,7 +145,7 @@ export const toCssRules = (
 	walk(style, selectors, conditions)
 }
 
-const toCssString = (/** @type {string[]} */ declarations, /** @type {string[]} */ selectors, /** @type {string[]} */ conditions) => (
+const toCssString = (declarations,  selectors,  conditions) => (
 	`${conditions.map((condition) => `${condition}{`).join('')}${selectors.length ? `${selectors.join(',')}{` : ''}${declarations.join(';')}${selectors.length ? `}` : ''}${Array(conditions.length ? conditions.length + 1 : 0).join('}')}`
 )
 

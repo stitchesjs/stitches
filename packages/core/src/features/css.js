@@ -9,26 +9,12 @@ import { toHash } from '../convert/toHash.js'
 import { toTailDashed } from '../convert/toTailDashed.js'
 import { createRulesInjectionDeferrer } from '../sheet.js'
 
-/** @typedef {import('./css').Internals} Internals */
-/** @typedef {import('./css').Composer} Composer */
-/** @typedef {import('./css').Config} Config */
-/** @typedef {import('./css').InitComposer} InitComposer */
-/** @typedef {import('./css').PrefilledVariants} PrefilledVariants */
-/** @typedef {import('./css').Render} Render */
-/** @typedef {import('./css').Styling} Styling */
-/** @typedef {import('./css').UndefinedVariants} UndefinedVariants */
-/** @typedef {import('./css').VariantMatcher} VariantMatcher */
-/** @typedef {import('./css').VariantProps} VariantProps */
-/** @typedef {import('./css').VariantTuple} VariantTuple */
-
-/** @typedef {import('../sheet').SheetGroup} SheetGroup */
-
 const createCssFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
-export const createCssFunction = (/** @type {Config} */ config, /** @type {SheetGroup} */ sheet) =>
+export const createCssFunction = ( config,  sheet) =>
 	createCssFunctionMap(config, () => (...args) => {
-		/** @type {Internals} */
+		
 		let internals = {
 			type: null,
 			composers: new Set(),
@@ -66,20 +52,16 @@ export const createCssFunction = (/** @type {Config} */ config, /** @type {Sheet
 	})
 
 /** Creates a composer from a configuration object. */
-const createComposer = (/** @type {InitComposer} */ { variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style }, /** @type {Config} */ config) => {
+const createComposer = ({ variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style },  config) => {
 	/** @type {string} Composer Unique Identifier. @see `{CONFIG_PREFIX}-?c-{STYLE_HASH}` */
 	const className = `${toTailDashed(config.prefix)}c-${toHash(style)}`
 
-	/** @type {VariantTuple[]} */
 	const singularVariants = []
 
-	/** @type {VariantTuple[]} */
 	const compoundVariants = []
 
-	/** @type {PrefilledVariants} */
 	const prefilledVariants = Object.create(null)
 
-	/** @type {UndefinedVariants} */
 	const undefinedVariants = []
 
 	for (const variantName in initDefaultVariants) {
@@ -94,14 +76,12 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 			const variantPairs = initSingularVariants[name]
 
 			for (const pair in variantPairs) {
-				/** @type {VariantMatcher} */
 				const vMatch = { [name]: String(pair) }
 
 				if (String(pair) === 'undefined') undefinedVariants.push(name)
 
 				const vStyle = variantPairs[pair]
 
-				/** @type {VariantTuple} */
 				const variant = [vMatch, vStyle, !hasNames(vStyle)]
 
 				singularVariants.push(variant)
@@ -112,7 +92,6 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 	// add compound variants
 	if (typeof initCompoundVariants === 'object' && initCompoundVariants) {
 		for (const compoundVariant of initCompoundVariants) {
-			/** @type {InitComposer['compoundVariants']} */
 			let { css: vStyle, ...vMatch } = compoundVariant
 
 			vStyle = typeof vStyle === 'object' && vStyle || {}
@@ -120,20 +99,19 @@ const createComposer = (/** @type {InitComposer} */ { variants: initSingularVari
 			// serialize all compound variant pairs
 			for (const name in vMatch) vMatch[name] = String(vMatch[name])
 
-			/** @type {VariantTuple} */
 			const variant = [vMatch, vStyle, !hasNames(vStyle)]
 
 			compoundVariants.push(variant)
 		}
 	}
 
-	return /** @type {Composer} */ ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
+	return  ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
 }
 
 const createRenderer = (
-	/** @type {Config} */ config,
-	/** @type {Internals} */ internals,
-	/** @type {import('../sheet').SheetGroup} */ sheet
+	 config,
+	 internals,
+	 sheet
 ) => {
 	const [
 		baseClassName,
@@ -147,7 +125,6 @@ const createRenderer = (
 
 	const selector = `.${baseClassName}${baseClassNames.length > 1 ? `:where(.${baseClassNames.slice(1).join('.')})` : ``}`
 
-	/** @type {Render} */
 	const render = (props) => {
 		props = typeof props === 'object' && props || empty
 
@@ -157,7 +134,6 @@ const createRenderer = (
 		// therefore: we must create a new props & css variables
 		const { css, ...forwardProps } = props
 
-		/** @type {VariantProps} */
 		const variantProps = {}
 
 		for (const name in prefilledVariants) {
@@ -298,7 +274,7 @@ const createRenderer = (
 }
 
 /** Returns useful data that can be known before rendering. */
-const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) => {
+const getPreparedDataFromComposers = (composers) => {
 	/** Class name of the first composer. */
 	let baseClassName = ''
 
@@ -324,7 +300,6 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 		}
 	}
 
-	/** @type {[string, string[], PrefilledVariants, Set<UndefinedVariants>]} */
 	const preparedData = [
 		baseClassName,
 		baseClassNames,
@@ -336,16 +311,12 @@ const getPreparedDataFromComposers = (/** @type {Set<Composer>} */ composers) =>
 }
 
 const getTargetVariantsToAdd = (
-	/** @type {VariantTuple[]} */
 	targetVariants,
-	/** @type {VariantProps} */
 	variantProps,
-	/** @type {Config['media']} */
 	media,
-	/** @type {boolean} */
 	isCompoundVariant,
 ) => {
-	/** @type {[string, Styling][][]} */
+	
 	const targetVariantsToAdd = []
 
 	targetVariants: for (let [vMatch, vStyle, vEmpty] of targetVariants) {
@@ -355,7 +326,6 @@ const getTargetVariantsToAdd = (
 		/** Position the variant should be inserted into. */
 		let vOrder = 0
 
-		/** @type {string & keyof typeof vMatch} */
 		let vName
 
 		let isResponsive = false
