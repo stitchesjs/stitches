@@ -2,7 +2,7 @@ const stringifyReplacer = (name, data) => (typeof data === 'function' ? { '()': 
 
 const stringify = (value) => JSON.stringify(value, stringifyReplacer)
 
-/** @type {() => <T = any, A = any[], F = (T, ...A) => any>(value: T, apply: F, ...args: A) => ReturnType<F>} */
+
 export const createMemo = () => {
 	const cache = Object.create(null)
 

@@ -1,7 +1,3 @@
-/** @typedef {import('./sheet').RuleGroup} RuleGroup */
-/** @typedef {import('./sheet').RuleGroupNames} RuleGroupNames */
-/** @typedef {import('./sheet').SheetGroup} SheetGroup */
-
 /**
  * Rules in the sheet appear in this order:
  * 1. theme rules (themed)
@@ -12,10 +8,10 @@
  * 6. compound variants rules (allvar)
  * 7. inline rules (inline)
  */
-/** @type {RuleGroupNames} */
+
 export const names = ['themed', 'global', 'styled', 'onevar', 'resonevar', 'allvar', 'inline']
 
-const isSheetAccessible = (/** @type {CSSStyleSheet} */ sheet) => {
+const isSheetAccessible = (sheet) => {
 	if (sheet.href && !sheet.href.startsWith(location.origin)) {
 		return false
 	}
@@ -27,7 +23,7 @@ const isSheetAccessible = (/** @type {CSSStyleSheet} */ sheet) => {
 	}
 }
 
-export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
+export const createSheet = (root) => {
 	/** @type {SheetGroup} Object hosting the hydrated stylesheet. */
 	let groupSheet
 
@@ -73,7 +69,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 			}
 		}
 
-		/** @type {StyleSheetList} */
+		
 		const sheets = Object(root).styleSheets || []
 
 		// iterate all stylesheets until a hydratable stylesheet is found
@@ -121,8 +117,8 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 
 		// if no hydratable stylesheet is found
 		if (!groupSheet) {
-			const createCSSMediaRule = (/** @type {string} */ sourceCssText, type) => {
-				return /** @type {CSSMediaRule} */ ({
+			const createCSSMediaRule = (sourceCssText, type) => {
+				return  ({
 					type,
 					cssRules: [],
 					insertRule(cssText, index) {
@@ -169,7 +165,7 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 	return groupSheet
 }
 
-const addApplyToGroup = (/** @type {RuleGroup} */ group) => {
+const addApplyToGroup = (group) => {
 	const groupingRule = group.group
 
 	let index = groupingRule.cssRules.length
