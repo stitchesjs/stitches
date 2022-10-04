@@ -1,9 +1,5 @@
 import { getNonce } from './utility/getNonce.js'
 
-/** @typedef {import('./sheet').RuleGroup} RuleGroup */
-/** @typedef {import('./sheet').RuleGroupNames} RuleGroupNames */
-/** @typedef {import('./sheet').SheetGroup} SheetGroup */
-
 /**
  * Rules in the sheet appear in this order:
  * 1. theme rules (themed)
