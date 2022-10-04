@@ -1,4 +1,4 @@
-import { getNonce } from './utility/getNonce'
+import { getNonce } from './utility/getNonce.js'
 
 /** @typedef {import('./sheet').RuleGroup} RuleGroup */
 /** @typedef {import('./sheet').RuleGroupNames} RuleGroupNames */
