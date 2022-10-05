@@ -47,7 +47,8 @@ const main = async (pkg, opts) => {
 					error.stack = [ ...error.stack.split(/\n/g).slice(1)].join('\n')
 
 					// assign failure to the results
-					results[description][test].push(`${failIcon} ${infoText(test)}`, getErrorStack(error), '')
+					const errorMessage = error.message.split('\n')[0]
+					results[description][test].push(`${failIcon} ${infoText(test)}\n\t${errorMessage}`, getErrorStack(error), '')
 					results[description][test][didFail] = error
 					results[description][didFail] = true
 					results[didFail] = true
