@@ -82,3 +82,72 @@ describe('css.withConfig', () => {
 		expect(cssString).toBe(`--sxs{--sxs:2 c-component-to-extend-id c-cool-component-id}@media{.c-component-to-extend-id{color:red}.c-cool-component-id{color:blue}}`)
 	})
 })
+
+describe('shouldForwardStitchesProp', () => {
+	test('does not omit stitches props when shouldForwardStitchesProp returns true', () => {
+		const { css } = createStitches()
+
+		const componentOneConfig = {
+			shouldForwardStitchesProp: () => false,
+		}
+		const componentOne = css.withConfig(componentOneConfig)('button', {
+			variants: {
+				variant: {
+					red: { background: 'red' },
+				},
+			},
+		})
+
+		const {props: firstComponentProps} = componentOne({ variant: 'red', css: {} })
+		expect(firstComponentProps.variant).toBe(undefined)
+		expect(firstComponentProps.css).toEqual(undefined)
+
+		const componentTwoConfig = {
+			shouldForwardStitchesProp: () => true,
+		}
+
+		const componentTwo = css.withConfig(componentTwoConfig)('button', {
+			variants: {
+				variant: {
+					red: { background: 'red' },
+				},
+			},
+		})
+
+		const {props: secondComponentProps} = componentTwo({ variant: 'red', css: {} })
+		expect(secondComponentProps.variant).toBe('red')
+		expect(secondComponentProps.css).toEqual({})
+	})
+
+	test('does not omit a non-stitches props when shouldForwardStitchesProp returns true', () => {
+		const { css } = createStitches()
+		const componentConfig = {
+			shouldForwardStitchesProp: () => true,
+		}
+		const componentToRender = css.withConfig(componentConfig)('button', {
+			variants: {
+				variant: {
+					red: { background: 'red' },
+				},
+			},
+		})
+		const props = componentToRender({ href: 'www.hello.com' }).props
+		expect(props.href).toBe('www.hello.com')
+	})
+
+	test('Omits variants when shouldForwardStitchesProp returns false', () => {
+		const { css } = createStitches()
+		const componentConfig = {
+			shouldForwardStitchesProp: () => false,
+		}
+		const componentToRender = css.withConfig(componentConfig)('button', {
+			variants: {
+				variant: {
+					red: { background: 'red' },
+				},
+			},
+		})
+		const props = componentToRender({ variant: 'red' }).props
+		expect(props.variant).toBe(undefined)
+	})
+})

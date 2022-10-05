@@ -1,3 +1,5 @@
+import * as React from 'react'
+import * as renderer from 'react-test-renderer'
 import { createStitches } from '../src/index.js'
 
 describe('styled.withConfig', () => {
@@ -84,5 +86,80 @@ describe('styled.withConfig', () => {
 
 		expect(className).toBe('c-component-to-extend-id c-cool-component-id')
 		expect(cssString).toBe(`--sxs{--sxs:2 c-component-to-extend-id c-cool-component-id}@media{.c-component-to-extend-id{color:red}.c-cool-component-id{color:blue}}`)
+	})
+})
+
+describe('shouldForwardStitchesProp', () => {
+	test('Forwards the variant to the underlying component when shouldForwardStitchesProp returns true', () => {
+		const { styled } = createStitches()
+
+		const ReactComponent = ({ isOpen }) => {
+			return React.createElement('div', {}, isOpen ? 'open' : 'closed')
+		}
+
+		const componentOneConfig = {
+			shouldForwardStitchesProp: () => true,
+		}
+
+		const StitchesComponent = styled.withConfig(componentOneConfig)(ReactComponent, {
+			variants: {
+				isOpen: {
+					true: { background: 'red' },
+					false: { background: 'blue' },
+				},
+			},
+		})
+
+		let Rendered
+		renderer.act(() => {
+			Rendered = renderer.create(React.createElement(StitchesComponent, { isOpen: true }))
+		})
+
+		expect(Rendered.toJSON().children[0]).toBe('open')
+	})
+
+	test('Does not render the underlying ReactComponent when an as prop is provided and shouldForwardStitchesProp returns false', () => {
+		const { styled } = createStitches()
+
+		const ReactComponent = ({ as: asProp }) => {
+			return React.createElement(asProp || 'button', {}, 'hola from child')
+		}
+
+		const componentOneConfig = {
+			shouldForwardStitchesProp: () => false,
+		}
+
+		const StitchesComponent = styled.withConfig(componentOneConfig)(ReactComponent, {})
+
+		let Rendered
+		renderer.act(() => {
+			Rendered = renderer.create(React.createElement(StitchesComponent, { as: 'a' }, ['comp']))
+		})
+
+		expect(Rendered.toJSON().children[0]).toBe('comp')
+	})
+
+	test('Forwards the as prop to the underlying component when shouldForwardStitchesProp returns true and the asp prop was defined', () => {
+		const { styled } = createStitches()
+
+		const ReactComponent = ({ as: asProp }) => {
+			return React.createElement('div', {}, asProp || 'no-as-prop-found')
+		}
+
+		const componentOneConfig = {
+			shouldForwardStitchesProp: () => true,
+		}
+		const StitchesComponent = styled.withConfig(componentOneConfig)(ReactComponent, {})
+
+		let Rendered
+		renderer.act(() => {
+			Rendered = renderer.create(React.createElement(StitchesComponent))
+		})
+		expect(Rendered.toJSON().children[0]).toBe('no-as-prop-found')
+
+		renderer.act(() => {
+			Rendered.update(React.createElement(StitchesComponent, { as: 'a' }))
+		})
+		expect(Rendered.toJSON().children[0]).toBe('a')
 	})
 })

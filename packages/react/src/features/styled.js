@@ -12,16 +12,19 @@ export const createStyledFunction = ({ config, sheet }) =>
 	createCssFunctionMap(config, () => {
 		const cssFunction = createCssFunction(config, sheet)
 
-		const _styled = (args, css = cssFunction, { displayName } = {}) => {
+		const _styled = (args, css = cssFunction, { displayName, shouldForwardStitchesProp } = {}) => {
 			const cssComponent = css(...args)
 			const DefaultType = cssComponent[internal].type
+			const shouldForwardAs = shouldForwardStitchesProp?.('as')
 
 			const styledComponent = React.forwardRef((props, ref) => {
-				const Type = props && props.as || DefaultType
+				const Type = props?.as && !shouldForwardAs ? props?.as : DefaultType
 
 				const { props: forwardProps, deferredInjector } = cssComponent(props)
 
-				delete forwardProps.as
+				if (!shouldForwardAs) {
+					delete forwardProps.as
+				}
 
 				forwardProps.ref = ref
 

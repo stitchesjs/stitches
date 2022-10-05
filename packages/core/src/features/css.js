@@ -48,12 +48,12 @@ export const createCssFunction = (config, sheet) =>
       if (internals.type == null) internals.type = 'span'
       if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], {}, []])
 
-      return createRenderer(config, internals, sheet)
+      return createRenderer(config, internals, sheet, componentConfig)
     }
 
 		const css = (...args) => _css(args)
 
-    css.withConfig = (componentConfig) => (...args) => _css(args, componentConfig)
+		css.withConfig = (componentConfig) => (...args) => _css(args, componentConfig)
 
     return css
   })
@@ -118,11 +118,7 @@ const createComposer = ({ variants: initSingularVariants, compoundVariants: init
 	return  ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
 }
 
-const createRenderer = (
-	 config,
-	 internals,
-	 sheet
-) => {
+const createRenderer = (config, internals, sheet, { shouldForwardStitchesProp }) => {
 	const [
 		baseClassName,
 		baseClassNames,
@@ -142,14 +138,13 @@ const createRenderer = (
 		// 2. we delete variant props
 		// 3. we delete `css` prop
 		// therefore: we must create a new props & css variables
-		const { css, ...forwardProps } = props
+		const { ...forwardProps } = props
 
 		const variantProps = {}
 
 		for (const name in prefilledVariants) {
-			delete forwardProps[name]
-
 			if (name in props) {
+				if (!shouldForwardStitchesProp?.(name)) delete forwardProps[name]
 				let data = props[name]
 
 				if (typeof data === 'object' && data) {
@@ -236,7 +231,9 @@ const createRenderer = (
 		}
 
 		// apply css property styles
+		const css = forwardProps.css
 		if (typeof css === 'object' && css) {
+			if (!shouldForwardStitchesProp?.('css')) delete forwardProps.css 
 			/** @type {string} Inline Class Unique Identifier. @see `{COMPOSER_UUID}-i{VARIANT_UUID}-css` */
 			const iClass = `${baseClassName}-i${toHash(css)}-css`
 
