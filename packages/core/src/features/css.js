@@ -11,6 +11,7 @@ import { createRulesInjectionDeferrer } from '../sheet.js'
 
 const createCssFunctionMap = createMemo()
 
+const $ConfigSymbol = Symbol()
 /** Returns a function that applies component styles. */
 export const createCssFunction = (config, sheet) =>
   createCssFunctionMap(config, () => {
@@ -50,6 +51,13 @@ export const createCssFunction = (config, sheet) =>
 
       return createRenderer(config, internals, sheet)
     }
+
+		css.withConfig = (componentConfig) => (...args)=> {
+			const component = css(...args)
+			component[$ConfigSymbol] = componentConfig
+			return component
+		}
+
     return css
   })
 
