@@ -12,44 +12,47 @@ import { createRulesInjectionDeferrer } from '../sheet.js'
 const createCssFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
-export const createCssFunction = ( config,  sheet) =>
-	createCssFunctionMap(config, () => (...args) => {
-		
-		let internals = {
-			type: null,
-			composers: new Set(),
-		}
+export const createCssFunction = (config, sheet) =>
+  createCssFunctionMap(config, () => {
+    const css = (...args) => {
+      let internals = {
+        type: null,
+        composers: new Set(),
+      }
 
-		for (const arg of args) {
-			// skip any void argument
-			if (arg == null) continue
+      for (const arg of args) {
+        // skip any void argument
+        if (arg == null) continue
 
-			// conditionally extend the component
-			if (arg[internal]) {
-				if (internals.type == null) internals.type = arg[internal].type
+        // conditionally extend the component
+        if (arg[internal]) {
+          if (internals.type == null) internals.type = arg[internal].type
 
-				for (const composer of arg[internal].composers) {
-					internals.composers.add(composer)
-				}
-			}
+          for (const composer of arg[internal].composers) {
+            internals.composers.add(composer)
+          }
+        }
 
-			// otherwise, conditionally define the component type
-			else if (arg.constructor !== Object || arg.$$typeof) {
-				if (internals.type == null) internals.type = arg
-			}
+        // otherwise, conditionally define the component type
+        else if (arg.constructor !== Object || arg.$$typeof) {
+          if (internals.type == null) internals.type = arg
+        }
 
-			// otherwise, add a new composer to this component
-			else {
-				internals.composers.add(createComposer(arg, config))
-			}
-		}
+        // otherwise, add a new composer to this component
+        else {
+          internals.composers.add(createComposer(arg, config))
+        }
+      }
 
-		// set the component type if none was set
-		if (internals.type == null) internals.type = 'span'
-		if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], {}, []])
+      // set the component type if none was set
+      if (internals.type == null) internals.type = 'span'
+      if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], {}, []])
 
-		return createRenderer(config, internals, sheet)
-	})
+      return createRenderer(config, internals, sheet)
+    }
+    return css
+  })
+
 
 /** Creates a composer from a configuration object. */
 const createComposer = ({ variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style },  config) => {
