@@ -11,11 +11,10 @@ import { createRulesInjectionDeferrer } from '../sheet.js'
 
 const createCssFunctionMap = createMemo()
 
-const $ConfigSymbol = Symbol()
 /** Returns a function that applies component styles. */
 export const createCssFunction = (config, sheet) =>
   createCssFunctionMap(config, () => {
-    const css = (...args) => {
+    const _css = (args, componentConfig = {}) => {
       let internals = {
         type: null,
         composers: new Set(),
@@ -41,7 +40,7 @@ export const createCssFunction = (config, sheet) =>
 
         // otherwise, add a new composer to this component
         else {
-          internals.composers.add(createComposer(arg, config))
+          internals.composers.add(createComposer(arg, config, componentConfig))
         }
       }
 
@@ -52,20 +51,20 @@ export const createCssFunction = (config, sheet) =>
       return createRenderer(config, internals, sheet)
     }
 
-		css.withConfig = (componentConfig) => (...args)=> {
-			const component = css(...args)
-			component[$ConfigSymbol] = componentConfig
-			return component
-		}
+		const css = (...args) => _css(args)
+
+    css.withConfig = (componentConfig) => (...args) => _css(args, componentConfig)
 
     return css
   })
 
 
 /** Creates a composer from a configuration object. */
-const createComposer = ({ variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style },  config) => {
+const createComposer = ({ variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style },  config, {componentId, displayName}) => {
 	/** @type {string} Composer Unique Identifier. @see `{CONFIG_PREFIX}-?c-{STYLE_HASH}` */
-	const className = `${toTailDashed(config.prefix)}c-${toHash(style)}`
+	const hash = componentId || toHash(style)
+	const componentNamePrefix =  displayName ? ('c-' + displayName +'') : 'c'
+	const className = `${toTailDashed(config.prefix)}${componentNamePrefix}-${hash}`
 
 	const singularVariants = []
 
