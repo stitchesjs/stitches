@@ -70,7 +70,7 @@ const PotatoButton = css({
 				color: 'Turquoise',
 			},
 		},
-		hue: {
+		variant: {
 			blue: {
 				backgroundColor: '$gray100',
 			},

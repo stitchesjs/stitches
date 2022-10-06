@@ -12,49 +12,59 @@ import { createRulesInjectionDeferrer } from '../sheet.js'
 const createCssFunctionMap = createMemo()
 
 /** Returns a function that applies component styles. */
-export const createCssFunction = ( config,  sheet) =>
-	createCssFunctionMap(config, () => (...args) => {
-		
-		let internals = {
-			type: null,
-			composers: new Set(),
-		}
+export const createCssFunction = (config, sheet) =>
+  createCssFunctionMap(config, () => {
+    const _css = (args, componentConfig = {}) => {
+      let internals = {
+        type: null,
+        composers: new Set(),
+      }
 
-		for (const arg of args) {
-			// skip any void argument
-			if (arg == null) continue
+      for (const arg of args) {
+        // skip any void argument
+        if (arg == null) continue
 
-			// conditionally extend the component
-			if (arg[internal]) {
-				if (internals.type == null) internals.type = arg[internal].type
+        // conditionally extend the component
+        if (arg[internal]) {
+          if (internals.type == null) internals.type = arg[internal].type
 
-				for (const composer of arg[internal].composers) {
-					internals.composers.add(composer)
-				}
-			}
+          for (const composer of arg[internal].composers) {
+            internals.composers.add(composer)
+          }
+        }
 
-			// otherwise, conditionally define the component type
-			else if (arg.constructor !== Object || arg.$$typeof) {
-				if (internals.type == null) internals.type = arg
-			}
+        // otherwise, conditionally define the component type
+        else if (arg.constructor !== Object || arg.$$typeof) {
+          if (internals.type == null) internals.type = arg
+        }
 
-			// otherwise, add a new composer to this component
-			else {
-				internals.composers.add(createComposer(arg, config))
-			}
-		}
+        // otherwise, add a new composer to this component
+        else {
+          internals.composers.add(createComposer(arg, config, componentConfig))
+        }
+      }
 
-		// set the component type if none was set
-		if (internals.type == null) internals.type = 'span'
-		if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], {}, []])
+      // set the component type if none was set
+      if (internals.type == null) internals.type = 'span'
+      if (!internals.composers.size) internals.composers.add(['PJLV', {}, [], [], {}, []])
 
-		return createRenderer(config, internals, sheet)
-	})
+      return createRenderer(config, internals, sheet, componentConfig)
+    }
+
+		const css = (...args) => _css(args)
+
+		css.withConfig = (componentConfig) => (...args) => _css(args, componentConfig)
+
+    return css
+  })
+
 
 /** Creates a composer from a configuration object. */
-const createComposer = ({ variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style },  config) => {
+const createComposer = ({ variants: initSingularVariants, compoundVariants: initCompoundVariants, defaultVariants: initDefaultVariants, ...style },  config, {componentId, displayName}) => {
 	/** @type {string} Composer Unique Identifier. @see `{CONFIG_PREFIX}-?c-{STYLE_HASH}` */
-	const className = `${toTailDashed(config.prefix)}c-${toHash(style)}`
+	const hash = componentId || toHash(style)
+	const componentNamePrefix =  displayName ? ('c-' + displayName +'') : 'c'
+	const className = `${toTailDashed(config.prefix)}${componentNamePrefix}-${hash}`
 
 	const singularVariants = []
 
@@ -108,11 +118,7 @@ const createComposer = ({ variants: initSingularVariants, compoundVariants: init
 	return  ([className, style, singularVariants, compoundVariants, prefilledVariants, undefinedVariants])
 }
 
-const createRenderer = (
-	 config,
-	 internals,
-	 sheet
-) => {
+const createRenderer = (config, internals, sheet, { shouldForwardStitchesProp }) => {
 	const [
 		baseClassName,
 		baseClassNames,
@@ -132,14 +138,13 @@ const createRenderer = (
 		// 2. we delete variant props
 		// 3. we delete `css` prop
 		// therefore: we must create a new props & css variables
-		const { css, ...forwardProps } = props
+		const { ...forwardProps } = props
 
 		const variantProps = {}
 
 		for (const name in prefilledVariants) {
-			delete forwardProps[name]
-
 			if (name in props) {
+				if (!shouldForwardStitchesProp?.(name)) delete forwardProps[name]
 				let data = props[name]
 
 				if (typeof data === 'object' && data) {
@@ -226,7 +231,9 @@ const createRenderer = (
 		}
 
 		// apply css property styles
+		const css = forwardProps.css
 		if (typeof css === 'object' && css) {
+			if (!shouldForwardStitchesProp?.('css')) delete forwardProps.css 
 			/** @type {string} Inline Class Unique Identifier. @see `{COMPOSER_UUID}-i{VARIANT_UUID}-css` */
 			const iClass = `${baseClassName}-i${toHash(css)}-css`
 
