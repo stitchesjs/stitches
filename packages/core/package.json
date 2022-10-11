@@ -9,7 +9,7 @@
   "typesVersions": {
     ">= 4.1": {
       "*": [
-        "types/index.d.ts"
+        "types/*"
       ]
     }
   },
