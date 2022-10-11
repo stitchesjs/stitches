@@ -1,5 +1,5 @@
-import type * as CSSUtil from './css-util'
-import type Stitches from './stitches'
+import type * as CSSUtil from './css-util.js'
+import type Stitches from './stitches.js'
 
 /** Configuration Interface */
 declare namespace ConfigType {

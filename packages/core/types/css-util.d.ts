@@ -1,7 +1,7 @@
-import type * as Native from './css'
-import type * as Config from './config'
-import type * as ThemeUtil from './theme'
-import type * as Util from './util'
+import type * as Native from './css.js'
+import type * as Config from './config.js'
+import type * as ThemeUtil from './theme.js'
+import type * as Util from './util.js'
 
 export { Native }
 

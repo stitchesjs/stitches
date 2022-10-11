@@ -1,7 +1,7 @@
-import type * as CSSUtil from './css-util'
-import type * as StyledComponent from './styled-component'
-import type * as ThemeUtil from './theme'
-import type * as Util from './util'
+import type * as CSSUtil from './css-util.js'
+import type * as StyledComponent from './styled-component.js'
+import type * as ThemeUtil from './theme.js'
+import type * as Util from './util.js'
 
 /** Remove an index signature from a type */
 export type RemoveIndex<T> = {[k in keyof T as string extends k ? never : number extends k ? never : k]: T[k]}

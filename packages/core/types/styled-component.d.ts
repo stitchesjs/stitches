@@ -1,4 +1,4 @@
-import type * as Util from './util'
+import type * as Util from './util.js'
 
 /** Returns a new CSS Component. */
 export interface CssComponent<
