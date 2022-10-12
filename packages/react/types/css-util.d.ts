@@ -38,7 +38,7 @@ export type CSS<
 	}
 	// known utility styles
 	& {
-		[K in keyof Utils as K extends keyof CSSProperties ? never : K]?: Utils[K] extends (arg: infer P) => any
+		[K in keyof Utils]?: Utils[K] extends (arg: infer P) => any
 			? (
 				| (
 					P extends any[]
