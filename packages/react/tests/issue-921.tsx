@@ -69,7 +69,8 @@ void function Test() {
 }
 
 const style: CSS = {
-	background: true // expect error
+	// @ts-expect-error
+	background: true 
 }
 
 const style2: CSS<typeof config> = {
