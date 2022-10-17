@@ -9,7 +9,7 @@ export const toTokenizedValue = (
 	/** @type {string} */
 	scale,
 ) => value.replace(
-	/([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|(?<!url\(.*)--|--(?!.*\)))([$\w-]+)/g,
+	/([+-])?((?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)?(\$|--)([$\w-]+)/g,
 	($0, direction, multiplier, separator, token) => (
 		separator == "$" == !!multiplier
 			? $0
