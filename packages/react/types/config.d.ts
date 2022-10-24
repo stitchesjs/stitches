@@ -4,7 +4,7 @@ import type Stitches from './stitches.js'
 /** Configuration Interface */
 declare namespace ConfigType {
 	/** Prefix interface. */
-	export type Prefix<T = ''> = T extends string ? T: string
+	export type Prefix<T = ''> = T extends string ? T : string
 
 	/** Media interface. */
 	export type Media<T = {}> = {
@@ -28,10 +28,10 @@ declare namespace ConfigType {
 		transitions?: { [token in number | string]: boolean | number | string }
 		zIndices?: { [token in number | string]: boolean | number | string }
 	} & {
-		[Scale in keyof T]: {
-			[Token in keyof T[Scale]]: T[Scale][Token] extends (boolean | number | string) ? T[Scale][Token] : (boolean | number | string)
+			[Scale in keyof T]: {
+				[Token in keyof T[Scale]]: T[Scale][Token] extends (boolean | number | string) ? T[Scale][Token] : (boolean | number | string)
+			}
 		}
-	}
 
 	/** ThemeMap interface. */
 	export type ThemeMap<T = {}> = {
@@ -112,6 +112,7 @@ export interface DefaultThemeMap {
 
 	fontSize: 'fontSizes'
 
+	accentColor: 'colors'
 	background: 'colors'
 	backgroundColor: 'colors'
 	backgroundImage: 'colors'

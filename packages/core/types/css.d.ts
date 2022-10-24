@@ -21,10 +21,19 @@
  * SOFTWARE.
  */
 
-export {};
+export { };
 
 
 export interface StandardLonghandProperties {
+  /**
+   * The **`accent-color`** CSS property sets the accent color value of an element's checkbox and radio decorations.
+   *
+   * **Syntax**: `<accent-color>`
+   *
+   * **Initial value**: Varies from one browser to another
+   *
+   */
+  accentColor?: Property.Color;
   /**
    * The CSS **`align-content`** property sets the distribution of space between and around content items along a flexbox's cross-axis or a grid's block axis.
    *
@@ -1307,7 +1316,7 @@ export interface StandardLonghandProperties {
    *
    * **Initial value**: `normal`
    *
-   */	
+   */
   gridGap?: Property.GridGap;
   /**
    * The **`hanging-punctuation`** CSS property specifies whether a punctuation mark should hang at the start or end of a line of text. Hanging punctuation may be placed outside the line box.
@@ -3503,7 +3512,7 @@ export interface StandardShorthandProperties {
 
 export interface StandardProperties
   extends StandardLonghandProperties,
-    StandardShorthandProperties {}
+  StandardShorthandProperties { }
 
 
 export interface SvgProperties {
@@ -3571,7 +3580,7 @@ export interface SvgProperties {
 
 export interface Properties
   extends StandardProperties,
-    SvgProperties {}
+  SvgProperties { }
 
 export interface StandardLonghandPropertiesHyphen {
   /**
@@ -4857,7 +4866,7 @@ export interface StandardLonghandPropertiesHyphen {
     * **Initial value**: `normal`
     *
     */
-   "grid-gap"?: Property.GridGap;
+  "grid-gap"?: Property.GridGap;
   /**
    * The **`hanging-punctuation`** CSS property specifies whether a punctuation mark should hang at the start or end of a line of text. Hanging punctuation may be placed outside the line box.
    *
@@ -7052,7 +7061,7 @@ export interface StandardShorthandPropertiesHyphen {
 
 export interface StandardPropertiesHyphen
   extends StandardLonghandPropertiesHyphen,
-    StandardShorthandPropertiesHyphen {}
+  StandardShorthandPropertiesHyphen { }
 
 
 export interface SvgPropertiesHyphen {
@@ -7120,7 +7129,7 @@ export interface SvgPropertiesHyphen {
 
 export interface PropertiesHyphen
   extends StandardPropertiesHyphen,
-    SvgPropertiesHyphen {}
+  SvgPropertiesHyphen { }
 
 export type StandardLonghandPropertiesFallback = {
   [P in keyof StandardLonghandProperties]: StandardLonghandProperties[P] | StandardLonghandProperties[P][];
@@ -7132,7 +7141,7 @@ export type StandardShorthandPropertiesFallback = {
 
 export interface StandardPropertiesFallback
   extends StandardLonghandPropertiesFallback,
-    StandardShorthandPropertiesFallback {}
+  StandardShorthandPropertiesFallback { }
 
 
 export type SvgPropertiesFallback = {
@@ -7141,7 +7150,7 @@ export type SvgPropertiesFallback = {
 
 export interface PropertiesFallback
   extends StandardPropertiesFallback,
-    SvgPropertiesFallback {}
+  SvgPropertiesFallback { }
 
 export type StandardLonghandPropertiesHyphenFallback = {
   [P in keyof StandardLonghandPropertiesHyphen]: StandardLonghandPropertiesHyphen[P] | StandardLonghandPropertiesHyphen[P][];
@@ -7153,7 +7162,7 @@ export type StandardShorthandPropertiesHyphenFallback = {
 
 export interface StandardPropertiesHyphenFallback
   extends StandardLonghandPropertiesHyphenFallback,
-    StandardShorthandPropertiesHyphenFallback {}
+  StandardShorthandPropertiesHyphenFallback { }
 
 
 export type SvgPropertiesHyphenFallback = {
@@ -7162,7 +7171,7 @@ export type SvgPropertiesHyphenFallback = {
 
 export interface PropertiesHyphenFallback
   extends StandardPropertiesHyphenFallback,
-    SvgPropertiesHyphenFallback {}
+  SvgPropertiesHyphenFallback { }
 
 export type AtRules =
   | "@charset"
@@ -7741,7 +7750,7 @@ export type SvgAttributes =
 
 export type Globals = "inherit" | "initial" | "revert" | "unset";
 
-export type OnlyObject = Record<never,never>
+export type OnlyObject = Record<never, never>
 
 export type OnlyNumber = number & OnlyObject
 
@@ -7762,11 +7771,11 @@ export namespace Property {
 
   export type Animation = DataType.SingleAnimation | OnlyString;
 
-  export type AnimationDelay = never  | OnlyString;
+  export type AnimationDelay = never | OnlyString;
 
   export type AnimationDirection = DataType.SingleAnimationDirection | OnlyString;
 
-  export type AnimationDuration = never  | OnlyString;
+  export type AnimationDuration = never | OnlyString;
 
   export type AnimationFillMode = DataType.SingleAnimationFillMode | OnlyString;
 
@@ -8783,9 +8792,9 @@ export namespace Property {
 
   export type Transition = DataType.SingleTransition | OnlyString;
 
-  export type TransitionDelay = never  | OnlyString;
+  export type TransitionDelay = never | OnlyString;
 
-  export type TransitionDuration = never  | OnlyString;
+  export type TransitionDuration = never | OnlyString;
 
   export type TransitionProperty = "all" | "none" | OnlyString;
 
@@ -9813,7 +9822,7 @@ declare namespace DataType {
 
   type SingleAnimationFillMode = "backwards" | "both" | "forwards" | "none";
 
-  type SingleTransition = EasingFunction  | "all" | "none" | OnlyString;
+  type SingleTransition = EasingFunction | "all" | "none" | OnlyString;
 
   type StepTimingFunction = "step-end" | "step-start" | OnlyString;
 
