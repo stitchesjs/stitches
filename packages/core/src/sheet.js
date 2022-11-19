@@ -82,14 +82,14 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 				/** @type {CSSStyleRule} Possible indicator rule. */
 				const check = Object(rules[index])
 
-				// a hydratable set of rules will start with a style rule (type: 1), ignore all others
-				if (check.type !== 1) continue
+				// a hydratable set of rules should be a CSSStyleRule, ignore all others
+				if (check.constructor.name !== 'CSSStyleRule') continue
 
 				/** @type {CSSMediaRule} Possible styling group. */
 				const group = Object(rules[index + 1])
 
-				// a hydratable set of rules will follow with a media rule (type: 4), ignore all others
-				if (group.type !== 4) continue
+				// a hydratable set of rules will follow with a CSSMediaRule, ignore all others
+				if (group.constructor.name !== 'CSSMediaRule') continue
 
 				++index
 
