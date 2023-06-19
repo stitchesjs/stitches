@@ -1,3 +1,7 @@
+Update June 19, 2023: Stitches is no longer actively maintained due to changes in the React ecosystem and maintainer availability. You can <a href="https://github.com/stitchesjs/stitches/discussions/1149#discussioncomment-6223090">read more here</a>.
+
+---
+
 <a href="https://stitches.dev">
   <img alt="stitches" src="https://user-images.githubusercontent.com/372831/112011920-03e21400-8b29-11eb-9c9a-4e14d5a1f575.png" />
 </a>
