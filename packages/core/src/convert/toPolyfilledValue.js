@@ -11,6 +11,7 @@ export const toPolyfilledValue = {
 	clipPath: (d) => ({ WebkitClipPath: d, clipPath: d }),
 	content: (d) => ({ content: d.includes('"') || d.includes("'") || /^([A-Za-z]+\([^]*|[^]*-quote|inherit|initial|none|normal|revert|unset)$/.test(d) ? d : `"${d}"` }),
 	hyphens: (d) => ({ WebkitHyphens: d, hyphens: d }),
+	mask: (d) => ({ WebkitMask: d, mask: d }),
 	maskImage: (d) => ({ WebkitMaskImage: d, maskImage: d }),
 	maskSize: (d) => ({ WebkitMaskSize: d, maskSize: d }),
 	textSizeAdjust: (d) => ({ WebkitTextSizeAdjust: d, textSizeAdjust: d }),
