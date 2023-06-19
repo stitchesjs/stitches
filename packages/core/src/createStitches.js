@@ -34,6 +34,7 @@ export const createStitches = (config) => {
 			theme,
 			themeMap,
 			utils,
+			root,
 		}
 
 		/** Internal stylesheet. */

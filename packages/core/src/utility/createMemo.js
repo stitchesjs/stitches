@@ -1,13 +1,13 @@
-const stringifyReplacer = (name, data) => (typeof data === 'function' ? { '()': Function.prototype.toString.call(data) } : data)
+import { safeJsonStringify } from './safeJsonStringify.js'
 
-const stringify = (value) => JSON.stringify(value, stringifyReplacer)
+const stringifyReplacer = (name, data) => (typeof data === 'function' ? { '()': Function.prototype.toString.call(data) } : data)
 
 
 export const createMemo = () => {
 	const cache = Object.create(null)
 
 	return (value, apply, ...args) => {
-		const vjson = stringify(value)
+		const vjson = safeJsonStringify(value, stringifyReplacer)
 
 		return vjson in cache ? cache[vjson] : (cache[vjson] = apply(value, ...args))
 	}
