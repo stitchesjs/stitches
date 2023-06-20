@@ -83,6 +83,7 @@ export const defaultThemeMap = {
 
 	fontSize: fontSizes,
 
+	accentColor: colors,
 	background: colors,
 	backgroundColor: colors,
 	backgroundImage: colors,
