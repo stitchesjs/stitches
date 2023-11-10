@@ -1,5 +1,5 @@
 {
-  "name": "@stitches/core",
+  "name": "@voiceflow/stitches-core",
   "version": "1.3.1-1",
   "description": "The modern CSS-in-JS library",
   "type": "module",

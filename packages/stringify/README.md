@@ -3,7 +3,7 @@
 **stringify** converts a JavaScript object to a CSS string, optionally replacing values if a [replacer](#replacer) function is specified.
 
 ```js
-import { stringify } from '@stitches/stringify'
+import { stringify } from '@voiceflow/stitches-stringify'
 
 stringify({
   body: {
@@ -39,13 +39,13 @@ The actual output will not be formatted as it appears here.
 From NPM, add **stringify** to your project:
 
 ```bash
-npm install @stitches/stringify
+npm install @voiceflow/stitches-stringify
 ```
 
 Use **stringify** to serialize your CSS:
 
 ```js
-import { stringify } from '@stitches/stringify'
+import { stringify } from '@voiceflow/stitches-stringify'
 
 stringify({
   body: {

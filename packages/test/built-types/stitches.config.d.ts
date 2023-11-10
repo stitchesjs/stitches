@@ -1,11 +1,11 @@
-import type * as Stitches from '@stitches/react';
-export type { VariantProps } from '@stitches/react';
+import type * as Stitches from '@voiceflow/stitches-react';
+export type { VariantProps } from '@voiceflow/stitches-react';
 export declare const styled: {
     withConfig: (config: {
         componentId?: string | undefined;
         displayName?: string | undefined;
         shouldForwardStitchesProp?: ((prop: "css" | (string & {})) => boolean | void) | undefined;
-    }) => import("@stitches/react/types/stitches").StyledFunctionType<{
+    }) => import("@voiceflow/stitches-react/types/stitches").StyledFunctionType<{
         bp1: "(min-width: 520px)";
         bp2: "(min-width: 900px)";
         bp3: "(min-width: 1200px)";
@@ -772,138 +772,138 @@ export declare const styled: {
             4: string;
             max: string;
         };
-    }, import("@stitches/react/types/config").DefaultThemeMap, {
+    }, import("@voiceflow/stitches-react/types/config").DefaultThemeMap, {
         p: (value: Stitches.PropertyValue<'padding'>) => {
-            padding: import("@stitches/react/types/css-util").WithPropertyValue<"padding">;
+            padding: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"padding">;
         };
         pt: (value: Stitches.PropertyValue<'paddingTop'>) => {
-            paddingTop: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
         };
         pr: (value: Stitches.PropertyValue<'paddingRight'>) => {
-            paddingRight: import("@stitches/react/types/css-util").WithPropertyValue<"paddingRight">;
+            paddingRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingRight">;
         };
         pb: (value: Stitches.PropertyValue<'paddingBottom'>) => {
-            paddingBottom: import("@stitches/react/types/css-util").WithPropertyValue<"paddingBottom">;
+            paddingBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingBottom">;
         };
         pl: (value: Stitches.PropertyValue<'paddingLeft'>) => {
-            paddingLeft: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
         };
         px: (value: Stitches.PropertyValue<'paddingLeft'>) => {
-            paddingLeft: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
-            paddingRight: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
         };
         py: (value: Stitches.PropertyValue<'paddingTop'>) => {
-            paddingTop: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
-            paddingBottom: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
         };
         m: (value: Stitches.PropertyValue<'margin'>) => {
-            margin: import("@stitches/react/types/css-util").WithPropertyValue<"margin">;
+            margin: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"margin">;
         };
         mt: (value: Stitches.PropertyValue<'marginTop'>) => {
-            marginTop: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
+            marginTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
         };
         mr: (value: Stitches.PropertyValue<'marginRight'>) => {
-            marginRight: import("@stitches/react/types/css-util").WithPropertyValue<"marginRight">;
+            marginRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginRight">;
         };
         mb: (value: Stitches.PropertyValue<'marginBottom'>) => {
-            marginBottom: import("@stitches/react/types/css-util").WithPropertyValue<"marginBottom">;
+            marginBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginBottom">;
         };
         ml: (value: Stitches.PropertyValue<'marginLeft'>) => {
-            marginLeft: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
         };
         mx: (value: Stitches.PropertyValue<'marginLeft'>) => {
-            marginLeft: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
-            marginRight: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
         };
         my: (value: Stitches.PropertyValue<'marginTop'>) => {
-            marginTop: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
-            marginBottom: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
+            marginTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
+            marginBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
         };
         ta: (value: Stitches.PropertyValue<'textAlign'>) => {
-            textAlign: import("@stitches/react/types/css-util").WithPropertyValue<"textAlign">;
+            textAlign: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"textAlign">;
         };
         fd: (value: Stitches.PropertyValue<'flexDirection'>) => {
-            flexDirection: import("@stitches/react/types/css-util").WithPropertyValue<"flexDirection">;
+            flexDirection: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexDirection">;
         };
         fw: (value: Stitches.PropertyValue<'flexWrap'>) => {
-            flexWrap: import("@stitches/react/types/css-util").WithPropertyValue<"flexWrap">;
+            flexWrap: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexWrap">;
         };
         ai: (value: Stitches.PropertyValue<'alignItems'>) => {
-            alignItems: import("@stitches/react/types/css-util").WithPropertyValue<"alignItems">;
+            alignItems: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignItems">;
         };
         ac: (value: Stitches.PropertyValue<'alignContent'>) => {
-            alignContent: import("@stitches/react/types/css-util").WithPropertyValue<"alignContent">;
+            alignContent: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignContent">;
         };
         jc: (value: Stitches.PropertyValue<'justifyContent'>) => {
-            justifyContent: import("@stitches/react/types/css-util").WithPropertyValue<"justifyContent">;
+            justifyContent: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"justifyContent">;
         };
         as: (value: Stitches.PropertyValue<'alignSelf'>) => {
-            alignSelf: import("@stitches/react/types/css-util").WithPropertyValue<"alignSelf">;
+            alignSelf: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignSelf">;
         };
         fg: (value: Stitches.PropertyValue<'flexGrow'>) => {
-            flexGrow: import("@stitches/react/types/css-util").WithPropertyValue<"flexGrow">;
+            flexGrow: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexGrow">;
         };
         fs: (value: Stitches.PropertyValue<'flexShrink'>) => {
-            flexShrink: import("@stitches/react/types/css-util").WithPropertyValue<"flexShrink">;
+            flexShrink: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexShrink">;
         };
         fb: (value: Stitches.PropertyValue<'flexBasis'>) => {
-            flexBasis: import("@stitches/react/types/css-util").WithPropertyValue<"flexBasis">;
+            flexBasis: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexBasis">;
         };
         bc: (value: Stitches.PropertyValue<'backgroundColor'>) => {
-            backgroundColor: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundColor">;
+            backgroundColor: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundColor">;
         };
         br: (value: Stitches.PropertyValue<'borderRadius'>) => {
-            borderRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderRadius">;
+            borderRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderRadius">;
         };
         btrr: (value: Stitches.PropertyValue<'borderTopRightRadius'>) => {
-            borderTopRightRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderTopRightRadius">;
+            borderTopRightRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderTopRightRadius">;
         };
         bbrr: (value: Stitches.PropertyValue<'borderBottomRightRadius'>) => {
-            borderBottomRightRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderBottomRightRadius">;
+            borderBottomRightRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderBottomRightRadius">;
         };
         bblr: (value: Stitches.PropertyValue<'borderBottomLeftRadius'>) => {
-            borderBottomLeftRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderBottomLeftRadius">;
+            borderBottomLeftRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderBottomLeftRadius">;
         };
         btlr: (value: Stitches.PropertyValue<'borderTopLeftRadius'>) => {
-            borderTopLeftRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderTopLeftRadius">;
+            borderTopLeftRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderTopLeftRadius">;
         };
         bs: (value: Stitches.PropertyValue<'boxShadow'>) => {
-            boxShadow: import("@stitches/react/types/css-util").WithPropertyValue<"boxShadow">;
+            boxShadow: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"boxShadow">;
         };
         lh: (value: Stitches.PropertyValue<'lineHeight'>) => {
-            lineHeight: import("@stitches/react/types/css-util").WithPropertyValue<"lineHeight">;
+            lineHeight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"lineHeight">;
         };
         ox: (value: Stitches.PropertyValue<'overflowX'>) => {
-            overflowX: import("@stitches/react/types/css-util").WithPropertyValue<"overflowX">;
+            overflowX: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"overflowX">;
         };
         oy: (value: Stitches.PropertyValue<'overflowY'>) => {
-            overflowY: import("@stitches/react/types/css-util").WithPropertyValue<"overflowY">;
+            overflowY: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"overflowY">;
         };
         pe: (value: Stitches.PropertyValue<'pointerEvents'>) => {
-            pointerEvents: import("@stitches/react/types/css-util").WithPropertyValue<"pointerEvents">;
+            pointerEvents: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"pointerEvents">;
         };
         us: (value: Stitches.PropertyValue<'userSelect'>) => {
-            WebkitUserSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
-            userSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
+            WebkitUserSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
+            userSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
         };
         userSelect: (value: Stitches.PropertyValue<'userSelect'>) => {
-            WebkitUserSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
-            userSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
+            WebkitUserSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
+            userSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
         };
         size: (value: Stitches.PropertyValue<'width'>) => {
-            width: import("@stitches/react/types/css-util").WithPropertyValue<"width">;
-            height: import("@stitches/react/types/css-util").WithPropertyValue<"width">;
+            width: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"width">;
+            height: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"width">;
         };
         appearance: (value: Stitches.PropertyValue<'appearance'>) => {
-            WebkitAppearance: import("@stitches/react/types/css-util").WithPropertyValue<"appearance">;
-            appearance: import("@stitches/react/types/css-util").WithPropertyValue<"appearance">;
+            WebkitAppearance: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"appearance">;
+            appearance: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"appearance">;
         };
         backgroundClip: (value: Stitches.PropertyValue<'backgroundClip'>) => {
-            WebkitBackgroundClip: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundClip">;
-            backgroundClip: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundClip">;
+            WebkitBackgroundClip: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundClip">;
+            backgroundClip: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundClip">;
         };
     }>;
-} & import("@stitches/react/types/stitches").StyledFunctionType<{
+} & import("@voiceflow/stitches-react/types/stitches").StyledFunctionType<{
     bp1: "(min-width: 520px)";
     bp2: "(min-width: 900px)";
     bp3: "(min-width: 1200px)";
@@ -1670,135 +1670,135 @@ export declare const styled: {
         4: string;
         max: string;
     };
-}, import("@stitches/react/types/config").DefaultThemeMap, {
+}, import("@voiceflow/stitches-react/types/config").DefaultThemeMap, {
     p: (value: Stitches.PropertyValue<'padding'>) => {
-        padding: import("@stitches/react/types/css-util").WithPropertyValue<"padding">;
+        padding: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"padding">;
     };
     pt: (value: Stitches.PropertyValue<'paddingTop'>) => {
-        paddingTop: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
+        paddingTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
     };
     pr: (value: Stitches.PropertyValue<'paddingRight'>) => {
-        paddingRight: import("@stitches/react/types/css-util").WithPropertyValue<"paddingRight">;
+        paddingRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingRight">;
     };
     pb: (value: Stitches.PropertyValue<'paddingBottom'>) => {
-        paddingBottom: import("@stitches/react/types/css-util").WithPropertyValue<"paddingBottom">;
+        paddingBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingBottom">;
     };
     pl: (value: Stitches.PropertyValue<'paddingLeft'>) => {
-        paddingLeft: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
+        paddingLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
     };
     px: (value: Stitches.PropertyValue<'paddingLeft'>) => {
-        paddingLeft: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
-        paddingRight: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
+        paddingLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
+        paddingRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
     };
     py: (value: Stitches.PropertyValue<'paddingTop'>) => {
-        paddingTop: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
-        paddingBottom: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
+        paddingTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
+        paddingBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
     };
     m: (value: Stitches.PropertyValue<'margin'>) => {
-        margin: import("@stitches/react/types/css-util").WithPropertyValue<"margin">;
+        margin: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"margin">;
     };
     mt: (value: Stitches.PropertyValue<'marginTop'>) => {
-        marginTop: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
+        marginTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
     };
     mr: (value: Stitches.PropertyValue<'marginRight'>) => {
-        marginRight: import("@stitches/react/types/css-util").WithPropertyValue<"marginRight">;
+        marginRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginRight">;
     };
     mb: (value: Stitches.PropertyValue<'marginBottom'>) => {
-        marginBottom: import("@stitches/react/types/css-util").WithPropertyValue<"marginBottom">;
+        marginBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginBottom">;
     };
     ml: (value: Stitches.PropertyValue<'marginLeft'>) => {
-        marginLeft: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
+        marginLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
     };
     mx: (value: Stitches.PropertyValue<'marginLeft'>) => {
-        marginLeft: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
-        marginRight: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
+        marginLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
+        marginRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
     };
     my: (value: Stitches.PropertyValue<'marginTop'>) => {
-        marginTop: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
-        marginBottom: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
+        marginTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
+        marginBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
     };
     ta: (value: Stitches.PropertyValue<'textAlign'>) => {
-        textAlign: import("@stitches/react/types/css-util").WithPropertyValue<"textAlign">;
+        textAlign: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"textAlign">;
     };
     fd: (value: Stitches.PropertyValue<'flexDirection'>) => {
-        flexDirection: import("@stitches/react/types/css-util").WithPropertyValue<"flexDirection">;
+        flexDirection: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexDirection">;
     };
     fw: (value: Stitches.PropertyValue<'flexWrap'>) => {
-        flexWrap: import("@stitches/react/types/css-util").WithPropertyValue<"flexWrap">;
+        flexWrap: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexWrap">;
     };
     ai: (value: Stitches.PropertyValue<'alignItems'>) => {
-        alignItems: import("@stitches/react/types/css-util").WithPropertyValue<"alignItems">;
+        alignItems: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignItems">;
     };
     ac: (value: Stitches.PropertyValue<'alignContent'>) => {
-        alignContent: import("@stitches/react/types/css-util").WithPropertyValue<"alignContent">;
+        alignContent: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignContent">;
     };
     jc: (value: Stitches.PropertyValue<'justifyContent'>) => {
-        justifyContent: import("@stitches/react/types/css-util").WithPropertyValue<"justifyContent">;
+        justifyContent: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"justifyContent">;
     };
     as: (value: Stitches.PropertyValue<'alignSelf'>) => {
-        alignSelf: import("@stitches/react/types/css-util").WithPropertyValue<"alignSelf">;
+        alignSelf: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignSelf">;
     };
     fg: (value: Stitches.PropertyValue<'flexGrow'>) => {
-        flexGrow: import("@stitches/react/types/css-util").WithPropertyValue<"flexGrow">;
+        flexGrow: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexGrow">;
     };
     fs: (value: Stitches.PropertyValue<'flexShrink'>) => {
-        flexShrink: import("@stitches/react/types/css-util").WithPropertyValue<"flexShrink">;
+        flexShrink: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexShrink">;
     };
     fb: (value: Stitches.PropertyValue<'flexBasis'>) => {
-        flexBasis: import("@stitches/react/types/css-util").WithPropertyValue<"flexBasis">;
+        flexBasis: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexBasis">;
     };
     bc: (value: Stitches.PropertyValue<'backgroundColor'>) => {
-        backgroundColor: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundColor">;
+        backgroundColor: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundColor">;
     };
     br: (value: Stitches.PropertyValue<'borderRadius'>) => {
-        borderRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderRadius">;
+        borderRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderRadius">;
     };
     btrr: (value: Stitches.PropertyValue<'borderTopRightRadius'>) => {
-        borderTopRightRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderTopRightRadius">;
+        borderTopRightRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderTopRightRadius">;
     };
     bbrr: (value: Stitches.PropertyValue<'borderBottomRightRadius'>) => {
-        borderBottomRightRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderBottomRightRadius">;
+        borderBottomRightRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderBottomRightRadius">;
     };
     bblr: (value: Stitches.PropertyValue<'borderBottomLeftRadius'>) => {
-        borderBottomLeftRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderBottomLeftRadius">;
+        borderBottomLeftRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderBottomLeftRadius">;
     };
     btlr: (value: Stitches.PropertyValue<'borderTopLeftRadius'>) => {
-        borderTopLeftRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderTopLeftRadius">;
+        borderTopLeftRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderTopLeftRadius">;
     };
     bs: (value: Stitches.PropertyValue<'boxShadow'>) => {
-        boxShadow: import("@stitches/react/types/css-util").WithPropertyValue<"boxShadow">;
+        boxShadow: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"boxShadow">;
     };
     lh: (value: Stitches.PropertyValue<'lineHeight'>) => {
-        lineHeight: import("@stitches/react/types/css-util").WithPropertyValue<"lineHeight">;
+        lineHeight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"lineHeight">;
     };
     ox: (value: Stitches.PropertyValue<'overflowX'>) => {
-        overflowX: import("@stitches/react/types/css-util").WithPropertyValue<"overflowX">;
+        overflowX: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"overflowX">;
     };
     oy: (value: Stitches.PropertyValue<'overflowY'>) => {
-        overflowY: import("@stitches/react/types/css-util").WithPropertyValue<"overflowY">;
+        overflowY: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"overflowY">;
     };
     pe: (value: Stitches.PropertyValue<'pointerEvents'>) => {
-        pointerEvents: import("@stitches/react/types/css-util").WithPropertyValue<"pointerEvents">;
+        pointerEvents: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"pointerEvents">;
     };
     us: (value: Stitches.PropertyValue<'userSelect'>) => {
-        WebkitUserSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
-        userSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
+        WebkitUserSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
+        userSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
     };
     userSelect: (value: Stitches.PropertyValue<'userSelect'>) => {
-        WebkitUserSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
-        userSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
+        WebkitUserSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
+        userSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
     };
     size: (value: Stitches.PropertyValue<'width'>) => {
-        width: import("@stitches/react/types/css-util").WithPropertyValue<"width">;
-        height: import("@stitches/react/types/css-util").WithPropertyValue<"width">;
+        width: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"width">;
+        height: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"width">;
     };
     appearance: (value: Stitches.PropertyValue<'appearance'>) => {
-        WebkitAppearance: import("@stitches/react/types/css-util").WithPropertyValue<"appearance">;
-        appearance: import("@stitches/react/types/css-util").WithPropertyValue<"appearance">;
+        WebkitAppearance: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"appearance">;
+        appearance: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"appearance">;
     };
     backgroundClip: (value: Stitches.PropertyValue<'backgroundClip'>) => {
-        WebkitBackgroundClip: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundClip">;
-        backgroundClip: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundClip">;
+        WebkitBackgroundClip: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundClip">;
+        backgroundClip: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundClip">;
     };
 }>, createTheme: <Argument0 extends string | ({
     colors?: {
@@ -3329,8 +3329,8 @@ export declare const styled: {
 })>(nameOrScalesArg0: Argument0, nameOrScalesArg1?: Argument1 | undefined) => string & {
     className: string;
     selector: string;
-} & (Argument0 extends string ? import("@stitches/react/types/stitches").ThemeTokens<Argument1, ""> : import("@stitches/react/types/stitches").ThemeTokens<Argument0, "">), getCssText: () => string, keyframes: (style: {
-    [offset: string]: import("@stitches/react/types/css-util").CSS<{
+} & (Argument0 extends string ? import("@voiceflow/stitches-react/types/stitches").ThemeTokens<Argument1, ""> : import("@voiceflow/stitches-react/types/stitches").ThemeTokens<Argument0, "">), getCssText: () => string, keyframes: (style: {
+    [offset: string]: import("@voiceflow/stitches-react/types/css-util").CSS<{
         bp1: "(min-width: 520px)";
         bp2: "(min-width: 900px)";
         bp3: "(min-width: 1200px)";
@@ -4097,135 +4097,135 @@ export declare const styled: {
             4: string;
             max: string;
         };
-    }, import("@stitches/react/types/config").DefaultThemeMap, {
+    }, import("@voiceflow/stitches-react/types/config").DefaultThemeMap, {
         p: (value: Stitches.PropertyValue<'padding'>) => {
-            padding: import("@stitches/react/types/css-util").WithPropertyValue<"padding">;
+            padding: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"padding">;
         };
         pt: (value: Stitches.PropertyValue<'paddingTop'>) => {
-            paddingTop: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
         };
         pr: (value: Stitches.PropertyValue<'paddingRight'>) => {
-            paddingRight: import("@stitches/react/types/css-util").WithPropertyValue<"paddingRight">;
+            paddingRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingRight">;
         };
         pb: (value: Stitches.PropertyValue<'paddingBottom'>) => {
-            paddingBottom: import("@stitches/react/types/css-util").WithPropertyValue<"paddingBottom">;
+            paddingBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingBottom">;
         };
         pl: (value: Stitches.PropertyValue<'paddingLeft'>) => {
-            paddingLeft: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
         };
         px: (value: Stitches.PropertyValue<'paddingLeft'>) => {
-            paddingLeft: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
-            paddingRight: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
         };
         py: (value: Stitches.PropertyValue<'paddingTop'>) => {
-            paddingTop: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
-            paddingBottom: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
         };
         m: (value: Stitches.PropertyValue<'margin'>) => {
-            margin: import("@stitches/react/types/css-util").WithPropertyValue<"margin">;
+            margin: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"margin">;
         };
         mt: (value: Stitches.PropertyValue<'marginTop'>) => {
-            marginTop: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
+            marginTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
         };
         mr: (value: Stitches.PropertyValue<'marginRight'>) => {
-            marginRight: import("@stitches/react/types/css-util").WithPropertyValue<"marginRight">;
+            marginRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginRight">;
         };
         mb: (value: Stitches.PropertyValue<'marginBottom'>) => {
-            marginBottom: import("@stitches/react/types/css-util").WithPropertyValue<"marginBottom">;
+            marginBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginBottom">;
         };
         ml: (value: Stitches.PropertyValue<'marginLeft'>) => {
-            marginLeft: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
         };
         mx: (value: Stitches.PropertyValue<'marginLeft'>) => {
-            marginLeft: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
-            marginRight: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
         };
         my: (value: Stitches.PropertyValue<'marginTop'>) => {
-            marginTop: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
-            marginBottom: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
+            marginTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
+            marginBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
         };
         ta: (value: Stitches.PropertyValue<'textAlign'>) => {
-            textAlign: import("@stitches/react/types/css-util").WithPropertyValue<"textAlign">;
+            textAlign: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"textAlign">;
         };
         fd: (value: Stitches.PropertyValue<'flexDirection'>) => {
-            flexDirection: import("@stitches/react/types/css-util").WithPropertyValue<"flexDirection">;
+            flexDirection: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexDirection">;
         };
         fw: (value: Stitches.PropertyValue<'flexWrap'>) => {
-            flexWrap: import("@stitches/react/types/css-util").WithPropertyValue<"flexWrap">;
+            flexWrap: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexWrap">;
         };
         ai: (value: Stitches.PropertyValue<'alignItems'>) => {
-            alignItems: import("@stitches/react/types/css-util").WithPropertyValue<"alignItems">;
+            alignItems: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignItems">;
         };
         ac: (value: Stitches.PropertyValue<'alignContent'>) => {
-            alignContent: import("@stitches/react/types/css-util").WithPropertyValue<"alignContent">;
+            alignContent: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignContent">;
         };
         jc: (value: Stitches.PropertyValue<'justifyContent'>) => {
-            justifyContent: import("@stitches/react/types/css-util").WithPropertyValue<"justifyContent">;
+            justifyContent: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"justifyContent">;
         };
         as: (value: Stitches.PropertyValue<'alignSelf'>) => {
-            alignSelf: import("@stitches/react/types/css-util").WithPropertyValue<"alignSelf">;
+            alignSelf: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignSelf">;
         };
         fg: (value: Stitches.PropertyValue<'flexGrow'>) => {
-            flexGrow: import("@stitches/react/types/css-util").WithPropertyValue<"flexGrow">;
+            flexGrow: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexGrow">;
         };
         fs: (value: Stitches.PropertyValue<'flexShrink'>) => {
-            flexShrink: import("@stitches/react/types/css-util").WithPropertyValue<"flexShrink">;
+            flexShrink: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexShrink">;
         };
         fb: (value: Stitches.PropertyValue<'flexBasis'>) => {
-            flexBasis: import("@stitches/react/types/css-util").WithPropertyValue<"flexBasis">;
+            flexBasis: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexBasis">;
         };
         bc: (value: Stitches.PropertyValue<'backgroundColor'>) => {
-            backgroundColor: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundColor">;
+            backgroundColor: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundColor">;
         };
         br: (value: Stitches.PropertyValue<'borderRadius'>) => {
-            borderRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderRadius">;
+            borderRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderRadius">;
         };
         btrr: (value: Stitches.PropertyValue<'borderTopRightRadius'>) => {
-            borderTopRightRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderTopRightRadius">;
+            borderTopRightRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderTopRightRadius">;
         };
         bbrr: (value: Stitches.PropertyValue<'borderBottomRightRadius'>) => {
-            borderBottomRightRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderBottomRightRadius">;
+            borderBottomRightRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderBottomRightRadius">;
         };
         bblr: (value: Stitches.PropertyValue<'borderBottomLeftRadius'>) => {
-            borderBottomLeftRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderBottomLeftRadius">;
+            borderBottomLeftRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderBottomLeftRadius">;
         };
         btlr: (value: Stitches.PropertyValue<'borderTopLeftRadius'>) => {
-            borderTopLeftRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderTopLeftRadius">;
+            borderTopLeftRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderTopLeftRadius">;
         };
         bs: (value: Stitches.PropertyValue<'boxShadow'>) => {
-            boxShadow: import("@stitches/react/types/css-util").WithPropertyValue<"boxShadow">;
+            boxShadow: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"boxShadow">;
         };
         lh: (value: Stitches.PropertyValue<'lineHeight'>) => {
-            lineHeight: import("@stitches/react/types/css-util").WithPropertyValue<"lineHeight">;
+            lineHeight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"lineHeight">;
         };
         ox: (value: Stitches.PropertyValue<'overflowX'>) => {
-            overflowX: import("@stitches/react/types/css-util").WithPropertyValue<"overflowX">;
+            overflowX: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"overflowX">;
         };
         oy: (value: Stitches.PropertyValue<'overflowY'>) => {
-            overflowY: import("@stitches/react/types/css-util").WithPropertyValue<"overflowY">;
+            overflowY: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"overflowY">;
         };
         pe: (value: Stitches.PropertyValue<'pointerEvents'>) => {
-            pointerEvents: import("@stitches/react/types/css-util").WithPropertyValue<"pointerEvents">;
+            pointerEvents: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"pointerEvents">;
         };
         us: (value: Stitches.PropertyValue<'userSelect'>) => {
-            WebkitUserSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
-            userSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
+            WebkitUserSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
+            userSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
         };
         userSelect: (value: Stitches.PropertyValue<'userSelect'>) => {
-            WebkitUserSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
-            userSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
+            WebkitUserSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
+            userSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
         };
         size: (value: Stitches.PropertyValue<'width'>) => {
-            width: import("@stitches/react/types/css-util").WithPropertyValue<"width">;
-            height: import("@stitches/react/types/css-util").WithPropertyValue<"width">;
+            width: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"width">;
+            height: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"width">;
         };
         appearance: (value: Stitches.PropertyValue<'appearance'>) => {
-            WebkitAppearance: import("@stitches/react/types/css-util").WithPropertyValue<"appearance">;
-            appearance: import("@stitches/react/types/css-util").WithPropertyValue<"appearance">;
+            WebkitAppearance: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"appearance">;
+            appearance: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"appearance">;
         };
         backgroundClip: (value: Stitches.PropertyValue<'backgroundClip'>) => {
-            WebkitBackgroundClip: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundClip">;
-            backgroundClip: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundClip">;
+            WebkitBackgroundClip: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundClip">;
+            backgroundClip: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundClip">;
         };
     }>;
 }) => {
@@ -5002,136 +5002,136 @@ export declare const styled: {
             max: string;
         };
     };
-    themeMap: import("@stitches/react/types/config").DefaultThemeMap;
+    themeMap: import("@voiceflow/stitches-react/types/config").DefaultThemeMap;
     utils: {
         p: (value: Stitches.PropertyValue<'padding'>) => {
-            padding: import("@stitches/react/types/css-util").WithPropertyValue<"padding">;
+            padding: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"padding">;
         };
         pt: (value: Stitches.PropertyValue<'paddingTop'>) => {
-            paddingTop: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
         };
         pr: (value: Stitches.PropertyValue<'paddingRight'>) => {
-            paddingRight: import("@stitches/react/types/css-util").WithPropertyValue<"paddingRight">;
+            paddingRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingRight">;
         };
         pb: (value: Stitches.PropertyValue<'paddingBottom'>) => {
-            paddingBottom: import("@stitches/react/types/css-util").WithPropertyValue<"paddingBottom">;
+            paddingBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingBottom">;
         };
         pl: (value: Stitches.PropertyValue<'paddingLeft'>) => {
-            paddingLeft: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
         };
         px: (value: Stitches.PropertyValue<'paddingLeft'>) => {
-            paddingLeft: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
-            paddingRight: import("@stitches/react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
+            paddingRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingLeft">;
         };
         py: (value: Stitches.PropertyValue<'paddingTop'>) => {
-            paddingTop: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
-            paddingBottom: import("@stitches/react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
+            paddingBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"paddingTop">;
         };
         m: (value: Stitches.PropertyValue<'margin'>) => {
-            margin: import("@stitches/react/types/css-util").WithPropertyValue<"margin">;
+            margin: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"margin">;
         };
         mt: (value: Stitches.PropertyValue<'marginTop'>) => {
-            marginTop: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
+            marginTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
         };
         mr: (value: Stitches.PropertyValue<'marginRight'>) => {
-            marginRight: import("@stitches/react/types/css-util").WithPropertyValue<"marginRight">;
+            marginRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginRight">;
         };
         mb: (value: Stitches.PropertyValue<'marginBottom'>) => {
-            marginBottom: import("@stitches/react/types/css-util").WithPropertyValue<"marginBottom">;
+            marginBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginBottom">;
         };
         ml: (value: Stitches.PropertyValue<'marginLeft'>) => {
-            marginLeft: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
         };
         mx: (value: Stitches.PropertyValue<'marginLeft'>) => {
-            marginLeft: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
-            marginRight: import("@stitches/react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginLeft: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
+            marginRight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginLeft">;
         };
         my: (value: Stitches.PropertyValue<'marginTop'>) => {
-            marginTop: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
-            marginBottom: import("@stitches/react/types/css-util").WithPropertyValue<"marginTop">;
+            marginTop: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
+            marginBottom: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"marginTop">;
         };
         ta: (value: Stitches.PropertyValue<'textAlign'>) => {
-            textAlign: import("@stitches/react/types/css-util").WithPropertyValue<"textAlign">;
+            textAlign: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"textAlign">;
         };
         fd: (value: Stitches.PropertyValue<'flexDirection'>) => {
-            flexDirection: import("@stitches/react/types/css-util").WithPropertyValue<"flexDirection">;
+            flexDirection: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexDirection">;
         };
         fw: (value: Stitches.PropertyValue<'flexWrap'>) => {
-            flexWrap: import("@stitches/react/types/css-util").WithPropertyValue<"flexWrap">;
+            flexWrap: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexWrap">;
         };
         ai: (value: Stitches.PropertyValue<'alignItems'>) => {
-            alignItems: import("@stitches/react/types/css-util").WithPropertyValue<"alignItems">;
+            alignItems: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignItems">;
         };
         ac: (value: Stitches.PropertyValue<'alignContent'>) => {
-            alignContent: import("@stitches/react/types/css-util").WithPropertyValue<"alignContent">;
+            alignContent: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignContent">;
         };
         jc: (value: Stitches.PropertyValue<'justifyContent'>) => {
-            justifyContent: import("@stitches/react/types/css-util").WithPropertyValue<"justifyContent">;
+            justifyContent: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"justifyContent">;
         };
         as: (value: Stitches.PropertyValue<'alignSelf'>) => {
-            alignSelf: import("@stitches/react/types/css-util").WithPropertyValue<"alignSelf">;
+            alignSelf: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"alignSelf">;
         };
         fg: (value: Stitches.PropertyValue<'flexGrow'>) => {
-            flexGrow: import("@stitches/react/types/css-util").WithPropertyValue<"flexGrow">;
+            flexGrow: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexGrow">;
         };
         fs: (value: Stitches.PropertyValue<'flexShrink'>) => {
-            flexShrink: import("@stitches/react/types/css-util").WithPropertyValue<"flexShrink">;
+            flexShrink: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexShrink">;
         };
         fb: (value: Stitches.PropertyValue<'flexBasis'>) => {
-            flexBasis: import("@stitches/react/types/css-util").WithPropertyValue<"flexBasis">;
+            flexBasis: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"flexBasis">;
         };
         bc: (value: Stitches.PropertyValue<'backgroundColor'>) => {
-            backgroundColor: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundColor">;
+            backgroundColor: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundColor">;
         };
         br: (value: Stitches.PropertyValue<'borderRadius'>) => {
-            borderRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderRadius">;
+            borderRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderRadius">;
         };
         btrr: (value: Stitches.PropertyValue<'borderTopRightRadius'>) => {
-            borderTopRightRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderTopRightRadius">;
+            borderTopRightRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderTopRightRadius">;
         };
         bbrr: (value: Stitches.PropertyValue<'borderBottomRightRadius'>) => {
-            borderBottomRightRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderBottomRightRadius">;
+            borderBottomRightRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderBottomRightRadius">;
         };
         bblr: (value: Stitches.PropertyValue<'borderBottomLeftRadius'>) => {
-            borderBottomLeftRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderBottomLeftRadius">;
+            borderBottomLeftRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderBottomLeftRadius">;
         };
         btlr: (value: Stitches.PropertyValue<'borderTopLeftRadius'>) => {
-            borderTopLeftRadius: import("@stitches/react/types/css-util").WithPropertyValue<"borderTopLeftRadius">;
+            borderTopLeftRadius: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"borderTopLeftRadius">;
         };
         bs: (value: Stitches.PropertyValue<'boxShadow'>) => {
-            boxShadow: import("@stitches/react/types/css-util").WithPropertyValue<"boxShadow">;
+            boxShadow: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"boxShadow">;
         };
         lh: (value: Stitches.PropertyValue<'lineHeight'>) => {
-            lineHeight: import("@stitches/react/types/css-util").WithPropertyValue<"lineHeight">;
+            lineHeight: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"lineHeight">;
         };
         ox: (value: Stitches.PropertyValue<'overflowX'>) => {
-            overflowX: import("@stitches/react/types/css-util").WithPropertyValue<"overflowX">;
+            overflowX: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"overflowX">;
         };
         oy: (value: Stitches.PropertyValue<'overflowY'>) => {
-            overflowY: import("@stitches/react/types/css-util").WithPropertyValue<"overflowY">;
+            overflowY: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"overflowY">;
         };
         pe: (value: Stitches.PropertyValue<'pointerEvents'>) => {
-            pointerEvents: import("@stitches/react/types/css-util").WithPropertyValue<"pointerEvents">;
+            pointerEvents: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"pointerEvents">;
         };
         us: (value: Stitches.PropertyValue<'userSelect'>) => {
-            WebkitUserSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
-            userSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
+            WebkitUserSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
+            userSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
         };
         userSelect: (value: Stitches.PropertyValue<'userSelect'>) => {
-            WebkitUserSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
-            userSelect: import("@stitches/react/types/css-util").WithPropertyValue<"userSelect">;
+            WebkitUserSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
+            userSelect: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"userSelect">;
         };
         size: (value: Stitches.PropertyValue<'width'>) => {
-            width: import("@stitches/react/types/css-util").WithPropertyValue<"width">;
-            height: import("@stitches/react/types/css-util").WithPropertyValue<"width">;
+            width: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"width">;
+            height: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"width">;
         };
         appearance: (value: Stitches.PropertyValue<'appearance'>) => {
-            WebkitAppearance: import("@stitches/react/types/css-util").WithPropertyValue<"appearance">;
-            appearance: import("@stitches/react/types/css-util").WithPropertyValue<"appearance">;
+            WebkitAppearance: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"appearance">;
+            appearance: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"appearance">;
         };
         backgroundClip: (value: Stitches.PropertyValue<'backgroundClip'>) => {
-            WebkitBackgroundClip: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundClip">;
-            backgroundClip: import("@stitches/react/types/css-util").WithPropertyValue<"backgroundClip">;
+            WebkitBackgroundClip: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundClip">;
+            backgroundClip: import("@voiceflow/stitches-react/types/css-util").WithPropertyValue<"backgroundClip">;
         };
     };
 };
@@ -5139,7 +5139,7 @@ export declare type CSS = Stitches.CSS<typeof config>;
 export declare const darkTheme: string & {
     className: string;
     selector: string;
-} & import("@stitches/react/types/stitches").ThemeTokens<{
+} & import("@voiceflow/stitches-react/types/stitches").ThemeTokens<{
     colors: {
         hiContrast: string;
         loContrast: string;

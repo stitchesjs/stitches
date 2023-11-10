@@ -1,15 +1,15 @@
-# @stitches/react
+# @voiceflow/stitches-react
 
-**@stitches/react** is a react implementation of [stitches](https://stitches.dev), a CSS-in-JS library with a best-in-class developer experience.
+**@voiceflow/stitches-react** is a react implementation of [stitches](https://stitches.dev), a CSS-in-JS library with a best-in-class developer experience.
 
 <p><br /></p>
 
 ```sh
 # with npm
-npm install @stitches/react
+npm install @voiceflow/stitches-react
 
 # with yarn
-yarn add @stitches/react
+yarn add @voiceflow/stitches-react
 ```
 
 <p><br /></p>
@@ -21,7 +21,7 @@ yarn add @stitches/react
 ```html
 <script type="module">
 
-import { styled } from 'https://cdn.skypack.dev/@stitches/react'
+import { styled } from 'https://cdn.skypack.dev/@voiceflow/stitches-react'
 
 </script>
 ```
@@ -33,7 +33,7 @@ import { styled } from 'https://cdn.skypack.dev/@stitches/react'
 <br />
 
 ```js
-<script src="https://unpkg.com/@stitches/react/dist/index.global.js"></script>
+<script src="https://unpkg.com/@voiceflow/stitches-react/dist/index.global.js"></script>
 <script>
 
 const { styled } = stitches

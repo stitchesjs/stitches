@@ -1,4 +1,4 @@
-import { globalCss } from '@stitches/react'
+import { globalCss } from '@voiceflow/stitches-react'
 
 void globalCss({
 	"@font-face": {
