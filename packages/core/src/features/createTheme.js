@@ -44,7 +44,7 @@ export const createCreateThemeFunction = (
 			if (cssProps.length && !sheet.rules.themed.cache.has(className)) {
 				sheet.rules.themed.cache.add(className)
 
-				const rootPrelude = style === config.theme ? ':root,' : ''
+				const rootPrelude = style === config.theme ? ':host,' : ''
 				const cssText = `${rootPrelude}.${className}{${cssProps.join(';')}}`
 
 				sheet.rules.themed.apply(cssText)
