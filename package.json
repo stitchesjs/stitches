@@ -45,7 +45,7 @@
     "acorn-private-methods": "1.0.0",
     "astring": "1.7.5",
     "csstype": "3.0.9",
-    "esbuild": "0.13.2",
+    "esbuild": "0.25.0",
     "eslint": "7.32.0",
     "nodemon": "2.0.13",
     "react": "17.0.2",
