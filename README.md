@@ -1,4 +1,4 @@
-Update June 19, 2023: Stitches is no longer actively maintained due to changes in the React ecosystem and maintainer availability. You can <a href="https://github.com/stitchesjs/stitches/discussions/1149#discussioncomment-6223090">read more here</a>.
+**Update**: This fork adds support for React 18, including server-side rendering and React Server Components. See [REACT18.md](./REACT18.md) for details on the new features and migration guide.
 
 ---
 
@@ -10,7 +10,7 @@ Update June 19, 2023: Stitches is no longer actively maintained due to changes i
 
 ## Style your components with confidence
 
-CSS-in-JS with near-zero runtime, SSR, multi-variant support, and a best-in-class developer experience.
+CSS-in-JS with near-zero runtime, SSR, multi-variant support, React 18 compatibility, and a best-in-class developer experience.
 
 #### Stitches Core
 

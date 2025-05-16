@@ -3,6 +3,7 @@ import type Stitches from './stitches.js'
 import type * as Config from './config.js'
 import type * as CSSUtil from './css-util.js'
 import type * as StyledComponent from './styled-component.js'
+import type * as Server from './server.js'
 
 export { $$PropertyValue, $$ScaleValue, $$ThemeValue } from './css-util.js'
 export type CreateStitches = Config.CreateStitches
@@ -81,3 +82,12 @@ export declare const css: Stitches['css']
 
 /** Returns a function that applies styles and variants for a specific class. */
 export declare const styled: Stitches['styled']
+
+/** Server-side rendering component for React 18 */
+export declare const StitchesServerStyleSheet: Server.StitchesServerStyleSheet
+
+/** Creates a hook for server-side rendering with React 18 */
+export declare const createServerStylesHook: Server.createServerStylesHook
+
+/** Hook for React 18 server components */
+export declare const useServerStyles: () => React.ReactElement | null

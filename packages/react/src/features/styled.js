@@ -28,8 +28,15 @@ export const createStyledFunction = ({ config, sheet }) =>
 
 				forwardProps.ref = ref
 
+				// Handle React 18 concurrent rendering
 				if (deferredInjector) {
-					return React.createElement(React.Fragment, null, React.createElement(Type, forwardProps), React.createElement(deferredInjector, null))
+					// Use React.Fragment to avoid extra DOM nodes
+					return React.createElement(
+						React.Fragment,
+						null,
+						React.createElement(Type, forwardProps),
+						React.createElement(deferredInjector, null)
+					)
 				}
 
 				return React.createElement(Type, forwardProps)
@@ -47,7 +54,7 @@ export const createStyledFunction = ({ config, sheet }) =>
 		}
 
 		const styled = (...args) => _styled(args)
-	
+
 		styled.withConfig = (componentConfig) => (...args) => {
 			const cssWithConfig = cssFunction.withConfig(componentConfig)
 			return _styled(args, cssWithConfig, componentConfig)

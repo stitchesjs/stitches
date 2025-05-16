@@ -14,8 +14,11 @@ import { getNonce } from './utility/getNonce.js'
 export const names = ['themed', 'global', 'styled', 'onevar', 'resonevar', 'allvar', 'inline']
 
 const isSheetAccessible = (/** @type {CSSStyleSheet} */ sheet) => {
-	if (sheet.href && !sheet.href.startsWith(location.origin)) {
-		return false
+	// Check if we're in a browser environment
+	if (typeof window !== 'undefined' && typeof location !== 'undefined') {
+		if (sheet.href && !sheet.href.startsWith(location.origin)) {
+			return false
+		}
 	}
 
 	try {
@@ -136,10 +139,13 @@ export const createSheet = (/** @type {DocumentOrShadowRoot} */ root) => {
 			}
 
 			const createSheet = () => {
-				if (!root) {
+				// Handle server-side rendering or environments without DOM
+				if (!root || typeof document === 'undefined') {
 					return createCSSMediaRule('', 'text/css')
 				}
 				const styleEl = document.createElement('style')
+				// Add data attribute for React 18 streaming SSR
+				styleEl.setAttribute('data-stitches', '')
 				const nonce = getNonce()
 				if (nonce) {
 					styleEl.setAttribute('nonce', nonce)

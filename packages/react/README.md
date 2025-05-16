@@ -1,6 +1,6 @@
 # @stitches/react
 
-**@stitches/react** is a react implementation of [stitches](https://stitches.dev), a CSS-in-JS library with a best-in-class developer experience.
+**@stitches/react** is a react implementation of [stitches](https://stitches.dev), a CSS-in-JS library with a best-in-class developer experience. Now with full React 18 support, including server-side rendering and React Server Components.
 
 <p><br /></p>
 
@@ -42,6 +42,16 @@ const { styled } = stitches
 ```
 
 <p><br /></p>
+
+## React 18 Support
+
+This version includes full support for React 18, including:
+
+- Server-side rendering with streaming
+- React Server Components
+- Concurrent rendering
+
+See the [React 18 documentation](../../REACT18.md) for details on how to use these features.
 
 ## Documentation
 
